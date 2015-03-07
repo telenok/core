@@ -26,6 +26,11 @@
             "Telenok\\Core": "src/"
         }
     },
+    "scripts": {
+	"post-update-cmd": [
+	    "php artisan telenok:core --tag=public"
+	]
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"

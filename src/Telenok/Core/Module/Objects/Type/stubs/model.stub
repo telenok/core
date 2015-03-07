@@ -1,0 +1,9 @@
+<?php {{namespace}}
+
+class {{class}} extends \Telenok\Core\Interfaces\Eloquent\Object\Model  {
+
+    protected $table = '{{table}}';
+
+}
+
+?>

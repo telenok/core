@@ -1,0 +1,14 @@
+<?php {{namespace}}
+
+class {{class}} extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller { 
+    
+    protected $key = '{{key}}';
+    protected $parent = '{{parent}}';
+    protected $presentation = '{{presentation}}'; 
+
+    protected $modelListClass = '{{classList}}';
+    protected $modelTreeClass = '{{classTree}}';
+
+}
+
+?>

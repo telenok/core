@@ -2,7 +2,7 @@
 
 namespace Telenok\Core\Interfaces;
 
-interface Request {
+interface IRequest {
     
     public function setRequest(\Illuminate\Http\Request $param);
     

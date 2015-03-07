@@ -1,0 +1,5 @@
+
+    public function {{method}}()
+    {
+        return $this->morphOne('{{class}}', '{{name}}', '{{type}}', '{{foreignKey}}', '{{otherKey}}');
+    }

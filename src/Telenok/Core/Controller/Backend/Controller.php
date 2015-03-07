@@ -8,13 +8,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
     public function __construct()
     {
-	$this->middleware('backend.auth', ['except' => ['errorAccessDenied', 'login']]); 
+	$this->middleware('auth', ['except' => ['errorAccessDenied', 'login']]); 
     }
 
     public function login()
     {
-	dd('aaa');
-	
         $username = trim($this->getRequest()->input('username'));
         $password = trim($this->getRequest()->input('password'));
         $remember = intval($this->getRequest()->input('remember'));

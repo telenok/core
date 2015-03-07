@@ -1,0 +1,5 @@
+
+    public function {{method}}()
+    {
+        return $this->belongsToMany('{{class}}', '{{table}}', '{{field_1}}', '{{field_2}}')->withTimestamps();
+    }

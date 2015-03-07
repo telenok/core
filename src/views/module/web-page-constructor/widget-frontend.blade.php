@@ -1,0 +1,1 @@
+Content of widget ID: "{{$widget ? $widget->getKey() : ''}}" and KEY: "{{$controller->getKey()}}"
