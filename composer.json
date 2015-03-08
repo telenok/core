@@ -1,39 +1,41 @@
 {
-    "name": "telenok/core",
-    "description": "Telenok CMS Core engine",
-    "keywords": ["telenok", "core", "laravel"],
-    "homepage": "http://telenok.com",
-    "minimum-stability": "dev",
-    "license": "commercial",
-    "support": {
-        "email": "support@telenok.com",
-        "issues": "https://github.com/telenok/core/issues"
-    },
-    "authors": [
-        {
-            "name": "Kiselevich Konstantin",
-            "email": "support@telenok.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.4.0"
-    },
-    "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
-        "psr-0": {
-            "Telenok\\Core": "src/"
-        }
-    },
-    "scripts": {
-	"post-update-cmd": [
-	    "php artisan telenok:core --tag=public"
-	]
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
-    }
+	"name": "telenok/core",
+	"description": "Telenok CMS Core engine",
+	"keywords": ["telenok", "core", "laravel"],
+	"homepage": "http://telenok.com",
+	"minimum-stability": "dev",
+	"license": "commercial",
+	"support": {
+		"email": "support@telenok.com",
+		"issues": "https://github.com/telenok/core/issues"
+	},
+	"authors": [
+		{
+			"name": "Kiselevich Konstantin",
+			"email": "support@telenok.com"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"autoload": {
+		"classmap": [
+			"src/migrations"
+		],
+		"psr-0": {
+			"Telenok\\Core": "src/"
+		}
+	},
+	"scripts": {
+		"post-update-cmd": [ 
+			"php artisan vendor:publish --tag=\"public\" --provider=\"Vendor\\Providers\\CoreServiceProvider\"",
+			"php artisan vendor:publish --tag=\"migrations\" --provider=\"Vendor\\Providers\\CoreServiceProvider\"",
+			"php artisan vendor:publish --tag=\"seeds\" --provider=\"Vendor\\Providers\\CoreServiceProvider\""
+		]
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	}
 }

@@ -7,6 +7,8 @@ interface IField extends \Telenok\Core\Interfaces\IRequest {
     public function getName();
 
     public function getKey();
+	
+    public function setKey($key);
 
     public function getViewModel();
 

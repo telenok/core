@@ -71,7 +71,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 
 		$wop = \App\Model\Telenok\Web\WidgetOnPage::where('container', $container_id)->orderBy('widget_order')->get();
 
-		$widgetConfig = app('telenok.config')->getWidget();
+		$widgetConfig = app('telenok.config.repository')->getWidget();
 
 		$wop->each(function($w) use (&$content, $widgetConfig)
 		{
@@ -150,7 +150,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 
 		$wop = \App\Model\Telenok\Web\WidgetOnPage::where('container', $container_id)->orderBy('widget_order')->get();
 
-		$widgetConfig = app('telenok.config')->getWidget();
+		$widgetConfig = app('telenok.config.repository')->getWidget();
 
 		$wop->each(function($w) use (&$content, $widgetConfig)
 		{
@@ -260,7 +260,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 			{
 				$buffer = \App\Model\Telenok\System\Buffer::addBuffer(\Auth::user()->getKey(), $item->getKey(), 'web-page', $buffer->key);
 				
-				$widget = app('telenok.config')->getWidget()->get($item->key);
+				$widget = app('telenok.config.repository')->getWidget()->get($item->key);
 				
 				$widget->insertFromBufferOnPage(
 						$widgetOnPage->widgetLanguageLanguage()->first()->pluck('id'), 

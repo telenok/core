@@ -2,20 +2,11 @@
 
 namespace Telenok\Core\Interfaces\Setting;
 
-abstract class Controller {
-
-    use \Telenok\Core\Support\PackageLoad;
-
-    protected $key = '';
+abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
+ 
     protected $ruleList = [];
-    protected $formSettingContentView = '';
-    protected $package = '';
-    protected $languageDirectory = 'setting';
-
-    public function getKey()
-    {
-        return $this->key;
-    } 
+    protected $formSettingContentView = ''; 
+    protected $languageDirectory = 'setting'; 
 
 	public function getFormSettingContent($field, $model, $uniqueId)
 	{

@@ -84,7 +84,7 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 			return \Response::json('Empty page id or widget key', 403);
 		}
 		
-		$widget = app('telenok.config')->getWidget()->get($key); 
+		$widget = app('telenok.config.repository')->getWidget()->get($key); 
 		
 		if (intval($bufferId))
 		{
@@ -104,7 +104,7 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 		{
 			$widget = \App\Model\Telenok\Web\WidgetOnPage::findOrFail($id);
 
-			app('telenok.config')->getWidget()->get($widget->key)->removeFromPage($id);
+			app('telenok.config.repository')->getWidget()->get($widget->key)->removeFromPage($id);
 
 			return ['success' => 1];
 		}

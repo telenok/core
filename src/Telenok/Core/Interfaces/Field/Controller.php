@@ -211,7 +211,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		return $item->show_in_list == 1 && \Auth::can('read', 'object_field.' . $type->code . '.' . $item->code);
 	    });
 
-	    $config = app('telenok.config')->getObjectFieldController();
+	    $config = app('telenok.config.repository')->getObjectFieldController();
 
 	    $canUpdate = \Auth::can('update', 'object_field.' . $model->getTable() . '.' . $field->code);
 

@@ -2,29 +2,15 @@
 
 namespace Telenok\Core\Interfaces\Widget\Group;
 
-abstract class Controller {
-    
-    use \Telenok\Core\Support\PackageLoad; 
-
-    protected $key = '';
-    protected $icon = 'fa fa-desktop'; 
-	protected $package;
+abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
+ 
+    protected $icon = 'fa fa-desktop';
     protected $languageDirectory = 'widget-group';
     protected $widgetGroupModel;
-
-    public function getName()
-    {
-        return $this->LL('name');
-    }
 
     public function getIcon()
     {
         return $this->icon;
-    }
-
-    public function getKey()
-    {
-        return $this->key;
     }
 
     public function setWidgetGroupModel($model)

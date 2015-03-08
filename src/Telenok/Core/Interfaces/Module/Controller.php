@@ -2,41 +2,22 @@
 
 namespace Telenok\Core\Interfaces\Module;
 
-abstract class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\Module\IModule {
-
-    use \Telenok\Core\Support\PackageLoad;
-    
-    protected $key = '';
+abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Module\IModule {
+ 
     protected $permissionKey = '';
     protected $parent = '';
     protected $group = '';
-    protected $icon = 'fa fa-desktop'; 
-    protected $package = '';
+    protected $icon = 'fa fa-desktop';  
     protected $languageDirectory = 'module';
     protected $modelModule; 
-    protected $modelRepository;
-    protected $request; 
+    protected $modelRepository; 
 
     public function __construct()
     {
-        if (!\App::runningInConsole())
-        {
-            $this->beforeFilter('auth');
-            $this->beforeFilter(function()
-            {
-                if (!\Auth::can('read', $this->getPermissionKey()))
-                {
-                    return \Redirect::route('error.access-denied');
-                }
-            });
-        } 
+		$this->middleware('auth');
+		$this->middleware('auth.module'); 
     }
-	
-    public function getName()
-    {
-        return $this->LL('name');
-    }
-    
+	 
     public function getHeader()
     {
         return $this->LL('header.title');
@@ -45,18 +26,6 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
     public function getHeaderDescription()
     {
         return $this->LL('header.description');
-    }    
-
-    public function setKey($key)
-    {
-        $this->key = $key;
-        
-        return $this;
-    }
-
-    public function getKey()
-    {
-        return $this->key;
     }
 
     public function setPermissionKey($param = '')
@@ -65,18 +34,6 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
 
         return $this;
     }	
-    
-    public function setRequest(\Illuminate\Http\Request $param = null)
-    {
-        $this->request = $param;
-        
-        return $this;
-    }
-
-    public function getRequest()
-    {
-        return $this->request;
-    }
 
     public function getPermissionKey()
     {
@@ -112,7 +69,7 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
 
     public function children()
     {
-        return app('telenok.config')->getModule()->filter(function($item) 
+        return app('telenok.config.repository')->getModule()->filter(function($item) 
         {
             return $this->getKey() == $item->getParent();
         });
@@ -122,12 +79,12 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
     {
         if (!$this->getParent()) return false;
         
-        return app('telenok.config')->getModule()->get($this->getParent());
+        return app('telenok.config.repository')->getModule()->get($this->getParent());
     }
 
     public function isParentAndSingle()
     {
-        $collection = app('telenok.config')->getModule()->filter(function($item) {
+        $collection = app('telenok.config.repository')->getModule()->filter(function($item) {
             return $item->getParent() == $this->getKey();
         });
         

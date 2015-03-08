@@ -34,7 +34,7 @@ class WidgetOnPage extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
      
     public function preProcess($type, $input)
     {
-        app('telenok.config')->getWidget()->get($input->get('key'))->validate($this, $input);
+        app('telenok.config.repository')->getWidget()->get($input->get('key'))->validate($this, $input);
         
         return parent::preProcess($type, $input);
     }

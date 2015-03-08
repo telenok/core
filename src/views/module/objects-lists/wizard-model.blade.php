@@ -311,7 +311,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 				<script type="text/javascript">
 					<?php
 					
-						$config = app('telenok.config')->getObjectFieldController();
+						$config = app('telenok.config.repository')->getObjectFieldController();
 
 						$put = \Illuminate\Support\Collection::make(); 
 

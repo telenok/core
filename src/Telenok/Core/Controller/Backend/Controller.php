@@ -58,7 +58,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
         $listModuleMenuLeft = \Illuminate\Support\Collection::make();
         \Event::fire('telenok.module.menu.left', $listModuleMenuLeft);
 
-        $config = app('telenok.config');
+        $config = app('telenok.config.repository');
 
         $setArray = [];
 

@@ -1,13 +1,13 @@
 
 @if ($field->code !== 'structure')
 
-    {!! app('telenok.config')->getObjectFieldController()->get($field->key)->getFormModelContent($controller, $model, $field, $uniqueId) !!}
+    {!! app('telenok.config.repository')->getObjectFieldController()->get($field->key)->getFormModelContent($controller, $model, $field, $uniqueId) !!}
 
 @elseif ($field->code === 'structure')
 
     <?php
 
-    $w = app('telenok.config')->getWidget()->get($model->key);
+    $w = app('telenok.config.repository')->getWidget()->get($model->key);
 
     ?>
 

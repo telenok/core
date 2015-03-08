@@ -27,7 +27,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
         if ($key)
         {
-            app('telenok.config')->getObjectFieldController()->get($key)->validate($model, $input, $message);
+            app('telenok.config.repository')->getObjectFieldController()->get($key)->validate($model, $input, $message);
         }
 
         return $this;
@@ -63,13 +63,13 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 		} 
 
 		// preprocessing at field controller
-		if (!app('telenok.config')->getObjectFieldController()->has($input->get('key')))
+		if (!app('telenok.config.repository')->getObjectFieldController()->has($input->get('key')))
 		{
 			throw new \Exception('There are not field with key "' . $input->get('key') . '"');
 		}
 		else
 		{
-			app('telenok.config')->getObjectFieldController()->get($input->get('key'))->preProcess($model, $type, $input);
+			app('telenok.config.repository')->getObjectFieldController()->get($input->get('key'))->preProcess($model, $type, $input);
 		}
 		
         return parent::preProcess($model, $type, $input);
@@ -77,7 +77,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
     public function postProcess($model, $type, $input)
     {   
-        $field = app('telenok.config')->getObjectFieldController()->get($input->get('key'));
+        $field = app('telenok.config.repository')->getObjectFieldController()->get($input->get('key'));
 
         $field->postProcess($model, $type, $input);  
 

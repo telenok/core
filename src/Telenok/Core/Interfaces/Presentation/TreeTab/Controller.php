@@ -2,10 +2,9 @@
 
 namespace Telenok\Core\Interfaces\Presentation\TreeTab;
 
-use \Telenok\Core\Interfaces\Module\Controller as Module;
 use \Telenok\Core\Interfaces\Presentation\IPresentation;
 
-abstract class Controller extends Module implements IPresentation {
+abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller implements IPresentation {
 
     protected $tabKey = '';
     protected $presentation = 'tree-tab';

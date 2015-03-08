@@ -177,7 +177,7 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 			
 			$items = $query->get();
 			
-			$config = app('telenok.config')->getObjectFieldController();
+			$config = app('telenok.config.repository')->getObjectFieldController();
 
             foreach ($items->slice(0, $this->displayLength, true) as $k => $item)
             {

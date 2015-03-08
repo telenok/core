@@ -28,7 +28,6 @@
     $list->put('web', 1);
     $list->put('objects', 2);
     $list->put('system', 3);
-    $list->put('workflow', 3);
 
     $list->put('dashboard', 0);
     $list->put('objects-field', 0);
@@ -97,12 +96,12 @@
 
 \Event::listen('telenok.compile.route', function()
 {
-    app('telenok.config')->compileRouter();
+    app('telenok.config.repository')->compileRouter();
 });
 
 \Event::listen('telenok.compile.setting', function()
 {
-    app('telenok.config')->compileSetting();
+    app('telenok.config.repository')->compileSetting();
 });
 
 Event::listen('illuminate.query', function($sql, $bindings, $time)

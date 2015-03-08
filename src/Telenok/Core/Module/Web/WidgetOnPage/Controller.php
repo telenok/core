@@ -19,7 +19,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     { 
         if ($input->get('key'))
         {
-            app('telenok.config')->getWidget()->get($input->get('key'))->preProcess($model, $type, $input);
+            app('telenok.config.repository')->getWidget()->get($input->get('key'))->preProcess($model, $type, $input);
         }
         
         return parent::postProcess($model, $type, $input);
@@ -39,12 +39,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
             }
             else
             {
-                $viewContent = app('telenok.config')->getWidget()->get($input->get('key'))->getViewContent();
+                $viewContent = app('telenok.config.repository')->getWidget()->get($input->get('key'))->getViewContent();
             }
              
             \File::put($templateFile, $viewContent);
             
-            app('telenok.config')->getWidget()->get($input->get('key'))->postProcess($model, $type, $input);
+            app('telenok.config.repository')->getWidget()->get($input->get('key'))->postProcess($model, $type, $input);
         }
         
         return parent::postProcess($model, $type, $input);

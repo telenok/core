@@ -2,11 +2,8 @@
 
 namespace Telenok\Core\Interfaces\Widget;
 
-abstract class Controller {
-
-    use \Telenok\Core\Support\PackageLoad; 
-    
-	protected $key = '';
+abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
+	
 	protected $parent = '';
 	protected $group = '';
 	protected $icon = 'fa fa-desktop';
@@ -15,23 +12,12 @@ abstract class Controller {
 	protected $frontendView = '';
 	protected $structureView = '';
 	protected $frontendController;
-	protected $cacheTime = 3600;
-	protected $package;
+	protected $cacheTime = 3600; 
     protected $languageDirectory = 'widget';
-
-	public function getName()
-	{
-		return $this->LL('name');
-	}
 
 	public function getIcon()
 	{
 		return $this->icon;
-	}
-
-	public function getKey()
-	{
-		return $this->key;
 	}
 
 	public function setWidgetModel($param)
@@ -101,7 +87,7 @@ abstract class Controller {
 
 	public function children()
 	{
-		return app('telenok.config')->getWidget()->filter(function($item)
+		return app('telenok.config.repository')->getWidget()->filter(function($item)
 				{
 					return $this->getKey() == $item->getParent();
 				});
@@ -109,7 +95,7 @@ abstract class Controller {
 
 	public function parent()
 	{
-		$list = app('telenok.config')->getWidget()->all();
+		$list = app('telenok.config.repository')->getWidget()->all();
         
 		$key = $this->getKey();
 

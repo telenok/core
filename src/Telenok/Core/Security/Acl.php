@@ -722,7 +722,7 @@ class Acl
 		{
 			$queryWhere->where(\DB::raw(1), 0);
 			
-			$filters = app('telenok.config')->getAclResourceFilter();
+			$filters = app('telenok.config.repository')->getAclResourceFilter();
 
 			if (!empty($filterCode))
 			{

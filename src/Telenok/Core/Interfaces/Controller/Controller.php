@@ -2,11 +2,10 @@
 
 namespace Telenok\Core\Interfaces\Controller;
 
-abstract class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\Request {
+abstract class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\IRequest {
 
     use \Telenok\Core\Support\Language\Load;
     use \Illuminate\Foundation\Bus\DispatchesCommands;
-    use \Illuminate\Foundation\Validation\ValidatesRequests;
 
     protected $key = '';
     protected $package = '';
@@ -20,6 +19,13 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
     public function getKey()
     {
         return $this->key;
+    }
+
+    public function setKey($key)
+    {
+        $this->key = $key;
+		
+		return $this;
     }
     
     public function setRequest(\Illuminate\Http\Request $request = null)

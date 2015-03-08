@@ -121,8 +121,8 @@
 				<div id="menu-list-{{$uniqueId}}" class="tab-pane active">
 					<ul class="dropdown-menu" style="position: inherit; display: block;">
 						<?php
-						$group = app('telenok.config')->getWidgetGroup();
-						$widget = app('telenok.config')->getWidget();
+						$group = app('telenok.config.repository')->getWidgetGroup();
+						$widget = app('telenok.config.repository')->getWidget();
 
 						foreach ($group as $g)
 						{

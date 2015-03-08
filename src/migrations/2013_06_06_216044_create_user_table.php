@@ -24,6 +24,7 @@ class CreateUserTable extends Migration {
 				$table->string('email')->nullable();
 				$table->string('remember_token')->nullable();
 				$table->string('password', 60)->nullable();
+				$table->rememberToken();
 				$table->longText('configuration')->nullable();
 				$table->integer('author_user_message')->unsigned()->nullable();
 				$table->integer('created_by_user')->unsigned()->nullable();

@@ -105,7 +105,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
 
     public function getFilterSubQuery($input, $model, $query)
     {
-        $fieldConfig = app('telenok.config')->getObjectFieldController();
+        $fieldConfig = app('telenok.config.repository')->getObjectFieldController();
 
 		if (!$input instanceof \Illuminate\Support\Collection)
 		{
@@ -145,7 +145,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
 
             $items = $this->getListItem($model)->get();
 
-            $config = app('telenok.config')->getObjectFieldController();
+            $config = app('telenok.config.repository')->getObjectFieldController();
 
 			$fields = $model->getFieldList();
 			
@@ -209,7 +209,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
         $query->where(function($query) use ($str, $query, $model, $field)
         {
             $f = $model->getObjectField()->get($field);
-            app('telenok.config')
+            app('telenok.config.repository')
                     ->getObjectFieldController()->get($f->key)
                     ->getFilterQuery($f, $model, $query, $f->code, $str);
         });
@@ -261,7 +261,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
 
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
-        \Event::fire('workflow.form.create', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
+        //\Event::fire('workflow.form.create', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
 
         return [
             'tabKey' => $this->getTabKey() . '-new-' . str_random(),
@@ -289,7 +289,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
             
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
-        \Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));  
+        //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));  
 
 		$model->lock();
         
@@ -328,7 +328,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
             
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
-        \Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));   
+        //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));   
 
         $return = [];
 
@@ -367,7 +367,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
             
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
-        \Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));   
+        //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));   
 
         $return = [];
 
@@ -420,7 +420,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
         { 
             $eventResource = \Illuminate\Support\Collection::make(['model' => $model::find($id), 'type' => $type, 'fields' => $fields]);
 
-            \Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));  
+            //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));  
             
             $content[] = view($this->getPresentationModelView(), array_merge(array( 
                 'controller' => $this,

@@ -1,16 +1,16 @@
 	@if (!in_array($field->code, ['key', 'field_view'], true))
 
-		{!! app('telenok.config')->getObjectFieldController()->get($field->key)->getFormModelContent($controller, $model, $field, $uniqueId) !!}
+		{!! app('telenok.config.repository')->getObjectFieldController()->get($field->key)->getFormModelContent($controller, $model, $field, $uniqueId) !!}
 
 	@elseif ($field->code == "field_view" && $model->exists)
 
         <?php
 
-            $views = app('telenok.config')->getObjectFieldViewModel()->get($model->key, []);
+            $views = app('telenok.config.repository')->getObjectFieldViewModel()->get($model->key, []);
 
             if (empty($viewsCollection))
             {
-                $views[] = app('telenok.config')->getObjectFieldController()->get($model->key)->getViewModel();
+                $views[] = app('telenok.config.repository')->getObjectFieldController()->get($model->key)->getViewModel();
             }
             
             $views = array_combine($views, $views);
@@ -43,7 +43,7 @@
 				$selectFields = [];
 				$multilanguageFields = [];
 
-				app('telenok.config')->getObjectFieldController()
+				app('telenok.config.repository')->getObjectFieldController()
                         ->reject(function($i) { return in_array($i->getKey(),['locked-by', 'deleted-by', 'created-by', 'active', 'permission', 'updated-by'], true); })
                         ->each(function($field) use (&$selectFields, &$multilanguageFields) 
 				{  
@@ -86,7 +86,7 @@
 
 		@if ($model->exists) 
 
-		{!! app('telenok.config')->getObjectFieldController()->get($model->key)->getFormFieldContent($model, $uniqueId) !!}
+		{!! app('telenok.config.repository')->getObjectFieldController()->get($model->key)->getFormFieldContent($model, $uniqueId) !!}
 
 		@endif
 

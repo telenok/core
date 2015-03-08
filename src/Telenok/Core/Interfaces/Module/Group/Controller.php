@@ -2,22 +2,13 @@
 
 namespace Telenok\Core\Interfaces\Module\Group;
 
-abstract class Controller {
-    
-    use \Telenok\Core\Support\PackageLoad;
-    
-    protected $key = '';
+abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
+     
     protected $icon = 'fa fa-desktop'; 
     protected $btn = 'btn-info'; 
-    protected $modelGroupModule; 
-    protected $package; 
+    protected $modelGroupModule;  
     protected $languageDirectory = 'module-group';
-
-    public function getName()
-    {
-        return $this->LL('name');
-    }
-
+ 
     public function getButton()
     {
         return $this->btn;
@@ -26,12 +17,7 @@ abstract class Controller {
     public function getIcon()
     {
         return $this->icon;
-    }
-
-    public function getKey()
-    {
-        return $this->key;
-    }
+    } 
     
     public function setModelModuleGroup($model)
     {

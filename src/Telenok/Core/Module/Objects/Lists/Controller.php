@@ -193,7 +193,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 	public function getFilterSubQuery($input, $model, $query)
 	{
-		$controller = app('telenok.config')->getObjectFieldController();
+		$controller = app('telenok.config.repository')->getObjectFieldController();
 
 		if (!$input instanceof \Illuminate\Support\Collection)
 		{
@@ -221,7 +221,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $query->where(function($query) use ($str, $query, $model, $field)
         {
             $f = $model->getObjectField()->get($field);
-            app('telenok.config')
+            app('telenok.config.repository')
                     ->getObjectFieldController()->get($f->key)
                     ->getFilterQuery($f, $model, $query, $f->code, $str);
         });
@@ -246,7 +246,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         
         $items = $this->getListItem($model)->get();
 
-        $config = app('telenok.config')->getObjectFieldController();
+        $config = app('telenok.config.repository')->getObjectFieldController();
 
         $fieldsIterate = $type->field()->active()->get()->filter(function($item) use ($fields)
 				{
@@ -297,7 +297,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             
             $items = $this->getListItem($model)->get();
 
-			$config = app('telenok.config')->getObjectFieldController();
+			$config = app('telenok.config.repository')->getObjectFieldController();
 
             foreach ($items->slice(0, $this->displayLength, true) as $item)
             {
@@ -384,7 +384,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
-        \Event::fire('workflow.form.create', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
+        //\Event::fire('workflow.form.create', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
 
 		try
 		{
@@ -432,7 +432,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
-        \Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
+        //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
 
         $model->lock();
 
@@ -475,7 +475,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         {
 			\DB::transaction(function() use ($model, $type, $force)
 			{
-				\Event::fire('workflow.delete.before', (new \Telenok\Core\Workflow\Event())->setResourceCode("object_type.{$type->code}"));
+				//\Event::fire('workflow.delete.before', (new \Telenok\Core\Workflow\Event())->setResourceCode("object_type.{$type->code}"));
 
 				if ($force)
 				{
@@ -486,7 +486,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 					$model->delete();
 				}
 
-				\Event::fire('workflow.delete.after', (new \Telenok\Core\Workflow\Event())->setResourceCode("object_type.{$type->code}")->setResource($model));
+				//\Event::fire('workflow.delete.after', (new \Telenok\Core\Workflow\Event())->setResourceCode("object_type.{$type->code}")->setResource($model));
 			});
 
             return ['success' => 1];
@@ -528,7 +528,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             {
                 $eventResource = \Illuminate\Support\Collection::make(['model' => $model::find($id_), 'type' => $type, 'fields' => $fields]);
 
-                \Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
+                //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
                 
                 $content[] = view($this->getPresentationModelView(), array_merge(array( 
                     'controller' => $this,
@@ -622,7 +622,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]); 
 
-        \Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
+        //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
 
         $return = [];
         
@@ -666,7 +666,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]); 
 
-        \Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
+        //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
         
         $return = [];
         

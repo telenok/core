@@ -24,10 +24,32 @@ class CoreServiceProvider extends ServiceProvider {
 		$this->publishes([__DIR__ . '/../../../public' => public_path('packages/telenok/core')], 'public');
 
 		include __DIR__ . '/../../config/routes.php';
+		include __DIR__ . '/../../config/event.php';
 
+		\Auth::extend('custom', function()
+		{
+			return new \Telenok\Core\Security\Guard(
+					new \Telenok\Core\Security\UserProvider($this->app['hash'], $this->app['config']['auth.model']), $this->app['session.store']
+			);
+		});		
+		
 		if (!file_exists(storage_path() . '/installedTelenokCore'))
 		{
 			return;
+		}
+
+		\Event::fire('telenok.compile.setting');
+
+		if (!\Request::is('telenok', 'telenok/*'))
+		{
+			$routersPath = storage_path() . '/route/route.php';
+
+			if (!file_exists($routersPath))
+			{
+				\Event::fire('telenok.compile.route');
+			}
+
+			include $routersPath;
 		}
 	}
 
@@ -38,12 +60,51 @@ class CoreServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		if (!file_exists(storage_path() . '/installedTelenokCore'))
-		{
-			return;
-		}
-
 		$this->app->singleton('telenok.config.repository', '\Telenok\Core\Support\Config\Repository');
+
+		$this->registerMemcache();
+	}
+
+	public function registerMemcache()
+	{
+		$cfg = $this->app['config'];
+
+		$isCacheDriver = $cfg['cache.driver'] == 'memcache';
+		$servers = $cfg['cache.memcache']? : $cfg['cache.memcached'];
+		$prefix = $cfg['cache.prefix'];
+		$isSessionDriver = $cfg['session.driver'] == 'memcache';
+		$minutes = $cfg['session.lifetime'];
+		$memcache = $repo = $handler = $manager = $driver = null;
+
+		if ($isCacheDriver)
+		{
+			$memcache = (new \Telenok\Core\Support\Memcache\MemcacheConnector())->connect($servers);
+			$repo = new \Illuminate\Cache\Repository(new \Telenok\Core\Support\Memcache\MemcacheStore($memcache, $prefix));
+
+			$this->app->resolving('cache', function($cache) use ($repo)
+			{
+				$cache->extend('memcache', function($app) use ($repo)
+				{
+					return $repo;
+				});
+			});
+
+			if ($isSessionDriver)
+			{
+				$handler = new \Telenok\Core\Support\Memcache\MemcacheHandler($repo, $minutes);
+				$manager = new \Telenok\Core\Support\Memcache\MemcacheSessionManager($handler);
+
+				$driver = $manager->driver('memcache');
+
+				$this->app->resolving('session', function($session) use ($driver)
+				{
+					$session->extend('memcache', function($app) use ($driver)
+					{
+						return $driver;
+					});
+				});
+			}
+		}
 	}
 
 	/**

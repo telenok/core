@@ -703,12 +703,6 @@ class SeedLast extends Migration {
 					'code' => 'file',
 				])->makeRoot();
 
-		$folderBusinessProcess = (new \App\Model\Telenok\System\Folder())->storeOrUpdate([
-					'title' => ['en' => 'Business process', 'ru' => 'Бизнес-процесс'],
-					'active' => 1,
-					'code' => 'business_process',
-				])->makeRoot();
-
 		$folderWeb = (new \App\Model\Telenok\System\Folder())->storeOrUpdate([
 					'title' => ['en' => 'Web', 'ru' => 'Веб'],
 					'active' => 1,
@@ -749,11 +743,6 @@ class SeedLast extends Migration {
 		\App\Model\Telenok\Object\Type::where('code', 'page_controller')->first()->makeLastChildOf($folderWeb);
 		\App\Model\Telenok\Object\Type::where('code', 'widget_on_page')->first()->makeLastChildOf($folderWeb);
 		\App\Model\Telenok\Object\Type::where('code', 'domain')->first()->makeLastChildOf($folderWeb);
-
-		\App\Model\Telenok\Object\Type::where('code', 'workflow_process')->first()->makeLastChildOf($folderBusinessProcess);
-		\App\Model\Telenok\Object\Type::where('code', 'workflow_thread')->first()->makeLastChildOf($folderBusinessProcess);
-		\App\Model\Telenok\Object\Type::where('code', 'workflow_process_parameter')->first()->makeLastChildOf($folderBusinessProcess);
-		\App\Model\Telenok\Object\Type::where('code', 'workflow_process_variable')->first()->makeLastChildOf($folderBusinessProcess);
 
 		//Module group
 		(new \App\Model\Telenok\Web\ModuleGroup())->storeOrUpdate([
@@ -828,27 +817,6 @@ class SeedLast extends Migration {
 			'active' => 1,
 			'controller_class' => 'App\Http\Controllers\Module\Objects\Version\Controller',
 			'module_order' => 4,
-		]);
-
-		(new \App\Model\Telenok\Web\Module())->storeOrUpdate([
-			'title' => ['en' => 'Workflow', 'ru' => 'Workflow'],
-			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Workflow\Controller',
-			'module_order' => 2,
-		]);
-
-		(new \App\Model\Telenok\Web\Module())->storeOrUpdate([
-			'title' => ['en' => 'Process', 'ru' => 'Process'],
-			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Workflow\Process\Controller',
-			'module_order' => 1,
-		]);
-
-		(new \App\Model\Telenok\Web\Module())->storeOrUpdate([
-			'title' => ['en' => 'Thread', 'ru' => 'Thread'],
-			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Workflow\Thread\Controller',
-			'module_order' => 2,
 		]);
 
 		(new \App\Model\Telenok\Web\Module())->storeOrUpdate([
@@ -954,13 +922,6 @@ class SeedLast extends Migration {
 			'active' => 1,
 			'value' => 0,
 			'code' => 'app.acl.enabled',
-		]);
-
-		(new \App\Model\Telenok\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'Workflow enabled', 'ru' => 'Workflow разрешено'],
-			'active' => 1,
-			'value' => 0,
-			'code' => 'app.workflow.enabled',
 		]);
 
 		(new \App\Model\Telenok\System\Setting())->storeOrUpdate([

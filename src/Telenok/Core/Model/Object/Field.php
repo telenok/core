@@ -29,7 +29,7 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 		{
             $type = $model->fieldObjectType()->first();
                         
-			if ($controllers = app('telenok.config')->getObjectFieldController()->get($model->key))
+			if ($controllers = app('telenok.config.repository')->getObjectFieldController()->get($model->key))
 			{
 				return $controllers->processDeleting($model);
 			}
@@ -67,7 +67,7 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 		{
 			parent::getFillable();
 
-			foreach(app('telenok.config')->getObjectFieldController()->all() as $controller)
+			foreach(app('telenok.config.repository')->getObjectFieldController()->all() as $controller)
 			{
                 $dateField = (array) $controller->getSpecialDateField($this);
 

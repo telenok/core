@@ -4,8 +4,6 @@ namespace Telenok\Core\Interfaces\Controller\Frontend;
 
 abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
-    protected $key = '';
-    protected $package = '';
     protected $controllerModel;
     protected $container = [];
     protected $jsFilePath = [];
@@ -39,7 +37,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 			})
 			->orderBy('widget_order')->get();
 
-	$widgetConfig = app('telenok.config')->getWidget();
+	$widgetConfig = app('telenok.config.repository')->getWidget();
 
 	$wop->each(function($w) use (&$content, $widgetConfig)
 	{
@@ -82,7 +80,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
     {
 	$content = [];
 
-	$listWidget = app('telenok.config')->getWidget();
+	$listWidget = app('telenok.config.repository')->getWidget();
 	$pageId = intval(str_replace('page_', '', \Route::currentRouteName()));
 
 	try
