@@ -18,6 +18,10 @@
 			{
 				return this.presentationDomId;
 			},
+			getPresentationParam: function(param)
+			{
+				return this.presentationParam;
+			},
 			setPageHeader: function()
 			{
 				jQuery('div.page-header', '#' + this.presentationDomId).html('<h1>' 
@@ -121,6 +125,24 @@
 				});
 
 				return this;
+			},
+			removePageAttribute: function()
+			{
+				var trees = jQuery('div.telenok-presentation-tree div.telenok-tree', '#' + this.presentationDomId).size();
+				
+				if (!trees)
+				{
+					this.removePageHeader();
+					this.removeBreadcrumbs();
+				}
+			},
+			removePageHeader: function()
+			{
+				jQuery('div.page-header', '#' + this.presentationDomId).html("").hide();
+			},
+			removeBreadcrumbs: function()
+			{
+				telenok.removeBreadcrumbs();
 			},
 			showSkeleton: function()
 			{
