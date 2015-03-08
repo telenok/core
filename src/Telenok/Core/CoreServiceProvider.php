@@ -26,6 +26,8 @@ class CoreServiceProvider extends ServiceProvider {
 		include __DIR__ . '/../../config/routes.php';
 		include __DIR__ . '/../../config/event.php';
 
+		$this->commands('command.telenok.install');
+
 		\Auth::extend('custom', function()
 		{
 			return new \Telenok\Core\Security\Guard(
