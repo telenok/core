@@ -7,12 +7,10 @@ if (!\Request::is('telenok', 'telenok/*'))
 
 //\Route::filter('access-module', 'Telenok\Core\Filter\Router\Backend\Controller@accessModule');
 
-\Route::when('/*', ['middleware' => 'csrf'], ['post']);
+//\Route::when('/*', ['middleware' => 'csrf'], ['post']);
 
 \Route::get('telenok', array('as' => 'cmf.content', 'uses' => "Telenok\Core\Controller\Backend\Controller@getContent"));
 \Route::get('telenok/error', array('as' => 'error.access-denied', 'uses' => "Telenok\Core\Controller\Backend\Controller@errorAccessDenied"));
-\Route::any('telenok/login', array('as' => 'cmf.login', 'uses' => "Telenok\Core\Controller\Backend\Controller@login"));
-\Route::post('telenok/logout', array('as' => 'cmf.logout', 'uses' => "Telenok\Core\Controller\Backend\Controller@logout"));
 
 // Update user's UI setting
 \Route::post('telenok/user/update/ui-setting', array('as' => 'cmf.user.update.ui-setting', 'uses' => "Telenok\Core\Controller\Backend\Controller@updateBackendUISetting"));
@@ -119,3 +117,17 @@ if (!\Request::is('telenok', 'telenok/*'))
 \Route::get('telenok/module/web-page-constructor/view/page/remove/widget-id/{id}/', array('as' => 'cmf.module.web-page-constructor.view.page.remove.widget', 'uses' => "App\Http\Controllers\Module\Web\PageConstructor\Controller@removeWidget"));
 \Route::post('telenok/module/web-page-constructor/view/page/widget/buffer/add/{id}/key/{key}', array('as' => 'cmf.module.web-page-constructor.view.buffer.add.widget', 'uses' => "App\Http\Controllers\Module\Web\PageConstructor\Controller@addBufferWidget"));
 \Route::post('telenok/module/web-page-constructor/view/page/widget/buffer/delete/{id}', array('as' => 'cmf.module.web-page-constructor.view.buffer.delete.widget', 'uses' => "App\Http\Controllers\Module\Web\PageConstructor\Controller@deleteBufferWidget"));
+
+/*
+Route::controllers([
+	'telenok/auth' => '',
+	'telenok/password' => 'Telenok\Core\Controller\Auth\PasswordController',
+]);
+*/
+
+\Route::get('telenok/login', array('as' => 'cmf.login.content', 'uses' => "Telenok\Core\Controller\Auth\AuthController@getLogin"));
+\Route::post('telenok/login', array('as' => 'cmf.login.process', 'uses' => "Telenok\Core\Controller\Auth\AuthController@postLogin"));
+\Route::get('telenok/logout', array('as' => 'cmf.logout', 'uses' => "Telenok\Core\Controller\Backend\Controller@logout"));
+\Route::post('telenok/password/reset', array('as' => 'cmf.password.reset.process', 'uses' => "Telenok\Core\Controller\Auth\PasswordController@postReset"));
+
+

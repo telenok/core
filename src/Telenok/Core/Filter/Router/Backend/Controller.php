@@ -23,7 +23,7 @@ class Controller {
             }
             else if (\Auth::guest())
             {
-                return \Redirect::route('cmf.login');
+                return \Redirect::route('cmf.login.content');
             }
             else
             {
@@ -32,7 +32,7 @@ class Controller {
         }
         else if (!$request->is('telenok/login') && ($request->is('telenok', 'telenok/*')) && \Auth::guest())
         {
-            return \Redirect::route('cmf.login');
+            return \Redirect::route('cmf.login.content');
         }
         else if ($request->is('telenok/login') && !\Auth::guest() && $accessControlPanel)
         {
