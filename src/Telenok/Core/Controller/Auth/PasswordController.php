@@ -20,11 +20,9 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 
 	public function postReset(\Illuminate\Http\Request $request)
 	{
-		try
-		{
-			$this->validate($request, ['email' => 'required|email']);
-		} 
-		catch (\Exception $e)
+		$v = \Validator::make($request->all(), ['email' => 'required|email']);
+
+		if ($v->fails())
 		{
 			return json_encode(['error' => 1]);
 		}

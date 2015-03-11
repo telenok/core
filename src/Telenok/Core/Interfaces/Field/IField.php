@@ -46,6 +46,13 @@ interface IField extends \Telenok\Core\Interfaces\IRequest {
 
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null);
 
+	/**
+	 * Return Object Type linked to the field
+	 * 
+	 * @param \App\Model\Telenok\Object\Field $field
+	 * @return \App\Model\Telenok\Object\Type
+	 * 
+	 */
     public function getLinkedModelType($field);
 
     public function getTableList($id = null, $fieldId = null, $uniqueId = null);

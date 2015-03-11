@@ -10,5 +10,3 @@ class {{class}} extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Cont
     protected $modelTreeClass = '{{classTree}}';
 
 }
-
-?>

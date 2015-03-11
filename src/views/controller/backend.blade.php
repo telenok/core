@@ -227,6 +227,29 @@
 			</div>
         </div>
         
-        
-</body>
+		<script type="text/javascript">
+
+			jQuery(function($)
+			{
+				setInterval(function()
+				{
+					$.ajax({
+						url: "{!! route('cmf.update.csrf') !!}",
+						dataType: "json",
+						success: function(data)
+						{
+							jQuery('meta[name="csrf-token"]').attr('content', data.csrf_token);
+						}
+					});
+				}, 1000*600);
+			});
+
+			jQuery.ajaxSetup({
+				headers: {
+					'X-CSRF-Token': jQuery('meta[name="csrf-token"]').attr('content')
+				}
+			});
+
+		</script>
+	</body>
 @stop

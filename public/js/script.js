@@ -171,7 +171,7 @@ var telenokJS = Clazzzz.extend(
     {
         jQuery.ajax({
             url: '/telenok/user/update/ui-setting',
-            method: 'get',
+            method: 'post',
             data: {
                 key: key,
                 value: value

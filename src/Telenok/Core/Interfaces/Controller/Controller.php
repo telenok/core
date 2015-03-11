@@ -28,13 +28,25 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
 		return $this;
     }
     
-    public function setRequest(\Illuminate\Http\Request $request = null)
+	
+	/**
+	 * Set http request
+	 * 
+	 * @param \Illuminate\Http\Request  $request
+	 * @return $this
+	 */
+    public function setRequest($request = null)
     {
         $this->request = $request;
         
         return $this;
     }
 
+	/**
+	 * Get http request
+	 * 
+	 * @return \Illuminate\Http\Request
+	 */
     public function getRequest()
     {
         return $this->request;

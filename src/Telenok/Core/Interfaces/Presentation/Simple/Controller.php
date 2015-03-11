@@ -2,10 +2,9 @@
 
 namespace Telenok\Core\Interfaces\Presentation\Simple;
 
-use \Telenok\Core\Interfaces\Module\Controller as Module;
 use \Telenok\Core\Interfaces\Presentation\IPresentation;
 
-abstract class Controller extends Module implements IPresentation {
+abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller implements IPresentation {
 
     protected $presentation = 'simple';
     protected $presentationView = '';

@@ -16,6 +16,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		return $field->relation_one_to_many_belong_to ? $field->{$linkedField} : $field->relation_one_to_many_has;
 	}
 	
+	/**
+	 * Return Object Type linked to the field
+	 * 
+	 * @param \App\Model\Telenok\Object\Field $field
+	 * @return \App\Model\Telenok\Object\Type
+	 * 
+	 */
 	public function getLinkedModelType($field)
 	{
 		return \App\Model\Telenok\Object\Type::whereIn('id', [$field->relation_one_to_many_has, $field->relation_one_to_many_belong_to])->first();

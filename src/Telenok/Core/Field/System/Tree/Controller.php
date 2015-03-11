@@ -17,6 +17,13 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 		return \App\Model\Telenok\Object\Type::withPermission()->where('treeable', 1)->get(['id'])->fetch('id')->all();
 	}
 
+	/**
+	 * Return Object Type linked to the field
+	 * 
+	 * @param \App\Model\Telenok\Object\Field $field
+	 * @return \App\Model\Telenok\Object\Type
+	 * 
+	 */
 	public function getLinkedModelType($field)
 	{
 		return \App\Model\Telenok\Object\Type::where('code', 'object_sequence')->first();

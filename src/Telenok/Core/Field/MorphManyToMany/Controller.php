@@ -16,6 +16,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		return [];
     } 
 
+	/**
+	 * Return Object Type linked to the field
+	 * 
+	 * @param \App\Model\Telenok\Object\Field $field
+	 * @return \App\Model\Telenok\Object\Type
+	 * 
+	 */
 	public function getLinkedModelType($field)
 	{
 		return \App\Model\Telenok\Object\Type::whereIn('id', [$field->morph_many_to_many_has, $field->morph_many_to_many_belong_to])->first();
