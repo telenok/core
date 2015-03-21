@@ -3,7 +3,7 @@
 namespace Telenok\Core\Interfaces\Module;
 
 abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Module\IModule {
- 
+
     protected $permissionKey = '';
     protected $parent = '';
     protected $group = '';
@@ -25,12 +25,12 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 			});
 		}
     }
-	 
+
     public function getHeader()
     {
         return $this->LL('header.title');
     }    
-    
+
     public function getHeaderDescription()
     {
         return $this->LL('header.description');

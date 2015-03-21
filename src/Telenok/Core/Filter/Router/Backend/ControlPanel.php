@@ -6,6 +6,11 @@ class ControlPanel {
 
 	public function filter()
 	{
+		if (in_array(\Route::currentRouteName(), ['cmf.login.content', 'error.access-denied', 'cmf.login.process', 'cmf.password.reset.process']))
+		{
+			return;
+		}
+
 		if (app('config')->get('app.acl.enabled'))
 		{
 			$accessControlPanel = \Auth::can('read', 'control_panel');
@@ -14,7 +19,7 @@ class ControlPanel {
 		{
 			$accessControlPanel = \Auth::hasRole('super_administrator');
 		}
-
+ 
 		if (!$accessControlPanel)
 		{
 			if (\Request::ajax())

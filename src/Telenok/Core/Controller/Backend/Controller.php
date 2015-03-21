@@ -8,7 +8,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
 	public function __construct()
 	{
-		if (!\App::runningInConsole())
+		if (!app()->runningInConsole())
 		{
 			$this->beforeFilter('control-panel', ['except' => ['errorAccessDenied']]);
 		}
