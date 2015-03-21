@@ -14,13 +14,16 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
     public function __construct()
     {
-		$this->beforeFilter(function()
+		if (!app()->runningInConsole())
 		{
-			if (!\Auth::can('read', $this->getPermissionKey()))
+			$this->beforeFilter(function()
 			{
-				return \Redirect::route('error.access-denied');
-			}
-		});
+				if (!\Auth::can('read', $this->getPermissionKey()))
+				{
+					return \Redirect::route('error.access-denied');
+				}
+			});
+		}
     }
 	 
     public function getHeader()

@@ -8,7 +8,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
 	public function __construct()
 	{
-		$this->beforeFilter('control-panel', ['except' => ['errorAccessDenied']]);
+		if (!\App::runningInConsole())
+		{
+			$this->beforeFilter('control-panel', ['except' => ['errorAccessDenied']]);
+		}
 	}
 
 	public function updateBackendUISetting($key = null, $value = null)

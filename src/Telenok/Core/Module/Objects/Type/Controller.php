@@ -73,7 +73,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 				->filter(function($i)
 				{
 					return trim($i);
-				})->each(function($item)
+				})
+				->each(function($item)
 				{
 					if (!preg_match('/^[a-z][\w]*$/i', $item))
 					{
@@ -84,6 +85,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 		{
 			return ucfirst($item);
 		});
+
+		if ($classNameCollection->isEmpty())
+		{
+			throw new \Exception($this->LL('error.class_model.name'));
+		}
 
 		$input->put('class_model', '\\' . implode($classNameCollection->all(), '\\'));
 

@@ -26,7 +26,8 @@ class CoreServiceProvider extends ServiceProvider {
 		include __DIR__ . '/../../config/routes.php';
 		include __DIR__ . '/../../config/event.php';
 
-		//$this->commands('command.telenok.install');
+		$this->commands('command.telenok.install');
+		$this->commands('command.telenok.seed');
 
 		\Auth::extend('custom', function()
 		{
@@ -34,7 +35,7 @@ class CoreServiceProvider extends ServiceProvider {
 					new \Telenok\Core\Security\UserProvider($this->app['hash'], $this->app['config']['auth.model']), $this->app['session.store']
 			);
 		});		
-		
+
 		if (!file_exists(storage_path() . '/installedTelenokCore'))
 		{
 			return;
@@ -63,6 +64,16 @@ class CoreServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$this->app->singleton('telenok.config.repository', '\Telenok\Core\Support\Config\Repository');
+
+		$this->app['command.telenok.install'] = $this->app->share(function($app)
+		{
+			return new \Telenok\Core\Command\Install();
+		});
+
+		$this->app['command.telenok.seed'] = $this->app->share(function($app)
+		{
+			return new \Telenok\Core\Command\Seed();
+		});
 
 		$this->registerMemcache();
 	}
