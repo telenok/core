@@ -26,13 +26,13 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
 
 		$this->info('Configure Telenok CMS');
 
-		if ($this->confirm('Do you want to configure app.php [yes/no]: ', false))
+		if ($this->confirm('Do you want to configure enviroment for app.php [yes/no]: ', false))
 		{
 			$this->inputDomain();
 			$this->inputDomainSecure();
 			$this->inputLocale();
 
-			if ($this->confirm('Do you want to replace app.php [yes/no]: ', false))
+			if ($this->confirm('Do you want to update .env file [yes/no]: ', false))
 			{
 				try
 				{
@@ -48,7 +48,7 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
 			}
 		}
 
-		if ($this->confirm('Do you want to configure database.php [yes/no]: ', false))
+		if ($this->confirm('Do you want to configure enviroment for database.php [yes/no]: ', false))
 		{
 			$this->inputDbDriver();
 			$this->inputDbHost();
@@ -57,7 +57,7 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
 			$this->inputDbDatabase();
 			$this->inputDbPrefix();
 
-			if ($this->confirm('Do you want to replace database.php files [yes/no]: ', false))
+			if ($this->confirm('Do you want to update .env file [yes/no]: ', false))
 			{
 				try
 				{
