@@ -235,45 +235,70 @@ class Controller {
 	{
 		return (mb_strlen($param) && (filter_var($param, FILTER_VALIDATE_IP) || gethostbyname(idn_to_ascii($param))));
 	}
-
+	
 	public function processConfigAppFile()
 	{
 		$param = array(
-			'domain' => $this->domain,
-			'domainSecure' => $this->domainSecure ? 's' : '',
-			'locale' => $this->locale,
-			'random' => str_random(),
+			'APP_URL' => 'http' . ($this->domainSecure ? 's' : '') . '://' . $this->domain,
+			'APP_LOCALE' => $this->locale,
+			'APP_KEY' => str_random(),
 		);
 
-		$stub = \File::get(__DIR__ . '/stubs/app.stub');
+		$path = base_path('.env');
+		$path_example = base_path('.env.example');
+
+		if (!file_exists($path))
+		{
+			copy($path_example, $path);
+		}
+		
+		if (!file_exists($path))
+		{
+			throw new \Exception('Cant create "' . $path . '" file');
+		}
+		
+		$stub = \File::get($path);
 
 		foreach ($param as $k => $v)
 		{
-			$stub = str_replace('{{' . $k . '}}', $v, $stub);
+			$stub = preg_replace('/^[ \t]*(' . preg_quote($v) . '=)(.*)$/u', '$1' . $v);
 		}
-
-		\File::put(app()->configPath() . DIRECTORY_SEPARATOR . 'app.php', $stub);
+		
+		\File::put($path, $stub);
 	}
 
 	public function processConfigDatabaseFile()
 	{
 		$param = array(
-			'dbDriver' => $this->dbDriver,
-			'dbDatabase' => $this->dbDatabase,
-			'dbHost' => $this->dbHost,
-			'dbUsername' => $this->dbUsername,
-			'dbPassword' => $this->dbPassword,
-			'dbPrefix' => $this->dbPrefix,
+			'DB_CONNECTION_DEFAULT' => $this->dbDriver,
+			'DB_DATABASE' => $this->dbDatabase,
+			'DB_HOST' => $this->dbHost,
+			'DB_USERNAME' => $this->dbUsername,
+			'DB_PASSWORD' => $this->dbPassword,
+			'DB_PREFIX' => $this->dbPrefix,
 		);
 
-		$stub = \File::get(__DIR__ . '/stubs/database.stub');
+		$path = base_path('.env');
+		$path_example = base_path('.env.example');
+
+		if (!file_exists($path))
+		{
+			copy($path_example, $path);
+		}
+		
+		if (!file_exists($path))
+		{
+			throw new \Exception('Cant create "' . $path . '" file');
+		}
+		
+		$stub = \File::get($path);
 
 		foreach ($param as $k => $v)
 		{
-			$stub = str_replace('{{' . $k . '}}', $v, $stub);
+			$stub = preg_replace('/^[ \t]*(' . preg_quote($v) . '=)(.*)$/u', '$1' . $v);
 		}
 
-		\File::put(app()->configPath() . DIRECTORY_SEPARATOR . 'database.php', $stub);
+		\File::put($path, $stub);
 
 		// validate database connection
 		$conn = array(
