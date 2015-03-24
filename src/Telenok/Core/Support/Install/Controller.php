@@ -267,7 +267,7 @@ class Controller {
 			}
 			else
 			{
-				$stub .= '\n' . $k . '=' . $v;
+				$stub .= "\n" . $k . '=' . $v;
 			}
 		}
 		
@@ -308,7 +308,7 @@ class Controller {
 			}
 			else
 			{
-				$stub .= '\n' . $k . '=' . $v;
+				$stub .= "\n" . $k . '=' . $v;
 			}
 		}
 
