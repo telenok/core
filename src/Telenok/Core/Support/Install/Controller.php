@@ -310,9 +310,7 @@ class Controller {
 			{
 				$stub .= "\n" . $k . '=' . $v;
 			}
-		}
-
-		\File::put($path, $stub);
+		} 
 
 		// validate database connection
 		$conn = array(
@@ -348,7 +346,7 @@ class Controller {
 			throw new \Exception('Cant create table in database. Please, validate setting in app/config/database.php or set its again with current console command.');
 		}
 
-		\File::put(app()->configPath() . DIRECTORY_SEPARATOR . 'database.php', $stub);
+		\File::put($path, $stub);
 	}
 
 	public function touchInstallFlag()
