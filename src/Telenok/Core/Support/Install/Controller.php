@@ -261,9 +261,9 @@ class Controller {
 
 		foreach ($param as $k => $v)
 		{
-			if (preg_match('/^[ \t]*' . preg_quote($k, '/') . '[=].*$/u', $stub))
+			if (preg_match('/^[ \t]*' . preg_quote($k, '/') . '[=].*$/mu', $stub))
 			{
-				$stub = preg_replace('/^[ \t]*(' . preg_quote($k, '/') . '=)(.*)$/u', '$1' . $v, $stub);
+				$stub = preg_replace('/^[ \t]*(' . preg_quote($k, '/') . '=)(.*)$/iu', '$1' . $v, $stub);
 			}
 			else
 			{
@@ -302,9 +302,9 @@ class Controller {
 
 		foreach ($param as $k => $v)
 		{
-			if (preg_match('/^[ \t]*' . preg_quote($k, '/') . '[=].*$/u', $stub))
+			if (preg_match('/^[ \t]*' . preg_quote($k, '/') . '[=].*$/imu', $stub))
 			{
-				$stub = preg_replace('/^[ \t]*(' . preg_quote($k, '/') . '=)(.*)$/u', '$1' . $v, $stub);
+				$stub = preg_replace('/^[ \t]*(' . preg_quote($k, '/') . '=)(.*)$/iu', '$1' . $v, $stub);
 			}
 			else
 			{
