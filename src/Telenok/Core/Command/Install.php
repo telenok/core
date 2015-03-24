@@ -105,8 +105,6 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
 		{
 			$this->info('Seems, table "migrations" already exists');
 		}
-
-		$this->processingController->touchInstallFlag();
 	}
 
 	public function inputDomain()
