@@ -261,7 +261,14 @@ class Controller {
 
 		foreach ($param as $k => $v)
 		{
-			$stub = preg_replace('/^[ \t]*(' . preg_quote($v) . '=)(.*)$/u', '$1' . $v, $stub);
+			if (preg_match('/^[ \t]*' . preg_quote($k, '/') . '=.*$/u', $stub))
+			{
+				$stub = preg_replace('/^[ \t]*(' . preg_quote($k, '/') . '=)(.*)$/u', '$1' . $v, $stub);
+			}
+			else
+			{
+				$stub .= '\n' . $k . '=' . $v;
+			}
 		}
 		
 		\File::put($path, $stub);
@@ -295,7 +302,14 @@ class Controller {
 
 		foreach ($param as $k => $v)
 		{
-			$stub = preg_replace('/^[ \t]*(' . preg_quote($v) . '=)(.*)$/u', '$1' . $v, $stub);
+			if (preg_match('/^[ \t]*' . preg_quote($k, '/') . '=.*$/u', $stub))
+			{
+				$stub = preg_replace('/^[ \t]*(' . preg_quote($k, '/') . '=)(.*)$/u', '$1' . $v, $stub);
+			}
+			else
+			{
+				$stub .= '\n' . $k . '=' . $v;
+			}
 		}
 
 		\File::put($path, $stub);
