@@ -233,7 +233,7 @@ class Controller {
 
 	public function validateDomainOrIp($param)
 	{
-		return (mb_strlen($param) && (filter_var($param, FILTER_VALIDATE_IP) || gethostbyname(idn_to_ascii($param))));
+		return mb_strlen($param);
 	}
 	
 	public function processConfigAppFile()
@@ -261,7 +261,7 @@ class Controller {
 
 		foreach ($param as $k => $v)
 		{
-			$stub = preg_replace('/^[ \t]*(' . preg_quote($v) . '=)(.*)$/u', '$1' . $v);
+			$stub = preg_replace('/^[ \t]*(' . preg_quote($v) . '=)(.*)$/u', '$1' . $v, $stub);
 		}
 		
 		\File::put($path, $stub);
@@ -295,7 +295,7 @@ class Controller {
 
 		foreach ($param as $k => $v)
 		{
-			$stub = preg_replace('/^[ \t]*(' . preg_quote($v) . '=)(.*)$/u', '$1' . $v);
+			$stub = preg_replace('/^[ \t]*(' . preg_quote($v) . '=)(.*)$/u', '$1' . $v, $stub);
 		}
 
 		\File::put($path, $stub);
