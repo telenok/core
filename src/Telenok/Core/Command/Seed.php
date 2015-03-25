@@ -34,6 +34,8 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 
 			$this->info('Start creating tables and seed database. Please, wait. It can take some minuts.');
 
+			$this->processingController->createBaseTable($this);
+			
 			$this->call('migrate', array('--force', '--path' => 'vendor\telenok\core\src\migrations'));
 
 			$this->processingController->touchInstallFlag();

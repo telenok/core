@@ -72,39 +72,8 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
 				}
 			}
 		}
-
-		if (!\Schema::hasTable('setting'))
-		{
-			\Schema::create('setting', function(\Illuminate\Database\Schema\Blueprint $table)
-			{
-				$table->increments('id');
-				$table->timestamps();
-				$table->softDeletes();
-
-				$table->text('title')->nullable();
-				$table->string('code')->nullable()->default(null)->unique('code');
-				$table->mediumText('value');
-				$table->integer('active')->unsigned()->nullable()->default(null);
-				$table->timestamp('active_at_start');
-				$table->timestamp('active_at_end');
-				$table->integer('created_by_user')->unsigned()->nullable()->default(null);
-				$table->integer('updated_by_user')->unsigned()->nullable()->default(null);
-				$table->integer('deleted_by_user')->unsigned()->nullable()->default(null);
-			});
-		}
-		else
-		{
-			$this->info('Seems, table "setting" already exists');
-		}
-
-		try
-		{
-			$this->call('migrate:install');
-		}
-		catch (\Exception $ex)
-		{
-			$this->info('Seems, table "migrations" already exists');
-		}
+		
+		$this->processingController->createBaseTable($this);
 	}
 
 	public function inputDomain()
