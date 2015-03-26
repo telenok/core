@@ -41,7 +41,7 @@
 
                                                 {!! Form::open(['route' => 'cmf.login.process', 'method' => 'post', 'id' => 'login']) !!}
 												
-													<div class="login-notice alert alert-danger display-none" id='password-reset-error'>
+													<div class="login-notice alert alert-danger display-none" id='login-error'>
 														{{ $controller->LL('error.login.title') }}<br><br>
 														<ul>
 															<li>{{ $controller->LL('error.login') }}</li>
