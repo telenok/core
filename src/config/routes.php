@@ -3,7 +3,7 @@
 if (\Request::is('telenok', 'telenok/*'))
 {
 	\Route::filter('control-panel', 'Telenok\Core\Filter\Router\Backend\ControlPanel@filter');
-	\Route::whenRegex('/telenok.*/u', 'control-panel');
+	\Route::whenRegex('/telenok.*/', 'control-panel');
 
 	\Route::get('telenok', array('as' => 'cmf.content', 'uses' => "Telenok\Core\Controller\Backend\Controller@getContent"));
 	\Route::get('telenok/error', array('as' => 'error.access-denied', 'uses' => "Telenok\Core\Controller\Backend\Controller@errorAccessDenied"));
@@ -118,6 +118,6 @@ if (\Request::is('telenok', 'telenok/*'))
 	\Route::get('telenok/login', array('as' => 'cmf.login.content', 'uses' => "Telenok\Core\Controller\Auth\AuthController@getLogin"));
 	\Route::post('telenok/login', array('as' => 'cmf.login.process', 'uses' => "Telenok\Core\Controller\Auth\AuthController@postLogin"));
 	\Route::get('telenok/logout', array('as' => 'cmf.logout', 'uses' => "Telenok\Core\Controller\Backend\Controller@logout"));
-	\Route::post('telenok/password/reset', array('as' => 'cmf.password.reset.process', 'uses' => "Telenok\Core\Controller\Auth\PasswordController@postReset"));
-
+	\Route::post('telenok/password/reset', array('as' => 'cmf.password.reset.process', 'uses' => "Telenok\Core\Controller\Auth\PasswordController@postEmail"));
+	\Route::get('telenok/password/reset/{token}', array('as' => 'cmf.password.reset.token', 'uses' => "Telenok\Core\Controller\Auth\PasswordController@getReset"));
 }

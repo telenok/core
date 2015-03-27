@@ -6,7 +6,7 @@ class ControlPanel {
 
 	public function filter()
 	{
-		if (in_array(\Route::currentRouteName(), ['cmf.login.content', 'error.access-denied', 'cmf.login.process', 'cmf.password.reset.process']))
+		if (in_array(\Route::currentRouteName(), ['cmf.login.content', 'error.access-denied', 'cmf.login.process', 'cmf.password.reset.process', 'cmf.password.reset.token']))
 		{
 			return;
 		}

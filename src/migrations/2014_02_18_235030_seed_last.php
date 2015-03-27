@@ -938,5 +938,40 @@ class SeedLast extends Migration {
 			'code' => 'app.backend.brand',
 		]);
 
+		(new \App\Model\Telenok\System\Setting())->storeOrUpdate([
+			'title' => ['en' => 'Twitter page', 'ru' => 'Страница в Twitter'],
+			'active' => 1,
+			'value' => 'https://twitter.com/',
+			'code' => 'app.social.twitter.url',
+		]);
+
+		(new \App\Model\Telenok\System\Setting())->storeOrUpdate([
+			'title' => ['en' => 'Facebook page', 'ru' => 'Страница в Facebook'],
+			'active' => 1,
+			'value' => 'https://facebook.com/',
+			'code' => 'app.social.facebook.url',
+		]);
+
+		(new \App\Model\Telenok\System\Setting())->storeOrUpdate([
+			'title' => ['en' => 'VK page', 'ru' => 'Страница в VK'],
+			'active' => 1,
+			'value' => 'https://vk.com/',
+			'code' => 'app.social.vk.url',
+		]);
+
+		(new \App\Model\Telenok\System\Setting())->storeOrUpdate([
+			'title' => ['en' => 'Google+ page', 'ru' => 'Страница в Google+'],
+			'active' => 1,
+			'value' => 'https://plus.google.com/',
+			'code' => 'app.social.google-plus.url',
+		]);
+
+		(new \App\Model\Telenok\System\Setting())->storeOrUpdate([
+			'title' => ['en' => 'Youtube page', 'ru' => 'Страница в Youtube'],
+			'active' => 1,
+			'value' => 'https://youtube.com/',
+			'code' => 'app.social.youtube.url',
+		]);
+
 	}
 }
