@@ -1149,7 +1149,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function LL($key = '', $param = [])
 	{
-		return \Lang::get("core::default.$key", $param);
+		return trans("core::default.$key", $param);
 	}
 
 	public function createdByUser()

@@ -351,15 +351,15 @@
 					},
 					"oLanguage": {
 						"oPaginate": {
-							"sNext": "{{ \Lang::get('core::default.btn.next') }}",
-							"sPrevious": "{{ \Lang::get('core::default.btn.prev') }}", 
+							"sNext": "{{ trans('core::default.btn.next') }}",
+							"sPrevious": "{{ trans('core::default.btn.prev') }}", 
 						},
-						"sEmptyTable": "{{ \Lang::get('core::default.table.empty') }}",
-						"sSearch": "{{ \Lang::get('core::default.btn.search') }} ",
-						"sSearchPlaceholder": "{{ \Lang::get('core::default.table.placeholder.search') }} ",
-						"sInfo": "{{ \Lang::get('core::default.table.showed') }}",
-						"sInfoEmpty": "{{ \Lang::get('core::default.table.empty.showed') }}",
-						"sZeroRecords": "{{ \Lang::get('core::default.table.empty.filtered') }}",
+						"sEmptyTable": "{{ trans('core::default.table.empty') }}",
+						"sSearch": "{{ trans('core::default.btn.search') }} ",
+						"sSearchPlaceholder": "{{ trans('core::default.table.placeholder.search') }} ",
+						"sInfo": "{{ trans('core::default.table.showed') }}",
+						"sInfoEmpty": "{{ trans('core::default.table.empty.showed') }}",
+						"sZeroRecords": "{{ trans('core::default.table.empty.filtered') }}",
 						"sInfoFiltered": "",
 					}
 				}, param);

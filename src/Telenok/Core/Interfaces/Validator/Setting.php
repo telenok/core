@@ -24,7 +24,7 @@ class Setting {
     
     public function setMessage($param = [])
     {
-        $this->message = array_merge(\Lang::get('core::default.error'), (array)$param);
+        $this->message = array_merge(trans('core::default.error'), (array)$param);
 
         return $this;
     }

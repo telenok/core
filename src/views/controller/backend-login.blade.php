@@ -42,7 +42,7 @@
                                                 {!! Form::open(['route' => 'cmf.login.process', 'method' => 'post', 'id' => 'login']) !!}
 												
 													<div class="login-notice alert alert-danger display-none" id='login-error'>
-														{{ $controller->LL('error.login.title') }}<br><br>
+														{!! $controller->LL('error.login.title') !!}<br><br>
 														<ul>
 															<li>{{ $controller->LL('error.login') }}</li>
 														</ul>
@@ -107,10 +107,10 @@
                                                     {{ $controller->LL('title-email-password') }}
                                                 </p>
 
-                                                {!! Form::open(['route' => 'cmf.password.reset.process', 'method' => 'post', 'id' => 'password-reset']) !!}
+                                                {!! Form::open(['route' => 'cmf.password.reset.email.process', 'method' => 'post', 'id' => 'password-reset']) !!}
 
 													<div class="password-reset-notice alert alert-danger display-none" id='password-reset-error'>
-														{{ $controller->LL('error.password.reset.title') }}<br><br>
+														{!! $controller->LL('error.password.reset.title') !!}<br><br>
 														<ul>
 															<li>{{ $controller->LL('error.password.reset') }}</li>
 														</ul>
@@ -175,7 +175,7 @@
 			{
 				$.ajax({
 						type: "POST",
-						url: "{!! route('cmf.password.reset.process') !!}",
+						url: "{!! route('cmf.password.reset.email.process') !!}",
 						data: jQuery(this).serialize(),
 						dataType: 'json',
 						success: function(data)

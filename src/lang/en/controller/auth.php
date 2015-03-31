@@ -20,7 +20,7 @@ return array(
     
     'email.sent' => 'Within a few minutes you will receive an email with instructions to reset your password',
 	
-	'error.login.title' => '<strong>Whoops!</strong> There were some problems with your input.',
+	'error.login.title' => '<strong>Whoops!</strong> There were some problems with your input',
     'error.login' => 'Wrong username or password',
 	
 	'error.password.reset.title' => '<strong>Whoops!</strong> There were some problems with your input.',

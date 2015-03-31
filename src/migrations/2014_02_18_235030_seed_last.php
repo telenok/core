@@ -932,6 +932,13 @@ class SeedLast extends Migration {
 		]);
 
 		(new \App\Model\Telenok\System\Setting())->storeOrUpdate([
+			'title' => ['en' => 'Minimum password length', 'ru' => 'Минимальная длина пароля'],
+			'active' => 1,
+			'value' => 8,
+			'code' => 'auth.password.length-min',
+		]);
+
+		(new \App\Model\Telenok\System\Setting())->storeOrUpdate([
 			'title' => ['en' => 'Backend brand', 'ru' => 'Backend brand'],
 			'active' => 1,
 			'value' => 'Company Co.',

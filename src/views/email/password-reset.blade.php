@@ -1,4 +1,4 @@
-@extends('layout.email')
+@extends('core::layout.email')
 
 @section('header-row')
 <table class="header-row" width="378" cellspacing="0" cellpadding="0" border="0" style="table-layout: fixed;">
@@ -6,7 +6,7 @@
 	<tr>
 	  <td class="header-row-td" width="378" style="font-family: Arial, sans-serif; font-weight: normal; line-height: 19px; color: #478fca; margin: 0px; font-size: 18px; padding-bottom: 10px; padding-top: 15px;" 
 		  valign="top" align="left">
-		{{\Lang::get('passwords.reset.title')}}
+		{{trans('core::controller/backend-password-reset.reset.title')}}
 	  </td>
 	</tr>
   </tbody>
@@ -15,7 +15,7 @@
 
 @section('description')
 <div style="font-family: Arial, sans-serif; line-height: 20px; color: #444444; font-size: 13px;">
-	{{\Lang::get('passwords.reset.description')}}
+	{{trans('core::controller/backend-password-reset.reset.description')}}
 </div>
 @stop
 
@@ -23,7 +23,7 @@
 <div style="font-family: Arial, sans-serif; line-height: 19px; color: #444444; font-size: 13px; text-align: center;">
   <a href="{!! route('cmf.password.reset.token', ['token' => $token]) !!}" style="color: #ffffff; text-decoration: none; margin: 0px; text-align: center; vertical-align: baseline; border: 4px solid #6fb3e0; 
 	 padding: 4px 9px; font-size: 15px; line-height: 21px; background-color: #6fb3e0;">
-	&nbsp; {{\Lang::get('passwords.reset.button')}} &nbsp;</a>
+	&nbsp; {{trans('core::controller/backend-password-reset.btn.reset')}} &nbsp;</a>
 </div>
 @stop
 

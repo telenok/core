@@ -47,17 +47,17 @@ trait Load
         $kDefault = "{$this->getPackage()}::default.$key";
         $kStandart = "module/{$this->getKey()}.$key";
 
-        $word = \Lang::get($k, $param);
+        $word = trans($k, $param);
 
         // not found in current wordspace
         if ($k === $word)
         {
-            $word = \Lang::get($kDefault, $param);
+            $word = trans($kDefault, $param);
 
             // not found in default wordspace
             if ($kDefault === $word)
             {
-                $word = \Lang::get($kStandart, $param);
+                $word = trans($kStandart, $param);
 
                 if ($kDefault === $word)
                 {

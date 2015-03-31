@@ -55,7 +55,7 @@
             
             @if ($field->translate('description'))
             <span title="" data-content="{{ $field->translate('description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 
-                  class="help-button" data-original-title="{{\Lang::get('core::default.tooltip.description')}}">?</span>
+                  class="help-button" data-original-title="{{trans('core::default.tooltip.description')}}">?</span>
             @endif
             
         </div>
