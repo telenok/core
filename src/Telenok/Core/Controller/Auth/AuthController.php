@@ -58,6 +58,8 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Controller {
 			{
 				return json_encode(['success' => 1, 'redirect' => route('cmf.content')]);
 			}
+
+			return json_encode(['error' => 1]);
 		}
 	}
 }

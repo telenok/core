@@ -65,7 +65,7 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 
 			$response = $this->passwords->reset($credentials, function($user, $password)
 			{
-				$user->password = bcrypt($password);
+				$user->password = $password;
 
 				$user->save();
 
@@ -112,8 +112,9 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 			case \Illuminate\Contracts\Auth\PasswordBroker::RESET_LINK_SENT:
 				return json_encode(['success' => 1]);
 
-			case \Illuminate\Contracts\Auth\PasswordBroker::INVALID_USER:
-				return json_encode(['error' => 1]);
+			//case \Illuminate\Contracts\Auth\PasswordBroker::INVALID_USER:
+			default:
+				return json_encode(['error' => 1]); 
 		}
 	}
 

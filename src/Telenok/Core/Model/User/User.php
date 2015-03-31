@@ -21,11 +21,11 @@ class User extends \Telenok\Core\Interfaces\Eloquent\Object\Model implements Aut
 	{
 		if ($value = trim($value))
 		{
-			$this->attributes['password'] = \Hash::make($value);
+			$this->attributes['password'] = bcrypt($value);
 		}
 		else if (!$this->exists && !$value)
 		{
-			$this->attributes['password'] = \Hash::make(str_random());
+			$this->attributes['password'] = bcrypt(str_random());
 		}
 	}
 

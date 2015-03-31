@@ -120,5 +120,5 @@ if (\Request::is('telenok', 'telenok/*'))
 	\Route::get('telenok/logout', array('as' => 'cmf.logout', 'uses' => "Telenok\Core\Controller\Backend\Controller@logout"));
 	\Route::post('telenok/password/reset/email', array('as' => 'cmf.password.reset.email.process', 'uses' => "Telenok\Core\Controller\Auth\PasswordController@postEmail"));
 	\Route::get('telenok/password/reset/{token}', array('as' => 'cmf.password.reset.token', 'uses' => "Telenok\Core\Controller\Auth\PasswordController@getReset"));
-	\Route::post('telenok/password/reset/process/{token}', array('as' => 'cmf.password.reset.token.process', 'uses' => "Telenok\Core\Controller\Auth\PasswordController@postReset"));
+	\Route::post('telenok/password/reset/process', array('as' => 'cmf.password.reset.token.process', 'uses' => "Telenok\Core\Controller\Auth\PasswordController@postReset"));
 }

@@ -39,7 +39,7 @@
 
                                                 <div class="space-6"></div>
 
-                                                {!! Form::open(['route' => ['cmf.password.reset.token.process', 'token' => $token], 'method' => 'post', 'id' => 'password-reset', 'autocomplete' => "off"]) !!}
+                                                {!! Form::open(['route' => 'cmf.password.reset.token.process', 'method' => 'post', 'id' => 'password-reset', 'autocomplete' => "off"]) !!}
 													<input type="hidden" name="_token" value="{{ csrf_token() }}">
 													<input type="hidden" name="token" value="{{ $token }}">
 													
@@ -127,7 +127,7 @@
 			{
 				$.ajax({
 						type: "POST",
-						url: "{!! route('cmf.password.reset.token.process', ['token' => $token]) !!}",
+						url: "{!! route('cmf.password.reset.token.process') !!}",
 						data: jQuery(this).serialize(),
 						dataType: 'json',
 						success: function(data)
