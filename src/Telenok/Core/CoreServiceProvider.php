@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core;
+<?php namespace Telenok\Core;
 
 use Illuminate\Support\ServiceProvider;
 

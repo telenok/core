@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Files\Browser;
+<?php namespace Telenok\Core\Module\Files\Browser;
 
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller { 
     

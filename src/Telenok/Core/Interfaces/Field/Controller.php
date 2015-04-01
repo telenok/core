@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Field;
+<?php namespace Telenok\Core\Interfaces\Field;
 
 abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Field\IField {
 

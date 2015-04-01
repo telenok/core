@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\System\Tree;
+<?php namespace Telenok\Core\Field\System\Tree;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

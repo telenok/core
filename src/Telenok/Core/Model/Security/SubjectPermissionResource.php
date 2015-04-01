@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\Security;
+<?php namespace Telenok\Core\Model\Security;
 
 class SubjectPermissionResource extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

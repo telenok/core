@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Web\WidgetOnPage;
+<?php namespace Telenok\Core\Module\Web\WidgetOnPage;
 
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
 

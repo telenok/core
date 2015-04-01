@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Field;
+<?php namespace Telenok\Core\Interfaces\Field;
 
 interface IField extends \Telenok\Core\Interfaces\IRequest {
 

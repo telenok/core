@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\System\Permission;
+<?php namespace Telenok\Core\Field\System\Permission;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

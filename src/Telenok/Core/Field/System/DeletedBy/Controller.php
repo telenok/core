@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\System\DeletedBy;
+<?php namespace Telenok\Core\Field\System\DeletedBy;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

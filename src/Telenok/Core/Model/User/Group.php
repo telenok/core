@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\User;
+<?php namespace Telenok\Core\Model\User;
 
 class Group extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

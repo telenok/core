@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Users\Message;
+<?php namespace Telenok\Core\Module\Users\Message;
   
 use \Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 

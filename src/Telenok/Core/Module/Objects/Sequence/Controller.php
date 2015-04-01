@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Objects\Sequence;
+<?php namespace Telenok\Core\Module\Objects\Sequence;
 
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller { 
 

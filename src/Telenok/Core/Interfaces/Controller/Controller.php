@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Controller;
+<?php namespace Telenok\Core\Interfaces\Controller;
 
 abstract class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\IRequest {
 

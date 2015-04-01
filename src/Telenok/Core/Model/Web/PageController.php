@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\Web;
+<?php namespace Telenok\Core\Model\Web;
 
 class PageController extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\Integer;
+<?php namespace Telenok\Core\Field\Integer;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;  

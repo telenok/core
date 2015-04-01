@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Objects\Lists\Wizard;
+<?php namespace Telenok\Core\Module\Objects\Lists\Wizard;
 
 class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 

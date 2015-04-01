@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Support\Config;
+<?php namespace Telenok\Core\Support\Config;
 
 class Repository {
 

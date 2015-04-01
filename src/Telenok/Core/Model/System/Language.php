@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\System;
+<?php namespace Telenok\Core\Model\System;
 
 class Language extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

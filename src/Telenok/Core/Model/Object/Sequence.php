@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\Object;
+<?php namespace Telenok\Core\Model\Object;
 
 class Sequence extends \Telenok\Core\Interfaces\Eloquent\Object\Model {  
 

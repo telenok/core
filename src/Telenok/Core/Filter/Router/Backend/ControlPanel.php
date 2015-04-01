@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Filter\Router\Backend;
+<?php namespace Telenok\Core\Filter\Router\Backend;
 
 class ControlPanel {
 

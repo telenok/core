@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\ComplexArray;
+<?php namespace Telenok\Core\Field\ComplexArray;
 
 use Illuminate\Database\Schema\Blueprint;
 

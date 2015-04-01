@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Eloquent\Object;
+<?php namespace Telenok\Core\Interfaces\Eloquent\Object;
 
 abstract class Model extends \Illuminate\Database\Eloquent\Model {
 

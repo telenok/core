@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Filter\Acl\Resource\DirectRight;
+<?php namespace Telenok\Core\Filter\Acl\Resource\DirectRight;
 
 class Controller extends \Telenok\Core\Interfaces\Filter\Acl\Resource\Controller {
 

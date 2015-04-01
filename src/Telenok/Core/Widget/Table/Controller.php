@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Widget\Table;
+<?php namespace Telenok\Core\Widget\Table;
 
 class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 

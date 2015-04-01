@@ -1,6 +1,4 @@
-<?php 
-
-namespace Telenok\Core\Support\Memcache;
+<?php namespace Telenok\Core\Support\Memcache;
 
 use \Illuminate\Cache\StoreInterface;
 use \Illuminate\Cache\TaggableStore;

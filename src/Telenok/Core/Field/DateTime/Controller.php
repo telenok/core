@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\DateTime;
+<?php namespace Telenok\Core\Field\DateTime;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration; 

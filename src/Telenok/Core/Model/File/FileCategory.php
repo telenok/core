@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\File;
+<?php namespace Telenok\Core\Model\File;
 
 class FileCategory extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

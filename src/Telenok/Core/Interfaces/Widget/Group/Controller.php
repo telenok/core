@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Widget\Group;
+<?php namespace Telenok\Core\Interfaces\Widget\Group;
 
 abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
  

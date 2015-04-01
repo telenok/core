@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Setting\AppLocaleDefault;
+<?php namespace Telenok\Core\Setting\AppLocaleDefault;
 
 class Controller extends \Telenok\Core\Interfaces\Setting\Controller {
 

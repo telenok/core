@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\System;
+<?php namespace Telenok\Core\Model\System;
 
 class Buffer extends \Illuminate\Database\Eloquent\Model {
 

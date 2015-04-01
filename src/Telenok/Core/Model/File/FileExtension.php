@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\File;
+<?php namespace Telenok\Core\Model\File;
 
 class FileExtension extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

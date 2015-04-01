@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Module;
+<?php namespace Telenok\Core\Interfaces\Module;
 
 abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Module\IModule {
 

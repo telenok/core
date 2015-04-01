@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\Text;
+<?php namespace Telenok\Core\Field\Text;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

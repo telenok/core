@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Controller\Auth;
+<?php namespace Telenok\Core\Controller\Auth;
 
 class AuthController extends \Telenok\Core\Interfaces\Controller\Controller {
  

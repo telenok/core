@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Validator;
+<?php namespace Telenok\Core\Interfaces\Validator;
 
 use Symfony\Component\Translation\TranslatorInterface;
 

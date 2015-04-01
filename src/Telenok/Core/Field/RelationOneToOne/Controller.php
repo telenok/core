@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\RelationOneToOne;
+<?php namespace Telenok\Core\Field\RelationOneToOne;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

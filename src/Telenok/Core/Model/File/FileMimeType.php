@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\File;
+<?php namespace Telenok\Core\Model\File;
 
 class FileMimeType extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

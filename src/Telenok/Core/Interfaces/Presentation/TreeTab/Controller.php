@@ -1,6 +1,4 @@
-<?php 
-
-namespace Telenok\Core\Interfaces\Presentation\TreeTab;
+<?php namespace Telenok\Core\Interfaces\Presentation\TreeTab;
 
 use \Telenok\Core\Interfaces\Presentation\IPresentation;
 

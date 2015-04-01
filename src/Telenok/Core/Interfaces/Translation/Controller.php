@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Translation;
+<?php namespace Telenok\Core\Interfaces\Translation;
 
 abstract class Controller {
 

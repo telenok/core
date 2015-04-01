@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Presentation\Simple;
+<?php namespace Telenok\Core\Interfaces\Presentation\Simple;
 
 use \Telenok\Core\Interfaces\Presentation\IPresentation;
 

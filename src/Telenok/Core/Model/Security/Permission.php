@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\Security;
+<?php namespace Telenok\Core\Model\Security;
 
 class Permission extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

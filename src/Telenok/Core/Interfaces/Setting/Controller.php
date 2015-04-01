@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Setting;
+<?php namespace Telenok\Core\Interfaces\Setting;
 
 abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
  

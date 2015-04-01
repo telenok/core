@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Presentation;
+<?php namespace Telenok\Core\Interfaces\Presentation;
 
 interface IPresentation extends \Telenok\Core\Interfaces\Module\IModule {
     

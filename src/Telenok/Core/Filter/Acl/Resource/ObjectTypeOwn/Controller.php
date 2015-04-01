@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Filter\Acl\Resource\ObjectTypeOwn;
+<?php namespace Telenok\Core\Filter\Acl\Resource\ObjectTypeOwn;
 
 class Controller extends \Telenok\Core\Interfaces\Filter\Acl\Resource\Controller {
 

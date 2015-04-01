@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\User;
+<?php namespace Telenok\Core\Model\User;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;

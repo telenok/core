@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Command;
+<?php namespace Telenok\Core\Command;
 
 use Illuminate\Console\Command;
 

@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Users;
+<?php namespace Telenok\Core\Module\Users;
 
 class Controller extends \Telenok\Core\Interfaces\Module\Controller {
 

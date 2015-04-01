@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\System\UpdatedBy;
+<?php namespace Telenok\Core\Field\System\UpdatedBy;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

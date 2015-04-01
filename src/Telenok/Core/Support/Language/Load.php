@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Support\Language;
+<?php namespace Telenok\Core\Support\Language;
 
 trait Load
 {

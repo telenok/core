@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Web\PageConstructor;
+<?php namespace Telenok\Core\Module\Web\PageConstructor;
 
 class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 

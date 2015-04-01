@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Widget\Menu;
+<?php namespace Telenok\Core\Widget\Menu;
 
 class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 

@@ -1,6 +1,4 @@
-<?php 
-
-namespace Telenok\Core\Field\MorphOneToOne;
+<?php namespace Telenok\Core\Field\MorphOneToOne;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

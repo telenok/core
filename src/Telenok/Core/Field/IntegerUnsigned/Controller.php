@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\IntegerUnsigned;
+<?php namespace Telenok\Core\Field\IntegerUnsigned;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;  

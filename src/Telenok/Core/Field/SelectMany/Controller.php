@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\SelectMany;
+<?php namespace Telenok\Core\Field\SelectMany;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration; 

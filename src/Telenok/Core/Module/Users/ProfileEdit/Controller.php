@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Users\ProfileEdit; 
+<?php namespace Telenok\Core\Module\Users\ProfileEdit; 
 
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
     

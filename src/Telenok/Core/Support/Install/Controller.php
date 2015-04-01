@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Support\Install;
+<?php namespace Telenok\Core\Support\Install;
 
 class Controller {
 

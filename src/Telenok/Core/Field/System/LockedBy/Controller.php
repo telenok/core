@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\System\LockedBy;
+<?php namespace Telenok\Core\Field\System\LockedBy;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

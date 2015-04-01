@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Security;
+<?php namespace Telenok\Core\Security;
 
 class Guard extends \Illuminate\Auth\Guard {
 

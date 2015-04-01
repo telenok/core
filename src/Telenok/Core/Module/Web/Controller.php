@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Web;
+<?php namespace Telenok\Core\Module\Web;
 
 class Controller extends \Telenok\Core\Interfaces\Module\Controller {
     

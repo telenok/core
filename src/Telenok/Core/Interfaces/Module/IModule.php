@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Module;
+<?php namespace Telenok\Core\Interfaces\Module;
 
 interface IModule extends \Telenok\Core\Interfaces\IRequest {
 

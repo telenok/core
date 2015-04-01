@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Field\Relation;
+<?php namespace Telenok\Core\Interfaces\Field\Relation;
 
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 

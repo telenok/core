@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\System;
+<?php namespace Telenok\Core\Model\System;
 
 class Folder extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

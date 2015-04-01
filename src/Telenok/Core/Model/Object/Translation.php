@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\Object;
+<?php namespace Telenok\Core\Model\Object;
 
 class Translation extends \Illuminate\Database\Eloquent\Model {
 

@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Model\Security;
+<?php namespace Telenok\Core\Model\Security;
 
 class Role extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 

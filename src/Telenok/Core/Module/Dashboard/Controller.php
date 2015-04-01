@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Module\Dashboard;
+<?php namespace Telenok\Core\Module\Dashboard;
 
 class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller { 
     

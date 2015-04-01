@@ -1,4 +1,4 @@
-<?php  namespace Telenok\Core\Controller\Auth;
+<?php namespace Telenok\Core\Controller\Auth;
 
 use Illuminate\Contracts\Auth\Guard;
 use Telenok\Core\Contract\Auth\PasswordBroker;

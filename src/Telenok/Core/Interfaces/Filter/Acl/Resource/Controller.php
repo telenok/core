@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Filter\Acl\Resource;
+<?php namespace Telenok\Core\Interfaces\Filter\Acl\Resource;
 
 class Controller {
 

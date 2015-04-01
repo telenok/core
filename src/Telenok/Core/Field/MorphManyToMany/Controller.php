@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Field\MorphManyToMany;
+<?php namespace Telenok\Core\Field\MorphManyToMany;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
