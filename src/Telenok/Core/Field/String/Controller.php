@@ -23,7 +23,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 {
                     $join   ->on($model->getTable().'.id', '=', $translate->getTable().'.translation_object_model_id')
                             ->on($translate->getTable().'.translation_object_field_code', '=', \DB::raw("'" . $fieldCode . "'"))
-                            ->on($translate->getTable().'.translation_object_language', '=', \DB::raw("'".\Config::get('app.locale')."'"));
+                            ->on($translate->getTable().'.translation_object_language', '=', \DB::raw("'".config('app.locale')."'"));
                 });
 
                 $query->where(function($query) use ($value, $model, $translate)
@@ -64,7 +64,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				$value = [];
 			}
 
-			$defaultLanguage = \Config::get('app.localeDefault', "en");
+			$defaultLanguage = config('app.localeDefault', "en");
 
 			if (is_string($value) )
 			{

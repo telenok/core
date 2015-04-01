@@ -649,9 +649,9 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			{
 				return $v[$locale];
 			}
-			else if (isset($v[\Config::get('app.localeDefault')]))
+			else if (isset($v[config('app.localeDefault')]))
 			{
-				return $v[\Config::get('app.localeDefault')];
+				return $v[config('app.localeDefault')];
 			}
 			else
 			{
@@ -697,7 +697,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	// ->permission('read', 'user_authorized', ['object-type', 'own'])
 	public function scopeWithPermission($query, $permissionCode = 'read', $subjectCode = null, $filterCode = null)
 	{
-		if (!\Config::get('app.acl.enabled'))
+		if (!config('app.acl.enabled'))
 		{
 			return $query;
 		}

@@ -56,31 +56,31 @@
 
 \Event::listen('telenok.objects-field.add', function($list)
 {
-    $list->push('Telenok\Core\Field\Integer\Controller');
-    $list->push('Telenok\Core\Field\IntegerUnsigned\Controller');
-    $list->push('Telenok\Core\Field\Text\Controller');
-    $list->push('Telenok\Core\Field\String\Controller');
-    $list->push('Telenok\Core\Field\ComplexArray\Controller');
-    $list->push('Telenok\Core\Field\RelationOneToOne\Controller');
-    $list->push('Telenok\Core\Field\RelationOneToMany\Controller');
-    $list->push('Telenok\Core\Field\RelationManyToMany\Controller');
-    $list->push('Telenok\Core\Field\System\Tree\Controller');
-    $list->push('Telenok\Core\Field\MorphOneToOne\Controller');
-    $list->push('Telenok\Core\Field\MorphOneToMany\Controller');
-    $list->push('Telenok\Core\Field\MorphManyToMany\Controller');
-    $list->push('Telenok\Core\Field\System\CreatedBy\Controller');
-    $list->push('Telenok\Core\Field\System\UpdatedBy\Controller');
-    $list->push('Telenok\Core\Field\System\DeletedBy\Controller');
-    $list->push('Telenok\Core\Field\System\LockedBy\Controller');
-    $list->push('Telenok\Core\Field\System\Permission\Controller');
-    $list->push('Telenok\Core\Field\FileManyToMany\Controller');
-    $list->push('Telenok\Core\Field\Upload\Controller');
-    $list->push('Telenok\Core\Field\SelectOne\Controller');
-    $list->push('Telenok\Core\Field\SelectMany\Controller');
-    $list->push('Telenok\Core\Field\Time\Controller');
-    $list->push('Telenok\Core\Field\DateTime\Controller');
-    $list->push('Telenok\Core\Field\TimeRange\Controller');
-    $list->push('Telenok\Core\Field\DateTimeRange\Controller');
+    $list->push('App\Telenok\Core\Field\Integer\Controller');
+    $list->push('App\Telenok\Core\Field\IntegerUnsigned\Controller');
+    $list->push('App\Telenok\Core\Field\Text\Controller');
+    $list->push('App\Telenok\Core\Field\String\Controller');
+    $list->push('App\Telenok\Core\Field\ComplexArray\Controller');
+    $list->push('App\Telenok\Core\Field\RelationOneToOne\Controller');
+    $list->push('App\Telenok\Core\Field\RelationOneToMany\Controller');
+    $list->push('App\Telenok\Core\Field\RelationManyToMany\Controller');
+    $list->push('App\Telenok\Core\Field\System\Tree\Controller');
+    $list->push('App\Telenok\Core\Field\MorphOneToOne\Controller');
+    $list->push('App\Telenok\Core\Field\MorphOneToMany\Controller');
+    $list->push('App\Telenok\Core\Field\MorphManyToMany\Controller');
+    $list->push('App\Telenok\Core\Field\System\CreatedBy\Controller');
+    $list->push('App\Telenok\Core\Field\System\UpdatedBy\Controller');
+    $list->push('App\Telenok\Core\Field\System\DeletedBy\Controller');
+    $list->push('App\Telenok\Core\Field\System\LockedBy\Controller');
+    $list->push('App\Telenok\Core\Field\System\Permission\Controller');
+    $list->push('App\Telenok\Core\Field\FileManyToMany\Controller');
+    $list->push('App\Telenok\Core\Field\Upload\Controller');
+    $list->push('App\Telenok\Core\Field\SelectOne\Controller');
+    $list->push('App\Telenok\Core\Field\SelectMany\Controller');
+    $list->push('App\Telenok\Core\Field\Time\Controller');
+    $list->push('App\Telenok\Core\Field\DateTime\Controller');
+    $list->push('App\Telenok\Core\Field\TimeRange\Controller');
+    $list->push('App\Telenok\Core\Field\DateTimeRange\Controller');
 });
 
 \Event::listen('telenok.objects-field.view.model.add', function($list)
@@ -106,8 +106,7 @@
 
 Event::listen('illuminate.query', function($sql, $bindings, $time)
 {
-
-    if (\Config::get('querylog'))
+    if (config('querylog'))
     {
         $sql = vsprintf(str_replace(array('%', '?'), array('%%', '"%s"'), $sql), $bindings);
 

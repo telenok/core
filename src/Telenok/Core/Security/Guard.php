@@ -26,7 +26,7 @@ class Guard extends \Illuminate\Auth\Guard {
     */
     public function can($permissionCode = null, $resourceCode = null)
     { 
-        if (!\Config::get('app.acl.enabled')) 
+        if (!config('app.acl.enabled')) 
         {
 			return true;
         }

@@ -58,7 +58,7 @@ class Version extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	public static function add(\Illuminate\Database\Eloquent\Model $model = null)
 	{
-		if (!($model instanceof \Telenok\Core\Model\Object\Sequence) && $model->exists && \Config::get('app.version.enabled'))
+		if (!($model instanceof \Telenok\Core\Model\Object\Sequence) && $model->exists && config('app.version.enabled'))
 		{
 			$this_ = new static;
 

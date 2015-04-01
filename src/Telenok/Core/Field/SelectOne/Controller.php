@@ -76,7 +76,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
             if ($key == 'select_one_data')
             {
-                $localeDefault = \Config::get('app.localeDefault');
+                $localeDefault = config('app.localeDefault');
 
                 $title = array_get($value, 'title.' . $localeDefault, []);
                 
@@ -112,7 +112,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         if (!empty($value))
         {
             $config = $field->select_one_data->toArray();
-            $locale = \Config::get('app.locale');
+            $locale = config('app.locale');
             $title = array_get($config, 'title.' . $locale, []);
             $key = array_get($config, 'key', []);
 

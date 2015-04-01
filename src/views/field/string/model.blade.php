@@ -27,9 +27,9 @@
 			<ul class="nav nav-tabs" >
 				<?php 
 
-				$localeDefault = \Config::get('app.localeDefault');
+				$localeDefault = config('app.localeDefault');
 
-				$languages = \App\Model\Telenok\System\Language::whereIn('locale', \Config::get('app.locales')->all())
+				$languages = \App\Model\Telenok\System\Language::whereIn('locale', config('app.locales')->all())
 								->get()->sortBy(function($item) use ($localeDefault)
 				{
 					return $item->locale == $localeDefault ? 0 : 1;

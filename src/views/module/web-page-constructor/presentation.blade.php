@@ -194,10 +194,10 @@
 							onchange="telenok_module_web_language_id = this.options[this.selectedIndex].value; reloadWebPageContainer();">
 						<?php
 
-						$localeDefault = \Config::get('app.localeDefault');
+						$localeDefault = config('app.localeDefault');
 						$localeDefaultId = 0;
 
-						$languages = \App\Model\Telenok\System\Language::whereIn('locale', \Config::get('app.locales')->all())
+						$languages = \App\Model\Telenok\System\Language::whereIn('locale', config('app.locales')->all())
 										->get()->sortBy(function($item) use ($localeDefault, &$localeDefaultId)
 						{
 							if ($item->locale == $localeDefault)

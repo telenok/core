@@ -19,7 +19,7 @@
                                 <div class="center">
                                     <h1>
                                         <i class="fa fa-leaf green"></i>
-                                        <span class="green">{{\Config::get('app.backend.brand')}}</span>
+                                        <span class="green">{{config('app.backend.brand')}}</span>
                                     </h1>
                                     <h4 class="blue">&copy; Telenok CMS</h4>
                                 </div>

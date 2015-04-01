@@ -12,11 +12,11 @@
     
     if ($model->exists && $model->{$field->code})
     {
-        $value = $model->{$field->code}->setTimezone(\Config::get('app.timezone'));
+        $value = $model->{$field->code}->setTimezone(config('app.timezone'));
     }
     else
     {
-        $value = $field->time_default->setTimezone(\Config::get('app.timezone'));
+        $value = $field->time_default->setTimezone(config('app.timezone'));
     }
 
     $domAttr['placeholder'] = ($placeholder = $field->time_default->toTimeString()) ? $placeholder : $field->translate('title');

@@ -9,8 +9,8 @@
         $disabled = true; 
     }
 
-    $localeDefault = \Config::get('app.localeDefault');
-    $locale = \Config::get('app.locale');
+    $localeDefault = config('app.localeDefault');
+    $locale = config('app.locale');
 
     $title = $field->select_many_data->get('title', []);
     $keys = $field->select_many_data->get('key', []);

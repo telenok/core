@@ -237,7 +237,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
                 {
                     $join   ->on($model->getTable().'.id', '=', $translate->getTable().'.translation_object_model_id')
                             ->on($translate->getTable().'.translation_object_field_code', '=', \DB::raw("'{$orderByField}'"))
-                            ->on($translate->getTable().'.translation_object_language', '=', \DB::raw("'".\Config::get('app.locale')."'"));
+                            ->on($translate->getTable().'.translation_object_language', '=', \DB::raw("'".config('app.locale')."'"));
                 });
 
                 $query->orderBy($translate->getTable().'.translation_object_string', $this->getRequest()->input('sSortDir_0'));

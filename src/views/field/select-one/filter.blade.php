@@ -13,11 +13,11 @@ $jsUnique = str_random();
         
         if (!empty($data))
         {
-            $title = array_get($data, 'title.' . \Config::get('app.locale'));
+            $title = array_get($data, 'title.' . config('app.locale'));
             
             if (empty($title))
             {
-                $title = array_get($data, 'title.' . \Config::get('app.localeDefault'));
+                $title = array_get($data, 'title.' . config('app.localeDefault'));
             }
             
             $keys = array_get($data, 'key');

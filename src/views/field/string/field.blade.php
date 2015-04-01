@@ -13,7 +13,7 @@
 </div> 
 
 @if ($model->multilanguage)
-	@foreach(\Config::get('app.locales')->all() as $locale)
+	@foreach(config('app.locales')->all() as $locale)
 		<div class="form-group">
 			{!! Form::label("string_default[{$locale}]", $controller->LL("property.string_default") . " [{$locale}]", array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 			<div class="col-sm-9">

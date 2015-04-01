@@ -52,7 +52,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	{
         if ($m = $this->getWidgetModel())
         {
-            return $m->getKey() . \Config::get('app.locale', \Config::get('app.localeDefault'));
+            return $m->getKey() . config('app.locale', config('app.localeDefault'));
         }
         
 		return false;

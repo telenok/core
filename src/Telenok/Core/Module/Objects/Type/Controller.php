@@ -166,7 +166,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 	{
 		if ($model->code)
 		{
-			$locales = \Config::get('app.locales');
+			$locales = config('app.locales');
 
 			foreach ($locales as $locale)
 			{

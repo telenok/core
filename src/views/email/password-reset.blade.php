@@ -32,28 +32,28 @@
   <tbody>
 	<tr>
 	  <td width="100%" align="center" bgcolor="#f5f5f5" style="font-family: Arial, sans-serif; line-height: 24px; color: #bbbbbb; font-size: 13px; font-weight: normal; text-align: center; padding: 9px; border-width: 1px 0px 0px; border-style: solid; border-color: #e3e3e3; background-color: #f5f5f5;" valign="top">
-		<a href="#" style="color: #428bca; text-decoration: none; background-color: transparent;">{{\Config::get('app.backend.brand')}}</a>
+		<a href="#" style="color: #428bca; text-decoration: none; background-color: transparent;">{{config('app.backend.brand')}}</a>
 		<br>
 
 		<?php $socialLink = []; ?>
 
-		@if ($url = \Config::get('app.social.twitter.url'))
+		@if ($url = config('app.social.twitter.url'))
 			<?php $socialLink[] = '<a href="' . $url . '" style="color: #478fca; text-decoration: none; background-color: transparent;">twitter</a>'; ?>
 		@endif
 
-		@if ($url = \Config::get('app.social.facebook.url'))
+		@if ($url = config('app.social.facebook.url'))
 			<?php $socialLink[] = '<a href="' . $url . '" style="color: #5b7a91; text-decoration: none; background-color: transparent;">facebook</a>'; ?>
 		@endif
 
-		@if ($url = \Config::get('app.social.vk.url'))
+		@if ($url = config('app.social.vk.url'))
 			<?php $socialLink[] = '<a href="' . $url . '" style="color: #537599; text-decoration: none; background-color: transparent;">vkontakte</a>'; ?>
 		@endif
 
-		@if ($url = \Config::get('app.social.google-plus.url'))
+		@if ($url = config('app.social.google-plus.url'))
 			<?php $socialLink[] = '<a href="' . $url . '" style="color: #dd5a43; text-decoration: none; background-color: transparent;">google+</a>'; ?>
 		@endif
 
-		@if ($url = \Config::get('app.social.youtube.url'))
+		@if ($url = config('app.social.youtube.url'))
 			<?php $socialLink[] = '<a href="' . $url . '" style="color: #cc181e; text-decoration: none; background-color: transparent;">youtube</a>'; ?>
 		@endif
 

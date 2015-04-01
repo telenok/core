@@ -9,7 +9,7 @@
     <body class="no-skin telenok-backend">
         <div class="navbar navbar-default navbar-fixed-top">
             <div class="navbar-inner">
-				<a class="navbar-brand" href="telenok/"><small>{{\Config::get('app.backend.brand')}}</small></a>
+				<a class="navbar-brand" href="telenok/"><small>{{config('app.backend.brand')}}</small></a>
 				<ul class="nav ace-nav pull-right">
 
 					@foreach($listModuleMenuTop as $itemFirstLevel)
