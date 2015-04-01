@@ -25,7 +25,7 @@ class SeedPageControllerTable extends Migration {
                     'key' => 'string',
                     'code' => 'controller_class',
                     'active' => 1,
-                    'string_default' => '\Telenok\Core\Controller\Frontend\Controller',
+                    'string_default' => '\App\Telenok\Core\Controller\Frontend\Controller',
                     'field_object_type' => $modelTypeId,
                     'field_object_tab' => $tabMainId,
                     'multilanguage' => 0,

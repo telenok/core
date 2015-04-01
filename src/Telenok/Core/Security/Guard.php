@@ -33,18 +33,18 @@ class Guard extends \Illuminate\Auth\Guard {
 		
         if ($this->check()) 
         {
-            if (\Telenok\Core\Security\Acl::user()->can($permissionCode, $resourceCode))
+            if (\App\Telenok\Core\Security\Acl::user()->can($permissionCode, $resourceCode))
             {
                 return true;
             }
-            else if (\Telenok\Core\Security\Acl::subject('user_authorized')->can($permissionCode, $resourceCode))
+            else if (\App\Telenok\Core\Security\Acl::subject('user_authorized')->can($permissionCode, $resourceCode))
             {
                 return true;
             }
         }
         else 
         {
-            return \Telenok\Core\Security\Acl::subject('user_unauthorized')->can($permissionCode, $resourceCode);
+            return \App\Telenok\Core\Security\Acl::subject('user_unauthorized')->can($permissionCode, $resourceCode);
         } 
 		
         return false;
@@ -54,7 +54,7 @@ class Guard extends \Illuminate\Auth\Guard {
     { 
         if ($this->check())
         {
-            return \Telenok\Core\Security\Acl::user()->hasRole($id);
+            return \App\Telenok\Core\Security\Acl::user()->hasRole($id);
         }
 
         return false;

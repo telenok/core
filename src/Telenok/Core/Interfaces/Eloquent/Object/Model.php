@@ -205,7 +205,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function storeOrUpdate($input = [], $withPermission = false, $withEvent = true)
 	{
-		if ($this instanceof \Telenok\Core\Model\Object\Sequence)
+		if ($this instanceof \App\Telenok\Core\Model\Object\Sequence)
 		{
 			throw new \Exception('Cant storeOrUpdate sequence model directly');
 		}
@@ -269,7 +269,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 				if ($withEvent)
 				{
-					//\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
+					//\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
 				}
 
 				if ($type->classController())
@@ -313,7 +313,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 				if ($withEvent)
 				{
-					//\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.after', (new \Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
+					//\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.after', (new \App\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
 				}
 			});
 		}

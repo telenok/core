@@ -114,7 +114,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	{ 
 		$permissionList = (array)$input->get('permission', []);
 
-		\Telenok\Core\Security\Acl::resource($model)->unsetPermission();
+		\App\Telenok\Core\Security\Acl::resource($model)->unsetPermission();
         
 		foreach($permissionList as $permissionCode => $persmissionIds)
 		{
@@ -122,7 +122,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			{
 				foreach($persmissionIds as $id)
 				{
-					\Telenok\Core\Security\Acl::subject($id)->setPermission($permissionCode, $model);
+					\App\Telenok\Core\Security\Acl::subject($id)->setPermission($permissionCode, $model);
 				}
 			}
 		}

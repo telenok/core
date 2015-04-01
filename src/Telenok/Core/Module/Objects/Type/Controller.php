@@ -22,7 +22,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 		try
 		{
-			\Telenok\Core\Security\Acl::addResource($resCode, $title);
+			\App\Telenok\Core\Security\Acl::addResource($resCode, $title);
 		}
 		catch (\Exception $ex)
 		{

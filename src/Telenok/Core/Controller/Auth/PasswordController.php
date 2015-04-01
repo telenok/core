@@ -23,7 +23,7 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 
 		$view = app('config')->get('auth.password.email');
 
-		$this->passwords = new \Telenok\Core\Contract\Auth\PasswordBroker(
+		$this->passwords = new \App\Telenok\Core\Contract\Auth\PasswordBroker(
 			$tokens, $users, app('mailer'), $view
 		);
 		

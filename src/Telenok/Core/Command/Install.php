@@ -20,7 +20,7 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
 
 	public function fire()
 	{
-		$this->setProcessingController(new \Telenok\Core\Support\Install\Controller());
+		$this->setProcessingController(new \App\Telenok\Core\Support\Install\Controller());
 
 		$this->info('Configure Telenok CMS');
 

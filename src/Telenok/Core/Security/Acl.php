@@ -12,9 +12,9 @@ class Acl
 	/* 
      * Set resource as internal variable for manipulating
      * 
-     * \Telenok\Core\Security\Acl::resource(200)
-     * \Telenok\Core\Security\Acl::resource('control_panel')
-     * \Telenok\Core\Security\Acl::resource(\App\Model\Telenok\User\User $user)
+     * \App\Telenok\Core\Security\Acl::resource(200)
+     * \App\Telenok\Core\Security\Acl::resource('control_panel')
+     * \App\Telenok\Core\Security\Acl::resource(\App\Model\Telenok\User\User $user)
      * 
      */
     public static function resource($id = null)
@@ -45,9 +45,9 @@ class Acl
     /* 
      * Set subject as internal variable for manipulating
      * 
-     * \Telenok\Core\Security\Acl::subject(200)
-     * \Telenok\Core\Security\Acl::subject('user_unauthorized')
-     * \Telenok\Core\Security\Acl::subject(\App\Model\Telenok\User\User $user)
+     * \App\Telenok\Core\Security\Acl::subject(200)
+     * \App\Telenok\Core\Security\Acl::subject('user_unauthorized')
+     * \App\Telenok\Core\Security\Acl::subject(\App\Model\Telenok\User\User $user)
      * 
      */
     public static function subject($id = null)
@@ -83,9 +83,9 @@ class Acl
     /* 
      * Set user as internal variable for manipulating
      * 
-     * \Telenok\Core\Security\Acl::user() - for logged user
-     * \Telenok\Core\Security\Acl::user(2)
-     * \Telenok\Core\Security\Acl::user(\App\Model\Telenok\User\User $user)
+     * \App\Telenok\Core\Security\Acl::user() - for logged user
+     * \App\Telenok\Core\Security\Acl::user(2)
+     * \App\Telenok\Core\Security\Acl::user(\App\Model\Telenok\User\User $user)
      * 
      */
     public static function user($id = null)
@@ -116,9 +116,9 @@ class Acl
     /* 
      * Set role as internal variable for manipulating
      * 
-     * \Telenok\Core\Security\Acl::role('administrator')
-     * \Telenok\Core\Security\Acl::role(2)
-     * \Telenok\Core\Security\Acl::role(\App\Model\Telenok\Security\Role $role)
+     * \App\Telenok\Core\Security\Acl::role('administrator')
+     * \App\Telenok\Core\Security\Acl::role(2)
+     * \App\Telenok\Core\Security\Acl::role(\App\Model\Telenok\Security\Role $role)
      * 
      */
     public static function role($id = null)
@@ -145,9 +145,9 @@ class Acl
     /* 
      * Set group as internal variable for manipulating
      * 
-     * \Telenok\Core\Security\Acl::group('administrator')
-     * \Telenok\Core\Security\Acl::group(2)
-     * \Telenok\Core\Security\Acl::group(\App\Model\Telenok\User\Group $group)
+     * \App\Telenok\Core\Security\Acl::group('administrator')
+     * \App\Telenok\Core\Security\Acl::group(2)
+     * \App\Telenok\Core\Security\Acl::group(\App\Model\Telenok\User\Group $group)
      * 
      */
     public static function group($id = null)
@@ -174,8 +174,8 @@ class Acl
     /* 
      * Add role 
      * 
-     * \Telenok\Core\Security\Acl::addRole(['en' => 'News writers'], 'news_writers')
-     * \Telenok\Core\Security\Acl::addRole('News writers', 'news_writers')
+     * \App\Telenok\Core\Security\Acl::addRole(['en' => 'News writers'], 'news_writers')
+     * \App\Telenok\Core\Security\Acl::addRole('News writers', 'news_writers')
      * 
      */
     public static function addRole($title = [], $code = null)
@@ -197,8 +197,8 @@ class Acl
     /* 
      * Delete role
      * 
-     * \Telenok\Core\Security\Acl::deleteRole(2)
-     * \Telenok\Core\Security\Acl::deleteRole(\App\Model\Telenok\Security\Role $role)
+     * \App\Telenok\Core\Security\Acl::deleteRole(2)
+     * \App\Telenok\Core\Security\Acl::deleteRole(\App\Model\Telenok\Security\Role $role)
      * 
      */
     public static function deleteRole($id = null)
@@ -225,8 +225,8 @@ class Acl
     /* 
      * Add resource 
      * 
-     * \Telenok\Core\Security\Acl::addResource('file', ['en' => 'File'])
-     * \Telenok\Core\Security\Acl::addResource('file', 'File')
+     * \App\Telenok\Core\Security\Acl::addResource('file', ['en' => 'File'])
+     * \App\Telenok\Core\Security\Acl::addResource('file', 'File')
      * 
      */
     public static function addResource($code = null, $title = [])
@@ -248,8 +248,8 @@ class Acl
     /* 
      * Delete resource
      * 
-     * \Telenok\Core\Security\Acl::deleteResource(2)
-     * \Telenok\Core\Security\Acl::deleteResource(\App\Model\Telenok\Security\Resource $resource)
+     * \App\Telenok\Core\Security\Acl::deleteResource(2)
+     * \App\Telenok\Core\Security\Acl::deleteResource(\App\Model\Telenok\Security\Resource $resource)
      * 
      */
     public static function deleteResource($id = null)
@@ -276,8 +276,8 @@ class Acl
     /* 
      * Add permission 
      * 
-     * \Telenok\Core\Security\Acl::addPermission(['en' => 'Search'], 'search')
-     * \Telenok\Core\Security\Acl::addPermission('Search', 'search')
+     * \App\Telenok\Core\Security\Acl::addPermission(['en' => 'Search'], 'search')
+     * \App\Telenok\Core\Security\Acl::addPermission('Search', 'search')
      * 
      */
     public static function addPermission($title = [], $code = null)
@@ -299,9 +299,9 @@ class Acl
     /* 
      * Delete permission
      * 
-     * \Telenok\Core\Security\Acl::deletePermission()
-     * \Telenok\Core\Security\Acl::deletePermission(2)
-     * \Telenok\Core\Security\Acl::deletePermission(\App\Model\Telenok\Security\Permission $permission)
+     * \App\Telenok\Core\Security\Acl::deletePermission()
+     * \App\Telenok\Core\Security\Acl::deletePermission(2)
+     * \App\Telenok\Core\Security\Acl::deletePermission(\App\Model\Telenok\Security\Permission $permission)
      * 
      */
     public static function deletePermission($id = null)
@@ -328,12 +328,12 @@ class Acl
     /* 
      * Set permission to subject
      * 
-     * \Telenok\Core\Security\Acl::role/subject/user(who)->setPermission(what.can, over.resource)
+     * \App\Telenok\Core\Security\Acl::role/subject/user(who)->setPermission(what.can, over.resource)
      * 
-     * \Telenok\Core\Security\Acl::role(316)->setPermission('read', 'control_panel')
-     * \Telenok\Core\Security\Acl::user(339)->setPermission('read', 'news')
-     * \Telenok\Core\Security\Acl::role(800)->setPermission(233, 1901)
-     * \Telenok\Core\Security\Acl::subject(\Process $process)->setPermission(\App\Model\Telenok\Security\Permission $permission, \App\Model\Telenok\Security\Resource $resource)
+     * \App\Telenok\Core\Security\Acl::role(316)->setPermission('read', 'control_panel')
+     * \App\Telenok\Core\Security\Acl::user(339)->setPermission('read', 'news')
+     * \App\Telenok\Core\Security\Acl::role(800)->setPermission(233, 1901)
+     * \App\Telenok\Core\Security\Acl::subject(\Process $process)->setPermission(\App\Model\Telenok\Security\Permission $permission, \App\Model\Telenok\Security\Resource $resource)
      * 
      */
     public function setPermission($permissionCode = null, $resourceCode = null)
@@ -438,9 +438,9 @@ class Acl
     /* 
      * Remove permission from resource 
      * 
-     * \Telenok\Core\Security\Acl::resource(120)->unsetPermission('read') remove all permissions on resource with ID 120
-     * \Telenok\Core\Security\Acl::role(120)->unsetPermission(null, \User $user) remove all permission from role with ID 120 which assigned to user $user
-     * \Telenok\Core\Security\Acl::user($admin)->unsetPermission(\App\Model\Telenok\Security\Permission $permission, \SuperAdmin $subject)
+     * \App\Telenok\Core\Security\Acl::resource(120)->unsetPermission('read') remove all permissions on resource with ID 120
+     * \App\Telenok\Core\Security\Acl::role(120)->unsetPermission(null, \User $user) remove all permission from role with ID 120 which assigned to user $user
+     * \App\Telenok\Core\Security\Acl::user($admin)->unsetPermission(\App\Model\Telenok\Security\Permission $permission, \SuperAdmin $subject)
      * 
      */
     public function unsetPermission($permissionCode = null, $subjectCode = null)
@@ -502,9 +502,9 @@ class Acl
     /* 
      * Add group to user
      * 
-     * \Telenok\Core\Security\Acl::user(2)->setGroup('administrator')
-     * \Telenok\Core\Security\Acl::user($user)->setGroup(2)
-     * \Telenok\Core\Security\Acl::user($user)->setGroup(\App\Model\Telenok\User\Group $group)
+     * \App\Telenok\Core\Security\Acl::user(2)->setGroup('administrator')
+     * \App\Telenok\Core\Security\Acl::user($user)->setGroup(2)
+     * \App\Telenok\Core\Security\Acl::user($user)->setGroup(\App\Model\Telenok\User\Group $group)
      * 
      */
     public function setGroup($id = null)
@@ -536,9 +536,9 @@ class Acl
     /* 
      * Remove group from user
      * 
-     * \Telenok\Core\Security\Acl::user(2)->unsetGroup(2)
-     * \Telenok\Core\Security\Acl::user(2)->unsetGroup('super_administrator')
-     * \Telenok\Core\Security\Acl::user(2)->unsetGroup(\App\Model\Telenok\User\Group $group)
+     * \App\Telenok\Core\Security\Acl::user(2)->unsetGroup(2)
+     * \App\Telenok\Core\Security\Acl::user(2)->unsetGroup('super_administrator')
+     * \App\Telenok\Core\Security\Acl::user(2)->unsetGroup(\App\Model\Telenok\User\Group $group)
      * 
      */
     public function unsetGroup($id = null)
@@ -574,9 +574,9 @@ class Acl
     /* 
      * Add role to group
      * 
-     * \Telenok\Core\Security\Acl::group($admin)->setRole('super_administrator')
-     * \Telenok\Core\Security\Acl::group($admin)->setRole(2)
-     * \Telenok\Core\Security\Acl::group($admin)->setRole(\App\Model\Telenok\Security\Role $role)
+     * \App\Telenok\Core\Security\Acl::group($admin)->setRole('super_administrator')
+     * \App\Telenok\Core\Security\Acl::group($admin)->setRole(2)
+     * \App\Telenok\Core\Security\Acl::group($admin)->setRole(\App\Model\Telenok\Security\Role $role)
      * 
      */
     public function setRole($id = null)
@@ -608,9 +608,9 @@ class Acl
     /* 
      * Remove role from group
      * 
-     * \Telenok\Core\Security\Acl::group($admin)->unsetRole() - unset all roles from group
-     * \Telenok\Core\Security\Acl::group($admin)->unsetRole(2)
-     * \Telenok\Core\Security\Acl::group($admin)->unsetRole('super_administrator')
+     * \App\Telenok\Core\Security\Acl::group($admin)->unsetRole() - unset all roles from group
+     * \App\Telenok\Core\Security\Acl::group($admin)->unsetRole(2)
+     * \App\Telenok\Core\Security\Acl::group($admin)->unsetRole('super_administrator')
      * 
      */
     public function unsetRole($id = null)
@@ -646,11 +646,11 @@ class Acl
     /* 
      * Validate subject's permission
      * 
-     * \Telenok\Core\Security\Acl::group($admin)->can(\App\Model\Telenok\Security\Permission->code eg: 'write', \App\Model\Telenok\Security\Resource->code 'log')
-     * \Telenok\Core\Security\Acl::user(103)->can(222, \News $news, ['object-type-own']) - only 'object-type-own' filter used
-     * \Telenok\Core\Security\Acl::subject(103)->can(\App\Model\Telenok\Security\Permission $read, \User $user)
-     * \Telenok\Core\Security\Acl::subject(103)->can(12, 'object_type.language')
-     * \Telenok\Core\Security\Acl::subject(103)->can('read', 148)
+     * \App\Telenok\Core\Security\Acl::group($admin)->can(\App\Model\Telenok\Security\Permission->code eg: 'write', \App\Model\Telenok\Security\Resource->code 'log')
+     * \App\Telenok\Core\Security\Acl::user(103)->can(222, \News $news, ['object-type-own']) - only 'object-type-own' filter used
+     * \App\Telenok\Core\Security\Acl::subject(103)->can(\App\Model\Telenok\Security\Permission $read, \User $user)
+     * \App\Telenok\Core\Security\Acl::subject(103)->can(12, 'object_type.language')
+     * \App\Telenok\Core\Security\Acl::subject(103)->can('read', 148)
      * 
      */
     public function can($permissionCode = null, $resourceCode = null, $filterCode = null)
@@ -740,10 +740,10 @@ class Acl
     /* 
      * Validate subject's permission
      * 
-     * \Telenok\Core\Security\Acl::group($admin)->cannot(\App\Model\Telenok\Security\Permission->code eg: 'write', \App\Model\Telenok\Security\Resource->code 'log')
-     * \Telenok\Core\Security\Acl::user(103)->cannot(222, \News $news)
-     * \Telenok\Core\Security\Acl::subject(103)->cannot(\App\Model\Telenok\Security\Permission $read, \User $user)
-     * \Telenok\Core\Security\Acl::subject(103)->cannot(\App\Model\Telenok\Security\Permission $read, ['object_type.language.%'])
+     * \App\Telenok\Core\Security\Acl::group($admin)->cannot(\App\Model\Telenok\Security\Permission->code eg: 'write', \App\Model\Telenok\Security\Resource->code 'log')
+     * \App\Telenok\Core\Security\Acl::user(103)->cannot(222, \News $news)
+     * \App\Telenok\Core\Security\Acl::subject(103)->cannot(\App\Model\Telenok\Security\Permission $read, \User $user)
+     * \App\Telenok\Core\Security\Acl::subject(103)->cannot(\App\Model\Telenok\Security\Permission $read, ['object_type.language.%'])
      * 
      */
     public function cannot($permissionCode = null, $resourceCode = null)
@@ -754,9 +754,9 @@ class Acl
     /* 
      * Validate user's role
      * 
-     * \Telenok\Core\Security\Acl::user(103)->hasRole('superadmin')
-     * \Telenok\Core\Security\Acl::user($user)->hasRole(1)
-     * \Telenok\Core\Security\Acl::user(103)->hasRole(\App\Model\Telenok\Security\Role $role)
+     * \App\Telenok\Core\Security\Acl::user(103)->hasRole('superadmin')
+     * \App\Telenok\Core\Security\Acl::user($user)->hasRole(1)
+     * \App\Telenok\Core\Security\Acl::user(103)->hasRole(\App\Model\Telenok\Security\Role $role)
      * 
      */
     public function hasRole($id = null)
