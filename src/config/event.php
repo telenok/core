@@ -2,7 +2,7 @@
 
 \Validator::resolver(function($translator, $data, $rules, $messages, $customAttributes)
 {
-    return new \Telenok\Core\Interfaces\Validator\Validator($translator, $data, $rules, $messages, $customAttributes);
+    return new \App\Telenok\Core\Support\Validator\Validator($translator, $data, $rules, $messages, $customAttributes);
 });
 
 \Validator::extend('valid_regex', function($attribute, $value, $parameters)
@@ -12,15 +12,15 @@
 
 \Event::listen('telenok.setting.add', function($list)
 {
-    $list->push('Telenok\Core\Setting\AppLocaleDefault\Controller');
-    $list->push('Telenok\Core\Setting\AppLocales\Controller');
+    $list->push('App\Telenok\Core\Setting\AppLocaleDefault\Controller');
+    $list->push('App\Telenok\Core\Setting\AppLocales\Controller');
 });
 
 \Event::listen('telenok.acl.filter.resource.add', function($list)
 {
-    $list->push('Telenok\Core\Filter\Acl\Resource\ObjectType\Controller');
-    $list->push('Telenok\Core\Filter\Acl\Resource\ObjectTypeOwn\Controller');
-    $list->push('Telenok\Core\Filter\Acl\Resource\DirectRight\Controller');
+    $list->push('App\Telenok\Core\Filter\Acl\Resource\ObjectType\Controller');
+    $list->push('App\Telenok\Core\Filter\Acl\Resource\ObjectTypeOwn\Controller');
+    $list->push('App\Telenok\Core\Filter\Acl\Resource\DirectRight\Controller');
 });
 
 \Event::listen('telenok.module.menu.left', function($list)
