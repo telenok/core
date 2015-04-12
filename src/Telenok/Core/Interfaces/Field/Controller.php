@@ -154,8 +154,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	/**
 	 * Return Object Type linked to the field
 	 * 
-	 * @param \App\Model\Telenok\Object\Field $field
-	 * @return \App\Model\Telenok\Object\Type
+	 * @param \App\Telenok\Core\Model\Object\Field $field
+	 * @return \App\Telenok\Core\Model\Object\Type
 	 * 
 	 */
 	public function getLinkedModelType($field) {}
@@ -170,8 +170,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 		try
 		{
-			$model = \App\Model\Telenok\Object\Sequence::getModel($id);
-			$field = \App\Model\Telenok\Object\Sequence::getModel($fieldId);
+			$model = \App\Telenok\Core\Model\Object\Sequence::getModel($id);
+			$field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
 			$type = $this->getLinkedModelType($field);
 
 			$query = $model->{camel_case($field->code)}();
@@ -425,7 +425,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	{
 		try
 		{
-			$tabTo = \App\Model\Telenok\Object\Tab::where('tab_object_type', $typeId)
+			$tabTo = \App\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)
 					->where(function($query) use ($tabCode)
 					{
 						$query->where('id', $tabCode);
@@ -437,7 +437,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		{
 			try
 			{
-				$tabTo = \App\Model\Telenok\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
+				$tabTo = \App\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
 			}
 			catch (\Exception $ex)
 			{
@@ -458,15 +458,15 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		{
 			try
 			{
-				$tabHas = \App\Model\Telenok\Object\Tab::firstOrFail('id', $tabHasId);
+				$tabHas = \App\Telenok\Core\Model\Object\Tab::firstOrFail('id', $tabHasId);
 
-				$tabTo = \App\Model\Telenok\Object\Tab::where('tab_object_type', $typeId)->whereCode($tabHas->code);
+				$tabTo = \App\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->whereCode($tabHas->code);
 			}
 			catch (\Exception $ex)
 			{
 				try
 				{
-					$tabTo = \App\Model\Telenok\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
+					$tabTo = \App\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
 				}
 				catch (\Exception $ex)
 				{

@@ -10,6 +10,6 @@ class Language extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
     public function widgetLanguage()
     {
-        return $this->hasMany('\App\Model\Telenok\Web\WidgetOnPage', 'widget_language_language');
+        return $this->hasMany('\App\Telenok\Core\Model\Web\WidgetOnPage', 'widget_language_language');
     } 
 } 

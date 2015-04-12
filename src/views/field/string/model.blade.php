@@ -29,7 +29,7 @@
 
 				$localeDefault = config('app.localeDefault');
 
-				$languages = \App\Model\Telenok\System\Language::whereIn('locale', config('app.locales')->all())
+				$languages = \App\Telenok\Core\Model\System\Language::whereIn('locale', config('app.locales')->all())
 								->get()->sortBy(function($item) use ($localeDefault)
 				{
 					return $item->locale == $localeDefault ? 0 : 1;

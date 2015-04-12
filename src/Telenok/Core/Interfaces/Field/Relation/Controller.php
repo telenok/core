@@ -30,7 +30,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	$term = trim($this->getRequest()->input('term'));
 	$return = [];
 
-	$class = \App\Model\Telenok\Object\Sequence::getModel($id)->class_model;
+	$class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
 
 	$model = new $class;
 
@@ -65,7 +65,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
 	return '<div class="hidden-phone visible-lg btn-group">
                     <button class="btn btn-minier btn-info" title="' . $this->LL('list.btn.edit') . '" 
-                        onclick="editTableRow' . $uniqueId . '(this, \'' . \URL::route($this->getRouteWizardEdit(), ['id' => $item->getKey(), 'saveBtn' => 1, 'chooseBtn' => 0]) . '\'); return false;">
+                        onclick="editTableRow' . $uniqueId . '(this, \'' . route($this->getRouteWizardEdit(), ['id' => $item->getKey(), 'saveBtn' => 1, 'chooseBtn' => 0]) . '\'); return false;">
                         <i class="fa fa-pencil"></i>
                     </button>
 

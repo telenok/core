@@ -37,7 +37,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
             $ids = json_decode('[' . $ids . ']');
         }
 
-        $pages = \App\Model\Telenok\Web\Page::withTreeAttr()->whereIn('page.id', array_flatten($ids))->active()->withPermission()
+        $pages = \App\Telenok\Core\Model\Web\Page::withTreeAttr()->whereIn('page.id', array_flatten($ids))->active()->withPermission()
                     ->orderBy(\DB::raw('CONCAT(pivot_tree_attr.tree_path, pivot_tree_attr.tree_id)'))
                     ->orderBy('pivot_tree_attr.tree_order')
                     ->get();

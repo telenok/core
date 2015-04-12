@@ -5,8 +5,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     protected $key = 'objects-field';
     protected $parent = 'objects';
 
-    protected $modelListClass = '\App\Model\Telenok\Object\Field';
-    protected $modelTreeClass = '\App\Model\Telenok\Object\Type';
+    protected $modelListClass = '\App\Telenok\Core\Model\Object\Field';
+    protected $modelTreeClass = '\App\Telenok\Core\Model\Object\Type';
 
     protected $presentation = 'tree-tab-object';
     protected $presentationTreeView = 'core::module.objects-field.tree';
@@ -14,7 +14,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
     public function getTreeListTypes()
     {  
-        $types = \App\Model\Telenok\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->fetch('id')->toArray();
+        $types = \App\Telenok\Core\Model\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->fetch('id')->toArray();
 
         return $types;
     }
@@ -55,7 +55,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 		}
 		else
 		{
-			$modelType = \App\Model\Telenok\Object\Type::where('code', $input->get('field_object_type'))->orWhere('id', $input->get('field_object_type'))->firstOrFail();
+			$modelType = \App\Telenok\Core\Model\Object\Type::where('code', $input->get('field_object_type'))->orWhere('id', $input->get('field_object_type'))->firstOrFail();
 			
 			$input->put('field_object_type', $modelType->getKey());
 		} 

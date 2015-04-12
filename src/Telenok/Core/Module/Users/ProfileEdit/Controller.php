@@ -4,7 +4,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     
     protected $key = 'users-profile-edit';
     protected $parent = 'users';
-    protected $modelListClass = '\App\Model\Telenok\User\User';
+    protected $modelListClass = '\App\Telenok\Core\Model\User\User';
     protected $presentation = 'tree-tab-users-profile-edit';
     protected $presentationContentView = 'core::module.users-profile-edit.content'; 
     protected $presentationView = 'core::module.users-profile-edit.presentation';
@@ -40,7 +40,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
         $collection->put('order', 100000);
         $collection->put('devider_before', false);
         $collection->put('devider_after', false);
-        $collection->put('content', '<a href="#" onclick="jQuery.ajax(\'' . \URL::route('cmf.logout') . '\').done(function() { window.location = window.location; } ); return false;"><i class="fa fa-power-off"></i> ' . $this->LL('btn.logout') . '</a>');
+        $collection->put('content', '<a href="#" onclick="jQuery.ajax(\'' . route('cmf.logout') . '\').done(function() { window.location = window.location; } ); return false;"><i class="fa fa-power-off"></i> ' . $this->LL('btn.logout') . '</a>');
 
         return $collection;
     }

@@ -179,7 +179,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterActionParam($param = [])
     {
-		return \URL::route($this->routerActionParam ?: "cmf.module.{$this->getKey()}.action.param", $param);
+		return route($this->routerActionParam ?: "cmf.module.{$this->getKey()}.action.param", $param);
     } 
 	
     public function setRouterList($param)
@@ -191,7 +191,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterList($param = [])
     {
-        return \URL::route($this->routerList ?: "cmf.module.{$this->getKey()}.list", $param);
+        return route($this->routerList ?: "cmf.module.{$this->getKey()}.list", $param);
     }	
 	
     public function setRouterContent($param)
@@ -203,7 +203,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 	
     public function getRouterContent($param = [])
     {
-        return \URL::route($this->routerContent ?: "cmf.module.{$this->getKey()}", $param);
+        return route($this->routerContent ?: "cmf.module.{$this->getKey()}", $param);
     }
 	
     public function setRouterCreate($param)
@@ -215,7 +215,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
     
     public function getRouterCreate($param = [])
     {
-        return \URL::route($this->routerCreate ?: "cmf.module.{$this->getKey()}.create", $param);
+        return route($this->routerCreate ?: "cmf.module.{$this->getKey()}.create", $param);
     }
 	
     public function setRouterEdit($param)
@@ -227,7 +227,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterEdit($param = [])
     {
-        return \URL::route($this->routerEdit ?: "cmf.module.{$this->getKey()}.edit", $param);
+        return route($this->routerEdit ?: "cmf.module.{$this->getKey()}.edit", $param);
     }
 	
     public function setRouterDelete($param)
@@ -239,7 +239,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterDelete($param = [])
     {
-        return \URL::route($this->routerDelete ?: "cmf.module.{$this->getKey()}.delete", $param);
+        return route($this->routerDelete ?: "cmf.module.{$this->getKey()}.delete", $param);
     }
 	
     public function setRouterStore($param)
@@ -251,7 +251,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterStore($param = [])
     {
-        return \URL::route($this->routerStore ?: "cmf.module.{$this->getKey()}.store", $param);
+        return route($this->routerStore ?: "cmf.module.{$this->getKey()}.store", $param);
     }
 	
     public function setRouterUpdate($param)
@@ -263,7 +263,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterUpdate($param = [])
     {
-        return \URL::route($this->routerUpdate ?: "cmf.module.{$this->getKey()}.update", $param);
+        return route($this->routerUpdate ?: "cmf.module.{$this->getKey()}.update", $param);
     }
 	
     public function setRouterListEdit($param)
@@ -275,7 +275,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterListEdit($param = [])
     {
-		return \URL::route($this->routerListEdit ?: "cmf.module.{$this->getKey()}.list.edit", $param);
+		return route($this->routerListEdit ?: "cmf.module.{$this->getKey()}.list.edit", $param);
     }
 	
     public function setRouterListDelete($param)
@@ -287,7 +287,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterListDelete($param = [])
     {
-		return \URL::route($this->routerListDelete ?: "cmf.module.{$this->getKey()}.list.delete", $param);
+		return route($this->routerListDelete ?: "cmf.module.{$this->getKey()}.list.delete", $param);
     }
 	
     public function setRouterListLock($param)
@@ -299,12 +299,12 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterLock($param = [])
     {
-		return \URL::route($this->routerLock ?: "cmf.module.{$this->getKey()}.lock", $param);
+		return route($this->routerLock ?: "cmf.module.{$this->getKey()}.lock", $param);
     }
 
     public function getRouterListLock($param = [])
     {
-		return \URL::route($this->routerListLock ?: "cmf.module.{$this->getKey()}.list.lock", $param);
+		return route($this->routerListLock ?: "cmf.module.{$this->getKey()}.list.lock", $param);
     }
 	
     public function setRouterListUnlock($param)
@@ -316,7 +316,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterListUnlock($param = [])
     {
-		return \URL::route($this->routerListUnlock ?: "cmf.module.{$this->getKey()}.list.unlock", $param);
+		return route($this->routerListUnlock ?: "cmf.module.{$this->getKey()}.list.unlock", $param);
     }
 	
     public function setRouterListTree($param)
@@ -328,7 +328,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getRouterListTree($param = [])
     {
-		return \URL::route($this->routerListTree ?: "cmf.module.{$this->getKey()}.list.tree", $param);
+		return route($this->routerListTree ?: "cmf.module.{$this->getKey()}.list.tree", $param);
     }
 
     public function setModelListClass($param)
@@ -377,17 +377,17 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
     
     public function getModel($id)
     {
-        return \App\Model\Telenok\Object\Sequence::getModel($id);
+        return \App\Telenok\Core\Model\Object\Sequence::getModel($id);
     }
  
     public function getType($id)
     {
-        return \App\Model\Telenok\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
+        return \App\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
     } 
 
     public function getTypeByModelId($id)
     {
-        return \App\Model\Telenok\Object\Sequence::findOrFail($id)->sequencesObjectType;
+        return \App\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType;
     }
     
     public function getModelByTypeId($id)
@@ -613,7 +613,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
     { 
         $types = [];
 
-        $types[] = \App\Model\Telenok\Object\Type::where('code', 'folder')->active()->pluck('id');
+        $types[] = \App\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->pluck('id');
 
         if ($this->getModelTreeClass())
         {
@@ -625,7 +625,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function getTreeListModel($treeId = 0, $str = '')
     { 
-        $sequence = app('\App\Model\Telenok\Object\Sequence');
+        $sequence = app('\App\Telenok\Core\Model\Object\Sequence');
 
         if ($str)
         {
@@ -639,11 +639,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
             if ($treeId == 0)
             {
-                $query = \App\Model\Telenok\Object\Sequence::withChildren(2)->orderBy('pivot_tree_children.tree_order')->active();
+                $query = \App\Telenok\Core\Model\Object\Sequence::withChildren(2)->orderBy('pivot_tree_children.tree_order')->active();
             }
             else
             {
-                $query = \App\Model\Telenok\Object\Sequence::find($treeId)->children(2)->orderBy('pivot_tree_attr.tree_order')->active();
+                $query = \App\Telenok\Core\Model\Object\Sequence::find($treeId)->children(2)->orderBy('pivot_tree_attr.tree_order')->active();
             }
 
             $query->whereIn('object_sequence.sequences_object_type', $types);
@@ -914,7 +914,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
 		try
 		{
-			$model = \App\Model\Telenok\Object\Sequence::find($id)->model;
+			$model = \App\Telenok\Core\Model\Object\Sequence::find($id)->model;
 
 			if (!$model->locked())
 			{
@@ -937,7 +937,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 		{
 			foreach($tableCheckAll as $id)
 			{
-				$model = \App\Model\Telenok\Object\Sequence::find($id)->model;
+				$model = \App\Telenok\Core\Model\Object\Sequence::find($id)->model;
 				
 				if (!$model->locked())
 				{
@@ -963,7 +963,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 			
 			foreach($tableCheckAll as $id)
 			{
-				$model = \App\Model\Telenok\Object\Sequence::find($id)->model;
+				$model = \App\Telenok\Core\Model\Object\Sequence::find($id)->model;
 
 				if ($model && $model->locked_by_user == $userId)
 				{
@@ -1073,7 +1073,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
         {
             try
             {
-                $model->makeLastChildOf(\App\Model\Telenok\System\Folder::findOrFail($input->get('tree_pid'))->sequence);
+                $model->makeLastChildOf(\App\Telenok\Core\Model\System\Folder::findOrFail($input->get('tree_pid'))->sequence);
             }
             catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) 
             { 

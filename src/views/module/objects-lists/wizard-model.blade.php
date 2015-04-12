@@ -281,7 +281,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 
 		<div class="modal-header table-header">
 			<button data-dismiss="modal" class="close" type="button">×</button>
-			<h4>{{ \App\Model\Telenok\Object\Type::where('code', $model->getTable())->first()->translate('title') }}</h4>
+			<h4>{{ \App\Telenok\Core\Model\Object\Type::where('code', $model->getTable())->first()->translate('title') }}</h4>
 		</div>
 
 

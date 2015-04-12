@@ -20,7 +20,7 @@ class SeedSettingTable extends Migration {
 
 		DB::table('object_field')->insertGetId(
 				[
-					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Model\Telenok\Object\Field']),
+					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
 					'title' => json_encode(SeedSettingTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
 					'title_list' => json_encode(SeedSettingTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
 					'key' => 'string',
@@ -39,7 +39,7 @@ class SeedSettingTable extends Migration {
 
 		DB::table('object_field')->insertGetId(
 				[
-					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Model\Telenok\Object\Field']),
+					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
 					'title' => json_encode(SeedSettingTableTranslation::get('field.value'), JSON_UNESCAPED_UNICODE),
 					'title_list' => json_encode(SeedSettingTableTranslation::get('field.value'), JSON_UNESCAPED_UNICODE),
 					'key' => 'complex-array',
@@ -61,7 +61,7 @@ class SeedSettingTable extends Migration {
 
 		DB::table('setting')->insertGetId(
 				[
-					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Model\Telenok\System\Setting']),
+					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\System\Setting']),
 					'title' => json_encode(['en' => 'Default language'], JSON_UNESCAPED_UNICODE),
 					'code' => 'app.localeDefault',
 					'value' => json_encode('en', JSON_UNESCAPED_UNICODE),
@@ -71,7 +71,7 @@ class SeedSettingTable extends Migration {
 
 		DB::table('setting')->insertGetId(
 				[
-					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Model\Telenok\System\Setting']),
+					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\System\Setting']),
 					'title' => json_encode(['en' => 'Languages'], JSON_UNESCAPED_UNICODE),
 					'code' => 'app.locales',
 					'value' => json_encode(['en', 'ru'], JSON_UNESCAPED_UNICODE),
@@ -81,7 +81,7 @@ class SeedSettingTable extends Migration {
 
 		DB::table('setting')->insertGetId(
 				[
-					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Model\Telenok\System\Setting']),
+					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\System\Setting']),
 					'title' => json_encode(['en' => 'Default timezone'], JSON_UNESCAPED_UNICODE),
 					'code' => 'app.timezone',
 					'value' => json_encode("UTC"),

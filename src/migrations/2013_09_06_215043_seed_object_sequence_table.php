@@ -22,7 +22,7 @@ class SeedObjectSequenceTable extends Migration {
 
 			DB::table('object_field')->insertGetId(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Model\Telenok\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['ru' => 'Класс модели', 'en' => 'Class model'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'Класс модели', 'en' => 'Class model'], JSON_UNESCAPED_UNICODE),
 						'key' => 'string',
@@ -41,7 +41,7 @@ class SeedObjectSequenceTable extends Migration {
 
 			DB::table('object_field')->insertGetId(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Model\Telenok\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['ru' => 'Тип', 'en' => 'Type'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'Тип', 'en' => 'Type'], JSON_UNESCAPED_UNICODE),
 						'key' => 'relation-one-to-many',
@@ -62,7 +62,7 @@ class SeedObjectSequenceTable extends Migration {
 
 			DB::table('object_field')->insert(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Model\Telenok\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['en' => 'Parent'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['en' => 'Parent'], JSON_UNESCAPED_UNICODE),
                         'key' => 'select-one',

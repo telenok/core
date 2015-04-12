@@ -38,7 +38,7 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 
 			$this->processingController->touchInstallFlag();
 
-			$user = \App\Model\Telenok\User\User::where('username', 'admin')->first();
+			$user = \App\Telenok\Core\Model\User\User::where('username', 'admin')->first();
 
 			$user->storeOrUpdate([
 				'username' => $this->processingController->getSuperuserLogin(),

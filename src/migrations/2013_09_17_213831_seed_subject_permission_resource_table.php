@@ -31,7 +31,7 @@ class SeedSubjectPermissionResourceTable extends Migration {
             ]);
         }
  
-		(new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
 					'title' => SeedObjectPermissionResourceTableTranslation::get('field.code'),
 					'title_list' => SeedObjectPermissionResourceTableTranslation::get('field.code'),
@@ -50,7 +50,7 @@ class SeedSubjectPermissionResourceTable extends Migration {
 				]
 		);
 
-		(new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
 					'title' => SeedObjectPermissionResourceTableTranslation::get('field.resource'),
 					'title_list' => SeedObjectPermissionResourceTableTranslation::get('field.resource'),
@@ -70,7 +70,7 @@ class SeedSubjectPermissionResourceTable extends Migration {
 				]
 		);
 		
-		(new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
 					'title' => SeedObjectPermissionResourceTableTranslation::get('field.subject'),
 					'title_list' => SeedObjectPermissionResourceTableTranslation::get('field.subject'),
@@ -89,7 +89,7 @@ class SeedSubjectPermissionResourceTable extends Migration {
 				]
 		);
 		
-		(new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
 					'title' => SeedObjectPermissionResourceTableTranslation::get('field.permission'),
 					'title_list' => SeedObjectPermissionResourceTableTranslation::get('field.permission'),

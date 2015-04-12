@@ -5,8 +5,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 	protected $key = 'web-page';
 	protected $parent = 'web';
 
-    protected $modelListClass = '\App\Model\Telenok\Web\Page';
-    protected $modelTreeClass = '\App\Model\Telenok\Web\Page';
+    protected $modelListClass = '\App\Telenok\Core\Model\Web\Page';
+    protected $modelTreeClass = '\App\Telenok\Core\Model\Web\Page';
     
     protected $presentation = 'tree-tab-object';
 

@@ -7,7 +7,7 @@ class Domain extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
     public function page()
     {
-        return $this->hasMany('\App\Model\Telenok\Web\Page', 'page_domain');
+        return $this->hasMany('\App\Telenok\Core\Model\Web\Page', 'page_domain');
     }
 }
 

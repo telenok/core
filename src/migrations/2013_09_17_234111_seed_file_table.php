@@ -18,7 +18,7 @@ class SeedFileTable extends Migration {
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
 
-        (new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'File category'],
                     'title_list' => ['en' => 'File category'],
@@ -38,7 +38,7 @@ class SeedFileTable extends Migration {
                 ]
         );
  
-        (new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'File upload'],
                     'title_list' => ['en' => 'File upload'],

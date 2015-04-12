@@ -12,12 +12,12 @@ class UserMessage extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	public function author()
 	{
-		return $this->hasOne('\App\Model\Telenok\User\User', 'author_user_message');
+		return $this->hasOne('\App\Telenok\Core\Model\User\User', 'author_user_message');
 	}
 
 	public function recepient()
 	{
-		return $this->belongsToMany('\App\Model\Telenok\User\User', 'pivot_relation_m2m_recepient_user_message', 'recepient_user_message', 'recepient')->withTimestamps();
+		return $this->belongsToMany('\App\Telenok\Core\Model\User\User', 'pivot_relation_m2m_recepient_user_message', 'recepient_user_message', 'recepient')->withTimestamps();
 	}
 
 }

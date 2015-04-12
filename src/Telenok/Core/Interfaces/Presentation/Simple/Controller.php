@@ -7,7 +7,10 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
     protected $presentation = 'simple';
     protected $presentationView = '';
     protected $presentationContentView = '';
-    
+    protected $presentationModuleKey = '';
+    protected $tabKey = '';
+    protected $additionalViewParam = [];
+
     public function getPresentation()
     {
         return $this->presentation;
@@ -19,6 +22,35 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
         
         return $this;
     } 
+    
+    public function getTabKey()
+    {
+        return $this->tabKey ?: $this->getKey();
+    }
+
+    public function setTabKey($key)
+    {
+        $this->tabKey = $key;
+        
+        return $this;
+    }
+    
+	public function getGridId($key = 'gridId')
+    {
+        return "{$this->getPresentation()}-{$this->getTabKey()}-{$key}";
+	}
+	
+	public function getPresentationModuleKey()
+    {
+        return $this->presentationModuleKey ?: $this->presentation . '-' . $this->getKey();
+    }
+
+    public function setPresentationModuleKey($key)
+    {
+        $this->presentationModuleKey = $key;
+        
+        return $this;
+    }
 
     public function getPresentationView()
     {
@@ -44,20 +76,46 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
         return $this;
     } 
 
+    public function getAdditionalViewParam()
+    {
+        return $this->additionalViewParam;
+    }    
+
+    public function setAdditionalViewParam($param = [])
+    {
+		$this->additionalViewParam = $param;
+		
+		return $this;
+    }    
+
     public function getActionParam()
     { 
-        return json_encode(array(
-            'presentation' => $this->getPresentation(),
-			'presentationModuleKey' => $this->getPresentationModuleKey(),
-            'presentationContent' => $this->getPresentationContent(),
-        ));
+        try
+        {
+            return [
+                'presentation' => $this->getPresentation(),
+                'presentationModuleKey' => $this->getPresentationModuleKey(),
+                'presentationContent' => $this->getPresentationContent(),
+                'key' => $this->getKey(),
+                'breadcrumbs' => $this->getBreadcrumbs(),
+                'pageHeader' => $this->getPageHeader(),
+            ];
+        }
+        catch (\Exception $e)
+        {
+            return [
+                'error' => $e->getMessage(),
+            ];
+        } 
     }
 
     public function getPresentationContent()
     {
         return view($this->getPresentationView(), array(
-            'controller' => $this,
             'presentation' => $this->getPresentation(),
+			'presentationModuleKey' => $this->getPresentationModuleKey(),
+            'uniqueId' => str_random(),
+			'controller' => $this,
             'content' => $this->getContent(),
             'key' => $this->getKey(),
             'breadcrumbs' => $this->getBreadcrumbs(),
@@ -66,12 +124,12 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
     }
 
     public function getContent()
-    {
-        return view($this->getPresentationContentView(), array(
-            'controller' => $this,
-            'uniqueId' => str_random(),                 
-            'success' => false, 
-        ))->render();
+    { 
+        return view($this->getPresentationContentView(), array_merge([
+                'controller' => $this,  
+                'uniqueId' => str_random(),
+            ], $this->getAdditionalViewParam()))->render();
     }
+
 }
 

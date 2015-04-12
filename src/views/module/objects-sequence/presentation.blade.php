@@ -18,7 +18,7 @@
                 { 
                     jQuery('#modal-{{$jsPresentationUnique}}').append('body').modal('show').data('model-data', function(id)
                     {
-                        var url = "{!! \URL::route("cmf.module.objects-lists.action.param", ['typeId' => '__typeId__']) !!}".replace("__typeId__", id);
+                        var url = "{!! route("cmf.module.objects-lists.action.param", ['typeId' => '__typeId__']) !!}".replace("__typeId__", id);
 
                         jQuery.ajax({
                                 method: 'get',
@@ -41,7 +41,7 @@
                                     
                                     telenok.processModuleContent(data.key);
 
-                                    var url = "{!! \URL::route("cmf.module.objects-lists.create", ['id' => '__id__']) !!}".replace("__id__", id);
+                                    var url = "{!! route("cmf.module.objects-lists.create", ['id' => '__id__']) !!}".replace("__id__", id);
 
                                     this_.addTabByURL({url : url});
 
@@ -83,7 +83,7 @@
 
                         <?php
 
-                            $model = new \App\Model\Telenok\Object\Type();
+                            $model = new \App\Telenok\Core\Model\Object\Type();
 
                             $query = $model::withPermission();
 

@@ -17,13 +17,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 	/**
 	 * Return Object Type linked to the field
 	 * 
-	 * @param \App\Model\Telenok\Object\Field $field
-	 * @return \App\Model\Telenok\Object\Type
+	 * @param \App\Telenok\Core\Model\Object\Field $field
+	 * @return \App\Telenok\Core\Model\Object\Type
 	 * 
 	 */
 	public function getLinkedModelType($field)
 	{
-		return \App\Model\Telenok\Object\Type::whereIn('id', [$field->relation_one_to_many_has, $field->relation_one_to_many_belong_to])->first();
+		return \App\Telenok\Core\Model\Object\Type::whereIn('id', [$field->relation_one_to_many_has, $field->relation_one_to_many_belong_to])->first();
 	}
 	
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
@@ -74,7 +74,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         
         $id = $field->relation_one_to_many_has ?: $field->relation_one_to_many_belong_to;
         
-        $class = \App\Model\Telenok\Object\Sequence::getModel($id)->class_model;
+        $class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
         
 		$model = new $class;
 		
@@ -94,7 +94,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                     keepTypingMsg: "'.$this->LL('notice.typing').'",
                     lookingForMsg: "'.$this->LL('notice.looking-for').'",
                     type: "GET",
-                    url: "'.\URL::route($this->getRouteListTitle(), ['id' => (int)$id]).'", 
+                    url: "'.route($this->getRouteListTitle(), ['id' => (int)$id]).'", 
                     dataType: "json",
                     minTermLength: 1
                 }, 
@@ -177,7 +177,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			$input->put('relation_one_to_many_has', $input->get('field_has'));
 		}
 
-		$input->put('relation_one_to_many_has', intval(\App\Model\Telenok\Object\Type::where('code', $input->get('relation_one_to_many_has'))->orWhere('id', $input->get('relation_one_to_many_has'))->pluck('id')));
+		$input->put('relation_one_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('relation_one_to_many_has'))->orWhere('id', $input->get('relation_one_to_many_has'))->pluck('id')));
 		$input->put('multilanguage', 0);
 		$input->put('allow_sort', 0);
 		
@@ -195,13 +195,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 				return parent::postProcess($model, $type, $input);
 			} 
 
-            $relatedTypeOfModelField = $model->fieldObjectType()->first();   // eg object \App\Model\Telenok\Object\Type which DB-field "code" is "author"
+            $relatedTypeOfModelField = $model->fieldObjectType()->first();   // eg object \App\Telenok\Core\Model\Object\Type which DB-field "code" is "author"
 
             $classModelHasMany = $relatedTypeOfModelField->class_model;
             $codeFieldHasMany = $model->code; 
             $codeTypeHasMany = $relatedTypeOfModelField->code; 
 
-            $typeBelongTo = \App\Model\Telenok\Object\Type::findOrFail($input->get('relation_one_to_many_has')); 
+            $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('relation_one_to_many_has')); 
             $tableBelongTo = $typeBelongTo->code;
             $classBelongTo = $typeBelongTo->class_model;
 
@@ -259,11 +259,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 					'field_order' => $input->get('field_order_belong', $model->field_order),
 				];
 				
-				$validator = $this->validator(new \App\Model\Telenok\Object\Field(), $toSave, []);
+				$validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
 
 				if ($validator->passes()) 
 				{
-					\App\Model\Telenok\Object\Field::create($toSave);
+					\App\Telenok\Core\Model\Object\Field::create($toSave);
 				}
 
 				if (!\Schema::hasColumn($tableBelongTo, $relatedSQLField) && !\Schema::hasColumn($tableBelongTo, "`{$relatedSQLField}`"))

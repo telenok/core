@@ -29,7 +29,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
     {
 	$content = ['controller' => $this];
 
-	$wop = \App\Model\Telenok\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
+	$wop = \App\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
 			{
 			    $query->where('id', $languageId);
 			})
@@ -83,7 +83,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	try
 	{
-	    $page = \App\Model\Telenok\Web\Page::findOrFail($pageId);
+	    $page = \App\Telenok\Core\Model\Web\Page::findOrFail($pageId);
 
 	    $this->setCacheTime($page->cache_time);
 

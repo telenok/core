@@ -7,21 +7,21 @@ class SubjectPermissionResource extends \Telenok\Core\Interfaces\Eloquent\Object
 
 	public function aclPermissionPermission()
 	{
-		return $this->belongsTo('\App\Model\Telenok\Security\Permission', 'acl_permission_object_sequence');
+		return $this->belongsTo('\App\Telenok\Core\Model\Security\Permission', 'acl_permission_object_sequence');
 	}
 
 	public function aclResourceObjectSequence()
 	{
-		return $this->belongsTo('\App\Model\Telenok\Object\Sequence', 'acl_resource_object_sequence');
+		return $this->belongsTo('\App\Telenok\Core\Model\Object\Sequence', 'acl_resource_object_sequence');
 	}
 
 	public function aclSubjectObjectSequence()
 	{
-		return $this->belongsTo('\App\Model\Telenok\Object\Sequence', 'acl_subject_object_sequence');
+		return $this->belongsTo('\App\Telenok\Core\Model\Object\Sequence', 'acl_subject_object_sequence');
 	} 
 
     public function aclPermissionObjectSequence()
     {
-        return $this->belongsTo('\App\Model\Telenok\Object\Sequence', 'acl_permission_object_sequence');
+        return $this->belongsTo('\App\Telenok\Core\Model\Object\Sequence', 'acl_permission_object_sequence');
     }
 }

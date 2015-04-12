@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Module\Objects\Lists\Wizard;
 
-class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
+class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 
     protected $presentation = 'wizard-model';
     protected $presentationModelView = 'core::module.objects-lists.wizard-model'; 
@@ -8,27 +8,27 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 
     public function getRouterCreate($param = [])
     {
-        return \URL::route("cmf.module.{$this->getKey()}.wizard.create", $param);
+        return route("cmf.module.{$this->getKey()}.wizard.create", $param);
     }
 
     public function getRouterEdit($param = [])
     {
-        return \URL::route("cmf.module.{$this->getKey()}.wizard.edit", $param);
+        return route("cmf.module.{$this->getKey()}.wizard.edit", $param);
     }
 
     public function getRouterStore($param = [])
     {
-        return \URL::route("cmf.module.{$this->getKey()}.wizard.store", $param);
+        return route("cmf.module.{$this->getKey()}.wizard.store", $param);
     }
 
     public function getRouterUpdate($param = [])
     {
-        return \URL::route("cmf.module.{$this->getKey()}.wizard.update", $param);
+        return route("cmf.module.{$this->getKey()}.wizard.update", $param);
     }
 
     public function getRouterChooseTypeId($param = [])
     {
-        return \URL::route("cmf.module.{$this->getKey()}.wizard.choose.type", $param);
+        return route("cmf.module.{$this->getKey()}.wizard.choose.type", $param);
     }
 
     public function getPresentationListWizardView()
@@ -90,7 +90,7 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 			if (is_array($id))
 			{
 				$typeList = $id;
-				$id = \App\Model\Telenok\Object\Type::where('code', 'object_sequence')->pluck('id');
+				$id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id');
 			}
 			
             $model = $this->getModelByTypeId($id);
@@ -140,7 +140,7 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 			if (is_array($id))
 			{
 				$typeList = $id;
-				$id = \App\Model\Telenok\Object\Type::where('code', 'object_sequence')->pluck('id');
+				$id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id');
 			}
 
             $type = $this->getType($id);

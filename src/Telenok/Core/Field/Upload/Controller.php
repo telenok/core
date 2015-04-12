@@ -52,7 +52,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     }
     public function processDeleting($model)
     {  
-		\App\Model\Telenok\Object\Field::where(function($query) use ($model)
+		\App\Telenok\Core\Model\Object\Field::where(function($query) use ($model)
 				{
 					$type = $model->fieldObjectType()->first();
 			
@@ -154,12 +154,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				{
 					if (!empty($mimeType))
 					{
-						$modelMimeType = \App\Model\Telenok\File\FileMimeType::where('mime_type', $mimeType)->firstOrFail();
+						$modelMimeType = \App\Telenok\Core\Model\File\FileMimeType::where('mime_type', $mimeType)->firstOrFail();
 					}
 				}
 				catch (\Exception $e)
 				{
-					$modelMimeType = (new \App\Model\Telenok\File\FileMimeType())->storeOrUpdate([
+					$modelMimeType = (new \App\Telenok\Core\Model\File\FileMimeType())->storeOrUpdate([
 						'title' => $mimeType,
 						'active' => 1,
 						'mime_type' => $mimeType
@@ -170,12 +170,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				{
 					if (!empty($extension))
 					{
-						$modelExtension = \App\Model\Telenok\File\FileExtension::where('extension', $extension)->firstOrFail();
+						$modelExtension = \App\Telenok\Core\Model\File\FileExtension::where('extension', $extension)->firstOrFail();
 					}
 				}
 				catch (\Exception $e)
 				{
-					$modelExtension = (new \App\Model\Telenok\File\FileExtension())->storeOrUpdate([
+					$modelExtension = (new \App\Telenok\Core\Model\File\FileExtension())->storeOrUpdate([
 						'title' => $extension,
 						'active' => 1,
 						'mime_type' => $extension
@@ -267,7 +267,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		try
 		{
-			(new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+			(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
 					'title' => $model->title->all(),
 					'title_list' => $model->title_list->all(),
@@ -290,7 +290,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	
 		try
 		{ 
-			(new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+			(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
 					'title' => $model->title->all(),
 					'title_list' => $model->title_list->all(),
@@ -313,7 +313,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		try
 		{ 
-			(new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+			(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
 					'title' => ['ru' => "Путь", 'en' => "Path"],
 					'title_list' => ['ru' => "Путь", 'en' => "Path"],
@@ -335,7 +335,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		try
 		{ 
-			(new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+			(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
 					'title' => ['ru' => "Оригинальное имя", 'en' => "Original name"],
 					'title_list' => ['ru' => "Оригинальное имя", 'en' => "Original name"],
@@ -357,7 +357,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		try
 		{ 
-			(new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+			(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
 					'title' => ['ru' => "Размер", 'en' => "Size"],
 					'title_list' => ['ru' => "Размер", 'en' => "Size"],

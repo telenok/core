@@ -5,7 +5,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 	protected $key = 'system-setting';
     protected $presentation = 'tree-tab-object';
     protected $presentationFormFieldListView = 'core::module.setting.form-field-list'; 
-    protected $modelListClass = '\App\Model\Telenok\System\Setting';
+    protected $modelListClass = '\App\Telenok\Core\Model\System\Setting';
 
 }
 

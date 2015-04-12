@@ -124,6 +124,9 @@
             <a data-action="reload" href="#" onclick="jQuery('#tree-{{$id}}').jstree('refresh');return false;">
                 <i class="fa fa-refresh"></i>
             </a>
+            <a href="#" onclick="telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').hideTree();return false;">
+                <i class="ace-icon fa fa-times red"></i>
+            </a>
         </span>
     </div>
 

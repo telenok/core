@@ -12,19 +12,19 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
 	public function getChooseTypeId($field, $linkedField)
 	{
-		return \App\Model\Telenok\Object\Type::withPermission()->where('treeable', 1)->get(['id'])->fetch('id')->all();
+		return \App\Telenok\Core\Model\Object\Type::withPermission()->where('treeable', 1)->get(['id'])->fetch('id')->all();
 	}
 
 	/**
 	 * Return Object Type linked to the field
 	 * 
-	 * @param \App\Model\Telenok\Object\Field $field
-	 * @return \App\Model\Telenok\Object\Type
+	 * @param \App\Telenok\Core\Model\Object\Field $field
+	 * @return \App\Telenok\Core\Model\Object\Type
 	 * 
 	 */
 	public function getLinkedModelType($field)
 	{
-		return \App\Model\Telenok\Object\Type::where('code', 'object_sequence')->first();
+		return \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->first();
 	}
 	
     public function saveModelField($field, $model, $input)
@@ -85,7 +85,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             {
                 try
                 {
-					$child = \App\Model\Telenok\Object\Sequence::findOrFail($id);
+					$child = \App\Telenok\Core\Model\Object\Sequence::findOrFail($id);
 
                     $child->makeLastChildOf($model);
                 }
@@ -176,11 +176,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 			'field_order' => $input->get('field_order'),
 		];  
  
-		$validator = $this->validator(new \App\Model\Telenok\Object\Field(), $toSave, []);
+		$validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
 
 		if ($input->get('create_belong') !== false && $validator->passes()) 
 		{
-			\App\Model\Telenok\Object\Field::create($toSave);
+			\App\Telenok\Core\Model\Object\Field::create($toSave);
 		}
 		
         return $this;

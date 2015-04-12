@@ -67,7 +67,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 
 		$input->put('field_object_tab', $tab->getKey());  
 
-		$table = \App\Model\Telenok\Object\Type::find($input->get('field_object_type'))->code;
+		$table = \App\Telenok\Core\Model\Object\Type::find($input->get('field_object_type'))->code;
 
 		$fieldName = 'created_by_user';
 

@@ -132,6 +132,28 @@
 
 				return this;
 			},
+			showTree: function() 
+			{
+				if (!this.presentationParam.treeContent) 
+				{
+					return this;
+				}
+				
+				var key = 'telenok-presentation-' + this.presentationParam.key + '-tree'; 
+				jQuery('div.telenok-presentation-tabs', '#' + this.getPresentationDomId()).removeClass('col-xs-12').addClass('col-xs-9');
+				jQuery('div.telenok-presentation-tree', '#' + this.getPresentationDomId()).show();
+			},
+			hideTree: function() 
+			{
+				if (!this.presentationParam.treeContent) 
+				{
+					return this;
+				}
+				
+				var key = 'telenok-presentation-' + this.presentationParam.key + '-tree'; 
+				jQuery('div.telenok-presentation-tabs', '#' + this.getPresentationDomId()).removeClass('col-xs-9').addClass('col-xs-12');
+				jQuery('div.telenok-presentation-tree', '#' + this.getPresentationDomId()).hide();
+			},
 			addTree: function() 
 			{ 
 				if (!this.presentationParam.treeContent) 
@@ -139,10 +161,9 @@
 					return this;
 				}
                 
-				var key = 'telenok-presentation-' + this.presentationParam.key + '-tree'; 
+				this.showTree();
 
-				jQuery('div.telenok-presentation-tabs', '#' + this.getPresentationDomId()).removeClass('col-xs-12').addClass('col-xs-9');
-				jQuery('div.telenok-presentation-tree', '#' + this.getPresentationDomId()).show();
+				var key = 'telenok-presentation-' + this.presentationParam.key + '-tree'; 
 
 				if (jQuery('#' + key).size()) 
 				{
@@ -172,7 +193,7 @@
 					{
 						aButtons.push(param.tableListBtnCreate);
 					}
-					else 
+					else if (param.tableListBtnCreate !== false)
 					{
 						aButtons.push({
 							"sExtends": "text",
@@ -191,7 +212,7 @@
 					{
 						aButtons.push(param.tableListBtnRefresh);
 					}
-					else 
+					else if (param.tableListBtnRefresh !== false)
 					{
 						aButtons.push({
 								"sExtends": "text",
@@ -209,7 +230,7 @@
 					{
 						aButtons.push(param.tableListBtnSelected);
 					}
-					else 
+					else if (param.tableListBtnSelected !== false)
 					{
 						aButtons.push({
 							"sExtends": "collection",
@@ -320,7 +341,7 @@
 					{
 						aButtons.push(param.tableListBtnFilter);
 					}
-					else 
+					else if (param.tableListBtnFilter !== false)
 					{
 						aButtons.push({
 								"sExtends": "text",

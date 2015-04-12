@@ -183,7 +183,7 @@
                             { 
                                 telenok.addModule(
                                     "object-sequence", 
-                                    "{!! \URL::route("cmf.module.objects-sequence.action.param", []) !!}", 
+                                    "{!! route("cmf.module.objects-sequence.action.param", []) !!}", 
                                     function(moduleKey) 
                                     {
                                         param = telenok.getModule(moduleKey);

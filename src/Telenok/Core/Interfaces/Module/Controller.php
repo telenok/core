@@ -99,7 +99,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
     public function getRouterActionParam($param = [])
     {
-		return \URL::route("cmf.module.{$this->getKey()}.action.param", $param);
+		return route("cmf.module.{$this->getKey()}.action.param", $param);
     }  
 	
     public function getActionParam()
@@ -109,7 +109,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 			'presentationModuleKey' => $this->getPresentationModuleKey(),
             'presentationBlockContent' => $this->getPresentationContent(),
             'key' => $this->getKey(),
-            'url' => \URL::route("cmf.module.{$this->getKey()}"),
+            'url' => route("cmf.module.{$this->getKey()}"),
             'breadcrumbs' => $this->getBreadcrumbs(),
             'pageHeader' => $this->getPageHeader(), 
         ));

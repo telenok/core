@@ -13,16 +13,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		$term = trim($this->getRequest()->input('term'));
 		$return = [];
 
-		$sequence = new \App\Model\Telenok\Object\Sequence();
+		$sequence = new \App\Telenok\Core\Model\Object\Sequence();
 
 		$sequenceTable = $sequence->getTable();
-		$typeTable = (new \App\Model\Telenok\Object\Type())->getTable();
+		$typeTable = (new \App\Telenok\Core\Model\Object\Type())->getTable();
 
 		$sequence->addMultilanguage('title_type');
 
 		try
 		{
-			\App\Model\Telenok\Object\Sequence::select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title AS title_type')
+			\App\Telenok\Core\Model\Object\Sequence::select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title AS title_type')
 					->join($typeTable, function($join) use ($sequenceTable, $typeTable)
 					{
 						$join->on($sequenceTable . '.sequences_object_type', '=', $typeTable . '.id');
@@ -92,7 +92,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
-		$permissions = \App\Model\Telenok\Security\Permission::active()->get();
+		$permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
         $this->setViewModel($field);
 
 		return view($this->getViewModel(), array(
@@ -133,7 +133,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	public function getListFieldContent($field, $item, $type = null)
 	{
 		$items = [];
-		$rows = \Illuminate\Support\Collection::make(\App\Model\Telenok\Security\Permission::take(8)->get());
+		$rows = \Illuminate\Support\Collection::make(\App\Telenok\Core\Model\Security\Permission::take(8)->get());
 
 		if ($rows->count())
 		{
@@ -151,7 +151,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         return view($this->getViewFilter(), [
             'controller' => $this,
             'field' => $field,
-            'permissions' => \App\Model\Telenok\Security\Permission::active()->get(),
+            'permissions' => \App\Telenok\Core\Model\Security\Permission::active()->get(),
         ]);
     }
 
@@ -159,9 +159,9 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
 		if ($value !== null)
 		{
-            $sequence = new \App\Model\Telenok\Object\Sequence();
-            $spr = new \App\Model\Telenok\Security\SubjectPermissionResource();
-            $type = new \App\Model\Telenok\Object\Type();
+            $sequence = new \App\Telenok\Core\Model\Object\Sequence();
+            $spr = new \App\Telenok\Core\Model\Security\SubjectPermissionResource();
+            $type = new \App\Telenok\Core\Model\Object\Type();
 
             foreach((array)$value as $permissionId => $ids)
             {

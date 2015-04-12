@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Module\Web\PageConstructor;
 
-class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
+class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 
 	protected $key = 'web-page-constructor';
 	protected $parent = 'web';
@@ -36,7 +36,7 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 	{
 		try
 		{
-			$page = \App\Model\Telenok\Web\Page::findOrFail($id);
+			$page = \App\Telenok\Core\Model\Web\Page::findOrFail($id);
 			$controllerClass = app($page->pagePageController->controller_class);
 
 			return [
@@ -60,7 +60,7 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 	{
 		$return = \Illuminate\Support\Collection::make();
 
-		$query = \App\Model\Telenok\Web\Page::query();
+		$query = \App\Telenok\Core\Model\Web\Page::query();
 
 		if ($this->getRequest()->input('term'))
 		{
@@ -100,7 +100,7 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 	{
 		try
 		{
-			$widget = \App\Model\Telenok\Web\WidgetOnPage::findOrFail($id);
+			$widget = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
 
 			app('telenok.config.repository')->getWidget()->get($widget->key)->removeFromPage($id);
 
@@ -118,16 +118,16 @@ class Controller extends \App\Http\Controllers\Module\Objects\Lists\Controller {
 
 	public function addBufferWidget($id = 0, $key = 'copy')
 	{
-		$widget = \App\Model\Telenok\Web\WidgetOnPage::findOrFail($id);
+		$widget = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
 
-		$buffer = \App\Model\Telenok\System\Buffer::addBuffer(\Auth::user()->getKey(), $widget->getKey(), 'web-page', $key);
+		$buffer = \App\Telenok\Core\Model\System\Buffer::addBuffer(\Auth::user()->getKey(), $widget->getKey(), 'web-page', $key);
 
 		return ['widget' => $widget, 'buffer' => $buffer];
 	}
 
 	public function deleteBufferWidget($id = 0)
 	{
-		$w = \App\Model\Telenok\System\Buffer::find($id);
+		$w = \App\Telenok\Core\Model\System\Buffer::find($id);
 
 		if ($w)
 		{

@@ -104,7 +104,7 @@ class Repository {
 			{
 				$list = \Illuminate\Support\Collection::make();
 
-				\App\Model\Telenok\Web\ModuleGroup::active()->get()->each(function($item) use (&$list)
+				\App\Telenok\Core\Model\Web\ModuleGroup::active()->get()->each(function($item) use (&$list)
 				{
 					$object = app($item->controller_class);
 					$object->setModelModuleGroup($item);
@@ -130,7 +130,7 @@ class Repository {
 			{
 				$list = \Illuminate\Support\Collection::make();
 
-				\App\Model\Telenok\Web\Module::active()->get()->each(function($item) use (&$list)
+				\App\Telenok\Core\Model\Web\Module::active()->get()->each(function($item) use (&$list)
 				{
 					$object = app($item->controller_class);
 					$object->setModelModule($item);
@@ -156,7 +156,7 @@ class Repository {
 			{
 				$list = \Illuminate\Support\Collection::make();
 
-				\App\Model\Telenok\Web\WidgetGroup::active()->get()->each(function($item) use (&$list)
+				\App\Telenok\Core\Model\Web\WidgetGroup::active()->get()->each(function($item) use (&$list)
 				{
 					$object = app($item->controller_class);
 					$object->setWidgetGroupModel($item);
@@ -182,7 +182,7 @@ class Repository {
 			{
 				$list = \Illuminate\Support\Collection::make();
 
-				\App\Model\Telenok\Web\Widget::active()->get()->each(function($item) use (&$list)
+				\App\Telenok\Core\Model\Web\Widget::active()->get()->each(function($item) use (&$list)
 				{
 					$object = app($item->controller_class);
 					$list->put($object->getKey(), $object);
@@ -212,9 +212,9 @@ class Repository {
 		$routeCommon = [];
 		$routeDomain = [];
 
-		$domains = \App\Model\Telenok\Web\Domain::active()->get();
+		$domains = \App\Telenok\Core\Model\Web\Domain::active()->get();
 
-		$pages = \App\Model\Telenok\Web\Page::whereHas('pagePageController', function($query)
+		$pages = \App\Telenok\Core\Model\Web\Page::whereHas('pagePageController', function($query)
 				{
 					$now = \Carbon\Carbon::now();
 					$query->where('active', 1)
@@ -275,7 +275,7 @@ class Repository {
 	{
 		if (\DB::table('setting')->where('active', 1)->count())
 		{
-			foreach (\App\Model\Telenok\System\Setting::all() as $setting)
+			foreach (\App\Telenok\Core\Model\System\Setting::all() as $setting)
 			{
 				\Config::set($setting->code, $setting->value/* instanceof \Illuminate\Support\Collection ? $setting->value->all() : $setting->value */);
 			}

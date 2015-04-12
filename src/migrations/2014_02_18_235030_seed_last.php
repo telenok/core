@@ -33,7 +33,7 @@ class SeedLast extends Migration {
 
 		\App\Telenok\Core\Model\Object\Type::all()->each(function($type) use ($user)
 		{
-            (new \App\Http\Controllers\Module\Objects\Type\Controller())->createResource($type);
+            (new \App\Telenok\Core\Module\Objects\Type\Controller())->createResource($type);
             
 			$class = $type->class_model;
 			
@@ -366,7 +366,18 @@ class SeedLast extends Migration {
 			'active' => 1
 		]);
 
-		
+		(new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+			'title' => ['en' => 'Module: Tools', 'ru' => 'Модуль: Инструменты'],
+			'code' => 'module.tools',
+			'active' => 1
+		]);
+
+		(new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+			'title' => ['en' => 'Module: PHP Console', 'ru' => 'Модуль: PHP консоль'],
+			'code' => 'module.php-console',
+			'active' => 1
+		]);
+
 		//Login User
 		Auth::login($user);
 
@@ -773,102 +784,130 @@ class SeedLast extends Migration {
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Users', 'ru' => 'Пользователи'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Users\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Users\Controller',
 			'module_order' => 1,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Profile', 'ru' => 'Профиль'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Users\ProfileEdit\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Users\ProfileEdit\Controller',
 			'module_order' => 1,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Objects', 'ru' => 'Объекты'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Objects\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Objects\Controller',
 			'module_order' => 1,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Type', 'ru' => 'Типы'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Objects\Type\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Objects\Type\Controller',
 			'module_order' => 3,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Field', 'ru' => 'Поле'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Objects\Field\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Objects\Field\Controller',
 			'module_order' => 2,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Lists', 'ru' => 'Список'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Objects\Lists\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Objects\Lists\Controller',
 			'module_order' => 1,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Version', 'ru' => 'Версии'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Objects\Version\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Objects\Version\Controller',
 			'module_order' => 4,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Web', 'ru' => 'Веб'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Web\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Web\Controller',
 			'module_order' => 1,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Files', 'ru' => 'Файлы'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Files\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Files\Controller',
 			'module_order' => 1,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Browser', 'ru' => 'Менеджер'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Files\Browser\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Files\Browser\Controller',
 			'module_order' => 1,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Page', 'ru' => 'Страница'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Web\Page\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Web\Page\Controller',
 			'module_order' => 2,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Page Constructor', 'ru' => 'Конструктор страницы'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Web\PageConstructor\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Web\PageConstructor\Controller',
 			'module_order' => 1,
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Domain', 'ru' => 'Домен'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Web\Domain\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Web\Domain\Controller',
 			'module_order' => 4,
 		]); 
-		
+
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
 			'title' => ['en' => 'Page Controller', 'ru' => 'Контроллер страницы'],
 			'active' => 1,
-			'controller_class' => 'App\Http\Controllers\Module\Web\PageController\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Web\PageController\Controller',
 			'module_order' => 3,
 		]);
-		
-		
+
+		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
+			'title' => ['en' => 'Tools', 'ru' => 'Инструменты'],
+			'active' => 1,
+			'controller_class' => 'App\Telenok\Core\Module\Tools\Controller',
+			'module_order' => 4,
+		]);
+
+		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
+			'title' => ['en' => 'PHP Console', 'ru' => 'PHP консоль'],
+			'active' => 1,
+			'controller_class' => 'App\Telenok\Core\Module\Tools\PhpConsole\Controller',
+			'module_order' => 1,
+		]);
+
+		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
+			'title' => ['en' => 'Database Console', 'ru' => 'Консоль базы данных'],
+			'active' => 1,
+			'controller_class' => 'App\Telenok\Core\Module\Tools\DatabaseConsole\Controller',
+			'module_order' => 2,
+		]);
+
+		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
+			'title' => ['en' => 'Package manager', 'ru' => 'Менеджер пакетов'],
+			'active' => 1,
+			'controller_class' => 'App\Telenok\Core\Module\Tools\PackageManager\Controller',
+			'module_order' => 3,
+		]);
+
+
 		// Widget group
 		(new \App\Telenok\Core\Model\Web\WidgetGroup())->storeOrUpdate([
 			'title' => ['en' => 'Standart', 'ru' => 'Стандартные'],

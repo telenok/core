@@ -15,7 +15,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		if ($value !== null && trim($value))
 		{
             $fieldCode = $field->code;
-            $translate = new \App\Model\Telenok\Object\Translation();
+            $translate = new \App\Telenok\Core\Model\Object\Translation();
 
             if (in_array($fieldCode, $model->getMultilanguage(), true))
             {

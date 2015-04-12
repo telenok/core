@@ -5,7 +5,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 	protected $key = 'web-page-controller';
 	protected $parent = 'web';
 	protected $presentation = 'tree-tab-object';
-    protected $modelListClass = '\App\Model\Telenok\Web\PageController';
+    protected $modelListClass = '\App\Telenok\Core\Model\Web\PageController';
 
     public function getGridId($key = 'gridId')
     {

@@ -7,11 +7,11 @@ class FileExtension extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
     public function avatarUser()
     {
-        return $this->hasMany('\App\Model\Telenok\User\User', 'avatar_user_file_extension');
+        return $this->hasMany('\App\Telenok\Core\Model\User\User', 'avatar_user_file_extension');
     } 
 
     public function uploadFile()
     {
-        return $this->hasMany('\App\Model\Telenok\File\File', 'upload_file_file_extension');
+        return $this->hasMany('\App\Telenok\Core\Model\File\File', 'upload_file_file_extension');
     }
 }

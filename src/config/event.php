@@ -43,6 +43,11 @@
     $list->put('files', 4);
     $list->put('files-browser', 5);
 
+    $list->put('tools', 5);
+    $list->put('database-console', 1);
+    $list->put('php-console', 2);
+    $list->put('package-manager', 3);
+
     $list->put('users', 1);
     $list->put('users-profile-edit', 2);
 });
@@ -104,7 +109,7 @@
     app('telenok.config.repository')->compileSetting();
 });
 
-Event::listen('illuminate.query', function($sql, $bindings, $time)
+\Event::listen('illuminate.query', function($sql, $bindings, $time)
 {
     if (config('querylog'))
     {

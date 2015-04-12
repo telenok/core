@@ -15,7 +15,7 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 	
 	public function __construct(Guard $auth)
 	{
-		$this->middleware('guest');
+		//$this->middleware('guest');
 		
 		$tokens = app('auth.password.tokens');
 

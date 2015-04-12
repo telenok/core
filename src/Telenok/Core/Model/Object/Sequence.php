@@ -14,7 +14,7 @@ class Sequence extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	public static function getModel($id)
 	{
-		return app(\App\Model\Telenok\Object\Sequence::findOrFail($id)->sequencesObjectType->class_model)->findOrFail($id);
+		return app(\App\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType->class_model)->findOrFail($id);
 	}
 
 	public function delete()
@@ -24,33 +24,33 @@ class Sequence extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
     
 	public function sequencesObjectType()
 	{
-		return $this->belongsTo('\App\Model\Telenok\Object\Type', 'sequences_object_type');
+		return $this->belongsTo('\App\Telenok\Core\Model\Object\Type', 'sequences_object_type');
 	}
 
 	public function createdByUser()
 	{
-		return $this->belongsTo('\App\Model\Telenok\User\User', 'created_by_user');
+		return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'created_by_user');
 	}
 
 	public function updatedByUser()
 	{
-		return $this->belongsTo('\App\Model\Telenok\User\User', 'updated_by_user');
+		return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'updated_by_user');
 	}
     
     public function aclResource()
     {
-        return $this->hasMany('\App\Model\Telenok\Security\SubjectPermissionResource', 'acl_resource_object_sequence');
+        return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_resource_object_sequence');
     }
 
 
     public function aclSubject()
     {
-        return $this->hasMany('\App\Model\Telenok\Security\SubjectPermissionResource', 'acl_subject_object_sequence');
+        return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_subject_object_sequence');
     }
 
     public function aclPermission()
     {
-        return $this->hasMany('\App\Model\Telenok\Security\SubjectPermissionResource', 'acl_permission_object_sequence');
+        return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_permission_object_sequence');
     }
     
     

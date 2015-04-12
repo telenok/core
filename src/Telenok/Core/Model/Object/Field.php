@@ -40,9 +40,9 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 	{
 		$code = 'object_field.' . $type->code . '.' . $this->code;
 
-		if (!\App\Model\Telenok\Security\Resource::where('code', $code)->count())
+		if (!\App\Telenok\Core\Model\Security\Resource::where('code', $code)->count())
 		{
-			(new \App\Model\Telenok\Security\Resource())->storeOrUpdate([
+			(new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
 				'title' => 'Object ' . $type->code . '. Field ' . $this->code,
 				'code' => $code,
 				'active' => 1
@@ -54,7 +54,7 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 	{
 		$code = 'object_field.' . $type->code . '.' . $this->code;
  
-        \App\Model\Telenok\Security\Resource::where('code', $code)->forceDelete();
+        \App\Telenok\Core\Model\Security\Resource::where('code', $code)->forceDelete();
 	}
 
 	public function getFillable()
@@ -135,12 +135,12 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
  
 	public function fieldObjectType()
 	{
-		return $this->belongsTo('\App\Model\Telenok\Object\Type', 'field_object_type');
+		return $this->belongsTo('\App\Telenok\Core\Model\Object\Type', 'field_object_type');
 	}
  
 	public function fieldObjectTab()
 	{
-		return $this->belongsTo('\App\Model\Telenok\Object\Tab', 'field_object_tab');
+		return $this->belongsTo('\App\Telenok\Core\Model\Object\Tab', 'field_object_tab');
 	}
 }
 

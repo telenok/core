@@ -47,8 +47,8 @@ interface IField extends \Telenok\Core\Interfaces\IRequest {
 	/**
 	 * Return Object Type linked to the field
 	 * 
-	 * @param \App\Model\Telenok\Object\Field $field
-	 * @return \App\Model\Telenok\Object\Type
+	 * @param \App\Telenok\Core\Model\Object\Field $field
+	 * @return \App\Telenok\Core\Model\Object\Type
 	 * 
 	 */
     public function getLinkedModelType($field);

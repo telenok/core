@@ -158,7 +158,6 @@
             </div>
         </div><!--/.main-container-->
 
-        
         <!--basic scripts-->
 
         <!--page specific plugin scripts-->

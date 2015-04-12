@@ -29,7 +29,7 @@
 				$allowedExt = $model->upload_allow_ext->all();
 			?>
 
-			@foreach(\App\Model\Telenok\File\FileExtension::all()->sort(function($a, $b) { return strcmp($a->extension, $b->extension); }) as $extension)
+			@foreach(\App\Telenok\Core\Model\File\FileExtension::all()->sort(function($a, $b) { return strcmp($a->extension, $b->extension); }) as $extension)
 
 			<option value="{{$extension->extension}}" @if (in_array($extension->extension, $allowedExt, true)) selected="selected" @endif >[{{$extension->extension}}] {{$extension->translate('title')}}</option>
 
@@ -46,7 +46,7 @@
 				$allowedMime = $model->upload_allow_mime->all();
 			?>
 
-			@foreach(\App\Model\Telenok\File\FileMimeType::all()->sort(function($a, $b) { return strcmp($a->mime_type, $b->mime_type); }) as $mimeType)
+			@foreach(\App\Telenok\Core\Model\File\FileMimeType::all()->sort(function($a, $b) { return strcmp($a->mime_type, $b->mime_type); }) as $mimeType)
 
 			<option value="{{$mimeType->mime_type}}" @if (in_array($mimeType->mime_type, $allowedMime, true)) selected="selected" @endif >[{{$mimeType->mime_type}}] {{$mimeType->translate('title')}}</option>
 

@@ -7,11 +7,11 @@ class FileMimeType extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
  
     public function uploadFile()
     {
-        return $this->hasMany('\App\Model\Telenok\File\File', 'upload_file_file_mime_type');
+        return $this->hasMany('\App\Telenok\Core\Model\File\File', 'upload_file_file_mime_type');
     }
     
     public function avatarUser()
     {
-        return $this->hasMany('\App\Model\Telenok\User\User', 'avatar_user_file_mime_type');
+        return $this->hasMany('\App\Telenok\Core\Model\User\User', 'avatar_user_file_mime_type');
     }
 }

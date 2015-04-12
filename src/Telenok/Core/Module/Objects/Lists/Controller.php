@@ -4,7 +4,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     protected $key = 'objects-lists';
     protected $parent = 'objects';
-    protected $modelTreeClass = '\App\Model\Telenok\Object\Type';
+    protected $modelTreeClass = '\App\Telenok\Core\Model\Object\Type';
 
     protected $presentation = 'tree-tab-object';
     protected $presentationContentView = 'core::module.objects-lists.content';
@@ -62,7 +62,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getTreeListTypes()
     { 
-        $types = \App\Model\Telenok\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->fetch('id')->toArray();
+        $types = \App\Telenok\Core\Model\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->fetch('id')->toArray();
         
         return $types;
     }
@@ -89,7 +89,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     
     public function getTreeListItemProcessed($item)
     {
-        $typeObjectId = \App\Model\Telenok\Object\Type::where('code', 'object_type')->pluck('id');
+        $typeObjectId = \App\Telenok\Core\Model\Object\Type::where('code', 'object_type')->pluck('id');
 
         $code = '';
 		$module = null;
@@ -724,11 +724,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             {
                 try
                 {
-                    $type = \App\Model\Telenok\Object\Sequence::findOrFail($input->get('id'))->sequencesObjectType()->firstOrFail();
+                    $type = \App\Telenok\Core\Model\Object\Sequence::findOrFail($input->get('id'))->sequencesObjectType()->firstOrFail();
                 }
                 catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e)
                 {
-                    throw new \Exception("App\Http\Controllers\Module\Objects\Lists\Controller::save() - Error: 'type of object not found, please, define it'");
+                    throw new \Exception("\App\Telenok\Core\Module\Objects\Lists\Controller::save() - Error: 'type of object not found, please, define it'");
                 }
             }
         }

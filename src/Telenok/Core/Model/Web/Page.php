@@ -7,17 +7,17 @@ class Page extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
     
 	public function pagePageController()
 	{
-		return $this->belongsTo('\App\Model\Telenok\Web\PageController', 'page_page_controller');
+		return $this->belongsTo('\App\Telenok\Core\Model\Web\PageController', 'page_page_controller');
 	}
 
 	public function widget()
 	{
-		return $this->hasMany('\App\Model\Telenok\Web\WidgetOnPage', 'widget_page');
+		return $this->hasMany('\App\Telenok\Core\Model\Web\WidgetOnPage', 'widget_page');
 	}
 	
     public function pageDomain()
     {
-        return $this->belongsTo('\App\Model\Telenok\Web\Domain', 'page_domain');
+        return $this->belongsTo('\App\Telenok\Core\Model\Web\Domain', 'page_domain');
     } 
      
 } 

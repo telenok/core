@@ -19,14 +19,14 @@ class Type extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 	{
 		$code = 'object_type.' . $this->code;
  
-        \App\Model\Telenok\Security\Resource::where('code', $code)->forceDelete();
+        \App\Telenok\Core\Model\Security\Resource::where('code', $code)->forceDelete();
 	}
 
 	protected function translateSync()
 	{
         parent::translateSync();
         
-        \App\Model\Telenok\Object\Sequence::where('sequences_object_type', $this->getKey())->update(['treeable' => $this->treeable]);
+        \App\Telenok\Core\Model\Object\Sequence::where('sequences_object_type', $this->getKey())->update(['treeable' => $this->treeable]);
 	}
     
 	public function setCodeAttribute($value)
@@ -36,17 +36,17 @@ class Type extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	public function field()
 	{
-		return $this->hasMany('\App\Model\Telenok\Object\Field', 'field_object_type');
+		return $this->hasMany('\App\Telenok\Core\Model\Object\Field', 'field_object_type');
 	}
 
 	public function tab()
 	{
-		return $this->hasMany('\App\Model\Telenok\Object\Tab', 'tab_object_type');
+		return $this->hasMany('\App\Telenok\Core\Model\Object\Tab', 'tab_object_type');
 	}
 
 	public function sequences()
 	{
-		return $this->hasMany('\App\Model\Telenok\Object\Sequence', 'sequences_object_type');
+		return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'sequences_object_type');
 	}
 
 }

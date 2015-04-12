@@ -18,7 +18,7 @@ class SeedPageControllerTable extends Migration {
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
 
-        (new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'Controller class', 'ru' => 'Класс контроллера'],
                     'title_list' => ['en' => 'Controller class', 'ru' => 'Класс контроллера'],
@@ -38,7 +38,7 @@ class SeedPageControllerTable extends Migration {
                 ]
         );
 
-        (new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'Controller method', 'ru' => 'Метод контроллера'],
                     'title_list' => ['en' => 'Controller method', 'ru' => 'Метод контроллера'],
@@ -58,7 +58,7 @@ class SeedPageControllerTable extends Migration {
                 ]
         );
 
-        (new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'Controller template', 'ru' => 'Шаблон контроллера'],
                     'title_list' => ['en' => 'Controller template', 'ru' => 'Шаблон контроллера'],
@@ -78,7 +78,7 @@ class SeedPageControllerTable extends Migration {
                 ]
         );
 
-        (new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'Controller\'s container template', 'ru' => 'Шаблон контейнера контроллера'],
                     'title_list' => ['en' => 'Controller\'s container template', 'ru' => 'Шаблон контейнера контроллера'],
@@ -98,7 +98,7 @@ class SeedPageControllerTable extends Migration {
                 ]
         );
 
-        (new \App\Model\Telenok\Object\Field())->storeOrUpdate(
+        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'Page'],
                     'title_list' => ['en' => 'Page'],

@@ -102,7 +102,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     public function preProcess($model, $type, $input)
     {
-		$input->put('relation_many_to_many_has', \App\Model\Telenok\Object\Type::whereCode('file')->pluck('id'));
+		$input->put('relation_many_to_many_has', \App\Telenok\Core\Model\Object\Type::whereCode('file')->pluck('id'));
 
 		if (!$input->get('show_in_form_belong'))
 		{
@@ -121,7 +121,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
 		\Input::merge(['active' => 1]);
 
-		$file = app('\App\Http\Controllers\Module\Objects\Lists\Controller');
+		$file = app('\App\Telenok\Core\Module\Objects\Lists\Controller');
 
 		$model = $file->save(null, 'file'); 
 		

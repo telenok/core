@@ -215,7 +215,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     
     public function getFilterQuery($model, $query)
     {
-        $translate = new \App\Model\Telenok\Object\Translation();
+        $translate = new \App\Telenok\Core\Model\Object\Translation();
         
         if ($title = trim($this->getRequest()->input('sSearch')))
         {
@@ -469,14 +469,14 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerActionParam ?: "cmf.module.{$this->getKey()}.action.param", $param);
+			return route($this->routerActionParam ?: "cmf.module.{$this->getKey()}.action.param", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
             $param['typeId'] = array_get($param, 'typeId', $this->getTypeList()->getKey());
             $param['treeId'] = array_get($param, 'treeId', 0);
 
-			return \URL::route("cmf.module.objects-lists.action.param", $param);
+			return route("cmf.module.objects-lists.action.param", $param);
 		}
     } 
     
@@ -484,11 +484,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerList ?: "cmf.module.{$this->getKey()}.list", $param);
+			return route($this->routerList ?: "cmf.module.{$this->getKey()}.list", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.list", $param);
+			return route("cmf.module.objects-lists.list", $param);
 		}
     }	
 
@@ -496,13 +496,13 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerContent ?:"cmf.module.{$this->getKey()}", $param);
+			return route($this->routerContent ?:"cmf.module.{$this->getKey()}", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
             $param['typeId'] = array_get($param, 'typeId', $this->getTypeList()->getKey());
 
-			return \URL::route("cmf.module.objects-lists", $param);
+			return route("cmf.module.objects-lists", $param);
 		}
     }
     
@@ -510,11 +510,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerCreate ?: "cmf.module.{$this->getKey()}.create", $param);
+			return route($this->routerCreate ?: "cmf.module.{$this->getKey()}.create", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.create", $param);
+			return route("cmf.module.objects-lists.create", $param);
 		} 
     }
 	
@@ -522,11 +522,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerEdit ?:"cmf.module.{$this->getKey()}.edit", $param);
+			return route($this->routerEdit ?:"cmf.module.{$this->getKey()}.edit", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.edit", $param);
+			return route("cmf.module.objects-lists.edit", $param);
 		} 
     }
     
@@ -534,11 +534,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerDelete ?: "cmf.module.{$this->getKey()}.delete", $param);
+			return route($this->routerDelete ?: "cmf.module.{$this->getKey()}.delete", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.delete", $param);
+			return route("cmf.module.objects-lists.delete", $param);
 		} 
     }
     
@@ -546,11 +546,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {		
 		try
 		{
-			return \URL::route($this->routerStore ?: "cmf.module.{$this->getKey()}.store", $param);
+			return route($this->routerStore ?: "cmf.module.{$this->getKey()}.store", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.store", $param);
+			return route("cmf.module.objects-lists.store", $param);
 		} 
     }
     
@@ -558,11 +558,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerUpdate ?: "cmf.module.{$this->getKey()}.update", $param);
+			return route($this->routerUpdate ?: "cmf.module.{$this->getKey()}.update", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.update", $param);
+			return route("cmf.module.objects-lists.update", $param);
 		} 
     }
 	
@@ -570,11 +570,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerListEdit ?: "cmf.module.{$this->getKey()}.list.edit", $param);
+			return route($this->routerListEdit ?: "cmf.module.{$this->getKey()}.list.edit", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.list.edit", $param);
+			return route("cmf.module.objects-lists.list.edit", $param);
 		} 
     }
 	
@@ -582,11 +582,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerListDelete ?: "cmf.module.{$this->getKey()}.list.delete", $param);
+			return route($this->routerListDelete ?: "cmf.module.{$this->getKey()}.list.delete", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.list.delete", $param);
+			return route("cmf.module.objects-lists.list.delete", $param);
 		} 
     }
 	
@@ -594,11 +594,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerLock ?: "cmf.module.{$this->getKey()}.lock", $param);
+			return route($this->routerLock ?: "cmf.module.{$this->getKey()}.lock", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.lock", $param);
+			return route("cmf.module.objects-lists.lock", $param);
 		} 
     }
 	
@@ -606,11 +606,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerListLock ?: "cmf.module.{$this->getKey()}.list.lock", $param);
+			return route($this->routerListLock ?: "cmf.module.{$this->getKey()}.list.lock", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.list.lock", $param);
+			return route("cmf.module.objects-lists.list.lock", $param);
 		} 
     }
 	
@@ -618,11 +618,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerListUnlock ?: "cmf.module.{$this->getKey()}.list.unlock", $param);
+			return route($this->routerListUnlock ?: "cmf.module.{$this->getKey()}.list.unlock", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return \URL::route("cmf.module.objects-lists.list.unlock", $param);
+			return route("cmf.module.objects-lists.list.unlock", $param);
 		} 
     }
 	
@@ -637,14 +637,14 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     {
 		try
 		{
-			return \URL::route($this->routerListTree ?: "cmf.module.{$this->getKey()}.list.tree", $param);
+			return route($this->routerListTree ?: "cmf.module.{$this->getKey()}.list.tree", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
             $param['typeId'] = array_get($param, 'typeId', $this->getTypeList()->getKey());
             $param['treeId'] = array_get($param, 'treeId', 0);
 
-			return \URL::route("cmf.module.objects-lists.list.tree", $param);
+			return route("cmf.module.objects-lists.list.tree", $param);
 		} 
     }
 
