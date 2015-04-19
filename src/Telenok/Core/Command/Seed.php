@@ -30,7 +30,7 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 			$this->inputSuperuserEmail();
 			$this->inputSuperuserPassword();
 
-			$this->info('Start creating tables and seed database. Please, wait. It can take some minuts.');
+			$this->info('Start creating tables and seed database. Please, wait. It can take some minutes.');
 
 			$this->processingController->createBaseTable($this);
 			

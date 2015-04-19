@@ -248,14 +248,14 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			{
 				
 			}
-			else if (!$model->exists)
+			else if (!$this->isDirty([$fillable]))
 			{
 				$model->$fillable = null;
 				$input->put($fillable, null);
 			}
 			else
 			{
-				$input->put($fillable, $model->$fillable);
+				$input->put($fillable, $this->$fillable);
 			}
 		}
 
