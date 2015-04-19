@@ -52,21 +52,22 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 	{
 		while (true)
 		{
-			$name = $this->ask('What is password for superuser in backend: ');
+			$password = $this->secret('What is password for superuser in backend: ');
 
 			try
 			{
-				$this->processingController->setSuperuserPassword($name);
+				$this->processingController->setSuperuserPassword($password);
 			}
 			catch (\Exception $e)
 			{
 				$this->error($e->getMessage() . ' Please, retry.');
+
 				continue;
 			}
 
 			$confirmPassword = $this->secret('Please, type password again to confirm it: ');
 
-			if ($name === $confirmPassword)
+			if ($password === $confirmPassword)
 			{
 				break;
 			}
