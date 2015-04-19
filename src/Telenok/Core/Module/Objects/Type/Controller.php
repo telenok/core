@@ -195,7 +195,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 					}
 					catch (\Exception $e)
 					{
-						\Exception($this->LL('error.file.create', array('path' => $file)));
+						throw new \Exception($this->LL('error.file.create', array('path' => $file)));
 					}
 				}
 			}
@@ -236,7 +236,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 			}
 			catch (\Exception $e)
 			{
-				\Exception($this->LL('error.file.create', array('path' => $file)));
+				throw new \Exception($this->LL('error.file.create', array('path' => $file)));
 			}
 		}
 	}
