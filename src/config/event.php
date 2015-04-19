@@ -10,6 +10,11 @@
     return (@preg_match($value, NULL) !== FALSE);
 });
 
+\Event::listen('telenok.package.add', function($list)
+{
+    $list->push('Telenok\Core\PackageInfo');
+});
+
 \Event::listen('telenok.setting.add', function($list)
 {
     $list->push('App\Telenok\Core\Setting\AppLocaleDefault\Controller');

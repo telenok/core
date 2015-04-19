@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Interfaces\Controller;
 
-abstract class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\IRequest {
+abstract class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\Support\IRequest {
 
     use \Telenok\Core\Support\Language\Load;
     use \Illuminate\Foundation\Bus\DispatchesCommands;

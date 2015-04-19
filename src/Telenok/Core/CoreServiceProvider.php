@@ -8,7 +8,7 @@ class CoreServiceProvider extends ServiceProvider {
 
 	public function boot()
 	{
-		$this->app->resolving(function(\Telenok\Core\Interfaces\IRequest $object, $app)
+		$this->app->resolving(function(\Telenok\Core\Interfaces\Support\IRequest $object, $app)
 		{
 			$object->setRequest($app['request']);
 		});
@@ -16,10 +16,7 @@ class CoreServiceProvider extends ServiceProvider {
 		$this->loadViewsFrom(__DIR__ . '/../../views', 'core');
 		$this->loadTranslationsFrom(__DIR__ . '/../../lang', 'core');
 
-		$this->publishes([__DIR__ . '/../../view' => base_path('resources/views/telenok/core')], 'view');
-		$this->publishes([__DIR__ . '/../../migrations' => base_path('/database/migrations')], 'migrations');
-		$this->publishes([__DIR__ . '/../../seeds' => base_path('/database/seeds')], 'seeds');
-		$this->publishes([__DIR__ . '/../../../public' => public_path('packages/telenok/core')], 'public');
+		$this->publishes([__DIR__ . '/../../../public' => public_path('packages/core')], 'public');
 
 		include __DIR__ . '/../../config/routes.php';
 		include __DIR__ . '/../../config/event.php';

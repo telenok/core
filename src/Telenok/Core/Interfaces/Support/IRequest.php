@@ -1,4 +1,4 @@
-<?php namespace Telenok\Core\Interfaces;
+<?php namespace Telenok\Core\Interfaces\Support;
 
 interface IRequest {
     

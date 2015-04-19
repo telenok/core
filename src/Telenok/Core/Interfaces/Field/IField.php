@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Interfaces\Field;
 
-interface IField extends \Telenok\Core\Interfaces\IRequest {
+interface IField extends \Telenok\Core\Interfaces\Support\IRequest {
 
     public function getName();
 

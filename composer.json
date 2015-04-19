@@ -29,10 +29,11 @@
 		}
 	},
 	"scripts": {
+		"post-create-project-cmd": [ 
+			"php artisan vendor:publish --tag=\"public\" --provider=\"Vendor\\Providers\\CoreServiceProvider\""
+		],
 		"post-update-cmd": [ 
-			"php artisan vendor:publish --tag=\"public\" --provider=\"Vendor\\Providers\\CoreServiceProvider\"",
-			"php artisan vendor:publish --tag=\"migrations\" --provider=\"Vendor\\Providers\\CoreServiceProvider\"",
-			"php artisan vendor:publish --tag=\"seeds\" --provider=\"Vendor\\Providers\\CoreServiceProvider\""
+			"php artisan vendor:publish --tag=\"public\" --provider=\"Vendor\\Providers\\CoreServiceProvider\""
 		]
 	},
 	"extra": {

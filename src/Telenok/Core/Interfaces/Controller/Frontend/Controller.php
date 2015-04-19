@@ -1,194 +1,197 @@
-<?php namespace Telenok\Core\Interfaces\Controller\Frontend;
+<?php
+
+namespace Telenok\Core\Interfaces\Controller\Frontend;
 
 abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
-    protected $controllerModel;
-    protected $container = [];
-    protected $jsFilePath = [];
-    protected $cssFilePath = [];
-    protected $cssCode = [];
-    protected $jsCode = [];
-    protected $cacheTime = 3600;
-    protected $languageDirectory = 'controller';
-    protected $frontendView = 'core::controller.frontend';
-    protected $backendView = 'core::controller.frontend-container';
+	protected $controllerModel;
+	protected $container = [];
+	protected $jsFilePath = [];
+	protected $cssFilePath = [];
+	protected $cssCode = [];
+	protected $jsCode = [];
+	protected $cacheTime = 3600;
+	protected $languageDirectory = 'controller';
+	protected $frontendView = 'core::controller.frontend';
+	protected $backendView = 'core::controller.frontend-container';
 
-    public function setCacheTime($param = 0)
-    {
-	$this->cacheTime = min($this->getCacheTime(), $param);
-
-	return $this;
-    }
-
-    public function getCacheTime()
-    {
-	return $this->cacheTime;
-    }
-
-    public function getContainerContent($pageId = 0, $languageId = 0)
-    {
-	$content = ['controller' => $this];
-
-	$wop = \App\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
-			{
-			    $query->where('id', $languageId);
-			})
-			->orderBy('widget_order')->get();
-
-	$widgetConfig = app('telenok.config.repository')->getWidget();
-
-	$wop->each(function($w) use (&$content, $widgetConfig)
+	public function setCacheTime($param = 0)
 	{
-	    $content[$w->container][] = $widgetConfig->get($w->key)->getInsertContent($w->getKey());
-	});
+		$this->cacheTime = min($this->getCacheTime(), $param);
 
-	return view($this->backendView, $content)->render();
-    }
+		return $this;
+	}
 
-    public function getContiner()
-    {
-	return $this->container;
-    }
-
-    public function getBackendView()
-    {
-	return $this->backendView;
-    }
-
-    public function setBackendView($param = '')
-    {
-	$this->backendView = $param;
-
-	return $this;
-    }
-
-    public function getFrontendView()
-    {
-	return $this->frontendView;
-    }
-
-    public function setFrontendView($param = '')
-    {
-	$this->frontendView = $param;
-
-	return $this;
-    }
-
-    public function getContent()
-    {
-	$content = [];
-
-	$listWidget = app('telenok.config.repository')->getWidget();
-	$pageId = intval(str_replace('page_', '', \Route::currentRouteName()));
-
-	try
+	public function getCacheTime()
 	{
-	    $page = \App\Telenok\Core\Model\Web\Page::findOrFail($pageId);
+		return $this->cacheTime;
+	}
 
-	    $this->setCacheTime($page->cache_time);
+	public function getContainerContent($pageId = 0, $languageId = 0)
+	{
+		$content = ['controller' => $this];
 
-	    if ($t = $page->translate('template_view'))
-	    {
-		$this->setFrontendView($t);
-	    }
+		$wop = \App\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
+						{
+							$query->where('id', $languageId);
+						})
+						->orderBy('widget_order')->get();
 
-	    foreach ($this->container as $containerId)
-	    {
-		$page->widget()->active()->get()->filter(function($item) use ($containerId)
+		$widgetConfig = app('telenok.config.repository')->getWidget();
+
+		$wop->each(function($w) use (&$content, $widgetConfig)
 		{
-		    return $item->container === $containerId;
-		})->each(function($item) use (&$content, $containerId, $listWidget)
-		{
-		    $content[$containerId][] = $listWidget->get($item->key)->setWidgetModel($item)->setFrontendController($this)->getContent();
+			$content[$w->container][] = $widgetConfig->get($w->key)->getInsertContent($w->getKey());
 		});
-	    }
+
+		return view($this->backendView, $content)->render();
 	}
-	catch (\Exception $e)
+
+	public function getContiner()
 	{
-	    throw $e;
+		return $this->container;
 	}
 
-	return view($this->getFrontendView(), [
-	    'page' => $page,
-	    'controller' => $this,
-	    'content' => $content,
-	]);
-    }
-
-    public function addCssFile($filePath)
-    {
-	$this->cssFilePath[] = $filePath;
-
-	return $this;
-    }
-
-    public function addCssCode($code)
-    {
-	$this->cssCode[] = $code;
-
-	return $this;
-    }
-
-    public function addJsFile($filePath)
-    {
-	$this->jsFilePath[] = $filePath;
-
-	return $this;
-    }
-
-    public function addJsCode($code)
-    {
-	$this->jsCode[] = $code;
-
-	return $this;
-    }
-
-    public function getHeader()
-    {
-	$header = '';
-
-	foreach ($this->cssFilePath as $file)
+	public function getBackendView()
 	{
-	    $header .= \HTML::style($file);
+		return $this->backendView;
 	}
 
-	foreach ($this->cssCode as $code)
+	public function setBackendView($param = '')
 	{
-	    $header .= "<style>{$code}</style>";
+		$this->backendView = $param;
+
+		return $this;
 	}
 
-	foreach ($this->jsFilePath as $file)
+	public function getFrontendView()
 	{
-	    $header .= \HTML::script($file);
+		return $this->frontendView;
 	}
 
-	foreach ($this->jsCode as $code)
+	public function setFrontendView($param = '')
 	{
-	    $header .= "<script type='text/javascript'>{$code}</script>";
+		$this->frontendView = $param;
+
+		return $this;
 	}
 
-	return $header;
-    }
+	public function getContent()
+	{
+		$content = [];
 
-    public function getName()
-    {
-	return $this->LL('name');
-    }
+		$listWidget = app('telenok.config.repository')->getWidget();
+		$pageId = intval(str_replace('page_', '', \Route::currentRouteName()));
 
-    public function setControllerModel($model)
-    {
-	$this->controllerModel = $model;
+		try
+		{
+			$page = \App\Telenok\Core\Model\Web\Page::findOrFail($pageId);
 
-	return $this;
-    }
+			$this->setCacheTime($page->cache_time);
 
-    public function getControllerModel()
-    {
-	return $this->controllerModel;
-    }
+			if ($t = $page->translate('template_view'))
+			{
+				$this->setFrontendView($t);
+			}
 
-    public function getKey()
-    {
-	return '';
-    }
+			foreach ($this->container as $containerId)
+			{
+				$page->widget()->active()->get()->filter(function($item) use ($containerId)
+				{
+					return $item->container === $containerId;
+				})->each(function($item) use (&$content, $containerId, $listWidget)
+				{
+					$content[$containerId][] = $listWidget->get($item->key)->setWidgetModel($item)->setFrontendController($this)->getContent();
+				});
+			}
+		}
+		catch (\Exception $e)
+		{
+			throw $e;
+		}
+
+		return view($this->getFrontendView(), [
+			'page' => $page,
+			'controller' => $this,
+			'content' => $content,
+		]);
+	}
+
+	public function addCssFile($filePath)
+	{
+		$this->cssFilePath[] = $filePath;
+
+		return $this;
+	}
+
+	public function addCssCode($code)
+	{
+		$this->cssCode[] = $code;
+
+		return $this;
+	}
+
+	public function addJsFile($filePath)
+	{
+		$this->jsFilePath[] = $filePath;
+
+		return $this;
+	}
+
+	public function addJsCode($code)
+	{
+		$this->jsCode[] = $code;
+
+		return $this;
+	}
+
+	public function getHeader()
+	{
+		$header = '';
+
+		foreach ($this->cssFilePath as $file)
+		{
+			$header .= \HTML::style($file);
+		}
+
+		foreach ($this->cssCode as $code)
+		{
+			$header .= "<style>{$code}</style>";
+		}
+
+		foreach ($this->jsFilePath as $file)
+		{
+			$header .= \HTML::script($file);
+		}
+
+		foreach ($this->jsCode as $code)
+		{
+			$header .= "<script type='text/javascript'>{$code}</script>";
+		}
+
+		return $header;
+	}
+
+	public function getName()
+	{
+		return $this->LL('name');
+	}
+
+	public function setControllerModel($model)
+	{
+		$this->controllerModel = $model;
+
+		return $this;
+	}
+
+	public function getControllerModel()
+	{
+		return $this->controllerModel;
+	}
+
+	public function getKey()
+	{
+		return '';
+	}
+
 }

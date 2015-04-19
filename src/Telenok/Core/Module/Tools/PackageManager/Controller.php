@@ -9,7 +9,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	protected $presentation = 'tree-tab-object';
     protected $presentationContentView = 'core::module.package-manager.content';
 
-	protected $tableColumn = ['name', 'size', 'perm', 'writeable', 'readable', 'updated_at'];
+	protected $tableColumn = ['name', 'version', 'perm', 'writeable', 'readable', 'updated_at'];
 
 	public function getTreeContent()
     {

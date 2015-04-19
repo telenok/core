@@ -2,6 +2,36 @@
 
 class Repository {
 
+	public function getPackage($flush = false)
+	{
+		static $list = null;
+
+		if ($list === null || $flush)
+		{
+			try
+			{
+				$collection = \Illuminate\Support\Collection::make();
+
+				\Event::fire('telenok.package.add', $collection);
+
+				$list = \Illuminate\Support\Collection::make();
+
+				foreach ($collection as $class)
+				{
+					$object = app($class);
+
+					$list->put($object->getKey(), $object);
+				}
+			}
+			catch (\Exception $e)
+			{
+				throw new \RuntimeException('Failed to get package. Error: ' . $e->getMessage());
+			}
+		}
+
+		return $list;
+	}
+
 	public function getSetting($flush = false)
 	{
 		static $list = null;
