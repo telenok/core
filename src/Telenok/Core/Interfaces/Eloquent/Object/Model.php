@@ -219,7 +219,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			throw new \Exception("Telenok\Core\Interfaces\Eloquent\Object\Model::storeOrUpdate() - Error: 'type of object not found, please, define it'");
 		}
 
-		$input = \Illuminate\Support\Collection::make($input);
+		// if model filled via $model->fill() and plus ->storeOrUpdate([some attributes])
+		$input = \Illuminate\Support\Collection::make($this->getAttributes())->merge($input);
 
 		try
 		{
@@ -237,10 +238,13 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			$model = new static();
 		}
 
+		// if model exists - add its attribute to $input
+		$input = \Illuminate\Support\Collection::make($model->getAttributes())->merge($input);
+
 		if ($withPermission)
 		{
 			$model->validateStoreOrUpdatePermission($type, $input);
-		}
+		} 
 
 		foreach ($model->fillable as $fillable)
 		{
@@ -248,7 +252,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			{
 				
 			}
-			else if (!$this->exists)
+			else if (!$model->exists)
 			{
 				$model->$fillable = null;
 				$input->put($fillable, null);
@@ -258,7 +262,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 				$input->put($fillable, $this->$fillable);
 			}
 		}
-
+		
 		try
 		{
 			\DB::transaction(function() use ($type, $input, $model, $withEvent)
@@ -1174,5 +1178,4 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_subject_object_sequence');
 	}
-
 }
