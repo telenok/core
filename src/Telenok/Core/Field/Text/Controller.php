@@ -99,7 +99,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     
     public function setModelSpecialAttribute($model, $key, $value)
     {  
-		if (in_array($key, ['text_default'], true) && $model->multilanguage)
+		if (in_array($key, ['text_default'], true) && ($model->multilanguage || is_array($value)))
 		{
 			$default = [];
 

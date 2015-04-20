@@ -84,7 +84,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             $value = json_encode($value, JSON_UNESCAPED_UNICODE);
         }
         else
-        {
+        { 
 			if ($value === null || !strlen($value))
 			{
 				$value = $field->string_default ?: null;
@@ -115,7 +115,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     
     public function setModelSpecialAttribute($model, $key, $value)
     {
-		if (in_array($key, ['string_default'], true) && $model->multilanguage)
+		if (in_array($key, ['string_default'], true) && ($model->multilanguage || is_array($value)))
 		{
 			$default = [];
 
