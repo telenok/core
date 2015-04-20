@@ -220,13 +220,30 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 
 		// if model filled via $model->fill() and plus ->storeOrUpdate([some attributes])
-		$input = \Illuminate\Support\Collection::make($this->getAttributes())->merge($input);
+		$t = [];
+		
+		foreach($this->getAttributes() as $k => $v)
+		{
+			$t[$k] = $this->$k;
+		}
+		
+		$input = \Illuminate\Support\Collection::make($t)->merge($input);
 
 		try
 		{
 			if (!$this->exists)
 			{
 				$model = $this->findOrFail($input->get($this->getKeyName()));
+				
+				// if model exists - add its attributes to $input
+				$t = [];
+
+				foreach($model->getAttributes() as $k => $v)
+				{
+					$t[$k] = $model->$k;
+				}
+
+				$input = \Illuminate\Support\Collection::make($t)->merge($input);
 			}
 			else
 			{
@@ -237,9 +254,6 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 		{
 			$model = new static();
 		}
-
-		// if model exists - add its attribute to $input
-		$input = \Illuminate\Support\Collection::make($model->getAttributes())->merge($input);
 
 		if ($withPermission)
 		{
@@ -259,7 +273,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			}
 			else
 			{
-				$input->put($fillable, $this->$fillable);
+				//$input->put($fillable, $model->$fillable);
 			}
 		}
 		

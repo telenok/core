@@ -90,7 +90,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     }
     
     public function setModelSpecialAttribute($model, $key, $value)
-    {  
+    {
 		if (in_array($key, ['select_many_data'], true))
 		{ 
 			$default = [];
@@ -140,7 +140,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                         $defaultKey[] = $v;
                     }
                 }
-                
+
                 $value['default'] = $defaultKey;
             }
             
