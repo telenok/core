@@ -17,15 +17,16 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     }
 
     public function getContent()
-    { 
+    {
+		$data = file_get_contents('http://telenok.com/package/lists/json');
+		$lists = json_decode($data, true);
+		
         return [
             'tabKey' => "{$this->getTabKey()}-{$this->getParent()}",
-            'tabLabel' => 'File manager',
+            'tabLabel' => 'Package manager',
             'tabContent' => view($this->getPresentationContentView(), array(
                 'controller' => $this,
-				'currentDirectory' => addslashes(base_path()),
-                'fields' => $this->tableColumn,
-                //'fieldsFilter' => $this->getModelFieldFilter(),
+				'lists' => $lists,
                 'gridId' => $this->getGridId(),
                 'uniqueId' => str_random(),
             ))->render()
