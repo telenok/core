@@ -364,7 +364,7 @@
 					"bDeferRender": '',
 					"bJQueryUI": false,
 					"iDisplayLength": {{ $iDisplayLength }},
-					"sDom": "<'row'<'col-md-6'T><'col-md-6'f>r>t<'row'<'col-md-6'T><'col-md-6'p>>",
+					"sDom": "<'row'<'col-md-9'T><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
 					"oTableTools": {
 						@section('tableListBtn')
 						"aButtons": aButtons

@@ -139,6 +139,24 @@
                     @endif
                 @endforeach
 
+				presentation.installByURL = function(param)
+				{
+					jQuery.ajax({
+						url: param.url,
+						method: 'post',
+						dataType: 'json'
+					})
+					.done(function(data) 
+					{
+						if (data.success) 
+						{
+							jQuery(dom_obj).closest("tr").remove();
+						}
+					});
+					
+					return this;
+				}
+
                 presentation.addDataTable({
                     aoColumns : aoColumns,
 					aaSorting: [],

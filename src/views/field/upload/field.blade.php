@@ -17,7 +17,7 @@
 <div class="form-group">
 	{!! Form::label("upload_allow_size", $controller->LL('property.upload_allow_size'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-9"> 
-		{!! Form::checkbox("upload_allow_size", $model->upload_allow_size, array('class'=>'ace ace-switch ace-switch-3')) !!}
+		{!! Form::text("upload_allow_size", $model->upload_allow_size, array('class'=>'ace ace-switch ace-switch-3')) !!}
 	</div>
 </div>
 <div class="form-group">

@@ -117,7 +117,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				$destinationPath = $directoryPath . $fileName; 
 
 				if ($field->upload_allow_mime->count() && !in_array($mimeType, $field->upload_allow_mime->all(), true))
-				{
+				{ 
 					throw new \Exception($this->LL('error.mime-type', ['attribute' => $mimeType]));
 				}
 
@@ -142,7 +142,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 					if ($validator->fails()) 
 					{
-						throw new \Exception($validator->messages());
+						throw new \Exception(implode(' ', $validator->messages()->all()));
 					}
 				}
 
@@ -184,13 +184,17 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 				$typeModel = $field->fieldObjectType()->first();
 
+				$currentPath = $model->{$field->code . '_path'};
+				
 				$model->{camel_case($field->code . '_' . $typeModel->code) . 'FileExtension'}()->associate($modelExtension);
 				$model->{camel_case($field->code . '_' . $typeModel->code) . 'FileMimeType'}()->associate($modelMimeType);
 				$model->{$field->code . '_original_file_name'} = $originalFileName;
 				$model->{$field->code . '_path'} = str_replace('\\', '/', $destinationPath);
 				$model->{$field->code . '_size'} = $size;
 				
-				$model = $model->save(); 
+				$model = $model->save();
+
+				\File::delete($currentPath);
 			}
 			catch (\Extension $e)
 			{
@@ -209,7 +213,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
 			if (in_array($key, ['upload_allow_ext', 'upload_allow_mime'], true))
 			{
-				$value = $value ? : '[]';
+				if ($key == 'upload_allow_ext')
+				{
+					$value = $value ? : json_encode($this->imageExtension);
+				}
+				else if ($key == 'upload_allow_mime')
+				{
+					$value = $value ? : json_encode($this->imageMimeType);
+				}
 
 				return \Illuminate\Support\Collection::make( (array)json_decode($value, true) );
 			}
@@ -232,9 +243,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			{
 				$value = $value->toArray();
 			}
-			else
+			else if ($key == 'upload_allow_ext')
 			{
-				$value = $value ? : [];
+				$value = $value ? : $this->imageExtension;
+			} 
+			else if ($key == 'upload_allow_mime')
+			{
+				$value = $value ? : $this->imageMimeType;
 			} 
 
 			$model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));

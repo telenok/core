@@ -126,12 +126,6 @@ if (\Request::is('telenok', 'telenok/*'))
 	\Route::get('telenok/module/php-console/action-param', array('as' => 'cmf.module.php-console.action.param', 'uses' => "App\Telenok\Core\Module\Tools\PhpConsole\Controller@getActionParam"));
 	\Route::get('telenok/module/database-console/action-param', array('as' => 'cmf.module.database-console.action.param', 'uses' => "App\Telenok\Core\Module\Tools\DatabaseConsole\Controller@getActionParam"));
 	
-	// Module Tools\PackageManager
-	\Route::get('telenok/module/tools/package-manager/action-param', array('as' => 'cmf.module.package-manager.action.param', 'uses' => "App\Telenok\Core\Module\Tools\PackageManager\Controller@getActionParam"));
-	\Route::get('telenok/module/tools/package-manager', array('as' => 'cmf.module.package-manager', 'uses' => "App\Telenok\Core\Module\Tools\PackageManager\Controller@getContent"));
-	\Route::get('telenok/module/tools/package-manager/list', array('as' => 'cmf.module.package-manager.list', 'uses' => "App\Telenok\Core\Module\Tools\PackageManager\Controller@getList"));
-
-	
 	// Module Packages\ComposerManager
 	\Route::get('telenok/module/packages/composer-manager/action-param', array('as' => 'cmf.module.composer-manager.action.param', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getActionParam"));
 	\Route::get('telenok/module/packages/composer-manager', array('as' => 'cmf.module.composer-manager', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getContent"));
@@ -140,7 +134,12 @@ if (\Request::is('telenok', 'telenok/*'))
 	\Route::post('telenok/module/packages/composer-manager/composer-json/update', array('as' => 'cmf.module.composer-manager.composer-json.update', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@composerJsonUpdate"));
 
 	// Module Packages\InstallerManager
-	\Route::get('telenok/module/packages/installer-manager/action-param', array('as' => 'cmf.module.installer-manager.action.param', 'uses' => "App\Telenok\Core\Module\Tools\InstallerManager\Controller@getActionParam"));
+	\Route::get('telenok/module/packages/installer-manager/action-param', array('as' => 'cmf.module.installer-manager.action.param', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getActionParam"));
+	\Route::get('telenok/module/packages/installer-manager', array('as' => 'cmf.module.installer-manager', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getContent"));
+	\Route::get('telenok/module/packages/installer-manager/list', array('as' => 'cmf.module.installer-manager.list', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getList"));
+	\Route::post('telenok/module/packages/installer-manager/install', array('as' => 'cmf.module.installer-manager.install', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@install"));
+	\Route::post('telenok/module/packages/installer-manager/update', array('as' => 'cmf.module.installer-manager.update', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@update"));
+	\Route::post('telenok/module/packages/installer-manager/delete', array('as' => 'cmf.module.installer-manager.delete', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@delete"));
 
 	
 }

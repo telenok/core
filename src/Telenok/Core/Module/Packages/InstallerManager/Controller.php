@@ -9,20 +9,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	protected $presentation = 'tree-tab-object';
     protected $presentationContentView = 'core::module.installer-manager.content';
 
-	protected $tableColumn = ['name', 'size', 'perm', 'writeable', 'readable', 'updated_at'];
-	protected $maxFileSizeToView = 100000;
-
-	public function getMaxSizeToView()
-	{
-		return $this->maxFileSizeToView;
-	}
-
-	public function setMaxSizeToView($param = 100000)
-	{
-		$this->maxFileSizeToView = $param;
-
-		return $this;
-	}
+	protected $tableColumn = ['name', 'key', 'description', 'image'];
 
 	public function getTreeContent()
     {
@@ -38,7 +25,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 'controller' => $this,
 				'currentDirectory' => addslashes(base_path()),
                 'fields' => $this->tableColumn,
-                //'fieldsFilter' => $this->getModelFieldFilter(),
                 'gridId' => $this->getGridId(),
                 'uniqueId' => str_random(),
             ))->render()
@@ -49,148 +35,34 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
         $content = []; 
 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
+        $request = $this->getRequest(); 
+		$list = (array)json_decode(file_get_contents('http://telenok.com/package/lists/json'), true);
 
-		$currentDirectory = $input->get('currentDirectory');
-
-		if (strstr($currentDirectory, base_path()) === FALSE)
-		{
-			$currentDirectory = base_path();
-		}
+		$sEcho = $request->input('sEcho');
+        $uniqueId = $request->input('uniqueId');
+        $iDisplayStart = $request->input('iDisplayStart', 0);
+        $iTotalDisplayRecords = $request->input('iDisplayLength', 20);
 		
-		$directory = new \SplFileInfo($currentDirectory);
-        
-		$sEcho = $input->get('sEcho');
-        $uniqueId = $input->get('uniqueId');
-        $iDisplayStart = $input->get('iDisplayStart', 0);
-        $iTotalDisplayRecords = $input->get('iDisplayLength', 20);
 		
-        $collection = \Symfony\Component\Finder\Finder::create()->in($directory->getPathname());
+        foreach($list as $item)
+        { 
+            $put = ['tableCheckAll' => '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]" value="' . $item['key'] . '" /><span class="lbl"></span></label>'];
 
-        if ($title = trim($input->get('sSearch')))
-        {
-			$collection->name("*{$title}*");
-        }
-        
-        if ($input->has('filter'))
-        {
-            $filter = $input->get('filter');
-
-            if ($name = trim(array_get($filter, 'name')))
-            {
-                $collection->name($name);
-            }
-
-            if ($contain = array_get($filter, 'contain'))
-            {
-                $collection->contains($contain);
-            }
-
-            if ($size = (array)array_get($filter, 'size', []))
-            {
-                $min = intval(array_get($size, 'min', 0));
-                $max = intval(array_get($size, 'max', PHP_INT_MAX));
-               
-                $collection->size('>= ' . $min);
-                $collection->size('<= ' . $max);
-                
-                $collection->files();
-            }
-
-            if ($lastModify = (array)array_get($filter, 'last_modify', []))
-            {
-                $start = array_get($lastModify, 'start');
-                $end = array_get($lastModify, 'end');
-               
-                if ($start)
-                {
-                    $collection->date('>= ' . $start);
-                }
-               
-                if ($end)
-                {
-                    $collection->date('<= ' . $end);
-                }
-            }
-        }
-        else
-        {
-            $collection->depth(0);
-        }
-        
-        $collection->sortByType();
-        
-        $iter = -1;
-        $iter2 = 0;
-        
-        $collection->filter(function($i) use ($iDisplayStart, $iTotalDisplayRecords, &$iter, &$iter2)
-        {
-            $iter++;
-            
-            if ($iter < $iDisplayStart || $iter > $iDisplayStart + $iTotalDisplayRecords + 1)
-            {
-                return false;
-            }
-            else
-            {
-                $iter2++;
-            }
-        });
-        
-		if ($directory->getPathname() != base_path())
-		{
-			$link = '<i class="fa fa-level-up"></i> <i class="fa fa-folder"></i> '
-					. '<a href="#" onclick="currentDirectory' . $uniqueId . ' = \'' . addslashes($directory->getPath()). '\'; telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\')'
-					. '.reloadDataTableOnClick({url: \'' . $this->getRouterList() . '\', gridId: \'' . $this->getGridId() . '\', data : {uniqueId: \'' . $uniqueId . '\', currentDirectory: \'' . addslashes($directory->getPath()) . '\'}}); return false;">' . $directory->getPath() . '</a>';
-			
-			$content[] = [
-							'tableCheckAll' => '', 
-							'name' => $link,
-							'size' => '',
-							'updated_at' => '',
-							'perm' => '',
-							'writeable' => '',
-							'readable' => '',
-							'tableManageItem' => '',
-					];
-		} 
-
-        foreach($collection as $item)
-        {
-            $put = ['tableCheckAll' => '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]" value="' . $item->getRealpath() . '" /><span class="lbl"></span></label>'];
-
-			if ($item->isDir())
-			{
-				$put['name'] = '<i class="fa fa-folder"></i> '
-					. '<a href="#" onclick="currentDirectory' . $uniqueId . ' = \'' . addslashes($item->getPathname()). '\'; telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\')'
-					. '.reloadDataTableOnClick({url: \'' . $this->getRouterList() . '\', gridId: \'' . $this->getGridId() . '\', data : {uniqueId: \'' . $uniqueId . '\', currentDirectory: \'' . addslashes($item->getPathname()) . '\'}}); return false;">' . $item->getFilename() . '</a>';
-			}
-			else if ($item->isFile())
-			{
-				$put['name'] = '<i class="fa ' . ($item->isDir() ? 'fa-folder' : 'fa-file-o') . '"></i> ' . $item->getFilename();
-			}
-
-			$put['size'] = $item->isDir() ? "" : $item->getSize();
-			$put['updated_at'] = date('Y-m-d H:i:s', $item->getATime());
-			$put['perm'] = substr(sprintf('%o', $item->getPerms()), -4);
-			$put['writeable'] = $item->isWritable();
-			$put['readable'] = $item->isReadable();
+			$put['name'] = '<i class="fa fa-folder"></i> ' . array_get($item, 'title.en');
+			$put['key'] = $item['key'];
+			$put['description'] = array_get($item, 'description.en');
+			$put['image'] = '<img src="http://www.pxleyes.com/images/tutorials/ext/Logo-Design-Process-and-Walkthrough-for-Vivid-Ways.jpg" class="img-thumbnail" style="height:100px;" />';
 
             $put['tableManageItem'] = $this->getListButton($item);
 
             $content[] = $put;
         }
 
-        if ($iter2 > $iTotalDisplayRecords)
-        {
-            array_pop($content);
-        }
-
         return [
             'gridId' => $this->getGridId(),
             'sEcho' => $sEcho,
-            'iTotalRecords' => $iter,
-            'iTotalDisplayRecords' => $iter,
+            'iTotalRecords' => count($list),
+            'iTotalDisplayRecords' => count($list),
             'aaData' => $content
         ];
     } 
@@ -199,22 +71,85 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
         return '
                 <div class="hidden-phone visible-lg btn-group">
+					<button class="btn btn-xs btn-success"
+						onclick="if (confirm(\'' . $this->LL('notice.sure') . '\'))
+							telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').installByURL({url: \''. $this->getRouterInstall(['key' => $item['key']]) . '\'});">
+						<i class="ace-icon fa fa-gavel bigger-110"></i>
+						Install
+						<i class="ace-icon fa fa-cloud-download icon-on-right"></i>
+					</button>				
+					<button class="btn btn-xs btn-warning">
+						<i class="ace-icon fa fa-arrow-circle-o-down bigger-110"></i>
+						Update
+						<i class="ace-icon fa fa-cloud-download icon-on-right"></i>
+					</button>				
+					<button class="btn btn-xs btn-danger">
+						<i class="ace-icon fa fa-circle-o bigger-110"></i>
+						Uninstall
+						<i class="ace-icon fa fa-exclamation-circle icon-on-right"></i>
+					</button>				
+
+
 				' . (
-				$item->isReadable() && ($item->isFile() || $item->isDir()) ? '
+				true ? '
                     <button class="btn btn-minier btn-info disable" title="'.$this->LL('list.btn.edit').'" 
                         onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \'' 
-                        . $this->getRouterEdit(['id' => $item->getRealPath()]) . '\'});">
+                        . $this->getRouterUpdate(['id' => $item['key']]) . '\'});">
                         <i class="fa fa-pencil"></i>
                     </button> ' : ''
 				) . '
                     <button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
-                        onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
-                        . $this->getRouterDelete(['id' => $item->getRealPath()]) . '\');">
+                        onclick="if (confirm(\'' . $this->LL('notice.sure') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
+                        . $this->getRouterDelete(['id' => $item['key']]) . '\');">
                         <i class="fa fa-trash-o"></i>
                     </button>
                 </div>';
     }
 
+    public function getRouterInstall($param = [])
+    {
+        return route("cmf.module.{$this->getKey()}.install", $param);
+    }
+	
+    public function install()
+	{
+		try
+		{ 
+			$request = $this->getRequest(); 
+
+			//file_get_contents('http://telenok.com/package/get/process?' . http_build_query(['key' => $request->input('key')]));
+			
+			file_put_contents(base_path('aa.zip'), file_get_contents("https://api.github.com/repos/laravel/framework/zipball/master"));
+			
+			
+			
+			
+			dd('ddddddddddddd');
+			
+			return [
+				'tabKey' => $this->getTabKey() . '-new-' . $tabKey,
+				'tabLabel' => $this->LL('list.create.' . (in_array($modelType, ['file', 'directory'], true) ? $modelType : "")),
+				'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array( 
+					'controller' => $this,
+					'currentDirectory' => addslashes($currentDirectory),
+					'modelType' => $modelType,
+					'model' => null,
+					'tabKey' => $tabKey,
+					'modelCurrentDirectory' => new \SplFileInfo($currentDirectory),
+					'routerParam' => $this->getRouterParam('create'),
+					'uniqueId' => str_random(),  
+				), $this->getAdditionalViewParam()))->render()
+			];
+		}
+		catch (\Exception $ex) 
+		{
+			return [
+				'exception' => $ex->getMessage(),
+			];
+		}
+	}
+	
+	
     public function create()
 	{
 		try
