@@ -5,7 +5,7 @@ class ControlPanel {
 	public function filter()
 	{
 		if (in_array(\Route::currentRouteName(), [
-				'cmf.login.content', 
+				//'cmf.login.content', 
 				'error.access-denied', 
 				'cmf.login.process', 
 				'cmf.password.reset.email.process', 
@@ -25,7 +25,7 @@ class ControlPanel {
 			$accessControlPanel = \Auth::hasRole('super_administrator');
 		}
  
-		if (!$accessControlPanel)
+		if (!$accessControlPanel && !\Request::is('telenok/login'))
 		{
 			if (\Request::ajax())
 			{
@@ -49,5 +49,4 @@ class ControlPanel {
 			return redirect()->route('cmf.content');
 		}
 	}
-
 }

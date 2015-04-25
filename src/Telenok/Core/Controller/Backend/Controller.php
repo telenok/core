@@ -87,7 +87,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 		$config = app('telenok.config.repository');
 
 		$setArray = [];
-
+		
 		$listModule = $config->getModule()
 				->filter(function($item) use ($listModuleMenuLeft)
 				{

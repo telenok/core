@@ -10,12 +10,12 @@
     return (@preg_match($value, NULL) !== FALSE);
 });
 
-\Event::listen('telenok.package.add', function($list)
+\Event::listen('telenok.repository.package', function($list)
 {
     $list->push('Telenok\Core\PackageInfo');
 });
 
-\Event::listen('telenok.setting.add', function($list)
+\Event::listen('telenok.repository.setting', function($list)
 {
     $list->push('App\Telenok\Core\Setting\AppLocaleDefault\Controller');
     $list->push('App\Telenok\Core\Setting\AppLocales\Controller');
@@ -51,7 +51,10 @@
     $list->put('tools', 5);
     $list->put('database-console', 1);
     $list->put('php-console', 2);
-    $list->put('package-manager', 3);
+	
+    $list->put('packages', 3);
+    $list->put('composer-manager', 1);
+    $list->put('installer-manager', 2);
 
     $list->put('users', 1);
     $list->put('users-profile-edit', 2);
@@ -64,7 +67,7 @@
     $list->push('users-profile-edit@topMenuLogout');
 });
 
-\Event::listen('telenok.objects-field.add', function($list)
+\Event::listen('telenok.repository.objects-field', function($list)
 {
     $list->push('App\Telenok\Core\Field\Integer\Controller');
     $list->push('App\Telenok\Core\Field\IntegerUnsigned\Controller');
@@ -93,7 +96,7 @@
     $list->push('App\Telenok\Core\Field\DateTimeRange\Controller');
 });
 
-\Event::listen('telenok.objects-field.view.model.add', function($list)
+\Event::listen('telenok.repository.objects-field.view.model', function($list)
 {
     $list->push('select-one#core::field.select-one.model-radio-button');
     $list->push('select-one#core::field.select-one.model-toggle-button');

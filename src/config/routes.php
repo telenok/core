@@ -131,4 +131,16 @@ if (\Request::is('telenok', 'telenok/*'))
 	\Route::get('telenok/module/tools/package-manager', array('as' => 'cmf.module.package-manager', 'uses' => "App\Telenok\Core\Module\Tools\PackageManager\Controller@getContent"));
 	\Route::get('telenok/module/tools/package-manager/list', array('as' => 'cmf.module.package-manager.list', 'uses' => "App\Telenok\Core\Module\Tools\PackageManager\Controller@getList"));
 
+	
+	// Module Packages\ComposerManager
+	\Route::get('telenok/module/packages/composer-manager/action-param', array('as' => 'cmf.module.composer-manager.action.param', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getActionParam"));
+	\Route::get('telenok/module/packages/composer-manager', array('as' => 'cmf.module.composer-manager', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getContent"));
+	\Route::get('telenok/module/packages/composer-manager/list', array('as' => 'cmf.module.composer-manager.list', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getList"));
+	\Route::get('telenok/module/packages/composer-manager/composer-json/edit', array('as' => 'cmf.module.composer-manager.composer-json.edit', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getComposerJsonContent"));
+	\Route::post('telenok/module/packages/composer-manager/composer-json/update', array('as' => 'cmf.module.composer-manager.composer-json.update', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@composerJsonUpdate"));
+
+	// Module Packages\InstallerManager
+	\Route::get('telenok/module/packages/installer-manager/action-param', array('as' => 'cmf.module.installer-manager.action.param', 'uses' => "App\Telenok\Core\Module\Tools\InstallerManager\Controller@getActionParam"));
+
+	
 }

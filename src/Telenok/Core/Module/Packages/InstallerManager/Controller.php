@@ -1,15 +1,28 @@
-<?php namespace Telenok\Core\Module\Tools\PackageManager;
+<?php namespace Telenok\Core\Module\Packages\InstallerManager;
 
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller { 
     
-    protected $key = 'package-manager';
-    protected $parent = 'tools';
+    protected $key = 'installer-manager';
+    protected $parent = 'packages';
     protected $icon = 'fa fa-file';
 
 	protected $presentation = 'tree-tab-object';
-    protected $presentationContentView = 'core::module.package-manager.content';
+    protected $presentationContentView = 'core::module.installer-manager.content';
 
-	protected $tableColumn = ['name', 'version', 'perm', 'writeable', 'readable', 'updated_at'];
+	protected $tableColumn = ['name', 'size', 'perm', 'writeable', 'readable', 'updated_at'];
+	protected $maxFileSizeToView = 100000;
+
+	public function getMaxSizeToView()
+	{
+		return $this->maxFileSizeToView;
+	}
+
+	public function setMaxSizeToView($param = 100000)
+	{
+		$this->maxFileSizeToView = $param;
+
+		return $this;
+	}
 
 	public function getTreeContent()
     {
@@ -17,16 +30,15 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     }
 
     public function getContent()
-    {
-		$data = file_get_contents('http://telenok.com/package/lists/json');
-		$lists = json_decode($data, true);
-		
+    { 
         return [
             'tabKey' => "{$this->getTabKey()}-{$this->getParent()}",
-            'tabLabel' => 'Package manager',
+            'tabLabel' => $this->LL('header.title'),
             'tabContent' => view($this->getPresentationContentView(), array(
                 'controller' => $this,
-				'lists' => $lists,
+				'currentDirectory' => addslashes(base_path()),
+                'fields' => $this->tableColumn,
+                //'fieldsFilter' => $this->getModelFieldFilter(),
                 'gridId' => $this->getGridId(),
                 'uniqueId' => str_random(),
             ))->render()
@@ -36,11 +48,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     public function getList()
     {
         $content = []; 
-        
+
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
-        
+
 		$currentDirectory = $input->get('currentDirectory');
-		
+
 		if (strstr($currentDirectory, base_path()) === FALSE)
 		{
 			$currentDirectory = base_path();

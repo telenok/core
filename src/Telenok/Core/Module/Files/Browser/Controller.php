@@ -33,7 +33,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     { 
         return [
             'tabKey' => "{$this->getTabKey()}-{$this->getParent()}",
-            'tabLabel' => 'File manager',
+            'tabLabel' => $this->LL('header.title'),
             'tabContent' => view($this->getPresentationContentView(), array(
                 'controller' => $this,
 				'currentDirectory' => addslashes(base_path()),

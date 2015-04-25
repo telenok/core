@@ -35,6 +35,9 @@
         
         {!! HTML::style('packages/telenok/core/js/jquery.chosen/chosen.css') !!}
         {!! HTML::script('packages/telenok/core/js/jquery.chosen/chosen.js') !!}
+		
+        {!! HTML::style('packages/telenok/core/js/highlight/styles/vs.css') !!}
+        {!! HTML::script('packages/telenok/core/js/highlight/highlight.js') !!}
 
         <script type="text/javascript">
             if("ontouchend" in document) document.write("<script src='packages/telenok/core/js/jquery.mobile.custom.min.js' type='text/javascript'>"+"<"+"/script>");

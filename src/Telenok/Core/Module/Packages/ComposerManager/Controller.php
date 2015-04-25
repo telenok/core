@@ -1,39 +1,23 @@
-<?php namespace Telenok\Core\Module\Packages\Manage;
+<?php namespace Telenok\Core\Module\Packages\ComposerManager;
 
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller { 
     
-    protected $key = 'packages-manage';
+    protected $key = 'composer-manager';
     protected $parent = 'packages';
     protected $icon = 'fa fa-file';
 
 	protected $presentation = 'tree-tab-object';
-    protected $presentationContentView = 'core::module.packages-manage.content';
+    protected $presentationContentView = 'core::module.composer-manager.content';
+    protected $presentationComposerJsonView = 'core::module.composer-manager.composer-json';
 
 	protected $tableColumn = ['name', 'size', 'perm', 'writeable', 'readable', 'updated_at'];
-	protected $maxFileSizeToView = 100000;
-
-	public function getMaxSizeToView()
-	{
-		return $this->maxFileSizeToView;
-	}
-
-	public function setMaxSizeToView($param = 100000)
-	{
-		$this->maxFileSizeToView = $param;
-		
-		return $this;
-	}
-	
-	public function getTreeContent()
-    {
-        return;
-    }
+	protected $timeProcessLimit = 600;
 
     public function getContent()
     { 
         return [
             'tabKey' => "{$this->getTabKey()}-{$this->getParent()}",
-            'tabLabel' => 'File manager',
+            'tabLabel' => $this->LL('header.title'),
             'tabContent' => view($this->getPresentationContentView(), array(
                 'controller' => $this,
 				'currentDirectory' => addslashes(base_path()),
@@ -45,14 +29,88 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         ];
     }
 
+    public function getComposerJsonContent()
+	{
+        return [
+            'tabKey' => "{$this->getTabKey()}-{$this->getParent()}-" . str_random(),
+            'tabLabel' => 'Composer.json',
+            'tabContent' => view($this->presentationComposerJsonView, array(
+				'routerParam' => $this->getRouterParam('composer-json-update'),
+                'controller' => $this,
+				'content' => file_get_contents(base_path('composer.json')),
+                'gridId' => $this->getGridId(),
+                'uniqueId' => str_random(),
+            ))->render()
+        ];
+	}
+
+	public function composerJsonUpdate()
+	{
+		\File::makeDirectory(base_path('storage/composer'), 0775, true, true);
+
+		$lastFile = base_path('storage/composer/composer.last.json');
+		$validateFile = base_path('storage/composer/composer.validate.json');
+
+		if (file_exists($validateFile) && (time() - filemtime($validateFile) < $this->timeProcessLimit))
+		{
+			throw new \Exception($this->LL('error.json.locked'));
+		}
+
+		touch($validateFile);
+
+		try
+		{ 
+			$json = $this->getRequest()->input('content');
+
+			$content = json_decode($json);
+
+			if ($content === null)
+			{
+				throw new \Exception();
+			}
+
+			file_put_contents($validateFile, $json);
+
+			$input = new \Symfony\Component\Console\Input\ArrayInput([
+					'command' => 'validate',
+					'file' => base_path('storage/composer/composer.validate.json'),
+				]);
+
+			$out = new \Symfony\Component\Console\Output\BufferedOutput();
+			$application = new \Composer\Console\Application();
+			$application->setAutoExit(false);
+			$application->run($input, $out);
+
+			if (strpos($out->fetch(), 'is invalid') !== false)
+			{
+				throw new \Exception();
+			}
+
+			file_put_contents($lastFile, file_get_contents(base_path('composer.json')));
+			file_put_contents(base_path('composer.json'), $json);
+		} 
+		catch (\Exception $e) 
+		{
+			\File::delete($validateFile);
+
+			throw new \Exception($this->LL('error.json'));
+		}
+		
+		\File::delete($validateFile);
+
+		return $this->getComposerJsonContent();
+	}
+	
     public function getList()
     {
-        $content = []; 
-        
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
-        
-		$currentDirectory = $input->get('currentDirectory');
+		//		$composerLock = json_decode(file_get_contents(base_path('composer.lock')), JSON_UNESCAPED_SLASHES);
 		
+        $content = []; 
+
+        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
+
+		$currentDirectory = $input->get('currentDirectory');
+
 		if (strstr($currentDirectory, base_path()) === FALSE)
 		{
 			$currentDirectory = base_path();
@@ -252,129 +310,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		}
 	}
 
-    public function edit($id = 0)
-	{
-		$id = $id ?: $this->getRequest()->input('id');
-
-		try
-		{
-			$model = new \SplFileInfo($id);
-
-			if (strstr($model->getPath(), base_path()) === FALSE)
-			{
-				throw new \Exception($this->LL('error.access-denied-over-base-directory'));
-			}
-
-			if ($model->isFile())
-			{
-				$modelType = 'file';
-			}
-			else if ($model->isDir())
-			{
-				$modelType = 'directory';
-			}
-
-            $tabKey = str_random();
-
-			return [
-				'tabKey' => $this->getTabKey() . '-edit-' . $tabKey,
-				'tabLabel' => $this->LL('list.edit.' . $modelType),
-				'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array( 
-					'controller' => $this,
-					'currentDirectory' => addslashes($model->getPath()),
-					'modelType' => $modelType,
-					'model' => $model,
-					'tabKey' => $tabKey,
-					'modelCurrentDirectory' => new \SplFileInfo($model->getPath()),
-					'routerParam' => $this->getRouterParam('edit'),
-					'uniqueId' => str_random(),  
-
-					
-				), $this->getAdditionalViewParam()))->render()
-			];
-
-		} 
-		catch (\Exception $ex) 
-		{
-			return [
-				'exception' => $ex->getMessage(),
-			];
-		}
-	}
-	
-    public function store($id = null)
-	{
-		try
-		{
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
-
-			$modelType = $input->get('modelType');
-			$name = trim($input->get('name'));
-
-			$currentDirectory = new \SplFileInfo($this->getRequest()->input('directory'));
-
-			if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE)
-			{
-				throw new \Exception($this->LL('error.access-denied-over-base-directory'));
-			}
-
-			$validator = \Validator::make(
-				[
-					'name' => $name,
-				],
-				[
-					'name' => ['required', 'regex:/^[\w .-]+$/u'],
-				]
-			);
-
-			if ($validator->fails())
-			{
-				throw (new \Telenok\Core\Interfaces\Exception\Validate())->setMessageError($validator->messages());
-			}
-			
-			$modelPath = $currentDirectory->getRealPath() . DIRECTORY_SEPARATOR . $name;
-
-            if (file_exists($modelPath))
-            {
-				throw new \Exception($this->LL('error.file.exists'));
-            }
-            
-			if ($modelType == 'directory')
-			{
-				\File::makeDirectory($modelPath, 0775, true, true);
-			}
-			else if ($modelType == 'file')
-			{
-				\File::put($modelPath, $this->getRequest()->input('content', ''));
-			}
-			else
-			{
-				throw new \Exception($this->LL('error.create.unknown-file-type'));
-			}
-			
-			return [
-				'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array( 
-					'controller' => $this,
-					'currentDirectory' => addslashes($currentDirectory->getRealPath()),
-                    'success' => true,
-					'modelType' => $modelType,
-					'model' => new \SplFileInfo($modelPath),
-					'modelCurrentDirectory' => $currentDirectory,
-					'routerParam' => $this->getRouterParam('update'),
-					'uniqueId' => str_random(),  
-				), $this->getAdditionalViewParam()))->render()
-			];
-		}
-		catch (\Telenok\Core\Interfaces\Exception\Validate $e)
-		{
-			throw $e;
-		}
-		catch (\Exception $e)
-		{
-			throw $e;
-		}
-	}
-	
     public function update($id = null)
 	{
 		try
@@ -496,7 +431,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			throw $e;
 		}
     }
-    
+
     public function editList($id = null)
     { 
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
@@ -614,6 +549,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				return [ $this->getRouterUpdate(['id' => $filePath, 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey]) ];
 				break;
 
+			case 'composer-json-update':
+				return [ route("cmf.module.composer-manager.composer-json.update", ['id' => $filePath, 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey]) ];
+				break;
+
 			default:
 				return [];
 				break;
@@ -672,5 +611,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         }
         
         return $listTree;
-    } 
+    }
+	
+	public function getTreeContent()
+    {
+        return;
+    }
+
 } 

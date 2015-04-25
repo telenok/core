@@ -58,11 +58,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     { 
         if ($field->multilanguage)
         { 
-			$default = json_decode($field->text_default ?: "[]", true);
+			$default = (array)json_decode($field->text_default ?: "[]", true);
 
             foreach ($default as $language => $v)
             {
-                if (!isset($value[$language]))
+                if (!isset($value[$language]) || !strlen($value[$language]))
                 {
                     $value[$language] = $v;
                 }

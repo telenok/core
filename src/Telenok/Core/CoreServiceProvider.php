@@ -16,7 +16,7 @@ class CoreServiceProvider extends ServiceProvider {
 		$this->loadViewsFrom(__DIR__ . '/../../views', 'core');
 		$this->loadTranslationsFrom(__DIR__ . '/../../lang', 'core');
 
-		$this->publishes([__DIR__ . '/../../../public' => public_path('packages/core')], 'public');
+		$this->publishes([__DIR__ . '/../../../public' => public_path('packages/telenok/core')], 'public');
 
 		include __DIR__ . '/../../config/routes.php';
 		include __DIR__ . '/../../config/event.php';

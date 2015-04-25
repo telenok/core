@@ -12,7 +12,7 @@ class Repository {
 			{
 				$collection = \Illuminate\Support\Collection::make();
 
-				\Event::fire('telenok.package.add', $collection);
+				\Event::fire('telenok.repository.package', $collection);
 
 				$list = \Illuminate\Support\Collection::make();
 
@@ -42,7 +42,7 @@ class Repository {
 			{
 				$collection = \Illuminate\Support\Collection::make();
 
-				\Event::fire('telenok.setting.add', $collection);
+				\Event::fire('telenok.repository.setting', $collection);
 
 				$list = \Illuminate\Support\Collection::make();
 
@@ -72,7 +72,7 @@ class Repository {
 			{
 				$collection = \Illuminate\Support\Collection::make();
 
-				\Event::fire('telenok.objects-field.add', $collection);
+				\Event::fire('telenok.repository.objects-field', $collection);
 
 				$list = \Illuminate\Support\Collection::make();
 
@@ -102,7 +102,7 @@ class Repository {
 			{
 				$collection = \Illuminate\Support\Collection::make();
 
-				\Event::fire('telenok.objects-field.view.model.add', $collection);
+				\Event::fire('telenok.repository.objects-field.view.model', $collection);
 
 				$l = [];
 

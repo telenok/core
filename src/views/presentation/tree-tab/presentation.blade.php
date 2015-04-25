@@ -185,7 +185,7 @@
 			},
 			addDataTable: function(param)
 			{
-				var aButtons = [];
+				var aButtons = param.aButtons || [];
 				var this_ = this;
 
 				@section('tableListBtnCreate')

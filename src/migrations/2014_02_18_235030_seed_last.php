@@ -378,9 +378,32 @@ class SeedLast extends Migration {
 			'active' => 1
 		]);
 
+		(new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+			'title' => ['en' => 'Module: Database Console', 'ru' => 'Модуль: Базаданных консоль'],
+			'code' => 'module.database-console',
+			'active' => 1
+		]);
+
+		(new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+			'title' => ['en' => 'Module: Packages', 'ru' => 'Модуль: Пакеты'],
+			'code' => 'module.packages',
+			'active' => 1
+		]);
+
+		(new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+			'title' => ['en' => 'Module: Composer manager', 'ru' => 'Модуль: Composer менеджер'],
+			'code' => 'module.composer-manager',
+			'active' => 1
+		]);
+
+		(new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+			'title' => ['en' => 'Module: Installer manager', 'ru' => 'Модуль: Менеджер инсталляции'],
+			'code' => 'module.installer-manager',
+			'active' => 1
+		]);
+
 		//Login User
 		Auth::login($user);
-
 
 		//User tab
         (new \App\Telenok\Core\Model\Object\Tab())->storeOrUpdate(
@@ -392,7 +415,6 @@ class SeedLast extends Migration {
                 'tab_order' => 2
             ]
         );
-
 
 		//User fields
 		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
@@ -901,12 +923,29 @@ class SeedLast extends Migration {
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-			'title' => ['en' => 'Package manager', 'ru' => 'Менеджер пакетов'],
+			'title' => ['en' => 'Packages', 'ru' => 'Пакеты'],
 			'active' => 1,
-			'controller_class' => 'App\Telenok\Core\Module\Tools\PackageManager\Controller',
+			'controller_class' => 'App\Telenok\Core\Module\Packages\Controller',
 			'module_order' => 3,
 		]);
 
+		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
+			'title' => ['en' => 'Composer manager', 'ru' => 'Composer менеджер'],
+			'active' => 1,
+			'controller_class' => 'App\Telenok\Core\Module\Packages\ComposerManager\Controller',
+			'module_order' => 1,
+		]);
+
+		(new \App\Telenok\Core\Model\Web\Module())->storeOrUpdate([
+			'title' => ['en' => 'Installer manager', 'ru' => 'Менеджер инсталляции'],
+			'active' => 1,
+			'controller_class' => 'App\Telenok\Core\Module\Packages\InstallerManager\Controller',
+			'module_order' => 2,
+		]);
+
+		
+		
+		
 
 		// Widget group
 		(new \App\Telenok\Core\Model\Web\WidgetGroup())->storeOrUpdate([
