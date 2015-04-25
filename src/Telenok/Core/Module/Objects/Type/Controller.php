@@ -126,13 +126,13 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 		$input->put('class_controller', '\\' . implode($classNameCollection->all(), '\\'));
 
-		$classModel = $input->get('class_controller');
+		$classController = $input->get('class_controller');
 
-		if (class_exists($classModel))
+		if (class_exists($classController))
 		{
 			\Session::flash('warning.class_controller_exists', $this->LL($this->LL('error.class_controller_exists')));
 		}
-		else if (preg_match('/^\\\\App\\\\Http\\\\Controllers\\\\.+/', $classModel) !== 1)
+		else if (preg_match('/^\\\\App\\\\Http\\\\Controllers\\\\.+/', $classController) !== 1)
 		{
 			throw new \Exception($this->LL('error.class_controller.store'));
 		}
@@ -170,8 +170,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 			foreach ($locales as $locale)
 			{
-				$dir = base_path('resources' . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . $locale . DIRECTORY_SEPARATOR . 'module');
-				$file = base_path('resources' . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . $locale . DIRECTORY_SEPARATOR . 'module' . DIRECTORY_SEPARATOR . 'objects-' . $model->code . '.php');
+				$dir = base_path('resources/lang/' . $locale . '/module');
+				$file = base_path('resources/lang/' . $locale . '/module/objects-' . $model->code . '.php');
 
 				if (!\File::exists($file))
 				{
@@ -210,8 +210,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 		$path = preg_replace('/^(App)(.+)$/', '${2}', $ns);
 
-		$dir = str_replace('\\', DIRECTORY_SEPARATOR, app_path() . $path);
-		$file = $dir . DIRECTORY_SEPARATOR . $class . '.php';
+		$dir = str_replace('\\', '/', app_path() . $path);
+		$file = $dir . '/' . $class . '.php';
 
 		if (!\File::exists($file))
 		{
@@ -243,14 +243,18 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 	public function createControllerFile($model, $type = null, $input = [])
 	{
-		$class = class_basename($model->class_controller);
+		if (!$model->class_controller)
+		{
+			return;
+		}
 
+		$class = class_basename($model->class_controller);
 		$ns = trim(preg_replace('/\\\\' . $class . '$/', '', $model->class_controller), '\\');
 
 		$path = preg_replace('/^(App)(.+)$/', '${2}', $ns);
 
-		$dir = str_replace('\\', DIRECTORY_SEPARATOR, app_path() . $path);
-		$file = $dir . DIRECTORY_SEPARATOR . $class . '.php';
+		$dir = str_replace('\\', '/', app_path() . $path);
+		$file = $dir . '/' . $class . '.php';
 
 		if (!\File::exists($file))
 		{

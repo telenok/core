@@ -194,7 +194,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				
 				$model = $model->save();
 
-				\File::delete($currentPath);
+				if ($currentPath)
+				{
+					$fileToDelere = \File::glob(strrev(implode(strrev('/*'), explode("/", strrev($currentPath), 2))));
+
+					foreach($fileToDelere as $d)
+					{
+						\File::delete($d);
+					}
+				}
 			}
 			catch (\Extension $e)
 			{
