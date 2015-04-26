@@ -46,10 +46,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 	public function composerJsonUpdate()
 	{
-		\File::makeDirectory(base_path('storage/composer'), 0775, true, true);
+		\File::makeDirectory(storage_path('telenok/composer'), 0775, true, true);
 
-		$lastFile = base_path('storage/composer/composer.last.json');
-		$validateFile = base_path('storage/composer/composer.validate.json');
+		$lastFile = storage_path('telenok/composer/composer.last.json');
+		$validateFile = storage_path('telenok/composer/composer.validate.json');
 
 		if (file_exists($validateFile) && (time() - filemtime($validateFile) < $this->timeProcessLimit))
 		{
@@ -73,7 +73,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 			$input = new \Symfony\Component\Console\Input\ArrayInput([
 					'command' => 'validate',
-					'file' => base_path('storage/composer/composer.validate.json'),
+					'file' => storage_path('telenok/composer/composer.validate.json'),
 				]);
 
 			$out = new \Symfony\Component\Console\Output\BufferedOutput();

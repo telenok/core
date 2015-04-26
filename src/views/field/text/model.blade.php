@@ -9,7 +9,6 @@
         $domAttr['disabled'] = 'disabled';
         $disabled = true; 
     }
-
 ?>
 
 @if ($field->multilanguage)
@@ -35,7 +34,6 @@
 					return $item->locale == $localeDefault ? 0 : 1;
 				});
 				?>
-
 				@foreach($languages as $language)
 				<li class="<?php if ($language->locale == $localeDefault) echo "active"; ?>">
 					<a data-toggle="tab" href="#{{$jsUnique}}-language-{{$language->locale}}-{{$field->code}}">
@@ -43,25 +41,20 @@
 					</a>
 				</li>
 				@endforeach
-
 			</ul>
 			<div class="tab-content">
 				@foreach($languages as $language)
-                
                 <?php
                     
                     $domAttr['id'] = $field->code . '-' . $uniqueId . '-' . $language->locale; 
                 
                 ?>
-                
 				<div id="{{$jsUnique}}-language-{{$language->locale}}-{{$field->code}}" class="tab-pane in <?php if ($language->locale == $localeDefault) echo "active"; ?>">
 					{!! Form::textarea("{$field->code}[{$language->locale}]", $model->translate($field->code, $language->locale), $domAttr ) !!}
 				</div>
 				@endforeach
 			</div> 
-
 		</div>
-
 	</div>
 </div>
 @else
@@ -73,9 +66,13 @@
 ?>
 
 <div class="form-group">
-	{!! Form::label("{$field->code}", $field->translate('title'), array('class'=>'control-label')) !!}
-	<div class="controls">
-		{!! Form::textarea($field->code, $model->translate($field->code), $domAttr) !!}
+	<div class="col-sm-12">
+		{!! Form::label("{$field->code}", $field->translate('title'), array('class'=>'control-label')) !!}
+	</div>
+	<div class="col-sm-12">
+		<div class="controls">
+			{!! Form::textarea($field->code, $model->translate($field->code), $domAttr) !!}
+		</div>
 	</div>
 </div>
 @endif

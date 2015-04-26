@@ -30,7 +30,7 @@ class CoreServiceProvider extends ServiceProvider {
 					new \App\Telenok\Core\Security\UserProvider($this->app['hash'], $this->app['config']['auth.model']), $this->app['session.store']
 			);
 		});		
-
+		
 		if (!file_exists(storage_path('telenok/installedTelenokCore.lock')))
 		{
 			return;

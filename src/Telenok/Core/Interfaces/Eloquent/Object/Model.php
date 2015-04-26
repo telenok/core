@@ -235,7 +235,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			{
 				$model = $this->findOrFail($input->get($this->getKeyName()));
 				
-				// if model exists - add its attributes to $input
+				// if model exists - add its attributes to $input for process all attributes in events
 				$t = [];
 
 				foreach($model->getAttributes() as $k => $v)
@@ -299,12 +299,14 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 				$model->preProcess($type, $input);
 
-				$validator = app('\Telenok\Core\Interfaces\Validator\Model')
+				$validator = app('\App\Telenok\Core\Interfaces\Validator\Model')
 						->setModel($model)
 						->setInput($input)
 						->setMessage($this->LL('error'))
 						->setCustomAttribute($this->validatorCustomAttributes());
 
+				
+				
 				if ($validator->fails())
 				{
 					throw (new \Telenok\Core\Interfaces\Exception\Validate())->setMessageError($validator->messages());
@@ -647,7 +649,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 				}
 			}
 		}
-
+		
 		return static::$listRule[$class];
 	}
 
