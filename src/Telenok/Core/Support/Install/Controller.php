@@ -349,7 +349,7 @@ class Controller {
 
 	public function touchInstallFlag()
 	{
-		touch(storage_path() . '/installedTelenokCore');
+		touch(storage_path('telenok/installedTelenokCore.lock'));
 	}
 
 	public function createBaseTable($commandObject)

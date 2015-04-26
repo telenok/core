@@ -229,7 +229,7 @@ class Repository {
 
 	public function compileRouter()
 	{
-		$path = storage_path() . '/route';
+		$path = storage_path('telenok/route');
 
 		$file = 'route.php';
 

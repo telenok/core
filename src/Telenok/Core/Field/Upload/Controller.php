@@ -111,7 +111,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				$size = $file->getClientSize();
 				$mimeType = $file->getMimeType();
 				$extension = $file->getClientOriginalExtension();
-				$directoryPath = 'upload' . DIRECTORY_SEPARATOR . date('Y') . DIRECTORY_SEPARATOR . date('m') . DIRECTORY_SEPARATOR . date('d') . DIRECTORY_SEPARATOR;
+				$directoryPath = 'upload/' . date('Y') . '/' . date('m') . '/' . date('d') . '/';
 				$originalFileName = $file->getClientOriginalName();
 				$fileName = \Str::random(20) . '.' . $extension;
 				$destinationPath = $directoryPath . $fileName; 
@@ -146,9 +146,9 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 					}
 				}
 
-				\File::makeDirectory($directoryPath, 0777, true, true);
+				\File::makeDirectory(public_path($directoryPath), 0777, true, true);
 
-				$file->move($directoryPath, $fileName);
+				$file->move(public_path($directoryPath), $fileName);
 
 				try
 				{
@@ -185,13 +185,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				$typeModel = $field->fieldObjectType()->first();
 
 				$currentPath = $model->{$field->code . '_path'};
-				
+
 				$model->{camel_case($field->code . '_' . $typeModel->code) . 'FileExtension'}()->associate($modelExtension);
 				$model->{camel_case($field->code . '_' . $typeModel->code) . 'FileMimeType'}()->associate($modelMimeType);
 				$model->{$field->code . '_original_file_name'} = $originalFileName;
 				$model->{$field->code . '_path'} = str_replace('\\', '/', $destinationPath);
 				$model->{$field->code . '_size'} = $size;
-				
+
 				$model = $model->save();
 
 				if ($currentPath)
@@ -206,7 +206,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			}
 			catch (\Extension $e)
 			{
-				\File::delete(base_path() . $destinationPath);
+				\File::delete(public_path($destinationPath));
 
 				throw $e;
 			}

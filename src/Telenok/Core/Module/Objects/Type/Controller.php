@@ -210,7 +210,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 		$path = preg_replace('/^(App)(.+)$/', '${2}', $ns);
 
-		$dir = str_replace('\\', '/', app_path() . $path);
+		$dir = str_replace('\\', '/', app_path($path));
 		$file = $dir . '/' . $class . '.php';
 
 		if (!\File::exists($file))
@@ -253,7 +253,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 		$path = preg_replace('/^(App)(.+)$/', '${2}', $ns);
 
-		$dir = str_replace('\\', '/', app_path() . $path);
+		$dir = str_replace('\\', '/', app_path($path));
 		$file = $dir . '/' . $class . '.php';
 
 		if (!\File::exists($file))

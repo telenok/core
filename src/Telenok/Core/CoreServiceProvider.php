@@ -31,7 +31,7 @@ class CoreServiceProvider extends ServiceProvider {
 			);
 		});		
 
-		if (!file_exists(storage_path() . '/installedTelenokCore'))
+		if (!file_exists(storage_path('telenok/installedTelenokCore.lock')))
 		{
 			return;
 		}
@@ -40,7 +40,7 @@ class CoreServiceProvider extends ServiceProvider {
 
 		if (!\Request::is('telenok', 'telenok/*'))
 		{
-			$routersPath = storage_path() . '/route/route.php';
+			$routersPath = storage_path('telenok/route/route.php');
 
 			if (!file_exists($routersPath))
 			{
