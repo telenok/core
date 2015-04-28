@@ -304,8 +304,6 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 						->setInput($input)
 						->setMessage($this->LL('error'))
 						->setCustomAttribute($this->validatorCustomAttributes());
-
-				
 				
 				if ($validator->fails())
 				{
@@ -649,7 +647,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 				}
 			}
 		}
-		
+
 		return static::$listRule[$class];
 	}
 

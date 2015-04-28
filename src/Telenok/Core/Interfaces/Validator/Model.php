@@ -88,17 +88,17 @@ class Model {
     }
 
     public function passes()
-    {  
+    {
         if ($this->model instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model && $this->model->exists)
         {
-            $this->ruleList = array_intersect_key($this->ruleList, $this->getInput()->toArray());
+            $this->ruleList = array_intersect_key($this->getRuleList(), $this->getInput()->toArray());
 
             if (empty($this->ruleList))
             {
                 return true;
             }
         }
-
+		
         $this->validator = \Validator::make(
                                 $this->getInput()->toArray(), 
                                 $this->getRuleList(), 

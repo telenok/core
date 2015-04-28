@@ -297,6 +297,6 @@ div.DTTT_collection_background {
     z-index: 2001;
 }
 
-table.dataTables_wrapper {
+div.dataTables_wrapper {
 	overflow: auto;
 }

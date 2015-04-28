@@ -65,7 +65,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 			return;
 		}
 
-		$input->put('class_model', strtolower(trim($input->get('class_model'), '\\ ')));
+		$input->put('class_model', trim($input->get('class_model'), '\\ '));
 
 		$classNameCollection = \Illuminate\Support\Collection::make(explode('\\', $input->get('class_model')))
 				->filter(function($i)
@@ -106,7 +106,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 			return;
 		}
 
-		$input->put('class_controller', strtolower(trim($input->get('class_controller'), '\\ ')));
+		$input->put('class_controller', trim($input->get('class_controller'), '\\ '));
 
 		$classNameCollection = \Illuminate\Support\Collection::make(explode('\\', $input->get('class_controller')))
 				->filter(function($i)
@@ -205,7 +205,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 	public function createModelFile($model, $type = null, $input = [])
 	{
 		$class = class_basename($model->class_model);
-
+		
 		$ns = trim(preg_replace('/\\\\' . $class . '$/', '', $model->class_model), '\\');
 
 		$path = preg_replace('/^(App)(.+)$/', '${2}', $ns);
