@@ -205,10 +205,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 	public function createModelFile($model, $type = null, $input = [])
 	{
 		$class = class_basename($model->class_model);
-		
+
 		$ns = trim(preg_replace('/\\\\' . $class . '$/', '', $model->class_model), '\\');
 
-		$path = preg_replace('/^(App)(.+)$/', '${2}', $ns);
+		$path = trim(str_replace('App', '', $ns), '\\');
 
 		$dir = str_replace('\\', '/', app_path($path));
 		$file = $dir . '/' . $class . '.php';
@@ -220,7 +220,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 				\File::makeDirectory($dir, 0775, true, true);
 
 				$param = [
-					'namespace' => ($ns ? "namespace $ns;" : ""),
+					'namespace' => $ns,
 					'class' => $class,
 					'table' => $model->code,
 				];
@@ -263,7 +263,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 				\File::makeDirectory($dir, 0775, true, true);
 
 				$param = [
-					'namespace' => ($ns ? "namespace $ns;" : ''),
+					'namespace' => $ns,
 					'class' => $class,
 					'key' => "objects-{$model->code}",
 					'parent' => 'objects',

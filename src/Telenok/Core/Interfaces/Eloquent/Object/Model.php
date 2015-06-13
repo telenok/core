@@ -653,7 +653,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function translate($field, $locale = '')
 	{
-		$locale = $locale ? : app('config')->get('app.locale');
+		$locale = $locale ? : config('app.locale');
 
 		if ($this->$field instanceof \Illuminate\Support\Collection)
 		{

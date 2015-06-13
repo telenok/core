@@ -110,22 +110,71 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
         return route("cmf.module.{$this->getKey()}.install", $param);
     }
-	
+
     public function install()
 	{
 		try
-		{ 
+		{
+			\File::makeDirectory(storage_path('telenok/composer'), 0775, true, true);
+
+			$jsonArray = json_decode(file_get_contents(base_path('composer.json')), true);
+			$tmpComposerJsonFile = base_path('composer.json');
+
+			$fileName = str_random();
+
+			if (is_array(array_get($jsonArray, 'repositories')))
+			{
+				foreach ($jsonArray['repositories'] as &$v)
+				{
+					if ($v['package']['name'] == 'fzaninotto/faker')
+					{
+						$v['package']['version'] = '1.5.0';
+						$v['package']['dist']['url'] = storage_path('telenok/composer/' . $fileName . '.zip');
+					}
+				}
+			}
+			else
+			{
+				$jsonArray['repositories'][] = [
+					'type' => 'package',
+					'package' => [
+						'name' => 'fzaninotto/faker',
+						'version' => '1.5.0',
+						'dist' => [
+							'url' => storage_path('telenok/composer/' . $fileName . '.zip'),
+							'type' => 'zip',
+						]
+					]
+				];
+			}
+
+			file_put_contents($tmpComposerJsonFile, json_encode($jsonArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+
+			$input = new \Symfony\Component\Console\Input\ArrayInput([
+					'command' => 'require',
+					'--working-dir' => base_path(),
+					'packages' => ['fzaninotto/faker'],
+				]);
+
+			$out = new \Symfony\Component\Console\Output\BufferedOutput();
+			$application = new \Composer\Console\Application();
+			$application->setAutoExit(false);
+			$application->run($input, $out);
+
+			if (strpos($out->fetch(), 'is invalid') !== false)
+			{
+				throw new \Exception();
+			}
+			
+			var_dump($out->fetch());
+			
+			dd('ssssssssssssss');
+
 			$request = $this->getRequest(); 
 
 			//file_get_contents('http://telenok.com/package/get/process?' . http_build_query(['key' => $request->input('key')]));
-			
-			file_put_contents(base_path('aa.zip'), file_get_contents("https://api.github.com/repos/laravel/framework/zipball/master"));
-			
-			
-			
-			
-			dd('ddddddddddddd');
-			
+			//file_put_contents(base_path('aa.zip'), file_get_contents("https://api.github.com/repos/laravel/framework/zipball/master"));
+
 			return [
 				'tabKey' => $this->getTabKey() . '-new-' . $tabKey,
 				'tabLabel' => $this->LL('list.create.' . (in_array($modelType, ['file', 'directory'], true) ? $modelType : "")),

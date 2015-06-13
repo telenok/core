@@ -6,7 +6,104 @@ use Illuminate\Database\Migrations\Migration;
 class SeedLast extends Migration {
 
 	public function up()
-	{ 
+	{
+		\Schema::table('object_type', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+		
+		\Schema::table('object_field', function ($table) {
+			$table->foreign('field_object_type')->references('id')->on('object_type')->onDelete('cascade');
+			$table->foreign('field_object_tab')->references('id')->on('object_tab')->onDelete('cascade');
+		});
+		
+		\Schema::table('object_translation', function ($table) {
+			$table->foreign('translation_object_model_id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+		
+		\Schema::table('user', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+		
+		\Schema::table('resource', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('language', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('user_message', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('group', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('role', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('permission', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('subject_permission_resource', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('folder', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('module_group', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('module', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('page', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('page_controller', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('widget_group', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('widget', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('widget_on_page', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('file_category', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('file_extension', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('file_mime_type', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('file', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		});
+
+		\Schema::table('domain', function ($table) {
+			$table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
+		}); 
+		
 		\App\Telenok\Core\Model\Object\Type::all()->each(function($type)
 		{
 			$table = $type->code;

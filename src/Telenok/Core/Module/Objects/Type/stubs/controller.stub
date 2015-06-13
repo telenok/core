@@ -1,4 +1,4 @@
-<?php {{namespace}}
+<?php namespace {{namespace}};
 
 class {{class}} extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller { 
     
