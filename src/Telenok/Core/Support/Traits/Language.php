@@ -1,8 +1,12 @@
-<?php namespace Telenok\Core\Support\Language;
+<?php namespace Telenok\Core\Support\Traits;
 
-trait Load
+trait Language
 {
-    public function getLanguageDirectory()
+	use Package;
+	
+	protected $languageDirectory;
+
+	public function getLanguageDirectory()
     {
         return $this->languageDirectory;
     }
@@ -14,33 +18,11 @@ trait Load
         return $this;
     }
 
-    public function getPackage()
-    {
-        static $ns = [];
-
-        $class = get_class($this);
-
-        if (!isset($ns[$class]))
-        {
-            if ($this->package) return $this->package;
-
-            $list = explode('\\', __NAMESPACE__);
-
-            $ns[$class] = strtolower(array_get($list, 1));
-        }
-
-        return $ns[$class];
-    }
-
-    public function setPackage($param)
-    {
-        $this->package = $param;
-
-        return $this;
-    }
-
     public function LL($key = '', $param = [])
     {
+		 
+		 
+		
         $k = "{$this->getPackage()}::{$this->getLanguageDirectory()}/{$this->getKey()}.$key";
         $kDefault = "{$this->getPackage()}::default.$key";
         $kStandart = "module/{$this->getKey()}.$key";

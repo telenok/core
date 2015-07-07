@@ -86,6 +86,4 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		return parent::postProcess($model, $type, $input);
 	}
-
 }
-

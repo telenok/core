@@ -31,7 +31,7 @@ class ControlPanel {
 			{
 				return response()->json(['error' => 'Unauthorized'], 403 /* Denied */);
 			}
-			else if (\Auth::guest())
+			else if (app('auth')->guest())
 			{
 				return redirect()->route('cmf.login.content');
 			}
@@ -40,11 +40,11 @@ class ControlPanel {
 				return redirect()->route('error.access-denied');
 			}
 		}
-		else if (!\Request::is('telenok/login') && (\Request::is('telenok', 'telenok/*')) && \Auth::guest())
+		else if (!\Request::is('telenok/login') && (\Request::is('telenok', 'telenok/*')) && app('auth')->guest())
 		{
 			return redirect()->route('cmf.login.content');
 		}
-		else if (\Request::is('telenok/login') && !\Auth::guest() && $accessControlPanel)
+		else if (\Request::is('telenok/login') && !app('auth')->guest() && $accessControlPanel)
 		{
 			return redirect()->route('cmf.content');
 		}

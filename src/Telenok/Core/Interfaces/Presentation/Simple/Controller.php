@@ -131,5 +131,12 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
             ], $this->getAdditionalViewParam()))->render();
     }
 
+    public function getFieldTemplateKey($field)
+	{
+	}
+	
+	public function getFieldTemplateView($field)
+	{
+	}
 }
 

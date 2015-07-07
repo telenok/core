@@ -1095,8 +1095,13 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
     {  
         return $this;
     }
+
+    public function getFieldTemplateKey($field)
+	{
+	}
 	
-	
-	
+	public function getFieldTemplateView($field)
+	{
+	}
 }
 

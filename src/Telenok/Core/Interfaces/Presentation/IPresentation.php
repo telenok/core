@@ -17,5 +17,9 @@ interface IPresentation extends \Telenok\Core\Interfaces\Module\IModule {
     public function getPresentationContent();
 
     public function getContent();
+	
+    public function getFieldTemplateKey($field);
+	
+	public function getFieldTemplateView($field);
 }
 

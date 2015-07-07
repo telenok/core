@@ -15,3 +15,7 @@
         @endif
 	</body>
 </html>
+
+
+@foreach($controller-> as $k => $item)
+{!! HTML::style('packages/telenok/core/css/jquery.gritter.css') !!}

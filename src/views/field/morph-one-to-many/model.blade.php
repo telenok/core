@@ -78,7 +78,7 @@
                     
                     jQuery('ul.nav-tabs#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab a:first').tab('show');
     
-                    var presentation = telenok.getPresentation('{{ $parentController->getPresentationModuleKey()}}');
+                    var presentation = telenok.getPresentation('{{ $controllerParent->getPresentationModuleKey()}}');
                     
                     var aoColumns = []; 
                     var aButtons = []; 
@@ -89,7 +89,7 @@
 
 							aButtons.push({
                                             "sExtends": "text",
-                                            "sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $parentController->LL('list.btn.refresh') }}",
+                                            "sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.refresh') }}",
                                             'sButtonClass': 'btn-sm',
                                             "fnClick": function(nButton, oConfig, oFlash) {
                                                 jQuery('#' + "telenok-{{$controller->getKey()}}-{{$jsUnique}}").dataTable().fnReloadAjax();
@@ -99,7 +99,7 @@
 							@if ($model->exists && $field->allow_update && $permissionUpdate)
 								aButtons.push({
                                             "sExtends": "text",
-                                            "sButtonText": "<i class='fa fa-trash-o smaller-90'></i> {{ $parentController->LL('list.btn.delete.all') }}",
+                                            "sButtonText": "<i class='fa fa-trash-o smaller-90'></i> {{ $controllerParent->LL('list.btn.delete.all') }}",
                                             'sButtonClass': 'btn-sm btn-danger',
                                             "fnClick": function(nButton, oConfig, oFlash) {
                                                 removeMorphAllO2MHas{{$jsUnique}}();
@@ -131,7 +131,7 @@
 								)
 							aButtons.push({
                                             "sExtends": "text",
-                                            "sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $parentController->LL('list.btn.create') }}",
+                                            "sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
                                             'sButtonClass': 'btn-success btn-sm',
                                             "fnClick": function(nButton, oConfig, oFlash) {
                                                 createMorphO2MHas{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardCreate(), [ 'id' => $field->morph_one_to_many_has, 'saveBtn' => 1, 'chooseBtn' => 1]) !!}');
@@ -141,7 +141,7 @@
 							 
 							aButtons.push({
                                             "sExtends": "text",
-                                            "sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $parentController->LL('list.btn.choose') }}",
+                                            "sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.choose') }}",
                                             'sButtonClass': 'btn-yellow btn-sm',
                                             "fnClick": function(nButton, oConfig, oFlash) {
                                                 chooseMorphO2MHas{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardChoose(), ['id' => $controller->getChooseTypeId($field, $linkedField)]) !!}');

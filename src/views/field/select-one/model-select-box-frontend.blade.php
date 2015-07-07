@@ -23,35 +23,32 @@
     }
 
     $values = array_combine($keys, $titleLocale);
-
 ?>
 
 <div class="form-group">
-	{!! Form::label("{$field->code}", $field->translate('title'), array('class' => 'col-sm-3 control-label no-padding-right')) !!}
-	<div class="col-sm-9">
-        <div>
-            <div class="btn-group btn-overlap" data-toggle="buttons">
-                @foreach($values as $k => $v)
-                <?php
-				
-                    $checked = ($model->exists && strcmp($k, $model->{$field->code}) === 0) || (!$model->exists && strcmp($k, $default) === 0) ? 1 : 0;
-					
-					$domAttr['id'] .= '-' . $k;
 
-                ?>
-                <label class="btn btn-white btn-sm btn-primary @if ($checked) active @endif" @if ($disabled) disabled="disabled" @endif>
-                   
-                    {!! Form::radio($field->code, $k, $checked, $domAttr) !!}
-                       
-                    <input type="radio" @if ($checked) checked="checked" @endif name="{{$field->code}}" value="{{$k}}" @if ($disabled) disabled="disabled" @endif /> {{$v}}
-                </label>
-                @endforeach
-            </div>
+	{!! Form::label("{$field->code}", $field->translate('title'), array('class' => 'col-xs-2 control-label text-right')) !!}
+
+	<div class="col-sm-10">
+
+            @if ($field->icon_class)
+		<div class="input-group">
+            <span class="input-group-addon">
+                <i class="{{ $field->icon_class }}"></i>
+            </span>
+            @else
+		<div>
+            @endif	
+            
+            {!! Form::select($field->code, $values, $model->exists ? $model->{$field->code} : $default, $domAttr) !!}
+
             @if ($field->translate('description'))
             <span title="" data-content="{{ $field->translate('description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 
                   class="help-button" data-original-title="{{trans('core::default.tooltip.description')}}">?</span>
             @endif
-        </div>
-    </div>
+            
+		</div>
+	</div> 
 </div>
+
 

@@ -14,6 +14,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     protected $presentationFormModelView = 'core::presentation.tree-tab-object.form';
     protected $presentationFormFieldListView = 'core::presentation.tree-tab-object.form-field-list';
 
+	public function getFieldTemplateKey($field) {}
+
+    public function getFieldTemplateView($field) {}
+
     public function getActionParam()
     {  
         if ($typeId = $this->getRequest()->input('typeId', 0))

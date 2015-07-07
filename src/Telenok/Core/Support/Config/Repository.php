@@ -2,94 +2,49 @@
 
 class Repository {
 
-	public function getPackage($flush = false)
+	public function getValue($event, $type, $flush = false)
 	{
-		static $list = null;
+		static $list = [];
 
-		if ($list === null || $flush)
+		if (!isset($list[$type]) || $flush)
 		{
 			try
 			{
 				$collection = \Illuminate\Support\Collection::make();
 
-				\Event::fire('telenok.repository.package', $collection);
+				\Event::fire($event, $collection);
 
-				$list = \Illuminate\Support\Collection::make();
+				$list[$type] = \Illuminate\Support\Collection::make();
 
 				foreach ($collection as $class)
 				{
 					$object = app($class);
 
-					$list->put($object->getKey(), $object);
+					$list[$type]->put($object->getKey(), $object);
 				}
 			}
 			catch (\Exception $e)
 			{
-				throw new \RuntimeException('Failed to get package. Error: ' . $e->getMessage());
+				throw new \RuntimeException('Failed to fire event "' . $event . '". Error: ' . $e->getMessage());
 			}
 		}
 
-		return $list;
+		return $list[$type];
+	}
+	
+	public function getPackage($flush = false)
+	{ 
+		return $this->getValue('telenok.repository.package', 'package', $flush);
 	}
 
 	public function getSetting($flush = false)
 	{
-		static $list = null;
-
-		if ($list === null || $flush)
-		{
-			try
-			{
-				$collection = \Illuminate\Support\Collection::make();
-
-				\Event::fire('telenok.repository.setting', $collection);
-
-				$list = \Illuminate\Support\Collection::make();
-
-				foreach ($collection as $class)
-				{
-					$object = app($class);
-
-					$list->put($object->getKey(), $object);
-				}
-			}
-			catch (\Exception $e)
-			{
-				throw new \RuntimeException('Failed to get setting. Error: ' . $e->getMessage());
-			}
-		}
-
-		return $list;
+		return $this->getValue('telenok.repository.setting', 'setting', $flush);
 	}
 
 	public function getObjectFieldController($flush = false)
 	{
-		static $list = null;
-
-		if ($list === null || $flush)
-		{
-			try
-			{
-				$collection = \Illuminate\Support\Collection::make();
-
-				\Event::fire('telenok.repository.objects-field', $collection);
-
-				$list = \Illuminate\Support\Collection::make();
-
-				foreach ($collection as $class)
-				{
-					$object = app($class);
-
-					$list->put($object->getKey(), $object);
-				}
-			}
-			catch (\Exception $e)
-			{
-				throw new \RuntimeException('Failed to get field. Error: ' . $e->getMessage());
-			}
-		}
-		
-		return $list;
+		return $this->getValue('telenok.repository.objects-field', 'objects-field', $flush);
 	}
 
 	public function getObjectFieldViewModel($flush = false)

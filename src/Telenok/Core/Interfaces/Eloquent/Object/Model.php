@@ -722,7 +722,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		if (empty($subjectCode))
 		{
-			if (\Auth::guest())
+			if (app('auth')->guest())
 			{
 				$subject = \App\Telenok\Core\Model\Security\Resource::where('code', 'user_unauthorized')->active()->first();
 			}

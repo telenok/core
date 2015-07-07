@@ -2,13 +2,23 @@
 
 abstract class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\Support\IRequest {
 
-    use \Telenok\Core\Support\Language\Load;
+    use \Telenok\Core\Support\Traits\Language;
     use \Illuminate\Foundation\Bus\DispatchesCommands;
 
     protected $key = '';
-    protected $package = '';
     protected $request; 
 
+    public function callAction($method, $parameters)
+	{
+		app('view')->composer('*', function($view)
+		{
+			$view->with(['controllerAction' => $this]);
+		});
+		
+		return parent::callAction($method, $parameters);
+	}
+	
+	
     public function getName()
     {
         return $this->LL('name');

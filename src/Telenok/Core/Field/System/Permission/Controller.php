@@ -96,7 +96,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         $this->setViewModel($field);
 
 		return view($this->getViewModel(), array(
-					'parentController' => $controller,
+					'controllerParent' => $controller,
 					'controller' => $this,
 					'model' => $model,
 					'field' => $field,

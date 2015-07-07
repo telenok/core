@@ -2,8 +2,12 @@
 
 abstract class PackageInfo {
 
+    use \Telenok\Core\Support\Traits\Language;
+
 	protected $key;
-	protected $version;
+	protected $baseClass;
+	protected $versionPackage;
+	protected $versionTelenok;
 	protected $title;
 	protected $description;
 	protected $image;
@@ -29,7 +33,7 @@ abstract class PackageInfo {
 
 	public function getTitle()
 	{
-		return $this->title ?: $this->LL("{$this->getKey()}::package.title");
+		return $this->title ?: $this->LL('title');
 	}
 
 	public function setDescription($param = '')
@@ -41,7 +45,7 @@ abstract class PackageInfo {
 
 	public function getDescription()
 	{
-		return $this->description ?: $this->LL("{$this->getKey()}::package.description");
+		return $this->description ?: $this->LL("description");
 	}
 
 	public function setImage($param = '')
@@ -54,5 +58,17 @@ abstract class PackageInfo {
 	public function getImage()
 	{
 		return $this->image;
+	}
+	
+	public function getBaseClass()
+	{
+		return $this->baseClass;
+	}
+	
+	public function setBaseClass($param)
+	{
+		$this->baseClass = $param;
+		
+		return $this;
 	}
 }

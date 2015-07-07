@@ -1,56 +1,10 @@
 <?php
 
-if (\Request::is('telenok', 'telenok/*'))
-{
-	\Route::filter('control-panel', '\App\Telenok\Core\Filter\Router\Backend\ControlPanel@filter');
-	\Route::whenRegex('/telenok.*/', 'control-panel');
+	\Route::get('html/form/create', array('as' => 'cmf.html.form.create', 'uses' => "Telenok\Core\Html\Form\Controller@create"));
+	\Route::get('html/form/createProcess', array('as' => 'cmf.html.form.create', 'uses' => "Telenok\Core\Html\Form\Controller@createProcess"));
+	\Route::get('html/form/update', array('as' => 'cmf.html.form.update', 'uses' => "Telenok\Core\Html\Form\Controller@updateProcess"));
 
-	\Route::get('telenok', array('as' => 'cmf.content', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@getContent"));
-	\Route::get('telenok/error', array('as' => 'error.access-denied', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@errorAccessDenied"));
-	\Route::get('telenok/update/csrf', array('as' => 'cmf.update.csrf', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@updateCsrf"));
 
-	// Update user's UI setting
-	\Route::post('telenok/user/update/ui-setting', array('as' => 'cmf.user.update.ui-setting', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@updateBackendUISetting"));
-
-	// Fields
-	\Route::get('telenok/field/relation-one-to-one/list/title/type/{id}', array('as' => 'cmf.field.relation-one-to-one.list.title', 'uses' => "\App\Telenok\Core\Field\RelationOneToOne\Controller@getTitleList"));
-
-	\Route::get('telenok/field/relation-one-to-many/list/title/type/{id}', array('as' => 'cmf.field.relation-one-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\RelationOneToMany\Controller@getTitleList"));
-	\Route::get('telenok/field/relation-one-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.relation-one-to-many.list.table', 'uses' => "\App\Telenok\Core\Field\RelationOneToMany\Controller@getTableList"));
-
-	\Route::get('telenok/field/relation-many-to-many/list/title/type/{id}', array('as' => 'cmf.field.relation-many-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\RelationManyToMany\Controller@getTitleList"));
-	\Route::get('telenok/field/relation-many-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.relation-many-to-many.list.table', 'uses' => "\App\Telenok\Core\Field\RelationManyToMany\Controller@getTableList"));
-
-	\Route::get('telenok/field/tree/list/title/type/{id}', array('as' => 'cmf.field.tree.list.title', 'uses' => "\App\Telenok\Core\Field\System\Tree\Controller@getTitleList"));
-	\Route::get('telenok/field/tree/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.tree.list.table', 'uses' => "\App\Telenok\Core\Field\System\Tree\Controller@getTableList"));
-
-	\Route::get('telenok/field/morph-many-to-many/list/title/type/{id}', array('as' => 'cmf.field.morph-many-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\MorphManyToMany\Controller@getTitleList"));
-	\Route::get('telenok/field/morph-many-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.morph-many-to-many.list.table', 'uses' => "\App\Telenok\Core\Field\MorphManyToMany\Controller@getTableList"));
-
-	\Route::get('telenok/field/morph-one-to-many/list/title/type/{id}', array('as' => 'cmf.field.morph-one-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\MorphOneToMany\Controller@getTitleList"));
-	\Route::get('telenok/field/morph-one-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.morph-one-to-many.list.table', 'uses' => "\App\Telenok\Core\Field\MorphOneToMany\Controller@getTableList"));
-
-	\Route::get('telenok/field/morph-one-to-one/list/title/type/{id}', array('as' => 'cmf.field.morph-one-to-one.list.title', 'uses' => "\App\Telenok\Core\Field\MorphOneToOne\Controller@getTitleList"));
-
-	\Route::get('telenok/field/permission/list/title', array('as' => 'cmf.field.permission.list.title', 'uses' => "\App\Telenok\Core\Field\System\Permission\Controller@getTitleList"));
-
-	\Route::post('telenok/field/file-many-to-many/upload', array('as' => 'cmf.field.file-many-to-many.upload', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@upload"));
-
-	// Module Dashboard 
-	\Route::get('telenok/module/dashboard', array('as' => 'cmf.module.dashboard', 'uses' => "App\Telenok\Core\Module\Dashboard\Controller@getContent"));
-
-	// Module Profile
-	\Route::get('telenok/module/users-profile-edit/action-param', array('as' => 'cmf.module.users-profile-edit.action.param', 'uses' => "App\Telenok\Core\Module\Users\ProfileEdit\Controller@getActionParam"));
-	\Route::get('telenok/module/users-profile-edit', array('as' => 'cmf.module.users-profile-edit', 'uses' => "App\Telenok\Core\Module\Users\ProfileEdit\Controller@getContent"));
-	\Route::post('telenok/module/users-profile-edit/update', array('as' => 'cmf.module.users-profile-edit.update', 'uses' => "App\Telenok\Core\Module\Users\ProfileEdit\Controller@update"));
-
-	// Module Objects\Type
-	\Route::get('telenok/module/objects-type/action-param', array('as' => 'cmf.module.objects-type.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Type\Controller@getActionParam"));
-
-	// Module Objects\Sequence
-	\Route::get('telenok/module/objects-sequence/action-param', array('as' => 'cmf.module.objects-sequence.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Sequence\Controller@getActionParam"));
-	\Route::get('telenok/module/objects-sequence', array('as' => 'cmf.module.objects-sequence', 'uses' => "App\Telenok\Core\Module\Objects\Sequence\Controller@getContent"));
-	\Route::get('telenok/module/objects-sequence/list', array('as' => 'cmf.module.objects-sequence.list', 'uses' => "App\Telenok\Core\Module\Objects\Sequence\Controller@getList"));
 
 	// Module Objects\Lists
 	\Route::get('telenok/module/objects-lists/action-param', array('as' => 'cmf.module.objects-lists.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@getActionParam"));
@@ -75,6 +29,57 @@ if (\Request::is('telenok', 'telenok/*'))
 	\Route::post('telenok/module/objects-lists/wizard/delete/{id}', array('as' => 'cmf.module.objects-lists.wizard.delete', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@delete"));
 	\Route::get('telenok/module/objects-lists/wizard/choose', array('as' => 'cmf.module.objects-lists.wizard.choose', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@choose"));
 	\Route::get('telenok/module/objects-lists/wizard/list', array('as' => 'cmf.module.objects-lists.wizard.list', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@getWizardList"));
+
+
+	// Fields
+	\Route::get('telenok/field/relation-one-to-one/list/title/type/{id}', array('as' => 'cmf.field.relation-one-to-one.list.title', 'uses' => "\App\Telenok\Core\Field\RelationOneToOne\Controller@getTitleList"));
+
+	\Route::get('telenok/field/relation-one-to-many/list/title/type/{id}', array('as' => 'cmf.field.relation-one-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\RelationOneToMany\Controller@getTitleList"));
+	\Route::get('telenok/field/relation-one-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.relation-one-to-many.list.table', 'uses' => "\App\Telenok\Core\Field\RelationOneToMany\Controller@getTableList"));
+
+	\Route::get('telenok/field/relation-many-to-many/list/title/type/{id}', array('as' => 'cmf.field.relation-many-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\RelationManyToMany\Controller@getTitleList"));
+	\Route::get('telenok/field/relation-many-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.relation-many-to-many.list.table', 'uses' => "\App\Telenok\Core\Field\RelationManyToMany\Controller@getTableList"));
+
+	\Route::get('telenok/field/tree/list/title/type/{id}', array('as' => 'cmf.field.tree.list.title', 'uses' => "\App\Telenok\Core\Field\System\Tree\Controller@getTitleList"));
+	\Route::get('telenok/field/tree/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.tree.list.table', 'uses' => "\App\Telenok\Core\Field\System\Tree\Controller@getTableList"));
+
+	\Route::get('telenok/field/morph-many-to-many/list/title/type/{id}', array('as' => 'cmf.field.morph-many-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\MorphManyToMany\Controller@getTitleList"));
+	\Route::get('telenok/field/morph-many-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.morph-many-to-many.list.table', 'uses' => "\App\Telenok\Core\Field\MorphManyToMany\Controller@getTableList"));
+
+	\Route::get('telenok/field/morph-one-to-many/list/title/type/{id}', array('as' => 'cmf.field.morph-one-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\MorphOneToMany\Controller@getTitleList"));
+	\Route::get('telenok/field/morph-one-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.morph-one-to-many.list.table', 'uses' => "\App\Telenok\Core\Field\MorphOneToMany\Controller@getTableList"));
+
+	\Route::get('telenok/field/morph-one-to-one/list/title/type/{id}', array('as' => 'cmf.field.morph-one-to-one.list.title', 'uses' => "\App\Telenok\Core\Field\MorphOneToOne\Controller@getTitleList"));
+
+	\Route::get('telenok/field/permission/list/title', array('as' => 'cmf.field.permission.list.title', 'uses' => "\App\Telenok\Core\Field\System\Permission\Controller@getTitleList"));
+
+	\Route::post('telenok/field/file-many-to-many/upload', array('as' => 'cmf.field.file-many-to-many.upload', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@upload"));
+ 
+	\Route::filter('control-panel', '\App\Telenok\Core\Filter\Router\Backend\ControlPanel@filter');
+	\Route::whenRegex('/telenok.*/', 'control-panel');
+
+	\Route::get('telenok', array('as' => 'cmf.content', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@getContent"));
+	\Route::get('telenok/error', array('as' => 'error.access-denied', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@errorAccessDenied"));
+	\Route::get('telenok/update/csrf', array('as' => 'cmf.update.csrf', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@updateCsrf"));
+
+	// Update user's UI setting
+	\Route::post('telenok/user/update/ui-setting', array('as' => 'cmf.user.update.ui-setting', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@updateBackendUISetting"));
+
+	// Module Dashboard 
+	\Route::get('telenok/module/dashboard', array('as' => 'cmf.module.dashboard', 'uses' => "App\Telenok\Core\Module\Dashboard\Controller@getContent"));
+
+	// Module Profile
+	\Route::get('telenok/module/users-profile-edit/action-param', array('as' => 'cmf.module.users-profile-edit.action.param', 'uses' => "App\Telenok\Core\Module\Users\ProfileEdit\Controller@getActionParam"));
+	\Route::get('telenok/module/users-profile-edit', array('as' => 'cmf.module.users-profile-edit', 'uses' => "App\Telenok\Core\Module\Users\ProfileEdit\Controller@getContent"));
+	\Route::post('telenok/module/users-profile-edit/update', array('as' => 'cmf.module.users-profile-edit.update', 'uses' => "App\Telenok\Core\Module\Users\ProfileEdit\Controller@update"));
+
+	// Module Objects\Type
+	\Route::get('telenok/module/objects-type/action-param', array('as' => 'cmf.module.objects-type.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Type\Controller@getActionParam"));
+
+	// Module Objects\Sequence
+	\Route::get('telenok/module/objects-sequence/action-param', array('as' => 'cmf.module.objects-sequence.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Sequence\Controller@getActionParam"));
+	\Route::get('telenok/module/objects-sequence', array('as' => 'cmf.module.objects-sequence', 'uses' => "App\Telenok\Core\Module\Objects\Sequence\Controller@getContent"));
+	\Route::get('telenok/module/objects-sequence/list', array('as' => 'cmf.module.objects-sequence.list', 'uses' => "App\Telenok\Core\Module\Objects\Sequence\Controller@getList"));
 
 	// Module Objects\Version
 	\Route::get('telenok/module/objects-version/action-param', array('as' => 'cmf.module.objects-version.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Version\Controller@getActionParam"));
@@ -137,9 +142,6 @@ if (\Request::is('telenok', 'telenok/*'))
 	\Route::get('telenok/module/packages/installer-manager/action-param', array('as' => 'cmf.module.installer-manager.action.param', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getActionParam"));
 	\Route::get('telenok/module/packages/installer-manager', array('as' => 'cmf.module.installer-manager', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getContent"));
 	\Route::get('telenok/module/packages/installer-manager/list', array('as' => 'cmf.module.installer-manager.list', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getList"));
-	\Route::post('telenok/module/packages/installer-manager/install', array('as' => 'cmf.module.installer-manager.install', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@install"));
+	\Route::any('telenok/module/packages/installer-manager/install', array('as' => 'cmf.module.installer-manager.install', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@install"));
 	\Route::post('telenok/module/packages/installer-manager/update', array('as' => 'cmf.module.installer-manager.update', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@update"));
 	\Route::post('telenok/module/packages/installer-manager/delete', array('as' => 'cmf.module.installer-manager.delete', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@delete"));
-
-	
-}

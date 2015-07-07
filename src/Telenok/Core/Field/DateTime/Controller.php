@@ -12,8 +12,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     public function getDateField($model, $field)
     { 
 		return [$field->code];
-    } 
-    
+    }
+
     public function getListFieldContent($field, $item, $type = null)
     {  
         return (string)$item->{$field->code};
@@ -28,7 +28,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
         return parent::setModelAttribute($model, $key, $value, $field);
     }
-    
+
     public function getModelSpecialAttribute($model, $key, $value)
     {
         try
@@ -47,7 +47,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             return null;
         }
     }
-    
+
     public function getFilterContent($field = null)
     {
         return view($this->getViewFilter(), [

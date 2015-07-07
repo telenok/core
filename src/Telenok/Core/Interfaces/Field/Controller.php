@@ -19,23 +19,43 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	public function getViewModel()
 	{
-		return $this->viewModel ? : "core::field.{$this->getKey()}.model";
+		return $this->viewModel ? : "{$this->getPackage()}::field.{$this->getKey()}.model";
 	}
 
-	public function getViewFilter()
+	public function setViewModel($field = null, $templateView = null, $templateKey = null)
 	{
-		return $this->viewFilter ? : "core::field.{$this->getKey()}.filter";
-	}
+		$viewObj = app('view');  
 
-	public function setViewModel($field = null)
-	{
-		if ($field && $field->field_view)
+		$fieldView = '';
+		$defaultTemplate = "{$this->getPackage()}::field.{$this->getKey()}.model";
+
+		if ($field instanceof \Telenok\Core\Model\Object\Field && $viewObj->exists($field->field_view))
 		{
-			$this->viewModel = $field->field_view;
+			$fieldView = $field->field_view;
+		}
+		
+		if ($templateView && $viewObj->exists($templateView))
+		{
+			$this->viewModel = $templateView;
+		}
+		else if ($templateKey && $viewObj->exists($t = ($fieldView ?: $defaultTemplate) . '-' . $templateKey))
+		{
+			$this->viewModel = $t;
+		}
+		else if ($fieldView)
+		{
+			$this->viewModel = $fieldView;
+		}
+		else if ($viewObj->exists($this->viewModel))
+		{
+		}
+		else if ($viewObj->exists($defaultTemplate))
+		{
+			$this->viewModel = $defaultTemplate;
 		}
 		else
 		{
-			$this->viewModel = $this->viewModel ? : "core::field.{$this->getKey()}.model";
+			throw new \Exception('Please set view for field "' . $this->getKey() . '"');
 		}
 
 		return $this;
@@ -44,6 +64,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	public function getViewField()
 	{
 		return $this->viewField ? : "core::field.{$this->getKey()}.field";
+	}
+
+	public function getViewFilter()
+	{
+		return $this->viewFilter ? : "core::field.{$this->getKey()}.filter";
 	}
 
 	public function getRouteListTable()
@@ -136,10 +161,10 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
-		$this->setViewModel($field);
+		$this->setViewModel($field, $controller->getFieldTemplateView($field), $controller->getFieldTemplateKey($field));
 
-		return view($this->getViewModel(), array(
-					'parentController' => $controller,
+		return view($this->getViewModel(), [
+					'controllerParent' => $controller,
 					'controller' => $this,
 					'model' => $model,
 					'field' => $field,
@@ -148,7 +173,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 					'permissionDelete' => \Auth::can('delete', 'object_field.' . $model->getTable() . '.' . $field->code),
 					'displayLength' => $this->displayLength,
 					'uniqueId' => $uniqueId,
-				))->render();
+				])->render();
 	}
 
 	/**

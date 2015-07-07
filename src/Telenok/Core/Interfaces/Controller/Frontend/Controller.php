@@ -145,32 +145,16 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		return $this;
 	}
 
-	public function getHeader()
+	public function getJsFile()
 	{
-		$header = '';
-
-		foreach ($this->cssFilePath as $file)
-		{
-			$header .= \HTML::style($file);
-		}
-
-		foreach ($this->cssCode as $code)
-		{
-			$header .= "<style>{$code}</style>";
-		}
-
-		foreach ($this->jsFilePath as $file)
-		{
-			$header .= \HTML::script($file);
-		}
-
-		foreach ($this->jsCode as $code)
-		{
-			$header .= "<script type='text/javascript'>{$code}</script>";
-		}
-
-		return $header;
+		return $this->jsFilePath;
 	}
+
+	public function getJsCode()
+	{
+		return $this->jsCode;
+	}
+	
 
 	public function getName()
 	{

@@ -27,8 +27,8 @@
 ?>
 
 <div class="form-group">
-	{!! Form::label("{$field->code}", $field->translate('title'), array('class' => 'col-sm-3 control-label no-padding-right')) !!}
-	<div class="col-sm-9">
+	{!! Form::label("{$field->code}", $field->translate('title'), array('class' => 'col-xs-2 control-label text-right')) !!}
+	<div class="col-sm-10">
         <div>
             <div class="control-group">
 
@@ -37,14 +37,18 @@
                 <?php
 
                     $checked = ($model->exists && strcmp($k, $model->{$field->code}) === 0) || (!$model->exists && strcmp($k, $default) === 0) ? 1 : 0;
- 
-					$domAttr['id'] .= '-' . $k;
 
                 ?>
 
                 <div class="radio">
                     <label>
 
+						<?php
+
+						$domAttr['id'] .= '-' . $k;
+
+						?>
+						
                         {!! Form::radio($field->code, $k, $checked, $domAttr) !!}
 
                         <span class="lbl"> {{$v}}</span>

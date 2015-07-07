@@ -47,7 +47,10 @@ class CoreServiceProvider extends ServiceProvider {
 				\Event::fire('telenok.compile.route');
 			}
 
-			include $routersPath;
+			if (!$this->app->routesAreCached())
+			{
+				include $routersPath;
+			}
 		}
 	}
 
