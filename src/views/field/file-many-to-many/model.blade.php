@@ -5,7 +5,7 @@
 
 	$disabledCreateFile = false;  
 	
-	if (!\Auth::can('create', 'object_type.file'))
+	if (!app('auth')->can('create', 'object_type.file'))
 	{
 		$disabledCreateFile = true;
 	} 

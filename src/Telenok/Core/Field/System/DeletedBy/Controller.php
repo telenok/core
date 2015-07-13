@@ -31,7 +31,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     { 
 		if ($key == 'deleted_by_user' && $value === null)
 		{
-			$value = \Auth::check() ? \Auth::user()->id : 0; 
+			$value = app('auth')->check() ? app('auth')->user()->id : 0; 
 		} 
 		else if ($key == 'deleted_at' && $value === null)
 		{

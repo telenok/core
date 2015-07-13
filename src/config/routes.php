@@ -1,9 +1,8 @@
 <?php
 
-	\Route::get('html/form/create', array('as' => 'cmf.html.form.create', 'uses' => "Telenok\Core\Html\Form\Controller@create"));
-	\Route::get('html/form/createProcess', array('as' => 'cmf.html.form.create', 'uses' => "Telenok\Core\Html\Form\Controller@createProcess"));
-	\Route::get('html/form/update', array('as' => 'cmf.html.form.update', 'uses' => "Telenok\Core\Html\Form\Controller@updateProcess"));
-
+	\Route::post('html/form/store/{typeId}', array('as' => 'cmf.html.form.store', 'uses' => "Telenok\Core\Html\Form\Controller@store"));
+	\Route::post('html/form/update/{id}', array('as' => 'cmf.html.form.update', 'uses' => "Telenok\Core\Html\Form\Controller@update"));
+	\Route::post('html/form/delete/{id}', array('as' => 'cmf.html.form.delete', 'uses' => "Telenok\Core\Html\Form\Controller@delete"));
 
 
 	// Module Objects\Lists

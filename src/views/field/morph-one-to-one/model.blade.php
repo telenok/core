@@ -19,7 +19,7 @@
 
 	$linkedType = $controller->getLinkedModelType($field);
 
-	if (!\Auth::can('create', 'object_type.' . $linkedType->code) && $field->morph_one_to_one_has)
+	if (!app('auth')->can('create', 'object_type.' . $linkedType->code) && $field->morph_one_to_one_has)
 	{
 		$disabledCreateLinkedType = true;
 	}

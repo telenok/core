@@ -36,6 +36,7 @@
     $random = str_random();
 	
 	$controllerAction->addCssFile(asset('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.css'));
+	$controllerAction->addJsFile(asset('packages/telenok/core/js/bootstrap/lib/moment.js'));
 	$controllerAction->addJsFile(asset('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.js'));
 
 ?>
@@ -79,25 +80,34 @@
     </div>
 </div>
 
+<?php 
+$jsCode = <<<EOF
 <script type="text/javascript">
-	jQuery("#datetime-picker-time-start-{{$random}}, #datetime-picker-time-end-{{$random}}")
-    .not('.datetime-picker-added').addClass('datetime-picker-added')
-    .datetimepicker(
-	{
-        format: 'YYYY-MM-DD HH:mm:ss',
-        useSeconds: true,
-		pick12HourFormat: false,
-		autoclose: true,
-		minuteStep: 1,
-        useCurrent: true
+	jQuery(function(){
+		jQuery("#datetime-picker-time-start-$random, #datetime-picker-time-end-$random")
+		.not(".datetime-picker-added").addClass("datetime-picker-added")
+		.datetimepicker(
+		{
+			format: "YYYY-MM-DD HH:mm:ss",
+			useSeconds: true,
+			pick12HourFormat: false,
+			autoclose: true,
+			minuteStep: 1,
+			useCurrent: true
+		});
+
+		jQuery("#datetime-picker-time-start-$random").on("dp.change",function (e) {
+			jQuery("#datetime-picker-time-end-$random").data("DateTimePicker").setMinDate(e.date);
+		});
+
+		jQuery("#datetime-picker-time-end-$random").on("dp.change",function (e) {
+			jQuery("#datetime-picker-time-start-$random").data("DateTimePicker").setMaxDate(e.date);
+		});
 	});
-    
-    jQuery("#datetime-picker-time-start-{{$random}}").on("dp.change",function (e) {
-        jQuery('#datetime-picker-time-end-{{$random}}').data("DateTimePicker").setMinDate(e.date);
-    });
-    
-    jQuery("#datetime-picker-time-end-{{$random}}").on("dp.change",function (e) {
-        jQuery('#datetime-picker-time-start-{{$random}}').data("DateTimePicker").setMaxDate(e.date);
-    });
 </script>
+EOF;
+		
+$controllerAction->addJsCode($jsCode); 
+
+?>
  

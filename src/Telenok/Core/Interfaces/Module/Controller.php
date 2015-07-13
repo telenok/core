@@ -16,9 +16,9 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		{
 			$this->beforeFilter(function()
 			{
-				if (!\Auth::can('read', $this->getPermissionKey()))
+				if (!app('auth')->can('read', $this->getPermissionKey()))
 				{
-					return \Redirect::route('error.access-denied');
+					return app('redirect')->route('error.access-denied');
 				}
 			});
 		}

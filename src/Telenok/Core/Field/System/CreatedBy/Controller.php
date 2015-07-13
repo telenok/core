@@ -31,7 +31,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     { 
 		if ($key == 'created_by_user' && $value === null)
 		{
-			$value = \Auth::check() ? \Auth::user()->id : 0; 
+			$value = app('auth')->check() ? app('auth')->user()->id : 0; 
 		} 
 		else if ($key == 'created_at' && $value === null)
 		{

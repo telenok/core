@@ -23,7 +23,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
         $collection->put('content', '<a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
                 <img class="nav-user-photo" src="' . (app('auth')->user()->avatar_path ?: 'packages/telenok/core/image/anonym.png') . '" alt="Anonym">
                 <span id="user_info">
-                     ' . $this->LL('welcome', ['username' => \Auth::user()->username]) . '
+                     ' . $this->LL('welcome', ['username' => app('auth')->user()->username]) . '
                 </span>
                 <i class="fa fa-caret-down"></i>
             </a>');

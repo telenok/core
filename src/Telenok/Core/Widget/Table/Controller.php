@@ -256,7 +256,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 
 			\App\Telenok\Core\Model\Web\WidgetOnPage::where("container", $container)->get()->each(function($item) use ($widgetOnPage, $buffer, $newContainres, $key)
 			{
-				$buffer = \App\Telenok\Core\Model\System\Buffer::addBuffer(\Auth::user()->getKey(), $item->getKey(), 'web-page', $buffer->key);
+				$buffer = \App\Telenok\Core\Model\System\Buffer::addBuffer(app('auth')->user()->getKey(), $item->getKey(), 'web-page', $buffer->key);
 				
 				$widget = app('telenok.config.repository')->getWidget()->get($item->key);
 				

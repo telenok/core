@@ -120,7 +120,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 	{
 		$widget = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
 
-		$buffer = \App\Telenok\Core\Model\System\Buffer::addBuffer(\Auth::user()->getKey(), $widget->getKey(), 'web-page', $key);
+		$buffer = \App\Telenok\Core\Model\System\Buffer::addBuffer(app('auth')->user()->getKey(), $widget->getKey(), 'web-page', $key);
 
 		return ['widget' => $widget, 'buffer' => $buffer];
 	}

@@ -275,7 +275,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
                 'fields' => $eventResource->get('fields'), 
                 'uniqueId' => str_random(), 
 				'routerParam' => $this->getRouterParam('create', $eventResource->get('type'), $eventResource->get('model')),
-				'canCreate' => \Auth::can('create', $eventResource->get('model')), 
+				'canCreate' => app('auth')->can('create', $eventResource->get('model')), 
             ], $this->getAdditionalViewParam()))->render()
         ];
     }
@@ -305,8 +305,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
 				'fields' => $eventResource->get('fields'), 
 				'uniqueId' => str_random(), 
 				'routerParam' => $this->getRouterParam('edit', $eventResource->get('type'), $eventResource->get('model')),
-				'canUpdate' => \Auth::can('update', $eventResource->get('model')),
-				'canDelete' => \Auth::can('delete', $eventResource->get('model')),
+				'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
+				'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
             ), $this->getAdditionalViewParam()))->render()
         ];
     }
@@ -343,8 +343,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
                     'success' => true,
                     'warning' => \Session::get('warning'),
 					'routerParam' => $this->getRouterParam('store', $eventResource->get('type'), $eventResource->get('model')),
-					'canUpdate' => \Auth::can('update', $eventResource->get('model')),
-					'canDelete' => \Auth::can('delete', $eventResource->get('model')),
+					'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
+					'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
                 ), $this->getAdditionalViewParam()))->render();
 
         return $return;
@@ -382,8 +382,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
                     'success' => TRUE,
                     'warning' => \Session::get('warning'),
 					'routerParam' => $this->getRouterParam('update', $eventResource->get('type'), $eventResource->get('model')),
-					'canUpdate' => \Auth::can('update', $eventResource->get('model')),
-					'canDelete' => \Auth::can('delete', $eventResource->get('model')),
+					'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
+					'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
                 ), $this->getAdditionalViewParam()))->render();
 
         return $return;
@@ -431,8 +431,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
                 'fields' => $eventResource->get('fields'), 
 				'routerParam' => $this->getRouterParam('edit', $eventResource->get('type'), $eventResource->get('model')),
                 'uniqueId' => str_random(), 
-				'canUpdate' => \Auth::can('update', $eventResource->get('model')),
-				'canDelete' => \Auth::can('delete', $eventResource->get('model')),
+				'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
+				'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
             ), $this->getAdditionalViewParam()))->render();
         }
 

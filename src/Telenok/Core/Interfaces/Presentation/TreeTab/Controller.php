@@ -679,7 +679,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
                     </button>']);
         
         $collection->put('locked', ['order' => 3000, 'content' => '<button class="btn btn-minier btn-light" onclick="return false;" title="' . $this->LL('list.btn.' . ($item->locked() ? 'locked' : 'unlocked')) . '">
-                        <i class="fa fa-' . ($item->locked() ? 'lock ' . (\Auth::user()->id == $item->locked_by_user ? 'green' : 'red') : 'unlock green'). '"></i>
+                        <i class="fa fa-' . ($item->locked() ? 'lock ' . (app('auth')->user()->id == $item->locked_by_user ? 'green' : 'red') : 'unlock green'). '"></i>
                     </button>']);
         
         $collection->put('deleted', ['order' => 4000, 'content' => '<button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
@@ -959,7 +959,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 		
 		try
 		{
-			$userId = \Auth::user()->id;
+			$userId = app('auth')->user()->id;
 			
 			foreach($tableCheckAll as $id)
 			{

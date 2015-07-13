@@ -94,7 +94,7 @@ class Acl
         
         if ($id === null)
         {
-            $user = \Auth::user();
+            $user = app('auth')->user();
         }
         else if ($id instanceof \Telenok\Core\Model\User\User)
         {

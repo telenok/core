@@ -10,7 +10,7 @@
 
 	$linkedType = $controller->getLinkedModelType($field);
 
-	if (!\Auth::can('create', 'object_type.' . $linkedType->code))
+	if (!app('auth')->can('create', 'object_type.' . $linkedType->code))
 	{
 		$disabledCreateLinkedType = true;
 	}

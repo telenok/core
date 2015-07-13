@@ -62,7 +62,7 @@
 	@section('lockedContainer')
 	@if ($model->locked())
     <div>
-		@if (\Auth::check() && \Auth::user()->id != $model->lockedByUser->id)
+		@if (app('auth')->check() && app('auth')->user()->id != $model->lockedByUser->id)
 		<div class="alert alert-danger">{{$controller->LL('notice.locked', ['at' => $model->locked_at, 'by' => $model->lockedByUser->username])}}<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>
 		@endif
 	</div>

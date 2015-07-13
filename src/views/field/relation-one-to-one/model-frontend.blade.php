@@ -5,27 +5,27 @@
 	$values = [];
 
     $domAttr = [
-		'id' => 'relation-many-to-many-' . $jsUnique,
+		'id' => 'relation-one-to-one-' . $jsUnique,
 		'class' => 'chosen',
-		'multiple' => 'multiple',
 		'data-placeholder' => e($controller->LL('notice.choose')),
 	];
-	
+
 	if ( (!$model->exists && (!$field->allow_create || !$permissionCreate)) || ($model->exists && (!$field->allow_update || !$permissionUpdate)) )
     {
         $domAttr['disabled'] = 'disabled';
         $disabled = true; 
     }
 
-	if ($v = \App\Telenok\Core\Model\Object\Sequence::where('sequences_object_type', $field->relation_many_to_many_has?:$field->relation_many_to_many_belong_to)->take(20)->get())
+	if ($v = \App\Telenok\Core\Model\Object\Sequence::where('sequences_object_type', $field->relation_one_to_one_has?:$field->relation_one_to_one_belong_to)->take(20)->get())
 	{
 		$values = $v->transform(function($item)
 		{
 			return ['id' => $item->id, 'value' => $item->translate('title')];
-		})->lists('value', 'id');
+		})->lists('value', 'id')->toArray();
 	}
-	
+
 	$values = ['&nbsp;'] + $values;
+
 ?>
 
 <div class="form-group">
@@ -42,8 +42,8 @@
             @else
 		<div>
             @endif	
-            
-            {!! Form::select($field->code . '[]', $values, $model->exists ? $model->{$field->code}->keys() : [], $domAttr) !!}
+
+            {!! Form::select($field->code, $values, $model->exists ? $model->{$field->code} : 0, $domAttr) !!}
 
 			<?php
 
@@ -58,11 +58,11 @@
 
 				jQuery(function()
 				{
-					jQuery("#relation-many-to-many-{{ $jsUnique }}").ajaxChosen({ 
+					jQuery("#relation-one-to-one-{{ $jsUnique }}").ajaxChosen({ 
 						keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
 						lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
 						type: "GET",
-						url: "{!! URL::route("cmf.field.relation-many-to-many.list.title", ['id' => $field->relation_many_to_many_has ?: $field->relation_many_to_many_belong_to]) !!}", 
+						url: "{!! URL::route("cmf.field.relation-one-to-one.list.title", ['id' => $field->relation_one_to_one_has ?: $field->relation_one_to_one_belong_to]) !!}", 
 						dataType: "json",
 						minTermLength: 1
 					}, 

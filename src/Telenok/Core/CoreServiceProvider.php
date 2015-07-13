@@ -24,7 +24,7 @@ class CoreServiceProvider extends ServiceProvider {
 		$this->commands('command.telenok.install');
 		$this->commands('command.telenok.seed');
 
-		\Auth::extend('custom', function()
+		app('auth')->extend('custom', function()
 		{
 			return new \App\Telenok\Core\Security\Guard(
 					new \App\Telenok\Core\Security\UserProvider($this->app['hash'], $this->app['config']['auth.model']), $this->app['session.store']

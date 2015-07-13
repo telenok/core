@@ -46,7 +46,7 @@
 				@endforeach
 
 			</ul>
-			<div class="tab-content">
+			<div class="tab-content" style="overflow: visible;">
 				<?php 
 
 					$domAttr['class'] = $field->css_class?: 'col-xs-12 col-sm-12';
@@ -54,8 +54,7 @@
 
 				@foreach($languages as $language)
 				<div id="{{$jsUnique}}-language-{{$language->locale}}-{{$field->code}}" class="tab-pane @if ($language->locale == $localeDefault) active @endif">
-					<div class="">
-
+					<div class="form-group" style="margin-left: 0;">
 						@if ($field->icon_class)
 						<span class="input-group-addon">
 							<i class="{{ $field->icon_class }}"></i>
@@ -77,7 +76,6 @@
 						<span title="" data-content="{{ $field->translate('description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 
 							  class="help-button" data-original-title="{{trans('core::default.tooltip.description')}}">?</span>
 						@endif
-
 					</div>
 				</div>
 				@endforeach
@@ -108,25 +106,22 @@
             </span>
             @else
 		<div>
-            @endif	
-            
-            @if ($field->string_password)
-                <?php 
-                    $domAttr['autocomplete'] = "off";
-                ?>
-                {!! Form::password($field->code, $domAttr) !!}
-            @else
-                {!! Form::text($field->code, $model->translate($field->code), $domAttr) !!}
-            @endif 
+			@endif	
 
-            @if ($field->translate('description'))
-            <span title="" data-content="{{ $field->translate('description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 
-                  class="help-button" data-original-title="{{trans('core::default.tooltip.description')}}">?</span>
-            @endif
-            
-		</div>
+				@if ($field->string_password)
+					<?php 
+						$domAttr['autocomplete'] = "off";
+					?>
+					{!! Form::password($field->code, $domAttr) !!}
+				@else
+					{!! Form::text($field->code, $model->translate($field->code), $domAttr) !!}
+				@endif 
+
+				@if ($field->translate('description'))
+				<span title="" data-content="{{ $field->translate('description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 
+					  class="help-button" data-original-title="{{trans('core::default.tooltip.description')}}">?</span>
+				@endif
+		</div> 
 	</div> 
 </div>
 @endif
-
-

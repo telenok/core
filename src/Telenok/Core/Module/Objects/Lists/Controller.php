@@ -286,7 +286,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             }
             else 
             {
-                //$type = $this->getTypeByModelId($input->get('treeId', 0));
                 throw new \Exception();
             } 
 
@@ -310,7 +309,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 					$put[$field->code] = $config->get($field->key)->getListFieldContent($field, $item, $type);
                 }
 
-				$canDelete = \Auth::can('delete', $item);
+				$canDelete = app('auth')->can('delete', $item);
 
                 $put['tableManageItem'] = $this->getListButtonExtended($item, $type, $canDelete);
 
@@ -352,7 +351,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     </button>
 
                     <button class="btn btn-minier btn-light" onclick="return false;" title="' . $this->LL('list.btn.' . ($item->locked() ? 'locked' : 'unlocked')) . '">
-                        <i class="fa fa-' . ($item->locked() ? 'lock ' . (\Auth::user()->id == $item->locked_by_user ? 'green' : 'red') : 'unlock green'). '"></i>
+                        <i class="fa fa-' . ($item->locked() ? 'lock ' . (app('auth')->user()->id == $item->locked_by_user ? 'green' : 'red') : 'unlock green'). '"></i>
                     </button>
 
                     ' . ($canDelete ? '
@@ -374,7 +373,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $type = $this->getType($id);
         $fields = $model->getFieldForm();
 
-        if (!\Auth::can('create', "object_type.{$type->code}"))
+        if (!app('auth')->can('create', "object_type.{$type->code}"))
         {
             throw new \LogicException($this->LL('error.access'));
         } 
@@ -397,10 +396,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 					'controller' => $this,
 					'model' => $eventResource->get('model'), 
 					'type' => $eventResource->get('type'), 
-					'fields' => $eventResource->get('fields'), 
+					'fields' => $eventResource->get('fields'),
 					'uniqueId' => str_random(), 
 					'routerParam' => $this->getRouterParam('create', $eventResource->get('type'), $eventResource->get('model')),
-					'canCreate' => \Auth::can('create', "object_type.{$eventResource->get('type')->code}"),
+					'canCreate' => app('auth')->can('create', "object_type.{$eventResource->get('type')->code}"),
 				), $this->getAdditionalViewParam()))->render()
 			];
 		} 
@@ -422,7 +421,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $type = $this->getTypeByModelId($id);
         $fields = $model->getFieldForm();
 
-        if (!\Auth::can('read', $id))
+        if (!app('auth')->can('read', $id))
         {
             throw new \LogicException($this->LL('error.access'));
         }
@@ -450,8 +449,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 					'fields' => $eventResource->get('fields'), 
 					'uniqueId' => str_random(), 
 					'routerParam' => $this->getRouterParam('edit', $eventResource->get('type'), $eventResource->get('model')),
-					'canUpdate' => \Auth::can('update', $eventResource->get('model')),
-					'canDelete' => \Auth::can('delete', $eventResource->get('model')),
+					'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
+					'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
 				), $this->getAdditionalViewParam()))->render()
 			];
 		} 
@@ -468,7 +467,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $model = $this->getModel($id);
         $type = $this->getTypeByModelId($id);
 
-        if (!\Auth::can('delete', $id))
+        if (!app('auth')->can('delete', $id))
         {
             throw new \LogicException($this->LL('error.access'));
         }
@@ -517,7 +516,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         foreach ($ids as $id_)
         {
-			if (!\Auth::can('read', $id_))
+			if (!app('auth')->can('read', $id_))
 			{
 				continue;
 			}
@@ -539,8 +538,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'fields' => $eventResource->get('fields'), 
 					'routerParam' => $this->getRouterParam('edit', $eventResource->get('type'), $eventResource->get('model')),
                     'uniqueId' => str_random(), 
-					'canUpdate' => \Auth::can('update', $eventResource->get('model')),
-					'canDelete' => \Auth::can('delete', $eventResource->get('model')),
+					'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
+					'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
                 ), $this->getAdditionalViewParam()))->render();
             }
         }
@@ -563,7 +562,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $type = $this->getTypeByModelId($id);
 
-        if (!\Auth::can('delete', "object_type.{$type->code}"))
+        if (!app('auth')->can('delete', "object_type.{$type->code}"))
         {
             throw new \LogicException($this->LL('error.access'));
         }
@@ -578,7 +577,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 				foreach ($ids as $id_)
 				{
-			        if (!\Auth::can('delete', $id_))
+			        if (!app('auth')->can('delete', $id_))
 					{
 						$model::findOrFail($id_)->delete();
 					}
@@ -637,8 +636,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'success' => true,
                     'warning' => \Session::get('warning'),
 					'routerParam' => $this->getRouterParam('store', $eventResource->get('type'), $eventResource->get('model')),
-					'canUpdate' => \Auth::can('update', $eventResource->get('model')),
-					'canDelete' => \Auth::can('delete', $eventResource->get('model')),
+					'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
+					'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
                ), $this->getAdditionalViewParam()))->render();
 
         return $return;
@@ -681,8 +680,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'success' => true,
                     'warning' => \Session::get('warning'),
 					'routerParam' => $this->getRouterParam('update', $eventResource->get('type'), $eventResource->get('model')),
-					'canUpdate' => \Auth::can('update', $eventResource->get('model')),
-					'canDelete' => \Auth::can('delete', $eventResource->get('model')),
+					'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
+					'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
                 ), $this->getAdditionalViewParam()))->render();
 
         return $return;

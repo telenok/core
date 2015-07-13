@@ -219,7 +219,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			throw new \Exception("Telenok\Core\Interfaces\Eloquent\Object\Model::storeOrUpdate() - Error: 'type of object not found, please, define it'");
 		}
 
-		// if model filled via $model->fill() and plus ->storeOrUpdate([some attributes])
+		// merge attributes if model filled via $model->fill() and plus ->storeOrUpdate([some attributes])
 		$t = [];
 		
 		foreach($this->getAttributes() as $k => $v)
@@ -373,11 +373,11 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			$type = $this->type();
 		}
 
-		if (!$this->exists && !\Auth::can('create', "object_type.{$type->code}"))
+		if (!$this->exists && !app('auth')->can('create', "object_type.{$type->code}"))
 		{
 			throw new \LogicException('Cant create model with type "' . $type->code . '". Access denied.');
 		}
-		else if ($this->exists && !\Auth::can('update', $this->getKey()))
+		else if ($this->exists && !app('auth')->can('update', $this->getKey()))
 		{
 			throw new \LogicException('Cant update model with type "' . $type->code . '". Access denied.');
 		}
@@ -393,8 +393,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			{
 
 				if (
-						(!$this->exists && !\Auth::can('create', 'object_field.' . $type->code . '.' . $key)) ||
-						($this->exists && !\Auth::can('update', 'object_field.' . $type->code . '.' . $key))
+						(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key)) ||
+						($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key))
 				)
 				{
 					$input->forget($key);
@@ -404,8 +404,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			{
 				if ($this instanceof \Telenok\Core\Model\Object\Field && ($fieldController = $f_->get($this->key)) && (in_array($key, $fieldController->getSpecialField($this), true) || in_array($key, $fieldController->getSpecialDateField($this), true)) &&
 						(
-						(!$this->exists && !\Auth::can('create', 'object_type.object_field')) ||
-						($this->exists && !\Auth::can('update', $this->getKey()))
+						(!$this->exists && !app('auth')->can('create', 'object_type.object_field')) ||
+						($this->exists && !app('auth')->can('update', $this->getKey()))
 						)
 				)
 				{
@@ -419,8 +419,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 						if ($fieldController && (in_array($key, $fieldController->getModelField($this, $field_), true) || in_array($key, $fieldController->getDateField($this, $field_), true)) &&
 								(
-								(!$this->exists && !\Auth::can('create', 'object_field.' . $type->code . '.' . $key_)) ||
-								($this->exists && !\Auth::can('update', 'object_field.' . $type->code . '.' . $key_))
+								(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key_)) ||
+								($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key_))
 								)
 						)
 						{
@@ -534,7 +534,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		return $type->field()->active()->get()->filter(function($item) use ($type)
 				{
-					return $item->show_in_list == 1 && \Auth::can('read', 'object_field.' . $type->code . '.' . $item->code);
+					return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
 				});
 	}
 
@@ -544,7 +544,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		return $type->field()->active()->get()->filter(function($item) use ($type)
 				{
-					return $item->show_in_form == 1 && \Auth::can('read', 'object_field.' . $type->code . '.' . $item->code);
+					return $item->show_in_form == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
 				});
 	}
 
@@ -726,15 +726,15 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			{
 				$subject = \App\Telenok\Core\Model\Security\Resource::where('code', 'user_unauthorized')->active()->first();
 			}
-			else if (\Auth::check())
+			else if (app('auth')->check())
 			{
-				if (\Auth::hasRole('super_administrator'))
+				if (app('auth')->hasRole('super_administrator'))
 				{
 					return $query;
 				}
 				else
 				{
-					$subject = \Auth::user();
+					$subject = app('auth')->user();
 				}
 			}
 		}
@@ -1138,9 +1138,9 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		\DB::transaction(function() use ($period)
 		{
-			$user = \Auth::user();
+			$user = app('auth')->user();
 
-			if ($this->exists && \Auth::check() && (!$this->locked() || $this->locked_by_user == $user->id))
+			if ($this->exists && app('auth')->check() && (!$this->locked() || $this->locked_by_user == $user->id))
 			{
 				$this->locked_by_user = $user->id;
 				$this->locked_at = \Carbon\Carbon::now()->addSeconds($period);

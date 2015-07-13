@@ -39,13 +39,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
 		if ($username && $password && (app('auth')->attempt(['username' => $username, 'password' => $password], $remember) || app('auth')->attempt(['email' => $username, 'password' => $password], $remember)))
 		{
-			if (\Auth::can('read', 'control_panel'))
+			if (app('auth')->can('read', 'control_panel'))
 			{
-				return \Redirect::route('cmf.content');
+				return app('redirect')->route('cmf.content');
 			}
 			else
 			{
-				return \Redirect::route('error.access-denied');
+				return app('redirect')->route('error.access-denied');
 			}
 		}
 
@@ -54,7 +54,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
 	public function logout()
 	{
-		\Auth::logout();
+		app('auth')->logout();
 
 		return ['success' => true];
 	}
@@ -96,7 +96,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 						return true;
 					}
 
-					if ($item->getParent() && \Auth::can('read', 'module.' . $item->getKey()) && $listModuleMenuLeft->has($item->getKey()))
+					if ($item->getParent() && app('auth')->can('read', 'module.' . $item->getKey()) && $listModuleMenuLeft->has($item->getKey()))
 					{
 						return true;
 					}

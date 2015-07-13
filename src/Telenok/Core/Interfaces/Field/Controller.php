@@ -168,9 +168,9 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 					'controller' => $this,
 					'model' => $model,
 					'field' => $field,
-					'permissionCreate' => \Auth::can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
-					'permissionUpdate' => \Auth::can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
-					'permissionDelete' => \Auth::can('delete', 'object_field.' . $model->getTable() . '.' . $field->code),
+					'permissionCreate' => app('auth')->can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
+					'permissionUpdate' => app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
+					'permissionDelete' => app('auth')->can('delete', 'object_field.' . $model->getTable() . '.' . $field->code),
 					'displayLength' => $this->displayLength,
 					'uniqueId' => $uniqueId,
 				])->render();
@@ -223,12 +223,12 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 			$objectField = $type->field()->active()->get()->filter(function($item) use ($type)
 			{
-				return $item->show_in_list == 1 && \Auth::can('read', 'object_field.' . $type->code . '.' . $item->code);
+				return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
 			});
 
 			$config = app('telenok.config.repository')->getObjectFieldController();
 
-			$canUpdate = \Auth::can('update', 'object_field.' . $model->getTable() . '.' . $field->code);
+			$canUpdate = app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code);
 
 			foreach ($items->slice(0, $this->displayLength, true) as $k => $item)
 			{
@@ -270,7 +270,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 		$objectField = $type->field()->active()->get()->filter(function($item) use ($type)
 		{
-			return $item->show_in_list == 1 && \Auth::can('read', 'object_field.' . $type->code . '.' . $item->code);
+			return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
 		});
 
 		foreach ($objectField as $key => $field)

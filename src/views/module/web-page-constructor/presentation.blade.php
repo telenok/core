@@ -163,7 +163,7 @@
 
 						$widgetBufferedList = \App\Telenok\Core\Model\System\Buffer::with("sequence")->where(function($query) 
 							{
-								$query->where('user_id', \Auth::user()->getKey());
+								$query->where('user_id', app('auth')->user()->getKey());
 								$query->where('place', 'web-page');
 							})->get(); 
 

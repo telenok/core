@@ -18,11 +18,11 @@ class ControlPanel {
 
 		if (app('config')->get('app.acl.enabled'))
 		{
-			$accessControlPanel = \Auth::can('read', 'control_panel');
+			$accessControlPanel = app('auth')->can('read', 'control_panel');
 		}
 		else
 		{
-			$accessControlPanel = \Auth::hasRole('super_administrator');
+			$accessControlPanel = app('auth')->hasRole('super_administrator');
 		}
  
 		if (!$accessControlPanel && !\Request::is('telenok/login'))

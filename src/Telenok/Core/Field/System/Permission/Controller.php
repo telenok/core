@@ -93,7 +93,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
 		$permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
-        $this->setViewModel($field);
+		$this->setViewModel($field, $controller->getFieldTemplateView($field), $controller->getFieldTemplateKey($field));
 
 		return view($this->getViewModel(), array(
 					'controllerParent' => $controller,
@@ -102,8 +102,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 					'field' => $field,
 					'uniqueId' => $uniqueId,
 					'permissions' => $permissions,
-					'permissionCreate' => \Auth::can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
-					'permissionUpdate' => \Auth::can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
+					'permissionCreate' => app('auth')->can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
+					'permissionUpdate' => app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
 				))->render();
 	}
 
@@ -126,7 +126,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				}
 			}
 		}
-		
+
 		return $model;
 	}
 

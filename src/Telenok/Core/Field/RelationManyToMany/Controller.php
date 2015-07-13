@@ -20,7 +20,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		{
 			return parent::getFormModelContent($controller, $model, $field, $uniqueId);
 		}
-	} 
+	}
 
 	/**
 	 * Return Object Type linked to the field
@@ -134,7 +134,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             {
                 try
                 {
-					if (\Auth::can('update', $id))
+					if (app('auth')->can('update', $id))
 					{
 	                    $model->$method()->attach($id);
 					}

@@ -342,7 +342,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 					{{ $controller->LL('btn.choose') }}
 				</button>
 				@endif
-				@if (\Input::get('saveBtn') && ( (!$model->exists && \Auth::can('create', 'object_type.' . $type->code)) || ($model->exists && \Auth::can('update', $model->getKey())) ))
+				@if (\Input::get('saveBtn') && ( (!$model->exists && app('auth')->can('create', 'object_type.' . $type->code)) || ($model->exists && app('auth')->can('update', $model->getKey())) ))
 				<button type="submit" class="btn btn-info">
 					{{ $controller->LL('btn.save') }}
 				</button>

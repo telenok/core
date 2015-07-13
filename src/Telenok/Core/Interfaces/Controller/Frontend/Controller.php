@@ -119,7 +119,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	public function addCssFile($filePath)
 	{
-		$this->cssFilePath[] = $filePath;
+		$this->cssFilePath[$filePath] = $filePath;
 
 		return $this;
 	}
@@ -133,7 +133,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	public function addJsFile($filePath)
 	{
-		$this->jsFilePath[] = $filePath;
+		$this->jsFilePath[$filePath] = $filePath;
 
 		return $this;
 	}
@@ -153,6 +153,16 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	public function getJsCode()
 	{
 		return $this->jsCode;
+	}
+
+	public function getCssFile()
+	{
+		return $this->cssFilePath;
+	}
+
+	public function getCssCode()
+	{
+		return $this->cssCode;
 	}
 	
 
