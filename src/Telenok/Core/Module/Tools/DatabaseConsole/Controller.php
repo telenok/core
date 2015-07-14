@@ -287,9 +287,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
 					'tabKey' => $tabKey,
 					'modelCurrentDirectory' => new \SplFileInfo($model->getPath()),
 					'routerParam' => $this->getRouterParam('edit'),
-					'uniqueId' => str_random(),  
-
-					
+					'uniqueId' => str_random(),
 				), $this->getAdditionalViewParam()))->render()
 			];
 
@@ -543,7 +541,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
                                 'routerParam' => $this->getRouterParam('edit'),
                                 'uniqueId' => str_random(),  
                             ), $this->getAdditionalViewParam()))->render();
-
             } 
             catch (\Exception $ex) 
             {
@@ -619,7 +616,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
 				break;
 		}
 	}
-	
 	
 	
 	

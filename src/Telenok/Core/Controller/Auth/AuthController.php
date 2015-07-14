@@ -29,7 +29,7 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Controller {
 	 */
 	public function getLogin()
 	{
-		return view('core::controller.backend-login', ['controller' => $this]);
+		return view('core::controller.backend-login', ['controller' => $this])->render();
 	}
 
 	/**

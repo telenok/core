@@ -24,7 +24,15 @@ ob_start();
 
 			var button_type = jQuery(this).data('btn-clicked');
 
-			@yield('buttonType')
+			@section('buttonType')
+				if (button_type == 'delete.close')
+				{ 
+					if (confirm('{{ $controller->LL('notice.sure') }}'))
+					{
+						$el.attr('action', "{!! $controller->getRouterDelete(['id' => $controller->getEventResource()->get('model')->getKey()]) !!}");
+					}
+				}
+			@show
 
 			@yield('beforeAjax')
 
@@ -153,7 +161,13 @@ $controllerAction->addJsCode($jsCode);
 	@section('formField')
 
 		{!! Form::hidden('id', $controller->getEventResource()->get('model')->getKey()) !!}
-		{!! Form::hidden('redirect_after_processing', $controller->getRedirectAfterProcessing()) !!}
+
+		@if ($controller->getEventResource()->get('model')->exists)
+			{!! Form::hidden('redirect_after_update', $controller->getRedirectAfterUpdate() ) !!}
+			{!! Form::hidden('redirect_after_delete', $controller->getRedirectAfterDelete() ) !!}
+		@else
+			{!! Form::hidden('redirect_after_store', $controller->getRedirectAfterStore() ) !!}
+		@endif
 
 		@include($controller->getFormView())
 

@@ -152,7 +152,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             'controller' => $this,
             'field' => $field,
             'permissions' => \App\Telenok\Core\Model\Security\Permission::active()->get(),
-        ]);
+        ])->render();
     }
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 

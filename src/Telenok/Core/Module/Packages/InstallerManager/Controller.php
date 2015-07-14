@@ -271,9 +271,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 					'tabKey' => $tabKey,
 					'modelCurrentDirectory' => new \SplFileInfo($model->getPath()),
 					'routerParam' => $this->getRouterParam('edit'),
-					'uniqueId' => str_random(),  
-
-					
+					'uniqueId' => str_random(),
 				), $this->getAdditionalViewParam()))->render()
 			];
 

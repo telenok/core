@@ -26,35 +26,32 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $routerStore;
 	protected $routerUpdate;
 	protected $routerDelete;
-	protected $redirectAfterProcessing;
+	protected $redirectAfterCreate;
+	protected $redirectAfterUpdate;
+	protected $redirectAfterDelete;
 
 	/*
 
-	echo (new \App\Telenok\Core\Html\Form\Controller())->form([
+	echo (new \App\Telenok\Core\Html\Form\Controller())->form([	
+		'uniqueId' => 'adadad94820sdvbxjkh',
 		'id' => 22, //for editinng
-		'model' => (\App\...\Object\Type::find(10) for creating || 'type_299' for creating || '\App\Model\Package' for creating),
+		'model' => (\App\...\Object\Type::find(10) for creating || type code like 'user' || 299 for creating || '\App\Model\Package' for creating),
 		'fieldOnly' => [
 			'id',
 			'title', 
 			'created_by_user', 
-			'updated_by_user', 
-			'locked_by_user',
-			'active',
-			'active_at',
-			'permission',
-			'package_license',
-			'key',
-			'description',
-			'version',
-			'image',
+		],
+		'fieldExcept' => [
+			'some_other_field',
 		],
 		'fieldTemplateKey' => 'frontend',
-		'modelView' => 'frontend',
-		'fieldTemplateKey' => 'frontend',
+		'modelView' => 'core::widget.form.model',
 		'routerStore' => 'some.router.store',
 		'routerUpdate' => 'some.router.update',
 		'routerDelete' => 'some.router.delete',
-		'redirectAfterProcessing' => 'some.router.afterProcessing',
+		'redirectAfterCreate' => 'some.router.afterProcessingCreate' or 'http://some.url/to/page,
+		'redirectAfterUpdate' => 'some.router.afterProcessingUpdate' or 'http://some.url/to/page,
+		'redirectAfterDelete' => 'some.router.afterProcessingDelete' or 'http://some.url/to/page,
 	]);
 
 	*/
@@ -62,22 +59,22 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		$this->setConfig($config);
 
-		$this->uniqueId = array_get($this->getConfig(), 'uniqueId', str_random());
-
-		$this->id = intval(array_get($this->getConfig(), 'id'));
-		$this->formClass = array_get($this->getConfig(), 'formClass', $this->formClass);
-		$this->modelView = array_get($this->getConfig(), 'modelView', $this->modelView);
-		$this->formView = array_get($this->getConfig(), 'formView', $this->formView);
-		$this->fieldView = array_get($this->getConfig(), 'fieldView', $this->fieldView);
-		$this->fieldOnly = array_get($this->getConfig(), 'fieldOnly', []);
-		$this->fieldExcept = array_get($this->getConfig(), 'fieldExcept', []);
-		$this->fieldExcept = array_get($this->getConfig(), 'fieldExcept', []);
-		$this->fieldTemplateView = array_get($this->getConfig(), 'fieldTemplateView', []);
-		$this->fieldTemplateKey = array_get($this->getConfig(), 'fieldTemplateKey');
-		$this->routerStore = array_get($this->getConfig(), 'routerStore');
-		$this->routerUpdate = array_get($this->getConfig(), 'routerUpdate');
-		$this->routerDelete = array_get($this->getConfig(), 'routerDelete');
-		$this->redirectAfterProcessing = array_get($this->getConfig(), 'redirectAfterProcessing');
+		$this->uniqueId = $this->getConfig('uniqueId', str_random());
+		$this->id = intval($this->getConfig('id'));
+		$this->formClass = $this->getConfig('id', $this->formClass);
+		$this->modelView = $this->getConfig('modelView', $this->modelView);
+		$this->formView = $this->getConfig('formView', $this->formView);
+		$this->fieldView = $this->getConfig('fieldView', $this->fieldView);
+		$this->fieldOnly = $this->getConfig('fieldOnly', []);
+		$this->fieldExcept = $this->getConfig('fieldExcept', []);
+		$this->fieldTemplateView = $this->getConfig('fieldTemplateView', []);
+		$this->fieldTemplateKey = $this->getConfig('fieldTemplateKey');
+		$this->routerStore = $this->getConfig('routerStore');
+		$this->routerUpdate = $this->getConfig('routerUpdate');
+		$this->routerDelete = $this->getConfig('routerDelete');
+		$this->redirectAfterStore = $this->getConfig('redirectAfterStore');
+		$this->redirectAfterUpdate = $this->getConfig('redirectAfterUpdate');
+		$this->redirectAfterDelete = $this->getConfig('redirectAfterDelete');
 
 		$this->setModel();
 		$this->setModelType();
@@ -114,7 +111,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				'routerParam' => $this->getRouterStore(['typeId' => $this->getEventResource()->get('type')->getKey()]),
 				'controller' => $this,
 				'canCreate' => true,
-			]);
+			])->render();
 		}
 		catch (\Exception $ex) 
 		{
@@ -146,7 +143,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				'controller' => $this,
 				'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
 				'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
-			]);
+			])->render();
 		}
 		catch (\Exception $ex) 
 		{
@@ -172,13 +169,61 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         {   
 			throw $e;
         }
+		
+		$v = $input->get('redirect_after_store');
+		
+		if (app('router')->has($v))
+		{
+			$redirect = route($v, ['id' => $model_->getKey()]);
+		}
+		else
+		{
+			$redirect = $v;
+		}
 
-		return ['redirect' => route('account.package.view', ['id' => $model_->getKey()], false)];
+		return ['redirect' => $redirect];
 	}
 
-	public function update()
+	public function update($id)
 	{
-		dd('updateProcess');
+        try 
+        {
+            $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+
+			$model = $this->getModelById($id);
+			
+			$model_ = $model->storeOrUpdate($input, true);			
+        } 
+        catch (\Exception $e) 
+        {   
+			throw $e;
+        }
+		
+		$v = $input->get('redirect_after_update');
+		
+		return ['redirect' => app('router')->has($v) ? route($v, ['id' => $model_->getKey()]) : $v];
+	}
+
+	public function delete($id = 0)
+	{
+        try 
+        {
+            $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+
+			$type = $this->getTypeById($typeId);
+
+			$model = $this->getModelByTypeId($type->getKey());
+
+			$model_ = $model->storeOrUpdate($input, true);
+        } 
+        catch (\Exception $e) 
+        {   
+			throw $e;
+        }
+
+		$v = $input->get('redirect_after_update');
+
+		return ['redirect' => app('router')->has($v) ? route($v) : $v];
 	}
 
     public function setRouterStore($param)
@@ -190,7 +235,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     public function getRouterStore($param = [])
     {
-        return route($this->routerStore ?: "cmf.html.form.store", $param);
+        return route($this->routerStore ?: "cmf.widget.form.store", $param);
     }
 
     public function setRouterUpdate($param)
@@ -202,7 +247,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     public function getRouterUpdate($param = [])
     {
-        return route($this->routerUpdate ?: "cmf.html.form.update", $param);
+        return route($this->routerUpdate ?: "cmf.widget.form.update", $param);
     }
 
     public function setRouterDelete($param)
@@ -214,7 +259,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     public function getRouterDelete($param = [])
     {
-        return route($this->routerDelete ?: "cmf.html.form.delete", $param);
+        return route($this->routerDelete ?: "cmf.widget.form.delete", $param);
     }
 
 	public function getUniqueId()
@@ -260,17 +305,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		{
 			$model_ = $model;
 		}
-		else if (strpos($model, 'type_') !== FALSE && ($id = intval(str_replace('type_', '', $model))))
-		{
-			$model_ = $this->getModelByTypeId($id);
-		}
-		else if (strpos($model, 'type_') !== FALSE && ($id = intval(str_replace('type_', '', $model))))
-		{
-			$model_ = $this->getModelByTypeId($id);
-		}
 		else if (is_string($model) && class_exists($model))
 		{
 			$model_ = app($model);
+		}
+		else
+		{
+			$model_ = $this->getModelByTypeId($model);
 		}
 		
 		if ($this->id)
@@ -288,10 +329,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		{
 			$this->model = $model_;
 		}
-		
+
 		if (!($this->model instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model))
 		{
-			throw new \Exception('Please, set model class or ID');
+			throw new \Exception('Please, set value for key "model"');
 		}
 
 		return $this;
@@ -407,15 +448,41 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this->fieldTemplateKey;
 	}
 	
-	public function setRedirectAfterProcessing($param)
+	public function setRedirectAfterStore($param)
 	{
-		$this->redirectAfterProcessing = $param;
+		$this->redirectAfterStore = $param;
 		
 		return $this;
 	}
 	
-	public function getRedirectAfterProcessing()
+	public function getRedirectAfterStore()
 	{
-		return $this->redirectAfterProcessing;
+		return $this->redirectAfterStore;
 	}
+	
+	public function setRedirectAfterUpdate($param)
+	{
+		$this->redirectAfterUpdate = $param;
+		
+		return $this;
+	}
+	
+	public function getRedirectAfterUpdate()
+	{
+		return $this->redirectAfterUpdate;
+	}
+	
+	public function setRedirectAfterDelete($param)
+	{
+		$this->redirectAfterDelete = $param;
+		
+		return $this;
+	}
+	
+	public function getRedirectAfterDelete()
+	{
+		return $this->redirectAfterDelete;
+	}
+	
+	
 }

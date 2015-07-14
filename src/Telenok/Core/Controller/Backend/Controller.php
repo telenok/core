@@ -49,7 +49,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 			}
 		}
 
-		return view('core::controller.backend-login', ['controller' => $this]);
+		return view('core::controller.backend-login', ['controller' => $this])->render();
 	}
 
 	public function logout()
@@ -61,17 +61,17 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
 	public function errorAccessDenied()
 	{
-		return view('core::controller.backend-denied', ['controller' => $this]);
+		return view('core::controller.backend-denied', ['controller' => $this])->render();
 	}
 
 	public function frontendAreaWidgetList()
 	{
-		return view('core::controller.backend-frontend-iframe-widget-list', ['controller' => $this]);
+		return view('core::controller.backend-frontend-iframe-widget-list', ['controller' => $this])->render();
 	}
 
 	public function frontendArea()
 	{
-		return view('core::controller.backend-frontend-iframe-content', ['controller' => $this]);
+		return view('core::controller.backend-frontend-iframe-content', ['controller' => $this])->render();
 	}
 
 	public function updateCsrf()
@@ -159,7 +159,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 		$setArray['listModuleMenuTop'] = $listModuleMenuTop;
 		$setArray['controller'] = $this;
 
-		return view('core::controller.backend', $setArray);
+		return view('core::controller.backend', $setArray)->render();
 	}
 
 }

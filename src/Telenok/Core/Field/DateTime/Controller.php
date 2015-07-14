@@ -53,7 +53,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         return view($this->getViewFilter(), [
             'controller' => $this,
             'field' => $field,
-        ]);
+        ])->render();
     }
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 

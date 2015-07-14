@@ -114,12 +114,12 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 			'page' => $page,
 			'controller' => $this,
 			'content' => $content,
-		]);
+		])->render();
 	}
 
-	public function addCssFile($filePath)
+	public function addCssFile($filePath, $key = '')
 	{
-		$this->cssFilePath[$filePath] = $filePath;
+		$this->cssFilePath[$key?:$filePath] = $filePath;
 
 		return $this;
 	}
@@ -131,9 +131,9 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		return $this;
 	}
 
-	public function addJsFile($filePath)
+	public function addJsFile($filePath, $key = '')
 	{
-		$this->jsFilePath[$filePath] = $filePath;
+		$this->jsFilePath[$key?:$filePath] = $filePath;
 
 		return $this;
 	}

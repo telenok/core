@@ -43,7 +43,7 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 			throw new NotFoundHttpException;
 		}
 
-		return view('core::controller.backend-password-reset', ['token' => $token, 'controller' => $this]);
+		return view('core::controller.backend-password-reset', ['token' => $token, 'controller' => $this])->render();
 	}
 
 	public function postReset(\Illuminate\Http\Request $request)
