@@ -18,6 +18,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $enableColumnSelect = true;
 	protected $enableColumnAction = true;
 
+	protected $viewGrid = 'core::widget.grid.table';
+	protected $viewRow = 'core::widget.grid.row';
+	protected $viewButtonTop = 'core::widget.grid.buttonTop';
 
 	/*
 
@@ -29,7 +32,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				{
 					return '
 							"sExtends": "text",
-							"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i>"' . e($controller->LL('list.btn.create')) . ',
+							"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i>' . e($controller->LL('list.btn.create')) . '",
 							"sButtonClass": "btn-success btn-sm disabled",
 							"fnClick": function(nButton, oConfig, oFlash) { window.location = "' . route("some.route") . '"; }
 						';
@@ -38,7 +41,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				{
 					return ' 
 							"sExtends": "text",
-							"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i>"' . e($controller->LL('list.btn.refresh')) . ',
+							"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i>' . e($controller->LL('list.btn.refresh')) . '",
 							'sButtonClass': "btn-success btn-sm disabled",
 							"fnClick": function(nButton, oConfig, oFlash) { window.location = "' . route("some.route.name") . '"; }
 						';
@@ -57,31 +60,56 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	public function grid($config = [])
 	{
 		$this->setConfig($config);
-		
-		$this->uniqueId = $this->getConfig('uniqueId', str_random());
-		$this->buttonTop = $this->getConfig('buttonTop', []);
-		$this->buttonTopOrder = $this->getConfig('buttonTopOrder', ['create', 'refresh']);
-		$this->fieldOnly = $this->getConfig('fieldOnly', []);
-		$this->fieldExcept = $this->getConfig('fieldExcept', []);
-		$this->routerList = $this->getConfig('routerList', $this->routerList);
-		$this->routerCreate = $this->getConfig('routerCreate', $this->routerCreate);
-		$this->routerEdit = $this->getConfig('routerEdit', $this->routerEdit);
-		$this->displayLength = $this->getConfig('displayLength', $this->displayLength);
-		$this->enableColumnSelect = $this->getConfig('enableColumnSelect', $this->enableColumnSelect);
-		$this->enableColumnAction = $this->getConfig('enableColumnAction', $this->enableColumnAction);
 
 		$this->setModelType();
-		$this->setModel();
-		$this->setFields();
 
         if (!app('auth')->can('read', "object_type.{$this->getModelType()->code}"))
         {
             throw new \LogicException($this->LL('error.access.read'));
         } 
 		
-		return view('core::widget.grid.table', [
+		$this->setModel();
+		$this->setFields();
+
+		return view($this->getViewGrid(), [
 			'controller' => $this,
 		])->render();
+	}
+
+	public function setViewGrid($param)
+	{
+		$this->viewGrid = $param;
+		
+		return $this;
+	}
+	
+	public function getViewGrid()
+	{
+		return $this->viewGrid;
+	}
+
+	public function setViewRow($param)
+	{
+		$this->viewRow = $param;
+		
+		return $this;
+	}
+	
+	public function getViewRow()
+	{
+		return $this->viewRow;
+	}
+
+	public function setViewButtonTop($param)
+	{
+		$this->viewButtonTop = $param;
+		
+		return $this;
+	}
+	
+	public function getViewButtonTop()
+	{
+		return $this->viewButtonTop;
 	}
 
 	public function enableColumnSelect()
@@ -197,11 +225,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		if (app('router')->has($this->getRouterList()))
 		{
-			return route($this->getRouterList(), ['typeid' => $this->getModelByType()->getKey()]);
+			return route($this->getRouterList(), ['typeId' => $this->getModelType()->getKey()]);
 		}
 		else
 		{
-			throw new \Exception('Wrong url list');
+			return $this->getRouterList();
 		}
 	}
 	
@@ -209,11 +237,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		if (app('router')->has($this->getRouterCreate()))
 		{
-			return route($this->getRouterCreate(), ['typeid' => $this->getModelByType()->getKey()]);
+			return route($this->getRouterCreate(), ['typeId' => $this->getModelType()->getKey()]);
 		}
 		else
 		{
-			throw new \Exception('Wrong router create');
+			return $this->getRouterCreate();
 		}
 	}
 	
@@ -225,7 +253,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 		else
 		{
-			throw new \Exception('Wrong router edit');
+			return $this->getRouterEdit();
 		}
 	}
 
@@ -319,7 +347,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	
 	public function getButtonTop()
 	{
-		return $this->getDefaultButtonTop();//merge($this->getDefaultButtonTop(), $this->buttonTop);
+		return array_merge($this->getDefaultButtonTop(), $this->buttonTop);
 	}
 	
 	public function getDefaultButtonTop()
@@ -330,7 +358,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 			{
 				return '
 						"sExtends": "text",
-						"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i>"' . e($controller->LL('list.btn.create')) . ',
+						"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i> ' . e($controller->LL('list.btn.create')) . '",
 						"sButtonClass": "btn-success btn-sm",
 						"fnClick": function(nButton, oConfig, oFlash) { window.location = "' . $controller->getUrlCreate() . '"; }
 					';
@@ -339,7 +367,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 			{
 				return '
 						"sExtends": "text",
-						"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i>"' . e($controller->LL('list.btn.refresh')) . ',
+						"sButtonText": "<i class=\'fa fa-refresh smaller-90\'></i> ' . e($controller->LL('list.btn.refresh')) . '",
 						"sButtonClass": "btn-success btn-sm",
 						"fnClick": function(nButton, oConfig, oFlash) 
 						{
@@ -365,6 +393,22 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	public function setConfig($config)
 	{
 		$this->config = $config;
+		
+		$this->uniqueId = $this->getConfig('uniqueId', str_random());
+		$this->buttonTop = $this->getConfig('buttonTop', []);
+		$this->buttonTopOrder = $this->getConfig('buttonTopOrder', ['create', 'refresh']);
+		$this->fieldOnly = $this->getConfig('fieldOnly', []);
+		$this->fieldExcept = $this->getConfig('fieldExcept', []);
+		$this->routerList = $this->getConfig('routerList', $this->routerList);
+		$this->routerCreate = $this->getConfig('routerCreate', $this->routerCreate);
+		$this->routerEdit = $this->getConfig('routerEdit', $this->routerEdit);
+		$this->displayLength = $this->getConfig('displayLength', $this->displayLength);
+		$this->enableColumnSelect = $this->getConfig('enableColumnSelect', $this->enableColumnSelect);
+		$this->enableColumnAction = $this->getConfig('enableColumnAction', $this->enableColumnAction);
+
+		$this->viewButtonTop = $this->getConfig('viewButtonTop', $this->viewButtonTop);
+		$this->viewGrid = $this->getConfig('viewGrid', $this->viewGrid);
+		$this->viewRow = $this->getConfig('viewRow', $this->viewRow);
 		
 		return $this;
 	}

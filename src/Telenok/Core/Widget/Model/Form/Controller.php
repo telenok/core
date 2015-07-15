@@ -59,23 +59,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		$this->setConfig($config);
 
-		$this->uniqueId = $this->getConfig('uniqueId', str_random());
-		$this->id = intval($this->getConfig('id'));
-		$this->formClass = $this->getConfig('id', $this->formClass);
-		$this->modelView = $this->getConfig('modelView', $this->modelView);
-		$this->formView = $this->getConfig('formView', $this->formView);
-		$this->fieldView = $this->getConfig('fieldView', $this->fieldView);
-		$this->fieldOnly = $this->getConfig('fieldOnly', []);
-		$this->fieldExcept = $this->getConfig('fieldExcept', []);
-		$this->fieldTemplateView = $this->getConfig('fieldTemplateView', []);
-		$this->fieldTemplateKey = $this->getConfig('fieldTemplateKey');
-		$this->routerStore = $this->getConfig('routerStore');
-		$this->routerUpdate = $this->getConfig('routerUpdate');
-		$this->routerDelete = $this->getConfig('routerDelete');
-		$this->redirectAfterStore = $this->getConfig('redirectAfterStore');
-		$this->redirectAfterUpdate = $this->getConfig('redirectAfterUpdate');
-		$this->redirectAfterDelete = $this->getConfig('redirectAfterDelete');
-
 		$this->setModel();
 		$this->setModelType();
 		$this->setFields();
@@ -419,6 +402,23 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	public function setConfig($config)
 	{
 		$this->config = $config;
+
+		$this->uniqueId = $this->getConfig('uniqueId', str_random());
+		$this->id = intval($this->getConfig('id'));
+		$this->formClass = $this->getConfig('id', $this->formClass);
+		$this->modelView = $this->getConfig('modelView', $this->modelView);
+		$this->formView = $this->getConfig('formView', $this->formView);
+		$this->fieldView = $this->getConfig('fieldView', $this->fieldView);
+		$this->fieldOnly = $this->getConfig('fieldOnly', []);
+		$this->fieldExcept = $this->getConfig('fieldExcept', []);
+		$this->fieldTemplateView = $this->getConfig('fieldTemplateView', []);
+		$this->fieldTemplateKey = $this->getConfig('fieldTemplateKey');
+		$this->routerStore = $this->getConfig('routerStore');
+		$this->routerUpdate = $this->getConfig('routerUpdate');
+		$this->routerDelete = $this->getConfig('routerDelete');
+		$this->redirectAfterStore = $this->getConfig('redirectAfterStore');
+		$this->redirectAfterUpdate = $this->getConfig('redirectAfterUpdate');
+		$this->redirectAfterDelete = $this->getConfig('redirectAfterDelete');
 		
 		return $this;
 	}

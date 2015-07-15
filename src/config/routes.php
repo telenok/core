@@ -4,7 +4,7 @@
 	\Route::post('widget/form/update/{id}', array('as' => 'cmf.widget.form.update', 'uses' => "Telenok\Core\Widget\Model\Form\Controller@update"));
 	\Route::post('widget/form/delete/{id}', array('as' => 'cmf.widget.form.delete', 'uses' => "Telenok\Core\Widget\Model\Form\Controller@delete"));
 	
-	\Route::get('widget/form/grid/{typeId}', array('as' => 'cmf.widget.grid.list', 'uses' => "Telenok\Core\Widget\Model\Grid\Controller@getList"));
+	\Route::get('widget/grid/{typeId}', array('as' => 'cmf.widget.grid.list', 'uses' => "Telenok\Core\Widget\Model\Grid\Controller@getList"));
 
 
 	// Module Objects\Lists

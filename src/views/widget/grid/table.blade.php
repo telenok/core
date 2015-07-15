@@ -1,11 +1,7 @@
 <div class="container-grid-{{$controller->getUniqueId()}}">
 
-    <table class="table table-striped table-bordered table-hover table-responsive" id="table-{{$controller->getUniqueId()}}" role="grid">
-		
+	<table class="table table-striped table-bordered table-hover table-responsive" id="table-{{$controller->getUniqueId()}}" role="grid">
 	</table>
-
-		
-		
 	
 <?php
 
@@ -40,8 +36,8 @@ ob_start();
 			
 			?>
 
-			@include('core::widget.grid.row')
-			@include('core::widget.grid.buttonTop')
+			@include($controller->getViewRow())
+			@include($controller->getViewButtonTop())
 
 			param = {
 				"searchDelay": 1000,
@@ -55,7 +51,7 @@ ob_start();
 				"bJQueryUI": false,
 				"sAjaxSource": "{!! $controller->getUrlList()!!}",
 				"iDisplayLength": 100,
-				"sDom": "<'row'<'col-md-9'T><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
+				"sDom": "<'row'<'col-md-8'T><'col-md-4'f>r>t<'row'<'col-md-8'T><'col-md-4'p>>",
 				"oTableTools": {
 					"aButtons": aButtons
 				},
@@ -90,7 +86,9 @@ $controllerAction->addJsCode($jsCode);
 
 $controllerAction->addCssFile(asset('packages/telenok/core/css/jquery-ui.css'), 'jquery-ui'); 
 $controllerAction->addCssFile(asset('packages/telenok/core/js/bootstrap/css/bootstrap.min.css'), 'bootstrap');
+$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.css'), 'datatables');
 $controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.css'), 'datatables.tabletool');
+$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.css'), 'datatables.bootstrap'); 
 
 $controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.js'), 'jquery'); 
 $controllerAction->addJsFile(asset('packages/telenok/core/js/jquery-ui.js'), 'jquery-ui'); 
