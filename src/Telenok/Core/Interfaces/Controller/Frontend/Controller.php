@@ -117,9 +117,9 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		])->render();
 	}
 
-	public function addCssFile($filePath, $key = '')
+	public function addCssFile($filePath, $key = '', $order = 1000000)
 	{
-		$this->cssFilePath[$key?:$filePath] = $filePath;
+		$this->cssFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
 
 		return $this;
 	}
@@ -131,9 +131,9 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		return $this;
 	}
 
-	public function addJsFile($filePath, $key = '')
+	public function addJsFile($filePath, $key = '', $order = 100000)
 	{
-		$this->jsFilePath[$key?:$filePath] = $filePath;
+		$this->jsFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
 
 		return $this;
 	}
@@ -147,6 +147,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	public function getJsFile()
 	{
+		usort($this->jsFilePath, function($a, $b) { return $a['order'] < $b['order'] ? -1 : 1; });
+		
 		return $this->jsFilePath;
 	}
 
@@ -157,6 +159,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	public function getCssFile()
 	{
+		usort($this->cssFilePath, function($a, $b) { return $a['order'] < $b['order'] ? -1 : 1; });
+		
 		return $this->cssFilePath;
 	}
 

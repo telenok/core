@@ -419,11 +419,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->redirectAfterStore = $this->getConfig('redirectAfterStore');
 		$this->redirectAfterUpdate = $this->getConfig('redirectAfterUpdate');
 		$this->redirectAfterDelete = $this->getConfig('redirectAfterDelete');
-		
+
 		return $this;
 	}
 	
-	public function getConfig($key = '')
+	public function getConfig($key = null, $default = null)
 	{
 		if (empty($key))
 		{
@@ -431,10 +431,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 		else
 		{
-			return array_get($this->config, $key);
+			return array_get($this->config, $key, $default);
 		}
 	}
-	
+
 	public function getFieldTemplateView($field)
 	{
 		if ($t = array_get($this->fieldTemplateView, $field->code))

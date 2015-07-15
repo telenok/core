@@ -1,7 +1,7 @@
 <div class="container-grid-{{$controller->getUniqueId()}}">
 
-	<table class="table table-striped table-bordered table-hover table-responsive" id="table-{{$controller->getUniqueId()}}" role="grid">
-	</table>
+	<table class="table table-striped table-bordered table-hover table-responsive" 
+		   id="table-{{$controller->getUniqueId()}}"></table>
 	
 <?php
 
@@ -15,20 +15,7 @@ ob_start();
 		{
 			var param = {};
 			var aoColumns = [];
-			var aButtons = [];
-			
-			aoColumns.push({ 
-				"mData": "tableCheckAll", 
-				"sTitle": '<label><input type="checkbox" name="checkHeader" class="ace ace-switch ace-switch-6" ' 
-						+ 'onclick="var tb=jQuery(\'#table-{{$controller->getUniqueId()}}\').dataTable();'
-						+ 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());'
-						+ 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));"><span class="lbl"></span></label>', 
-				"mDataProp": null, 
-				"sClass": "center", 
-				"sWidth": "20px", 
-				"sDefaultContent": '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]"><span class="lbl"></span></label>',
-				"bSortable": false
-			});
+			var aButtons = []; 
 			
 			<?php
 			
@@ -37,6 +24,7 @@ ob_start();
 			?>
 
 			@include($controller->getViewRow())
+
 			@include($controller->getViewButtonTop())
 
 			param = {
@@ -84,18 +72,18 @@ ob_end_clean();
 
 $controllerAction->addJsCode($jsCode); 
 
-$controllerAction->addCssFile(asset('packages/telenok/core/css/jquery-ui.css'), 'jquery-ui'); 
-$controllerAction->addCssFile(asset('packages/telenok/core/js/bootstrap/css/bootstrap.min.css'), 'bootstrap');
-$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.css'), 'datatables');
-$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.css'), 'datatables.tabletool');
-$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.css'), 'datatables.bootstrap'); 
+$controllerAction->addCssFile(asset('packages/telenok/core/css/jquery-ui.css'), 'jquery-ui', 0); 
+$controllerAction->addCssFile(asset('packages/telenok/core/js/bootstrap/css/bootstrap.min.css'), 'bootstrap', 10);
+$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.css'), 'datatables', 20);
+$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.css'), 'datatables.tabletool', 21);
+$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.css'), 'datatables.bootstrap', 22); 
 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.js'), 'jquery'); 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery-ui.js'), 'jquery-ui'); 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/bootstrap/js/bootstrap.min.js'), 'bootstrap'); 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.js'), 'datatables'); 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.js'), 'datatables.bootstrap'); 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.js'), 'datatables.tabletool'); 
+$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.js'), 'jquery', 0); 
+$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery-ui.js'), 'jquery-ui', 1); 
+$controllerAction->addJsFile(asset('packages/telenok/core/js/bootstrap/js/bootstrap.min.js'), 'bootstrap', 10); 
+$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.js'), 'datatables', 11); 
+$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.js'), 'datatables.bootstrap', 15);
+$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.js'), 'datatables.tabletool', 19); 
 
 ?>
 

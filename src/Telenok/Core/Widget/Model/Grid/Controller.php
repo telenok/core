@@ -130,6 +130,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->setModel();
 		$this->setFields();
 
+		$this->setRouterEdit($input->get('routerEdit'));
+		
         if (!app('auth')->can('read', "object_type.{$this->getModelType()->code}"))
         {
             throw new \LogicException($this->LL('error.access.read'));
@@ -204,9 +206,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				$put[$field->code] = $config->get($field->key)->getListFieldContent($field, $item, $this->getModelType());
 			}
 
-			$canDelete = app('auth')->can('delete', $item);
-
-			$put['tableManageItem'] = 'asdasd';//$this->getListButtonExtended($item, $this->getModelType(), $canDelete);
+			$put['tableManageItem'] = view('core::widget.grid.buttonAction', ['controller' => $this, 'item' => $item])->render();
 
 			$content[] = $put;
 		}
@@ -225,7 +225,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		if (app('router')->has($this->getRouterList()))
 		{
-			return route($this->getRouterList(), ['typeId' => $this->getModelType()->getKey()]);
+			return route($this->getRouterList(), ['typeId' => $this->getModelType()->getKey(), 'routerEdit' => $this->getRouterEdit()]);
 		}
 		else
 		{
@@ -257,14 +257,35 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 	}
 
+	public function setRouterList($param)
+	{
+		$this->routerList = $param;
+		
+		return $this;
+	}
+
 	public function getRouterList()
 	{
 		return $this->routerList;
 	}
 
+	public function setRouterCreate($param)
+	{
+		$this->routerCreate = $param;
+		
+		return $this;
+	}
+
 	public function getRouterCreate()
 	{
 		return $this->routerCreate;
+	}
+
+	public function setRouterEdit($param)
+	{
+		$this->routerEdit = $param;
+		
+		return $this;
 	}
 
 	public function getRouterEdit()
