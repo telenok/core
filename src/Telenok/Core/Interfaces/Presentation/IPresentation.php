@@ -18,8 +18,10 @@ interface IPresentation extends \Telenok\Core\Interfaces\Module\IModule {
 
     public function getContent();
 	
-    public function getFieldTemplateKey($field);
+    public function getModelFieldViewKey($field);
 	
-	public function getFieldTemplateView($field);
+	public function getModelFieldView($field);
+
+	public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null);
 }
 

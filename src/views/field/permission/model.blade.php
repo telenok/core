@@ -80,7 +80,7 @@
 						keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
 						lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
 						type: "GET",
-						url: "{!! URL::route("cmf.field.permission.list.title") !!}", 
+						url: "{!! $urlListTitle !!}", 
 						dataType: "json",
 						minTermLength: 1
 					}, 

@@ -9,8 +9,6 @@
 	{
 		$disabledCreateFile = true;
 	} 
-	
-    $linkedField = $field->relation_many_to_many_has ? 'relation_many_to_many_has' : 'relation_many_to_many_belong_to';
 ?>
     <div class="widget-box transparent">
         <div class="widget-header widget-header-small">
@@ -127,7 +125,7 @@
 									aoColumns : aoColumns,
 									aaSorting: [],
 									iDisplayLength : {{$displayLength}},
-									sAjaxSource : '{!! URL::route($controller->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $jsUnique]) !!}', 
+									sAjaxSource : '{!! $urlListTable !!}', 
 									oTableTools: {
 										aButtons : aButtons
 									}
@@ -146,7 +144,7 @@
 								"sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
 								'sButtonClass': 'btn-success btn-sm',
 								"fnClick": function(nButton, oConfig, oFlash) {
-									createM2M{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardCreate(), [ 'id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]) !!}');
+									createM2M{{$jsUnique}}(this, '{!! $urlWizardCreate !!}');
 								}
 							});
 							@endif	
@@ -161,7 +159,7 @@
 									"sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.choose') }}",
 									'sButtonClass': 'btn-yellow btn-sm',
 									"fnClick": function(nButton, oConfig, oFlash) {
-										chooseM2M{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardChoose(), ['id' => $field->{$linkedField}]) !!}');
+										chooseM2M{{$jsUnique}}(this, '{!! $urlWizardChoose !!}');
 									}
 							});
 							@endif
@@ -191,7 +189,7 @@
 		try
 		{
 			jQuery("div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone").dropzone({
-					url: "{!! URL::route($controller->getRouteUpload()) !!}",
+					url: "{!! route($controller->getRouteUpload()) !!}",
 					paramName: "upload", // The name that will be used to transfer the file
 					maxFilesize: 2.5, // MB
 					addRemoveLinks : true,

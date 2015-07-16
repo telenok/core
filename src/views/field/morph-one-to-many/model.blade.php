@@ -1,7 +1,6 @@
 <?php
 
     $method = camel_case($field->code);
-    $linkedField = $field->morph_one_to_many_has ? 'morph_one_to_many_has' : 'morph_one_to_many_belong_to';
     $jsUnique = str_random();
 ?>
 
@@ -115,7 +114,7 @@
 									aoColumns : aoColumns,
 									aaSorting: [],
 									iDisplayLength : {{$displayLength}},
-									sAjaxSource : '{!! URL::route($controller->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $jsUnique]) !!}', 
+									sAjaxSource : '{!! $urlListTable !!}', 
 									oTableTools: {
 										aButtons : aButtons
 									}
@@ -134,7 +133,7 @@
                                             "sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
                                             'sButtonClass': 'btn-success btn-sm',
                                             "fnClick": function(nButton, oConfig, oFlash) {
-                                                createMorphO2MHas{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardCreate(), [ 'id' => $field->morph_one_to_many_has, 'saveBtn' => 1, 'chooseBtn' => 1]) !!}');
+                                                createMorphO2MHas{{$jsUnique}}(this, '{!! $urlWizardCreate !!}');
                                             }
                                         });
 							@endif	
@@ -144,7 +143,7 @@
                                             "sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.choose') }}",
                                             'sButtonClass': 'btn-yellow btn-sm',
                                             "fnClick": function(nButton, oConfig, oFlash) {
-                                                chooseMorphO2MHas{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardChoose(), ['id' => $controller->getChooseTypeId($field, $linkedField)]) !!}');
+                                                chooseMorphO2MHas{{$jsUnique}}(this, '{!! $urlWizardChoose !!}');
                                             }
                                         }); 
 
@@ -373,7 +372,7 @@
 						|| 
 					($model->exists && $field->allow_update && $permissionUpdate))
 				)
-            <button onclick="chooseMorphO2MBelongTo{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardChoose(), ['id' => $controller->getChooseTypeId($field, $linkedField)]) !!}'); return false;" data-toggle="modal" class="btn btn-sm" type="button">
+            <button onclick="chooseMorphO2MBelongTo{{$jsUnique}}(this, '{!! $urlWizardChoose !!}'); return false;" data-toggle="modal" class="btn btn-sm" type="button">
                 <i class="fa fa-bullseye"></i>
                 {{ $controller->LL('btn.choose') }}
             </button> 
@@ -384,7 +383,7 @@
 						|| 
 					($model->exists && $field->allow_update && $permissionUpdate)) && !$disabledCreateLinkedType
 				)
-            <button onclick="createMorphO2O{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardCreate(), [ 'id' => $controller->getChooseTypeId($field, $linkedField), 'saveBtn' => 1, 'chooseBtn' => 1]) !!}'); return false;" data-toggle="modal" class="btn btn-sm" type="button">
+            <button onclick="createMorphO2O{{$jsUnique}}(this, '{!! $urlWizardCreate !!}'); return false;" data-toggle="modal" class="btn btn-sm" type="button">
                 <i class="fa fa-plus"></i>
                 {{ $controller->LL('btn.create') }}
             </button>
@@ -395,7 +394,7 @@
 						|| 
 					($model->exists && $field->allow_update && $permissionUpdate))
 				)
-            <button onclick="editMorphO2MBelongTo{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]) !!}'); return false;" data-toggle="modal" class="btn btn-sm btn-success" type="button">
+            <button onclick="editMorphO2MBelongTo{{$jsUnique}}(this, '{!! $urlWizardEdit !!}'); return false;" data-toggle="modal" class="btn btn-sm btn-success" type="button">
                 <i class="fa fa-pencil"></i>
                 {{ $controller->LL('btn.edit') }}
             </button>

@@ -10,7 +10,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     protected $viewModel = "core::field.relation-many-to-many.model";
     protected $viewField = "core::field.relation-many-to-many.field";
 
-	public function getChooseTypeId($field, $linkedField)
+	public function getChooseTypeId($field)
 	{
 		return \App\Telenok\Core\Model\Object\Type::withPermission()->where('treeable', 1)->get(['id'])->fetch('id')->all();
 	}
@@ -188,7 +188,6 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     public function postProcess($model, $type, $input) 
 	{ 
-		
 		return $this;
 	}
 

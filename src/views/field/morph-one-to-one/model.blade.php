@@ -1,7 +1,6 @@
 <?php
 
     $method = camel_case($field->code);
-    $linkedField = $field->morph_one_to_one_has ? 'morph_one_to_one_has' : 'morph_one_to_one_belong_to';
     $jsUnique = str_random();
 
 	$domAttr = ['disabled' => 'disabled', 'class' => 'col-xs-5 col-sm-5'];
@@ -42,7 +41,7 @@
 						|| 
 					($model->exists && $field->allow_update && $permissionUpdate))
 				)
-            <button onclick="chooseMorphO2O{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardChoose(), ['id' => $controller->getChooseTypeId($field, $linkedField)]) !!}'); return false;" data-toggle="modal" class="btn btn-sm" type="button">
+            <button onclick="chooseMorphO2O{{$jsUnique}}(this, '{!! $urlWizardChoose !!}'); return false;" data-toggle="modal" class="btn btn-sm" type="button">
                 <i class="fa fa-bullseye"></i>
                 {{ $controller->LL('btn.choose') }}
             </button>
@@ -53,7 +52,7 @@
 						|| 
 					($model->exists && $field->allow_update && $permissionUpdate)) && !$disabledCreateLinkedType
 				)
-            <button onclick="createMorphO2O{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardCreate(), [ 'id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]) !!}'); return false;" data-toggle="modal" class="btn btn-sm" type="button">
+            <button onclick="createMorphO2O{{$jsUnique}}(this, '{!! $urlWizardCreate !!}'); return false;" data-toggle="modal" class="btn btn-sm" type="button">
                 <i class="fa fa-plus"></i>
                 {{ $controller->LL('btn.create') }}
             </button>
@@ -64,7 +63,7 @@
 						|| 
 					($model->exists && $field->allow_update && $permissionUpdate))
 				)
-            <button onclick="editMorphO2O{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]) !!}'); return false;" data-toggle="modal" class="btn btn-sm btn-success" type="button">
+            <button onclick="editMorphO2O{{$jsUnique}}(this, '{!! $urlWizardEdit !!}'); return false;" data-toggle="modal" class="btn btn-sm btn-success" type="button">
                 <i class="fa fa-pencil"></i>
                 {{ $controller->LL('btn.edit') }}
             </button>

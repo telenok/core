@@ -9,9 +9,27 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     protected $specialField = ['relation_one_to_many_has', 'relation_one_to_many_belong_to'];
     protected $allowMultilanguage = false;
 
-	public function getChooseTypeId($field, $linkedField)
+	public function getLinkedField($field)
 	{
-		return $field->relation_one_to_many_belong_to ? $field->{$linkedField} : $field->relation_one_to_many_has;
+		return $field->relation_one_to_many_has ? 'relation_one_to_many_has' : 'relation_one_to_many_belong_to';
+	}
+	
+	public function getChooseTypeId($field)
+	{
+		return $field->relation_one_to_many_belong_to ? $field->{$this->getLinkedField($field)} : $field->relation_one_to_many_has;
+	}
+
+	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+	{
+		$linkedField = $this->getLinkedField($field);
+		
+		return [
+			'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
+			'urlListTable' => route($this->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $uniqueId]),
+			'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
+			'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $this->getChooseTypeId($field)]),
+			'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
+		];
 	}
 	
 	/**
@@ -25,7 +43,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 	{
 		return \App\Telenok\Core\Model\Object\Type::whereIn('id', [$field->relation_one_to_many_has, $field->relation_one_to_many_belong_to])->first();
 	}
-	
+
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     { 		
 		if ($field->relation_one_to_many_has || $field->relation_one_to_many_belong_to)

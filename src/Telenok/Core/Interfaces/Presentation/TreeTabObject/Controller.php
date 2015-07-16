@@ -11,10 +11,12 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
     protected $presentationFormModelView = 'core::presentation.tree-tab-object.form';
     protected $presentationFormFieldListView = 'core::presentation.tree-tab-object.form-field-list'; 
 
-    public function getFieldTemplateView($field) {}
+    public function getModelFieldView($field) {}
 
-	public function getFieldTemplateKey($field) {}
+	public function getModelFieldViewKey($field) {}
 	
+	public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null) {}
+
     public function getGridId($key = 'gridId')
     {
         return "{$this->getPresentation()}-{$this->getTabKey()}-{$this->getTypeList()->code}";

@@ -25,7 +25,26 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 	{
 		return \App\Telenok\Core\Model\Object\Type::whereIn('id', [$field->morph_many_to_many_has, $field->morph_many_to_many_belong_to])->first();
 	} 
-	
+
+	public function getLinkedField($field)
+	{
+		return $field->morph_many_to_many_has ? 'morph_many_to_many_has' : 'morph_many_to_many_belong_to';
+	}
+
+	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+	{
+		$linkedField = $this->getLinkedField($field);
+		
+		return
+		[
+			'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
+			'urlListTable' => route($this->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $uniqueId]),
+			'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $this->getChooseTypeId($field)]),
+			'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
+			'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
+		];
+	}
+
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null)
     {
 		if (!empty($value))

@@ -107,7 +107,7 @@
 									aoColumns : aoColumns,
 									aaSorting: [],
 									iDisplayLength : {{$displayLength}},
-									sAjaxSource : '{!! URL::route($controller->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $jsUnique]) !!}', 
+									sAjaxSource : '{!! $urlListTable !!}', 
 									oTableTools: {
 										aButtons : aButtons
 									}
@@ -126,7 +126,7 @@
 									"sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
 									'sButtonClass': 'btn-success btn-sm',
 									"fnClick": function(nButton, oConfig, oFlash) {
-										createM2M{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardCreate(), [ 'id' => $controller->getChooseTypeId($field, $linkedField), 'saveBtn' => 1, 'chooseBtn' => 1]) !!}');
+										createM2M{{$jsUnique}}(this, '{!! $urlWizardCreate !!}');
 									}
 								});
 							@endif	
@@ -136,7 +136,7 @@
 									"sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.choose') }}",
 									'sButtonClass': 'btn-yellow btn-sm',
 									"fnClick": function(nButton, oConfig, oFlash) {
-										chooseM2M{{$jsUnique}}(this, '{!! URL::route($controller->getRouteWizardChoose(), ['id' => $controller->getChooseTypeId($field, $linkedField)]) !!}');
+										chooseM2M{{$jsUnique}}(this, '{!! $urlWizardChoose !!}');
 									}
 								});
 

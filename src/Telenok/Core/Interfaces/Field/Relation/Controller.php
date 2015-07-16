@@ -4,9 +4,14 @@ namespace Telenok\Core\Interfaces\Field\Relation;
 
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
+
+	public function getLinkedField($field)
+	{
+	}
+	
 	public function getChooseTypeId($field, $linkedField)
 	{
-		return $field->{$linkedField};
+		return $field->{$this->getLinkedField($field)};
 	}
 
 	public function getModelAttribute($model, $key, $value, $field)
@@ -37,25 +42,25 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		$model = new $class;
 
 		$model::withPermission()
-				->join('object_translation', function($join) use ($model)
+			->join('object_translation', function($join) use ($model)
+			{
+				$join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id');
+			})
+			->where(function($query) use ($term, $model)
+			{
+				\Illuminate\Support\Collection::make(explode(' ', $term))
+				->reject(function($i)
 				{
-					$join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id');
+					return !trim($i);
 				})
-				->where(function($query) use ($term, $model)
+				->each(function($i) use ($query)
 				{
-					\Illuminate\Support\Collection::make(explode(' ', $term))
-					->reject(function($i)
-					{
-						return !trim($i);
-					})
-					->each(function($i) use ($query)
-					{
-						$query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
-					});
+					$query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
+				});
 
-					$query->orWhere($model->getTable() . '.id', (int) $term);
-				})
-				->take(20)->groupBy($model->getTable() . '.id')->get()->each(function($item) use (&$return)
+				$query->orWhere($model->getTable() . '.id', (int) $term);
+			})
+			->take(20)->groupBy($model->getTable() . '.id')->get()->each(function($item) use (&$return)
 		{
 			$return[] = ['value' => $item->id, 'text' => "[{$item->id}] " . $item->translate('title')];
 		});

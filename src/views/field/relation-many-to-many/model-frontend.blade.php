@@ -25,7 +25,7 @@
 		})->lists('value', 'id');
 	}
 	
-	$values = ['&nbsp;'] + $values;
+	$values = ['&nbsp;'] + (array)$values;
 ?>
 
 <div class="form-group">
@@ -47,8 +47,8 @@
 
 			<?php
 
-			$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.chosen/chosen.css', 'chosen'));
-			$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.chosen/chosen.js', 'chosen'));
+			$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.chosen/chosen.css'), 'chosen', 20);
+			$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.chosen/chosen.js'), 'chosen', 20);
 
 			ob_start();
 
@@ -62,7 +62,7 @@
 						keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
 						lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
 						type: "GET",
-						url: "{!! URL::route("cmf.field.relation-many-to-many.list.title", ['id' => $field->relation_many_to_many_has ?: $field->relation_many_to_many_belong_to]) !!}", 
+						url: "{!! $urlListTable !!}", 
 						dataType: "json",
 						minTermLength: 1
 					}, 

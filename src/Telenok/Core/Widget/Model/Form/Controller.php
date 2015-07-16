@@ -12,8 +12,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $fieldOnly = [];
 	protected $fieldExcept = [];
 
-	protected $fieldTemplateView = [];
-	protected $fieldTemplateKey;
+	protected $modelFieldView = [];
+	protected $modelFieldViewKey;
+	protected $modelFieldViewVariable = [];
 
 	protected $formClass = 'form-horizontal';
 
@@ -34,8 +35,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	echo (new \App\Telenok\Core\Html\Form\Controller())->form([	
 		'uniqueId' => 'adadad94820sdvbxjkh',
-		'id' => 22, //for editinng
-		'model' => (\App\...\Object\Type::find(10) for creating || type code like 'user' || 299 for creating || '\App\Model\Package' for creating),
+		'model' => (\App\...\Object\Type::find(10) || 299 ),
+		'modelType' => for security reason (\App\...\Object\Type::find(10) || type code like 'user' || 299 || '\App\Model\Package'),
 		'fieldOnly' => [
 			'id',
 			'title', 
@@ -44,8 +45,20 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		'fieldExcept' => [
 			'some_other_field',
 		],
-		'fieldTemplateKey' => 'frontend',
+		'modelFieldViewKey' => 'frontend',
+		'modelFieldView' => [
+			'code' => 'core::some.special.view',
+			'key' => 'core::some.other.view',
+		],
+		'modelFieldViewVariable' => [
+			'code' => function($fieldController, $model, $field, $uniqueId)
+						{
+							return [ 'urlListTitle' => route('some.other.router') ];
+						}
+		],
 		'modelView' => 'core::widget.form.model',
+		'formView' => 'core::widget.form.form',
+		'fieldView' => 'core::widget.form.field',
 		'routerStore' => 'some.router.store',
 		'routerUpdate' => 'some.router.update',
 		'routerDelete' => 'some.router.delete',
@@ -55,12 +68,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	]);
 
 	*/
+	
 	public function form($config = [])
 	{
 		$this->setConfig($config);
 
-		$this->setModel();
 		$this->setModelType();
+		$this->setModel();
 		$this->setFields();
 
 		if ($this->getModel()->exists)
@@ -282,40 +296,20 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	public function setModel($model = null)
 	{
 		$model = $model?:$this->getConfig('model');
-		$model_ = null;
 
-		if ($model instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model)
+		$realModel = $this->getModelByTypeId($this->getModelType()->getKey());
+		
+		if ($model instanceof $realModel)
 		{
-			$model_ = $model;
+			$this->model = $model;
 		}
-		else if (is_string($model) && class_exists($model))
+		else if ($v = intval($model))
 		{
-			$model_ = app($model);
+			$this->model = $realModel->findOrFail($v);
 		}
 		else
 		{
-			$model_ = $this->getModelByTypeId($model);
-		}
-		
-		if ($this->id)
-		{
-			if ($model_)
-			{
-				$this->model = $model_->findOrFail($this->id);
-			}
-			else
-			{
-				$this->model = $this->getModelById($id);
-			}
-		}
-		else if ($model_)
-		{
-			$this->model = $model_;
-		}
-
-		if (!($this->model instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model))
-		{
-			throw new \Exception('Please, set value for key "model"');
+			$this->model = $realModel;
 		}
 
 		return $this;
@@ -341,20 +335,31 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return app($this->getTypeById($id)->class_model);
     }
 
-	public function typeForm($type)
-    {
-        return app($type->classController())
-					->setTabKey($this->key)
-					->setAdditionalViewParam($this->getAdditionalViewParam());
-    } 
-	
-	public function setModelType($type = null)
+	public function setModelType($model = null)
 	{
-		$this->modelType = $type?:$this->getModel()->type();
+		$model = $model?:$this->getConfig('modelType');
+
+		if ($model instanceof \Telenok\Core\Model\Object\Type)
+		{
+			$this->modelType = $model;
+		}
+		else if (is_string($model) && class_exists($model))
+		{
+			$this->modelType = app($model);
+		}
+		else
+		{
+			$this->modelType = $this->getTypeById($model);
+		}
+
+		if (!($this->modelType instanceof \Telenok\Core\Model\Object\Type))
+		{
+			throw new \Exception('Please, set value for key "modelType"');
+		}
 
 		return $this;
 	}
-	
+
 	public function getModelType()
 	{
 		return $this->modelType;
@@ -411,8 +416,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->fieldView = $this->getConfig('fieldView', $this->fieldView);
 		$this->fieldOnly = $this->getConfig('fieldOnly', []);
 		$this->fieldExcept = $this->getConfig('fieldExcept', []);
-		$this->fieldTemplateView = $this->getConfig('fieldTemplateView', []);
-		$this->fieldTemplateKey = $this->getConfig('fieldTemplateKey');
+		$this->modelFieldView = $this->getConfig('modelFieldView', []);
+		$this->modelFieldViewKey = $this->getConfig('modelFieldViewKey');
+		$this->modelFieldViewVariable = $this->getConfig('modelFieldViewVariable');
 		$this->routerStore = $this->getConfig('routerStore');
 		$this->routerUpdate = $this->getConfig('routerUpdate');
 		$this->routerDelete = $this->getConfig('routerDelete');
@@ -435,17 +441,17 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 	}
 
-	public function getFieldTemplateView($field)
+	public function getModelFieldView($field)
 	{
-		if ($t = array_get($this->fieldTemplateView, $field->code))
+		if ($t = array_get($this->modelFieldView, $field->code))
 		{
 			return $t;
 		}
 	}
-	
-	public function getFieldTemplateKey($field)
+		
+	public function getModelFieldViewKey($field)
 	{
-		return $this->fieldTemplateKey;
+		return $this->modelFieldViewKey;
 	}
 	
 	public function setRedirectAfterStore($param)
@@ -484,5 +490,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this->redirectAfterDelete;
 	}
 	
-	
+	public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null)
+	{
+		$f = array_get($this->modelFieldViewVariable, $field->code);
+		
+		if ($f instanceof \Closure)
+		{
+			return $f($fieldController, $model, $field, $uniqueId);
+		}
+	}
 }

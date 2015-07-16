@@ -14,6 +14,24 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		return [];
     } 
 
+	public function getLinkedField($field)
+	{
+		return $field->relation_many_to_many_has ? 'relation_many_to_many_has' : 'relation_many_to_many_belong_to';
+	}
+
+	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+	{
+	    $linkedField = $this->getLinkedField($field);
+
+		return [
+			'urlListTitle' => route($this->getRouteListTitle(), ['id' => $field->{$linkedField}]),
+			'urlListTable' => route($this->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $uniqueId]),
+			'urlWizardCreate' => route($this->getRouteWizardCreate(), [ 'id' => $this->getChooseTypeId($field), 'saveBtn' => 1, 'chooseBtn' => 1]),
+			'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $this->getChooseTypeId($field)]),
+			'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
+		];
+	}
+	
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     { 		
 		if ($field->relation_many_to_many_has || $field->relation_many_to_many_belong_to)

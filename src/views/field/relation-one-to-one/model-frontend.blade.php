@@ -24,7 +24,7 @@
 		})->lists('value', 'id')->toArray();
 	}
 
-	$values = ['&nbsp;'] + $values;
+	$values = ['&nbsp;'] + (array)$values;
 
 ?>
 
@@ -47,8 +47,8 @@
 
 			<?php
 
-			$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.chosen/chosen.css', 'chosen'));
-			$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.chosen/chosen.js', 'chosen'));
+			$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.chosen/chosen.css'), 'chosen', 20);
+			$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.chosen/chosen.js'), 'chosen', 20);
 
 			ob_start();
 
@@ -62,7 +62,7 @@
 						keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
 						lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
 						type: "GET",
-						url: "{!! URL::route("cmf.field.relation-one-to-one.list.title", ['id' => $field->relation_one_to_one_has ?: $field->relation_one_to_one_belong_to]) !!}", 
+						url: "{!! $urlListTitle !!}", 
 						dataType: "json",
 						minTermLength: 1
 					}, 

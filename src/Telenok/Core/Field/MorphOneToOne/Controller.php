@@ -9,9 +9,28 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     protected $specialField = ['morph_one_to_one_has', 'morph_one_to_one_belong_to', 'morph_one_to_one_belong_to_type_list'];
     protected $allowMultilanguage = false;
 
-	public function getChooseTypeId($field, $linkedField)
+	public function getLinkedField($field)
 	{
-		return $field->morph_one_to_one_has ? $field->{$linkedField} : $field->morph_one_to_one_belong_to_type_list->all();
+		return $field->morph_one_to_one_has ? 'morph_one_to_one_has' : 'morph_one_to_one_belong_to';
+	}
+	
+	public function getChooseTypeId($field)
+	{
+		return $field->morph_one_to_one_has ? $field->{$this->getLinkedField()} : $field->morph_one_to_one_belong_to_type_list->all();
+	}
+
+	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+	{
+		$linkedField = $this->getLinkedField($field);
+		
+		return
+		[
+			'urlListTable' => route($this->getRouteListTable(), ['id' => (int)$model->getKey(), 'fieldId' => $field->getKey(), "uniqueId" => $uniqueId]),
+			'urlWizardCreate' => route($this->getRouteWizardCreate(), [ 'id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
+			'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $this->getChooseTypeId($field)]),
+			'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
+			'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
+		];
 	}
 
 	/**

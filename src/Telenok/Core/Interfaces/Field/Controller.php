@@ -27,7 +27,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		$viewObj = app('view');  
 
 		$fieldView = '';
-		$defaultTemplate = "{$this->getPackage()}::field.{$this->getKey()}.model";
+		$defaultTemplate = $this->viewModel?:"{$this->getPackage()}::field.{$this->getKey()}.model";
 
 		if ($field instanceof \Telenok\Core\Model\Object\Field && $viewObj->exists($field->field_view))
 		{
@@ -57,7 +57,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		{
 			throw new \Exception('Please set view for field "' . $this->getKey() . '"');
 		}
-
+		
 		return $this;
 	}
 
@@ -161,9 +161,9 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
-		$this->setViewModel($field, $controller->getFieldTemplateView($field), $controller->getFieldTemplateKey($field));
-
-		return view($this->getViewModel(), [
+		$this->setViewModel($field, $controller->getModelFieldView($field), $controller->getModelFieldViewKey($field));
+		
+		return view($this->getViewModel(), array_merge([
 					'controllerParent' => $controller,
 					'controller' => $this,
 					'model' => $model,
@@ -173,7 +173,10 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 					'permissionDelete' => app('auth')->can('delete', 'object_field.' . $model->getTable() . '.' . $field->code),
 					'displayLength' => $this->displayLength,
 					'uniqueId' => $uniqueId,
-				])->render();
+				],
+				(array)$this->getModelFieldViewVariable($controller, $model, $field, $uniqueId),
+				(array)$controller->getModelFieldViewVariable($this, $model, $field, $uniqueId)
+			))->render();
 	}
 
 	/**
@@ -184,6 +187,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	 * 
 	 */
 	public function getLinkedModelType($field) {}
+	
+	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null) {}
 
 	public function getTableList($id = null, $fieldId = null, $uniqueId = null)
 	{

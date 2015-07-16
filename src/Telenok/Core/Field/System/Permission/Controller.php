@@ -7,7 +7,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	protected $key = 'permission';
     protected $allowMultilanguage = false; 
-	
+
+	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+	{
+		return
+		[
+			'urlListTitle' => URLroute("cmf.field.permission.list.title"),
+		];
+	}
+
 	public function getTitleList($id = null)
 	{
 		$term = trim($this->getRequest()->input('term'));
@@ -93,17 +101,20 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
 		$permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
-		$this->setViewModel($field, $controller->getFieldTemplateView($field), $controller->getFieldTemplateKey($field));
+		$this->setViewModel($field, $controller->getModelFieldView($field), $controller->getModelFieldViewKey($field));
 
-		return view($this->getViewModel(), array(
-					'controllerParent' => $controller,
-					'controller' => $this,
-					'model' => $model,
-					'field' => $field,
-					'uniqueId' => $uniqueId,
-					'permissions' => $permissions,
-					'permissionCreate' => app('auth')->can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
-					'permissionUpdate' => app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
+		return view($this->getViewModel(), array_merge([
+						'controllerParent' => $controller,
+						'controller' => $this,
+						'model' => $model,
+						'field' => $field,
+						'uniqueId' => $uniqueId,
+						'permissions' => $permissions,
+						'permissionCreate' => app('auth')->can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
+						'permissionUpdate' => app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
+					],
+					(array)$this->getModelFieldViewVariable($controller, $model, $field, $uniqueId),
+					(array)$controller->getModelFieldViewVariable($this, $model, $field, $uniqueId)
 				))->render();
 	}
 

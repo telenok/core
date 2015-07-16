@@ -18,7 +18,21 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 	public function getRouteUpload()
 	{
 		return $this->routeUpload;
-	}	
+	}
+	
+	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+	{
+		$linkedField = $this->getLinkedField($field);
+		
+		return
+		[
+			'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
+			'urlListTable' => route($this->getRouteListTable(), ['id' => (int)$model->getKey(), 'fieldId' => $field->getKey(), 'uniqueId' => $uniqueId]),
+			'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $field->{$linkedField}]),
+			'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
+			'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
+		];
+	}
 	
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     { 		

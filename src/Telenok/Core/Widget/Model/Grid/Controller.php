@@ -17,6 +17,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $displayLength = 10;
 	protected $enableColumnSelect = true;
 	protected $enableColumnAction = true;
+	protected $queryFilter;
 
 	protected $viewGrid = 'core::widget.grid.table';
 	protected $viewRow = 'core::widget.grid.row';
@@ -48,6 +49,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				},
 			]
 		],
+		'queryFilter' => function($query) { $query->where('active', 1); },
 		'buttonTopOrder' => ['create', 'refresh'],
 		'routerList' => 'cmf.widget.grid.list',
 		'routerCreate' => 'cmf.widget.form.create',
@@ -137,7 +139,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             throw new \LogicException($this->LL('error.access.read'));
         } 
 
-        $total = $input->get('iDisplayLength', $this->displayLength);
+        $total = $input->get('iDisplayLength', $this->getDisplayLength());
         $sEcho = $input->get('sEcho');
         $iDisplayStart = $input->get('iDisplayStart', 0); 
 		
@@ -187,16 +189,21 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             $query->orderBy($this->getModel()->getTable() . '.' . $orderByField, $input->get('sSortDir_0'));
         }
 
+		if (($f = $this->getQueryFilter()) instanceof \Closure)
+		{
+			$f($query);
+		}
+		
         $items = $query->groupBy($this->getModel()->getTable() . '.id')
 				->orderBy($this->getModel()->getTable() . '.updated_at', 'desc')
 				->skip($this->getRequest()->input('iDisplayStart', 0))
-				->take($this->displayLength + 1)->get();
+				->take($this->getDisplayLength() + 1)->get();
 		
 		$config = app('telenok.config.repository')->getObjectFieldController();
 
 		$content = [];
 		
-		foreach ($items->slice(0, $this->displayLength, true) as $item)
+		foreach ($items->slice(0, $this->getDisplayLength(), true) as $item)
 		{
 			$put = ['tableCheckAll' => '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]" value="'
 											. $item->getKey() . '" /><span class="lbl"></span></label>'];
@@ -212,7 +219,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 
         return [
-            //'gridId' => $this->getGridId($model->getTable()), 
             'sEcho' => $sEcho,
             'iTotalRecords' => ($iDisplayStart + $items->count()),
             'iTotalDisplayRecords' => ($iDisplayStart + $items->count()),
@@ -325,7 +331,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function setModel()
 	{
-		$this->model = $this->getModelType();
+		$this->model = $this->getModelByType();
 		
 		return $this;
 	}
@@ -426,7 +432,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->displayLength = $this->getConfig('displayLength', $this->displayLength);
 		$this->enableColumnSelect = $this->getConfig('enableColumnSelect', $this->enableColumnSelect);
 		$this->enableColumnAction = $this->getConfig('enableColumnAction', $this->enableColumnAction);
-
+		$this->queryFilter = $this->getConfig('queryFilter');
+		
 		$this->viewButtonTop = $this->getConfig('viewButtonTop', $this->viewButtonTop);
 		$this->viewGrid = $this->getConfig('viewGrid', $this->viewGrid);
 		$this->viewRow = $this->getConfig('viewRow', $this->viewRow);
@@ -446,9 +453,28 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 	}
 
+	public function setQueryFilter($param)
+	{
+		$this->queryFilter = $param;
+		
+		return $this;
+	}
+
+	public function getQueryFilter()
+	{
+		return $this->queryFilter;
+	}
+
 	public function getUniqueId()
 	{
 		return $this->uniqueId;
+	}
+
+	public function setUniqueId($param)
+	{
+		$this->uniqueId = $param;
+
+		return $this;
 	}
 
     public function getTypeById($id)
@@ -460,4 +486,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     {
         return app($this->getModelType()->class_model);
     }
+	
+	public function getDisplayLength()
+	{
+		return $this->displayLength;
+	}
 }
