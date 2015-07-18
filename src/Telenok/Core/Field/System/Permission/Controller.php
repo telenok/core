@@ -12,7 +12,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	{
 		return
 		[
-			'urlListTitle' => URLroute("cmf.field.permission.list.title"),
+			'urlListTitle' => route("cmf.field.permission.list.title"),
 		];
 	}
 
@@ -123,17 +123,20 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	
 	public function saveModelField($field, $model, $input)
 	{ 
-		$permissionList = (array)$input->get('permission', []);
-
-		\App\Telenok\Core\Security\Acl::resource($model)->unsetPermission();
-        
-		foreach($permissionList as $permissionCode => $persmissionIds)
+		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.permission'))
 		{
-			if (!empty($persmissionIds))
+			$permissionList = (array)$input->get('permission', []);
+
+			\App\Telenok\Core\Security\Acl::resource($model)->unsetPermission();
+
+			foreach($permissionList as $permissionCode => $persmissionIds)
 			{
-				foreach($persmissionIds as $id)
+				if (!empty($persmissionIds))
 				{
-					\App\Telenok\Core\Security\Acl::subject($id)->setPermission($permissionCode, $model);
+					foreach($persmissionIds as $id)
+					{
+						\App\Telenok\Core\Security\Acl::subject($id)->setPermission($permissionCode, $model);
+					}
 				}
 			}
 		}

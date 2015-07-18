@@ -34,63 +34,69 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 			throw new \Exception('Model "' . get_class($model) . '" is not treeable');
 		}
 
-		$idsParentAdd = array_unique((array)$input->get("tree_parent_add", []));
-        $idsParentDelete = array_unique((array)$input->get("tree_parent_delete", []));
-        
-		$idsChildAdd = array_unique((array)$input->get("tree_child_add", []));
-        $idsChilDelete = array_unique((array)$input->get("tree_child_delete", []));
-		  
-        if (!empty($idsParentDelete))
-        {
-            if (in_array('*', $idsParentDelete, true))
-            {
-                $model->treeParent()->detach();
-            }
-            else if (!empty($idsParentDelete))
-            {
-                $model->treeParent()->detach($idsParentDelete);
-            }
+		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.tree_parent'))
+		{
+			$idsParentAdd = array_unique((array)$input->get("tree_parent_add", []));
+			$idsParentDelete = array_unique((array)$input->get("tree_parent_delete", []));
+
+			$idsChildAdd = array_unique((array)$input->get("tree_child_add", []));
+			$idsChilDelete = array_unique((array)$input->get("tree_child_delete", []));
+
+			if (!empty($idsParentDelete))
+			{
+				if (in_array('*', $idsParentDelete, true))
+				{
+					$model->treeParent()->detach();
+				}
+				else if (!empty($idsParentDelete))
+				{
+					$model->treeParent()->detach($idsParentDelete);
+				}
+			}
+
+			if (!empty($idsParentAdd))
+			{
+				foreach($idsParentAdd as $id)
+				{
+					try
+					{
+						$model->makeLastChildOf($id);
+					}
+					catch(\Exception $e) {
+
+						throw $e;
+					}
+				}
+			}
 		}
 
-        if (!empty($idsParentAdd))
-        {
-            foreach($idsParentAdd as $id)
-            {
-                try
-                {
-                    $model->makeLastChildOf($id);
-                }
-                catch(\Exception $e) {
-                    
-                    throw $e;
-                }
-            }
-		}
+		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.tree_child'))
+		{
+			if (!empty($idsChilDelete))
+			{
+				if (in_array('*', $idsChilDelete, true))
+				{
+					$model->treeChild()->detach();
+				}
+				else if (!empty($idsChilDelete))
+				{
+					$model->treeChild()->detach($idsChilDelete);
+				}
+			}
 
-        if (!empty($idsChilDelete))
-        {
-            if (in_array('*', $idsChilDelete, true))
-            {
-                $model->treeChild()->detach();
-            }
-            else if (!empty($idsChilDelete))
-            {
-                $model->treeChild()->detach($idsChilDelete);
-            }
-		}
+			if (!empty($idsChildAdd))
+			{
+				foreach($idsChildAdd as $id)
+				{
+					try
+					{
+						$child = \App\Telenok\Core\Model\Object\Sequence::findOrFail($id);
 
-        if (!empty($idsChildAdd))
-        {
-            foreach($idsChildAdd as $id)
-            {
-                try
-                {
-					$child = \App\Telenok\Core\Model\Object\Sequence::findOrFail($id);
-
-                    $child->makeLastChildOf($model);
-                }
-                catch(\Exception $e) {}
-            }
+						$child->makeLastChildOf($model);
+					}
+					catch(\Exception $e) {}
+				}
+			}
 		}
 
         return $model;

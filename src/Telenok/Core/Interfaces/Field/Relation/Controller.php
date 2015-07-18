@@ -9,7 +9,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	{
 	}
 	
-	public function getChooseTypeId($field, $linkedField)
+	public function getChooseTypeId($field)
 	{
 		return $field->{$this->getLinkedField($field)};
 	}

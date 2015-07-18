@@ -144,40 +144,43 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
         $idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
 
-        if ( (!empty($idsAdd) || !empty($idsDelete)) && $field->relation_one_to_many_has)
+        if ((!empty($idsAdd) || !empty($idsDelete)) && $field->relation_one_to_many_has)
         { 
             $method = camel_case($field->code);
 
-            $relatedField = $field->code . '_' . $model->sequence->sequencesObjectType->code;
+            $relatedField = $field->code . '_' . ($relatedTable = $model->sequence->sequencesObjectType->code);
 
-            if (in_array('*', $idsDelete, true))
-            {
-                $model->$method()->get()->each(function($item) use ($relatedField) 
-                {
-                    $item->fill([$relatedField => 0])->save();
-                });
-            }
-            else if (!empty($idsDelete))
-            {
-                $model->$method()->whereIn('id', $idsDelete)->get()->each(function($item) use ($relatedField) 
-                {
-                    $item->fill([$relatedField => 0])->save();
-                });
-            }
-
-			$method = camel_case($field->code);
-
-			$relatedQuery = $model->$method();
-
-			try
+			if (app('auth')->can('update', 'object_field.' . $relatedTable . '.' . $relatedField))
 			{
-				foreach($idsAdd as $id)
+				if (in_array('*', $idsDelete, true))
 				{
-					$relatedQuery->getRelated()->findOrFail((int)$id)
-						->storeOrUpdate([$relatedQuery->getPlainForeignKey() => $model->getKey()], true);
+					$model->$method()->get()->each(function($item) use ($relatedField) 
+					{
+						$item->fill([$relatedField => 0])->save();
+					});
 				}
+				else if (!empty($idsDelete))
+				{
+					$model->$method()->whereIn('id', $idsDelete)->get()->each(function($item) use ($relatedField) 
+					{
+						$item->fill([$relatedField => 0])->save();
+					});
+				}
+
+				$method = camel_case($field->code);
+
+				$relatedQuery = $model->$method();
+
+				try
+				{
+					foreach($idsAdd as $id)
+					{
+						$relatedQuery->getRelated()->findOrFail((int)$id)
+							->storeOrUpdate([$relatedQuery->getPlainForeignKey() => $model->getKey()], true);
+					}
+				}
+				catch (\Exception $e) {}
 			}
-			catch (\Exception $e) {}
         }
 
         return $model;
@@ -317,7 +320,5 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         }
 
         return parent::postProcess($model, $type, $input);
-    } 
-
+    }
 }
-

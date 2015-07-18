@@ -133,31 +133,34 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			return $model;
 		}
 
-		$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
-        $idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
-         
-        if ( (!empty($idsAdd) || !empty($idsDelete)))
-        { 
-            $method = camel_case($field->code);
-             
-            if (in_array('*', $idsDelete, true))
-            {
-                $model->$method()->detach();
-            }
-            else if (!empty($idsDelete))
-            {
-                $model->$method()->detach($idsDelete);
-            }
+		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
+		{
+			$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
+			$idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
 
-            foreach($idsAdd as $id)
-            {
-                try
-                {
-                    $model->$method()->attach($id);
-                }
-                catch(\Exception $e) {}
-            }
-        }
+			if ( (!empty($idsAdd) || !empty($idsDelete)))
+			{ 
+				$method = camel_case($field->code);
+
+				if (in_array('*', $idsDelete, true))
+				{
+					$model->$method()->detach();
+				}
+				else if (!empty($idsDelete))
+				{
+					$model->$method()->detach($idsDelete);
+				}
+
+				foreach($idsAdd as $id)
+				{
+					try
+					{
+						$model->$method()->attach($id);
+					}
+					catch(\Exception $e) {}
+				}
+			}
+		}
 
         return $model;
     }

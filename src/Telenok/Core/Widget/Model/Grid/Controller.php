@@ -14,6 +14,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $routerList = 'cmf.widget.grid.list';
 	protected $routerCreate = 'cmf.widget.form.create';
 	protected $routerEdit = 'cmf.widget.form.edit';
+	protected $routerDelete = 'cmf.widget.form.delete';
 	protected $displayLength = 10;
 	protected $enableColumnSelect = true;
 	protected $enableColumnAction = true;
@@ -54,6 +55,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		'routerList' => 'cmf.widget.grid.list',
 		'routerCreate' => 'cmf.widget.form.create',
 		'routerEdit' => 'cmf.widget.form.edit',
+		'routerDelete' => 'cmf.widget.form.delete',
 		'enableColumnSelect' => true,
 		'enableColumnAction' => false,
 	]);
@@ -138,7 +140,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         {
             throw new \LogicException($this->LL('error.access.read'));
         } 
-
+ 
         $total = $input->get('iDisplayLength', $this->getDisplayLength());
         $sEcho = $input->get('sEcho');
         $iDisplayStart = $input->get('iDisplayStart', 0); 
@@ -298,6 +300,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		return $this->routerEdit;
 	}
+
+	public function setRouterDelete($param)
+	{
+		$this->routerDelete = $param;
+		
+		return $this;
+	}
+
+	public function getRouterDelete()
+	{
+		return $this->routerDelete;
+	}
 	
 	public function setModelType($model = null)
 	{
@@ -429,11 +443,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->routerList = $this->getConfig('routerList', $this->routerList);
 		$this->routerCreate = $this->getConfig('routerCreate', $this->routerCreate);
 		$this->routerEdit = $this->getConfig('routerEdit', $this->routerEdit);
+		$this->routerDelete = $this->getConfig('routerDelete', $this->routerDelete);
 		$this->displayLength = $this->getConfig('displayLength', $this->displayLength);
 		$this->enableColumnSelect = $this->getConfig('enableColumnSelect', $this->enableColumnSelect);
 		$this->enableColumnAction = $this->getConfig('enableColumnAction', $this->enableColumnAction);
 		$this->queryFilter = $this->getConfig('queryFilter');
-		
+
 		$this->viewButtonTop = $this->getConfig('viewButtonTop', $this->viewButtonTop);
 		$this->viewGrid = $this->getConfig('viewGrid', $this->viewGrid);
 		$this->viewRow = $this->getConfig('viewRow', $this->viewRow);

@@ -256,7 +256,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     public function getRouterDelete($param = [])
     {
-        return route($this->routerDelete ?: "cmf.widget.form.delete", $param);
+        return route($this->routerDelete, $param);
     }
 
 	public function getUniqueId()

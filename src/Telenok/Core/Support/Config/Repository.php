@@ -32,6 +32,11 @@ class Repository {
 		return $list[$type];
 	}
 	
+	public function getAclResourceFilter($flush = false)
+	{ 
+		return $this->getValue('telenok.acl.filter.resource', 'acl.filter', $flush);
+	}
+	
 	public function getPackage($flush = false)
 	{ 
 		return $this->getValue('telenok.repository.package', 'package', $flush);
@@ -262,7 +267,7 @@ class Repository {
 		{
 			foreach (\App\Telenok\Core\Model\System\Setting::all() as $setting)
 			{
-				\Config::set($setting->code, $setting->value/* instanceof \Illuminate\Support\Collection ? $setting->value->all() : $setting->value */);
+				\Config::set($setting->code, $setting->value);
 			}
 		}
 	}

@@ -21,7 +21,7 @@
     $list->push('App\Telenok\Core\Setting\AppLocales\Controller');
 });
 
-\Event::listen('telenok.acl.filter.resource.add', function($list)
+\Event::listen('telenok.acl.filter.resource', function($list)
 {
     $list->push('App\Telenok\Core\Filter\Acl\Resource\ObjectType\Controller');
     $list->push('App\Telenok\Core\Filter\Acl\Resource\ObjectTypeOwn\Controller');

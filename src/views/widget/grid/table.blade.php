@@ -61,7 +61,24 @@ ob_start();
 
 			jQuery('#table-{{$controller->getUniqueId()}}').dataTable(param);
 
-		});
+
+			jQuery('#table-{{$controller->getUniqueId()}}').data('deleteRow', function(obj, id)
+			{
+				jQuery.ajax({
+					url: "{!! route($controller->getRouterDelete(), ['id' => '--id--']) !!}".replace("--id--", id),
+					type: "post",
+
+				}).done(function(data)
+				{
+					if (data.success == 1)
+					{
+						jQuery(obj).closest("tr").remove();
+					}
+				});
+			});
+
+		}); 
+		
 	</script>
 
 <?php

@@ -232,7 +232,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		
 		if ($field->morph_one_to_many_belong_to)
 		{ 
-			if ($id)
+			if ($id && app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
 			{
 				$objectModel = \App\Telenok\Core\Model\Object\Sequence::find($id)->model()->first();
 
@@ -246,7 +246,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 				$model->fill([$field->code . '_type' => null, $field->code . '_id' => null])->save();
 			}
 		}
-		else if ($field->morph_one_to_many_has)
+		else if ($field->morph_one_to_many_has && app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
 		{ 
 			$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
 			$idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));

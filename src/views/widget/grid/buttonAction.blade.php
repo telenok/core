@@ -10,7 +10,16 @@
 		@endif
 
 		@if (app('auth')->can('delete', $item))
-		<li><a href="#">{{ $controller->LL('list.btn.delete') }}</a></li>
+		<li><a href="#" onclick='
+			
+				if (confirm("{{$controller->LL('notice.sure')}}"))
+				{
+					jQuery(this).closest("table").data("deleteRow")(this, {{ $item->getKey() }});
+				}
+
+				return false;
+
+			   '>{{ $controller->LL('list.btn.delete') }}</a></li>
 		@endif
 	</ul>
 </div>

@@ -8,6 +8,10 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 	protected $key = 'updated-by';
     protected $routeListTitle = "cmf.field.relation-one-to-many.list.title";
 
+	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+	{
+	}
+
     public function getDateField($model, $field)
     { 
 		return ['updated_at'];

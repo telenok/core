@@ -391,7 +391,6 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 			if ($f)
 			{
-
 				if (
 						(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key)) ||
 						($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key))

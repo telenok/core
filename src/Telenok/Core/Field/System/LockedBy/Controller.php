@@ -8,10 +8,15 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 	protected $key = 'locked-by';
     protected $routeListTitle = "cmf.field.relation-one-to-many.list.title";
 
+	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+	{
+	}
+
     public function getDateField($model, $field)
     { 
 		return ['locked_at'];
-    } 
+    }
+
     public function getModelField($model, $field)
     { 
 		return $field->relation_one_to_many_belong_to ? [$field->code, 'locked_at'] : [];
