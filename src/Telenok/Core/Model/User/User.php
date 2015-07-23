@@ -11,7 +11,7 @@ class User extends \Telenok\Core\Interfaces\Eloquent\Object\Model implements Aut
 
 	protected $ruleList = ['title' => ['required', 'min:1'], 'email' => ['unique:user,email,:id:,id'], 'usernick' => ['unique:user,usernick,:id:,id']];
 	protected $table = 'user';
-	protected $hidden = ['password'];
+	protected $hidden = ['password', 'remember_token'];
 	protected $fillable = ['remember_token'];
 
 
@@ -19,11 +19,11 @@ class User extends \Telenok\Core\Interfaces\Eloquent\Object\Model implements Aut
 	{
 		if ($value = trim($value))
 		{
-			$this->attributes['password'] = bcrypt($value);
+			$this->attributes['password'] = password_hash($value,  PASSWORD_BCRYPT);
 		}
 		else if (!$this->exists && !$value)
 		{
-			$this->attributes['password'] = bcrypt(str_random());
+			$this->attributes['password'] = password_hash(str_random(), PASSWORD_BCRYPT);
 		}
 	}
 

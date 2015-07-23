@@ -18,11 +18,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $displayLength = 10;
 	protected $enableColumnSelect = true;
 	protected $enableColumnAction = true;
-	protected $queryFilter;
 
 	protected $viewGrid = 'core::widget.grid.table';
 	protected $viewRow = 'core::widget.grid.row';
 	protected $viewButtonTop = 'core::widget.grid.buttonTop';
+	
+	protected $queryFilter;
 
 	/*
 
@@ -50,7 +51,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				},
 			]
 		],
-		'queryFilter' => function($query) { $query->where('active', 1); },
 		'buttonTopOrder' => ['create', 'refresh'],
 		'routerList' => 'cmf.widget.grid.list',
 		'routerCreate' => 'cmf.widget.form.create',
@@ -125,8 +125,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		return $this->enableColumnAction;
 	}
-	
-	public function getList($typeId = 0)
+
+	public function getFieldTitleList($id = null, $closure = null)
+	{
+		
+		
+		return app('\Telenok\Core\Interfaces\Field\Relation\Controller')->getTitleList($id, $closure);
+	}
+
+	public function getList($typeId = 0, $closure = null)
 	{
 		$input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
 		
@@ -159,6 +166,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 			});       
 		} 
 
+		if ($closure instanceof \Closure)
+		{
+			$closure($query);
+		}
+		
 		if ($input->get('multifield_search', false))
 		{
 			$controller = app('telenok.config.repository')->getObjectFieldController();
@@ -191,11 +203,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             $query->orderBy($this->getModel()->getTable() . '.' . $orderByField, $input->get('sSortDir_0'));
         }
 
-		if (($f = $this->getQueryFilter()) instanceof \Closure)
-		{
-			$f($query);
-		}
-		
         $items = $query->groupBy($this->getModel()->getTable() . '.id')
 				->orderBy($this->getModel()->getTable() . '.updated_at', 'desc')
 				->skip($this->getRequest()->input('iDisplayStart', 0))
@@ -226,7 +233,47 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             'iTotalDisplayRecords' => ($iDisplayStart + $items->count()),
             'aaData' => $content
         ];
+	}
+	
+	public function getLinkedFieldList($typeId, $term = '')
+	{
+		$return = [];
+
+		$this->setModelType($typeId);
+
+		$this->getModelType()->withPermission()
+			->join('object_translation', function($join)
+			{
+				$join->on($this->getModelType()->getTable() . '.id', '=', 'object_translation.translation_object_model_id');
+			})
+			->where('created_by_user', app('auth')->user()->getKey())
+			->where(function($query) use ($term)
+			{
+				\Illuminate\Support\Collection::make(explode(' ', $term))
+				->reject(function($i)
+				{
+					return !trim($i);
+				})
+				->each(function($i) use ($query)
+				{
+					$query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
+				});
+
+				$query->orWhere($this->getModelType()->getTable() . '.id', (int) $term);
+			})
+			->take(20)->groupBy($this->getModelType()->getTable() . '.id')->get()->each(function($item) use (&$return)
+		{
+			$return[] = ['value' => $item->id, 'text' => "[{$item->id}] " . $item->translate('title')];
+		});
+
+		return $return;
+	}
+	
+	public function queryFilter($closure)
+	{
+		$this->queryFilter = $closure;
 		
+		return $this;
 	}
 	
 	public function getUrlList()
@@ -338,6 +385,20 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
 	}
 
+	public function delete($id = 0)
+	{
+        try
+        {
+			$this->getModelById($id)->delete();
+			
+			return ['success' => 1];
+        } 
+        catch (\Exception $e) 
+        {   
+			return ['success' => 0];
+        }
+	}
+
 	public function getModelType()
 	{
 		return $this->modelType;
@@ -438,8 +499,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->uniqueId = $this->getConfig('uniqueId', str_random());
 		$this->buttonTop = $this->getConfig('buttonTop', []);
 		$this->buttonTopOrder = $this->getConfig('buttonTopOrder', ['create', 'refresh']);
-		$this->fieldOnly = $this->getConfig('fieldOnly', []);
-		$this->fieldExcept = $this->getConfig('fieldExcept', []);
+		$this->fieldOnly = $this->getConfig('fieldOnly', $this->fieldOnly);
+		$this->fieldExcept = $this->getConfig('fieldExcept', $this->fieldExcept);
 		$this->routerList = $this->getConfig('routerList', $this->routerList);
 		$this->routerCreate = $this->getConfig('routerCreate', $this->routerCreate);
 		$this->routerEdit = $this->getConfig('routerEdit', $this->routerEdit);
@@ -447,7 +508,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->displayLength = $this->getConfig('displayLength', $this->displayLength);
 		$this->enableColumnSelect = $this->getConfig('enableColumnSelect', $this->enableColumnSelect);
 		$this->enableColumnAction = $this->getConfig('enableColumnAction', $this->enableColumnAction);
-		$this->queryFilter = $this->getConfig('queryFilter');
 
 		$this->viewButtonTop = $this->getConfig('viewButtonTop', $this->viewButtonTop);
 		$this->viewGrid = $this->getConfig('viewGrid', $this->viewGrid);
@@ -466,18 +526,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		{
 			return array_get($this->config, $key, $default);
 		}
-	}
-
-	public function setQueryFilter($param)
-	{
-		$this->queryFilter = $param;
-		
-		return $this;
-	}
-
-	public function getQueryFilter()
-	{
-		return $this->queryFilter;
 	}
 
 	public function getUniqueId()

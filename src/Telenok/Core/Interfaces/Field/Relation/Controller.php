@@ -4,11 +4,10 @@ namespace Telenok\Core\Interfaces\Field\Relation;
 
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
-
 	public function getLinkedField($field)
 	{
 	}
-	
+
 	public function getChooseTypeId($field)
 	{
 		return $field->{$this->getLinkedField($field)};
@@ -32,7 +31,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		throw new \Exception('Please, define one or more keys "' . implode('", "', (array) $param) . '"');
 	}
 
-	public function getTitleList($id = null)
+	public function getTitleList($id = null, $closure = null)
 	{
 		$term = trim($this->getRequest()->input('term'));
 		$return = [];
@@ -41,26 +40,35 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		$model = new $class;
 
-		$model::withPermission()
+		$query = $model::withPermission()
 			->join('object_translation', function($join) use ($model)
 			{
 				$join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id');
 			})
 			->where(function($query) use ($term, $model)
 			{
-				\Illuminate\Support\Collection::make(explode(' ', $term))
-				->reject(function($i)
+				if (trim($term))
 				{
-					return !trim($i);
-				})
-				->each(function($i) use ($query)
-				{
-					$query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
-				});
+					\Illuminate\Support\Collection::make(explode(' ', $term))
+					->reject(function($i)
+					{
+						return !trim($i);
+					})
+					->each(function($i) use ($query)
+					{
+						$query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
+					});
 
-				$query->orWhere($model->getTable() . '.id', (int) $term);
-			})
-			->take(20)->groupBy($model->getTable() . '.id')->get()->each(function($item) use (&$return)
+					$query->orWhere($model->getTable() . '.id', (int) $term);
+				}
+			});
+
+		if ($closure instanceof \Closure)
+		{
+			$closure($query);
+		}
+			
+		$query->take(20)->groupBy($model->getTable() . '.id')->get()->each(function($item) use (&$return)
 		{
 			$return[] = ['value' => $item->id, 'text' => "[{$item->id}] " . $item->translate('title')];
 		});

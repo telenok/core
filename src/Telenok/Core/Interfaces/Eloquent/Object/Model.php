@@ -94,6 +94,18 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 	}
 
+	public function delete()
+	{
+		if (app('auth')->can('delete', $this->getKey()))
+		{
+			parent::delete();
+		}
+		else
+		{
+			throw new \ModelProcessAccessDenied();
+		}
+	}
+
 	protected function translateSync()
 	{
 		if (!($this instanceof \Telenok\Core\Model\Object\Sequence))
@@ -403,8 +415,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			{
 				if ($this instanceof \Telenok\Core\Model\Object\Field && ($fieldController = $f_->get($this->key)) && (in_array($key, $fieldController->getSpecialField($this), true) || in_array($key, $fieldController->getSpecialDateField($this), true)) &&
 						(
-						(!$this->exists && !app('auth')->can('create', 'object_type.object_field')) ||
-						($this->exists && !app('auth')->can('update', $this->getKey()))
+							(!$this->exists && !app('auth')->can('create', 'object_type.object_field')) ||
+							($this->exists && !app('auth')->can('update', $this->getKey()))
 						)
 				)
 				{
@@ -418,8 +430,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 						if ($fieldController && (in_array($key, $fieldController->getModelField($this, $field_), true) || in_array($key, $fieldController->getDateField($this, $field_), true)) &&
 								(
-								(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key_)) ||
-								($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key_))
+									(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key_)) ||
+									($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key_))
 								)
 						)
 						{

@@ -16,9 +16,9 @@
         $disabled = true; 
     }
 
-	if ($v = \App\Telenok\Core\Model\Object\Sequence::where('sequences_object_type', $field->relation_one_to_one_has?:$field->relation_one_to_one_belong_to)->take(20)->get())
+	if ($model->exists && ($v = \App\Telenok\Core\Model\Object\Sequence::where('id', $model->{$field->code})->get()))
 	{
-		$values = $v->transform(function($item)
+		$value = $v->transform(function($item)
 		{
 			return ['id' => $item->id, 'value' => $item->translate('title')];
 		})->lists('value', 'id')->toArray();

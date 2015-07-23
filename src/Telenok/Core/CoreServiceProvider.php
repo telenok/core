@@ -127,5 +127,4 @@ class CoreServiceProvider extends ServiceProvider {
 	{
 		return [];
 	}
-
 }

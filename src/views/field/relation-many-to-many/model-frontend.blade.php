@@ -17,7 +17,7 @@
         $disabled = true; 
     }
 
-	if ($v = \App\Telenok\Core\Model\Object\Sequence::where('sequences_object_type', $field->relation_many_to_many_has?:$field->relation_many_to_many_belong_to)->take(20)->get())
+	if ($model->exists && ($v = \App\Telenok\Core\Model\Object\Sequence::whereIn('id', (array)$model->{$field->code}->modelKeys())->get()))
 	{
 		$values = $v->transform(function($item)
 		{
@@ -44,6 +44,7 @@
             @endif	
             
             {!! Form::select($field->code . '[]', $values, $model->exists ? $model->{$field->code}->keys() : [], $domAttr) !!}
+            {!! Form::hidden($field->code . '_delete[]', '*') !!}
 
 			<?php
 

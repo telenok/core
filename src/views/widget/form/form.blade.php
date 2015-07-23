@@ -1,4 +1,4 @@
-<div class="col-xs-12"> 
+<div class="col-xs-12">
 	<div class="tabbable">
 		<ul class="nav nav-tabs" id='form-nav-{{$controller->getUniqueId()}}'>
 

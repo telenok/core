@@ -92,7 +92,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         if (!app('auth')->can('create', "object_type.{$this->getModelType()->code}"))
         {
             throw new \LogicException($this->LL('error.access.create'));
-        } 
+        }
 
 		$fields = $this->getFields();
 
@@ -105,7 +105,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		try
 		{
 			return view($this->getModelView(), [
-				'routerParam' => $this->getRouterStore(['typeId' => $this->getEventResource()->get('type')->getKey()]),
+				'urlParam' => $this->getUrlStore(['typeId' => $this->getEventResource()->get('type')->getKey()]),
 				'controller' => $this,
 				'canCreate' => true,
 			])->render();
@@ -136,7 +136,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		try
 		{
 			return view($this->getModelView(), [
-				'routerParam' => $this->getRouterUpdate(['id' => $this->getEventResource()->get('model')->getKey()]),
+				'urlParam' => $this->getUrlUpdate(['id' => $this->getEventResource()->get('model')->getKey()]),
 				'controller' => $this,
 				'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
 				'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
@@ -203,24 +203,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function delete($id = 0)
 	{
-        try 
+        try
         {
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
-
-			$type = $this->getTypeById($typeId);
-
-			$model = $this->getModelByTypeId($type->getKey());
-
-			$model_ = $model->storeOrUpdate($input, true);
+			$this->getModelById($id)->delete();
         } 
         catch (\Exception $e) 
         {   
-			throw $e;
+			return ['success' => 0];
         }
 
-		$v = $input->get('redirect_after_update');
+		$v = $this->getRequest()->get('redirect_after_delete');
 
-		return ['redirect' => app('router')->has($v) ? route($v) : $v];
+		return ['success' => 1, 'redirect' => app('router')->has($v) ? route($v) : $v];
 	}
 
     public function setRouterStore($param)
@@ -230,9 +224,21 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
     }       
 
-    public function getRouterStore($param = [])
+    public function getRouterStore()
     {
-        return route($this->routerStore ?: "cmf.widget.form.store", $param);
+        return $this->routerStore ?: "cmf.widget.form.store";
+    }
+
+    public function getUrlStore($param = [])
+    {
+		if (app('router')->has($this->getRouterStore()))
+		{
+			return route($this->getRouterStore(), $param);
+		}
+		else
+		{
+			return $this->getRouterStore();
+		}
     }
 
     public function setRouterUpdate($param)
@@ -242,9 +248,21 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
     }       
 
-    public function getRouterUpdate($param = [])
+    public function getRouterUpdate()
     {
-        return route($this->routerUpdate ?: "cmf.widget.form.update", $param);
+        return $this->routerUpdate ?: "cmf.widget.form.update";
+    }
+
+    public function getUrlUpdate($param = [])
+    {
+		if (app('router')->has($this->getRouterUpdate()))
+		{
+			return route($this->getRouterUpdate(), $param);
+		}
+		else
+		{
+			return $this->getRouterUpdate();
+		}
     }
 
     public function setRouterDelete($param)
@@ -254,9 +272,21 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
     }       
 
-    public function getRouterDelete($param = [])
+    public function getRouterDelete()
     {
-        return route($this->routerDelete, $param);
+        return $this->routerDelete;
+    }
+
+    public function getUrlDelete($param = [])
+    {
+		if (app('router')->has($this->getRouterDelete()))
+		{
+			return route($this->getRouterDelete(), $param);
+		}
+		else
+		{
+			return $this->getRouterDelete();
+		}
     }
 
 	public function getUniqueId()
@@ -418,7 +448,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->fieldExcept = $this->getConfig('fieldExcept', []);
 		$this->modelFieldView = $this->getConfig('modelFieldView', []);
 		$this->modelFieldViewKey = $this->getConfig('modelFieldViewKey');
-		$this->modelFieldViewVariable = $this->getConfig('modelFieldViewVariable');
+		$this->modelFieldViewVariable = $this->getConfig('modelFieldViewVariable', $this->modelFieldViewVariable);
 		$this->routerStore = $this->getConfig('routerStore');
 		$this->routerUpdate = $this->getConfig('routerUpdate');
 		$this->routerDelete = $this->getConfig('routerDelete');

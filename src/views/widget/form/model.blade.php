@@ -13,14 +13,16 @@ ob_start();
 
 	@yield('ajaxLock')  
 
-	jQuery(function(){
-
+	jQuery(function()
+	{
 		jQuery('#model-{{$controller->getUniqueId()}}').on('submit', function(e) 
 		{
 			e.preventDefault();
 
 			var $container = jQuery(this).closest('div.container-model');
 			var $el = jQuery(this);
+
+			var $errorContainer = jQuery('div.error-container', $el);
 
 			var button_type = jQuery(this).data('btn-clicked');
 
@@ -29,7 +31,7 @@ ob_start();
 				{ 
 					if (confirm('{{ $controller->LL('notice.sure') }}'))
 					{
-						$el.attr('action', "{!! $controller->getRouterDelete(['id' => $controller->getEventResource()->get('model')->getKey()]) !!}");
+						$el.attr('action', "{!! $controller->getUrlDelete(['id' => $controller->getEventResource()->get('model')->getKey()]) !!}");
 					}
 				}
 			@show
@@ -55,6 +57,10 @@ ob_start();
 				{
 					window.location = data.redirect;
 				}
+				else if (data.success == 0)
+				{
+					$errorContainer.prepend('<div class="alert alert-danger">{{$controller->LL('notice.error.undefined')}}<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
+				}
 					
 				@show
 
@@ -73,8 +79,6 @@ ob_start();
 				{
 					var jsonError = jsonResponse.error.message;
 				}
-
-				var $errorContainer = jQuery('div.error-container', $el);
 
 				var errorGritterText = [];
 
@@ -111,7 +115,7 @@ ob_end_clean();
 
 $controllerAction->addJsCode($jsCode); 
 	
-?> 
+?>
 
 @section('notice')
     @if (isset($success) && !empty($success))
@@ -150,7 +154,7 @@ $controllerAction->addJsCode($jsCode);
 
 @section('form')
 
-{!! Form::open(array('url' => $routerParam, 'files' => true, 'id' => "model-{$controller->getUniqueId()}", 'class' => $controller->getFormClass())) !!}
+{!! Form::open(array('url' => $urlParam, 'files' => true, 'id' => "model-{$controller->getUniqueId()}", 'class' => $controller->getFormClass())) !!}
 
 	@section('errorContainer')
     <div class="error-container"></div>
@@ -168,7 +172,7 @@ $controllerAction->addJsCode($jsCode);
 		@else
 			{!! Form::hidden('redirect_after_store', $controller->getRedirectAfterStore() ) !!}
 		@endif
-
+		
 		@include($controller->getFormView())
 
 	@show

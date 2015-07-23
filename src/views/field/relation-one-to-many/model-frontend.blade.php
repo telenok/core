@@ -21,7 +21,19 @@
         $disabled = true; 
     }
 
-	if ($v = \App\Telenok\Core\Model\Object\Sequence::where('sequences_object_type', $field->relation_one_to_many_has?:$field->relation_one_to_many_belong_to)->take(20)->get())
+			
+	$selected = [];
+
+	if ($field->relation_one_to_many_has)
+	{
+		$selected = $model->{$field->code}->modelKeys();
+	}
+	else
+	{
+		$selected = $model->{$field->code};
+	}
+	
+	if ($v = \App\Telenok\Core\Model\Object\Sequence::whereIn('id', (array)$selected)->get())
 	{
 		$values = $v->transform(function($item)
 		{
@@ -29,8 +41,8 @@
 		})->lists('value', 'id')->toArray();
 	}
 
-	$values = ['&nbsp;'] + $values;
-
+	$values = ['&nbsp;'] + (array)$values;
+	
 ?>
 
 <div class="form-group">
@@ -47,24 +59,13 @@
             @else
 		<div>
             @endif	
-			
-			<?php
-			
-				$selected = [];
-			
-				if ($field->relation_one_to_many_has)
-				{
-					$selected = $model->{$field->code}->modelKeys();
-				}
-				else
-				{
-					$selected = $model->{$field->code};
-				}
 
-			?>
+            {!! Form::select($field->code . ($field->relation_one_to_many_has ? '_add[]' : ''), $values, $selected, $domAttr) !!}
 			
-            {!! Form::select($field->code . ($field->relation_one_to_many_has ? '[]' : ''), $values, $selected, $domAttr) !!}
-
+			@if ($field->relation_one_to_many_has)
+            {!! Form::hidden($field->code . '_delete[]', '*') !!}
+			@endif
+			
 			<?php
 			
 			$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.chosen/chosen.css'), 'chosen', 20);

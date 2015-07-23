@@ -8,6 +8,7 @@ return [
     'list.btn.choose' => 'Choose',
     'list.btn.delete.all' => 'Delete all',
     'list.btn.edit' => 'Edit',
+    'list.btn.view' => 'View',
     'list.btn.delete' => 'Delete', 
     'list.btn.active' => 'Actively',
     'list.btn.inactive' => 'Inactive',

@@ -16,7 +16,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		];
 	}
 
-	public function getTitleList($id = null)
+	public function getTitleList($id = null, $closure = null)
 	{
 		$term = trim($this->getRequest()->input('term'));
 		$return = [];
@@ -30,7 +30,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		try
 		{
-			\App\Telenok\Core\Model\Object\Sequence::select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title AS title_type')
+			$query = \App\Telenok\Core\Model\Object\Sequence::select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title AS title_type')
 					->join($typeTable, function($join) use ($sequenceTable, $typeTable)
 					{
 						$join->on($sequenceTable . '.sequences_object_type', '=', $typeTable . '.id');
@@ -58,8 +58,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 								$query->where($typeTable . '.title', 'like', "%{$i}%");
 							});
 						});
-					})
-					->take(20)->get()->each(function($item) use (&$return)
+					});
+			
+			if ($closure instanceof \Closure)
+			{
+				$closure($query);
+			}
+			
+			$query->take(20)->get()->each(function($item) use (&$return)
 			{
 				$return[] = ['value' => $item->id, 'text' => "[{$item->translate('title_type')}#{$item->id}] " . $item->translate('title')];
 			});

@@ -1,5 +1,15 @@
 
 
+//bootstrap fixes
+
+jQuery(function()
+{
+    jQuery(document).on('show.bs.modal', '.modal', function() {
+        jQuery(this).css("z-index", parseInt(jQuery('.modal-backdrop').css('z-index')) + 1);
+    });
+});
+
+
 /* Simple JavaScript Inheritance
  * By John Resig http://ejohn.org/
  * MIT Licensed.

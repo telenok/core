@@ -22,7 +22,7 @@ class CreateUserTable extends Migration {
 				$table->string('username')->nullable();
 				$table->string('usernick')->nullable();
 				$table->string('email')->nullable();
-				$table->string('password', 60)->nullable();
+				$table->string('password', 100)->nullable();
 				$table->rememberToken();
 				$table->longText('configuration')->nullable();
 				$table->integer('author_user_message')->unsigned()->nullable();

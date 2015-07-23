@@ -7,17 +7,6 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
 
     protected $key = '';
     protected $request; 
-
-    public function callAction($method, $parameters)
-	{
-		app('view')->composer('*', function($view)
-		{
-			$view->with(['controllerAction' => $this]);
-		});
-		
-		return parent::callAction($method, $parameters);
-	}
-	
 	
     public function getName()
     {

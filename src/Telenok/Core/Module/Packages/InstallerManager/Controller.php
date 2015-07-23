@@ -42,10 +42,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $uniqueId = $request->input('uniqueId');
         $iDisplayStart = $request->input('iDisplayStart', 0);
         $iTotalDisplayRecords = $request->input('iDisplayLength', 20);
-		
-		
+
         foreach($list as $item)
-        { 
+        {
             $put = ['tableCheckAll' => '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]" value="' . $item['key'] . '" /><span class="lbl"></span></label>'];
 
 			$put['name'] = '<i class="fa fa-folder"></i> ' . array_get($item, 'title.en');
@@ -71,6 +70,15 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
         return '
                 <div class="hidden-phone visible-lg btn-group">
+				
+                    <button class="btn btn-xs btn-info" title="'.$this->LL('list.btn.view').'" 
+                        onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \'' 
+                        . $this->getRouterUpdate(['id' => $item['key']]) . '\'});">
+                        <i class="ace-icon glyphicon glyphicon-eye-open bigger-110"></i>
+						View
+						<i class="ace-icon fa fa-arrow-circle-o-right icon-on-right"></i>
+                    </button>
+
 					<button class="btn btn-xs btn-success"
 						onclick="if (confirm(\'' . $this->LL('notice.sure') . '\'))
 							telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').installByURL({url: \''. $this->getRouterInstall(['key' => $item['key']]) . '\'});">
@@ -88,21 +96,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 						Uninstall
 						<i class="ace-icon fa fa-exclamation-circle icon-on-right"></i>
 					</button>				
-
-
-				' . (
-				true ? '
-                    <button class="btn btn-minier btn-info disable" title="'.$this->LL('list.btn.edit').'" 
-                        onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \'' 
-                        . $this->getRouterUpdate(['id' => $item['key']]) . '\'});">
-                        <i class="fa fa-pencil"></i>
-                    </button> ' : ''
-				) . '
-                    <button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
-                        onclick="if (confirm(\'' . $this->LL('notice.sure') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
-                        . $this->getRouterDelete(['id' => $item['key']]) . '\');">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
                 </div>';
     }
 

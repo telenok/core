@@ -148,9 +148,9 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         { 
             $method = camel_case($field->code);
 
-            $relatedField = $field->code . '_' . ($relatedTable = $model->sequence->sequencesObjectType->code);
+            $relatedField = $field->code . '_' . ($relatedTable = $model->getTable());
 
-			if (app('auth')->can('update', 'object_field.' . $relatedTable . '.' . $relatedField))
+			if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
 			{
 				if (in_array('*', $idsDelete, true))
 				{
