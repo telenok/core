@@ -20,6 +20,7 @@
 		{!! Form::text("upload_allow_size", $model->upload_allow_size, array('class'=>'ace ace-switch ace-switch-3')) !!}
 	</div>
 </div>
+
 <div class="form-group">
 	{!! Form::label('upload_allow_ext', $controller->LL('property.upload_allow_ext'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-9">
@@ -37,6 +38,7 @@
 		</select>
 	</div>
 </div>
+
 <div class="form-group">
 	{!! Form::label('upload_allow_mime', $controller->LL('property.upload_allow_mime'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-9">
@@ -53,7 +55,7 @@
 			@endforeach
 		</select>
 	</div>
-</div> 
+</div>
 <script type="text/javascript">
     jQuery("#upload_allow_ext{{$uniqueId}}").chosen({ 
         keepTypingMsg: "{{$controller->LL('notice.typing')}}",
@@ -77,3 +79,42 @@
         search_contains: true
     });
 </script>
+
+<div class="form-group">
+	{!! Form::label('', $controller->LL('property.upload_storage_default_local'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+	<div class="col-sm-9">
+		{!! Form::text("", config('filesystems.default'), ['disabled' => 'disabled']) !!}
+	</div>
+</div>
+
+<div class="form-group">
+	{!! Form::label('', $controller->LL('property.upload_storage_default_cloud'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+	<div class="col-sm-9">
+		{!! Form::text("", config('filesystems.cloud'), ['disabled' => 'disabled']) !!}
+	</div>
+</div>
+
+<div class="form-group">
+	{!! Form::label('upload_storage', $controller->LL('property.upload_storage'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+	<div class="col-sm-9">
+
+		<select multiple="multiple" class="form-control" data-placeholder="{{$controller->LL('property.upload_storage')}}" id="upload_storage{{$uniqueId}}" name="upload_storage[]">
+
+			<?php 
+
+				$disks = [
+					'default_local' => 'default_local',
+					'default_cloud' => 'default_cloud',
+				] + (array)config('filesystems.disks');
+			?>
+
+			@foreach($disks as $k => $d)
+
+			<option value="{{$k}}" @if (($model->upload_storage->isEmpty() && $k == 'default_local') || $model->upload_storage->search($k) !== FALSE)selected="selected"@endif>{{$k}}</option>
+
+			@endforeach
+
+		</select>
+
+	</div>
+</div>

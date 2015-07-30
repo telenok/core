@@ -316,7 +316,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
 				throw new \Exception($this->LL('error.access-denied-over-base-directory'));
 			}
 
-			$validator = \Validator::make(
+			$validator = app('validator')->make(
 				[
 					'name' => $name,
 				],
@@ -392,7 +392,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
 				throw new \Exception($this->LL('error.access-denied-over-base-directory'));
 			}
 
-			$validator = \Validator::make(
+			$validator = app('validator')->make(
 				[
 					'name' => $name,
 				],

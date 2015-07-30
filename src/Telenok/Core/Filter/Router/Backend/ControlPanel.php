@@ -11,7 +11,7 @@ class ControlPanel {
 				'cmf.password.reset.email.process', 
 				'cmf.password.reset.token',
 				'cmf.password.reset.token.process'
-			]))
+			], true))
 		{
 			return;
 		}

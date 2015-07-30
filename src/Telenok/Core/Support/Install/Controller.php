@@ -15,6 +15,8 @@ class Controller {
 	protected $dbDatabase = '';
 	protected $dbPrefix = '';
 
+	protected $installFlag = 'telenok/installedTelenokCore.lock';
+	
 	public function setDomain($param = '')
 	{
 		if ($this->validateDomainOrIp($param))
@@ -347,9 +349,14 @@ class Controller {
 		\File::put($path, $stub);
 	}
 
+	public function installFlag()
+	{
+		return storage_path($this->installFlag);
+	}
+	
 	public function touchInstallFlag()
 	{
-		touch(storage_path('telenok/installedTelenokCore.lock'));
+		touch($this->installFlag());
 	}
 
 	public function createBaseTable($commandObject)

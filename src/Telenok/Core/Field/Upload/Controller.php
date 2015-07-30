@@ -6,30 +6,12 @@ use Illuminate\Database\Migrations\Migration;
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     protected $key = 'upload';
-    protected $specialField = ['upload_allow_ext', 'upload_allow_mime', 'upload_allow_size'];
+    protected $specialField = ['upload_allow_ext', 'upload_allow_mime', 'upload_allow_size', 'upload_storage'];
 
-    protected $imageExtension = ['jpg', 'png', 'jpeg', 'gif'];
-    protected $imageMimeType = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'];
     protected $maxSiteDefault = 200000;
+	protected $defaultStorage = 'default_local';
 
-    
-    public function isImage($field, $item)
-    {
-		$typeModel = $field->fieldObjectType()->first();
-		$mime = $item->{camel_case($field->code . '_' . $typeModel->code) . 'FileMimeType'}()->pluck('mime_type');
-		$ext = $item->{camel_case($field->code . '_' . $typeModel->code) . 'FileExtension'}()->pluck('extension');
-
-		if (empty($mime))
-		{
-			return in_array($ext, $this->imageExtension, true);
-		}
-		else
-		{
-			return in_array($mime, $this->imageMimeType, true);
-		}
-    } 
-	
-    public function getModelField($model, $field)
+    public function getModelField1111111111111111111111111111111111($model, $field)
     {
 		return [];
     } 
@@ -41,7 +23,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			return;
 		}
 		
-		if ($this->isImage($field, $item))
+		if ($item->{$field->code}->isImage($field, $item))
 		{
 			return '<img src="' . \URL::asset($item->{$field->code . '_path'}) .'" alt="" width="140" />';
 		}
@@ -55,7 +37,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		\App\Telenok\Core\Model\Object\Field::where(function($query) use ($model)
 				{
 					$type = $model->fieldObjectType()->first();
-			
+
 					$query->whereIn('code', [
 						$model->code . '_path',
 						$model->code . '_size',
@@ -63,35 +45,42 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 						$model->code . '_' . $type->code . '_file_mime_type',
 						$model->code . '_' . $type->code . '_file_extension',
 					]);
+
 					$query->where('field_object_type', $model->field_object_type);
 				})
 				->get()->each(function($item)
 				{
 					$item->delete();
 				});
-				
+
         return parent::processDeleting($model);
     } 
 	
     public function saveModelField($field, $model, $input)
-	{ 
-		$file = \Input::file($field->code); 
-		
-        if ($file === null)
+	{
+		/*
+		 * if file uploaded
+		 */
+		$file = $this->getRequest()->file($field->code); 
+
+		/*
+		 * if not post file - think it can be sent by string - full path from local disk
+		 */        
+		if ($file === null)
         {
-            $file = $input->get($field->code);
-            
+			$file = $input->get($field->code);
+
             if ($file && file_exists($file))
             {
                 $fileData = pathinfo($file);
                 $basename = $fileData['basename'];
-                $size = filesize($path);
+                $size = filesize($file);
 
                 $finfo = finfo_open(FILEINFO_MIME_TYPE); 
                 $mime = finfo_file($finfo, $file);
                 finfo_close($finfo); 
 
-                $file = new \Symfony\Component\HttpFoundation\File\UploadedFile($file, $basename, $mime, $size, UPLOAD_ERR_OK);
+                $file = app('\Symfony\Component\HttpFoundation\File\UploadedFile', [$file, $basename, $mime, $size, UPLOAD_ERR_OK]);
             }
         }
 
@@ -111,13 +100,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				$size = $file->getClientSize();
 				$mimeType = $file->getMimeType();
 				$extension = $file->getClientOriginalExtension();
-				$directoryPath = 'upload/' . date('Y') . '/' . date('m') . '/' . date('d') . '/';
+				$directoryPath = env('UPLOAD_FOLDER') . '/' . date('Y') . '/' . date('m') . '/' . date('d') . '/';
 				$originalFileName = $file->getClientOriginalName();
 				$fileName = \Str::random(20) . '.' . $extension;
-				$destinationPath = $directoryPath . $fileName; 
+				$destinationPath = $directoryPath . $fileName;
 
 				if ($field->upload_allow_mime->count() && !in_array($mimeType, $field->upload_allow_mime->all(), true))
-				{ 
+				{
 					throw new \Exception($this->LL('error.mime-type', ['attribute' => $mimeType]));
 				}
 
@@ -135,7 +124,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 				if (!$rule->isEmpty())
 				{
-					$validator = \Validator::make(
+					$validator = app('validator')->make(
 						array('file' => $file),
 						array('file' => implode('|', $rule->all()))
 					);
@@ -145,10 +134,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 						throw new \Exception(implode(' ', $validator->messages()->all()));
 					}
 				}
-
-				\File::makeDirectory(public_path($directoryPath), 0777, true, true);
-
-				$file->move(public_path($directoryPath), $fileName);
 
 				try
 				{
@@ -194,43 +179,89 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 				$model = $model->save();
 
-				if ($currentPath)
-				{
-					$fileToDelere = \File::glob(strrev(implode(strrev('/*'), explode("/", strrev($currentPath), 2))));
+				$storageList = $field->upload_storage;
 
-					foreach($fileToDelere as $d)
+				if ($storageList->isEmpty())
+				{
+					$storageList->push('default_local');
+				}
+
+				$storageList = File::convertDefaultStorageName($storageList);
+
+				foreach($storageList->all() as $storage)
+				{
+					$fileResource = fopen($file->getPathname(), "r");
+
+					$disk = app('filesystem')->disk($storage);
+
+					$disk->makeDirectory($directoryPath);
+
+					$disk->put($destinationPath, $fileResource, \Illuminate\Contracts\Filesystem\Filesystem::VISIBILITY_PRIVATE);
+
+					if (is_resource($fileResource))
 					{
-						\File::delete($d);
+						fclose($fileResource);
 					}
 				}
 			}
 			catch (\Extension $e)
 			{
-				\File::delete(public_path($destinationPath));
-
 				throw $e;
+			}
+			
+			if ($currentPath)
+			{
+				$t = explode(".", basename($currentPath));
+				
+				$oldFilename = array_shift($t);
+				
+				foreach($storageList->all() as $storage)
+				{						
+					$disk = app('filesystem')->disk($storage);
+
+					foreach($disk->files($directoryPath) as $file)
+					{
+						if (strpos($file, $oldFilename) !== FALSE)
+						{
+							try
+							{
+								$disk->delete($file);
+							}
+							catch (\Exception $e) {}
+						}
+					}
+				}
 			}
 		} 
 
         return $model;
+	}
+	
+	public function getModelAttribute($model, $key, $value, $field)
+	{
+		return app('\Telenok\Core\Field\Upload\File')->setModels($model, $field);
 	}
 
     public function getModelSpecialAttribute($model, $key, $value)
     {
         try
         {
-			if (in_array($key, ['upload_allow_ext', 'upload_allow_mime'], true))
+			if (in_array($key, ['upload_allow_ext', 'upload_allow_mime', 'upload_storage'], true))
 			{
 				if ($key == 'upload_allow_ext')
 				{
-					$value = $value ? : json_encode($this->imageExtension);
+					$value = $value ? : json_encode(\Telenok\Core\Field\Upload\File::IMAGE_EXTENSION);
 				}
 				else if ($key == 'upload_allow_mime')
 				{
-					$value = $value ? : json_encode($this->imageMimeType);
+					$value = $value ? : json_encode(\Telenok\Core\Field\Upload\File::IMAGE_MIME_TYPE);
+				}
+				else if ($key == 'upload_storage')
+				{
+					$value = $value ? : $this->defaultStorage;
 				}
 
-				return \Illuminate\Support\Collection::make( (array)json_decode($value, true) );
+				return \Illuminate\Support\Collection::make((array)json_decode($value, true));
 			}
 			else
 			{
@@ -245,7 +276,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function setModelSpecialAttribute($model, $key, $value)
     {
-		if (in_array($key, ['upload_allow_ext', 'upload_allow_mime'], true))
+		if (in_array($key, ['upload_allow_ext', 'upload_allow_mime', 'upload_storage'], true))
 		{
 			if ($value instanceof \Illuminate\Support\Collection) 
 			{
@@ -253,11 +284,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			}
 			else if ($key == 'upload_allow_ext')
 			{
-				$value = $value ? : $this->imageExtension;
+				$value = $value ? : \Telenok\Core\Field\Upload\File::IMAGE_EXTENSION;
 			} 
 			else if ($key == 'upload_allow_mime')
 			{
-				$value = $value ? : $this->imageMimeType;
+				$value = $value ? : \Telenok\Core\Field\Upload\File::IMAGE_MIME_TYPE;
+			} 
+			else if ($key == 'upload_storage')
+			{
+				$value = $value ? : $this->defaultStorage;
 			} 
 
 			$model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
@@ -266,7 +301,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		{
 			parent::setModelSpecialAttribute($model, $key, $value);
 		}
-        
+
         return $this;
     }
 
@@ -401,15 +436,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		} catch (\Exception $ex) {} 
 
         $fields = []; 
-        
+
         if ($input->get('required'))
         {
             $fields['rule'][] = 'required';
         }
-          
+
         $model->fill($fields)->save(); 
-		
+
 		return parent::postProcess($model, $type, $input);
 	}
 }
-

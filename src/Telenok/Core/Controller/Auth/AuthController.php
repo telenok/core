@@ -40,7 +40,7 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Controller {
 	 */
 	public function postLogin(\Illuminate\Http\Request $request)
 	{
-		$v = \Validator::make($request->all(), [
+		$v = app('validator')->make($request->all(), [
 			'username' => 'required', 'password' => 'required',
 		]);
 

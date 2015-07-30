@@ -8,6 +8,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 	protected $presentation = 'tree-tab-object';
     protected $presentationContentView = 'core::module.installer-manager.content';
+    protected $presentationModelView = 'core::module.installer-manager.view';
 
 	protected $tableColumn = ['name', 'key', 'description', 'image'];
 
@@ -36,7 +37,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $content = []; 
 
         $request = $this->getRequest(); 
-		$list = (array)json_decode(file_get_contents('http://telenok.com/package/lists/json'), true);
+		$list = (array)json_decode(file_get_contents('http://telenok.local/package/lists/json'), true);
 
 		$sEcho = $request->input('sEcho');
         $uniqueId = $request->input('uniqueId');
@@ -71,9 +72,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         return '
                 <div class="hidden-phone visible-lg btn-group">
 				
-                    <button class="btn btn-xs btn-info" title="'.$this->LL('list.btn.view').'" 
+                    <button class="btn btn-xs btn-info" 
                         onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \'' 
-                        . $this->getRouterUpdate(['id' => $item['key']]) . '\'});">
+                        . $this->getRouterView(['id' => $item['key']]) . '\'});">
                         <i class="ace-icon glyphicon glyphicon-eye-open bigger-110"></i>
 						View
 						<i class="ace-icon fa fa-arrow-circle-o-right icon-on-right"></i>
@@ -81,7 +82,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 					<button class="btn btn-xs btn-success"
 						onclick="if (confirm(\'' . $this->LL('notice.sure') . '\'))
-							telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').installByURL({url: \''. $this->getRouterInstall(['key' => $item['key']]) . '\'});">
+							telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').installByURL({url: \''. 22 . '\'});">
 						<i class="ace-icon fa fa-gavel bigger-110"></i>
 						Install
 						<i class="ace-icon fa fa-cloud-download icon-on-right"></i>
@@ -99,13 +100,35 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 </div>';
     }
 
-    public function getRouterInstall($param = [])
+	public function view($id)
+	{
+		$packageInfo = (array)json_decode(file_get_contents('http://telenok.local/package/view/' . $id . '/json'), true);
+
+		return [
+			'tabKey' => $this->getTabKey() . '-new-' . str_random(),
+			'tabLabel' => 'View package',
+			'tabContent' => view($this->getPresentationModelView(), array_merge(array( 
+				'controller' => $this,
+				'packageInfo' => $packageInfo,
+			), $this->getAdditionalViewParam()))->render()
+		];
+	}
+	
+    public function getRouterView($param = [])
     {
-        return route("cmf.module.{$this->getKey()}.install", $param);
+        return route("cmf.module.{$this->getKey()}.view", $param);
     }
 
-    public function install()
+	public function installPackage($packageId, $versionId)
 	{
+		var_dump('http://telenok.local/account/package/download/' . urlencode($packageId) . '/' . urlencode($versionId));
+		
+		$packageFile = file_get_contents('http://telenok.local/account/package/download/' . urlencode($packageId) . '/' . urlencode($versionId));
+
+		dd( $packageFile );
+		
+		
+		
 		try
 		{
 			\File::makeDirectory(storage_path('telenok/composer'), 0775, true, true);
@@ -293,7 +316,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				throw new \Exception($this->LL('error.access-denied-over-base-directory'));
 			}
 
-			$validator = \Validator::make(
+			$validator = app('validator')->make(
 				[
 					'name' => $name,
 				],
@@ -369,7 +392,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				throw new \Exception($this->LL('error.access-denied-over-base-directory'));
 			}
 
-			$validator = \Validator::make(
+			$validator = app('validator')->make(
 				[
 					'name' => $name,
 				],

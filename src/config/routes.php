@@ -146,6 +146,7 @@
 	\Route::get('telenok/module/packages/installer-manager/action-param', array('as' => 'cmf.module.installer-manager.action.param', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getActionParam"));
 	\Route::get('telenok/module/packages/installer-manager', array('as' => 'cmf.module.installer-manager', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getContent"));
 	\Route::get('telenok/module/packages/installer-manager/list', array('as' => 'cmf.module.installer-manager.list', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getList"));
-	\Route::any('telenok/module/packages/installer-manager/install', array('as' => 'cmf.module.installer-manager.install', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@install"));
+	\Route::any('telenok/module/packages/installer-manager/view/{id}', array('as' => 'cmf.module.installer-manager.view', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@view"));
 	\Route::post('telenok/module/packages/installer-manager/update', array('as' => 'cmf.module.installer-manager.update', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@update"));
 	\Route::post('telenok/module/packages/installer-manager/delete', array('as' => 'cmf.module.installer-manager.delete', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@delete"));
+	\Route::any('telenok/module/packages/installer-manager/install-package/{packageId}/{versionId}', array('as' => 'cmf.module.installer-manager.install-package', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@installPackage"));	

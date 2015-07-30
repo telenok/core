@@ -420,13 +420,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		$this->fields = $this->getModel()->getFieldList()->reject(function($item)
 			{
-				if (in_array($item->code, $this->fieldExcept))
+				if (in_array($item->code, $this->fieldExcept, true))
 				{
 					return true;
 				}
 			})->filter(function($item)
 			{
-				if (empty($this->fieldOnly) || in_array($item->code, $this->fieldOnly))
+				if (empty($this->fieldOnly) || in_array($item->code, $this->fieldOnly, true))
 				{
 					return true;
 				}

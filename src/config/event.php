@@ -1,11 +1,11 @@
 <?php
 
-\Validator::resolver(function($translator, $data, $rules, $messages, $customAttributes)
+app('validator')->resolver(function($translator, $data, $rules, $messages, $customAttributes)
 {
     return new \App\Telenok\Core\Support\Validator\Validator($translator, $data, $rules, $messages, $customAttributes);
 });
 
-\Validator::extend('valid_regex', function($attribute, $value, $parameters)
+app('validator')->extend('valid_regex', function($attribute, $value, $parameters)
 {
     return (@preg_match($value, NULL) !== FALSE);
 });

@@ -329,7 +329,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				throw new \Exception($this->LL('error.access-denied-over-base-directory'));
 			}
 
-			$validator = \Validator::make(
+			$validator = app('validator')->make(
 				[
 					'name' => $name,
 				],

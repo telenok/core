@@ -14,7 +14,7 @@
     <div class="col-sm-5">
 		
         @if (!empty($model->{$field->code . '_path'}))
-			@if ($controller->isImage($field, $model))
+			@if ($model->{$field->code}->isImage($field, $model))
 			<img src="{!! \URL::asset($model->{$field->code . '_path'}) !!}" alt="" width="140" />
 			<br>
 			<a href="{!! \URL::asset($model->{$field->code . '_path'}) !!}" target="_blank">Open full size</a>

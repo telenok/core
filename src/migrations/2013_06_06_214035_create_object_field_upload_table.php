@@ -25,8 +25,12 @@ class CreateObjectFieldUploadTable extends Migration {
 				{
 					$table->integer('upload_allow_size')->nullable();
 				}
+
+				if (!\Schema::hasColumn('object_field', 'upload_storage'))
+				{
+					$table->text('upload_storage')->nullable();
+				}
 			});
 		}
 	}
-
 }

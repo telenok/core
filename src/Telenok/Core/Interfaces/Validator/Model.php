@@ -99,7 +99,7 @@ class Model {
             }
         }
 		
-        $this->validator = \Validator::make(
+        $this->validator = app('validator')->make(
                                 $this->getInput()->toArray(), 
                                 $this->getRuleList(), 
                                 $this->getMessage(), 

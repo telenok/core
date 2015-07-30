@@ -89,7 +89,7 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 
 	public function postEmail(\Illuminate\Http\Request $request)
 	{
-		$v = \Validator::make($request->all(), ['email' => 'required|email']);
+		$v = app('validator')->make($request->all(), ['email' => 'required|email']);
 
 		if ($v->fails())
 		{

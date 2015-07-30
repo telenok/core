@@ -102,7 +102,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 		else
 		{
-			throw new \ModelProcessAccessDenied();
+			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied();
 		}
 	}
 
@@ -219,7 +219,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		if ($this instanceof \App\Telenok\Core\Model\Object\Sequence)
 		{
-			throw new \Exception('Cant storeOrUpdate sequence model directly');
+			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Cant storeOrUpdate sequence model directly');
 		}
 
 		try
@@ -228,7 +228,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
 		{
-			throw new \Exception("Telenok\Core\Interfaces\Eloquent\Object\Model::storeOrUpdate() - Error: 'type of object not found, please, define it'");
+			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied("Telenok\Core\Interfaces\Eloquent\Object\Model::storeOrUpdate() - Error: 'type of object not found, please, define it'");
 		}
 
 		// merge attributes if model filled via $model->fill() and plus ->storeOrUpdate([some attributes])
@@ -316,10 +316,10 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 						->setInput($input)
 						->setMessage($this->LL('error'))
 						->setCustomAttribute($this->validatorCustomAttributes());
-				
+
 				if ($validator->fails())
 				{
-					throw (new \Telenok\Core\Interfaces\Exception\Validate())->setMessageError($validator->messages());
+					throw app('\Telenok\Core\Interfaces\Exception\Validate')->setMessageError($validator->messages());
 				}
 
 				if ($type->classController())
@@ -404,8 +404,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			if ($f)
 			{
 				if (
-						(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key)) ||
-						($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key))
+					(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key)) ||
+					($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key))
 				)
 				{
 					$input->forget($key);
@@ -414,10 +414,10 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			else
 			{
 				if ($this instanceof \Telenok\Core\Model\Object\Field && ($fieldController = $f_->get($this->key)) && (in_array($key, $fieldController->getSpecialField($this), true) || in_array($key, $fieldController->getSpecialDateField($this), true)) &&
-						(
-							(!$this->exists && !app('auth')->can('create', 'object_type.object_field')) ||
-							($this->exists && !app('auth')->can('update', $this->getKey()))
-						)
+					(
+						(!$this->exists && !app('auth')->can('create', 'object_type.object_field')) ||
+						($this->exists && !app('auth')->can('update', $this->getKey()))
+					)
 				)
 				{
 					$input->forget($key);
@@ -429,10 +429,10 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 						$fieldController = $f_->get($field_->key);
 
 						if ($fieldController && (in_array($key, $fieldController->getModelField($this, $field_), true) || in_array($key, $fieldController->getDateField($this, $field_), true)) &&
-								(
-									(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key_)) ||
-									($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key_))
-								)
+							(
+								(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key_)) ||
+								($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key_))
+							)
 						)
 						{
 							$input->forget($key);
@@ -911,7 +911,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 		else
 		{
-			throw new Exception('Not exists or not treeable');
+			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Not exists or not treeable');
 		}
 
 		return $this;
@@ -931,7 +931,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		if ($sequence->isAncestor($sequenceParent))
 		{
-			throw new \Exception('Cant move Ancestor to Descendant');
+			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
 		}
 
 		\DB::transaction(function() use ($sequence, $sequenceParent)
@@ -973,7 +973,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		if ($sequence->isAncestor($sequenceParent))
 		{
-			throw new \Exception('Cant move Ancestor to Descendant');
+			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
 		}
 
 		\DB::transaction(function() use ($sequence, $sequenceParent)
@@ -1043,7 +1043,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		if ($sequence->isAncestor($sequenceSibling))
 		{
-			throw new \Exception('Cant move Ancestor to Descendant');
+			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
 		}
 
 		\DB::transaction(function() use ($sequence, $sequenceSibling, $op)
