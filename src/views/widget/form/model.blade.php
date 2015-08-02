@@ -29,7 +29,7 @@ ob_start();
 			@section('buttonType')
 				if (button_type == 'delete.close')
 				{ 
-					if (confirm('{{ $controller->LL('notice.sure') }}'))
+					if (confirm('{{ $controller->LL('notice.sure.delete') }}'))
 					{
 						$el.attr('action', "{!! $controller->getUrlDelete(['id' => $controller->getEventResource()->get('model')->getKey()]) !!}");
 					}

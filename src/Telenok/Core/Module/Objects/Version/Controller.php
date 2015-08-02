@@ -20,7 +20,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 		{
 			return \App\Telenok\Core\Model\Object\Version::toRestore($model);
 		} 
-		catch (\Telenok\Core\Interfaces\Exception\ObjectTypeNotFound $ex) 
+		catch (\Telenok\Core\Support\Exception\ObjectTypeNotFound $ex) 
 		{
 			throw new \Exception($this->LL('error.restore.type.first', ['id' => $model->object_type_id]));
 		}

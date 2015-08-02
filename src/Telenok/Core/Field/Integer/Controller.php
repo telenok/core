@@ -35,20 +35,66 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	public function setModelAttribute($model, $key, $value, $field)
 	{
-		if ($field->key == $key)
-		{ 
-			if ($value === null)
-			{
-                $default = $field->integer_default?:null;
+		if ($value === null)
+		{
+			$default = $field->integer_default?:null;
 
-				$model->setAttribute($key, $default);
-			}
-			else
-			{
-				$model->setAttribute($key, $value);
-			}
+			$model->setAttribute($key, $default);
+		}
+		else
+		{
+			$model->setAttribute($key, (int)$value);
 		}
 	}
+
+    public function getModelSpecialAttribute($model, $key, $value)
+    {
+		if (in_array($key, ['integer_default', 'integer_min', 'integer_max'], true) && $value === null)
+		{ 
+			if ($key == 'integer_default')
+			{
+				return 0;
+			}
+			else if ($key == 'integer_min')
+			{
+				return -2147483648;
+			}
+			else if ($key == 'integer_max')
+			{
+				return 2147483647;
+			}
+		}
+
+		return parent::getModelSpecialAttribute($model, $key, $value);
+    }
+
+    public function setModelSpecialAttribute($model, $key, $value)
+    {
+        if (in_array($key, ['integer_default', 'integer_min', 'integer_max'], true))
+		{			
+            if ($value === null)
+            {
+                if ($key == 'integer_default')
+				{
+					$value = 0;
+				}
+				else if ($key == 'integer_min')
+				{
+					$value = -2147483648;
+				}
+				else if ($key == 'integer_max')
+				{
+					$value = 2147483647;
+				}
+            }
+			else
+			{
+				$value = (int)$value;
+			}
+		}
+
+        return parent::setModelSpecialAttribute($model, $key, $value);
+    }
 
 	public function postProcess($model, $type, $input)
 	{
@@ -76,18 +122,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		if ($input->get('integer_min'))
 		{
-			$field['rule'][] = "min:{$input->get('integer_min')}";
+			$field['rule'][] = "min:{(int)$input->get('integer_min')}";
 		}
 
 		if ($input->get('integer_max'))
 		{
-			$field['rule'][] = "max:{$input->get('integer_max')}";
+			$field['rule'][] = "max:{(int)$input->get('integer_max')}";
 		}
 
 		$model->fill($field)->save();
 
 		return parent::postProcess($model, $type, $input);
 	}
-
 }
-

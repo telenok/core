@@ -137,6 +137,7 @@ class SeedObjectFieldTable extends Migration {
                         'field_object_type' => $modelTypeId,
                         'field_object_tab' => $tabAdditionallyId,
                         'multilanguage' => 0,
+						'integer_unsigned_default' => 1,
                         'show_in_form' => 1,
                         'show_in_list' => 0,
                         'allow_search' => 1,

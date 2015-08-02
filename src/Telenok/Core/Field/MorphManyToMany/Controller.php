@@ -9,7 +9,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     protected $specialField = ['morph_many_to_many_has', 'morph_many_to_many_belong_to'];
     protected $allowMultilanguage = false;
 
-    public function getModelField($model, $field)
+    public function getModelFillableField($model, $field)
     {
 		return [];
     } 
@@ -127,7 +127,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
     public function saveModelField($field, $model, $input)
     {
-		// if created field
+		// if creating field
 		if ($model instanceof \Telenok\Core\Model\Object\Field && !$input->get('id'))
 		{
 			return $model;

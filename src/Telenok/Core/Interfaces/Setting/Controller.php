@@ -42,8 +42,6 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
     public function validateException()
     {
-        return app('\Telenok\Core\Interfaces\Exception\Validate');
+        return new \Telenok\Core\Support\Exception\Validate;
     }
-  
 }
-

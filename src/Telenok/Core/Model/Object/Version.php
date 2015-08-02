@@ -36,7 +36,7 @@ class Version extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 		} 
 		catch (\Exception $ex) 
 		{
-			throw new \Telenok\Core\Interfaces\Exception\ObjectTypeNotFound();
+			throw new \Telenok\Core\Support\Exception\ObjectTypeNotFound();
 		}
 		
 		try 

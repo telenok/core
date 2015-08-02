@@ -29,10 +29,13 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
                         
 			if ($controllers = app('telenok.config.repository')->getObjectFieldController()->get($model->key))
 			{
-				return $controllers->processDeleting($model);
+				return $controllers->processFieldDelete($model, $type, $model->forceDeleting);
 			}
-            
-            $this->deleteFieldResource($type);
+			
+            if ($model->forceDeleting)
+			{
+				$this->deleteFieldResource($type);
+			}
 		});
 	}
 
@@ -57,11 +60,19 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
         \App\Telenok\Core\Model\Security\Resource::where('code', $code)->forceDelete();
 	}
 
+	public function delete()
+	{
+		if ($this->forceDeleting == FALSE)
+		{
+			throw new \LogicException('Sorry, Object Field can be only FORCE DELETED with all linked data');
+		}
+	}
+	
 	public function getFillable()
 	{ 
 		$class = get_class($this); 
         
-		if (!isset(static::$listFieldController[$class]))
+		if (!isset(static::$listFillableFieldController[$class]))
 		{
 			parent::getFillable();
 
@@ -73,7 +84,8 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 				foreach(array_merge((array) $controller->getSpecialField($this), $dateField) as $f_)
                 {
-                    static::$listFieldController[$class][$f_] = $controller;
+					static::$listAllFieldController[$class][$f_] = $controller;
+                    static::$listFillableFieldController[$class][$f_] = $controller;
                     static::$listSpecialFieldController[$class][$f_] = $controller;
 
                     if ($this->exists)
@@ -86,7 +98,7 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 		$this->dates = array_merge($this->dates, (array) static::$listFieldDate[$class]);
 
-		return array_keys((array)static::$listFieldController[$class]);
+		return array_keys((array)static::$listFillableFieldController[$class]);
 	} 
 
 	public static function eraseStatic($model)
@@ -122,7 +134,7 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
         }
         else
         {
-            $f = static::$listFieldController[$class][$key];
+            $f = static::$listFillableFieldController[$class][$key];
 
             $f->setModelAttribute($this, $key, $value, $this->getObjectField()->get($key));      
         }

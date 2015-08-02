@@ -27,6 +27,8 @@ interface IField extends \Telenok\Core\Interfaces\Support\IRequest {
     public function getSpecialField($model);
 
     public function getModelField($model, $field);
+	
+    public function getModelFillableField($model, $field);
 
     public function getDateField($model, $field);
 
@@ -84,7 +86,9 @@ interface IField extends \Telenok\Core\Interfaces\Support\IRequest {
 
     public function postProcess($model, $type, $input);
 
-    public function processDeleting($model);
+    public function processFieldDelete($model, $type, $force);
+	
+    public function processModelDelete($model, $force);
 
     public function allowMultilanguage();
 

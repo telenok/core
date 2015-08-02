@@ -18,6 +18,11 @@
 	
 	\Route::get('widget/grid/{typeId}', array('as' => 'cmf.widget.grid.list', 'uses' => "Telenok\Core\Widget\Model\Grid\Controller@getList"));
 
+	
+	\Route::get('download/stream/{modelId}/{fieldId}', array('as' => 'cmf.download.stream.file', 'uses' => "Telenok\Core\Support\File\Download@stream"));
+	\Route::get('download/image/{modelId}/{fieldId}', array('as' => 'cmf.download.image.file', 'uses' => "Telenok\Core\Support\File\Download@image"));
+
+	
 
 	// Module Objects\Lists
 	\Route::get('telenok/module/objects-lists/action-param', array('as' => 'cmf.module.objects-lists.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@getActionParam"));

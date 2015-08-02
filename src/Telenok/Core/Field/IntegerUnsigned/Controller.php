@@ -7,7 +7,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	protected $key = 'integer-unsigned';
 	protected $specialField = ['integer_unsigned_default', 'integer_unsigned_min', 'integer_unsigned_max'];
-	protected $ruleList = ['integer_unsigned_default' => ['integer', 'between:0,2147483647'], 'integer_unsigned_min' => ['integer', 'between:0,2147483647'], 'integer_unsigned_max' => ['integer', 'between:0,2147483647']];
+	protected $ruleList = ['integer_unsigned_default' => ['integer', 'between:0,4294967295'], 'integer_unsigned_min' => ['integer', 'between:0,4294967295'], 'integer_unsigned_max' => ['integer', 'between:0,4294967295']];
 	protected $allowMultilanguage = false;
 
 	public function getListFieldContent($field, $item, $type = null)
@@ -35,7 +35,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	public function setModelAttribute($model, $key, $value, $field)
 	{
-
 		if ($value === null)
 		{
             $default = $field->integer_unsigned_default?:0;
@@ -44,10 +43,58 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		}
 		else
 		{
-			$model->setAttribute($key, $value);
+			$model->setAttribute($key, (int)$value);
 		}
 	}
-	
+    public function getModelSpecialAttribute($model, $key, $value)
+    {
+		if (in_array($key, ['integer_unsigned_default', 'integer_unsigned_min', 'integer_unsigned_max'], true) && $value === null)
+		{ 
+			if ($key == 'integer_unsigned_default')
+			{
+				return 0;
+			}
+			else if ($key == 'integer_unsigned_min')
+			{
+				return 0;
+			}
+			else if ($key == 'integer_unsigned_max')
+			{
+				return 4294967295;
+			}
+		}
+
+		return parent::getModelSpecialAttribute($model, $key, $value);
+    }
+
+    public function setModelSpecialAttribute($model, $key, $value)
+    {
+        if (in_array($key, ['integer_unsigned_default', 'integer_unsigned_min', 'integer_unsigned_max'], true))
+		{
+            if ($value === null)
+            {
+                if ($key == 'integer_unsigned_default')
+				{
+					$value = 0;
+				}
+				else if ($key == 'integer_unsigned_min')
+				{
+					$value = 0;
+				}
+				else if ($key == 'integer_unsigned_max')
+				{
+					$value = 4294967295;
+				}
+            }
+			else
+			{
+				$value = (int)$value;
+			}
+		}
+
+        return parent::setModelSpecialAttribute($model, $key, $value);
+    }
+
 	public function postProcess($model, $type, $input)
 	{
 		$table = $model->fieldObjectType()->first()->code;
@@ -74,12 +121,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		if ($input->get('integer_unsigned_min'))
 		{
-			$field['rule'][] = "min:{$input->get('integer_unsigned_min')}";
+			$field['rule'][] = "min:{(int)$input->get('integer_unsigned_min')}";
 		}
 
 		if ($input->get('integer_unsigned_max'))
 		{
-			$field['rule'][] = "max:{$input->get('integer_unsigned_max')}";
+			$field['rule'][] = "max:{(int)$input->get('integer_unsigned_max')}";
 		}
 
 		$model->fill($field)->save();

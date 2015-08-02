@@ -40,7 +40,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		];
 	}
 
-	public function getModelField($model, $field)
+	public function getModelFillableField($model, $field)
 	{
 		return $field->relation_one_to_one_belong_to ? [$field->code] : [];
 	}

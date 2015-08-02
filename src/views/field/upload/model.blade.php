@@ -15,16 +15,16 @@
 	{!! Form::label("{$field->code}", $field->translate('title'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
     <div class="col-sm-5">
 
-        @if (!empty($model->{$field->code . '_path'}))
+        @if ($model->{$field->code}->exists())
 			@if ($model->{$field->code}->isImage())
-			<img src="{!! \URL::asset($model->{$field->code . '_path'}) !!}" alt="" width="140" />
-			<br>
-			<a href="{!! \URL::asset($model->{$field->code . '_path'}) !!}" target="_blank">Open full size</a>
-			<br>
-			@else
-			<a href="{!! \URL::asset($model->{$field->code . '_path'}) !!}" target="_blank">Download [{{ $model->{$field->code . '_original_file_name'} }}]</a>
+			<img src="{!! $model->{$field->code}->downloadImageLink() !!}" alt="" width="140" />
 			<br>
 			@endif
+			<a href="{!! $model->{$field->code}->downloadStreamLink() !!}" target="_blank">Download [{{ $model->{$field->code . '_original_file_name'} }}]</a>
+			<br>
+		@elseif ($model->{$field->code}->path())
+			<i class="fa fa-exclamation-triangle"></i> File not found
+			<br>
 		@endif
 			
 		@if ($field->upload_allow_ext->count())

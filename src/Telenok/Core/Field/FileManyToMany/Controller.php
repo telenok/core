@@ -128,19 +128,17 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 	
 	public function upload()
 	{ 
-		if (!\Input::has('title'))
+		if (!$this->getRequest()->has('title'))
 		{
-			\Input::merge(['title' => ['en' => 'Some file']]);
+			$this->getRequest()->merge(['title' => ['en' => 'Some file']]);
 		}
 
-		\Input::merge(['active' => 1]);
+		$this->getRequest()->merge(['active' => 1]);
 
 		$file = app('\App\Telenok\Core\Module\Objects\Lists\Controller');
 
 		$model = $file->save(null, 'file'); 
 		
 		return $model->id;
-	}
-	
+	}	
 }
-

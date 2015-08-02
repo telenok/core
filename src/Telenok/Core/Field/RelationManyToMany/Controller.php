@@ -9,7 +9,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     protected $specialField = array('relation_many_to_many_has', 'relation_many_to_many_belong_to');
     protected $allowMultilanguage = false;
 
-    public function getModelField($model, $field)
+    public function getModelFillableField($model, $field)
     {
 		return [];
     } 

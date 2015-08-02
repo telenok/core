@@ -411,7 +411,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
 
     public function validateException()
     {
-        return app('\Telenok\Core\Interfaces\Exception\Validate');
+        return new \Telenok\Core\Support\Exception\Validate;
     } 
     
     public function getActionParam()
@@ -683,7 +683,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
                     </button>']);
         
         $collection->put('deleted', ['order' => 4000, 'content' => '<button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
-                        onclick="if (confirm(\'' . $this->LL('notice.sure') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
+                        onclick="if (confirm(\'' . $this->LL('notice.sure.delete') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
                         . $this->getRouterDelete(['id' => $item->getKey()]) . '\');">
                         <i class="fa fa-trash-o"></i>
                     </button>']); 
@@ -849,6 +849,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller imp
         try
         {
 	        $model = $this->getModelList()->findOrFail($id);
+		
+			if (!app('auth')->can('delete', $id))
+			{
+				throw new \LogicException($this->LL('error.access'));
+			}
 			
 			\DB::transaction(function() use ($model, $force)
 			{

@@ -45,6 +45,8 @@ return [
     'notice.error' => 'Error',
     'notice.error.undefined' => 'Sorry, an error occurred',
     'notice.sure' => 'Are you sure ?',
+	'notice.sure.delete' => 'Do you want to delete ?',
+	'notice.delete.force' => 'WARNING! Data will be permanently deleted! Are you sure ?',
     'notice.warning' => 'Warning!',
     'notice.choose' => "Select an Option",
     'notice.not-found' => "Oops, nothing found!",

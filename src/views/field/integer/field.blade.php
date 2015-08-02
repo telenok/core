@@ -25,7 +25,7 @@
 <div class="form-group">
 	{!! Form::label('integer_min', $controller->LL('property.integer_min'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-9">
-		{!! Form::text('integer_min', $model->integer_min) }}
+		{!! Form::text('integer_min', $model->integer_min) !!}
 	</div>
 </div>
 <div class="form-group">

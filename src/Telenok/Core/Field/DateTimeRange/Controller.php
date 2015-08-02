@@ -14,7 +14,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		return [$field->code . '_start', $field->code . '_end'];
     } 
 
-    public function getModelField($model, $field)
+    public function getModelFillableField($model, $field)
     {
 		return [];
     } 
@@ -115,7 +115,21 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		}
     }
 
-    public function postProcess($model, $type, $input)
+	public function processFieldDelete($model, $type, $force)
+	{
+		if ($force)
+		{
+			\Schema::table($type->code, function($table) use ($model)
+			{
+				$table->dropColumn($model->code . '_start');
+				$table->dropColumn($model->code . '_end');
+			});
+		}
+
+		return true;
+	}
+
+	public function postProcess($model, $type, $input)
     {
 		$table = $model->fieldObjectType()->first()->code;
         $fieldName = $model->code;

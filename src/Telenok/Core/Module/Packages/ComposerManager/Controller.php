@@ -266,7 +266,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     </button> ' : ''
 				) . '
                     <button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
-                        onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
+                        onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure.delete') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
                         . $this->getRouterDelete(['id' => $item->getRealPath()]) . '\');">
                         <i class="fa fa-trash-o"></i>
                     </button>
@@ -340,7 +340,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 			if ($validator->fails())
 			{
-				throw (new \Telenok\Core\Interfaces\Exception\Validate())->setMessageError($validator->messages());
+				throw (new \Telenok\Core\Support\Exception\Validate())->setMessageError($validator->messages());
 			}
 
 			if ($modelType == 'directory')
@@ -381,7 +381,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				), $this->getAdditionalViewParam()))->render()
 			];
 		}
-		catch (\Telenok\Core\Interfaces\Exception\Validate $e)
+		catch (\Telenok\Core\Support\Exception\Validate $e)
 		{
 			throw $e;
 		}
@@ -422,7 +422,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
             return ['success' => 1];
 		}
-		catch (\Telenok\Core\Interfaces\Exception\Validate $e)
+		catch (\Telenok\Core\Support\Exception\Validate $e)
 		{
 			throw $e;
 		}

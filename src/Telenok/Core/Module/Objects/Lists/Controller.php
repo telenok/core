@@ -320,6 +320,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         }
         catch (\Exception $e) 
         {
+			throw $e;
+
+
 			return [
                 'gridId' => $this->getGridId(), 
                 'sEcho' => $sEcho,
@@ -358,7 +361,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
                     ' . ($canDelete ? '
                     <button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
-                        onclick="if (confirm(\'' . $this->LL('notice.sure') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
+                        onclick="if (confirm(\'' . $this->LL('notice.sure.delete') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
                         . $this->getRouterDelete(['id' => $item->getKey()]) . '\');return false;">
                         <i class="fa fa-trash-o"></i>
                     </button>' : '') . '
@@ -466,14 +469,20 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function delete($id = null, $force = false)
     { 
-        $model = $this->getModel($id);
         $type = $this->getTypeByModelId($id);
 
+        if ($type->classController())
+        {
+            return $this->delete($id, $force);
+        } 
+				
         if (!app('auth')->can('delete', $id))
         {
             throw new \LogicException($this->LL('error.access'));
         }
 
+        $model = $this->getModel($id);
+		
         try
         {
 			\DB::transaction(function() use ($model, $type, $force)

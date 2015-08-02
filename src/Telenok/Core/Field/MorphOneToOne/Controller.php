@@ -53,7 +53,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		}
 	} 
 	
-    public function getModelField($model, $field)
+    public function getModelFillableField($model, $field)
     {
 		return $field->morph_one_to_one_belong_to ? [$field->code . '_type', $field->code . '_id'] : [];
     }
@@ -275,7 +275,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         return $model;
     }
 
-    public function processDeleting($model)
+    public function processFieldDelete($model, $type, $force)
     {  
 		if ($model->morph_one_to_one_has)
 		{
@@ -300,7 +300,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			}
 		}
 
-        return parent::processDeleting($model);
+        return parent::processFieldDelete($model, $type, $force);
     } 
 	
     public function preProcess($model, $type, $input)

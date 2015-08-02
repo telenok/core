@@ -17,7 +17,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 		return ['locked_at'];
     }
 
-    public function getModelField($model, $field)
+    public function getModelFillableField($model, $field)
     { 
 		return $field->relation_one_to_many_belong_to ? [$field->code, 'locked_at'] : [];
     } 

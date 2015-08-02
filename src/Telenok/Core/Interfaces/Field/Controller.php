@@ -103,6 +103,11 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	public function getModelField($model, $field)
 	{
+		return $this->getModelFillableField($model, $field);
+	}
+
+	public function getModelFillableField($model, $field)
+	{
 		return [$field->code];
 	}
 
@@ -416,7 +421,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 
 	public function validateException()
 	{
-		return app('\Telenok\Core\Interfaces\Exception\Validate');
+		return new \Telenok\Core\Support\Exception\Validate;
 	}
 
 	public function preProcess($model, $type, $input)
@@ -433,7 +438,20 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		return $this;
 	}
 
-	public function processDeleting($model)
+	public function processFieldDelete($model, $type, $force)
+	{
+		if ($force)
+		{
+			\Schema::table($type->code, function($table) use ($model)
+			{
+				$table->dropColumn($model->code);
+			});
+		}
+
+		return true;
+	}
+	
+	public function processModelDelete($model, $force)
 	{
 		return true;
 	}

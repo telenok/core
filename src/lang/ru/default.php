@@ -34,6 +34,7 @@ return [
     'notice.error' => 'Ошибка!',
     'notice.error.undefined' => 'Извините, произошла ошибка',
     'notice.sure' => 'Вы уверены ?',
+	'notice.sure.delete' => 'Вы действительно хотите удалить ?',
     'notice.warning' => 'Предупреждение!',
     'notice.choose' => "Выберите Опцию",
     'notice.not-found' => "Ничего не найдено!",

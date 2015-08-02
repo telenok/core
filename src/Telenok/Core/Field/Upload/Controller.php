@@ -11,51 +11,83 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     protected $maxSiteDefault = 200000;
 	protected $defaultStorage = 'default_local';
 
-    public function getModelField1111111111111111111111111111111111($model, $field)
-    {
+	public function getModelField($model, $field)
+	{
+		return [$field->code];
+	}
+
+	public function getModelFillableField($model, $field)
+	{
 		return [];
-    } 
+	}
 
     public function getListFieldContent($field, $item, $type = null)
-    { 
-		if (empty($item->{$field->code . '_path'}))
+    {
+		if ($item->{$field->code}->exists())
 		{
-			return;
+			if ($item->{$field->code}->isImage())
+			{
+				return '<img src="' . e($item->{$field->code}->downloadImageLink()) .'" alt="" width="140" />';
+			}
+			else
+			{
+				return '<a href="' . e($item->{$field->code}->downloadStreamLink())  .'" target="_blank">' . $this->LL('download') . '</a>';
+			}
 		}
-		
-		if ($item->{$field->code}->isImage($field, $item))
+		else if ($item->{$field->code}->path())
 		{
-			return '<img src="' . \URL::asset($item->{$field->code . '_path'}) .'" alt="" width="140" />';
-		}
-		else
-		{
-			return '<a href="' . \URL::asset($item->{$field->code . '_path'}) .'" target="_blank">' . $this->LL('download') . '</a>';
+			return '<i class="fa fa-exclamation-triangle"></i> File not found';
 		}
     }
-    public function processDeleting($model)
-    {  
-		\App\Telenok\Core\Model\Object\Field::where(function($query) use ($model)
+	
+	public function processModelDelete($model, $force)
+	{
+		return parent::processModelDelete($model, $force);
+	}
+
+    public function processFieldDelete($model, $type, $force)
+    {
+		/*
+		 * Delete all fields for Upload Controller
+		 */
+		\App\Telenok\Core\Model\Object\Field::where(function($query) use ($model, $type)
+			{
+
+				$query->whereIn('code', [
+					$model->code . '_path',
+					$model->code . '_size',
+					$model->code . '_original_file_name',
+					$model->code . '_' . $type->code . '_file_mime_type',
+					$model->code . '_' . $type->code . '_file_extension',
+				]);
+
+				$query->where('field_object_type', $model->field_object_type);
+			})
+			->get()->each(function($item) use ($force, $model, $type)
+			{
+				if ($force)
 				{
-					$type = $model->fieldObjectType()->first();
-
-					$query->whereIn('code', [
-						$model->code . '_path',
-						$model->code . '_size',
-						$model->code . '_original_file_name',
-						$model->code . '_' . $type->code . '_file_mime_type',
-						$model->code . '_' . $type->code . '_file_extension',
-					]);
-
-					$query->where('field_object_type', $model->field_object_type);
-				})
-				->get()->each(function($item)
+					$item->forceDelete();
+				}
+				else
 				{
 					$item->delete();
-				});
-
-        return parent::processDeleting($model);
+				}
+			});
+			
+		if ($force)
+		{
+			\Schema::table($type->code, function($table) use ($model, $type)
+			{
+				$table->dropColumn($model->code . '_path');
+				$table->dropColumn($model->code . '_size');
+				$table->dropColumn($model->code . '_original_file_name');
+				$table->dropColumn($model->code . '_' . $type->code . '_file_mime_type');
+				$table->dropColumn($model->code . '_' . $type->code . '_file_extension');
+			});
+		}
     } 
-	
+
     public function saveModelField($field, $model, $input)
 	{
 		/*
@@ -179,16 +211,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 				$model = $model->save();
 
-				$storageList = $field->upload_storage;
-
-				if ($storageList->isEmpty())
-				{
-					$storageList->push('default_local');
-				}
-
-				$storageList = File::convertDefaultStorageName($storageList);
-
-				foreach($storageList->all() as $storage)
+				foreach($this->storageList($field)->all() as $storage)
 				{
 					$fileResource = fopen($file->getPathname(), "r");
 
@@ -206,16 +229,41 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			}
 			catch (\Extension $e)
 			{
+				/*
+				 * remove latest uploaded file linked to current field of $model
+				 */
+				$f = explode(".", basename($fileName));
+
+				foreach($this->storageList($field)->all() as $storage)
+				{						
+					$disk = app('filesystem')->disk($storage);
+
+					foreach($disk->files($directoryPath) as $file)
+					{
+						if (strpos($file, $f) !== FALSE)
+						{
+							try
+							{
+								$disk->delete($file);
+							}
+							catch (\Exception $e) {}
+						}
+					}
+				}
+				
 				throw $e;
 			}
 			
+			/*
+			 * remove old file linked to current field of $model
+			 */
 			if ($currentPath)
 			{
 				$t = explode(".", basename($currentPath));
 				
 				$oldFilename = array_shift($t);
 				
-				foreach($storageList->all() as $storage)
+				foreach($this->storageList($field)->all() as $storage)
 				{						
 					$disk = app('filesystem')->disk($storage);
 
@@ -236,12 +284,24 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
         return $model;
 	}
+
+	protected function storageList($field)
+	{
+		$storageList = $field->upload_storage;
+
+		if ($storageList->isEmpty())
+		{
+			$storageList->push('default_local');
+		}
+
+		return File::convertDefaultStorageName($storageList);
+	}
 	
 	public function getModelAttribute($model, $key, $value, $field)
 	{
 		return app('\Telenok\Core\Field\Upload\File')->setModels($model, $field);
 	}
-
+	
     public function getModelSpecialAttribute($model, $key, $value)
     {
         try

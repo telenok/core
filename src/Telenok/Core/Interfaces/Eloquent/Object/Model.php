@@ -12,7 +12,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	protected $dates = [];
 	protected static $listField = [];
 	protected static $listRule = [];
-	protected static $listFieldController = [];
+	protected static $listAllFieldController = [];
+	protected static $listFillableFieldController = [];
 	protected static $listMultilanguage = [];
 	protected static $listFieldDate = [];
 
@@ -32,7 +33,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		static::deleting(function($model)
 		{
-			if ($model->hasVersioning())
+			if ($model->hasVersioning() && !$model->forceDeleting)
 			{
 				\App\Telenok\Core\Model\Object\Version::add($model);
 			}
@@ -40,6 +41,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			if (!($model instanceof \Telenok\Core\Model\Object\Sequence))
 			{
 				$model->deleteSequence();
+				$model->deleteModelFieldController();
 			}
 		});
 
@@ -93,16 +95,47 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 			$sequence->delete();
 		}
 	}
+	
+	protected function deleteModelFieldController()
+	{
+		$controllers = app('telenok.config.repository')->getObjectFieldController();
+
+		foreach ($this->getObjectField()->all() as $field)
+		{
+			if ($controller = $controllers->get($field->key))
+			{
+				$controller->processModelDelete($this, $this->forceDeleting);
+			}
+		}
+	}
+
+    public function restore()
+	{
+		if (app('auth')->can('delete', $this->getKey()))
+		{
+			\DB::transaction(function()
+			{
+				parent::restore();
+			});
+		}
+		else
+		{
+			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied();
+		}
+	}
 
 	public function delete()
 	{
 		if (app('auth')->can('delete', $this->getKey()))
 		{
-			parent::delete();
+			\DB::transaction(function()
+			{
+				parent::delete();
+			});
 		}
 		else
 		{
-			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied();
+			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied();
 		}
 	}
 
@@ -176,7 +209,8 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		static::$listRule[$class] = null;
 		static::$listField[$class] = null;
-		static::$listFieldController[$class] = null;
+		static::$listAllFieldController[$class] = null;
+		static::$listFillableFieldController[$class] = null;
 		static::$listMultilanguage[$class] = null;
 
 		$model->getObjectField();
@@ -219,7 +253,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		if ($this instanceof \App\Telenok\Core\Model\Object\Sequence)
 		{
-			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Cant storeOrUpdate sequence model directly');
+			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Cant storeOrUpdate sequence model directly');
 		}
 
 		try
@@ -228,7 +262,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 		catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
 		{
-			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied("Telenok\Core\Interfaces\Eloquent\Object\Model::storeOrUpdate() - Error: 'type of object not found, please, define it'");
+			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied("Telenok\Core\Interfaces\Eloquent\Object\Model::storeOrUpdate() - Error: 'type of object not found, please, define it'");
 		}
 
 		// merge attributes if model filled via $model->fill() and plus ->storeOrUpdate([some attributes])
@@ -276,7 +310,6 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 		{
 			if ($input->has($fillable))
 			{
-				
 			}
 			else if (!$model->exists)
 			{
@@ -288,7 +321,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 				//$input->put($fillable, $model->$fillable);
 			}
 		}
-		
+
 		try
 		{
 			\DB::transaction(function() use ($type, $input, $model, $withEvent)
@@ -316,10 +349,10 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 						->setInput($input)
 						->setMessage($this->LL('error'))
 						->setCustomAttribute($this->validatorCustomAttributes());
-
+		
 				if ($validator->fails())
 				{
-					throw app('\Telenok\Core\Interfaces\Exception\Validate')->setMessageError($validator->messages());
+					throw (new \Telenok\Core\Support\Exception\Validate())->setMessageError($validator->messages());
 				}
 
 				if ($type->classController())
@@ -347,7 +380,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 				}
 			});
 		}
-		catch (\Telenok\Core\Interfaces\Exception\Validate $e)
+		catch (\Telenok\Core\Support\Exception\Validate $e)
 		{
 			throw $e;
 		}
@@ -428,7 +461,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 					{
 						$fieldController = $f_->get($field_->key);
 
-						if ($fieldController && (in_array($key, $fieldController->getModelField($this, $field_), true) || in_array($key, $fieldController->getDateField($this, $field_), true)) &&
+						if ($fieldController && (in_array($key, $fieldController->getModelFillableField($this, $field_), true) || in_array($key, $fieldController->getDateField($this, $field_), true)) &&
 							(
 								(!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key_)) ||
 								($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key_))
@@ -483,7 +516,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		$class = get_class($this);
 
-		if (isset(static::$listFieldController[$class][$key]))
+		if (isset(static::$listAllFieldController[$class][$key]))
 		{
 			$this->setModelAttributeController($key, $value);
 		}
@@ -497,9 +530,9 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		$class = get_class($this);
 
-		if (isset(static::$listFieldController[$class][$key]))
+		if (isset(static::$listAllFieldController[$class][$key]))
 		{
-			return static::$listFieldController[$class][$key]->getModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
+			return static::$listAllFieldController[$class][$key]->getModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
 		}
 		else
 		{
@@ -511,7 +544,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		$class = get_class($this);
 
-		$f = static::$listFieldController[$class][$key];
+		$f = static::$listAllFieldController[$class][$key];
 
 		$f->setModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
 	}
@@ -603,9 +636,10 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		$class = get_class($this);
 
-		if (!isset(static::$listFieldController[$class]))
+		if (!isset(static::$listFillableFieldController[$class]))
 		{
-			static::$listFieldController[$class] = [];
+			static::$listAllFieldController[$class] = [];
+			static::$listFillableFieldController[$class] = [];
 			static::$listFieldDate[$class] = [];
 
 			$controllers = app('telenok.config.repository')->getObjectFieldController();
@@ -617,10 +651,15 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 					$dateField = (array) $controller->getDateField($this, $field);
 					static::$listFieldDate[$class] = array_merge(static::$listFieldDate[$class], $dateField);
 
-					foreach (array_merge((array) $controller->getModelField($this, $field), $dateField) as $f_)
+					foreach (array_merge((array) $controller->getModelFillableField($this, $field), $dateField) as $f_)
 					{
-						static::$listFieldController[$class][$f_] = $controller;
+						static::$listFillableFieldController[$class][$f_] = $controller;
 						static::$listField[$class][$f_] = $field;
+					}
+					
+					foreach ((array)$controller->getModelField($this, $field) as $f_)
+					{
+						static::$listAllFieldController[$class][$f_] = $controller;
 					}
 				}
 			}
@@ -628,9 +667,9 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		$this->dates = array_merge($this->getDates(), (array) static::$listFieldDate[$class]);
 
-		return array_keys((array) static::$listFieldController[$class]);
+		return array_keys((array) static::$listFillableFieldController[$class]);
 	}
-
+	
 	public function getRule()
 	{
 		$class = get_class($this);
@@ -911,7 +950,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 		}
 		else
 		{
-			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Not exists or not treeable');
+			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Not exists or not treeable');
 		}
 
 		return $this;
@@ -931,7 +970,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		if ($sequence->isAncestor($sequenceParent))
 		{
-			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
+			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
 		}
 
 		\DB::transaction(function() use ($sequence, $sequenceParent)
@@ -973,7 +1012,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		if ($sequence->isAncestor($sequenceParent))
 		{
-			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
+			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
 		}
 
 		\DB::transaction(function() use ($sequence, $sequenceParent)
@@ -1043,7 +1082,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		if ($sequence->isAncestor($sequenceSibling))
 		{
-			throw new \Telenok\Core\Interfaces\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
+			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
 		}
 
 		\DB::transaction(function() use ($sequence, $sequenceSibling, $op)

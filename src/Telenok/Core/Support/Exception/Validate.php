@@ -1,4 +1,4 @@
-<?php namespace Telenok\Core\Interfaces\Exception;
+<?php namespace Telenok\Core\Support\Exception;
 
 class Validate extends \Exception {
 

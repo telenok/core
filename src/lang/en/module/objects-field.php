@@ -16,4 +16,6 @@ return array(
 	'error.change.field.linked.type' => 'Cant change type for existing field',
 	'error.change.field.key' => 'Cant change key for existing field',
 	'error.add.field.type' => 'Please set "Id" or "Code" for type of field in "field_object_type" key',
+	'btn.delete' => 'Force delete',
+	'notice.sure.delete' => 'WARNING! All data of the field in all records will be permanently deleted! You CANT RESTORE THEM. Are you sure ?',
 );

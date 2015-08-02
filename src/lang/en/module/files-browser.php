@@ -25,9 +25,7 @@ return array(
 	'field.writeable' => 'Writeable',
 	'field.readable' => 'Readable',
 	'field.updated_at' => 'Updated',
-	'field.directory' => 'Current directory',
-	
-	'notice.delete.force' => 'WARNING! Item will be permanently deleted! Are you sure?',
+	'field.directory' => 'Current directory',	
 	
     'wizard.file.header' => 'Choose folder',
     
