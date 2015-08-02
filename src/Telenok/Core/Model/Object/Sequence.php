@@ -19,9 +19,22 @@ class Sequence extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	public function delete()
 	{
-        $this->model()->delete();
+		\DB::transaction(function()
+		{
+			if ($this->model && $this->model->exists)
+			{
+				if ($this->forceDeleting)
+				{
+					$this->model->forceDelete();
+				}
+			}
+			else
+			{
+				parent::delete();
+			}
+		});
     }
-    
+
 	public function sequencesObjectType()
 	{
 		return $this->belongsTo('\App\Telenok\Core\Model\Object\Type', 'sequences_object_type');
@@ -52,6 +65,4 @@ class Sequence extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
     {
         return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_permission_object_sequence');
     }
-    
-    
 }

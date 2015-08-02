@@ -33,23 +33,33 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		static::deleting(function($model)
 		{
-			if ($model->hasVersioning())
+			if (!($model instanceof \Telenok\Core\Model\Object\Sequence))
 			{
-				\App\Telenok\Core\Model\Object\Version::add($model);
-			}
+				if ($model->hasVersioning())
+				{
+					\App\Telenok\Core\Model\Object\Version::add($model);
+				}
 
+				$model->deleteModelFieldController();
+			}
+		});
+
+		static::deleted(function($model)
+		{
 			if (!($model instanceof \Telenok\Core\Model\Object\Sequence))
 			{
 				$model->deleteSequence();
-				$model->deleteModelFieldController();
 			}
 		});
 
 		static::restoring(function($model)
 		{
-			if ($model->hasVersioning())
+			if (!($model instanceof \Telenok\Core\Model\Object\Sequence))
 			{
-				$model->restoreSequence();
+				if ($model->hasVersioning())
+				{
+					$model->restoreSequence();
+				}
 			}
 		});
 	}

@@ -29,10 +29,10 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
                         
 			if ($controllers = app('telenok.config.repository')->getObjectFieldController()->get($model->key))
 			{
-				return $controllers->processFieldDelete($model, $type);
+				$controllers->processFieldDelete($model, $type);
 			}
 
-			$this->deleteFieldResource($type);
+			$model->deleteFieldResourcePermission($type);
 		});
 	}
 
@@ -50,19 +50,29 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 		}
 	}
 
-	public function deleteFieldResource($type)
+	public function deleteFieldResourcePermission($type)
 	{
-		$code = 'object_field.' . $type->code . '.' . $this->code;
- 
-        \App\Telenok\Core\Model\Security\Resource::where('code', $code)->forceDelete();
+		$resource = \App\Telenok\Core\Model\Security\Resource::where('code', 'object_field.' . $type->code . '.' . $this->code)->first(); 
+
+		\App\Telenok\Core\Model\Security\SubjectPermissionResource::
+			whereIn('acl_subject_object_sequence', [$resource->exists?$resource->getKey():0, $this->getKey()])
+			->whereIn('acl_resource_object_sequence', [$resource->exists?$resource->getKey():0, $this->getKey()])
+			->get()->each(function($i) { $i->forceDelete(); });
+		
+        $resource->forceDelete();
 	}
 
 	public function delete()
 	{
-		if ($this->forceDeleting == FALSE)
+		\DB::transaction(function()
 		{
-			throw new \LogicException('Sorry, Object Field can be only FORCE DELETED with all linked data');
-		}
+			if ($this->forceDeleting == FALSE)
+			{
+				throw new \LogicException('Sorry, Object Field can be only FORCE DELETED with all linked data');
+			}
+
+			parent::delete();
+		});
 	}
 	
 	public function getFillable()
