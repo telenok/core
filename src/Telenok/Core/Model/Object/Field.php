@@ -29,13 +29,10 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
                         
 			if ($controllers = app('telenok.config.repository')->getObjectFieldController()->get($model->key))
 			{
-				return $controllers->processFieldDelete($model, $type, $model->forceDeleting);
+				return $controllers->processFieldDelete($model, $type);
 			}
-			
-            if ($model->forceDeleting)
-			{
-				$this->deleteFieldResource($type);
-			}
+
+			$this->deleteFieldResource($type);
 		});
 	}
 

@@ -313,7 +313,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         return parent::preProcess($model, $type, $input);
     } 
 
-    public function processFieldDelete($model, $type, $force)
+    public function processFieldDelete($model, $type)
     {  
 		if ($model->morph_one_to_many_has)
 		{
@@ -339,7 +339,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			}
 		}
 
-        return parent::processFieldDelete($model, $type, $force);
+        return true;
     } 
 	
     public function postProcess($model, $type, $input)

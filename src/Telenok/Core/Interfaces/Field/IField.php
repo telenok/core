@@ -86,7 +86,7 @@ interface IField extends \Telenok\Core\Interfaces\Support\IRequest {
 
     public function postProcess($model, $type, $input);
 
-    public function processFieldDelete($model, $type, $force);
+    public function processFieldDelete($model, $type);
 	
     public function processModelDelete($model, $force);
 

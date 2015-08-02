@@ -45,7 +45,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		return parent::processModelDelete($model, $force);
 	}
 
-    public function processFieldDelete($model, $type, $force)
+    public function processFieldDelete($model, $type)
     {
 		/*
 		 * Delete all fields for Upload Controller
@@ -63,29 +63,19 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 				$query->where('field_object_type', $model->field_object_type);
 			})
-			->get()->each(function($item) use ($force, $model, $type)
+			->get()->each(function($item) use ($model, $type)
 			{
-				if ($force)
-				{
-					$item->forceDelete();
-				}
-				else
-				{
-					$item->delete();
-				}
+				$item->forceDelete();
 			});
 			
-		if ($force)
+		\Schema::table($type->code, function($table) use ($model, $type)
 		{
-			\Schema::table($type->code, function($table) use ($model, $type)
-			{
-				$table->dropColumn($model->code . '_path');
-				$table->dropColumn($model->code . '_size');
-				$table->dropColumn($model->code . '_original_file_name');
-				$table->dropColumn($model->code . '_' . $type->code . '_file_mime_type');
-				$table->dropColumn($model->code . '_' . $type->code . '_file_extension');
-			});
-		}
+			$table->dropColumn($model->code . '_path');
+			$table->dropColumn($model->code . '_size');
+			$table->dropColumn($model->code . '_original_file_name');
+			$table->dropColumn($model->code . '_' . $type->code . '_file_mime_type');
+			$table->dropColumn($model->code . '_' . $type->code . '_file_extension');
+		});
     } 
 
     public function saveModelField($field, $model, $input)

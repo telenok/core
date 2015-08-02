@@ -122,12 +122,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		if ($input->get('integer_min'))
 		{
-			$field['rule'][] = "min:{(int)$input->get('integer_min')}";
+			$field['rule'][] = "min:" . (int)$input->get('integer_min');
 		}
 
 		if ($input->get('integer_max'))
 		{
-			$field['rule'][] = "max:{(int)$input->get('integer_max')}";
+			$field['rule'][] = "max:" . (int)$input->get('integer_max');
 		}
 
 		$model->fill($field)->save();

@@ -108,16 +108,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		}
     }
 
-	public function processFieldDelete($model, $type, $force)
+	public function processFieldDelete($model, $type)
 	{
-		if ($force)
+		\Schema::table($type->code, function($table) use ($model)
 		{
-			\Schema::table($type->code, function($table) use ($model)
-			{
-				$table->dropColumn($model->code . '_start');
-				$table->dropColumn($model->code . '_end');
-			});
-		}
+			$table->dropColumn($model->code . '_start');
+			$table->dropColumn($model->code . '_end');
+		});
 
 		return true;
 	}

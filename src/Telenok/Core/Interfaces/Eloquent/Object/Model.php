@@ -33,7 +33,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		static::deleting(function($model)
 		{
-			if ($model->hasVersioning() && !$model->forceDeleting)
+			if ($model->hasVersioning())
 			{
 				\App\Telenok\Core\Model\Object\Version::add($model);
 			}

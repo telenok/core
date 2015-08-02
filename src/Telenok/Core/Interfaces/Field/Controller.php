@@ -438,15 +438,12 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		return $this;
 	}
 
-	public function processFieldDelete($model, $type, $force)
+	public function processFieldDelete($model, $type)
 	{
-		if ($force)
+		\Schema::table($type->code, function($table) use ($model)
 		{
-			\Schema::table($type->code, function($table) use ($model)
-			{
-				$table->dropColumn($model->code);
-			});
-		}
+			$table->dropColumn($model->code);
+		});
 
 		return true;
 	}

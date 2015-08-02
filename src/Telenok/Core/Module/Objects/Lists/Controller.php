@@ -471,9 +471,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     { 
         $type = $this->getTypeByModelId($id);
 
-        if ($type->classController())
+        if ($c = $type->classController())
         {
-            return $this->delete($id, $force);
+            return app($c)->delete($id, $force);
         } 
 				
         if (!app('auth')->can('delete', $id))
