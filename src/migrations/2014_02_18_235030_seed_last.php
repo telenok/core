@@ -1,4 +1,4 @@
-<?php
+p<?php
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -124,7 +124,7 @@ class SeedLast extends Migration {
 			'username' => 'admin',
 			'usernick' => 'Super administrator',
 			'email' => 'support@telenok.com',
-			'password' => '11111',
+			'password' => str_random(),
 			'active' => 1,
 		]);
 

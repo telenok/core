@@ -16,7 +16,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function getModelFillableField($model, $field)
     {
-		return [];
+		return $this->getDateField($model, $field);
     } 
 
     public function getListFieldContent($field, $item, $type = null)
@@ -161,4 +161,3 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         return parent::postProcess($model, $type, $input);
     }
 }
-

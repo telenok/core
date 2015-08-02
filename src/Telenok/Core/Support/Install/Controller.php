@@ -76,9 +76,9 @@ class Controller {
 
 	public function setSuperuserPassword($param = '')
 	{
-		if (mb_strlen($param) < config('auth.password.length-min', 8))
+		if (mb_strlen($param) < ($length = config('auth.password.length-min', 8)))
 		{
-			throw new \Exception('Wrong superuser password, it should be at least ' . config('auth.password.length-min', 8) . ' symbols.');
+			throw new \Exception('Wrong superuser password, it should be at least ' . $length . ' symbols.');
 		}
 		else
 		{
