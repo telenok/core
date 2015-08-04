@@ -1,5 +1,5 @@
-
 <?php
+
 $domAttr = ['id' => $field->code . '-' . $uniqueId, 'class' => $field->css_class?: 'col-xs-5 col-sm-5'];
 $disabled = false;
 
@@ -12,7 +12,7 @@ if ( (!$model->exists && (!$field->allow_create || !$permissionCreate)) || ($mod
 }
 ?> 
 
-<div class="form-group">
+<div class="form-group" data-field-key='{{ $field->code }}'>
     {!! Form::label($disabled ? str_random() : "{$field->code}", $field->translate('title'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-9">
 		

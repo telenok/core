@@ -165,14 +165,15 @@
         <!--inline scripts related to this page-->
 
         <script type="text/javascript">
-            function show_box(id) {
+            function show_box(id) 
+			{
                 jQuery('.widget-box.visible').removeClass('visible');
                 jQuery('#' + id).addClass('visible');
             }
 			
 			jQuery("#password-reset").submit(function()
 			{
-				$.ajax({
+				jQuery.ajax({
 						type: "POST",
 						url: "{!! route('cmf.password.reset.email.process') !!}",
 						data: jQuery(this).serialize(),
@@ -197,7 +198,7 @@
 			
 			jQuery("#login").submit(function()
 			{
-				$.ajax({
+				jQuery.ajax({
 						type: "POST",
 						url: "{!! route('cmf.login.process') !!}",
 						data: jQuery(this).serialize(),

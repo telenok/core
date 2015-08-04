@@ -6,7 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	protected $key = 'text';
-	protected $ruleList = ['text_width' => ['integer', 'between:20,2000'], 'text_height' => ['integer', 'between:20,2000']];
 	protected $specialField = ['text_width', 'text_height', 'text_default'];
    
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
@@ -134,7 +133,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		$table = $model->fieldObjectType()->first()->code;
         $fieldName = $model->code;
 
-		if (!\Schema::hasColumn($table, $fieldName) && !\Schema::hasColumn($table, "`{$fieldName}`"))
+		if (!\Schema::hasColumn($table, $fieldName))
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{

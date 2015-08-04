@@ -100,7 +100,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		$table = $model->fieldObjectType()->first()->code;
 		$fieldName = $model->getAttribute('code');
 
-		if (!\Schema::hasColumn($table, $fieldName) && !\Schema::hasColumn($table, "`{$fieldName}`"))
+		if (!\Schema::hasColumn($table, $fieldName))
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{
@@ -111,7 +111,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		$field = [];
 		$field['multilanguage'] = 0;
 		$field['rule'][] = 'integer';
-		
+
 		$field['integer_unsigned_default'] = $input->get('integer_unsigned_min');
 
 		if ($input->get('required'))
@@ -121,12 +121,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		if ($input->get('integer_unsigned_min'))
 		{
-			$field['rule'][] = "min:{(int)$input->get('integer_unsigned_min')}";
+			$field['rule'][] = "min:" . (int)$input->get('integer_unsigned_min');
 		}
 
 		if ($input->get('integer_unsigned_max'))
 		{
-			$field['rule'][] = "max:{(int)$input->get('integer_unsigned_max')}";
+			$field['rule'][] = "max:" . (int)$input->get('integer_unsigned_max');
 		}
 
 		$model->fill($field)->save();

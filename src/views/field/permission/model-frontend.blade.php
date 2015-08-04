@@ -21,7 +21,7 @@
 	*/
 ?>  
 
-<div class="widget-box transparent">
+<div class="widget-box transparent" data-field-key='{{ $field->code }}'>
 	<div class="widget-header widget-header-small">
 		<h4>
 			<i class="fa fa-list-ul"></i>

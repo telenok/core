@@ -44,11 +44,6 @@
 				
 			if (button_type == 'save.close' || button_type == 'delete.close')
 			{
-				if (button_type == 'delete.close' && !confirm('{{ $controller->LL('notice.sure.delete') }}'))
-				{
-					return;
-				}
-
 				var divId = $el.closest('div.tab-pane').attr('id');
 
 				jQuery('li a[href=#' + divId + '] i.fa.fa-times').click();

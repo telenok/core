@@ -233,7 +233,7 @@
 			{
 				setInterval(function()
 				{
-					$.ajax({
+					jQuery.ajax({
 						url: "{!! route('cmf.update.csrf') !!}",
 						dataType: "json",
 						success: function(data)

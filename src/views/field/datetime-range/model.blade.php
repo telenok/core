@@ -36,7 +36,7 @@
     $random = str_random();
 ?>
 
-<div class="form-group">
+<div class="form-group" data-field-key='{{ $field->code }}'>
 	{!! Form::label("{$field->code}_start" , $field->translate('title'), array('class' => 'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-3">
         <div class="input-daterange input-group">

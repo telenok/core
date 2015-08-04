@@ -24,7 +24,7 @@
 	}
 ?>
 
-    <div class="form-group">
+    <div class="form-group" data-field-key='{{ $field->code }}'>
         {!! Form::label($field->code, $field->translate('title'), ['class'=>'col-sm-3 control-label no-padding-right']) !!}
         <div class="col-sm-9"> 
             @if ($field->icon_class)

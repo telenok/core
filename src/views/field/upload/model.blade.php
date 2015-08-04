@@ -7,11 +7,9 @@
         $domAttr['disabled'] = 'disabled';
         $disabled = true; 
     }
-?>
+?> 
 
-
-
-<div class="form-group">
+<div class="form-group" data-field-key='{{ $field->code }}'>
 	{!! Form::label("{$field->code}", $field->translate('title'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
     <div class="col-sm-5">
 

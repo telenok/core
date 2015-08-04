@@ -48,11 +48,44 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     public function processFieldDelete($model, $type)
     {
 		/*
+		 * Remove all files
+		 */
+		$storages = $this->storageList($model)->all();
+
+		app($type->class_model)->chunk(200, function ($rows) use ($storages, $model)
+		{
+			foreach ($rows as $row) 
+			{
+				$f = pathinfo($row->{$model->code}->path(), PATHINFO_FILENAME);
+				$d = pathinfo($row->{$model->code}->path(), PATHINFO_DIRNAME);
+
+				if ($f)
+				{
+					foreach($storages as $storage)
+					{						
+						$disk = app('filesystem')->disk($storage);
+
+						foreach($disk->files($d) as $file)
+						{
+							if (strpos($file, $f) !== FALSE)
+							{
+								try
+								{
+									$disk->delete($file);
+								}
+								catch (\Exception $e) {}
+							}
+						}
+					}
+				}
+			}
+		});
+
+		/*
 		 * Delete all fields for Upload Controller
 		 */
 		\App\Telenok\Core\Model\Object\Field::where(function($query) use ($model, $type)
 			{
-
 				$query->whereIn('code', [
 					$model->code . '_path',
 					$model->code . '_size',
@@ -70,11 +103,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			
 		\Schema::table($type->code, function($table) use ($model, $type)
 		{
-			$table->dropColumn($model->code . '_path');
-			$table->dropColumn($model->code . '_size');
-			$table->dropColumn($model->code . '_original_file_name');
-			$table->dropColumn($model->code . '_' . $type->code . '_file_mime_type');
-			$table->dropColumn($model->code . '_' . $type->code . '_file_extension');
+			$table->dropColumn([
+				$model->code . '_path',
+				$model->code . '_original_file_name',
+				$model->code . '_size',
+				$model->code . '_' . $type->code . '_file_mime_type',
+				$model->code . '_' . $type->code . '_file_extension',
+			]);
 		});
     } 
 
@@ -222,7 +257,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				/*
 				 * remove latest uploaded file linked to current field of $model
 				 */
-				$f = explode(".", basename($fileName));
+				$f = pathinfo($fileName, PATHINFO_FILENAME);
 
 				foreach($this->storageList($field)->all() as $storage)
 				{						

@@ -75,7 +75,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 
 		$fieldName = 'created_by_user';
 
-		if (!\Schema::hasColumn($table, $fieldName) && !\Schema::hasColumn($table, "`{$fieldName}`"))
+		if (!\Schema::hasColumn($table, $fieldName))
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{

@@ -125,7 +125,7 @@
 			
 			jQuery("form#password-reset").submit(function()
 			{
-				$.ajax({
+				jQuery.ajax({
 						type: "POST",
 						url: "{!! route('cmf.password.reset.token.process') !!}",
 						data: jQuery(this).serialize(),

@@ -13,7 +13,7 @@
 ?>
 
 @if ($field->multilanguage)
-<div class="widget-box transparent">
+<div class="widget-box transparent" data-field-key='{{ $field->code }}'>
 	<div class="widget-header widget-header-small">
 		<h4 class="row">
 			<span class="col-sm-12">
@@ -48,7 +48,7 @@
 			<div class="tab-content">
 				<?php 
 
-					$domAttr['class'] = $field->css_class?: 'col-xs-12 col-sm-12';
+					$domAttr['class'] = $field->css_class?: 'col-xs-11 col-sm-11';
 				?>
 
 				@foreach($languages as $language)
@@ -62,13 +62,27 @@
 
 					<?php
                         $domAttr['id'] = $field->code . '-' . $uniqueId . '-' . $language->locale; 
-						$domAttr['placeholder'] = ($placeholder = $field->translate('string_default', $language->locale)) ? $placeholder : $field->translate('title', $language->locale);
+					
+						if ($v = $model->translate($field->code, $language->locale))
+						{
+							$value = $v;
+						}
+						else if (!$model->exists)
+						{
+							$value = $field->translate('string_default', $language->locale);
+						}
+						else
+						{
+							$value = '';
+						}
+						
+						$domAttr['placeholder'] = ($placeholder = $field->translate('string_default', $language->locale)) ? $placeholder : $field->translate('title');
 					?>
 
 					@if ($field->string_password)
 						{!! Form::password("{$field->code}[{$language->locale}]", $domAttr ) !!}
 					@else
-						{!! Form::text("{$field->code}[{$language->locale}]", $model->translate($field->code, $language->locale), $domAttr ) !!}
+						{!! Form::text("{$field->code}[{$language->locale}]", $value, $domAttr ) !!}
 					@endif
 
 					@if ($field->translate('description'))
@@ -85,7 +99,7 @@
 </div>
 @else
 
-<div class="form-group">
+<div class="form-group" data-field-key='{{ $field->code }}'>
 
 	{!! Form::label("{$field->code}", $field->translate('title'), array('class' => 'col-sm-3 control-label no-padding-right')) !!}
 
@@ -106,15 +120,31 @@
             </span>
             @else
 		<div>
-            @endif	
+            @endif
+			
+			<?php
+
+				$domAttr['autocomplete'] = "off";
+
+				if ($v = $model->{$field->code})
+				{
+					$value = $v;
+				}
+				else if (!$model->exists)
+				{
+					$value = $field->string_default;
+				}
+				else
+				{
+					$value = '';
+				}
+
+			?>
             
             @if ($field->string_password)
-                <?php 
-                    $domAttr['autocomplete'] = "off";
-                ?>
                 {!! Form::password($field->code, $domAttr) !!}
             @else
-                {!! Form::text($field->code, $model->translate($field->code), $domAttr) !!}
+                {!! Form::text($field->code, $value, $domAttr) !!}
             @endif 
 
             @if ($field->translate('description'))

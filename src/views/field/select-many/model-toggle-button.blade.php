@@ -25,12 +25,12 @@
     $values = array_combine($keys, $titleLocale);
 ?>
 
-<div class="form-group">
+<div class="form-group" data-field-key='{{ $field->code }}'>
 	{!! Form::label("{$field->code}", $field->translate('title'), array('class' => 'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-9">
         <div>
             <div class="btn-group btn-overlap" data-toggle="buttons">
-\
+
                 @foreach($values as $k => $v)
 
                 <?php

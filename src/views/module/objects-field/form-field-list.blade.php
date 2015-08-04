@@ -44,7 +44,7 @@
 				$multilanguageFields = [];
 
 				app('telenok.config.repository')->getObjectFieldController()
-                        ->reject(function($i) { return in_array($i->getKey(),['locked-by', 'deleted-by', 'created-by', 'active', 'permission', 'updated-by'], true); })
+                        ->reject(function($i) { return in_array($i->getKey(), ['locked-by', 'deleted-by', 'created-by', 'active', 'permission', 'updated-by'], true); })
                         ->each(function($field) use (&$selectFields, &$multilanguageFields) 
 				{  
 					$selectFields[$field->getKey()] = $field->getName(); 
@@ -61,33 +61,52 @@
 		</div>
 
 		<script type="text/javascript">
+
 			function onChangeType{{$uniqueId}}()
 			{
 				var $form = jQuery('#model-ajax-{{$uniqueId}}');
 
 				var $key = jQuery('select[name="key"]', $form);
 
-				@if (!$model->exists)
-
-				if ( ['{{implode("','", $multilanguageFields)}}'].join(',').indexOf($key.val())>=0 )
+				if ( ["{!! implode('","', $multilanguageFields) !!}"].join(',').indexOf($key.val()) > -1)
 				{
-					jQuery('input[name="multilanguage"][type="checkbox"]', $form).removeAttr('disabled');
+					jQuery("div", $form).find("[data-field-key='multilanguage']").show();
 				}
 				else
 				{
-					jQuery('input[name="multilanguage"][type="checkbox"]', $form).attr('disabled', 'disabled');
+					jQuery("div", $form).find("[data-field-key='multilanguage']").hide();
 				}
 
-				@endif
+				jQuery.ajax({
+						type: "GET",
+						url: "{!! 
+							route(
+									'cmf.module.objects-field.field.form', 
+									[
+										'fieldKey' => '--fieldKey--', 
+										'modelId' => '--modelId--',
+										'uniqueId' => '--uniqueId--',
+									]) 
+							!!}"
+								.replace('--fieldKey--', $key.val())
+								.replace('--modelId--', '{{ (int)$model->getKey() }}')
+								.replace('--uniqueId--', '{{$uniqueId}}'),
+						dataType: 'html',
+						success: function(data)
+						{
+							jQuery('#field-form-content-{{$uniqueId}}').html(data).show();
+						}
+					});
+
 			} 
             
-            onChangeType{{$uniqueId}}();
+			jQuery(function()
+			{
+				onChangeType{{$uniqueId}}();
+			});
 		</script>
 
-		@if ($model->exists) 
-
-		{!! app('telenok.config.repository')->getObjectFieldController()->get($model->key)->getFormFieldContent($model, $uniqueId) !!}
-
-		@endif
+		<div id='field-form-content-{{$uniqueId}}' style="display: none;"></div>
+		
 
 	@endif 

@@ -103,7 +103,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		$table = $model->fieldObjectType()->first()->code;
         $fieldName = $model->code;
 
-		if (!\Schema::hasColumn($table, $fieldName) && !\Schema::hasColumn($table, "`{$fieldName}`"))
+		if (!\Schema::hasColumn($table, $fieldName))
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{

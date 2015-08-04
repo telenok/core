@@ -31,7 +31,7 @@
 
 	function installPackage{{$jsUnique}}()
 	{
-		$.ajax({
+		jQuery.ajax({
 				type: "POST",
 				url: "{!! route('cmf.module.installer-manager.install-package', ['packageId' => array_get($packageInfo, 'key'), 'versionId' => 'latest']) !!}",
 				dataType: 'json',

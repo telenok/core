@@ -41,7 +41,7 @@
 
 ?>
 
-<div class="form-group">
+<div class="form-group" data-field-key='{{ $field->code }}'>
 	{!! Form::label("{$field->code}_start" , $field->translate('title'), array('class' => 'col-xs-2 control-label text-right')) !!}
 	<div class="col-sm-3">
         <div class="input-daterange input-group">

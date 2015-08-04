@@ -62,7 +62,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 
 		$fieldName = 'locked_by_user';
 
-		if (!\Schema::hasColumn($table, $fieldName) && !\Schema::hasColumn($table, "`{$fieldName}`"))
+		if (!\Schema::hasColumn($table, $fieldName))
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{
@@ -72,7 +72,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 		
 		$fieldName = 'locked_at';
 
-		if (!\Schema::hasColumn($table, $fieldName) && !\Schema::hasColumn($table, "`{$fieldName}`"))
+		if (!\Schema::hasColumn($table, $fieldName))
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{

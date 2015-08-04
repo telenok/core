@@ -12,6 +12,21 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     protected $presentationTreeView = 'core::module.objects-field.tree';
     protected $presentationFormFieldListView = 'core::module.objects-field.form-field-list';
 
+	public function getFormFieldContent($fieldKey, $modelId, $uniqueId)
+	{
+		try
+		{
+			$model = \App\Telenok\Core\Model\Object\Field::withPermission()->findOrFail($modelId);
+		}
+		catch (\Exception $ex)
+		{
+			$model = app('\App\Telenok\Core\Model\Object\Field'); 
+		}
+        
+		
+		return app('telenok.config.repository')->getObjectFieldController()->get($fieldKey)->getFormFieldContent($model, $uniqueId);
+	}
+	
     public function getTreeListTypes()
     {  
         $types = \App\Telenok\Core\Model\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->fetch('id')->toArray();

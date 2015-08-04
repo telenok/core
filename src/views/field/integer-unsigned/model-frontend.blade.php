@@ -19,7 +19,7 @@
 
     ?>
     
-	<div class="form-group">
+	<div class="form-group" data-field-key='{{ $field->code }}'>
 		{!! Form::label("{$field->code}", $field->translate('title'), array('class'=>'col-xs-2 control-label text-right')) !!}
 		<div class="col-xs-10">
 			@if ($field->icon_class)

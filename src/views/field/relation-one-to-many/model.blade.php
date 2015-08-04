@@ -15,7 +15,7 @@
 
 @if ($field->relation_one_to_many_has)
 
-    <div class="widget-box transparent">
+    <div class="widget-box transparent" data-field-key='{{ $field->code }}'>
         <div class="widget-header widget-header-small">
 			<h4 class="row">
 				<span class="col-sm-12">
@@ -354,7 +354,7 @@
 		}
     ?> 
 
-    <div class="form-group">
+    <div class="form-group" data-field-key='{{ $field->code }}'>
         {!! Form::label("{$field->code}", $field->translate('title'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
         <div class="col-sm-9"> 
             {!! Form::hidden("{$field->code}", $id) !!}

@@ -8,7 +8,7 @@
     }
 ?>
 
-<div class="form-group">
+<div class="form-group" data-field-key='{{ $field->code }}'>
 	{!! Form::label(str_random(), $controller->LL('title'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-xs-8">
 		<div class="input-group">

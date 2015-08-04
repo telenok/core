@@ -287,7 +287,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 					\App\Telenok\Core\Model\Object\Field::create($toSave);
 				}
 
-				if (!\Schema::hasColumn($tableBelongTo, $relatedSQLField) && !\Schema::hasColumn($tableBelongTo, "`{$relatedSQLField}`"))
+				if (!\Schema::hasColumn($tableBelongTo, $relatedSQLField))
 				{
 					\Schema::table($tableBelongTo, function(Blueprint $table) use ($relatedSQLField)
 					{

@@ -85,6 +85,10 @@
 	// Module Objects\Type
 	\Route::get('telenok/module/objects-type/action-param', array('as' => 'cmf.module.objects-type.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Type\Controller@getActionParam"));
 
+	// Module Objects\Field
+	\Route::get('telenok/module/objects-field/field-form/{fieldKey}/{modelId}/{uniqueId}', array('as' => 'cmf.module.objects-field.field.form', 'uses' => "App\Telenok\Core\Module\Objects\Field\Controller@getFormFieldContent"));
+
+		
 	// Module Objects\Sequence
 	\Route::get('telenok/module/objects-sequence/action-param', array('as' => 'cmf.module.objects-sequence.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Sequence\Controller@getActionParam"));
 	\Route::get('telenok/module/objects-sequence', array('as' => 'cmf.module.objects-sequence', 'uses' => "App\Telenok\Core\Module\Objects\Sequence\Controller@getContent"));

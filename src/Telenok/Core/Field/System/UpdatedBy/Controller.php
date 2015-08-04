@@ -75,7 +75,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 		$table = \App\Telenok\Core\Model\Object\Type::find($input->get('field_object_type'))->code;
 		$fieldName = 'updated_by_user';
 		
-		if (!\Schema::hasColumn($table, $fieldName) && !\Schema::hasColumn($table, "`{$fieldName}`"))
+		if (!\Schema::hasColumn($table, $fieldName))
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{

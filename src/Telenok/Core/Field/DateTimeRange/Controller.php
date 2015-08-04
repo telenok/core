@@ -131,7 +131,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		$table = $model->fieldObjectType()->first()->code;
         $fieldName = $model->code;
 
-		if (!\Schema::hasColumn($table, $fieldName . '_start') && !\Schema::hasColumn($table, "`{$fieldName}_start`"))
+		if (!\Schema::hasColumn($table, $fieldName . '_start'))
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{
@@ -139,7 +139,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			});
 		}
 
-		if (!\Schema::hasColumn($table, $fieldName . '_end') && !\Schema::hasColumn($table, "`{$fieldName}_end`"))
+		if (!\Schema::hasColumn($table, $fieldName . '_end'))
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{
