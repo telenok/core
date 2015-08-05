@@ -2,6 +2,8 @@
 
 abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Field\IField {
 
+	use \Illuminate\Support\Traits\Macroable;
+	
 	protected $ruleList = [];
 	protected $specialField = [];
 	protected $specialDateField = [];
@@ -16,6 +18,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	protected $routeWizardCreate;
 	protected $routeWizardEdit;
 	protected $routeWizardChoose;
+
 
 	public function getViewModel()
 	{
@@ -395,6 +398,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 		{
 			$stub = \File::get($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.stub");
 
+			$param['class_name'] = get_class($model);
+
 			foreach ($param as $k => $v)
 			{
 				$stub = str_replace('{{' . $k . '}}', $v, $stub);
@@ -403,6 +408,16 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 			$res = preg_replace('/\}\s*(\?\>)?$/', $stub, \File::get($file)) . PHP_EOL . PHP_EOL . '}' . PHP_EOL . '?>';
 
 			\File::put($file, $res);
+
+
+			$stub = \File::get($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.macro.stub");
+
+			foreach ($param as $k => $v)
+			{
+				$stub = str_replace('{{' . $k . '}}', $v, $stub);
+			}
+
+			\File::append(app_path(static::$macroFile), $stub);
 		}
 		catch (\Exception $e)
 		{

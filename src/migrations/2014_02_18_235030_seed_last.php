@@ -1,4 +1,4 @@
-p<?php
+<?php
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -845,8 +845,9 @@ class SeedLast extends Migration {
 		\App\Telenok\Core\Model\Object\Type::where('code', 'language')->first()->makeLastChildOf($folderSystem);
 		\App\Telenok\Core\Model\Object\Type::where('code', 'object_tab')->first()->makeLastChildOf($folderSystem);
 		\App\Telenok\Core\Model\Object\Type::where('code', 'setting')->first()->makeLastChildOf($folderSystem);
-
-		
+		\App\Telenok\Core\Model\Object\Type::where('code', 'folder')->first()->makeLastChildOf($folderSystem);
+		\App\Telenok\Core\Model\Object\Type::where('code', 'object_version')->first()->makeLastChildOf($folderSystem);
+		\App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->first()->makeLastChildOf($folderSystem);
 		
 		\App\Telenok\Core\Model\Object\Type::where('code', 'user')->first()->makeLastChildOf($folderUser);
 		\App\Telenok\Core\Model\Object\Type::where('code', 'permission')->first()->makeLastChildOf($folderUser);
@@ -856,13 +857,10 @@ class SeedLast extends Migration {
 		\App\Telenok\Core\Model\Object\Type::where('code', 'user_message')->first()->makeLastChildOf($folderUser);
 		\App\Telenok\Core\Model\Object\Type::where('code', 'subject_permission_resource')->first()->makeLastChildOf($folderUser);
 
-		\App\Telenok\Core\Model\Object\Type::where('code', 'folder')->first()->makeLastChildOf($folderOther);
 		\App\Telenok\Core\Model\Object\Type::where('code', 'module')->first()->makeLastChildOf($folderOther);
 		\App\Telenok\Core\Model\Object\Type::where('code', 'module_group')->first()->makeLastChildOf($folderOther);
 		\App\Telenok\Core\Model\Object\Type::where('code', 'widget')->first()->makeLastChildOf($folderOther);
 		\App\Telenok\Core\Model\Object\Type::where('code', 'widget_group')->first()->makeLastChildOf($folderOther);
-		\App\Telenok\Core\Model\Object\Type::where('code', 'object_version')->first()->makeLastChildOf($folderOther);
-		\App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->first()->makeLastChildOf($folderOther);
 
 		\App\Telenok\Core\Model\Object\Type::where('code', 'file')->first()->makeLastChildOf($folderFile);
 		\App\Telenok\Core\Model\Object\Type::where('code', 'file_category')->first()->makeLastChildOf($folderFile);

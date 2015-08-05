@@ -52,6 +52,8 @@ class CoreServiceProvider extends ServiceProvider {
 				include $routersPath;
 			}
 		}
+
+		\Telenok\Core\Interfaces\Field\Relation\Controller::readMacroFile();
 	}
 
 	/**

@@ -24,6 +24,6 @@
 
         ?>
         {!! Form::hidden($linkedField, $model->{$linkedField}) !!}
-        {!! Form::select($linkedField, \App\Telenok\Core\Model\Object\Type::get(['title', 'id'])->transform(function($item) { return ['title' => $item->translate('title'), 'id' => $item->id]; })->all(), $model->{$linkedField}, $domAttr) !!}
+        {!! Form::select($linkedField, \App\Telenok\Core\Model\Object\Type::get(['title', 'id'])->keyBy('id')->transform(function($item) { return $item->translate('title'); })->all(), $model->{$linkedField}, $domAttr) !!}
     </div>
 </div> 

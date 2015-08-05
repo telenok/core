@@ -30,5 +30,4 @@ class CreateObjectVersionTable extends Migration {
 			});
 		}
 	}
-
 }

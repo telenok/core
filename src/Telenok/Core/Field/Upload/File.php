@@ -9,6 +9,8 @@ class File {
 	protected $field;
 	protected $path;
 	protected $disk;
+	protected $mimeType;
+	protected $extension;
 
     const IMAGE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif'];
     const IMAGE_MIME_TYPE = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'];
@@ -51,7 +53,7 @@ class File {
 	{
 		$this->field = $field;
 		$this->model = $model;
-		$this->path($model->{$field->code . '_path'});
+		$this->setPath($model->{$field->code . '_path'});
 
 		$downloadStorages = static::convertDefaultStorageName(array_map("trim", explode(',', env('DOWNLOAD_STORAGES'))));
 		
@@ -96,18 +98,15 @@ class File {
 		}
 	}
 	
+	protected function setPath($path = '')
+	{
+		$this->path = $path;
+		
+		return $this;
+	}
 	public function path($path = '')
 	{
-		if ($path)
-		{
-			$this->path = $path;
-
-			return $this;
-		}
-		else
-		{
-			return $this->path;
-		}
+		return $this->path;
 	}
 	
 	public function size()
@@ -132,21 +131,38 @@ class File {
 
 	public function extension()
 	{
-		$a = explode('.', $this->path());
-		
-		return end($a);
+		if (!$this->extension)
+		{
+			$a = explode('.', $this->path());
+
+			$this->extension = end($a);
+		}
+
+		return $this->extension;
 	}
 
 	public function mimeType()
 	{
-		return $this->model->{$this->field->code . '_size'};
+		if (!$this->mimeType && $this->path() && $this->model->{$this->field->code . '_file_mime_type'})
+		{
+			$this->mimeType = $this->model->{$this->field->code . '_file_mime_type'}->mime_type;
+		}
+
+		return $this->mimeType;
 	}
-	
+
 	public function isImage()
     {
-		if ($this->exists() && ($ext = $this->extension()))
+		if ($this->exists())
 		{
-			return in_array($ext, static::IMAGE_EXTENSION, true);
+			if ($ext = $this->extension())
+			{
+				return in_array($ext, static::IMAGE_EXTENSION, true);
+			}
+			else
+			{
+				return in_array($this->mimeType(), static::IMAGE_MIME_TYPE, true);
+			}
 		}
     } 
 }

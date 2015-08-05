@@ -44,7 +44,7 @@
 				$multilanguageFields = [];
 
 				app('telenok.config.repository')->getObjectFieldController()
-                        ->reject(function($i) { return in_array($i->getKey(), ['locked-by', 'deleted-by', 'created-by', 'active', 'permission', 'updated-by'], true); })
+                        ->reject(function($i) use ($model) { return !$model->exists && in_array($i->getKey(), ['locked-by', 'deleted-by', 'created-by', 'active', 'permission', 'updated-by'], true); })
                         ->each(function($field) use (&$selectFields, &$multilanguageFields) 
 				{  
 					$selectFields[$field->getKey()] = $field->getName(); 

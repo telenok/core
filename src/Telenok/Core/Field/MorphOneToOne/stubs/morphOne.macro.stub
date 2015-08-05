@@ -1,0 +1,5 @@
+
+    {{class_name}}::macro('{{method}}', function()
+        {
+            return $this->morphOne('{{class}}', '{{name}}', '{{type}}', '{{foreignKey}}', '{{otherKey}}');
+        });

@@ -51,6 +51,7 @@
 
 	// Fields
 	\Route::get('field/relation-one-to-one/list/title/type/{id}', array('as' => 'cmf.field.relation-one-to-one.list.title', 'uses' => "\App\Telenok\Core\Field\RelationOneToOne\Controller@getTitleList"));
+	\Route::get('field/relation-one-to-one/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.relation-one-to-one.list.table', 'uses' => "\App\Telenok\Core\Field\RelationOneToOne\Controller@getTableList"));
 
 	\Route::get('field/relation-one-to-many/list/title/type/{id}', array('as' => 'cmf.field.relation-one-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\RelationOneToMany\Controller@getTitleList"));
 	\Route::get('field/relation-one-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'cmf.field.relation-one-to-many.list.table', 'uses' => "\App\Telenok\Core\Field\RelationOneToMany\Controller@getTableList"));

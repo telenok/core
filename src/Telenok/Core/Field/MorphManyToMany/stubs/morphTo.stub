@@ -1,5 +1,7 @@
 
+/*
     public function {{method}}()
     {
         return $this->morphToMany('{{class}}', '{{name}}', '{{table}}', '{{foreignKey}}', '{{otherKey}}');
     }
+*/

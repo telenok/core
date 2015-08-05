@@ -4,6 +4,17 @@ namespace Telenok\Core\Interfaces\Field\Relation;
 
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
+	protected static $macroFile = 'Model/macro.php';
+
+	public static function readMacroFile()
+	{
+		$path = app_path(static::$macroFile);
+		
+		touch($path);
+		
+		require $path;
+	}
+
 	public function getLinkedField($field)
 	{
 	}

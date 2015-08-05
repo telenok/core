@@ -147,10 +147,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 				$relatedQuery->getRelated()->findOrFail((int) $input->get($field->code, 0))
 						->storeOrUpdate([$relatedQuery->getPlainForeignKey() => $model->getKey()], true);
 			}
-			catch (\Exception $e)
-			{
-				
-			}
+			catch (\Exception $e) {}
 		}
 
 		return $model;
