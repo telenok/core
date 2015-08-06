@@ -15,12 +15,10 @@
 		
         @if (!empty($model->{$field->code . '_path'}))
 			@if ($model->{$field->code}->isImage($field, $model))
-			<img src="{!! \URL::asset($model->{$field->code . '_path'}) !!}" alt="" width="140" />
-			<br>
-			<a href="{!! \URL::asset($model->{$field->code . '_path'}) !!}" target="_blank">Open full size</a>
+			<img src="{!! $model->{$field->code}->downloadImageLink(140) !!}" alt="" />
 			<br>
 			@else
-			<a href="{!! \URL::asset($model->{$field->code . '_path'}) !!}" target="_blank">Download [{{ $model->{$field->code . '_original_file_name'} }}]</a>
+			<a href="{!! $model->{$field->code}->downloadStreamLink() !!}" target="_blank">Download [{{ $model->{$field->code . '_original_file_name'} }}]</a>
 			<br>
 			@endif
 		@endif

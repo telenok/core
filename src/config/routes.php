@@ -19,8 +19,8 @@
 	\Route::get('widget/grid/{typeId}', array('as' => 'cmf.widget.grid.list', 'uses' => "Telenok\Core\Widget\Model\Grid\Controller@getList"));
 
 	
-	\Route::get('download/stream/{modelId}/{fieldId}', array('as' => 'cmf.download.stream.file', 'uses' => "Telenok\Core\Support\File\Download@stream"));
-	\Route::get('download/image/{modelId}/{fieldId}', array('as' => 'cmf.download.image.file', 'uses' => "Telenok\Core\Support\File\Download@image"));
+	\Route::get('download/stream/{modelId}/{fieldId}', array('as' => 'cmf.download.stream.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@stream"));
+	\Route::get('download/image/{modelId}/{fieldId}/{width}/{height}/{secureKey}', array('as' => 'cmf.download.image.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@image"));
 
 	
 

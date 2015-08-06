@@ -36,6 +36,8 @@ class CoreServiceProvider extends ServiceProvider {
 			return;
 		}
 
+		\Telenok\Core\Interfaces\Field\Relation\Controller::readMacroFile();
+		
 		\Event::fire('telenok.compile.setting');
 
 		if (!\Request::is('telenok', 'telenok/*'))
@@ -52,8 +54,6 @@ class CoreServiceProvider extends ServiceProvider {
 				include $routersPath;
 			}
 		}
-
-		\Telenok\Core\Interfaces\Field\Relation\Controller::readMacroFile();
 	}
 
 	/**

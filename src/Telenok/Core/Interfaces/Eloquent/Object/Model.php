@@ -2,7 +2,7 @@
 
 abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
-	use \Illuminate\Database\Eloquent\SoftDeletes;
+	use \Illuminate\Database\Eloquent\SoftDeletes; 
 
 	public $incrementing = false;
 	public $timestamps = true;
@@ -16,7 +16,90 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	protected static $listFillableFieldController = [];
 	protected static $listMultilanguage = [];
 	protected static $listFieldDate = [];
+    protected static $macros = [];
 
+	
+	
+	
+	
+	
+	
+
+    /**
+     * Register a custom macro.
+     *
+     * @param  string    $name
+     * @param  callable  $macro
+     * @return void
+     */
+    public static function macro($name, callable $macro)
+    {
+        static::$macros[$name] = $macro;
+    }
+
+    /**
+     * Checks if macro is registered.
+     *
+     * @param  string  $name
+     * @return bool
+     */
+    public static function hasMacro($name)
+    {
+        return isset(static::$macros[$name]);
+    }
+
+    /**
+     * Dynamically handle calls to the class.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
+    public static function __callStatic($method, $parameters)
+    {
+        if (static::hasMacro($method)) 
+		{
+            if (static::$macros[$method] instanceof Closure) 
+			{
+                return call_user_func_array(\Closure::bind(static::$macros[$method], null, get_called_class()), $parameters);
+            }
+			else 
+			{
+                return call_user_func_array(static::$macros[$method], $parameters);
+            }
+        }
+
+		return parent::__callStatic($method, $parameters);
+    }
+
+    /**
+     * Dynamically handle calls to the class.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
+    public function __call($method, $parameters)
+    {
+        if (static::hasMacro($method)) 
+		{
+            if (static::$macros[$method] instanceof \Closure)
+			{
+                return static::$macros[$method]->call($this, $parameters);
+            }
+			else 
+			{
+                return call_user_func_array(static::$macros[$method], $parameters);
+            }
+        }
+		
+		return parent::__call($method, $parameters);
+    }
+	
 	public static function boot()
 	{
 		parent::boot();
@@ -1222,7 +1305,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		return $this->exists && $this->locked_by_user && $this->locked_at->diffInSeconds(null, false) <= 0;
 	}
-
+	
 	public function LL($key = '', $param = [])
 	{
 		return trans("core::default.$key", $param);

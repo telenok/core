@@ -27,11 +27,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		{
 			if ($item->{$field->code}->isImage())
 			{
-				return '<img src="' . e($item->{$field->code}->downloadImageLink()) .'" alt="" width="140" />';
+				return '<img src="' . $item->{$field->code}->downloadImageLink(140) .'" alt="" />';
 			}
 			else
 			{
-				return '<a href="' . e($item->{$field->code}->downloadStreamLink())  .'" target="_blank">' . $this->LL('download') . '</a>';
+				return '<a href="' . $item->{$field->code}->downloadStreamLink()  .'" target="_blank">' . $this->LL('download') . '</a>';
 			}
 		}
 		else if ($item->{$field->code}->path())
@@ -50,7 +50,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		/*
 		 * Remove all files
 		 */
-		$storages = $this->storageList($model)->all();
+		$storages = File::storageList($model->upload_storage)->all();
 
 		app($type->class_model)->chunk(200, function ($rows) use ($storages, $model)
 		{
@@ -236,7 +236,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 				$model = $model->save();
 
-				foreach($this->storageList($field)->all() as $storage)
+				foreach(File::storageList($field->upload_storage)->all() as $storage)
 				{
 					$fileResource = fopen($file->getPathname(), "r");
 
@@ -259,7 +259,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				 */
 				$f = pathinfo($fileName, PATHINFO_FILENAME);
 
-				foreach($this->storageList($field)->all() as $storage)
+				foreach(File::storageList($field->upload_storage)->all() as $storage)
 				{						
 					$disk = app('filesystem')->disk($storage);
 
@@ -288,7 +288,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				
 				$oldFilename = array_shift($t);
 				
-				foreach($this->storageList($field)->all() as $storage)
+				foreach(File::storageList($field->upload_storage)->all() as $storage)
 				{						
 					$disk = app('filesystem')->disk($storage);
 
@@ -310,18 +310,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         return $model;
 	}
 
-	protected function storageList($field)
-	{
-		$storageList = $field->upload_storage;
-
-		if ($storageList->isEmpty())
-		{
-			$storageList->push('default_local');
-		}
-
-		return File::convertDefaultStorageName($storageList);
-	}
-	
 	public function getModelAttribute($model, $key, $value, $field)
 	{
 		return app('\Telenok\Core\Field\Upload\File')->setModels($model, $field);

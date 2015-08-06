@@ -4,7 +4,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;  
 
 class File {
-	
+
 	protected $model;
 	protected $field;
 	protected $path;
@@ -20,16 +20,42 @@ class File {
 		return route('cmf.download.stream.file', ['modelId' => $this->model->id, 'fieldId' => $this->field->id]);
 	}
 
-	public function downloadImageLink()
+	public function downloadImageLink($width = 0, $height = 0)
 	{
-		return route('cmf.download.image.file', ['modelId' => $this->model->id, 'fieldId' => $this->field->id]);
+		return route('cmf.download.image.file', [
+					'modelId' => $this->model->id, 
+					'fieldId' => $this->field->id, 
+					'width' => (int)$width, 
+					'height' => (int)$height,
+					'secureKey' => $this->secureKey($width, $height),
+				]);
 	}
-	
+
+	public function secureKey($width, $height)
+	{
+		return md5(config('app.key').(int)$width.(int)$height);
+	}
+
+	public static function storageList(\Illuminate\Support\Collection $storageList)
+	{
+		if ($storageList->isEmpty())
+		{
+			$storageList->push('default_local');
+		}
+
+		return File::convertDefaultStorageName($storageList);
+	}
+
 	public function originalFileName()
 	{
 		return $this->model->{$this->field->code . '_original_file_name'};
 	}
-	
+
+	public function content($path = '')
+	{
+		return $this->disk()->get($path ? : $this->path());
+	}
+
 	public static function convertDefaultStorageName($list = [])
 	{
 		return \Illuminate\Support\Collection::make($list)->transform(function($item)
@@ -104,38 +130,27 @@ class File {
 		
 		return $this;
 	}
-	public function path($path = '')
+
+	public function path()
 	{
 		return $this->path;
 	}
-	
-	public function size()
+
+	public function dir()
 	{
-		if ($this->exists())
-		{
-			return (int)$this->model->{$this->field->code . '_size'};
-		}
+		return pathinfo($this->path(), PATHINFO_DIRNAME);
 	}
 
-	public function exists()
+	public function name()
 	{
-		try
-		{
-			return $this->path() ? $this->disk()->exists($this->path()) : FALSE;
-		} 
-		catch (\Exception $ex) 
-		{
-			return FALSE;
-		}
+		return pathinfo($this->path(), PATHINFO_FILENAME);
 	}
 
 	public function extension()
 	{
 		if (!$this->extension)
 		{
-			$a = explode('.', $this->path());
-
-			$this->extension = end($a);
+			$this->extension = pathinfo($this->path(), PATHINFO_EXTENSION);
 		}
 
 		return $this->extension;
@@ -149,6 +164,26 @@ class File {
 		}
 
 		return $this->mimeType;
+	}
+
+	public function size()
+	{
+		if ($this->exists())
+		{
+			return (int)$this->model->{$this->field->code . '_size'};
+		}
+	}
+
+	public function exists($path = '')
+	{
+		try
+		{
+			return $this->path() ? $this->disk()->exists($path ? : $this->path()) : FALSE;
+		} 
+		catch (\Exception $ex) 
+		{
+			return FALSE;
+		}
 	}
 
 	public function isImage()

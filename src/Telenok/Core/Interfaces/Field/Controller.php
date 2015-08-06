@@ -2,8 +2,6 @@
 
 abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Field\IField {
 
-	use \Illuminate\Support\Traits\Macroable;
-	
 	protected $ruleList = [];
 	protected $specialField = [];
 	protected $specialDateField = [];
@@ -418,6 +416,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 			}
 
 			\File::append(app_path(static::$macroFile), $stub);
+			
+			\Telenok\Core\Interfaces\Field\Relation\Controller::readMacroFile();
 		}
 		catch (\Exception $e)
 		{
