@@ -20,7 +20,7 @@
 
 	
 	\Route::get('download/stream/{modelId}/{fieldId}', array('as' => 'cmf.download.stream.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@stream"));
-	\Route::get('download/image/{modelId}/{fieldId}/{width}/{height}/{secureKey}', array('as' => 'cmf.download.image.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@image"));
+	\Route::get('download/image/{modelId}/{fieldId}/{toDo}/{width}/{height}/{secureKey}', array('as' => 'cmf.download.image.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@image"));
 
 	
 

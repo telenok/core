@@ -14,20 +14,23 @@ class File {
 
     const IMAGE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif'];
     const IMAGE_MIME_TYPE = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'];
+    const TODO_RESIZE = 'resize';
 
 	public function downloadStreamLink()
 	{
 		return route('cmf.download.stream.file', ['modelId' => $this->model->id, 'fieldId' => $this->field->id]);
 	}
 
-	public function downloadImageLink($width = 0, $height = 0)
+	public function downloadImageLink($width = 0, $height = 0, $toDo = File::TODO_RESIZE)
 	{
 		return route('cmf.download.image.file', [
 					'modelId' => $this->model->id, 
 					'fieldId' => $this->field->id, 
-					'width' => (int)$width, 
+					'toDo' => $toDo, 
+					'width' => (int)$width,
 					'height' => (int)$height,
 					'secureKey' => $this->secureKey($width, $height),
+					'cache' => md5($this->model->{$this->field->code}->path() . $width . $height)
 				]);
 	}
 
@@ -81,18 +84,11 @@ class File {
 		$this->model = $model;
 		$this->setPath($model->{$field->code . '_path'});
 
-		$downloadStorages = static::convertDefaultStorageName(array_map("trim", explode(',', env('DOWNLOAD_STORAGES'))));
+		$downloadStorages = static::convertDefaultStorageName(array_map("trim", explode(',', env('DOWNLOAD_STORAGES'))))->all();
 		
-		if (($c = $downloadStorages->count()) > 1)
-		{
-			$downloadStorages = $downloadStorages->random($c);
-		}
-		
-		$downloadStorages = $downloadStorages->all();
-				
 		$storages = static::convertDefaultStorageName(json_decode($field->upload_storage, TRUE));
 
-		$storageKey = \Illuminate\Support\Collection::make($storages)->first(function($k, $v) use ($downloadStorages)
+		$storageKey = $storages->shuffle()->first(function($k, $v) use ($downloadStorages)
 		{
 			if (in_array($v, $downloadStorages, true) && (!$this->path() || app('filesystem')->disk($v)->exists($this->path())))
 			{

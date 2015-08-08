@@ -9,26 +9,52 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		
 		if (app('auth')->can('read', 'object_field.' . $model->getTable() . '.' . $field->code))
 		{
-			$file = $model->{$field->code}->path();
+			$fileData = $model->{$field->code};
 
-			$fs = $model->{$field->code}->disk()->getDriver();
+			$file = $fileData->path();
+
+			$fs = $fileData->disk()->getDriver();
 			$stream = $fs->readStream($file);
 
-			return \Response::stream(function() use($stream) {
+			$fullsize = $fileData->size();
+			$size = $fullsize;
+			$response_code = 200;
+			$headers = ["Content-type" => $fs->getMimetype($file)];
+
+			// Check for request for part of the stream
+			$range = \Request::header('Range');
+
+			if($range != null)
+			{
+				$eqPos = strpos($range, "=");
+				$toPos = strpos($range, "-");
+				$unit = substr($range, 0, $eqPos);
+				$start = intval(substr($range, $eqPos + 1, $toPos));
+				$success = fseek($stream, $start);
+
+				if($success == 0) 
+				{
+					$size = $fullsize - $start;
+					$response_code = 206;
+					$headers["Accept-Ranges"] = $unit;
+					$headers["Content-Range"] = $unit . " " . $start . "-" . ($fullsize-1) . "/" . $fullsize;
+				}
+			}
+
+			$headers["Content-Length"] = $size;
+			//$headers["Content-disposition"] = "attachment; filename=\"" . basename($model->{$field->code}->originalFileName()) . "\"";
+
+			return \Response::stream(function () use ($stream) {
 				fpassthru($stream);
-			}, 200, [
-				'Content-Type' => $fs->getMimetype($file),
-				"Content-Length: " => $fs->getSize($file),
-				"Content-disposition" => "attachment; filename=\"" . basename($model->{$field->code}->originalFileName()) . "\"",
-			]);
-		}
+			}, $response_code, $headers);
+		}	
 		else
 		{
 			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
 		}
 	}
 	
-	public function image($modelId, $fieldId, $width, $height, $secureKey)
+	public function image($modelId, $fieldId, $toDo, $width, $height, $secureKey)
 	{
 		$model = \App\Telenok\Core\Model\Object\Sequence::getModel($modelId);
 		$field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
@@ -60,7 +86,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 						$imageProcess = app('\App\Telenok\Core\Field\Upload\Image');
 						$image = $imageProcess->imagine()->load($imageContent);
 						
-						$newImageContent = $this->process($image, $width, $height)->get($fileExtension, config('image.options', 'gd'));
+						$newImageContent = $this->process($image, $width, $height, $toDo)->get($fileExtension, config('image.options', 'gd'));
 						
 						foreach(File::storageList($field->upload_storage)->all() as $storage)
 						{
@@ -82,21 +108,37 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 
 			$fs = $fileData->disk()->getDriver();
 			$stream = $fs->readStream($filePath);
-
-			return \Response::stream(function() use($stream) {
-				fpassthru($stream);
-			}, 200, [
-				'Content-Type' => $fs->getMimetype($filePath),
-				"Content-Length: " => $fs->getSize($filePath),
-			]);
+			
+			$response =  \Response::stream(function() use($stream) {
+								fpassthru($stream);
+							}, 200, [
+								"Content-Type" => $fs->getMimetype($filePath),
+								"Content-Length" => $fs->getSize($filePath),
+								//"Cache-Control" => "must-revalidate",
+								//"Etag" => md5($filePath . $width . $height),
+								//"Last-Modified" => $field->updated_at->toRfc2822String(),
+							]);
+							
+			return $response;
 		}
 		else
 		{
 			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
 		}
 	}
-	
-	public function process($image, $width, $height)
+
+	public function process($image, $width, $height, $toDo)
+	{
+		switch ($toDo)
+		{
+			case File::TODO_RESIZE:
+			default:
+				return $this->resize($image, $width, $height);
+
+		}
+	}
+
+	public function resize($image, $width, $height)
 	{
 		$size = $image->getSize();
 
