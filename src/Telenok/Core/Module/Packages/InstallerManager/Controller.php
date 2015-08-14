@@ -1,7 +1,7 @@
 <?php namespace Telenok\Core\Module\Packages\InstallerManager;
 
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller { 
-    
+
     protected $key = 'installer-manager';
     protected $parent = 'packages';
     protected $icon = 'fa fa-file';
@@ -35,10 +35,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     public function getList()
     {
         $content = []; 
-
-        $request = $this->getRequest(); 
+		
+        $request = $this->getRequest();
+		
 		$list = (array)json_decode(file_get_contents('http://telenok.local/package/lists/json'), true);
-
+		
 		$sEcho = $request->input('sEcho');
         $uniqueId = $request->input('uniqueId');
         $iDisplayStart = $request->input('iDisplayStart', 0);
@@ -51,7 +52,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			$put['name'] = '<i class="fa fa-folder"></i> ' . array_get($item, 'title.en');
 			$put['key'] = $item['key'];
 			$put['description'] = array_get($item, 'description.en');
-			$put['image'] = '<img src="http://www.pxleyes.com/images/tutorials/ext/Logo-Design-Process-and-Walkthrough-for-Vivid-Ways.jpg" class="img-thumbnail" style="height:100px;" />';
+			$put['image'] = '<img src="' . $item['image_path'] . '" alt="" height="140" />';
 
             $put['tableManageItem'] = $this->getListButton($item);
 
@@ -79,24 +80,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 						View
 						<i class="ace-icon fa fa-arrow-circle-o-right icon-on-right"></i>
                     </button>
-
-					<button class="btn btn-xs btn-success"
-						onclick="if (confirm(\'' . $this->LL('notice.sure') . '\'))
-							telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').installByURL({url: \''. 22 . '\'});">
-						<i class="ace-icon fa fa-gavel bigger-110"></i>
-						Install
-						<i class="ace-icon fa fa-cloud-download icon-on-right"></i>
-					</button>				
-					<button class="btn btn-xs btn-warning">
-						<i class="ace-icon fa fa-arrow-circle-o-down bigger-110"></i>
-						Update
-						<i class="ace-icon fa fa-cloud-download icon-on-right"></i>
-					</button>				
-					<button class="btn btn-xs btn-danger">
-						<i class="ace-icon fa fa-circle-o bigger-110"></i>
-						Uninstall
-						<i class="ace-icon fa fa-exclamation-circle icon-on-right"></i>
-					</button>				
                 </div>';
     }
 
@@ -118,103 +101,218 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
         return route("cmf.module.{$this->getKey()}.view", $param);
     }
+	
+    private function getFolderContent($dir)
+    {
+        $finder = \Symfony\Component\Finder\Finder::create()
+            ->ignoreVCS(false)
+            ->ignoreDotFiles(false)
+            ->depth(0)
+            ->in($dir);
+
+        return iterator_to_array($finder);
+    }
+
+	public function getPackageRandomKey($packageId, $versionId)
+	{
+		return substr(md5($packageId . $versionId), 0, 10);
+	}
+
+	public function installPackageStatus()
+	{
+		if (file_exists($file = storage_path('telenok/composer/log')))
+		{
+			return (array)json_decode(file_get_contents($file), true);
+		}
+		else
+		{
+			return [];
+		}
+	}
+
+	public function appendLogFile($key, $status)
+	{
+		$file = storage_path('telenok/composer/log');
+
+		$content = (array)json_decode(file_get_contents($file), true);
+		
+		$content[$key] = $status;
+		
+		file_put_contents($file, json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
+	}
+
+	public function initLogFile()
+	{
+		$file = storage_path('telenok/composer/log');
+
+		if (!file_exists($file))
+		{
+			touch($file);
+		}
+		else if (($sec = time() - filemtime($file)) < 300)
+		{
+			abort(500, 'Sorry, other installation process still in progress. Please, wait about ' . $sec . 'seconds ');
+		}
+		else
+		{
+			file_put_contents($file, '');
+		}
+	}
 
 	public function installPackage($packageId, $versionId)
 	{
-		var_dump('http://telenok.local/account/package/download/' . urlencode($packageId) . '/' . urlencode($versionId));
-		
-		$packageFile = file_get_contents('http://telenok.local/account/package/download/' . urlencode($packageId) . '/' . urlencode($versionId));
-
-		dd( $packageFile );
-		
-		
+		$this->initLogFile();
 		
 		try
 		{
-			\File::makeDirectory(storage_path('telenok/composer'), 0775, true, true);
+			$packageRandomKey = $this->getPackageRandomKey($packageId, $versionId);
+			
+			// make composer.json copy
+			$this->appendLogFile('create composer.json', $this->LL('Create temporary copy of composer.json'));
+			
+			$composerPath = base_path('composer.json');
+			$composerTmpPath = base_path('composer.tmp.json');
 
-			$jsonArray = json_decode(file_get_contents(base_path('composer.json')), true);
-			$tmpComposerJsonFile = base_path('composer.json');
+			file_put_contents($composerTmpPath, file_get_contents($composerPath));
+			
+			// download package
+			$this->appendLogFile('download package', $this->LL('Download package'));
 
-			$fileName = str_random();
+			$url = 'http://telenok.local/account/package/download/' . urlencode($packageId) . '/' . urlencode($versionId);
 
-			if (is_array(array_get($jsonArray, 'repositories')))
+			$directory = storage_path('telenok/composer/' . $packageRandomKey);
+			$directoryUnzipped = $directory . '/unzipped'; 
+			
+			$packagePath = $directory . '/' . $packageRandomKey . '.zip';
+
+			\File::makeDirectory($directory, 0775, true, true);
+			\File::makeDirectory($directoryUnzipped, 0775, true, true);
+
+			file_put_contents($packagePath, file_get_contents($url));
+
+			// extract zip file
+			$this->appendLogFile('unzip package', $this->LL('Unzip package'));
+
+			$zip = new \ZipArchive();
+
+			if ($zip->open($packagePath) === TRUE)
 			{
-				foreach ($jsonArray['repositories'] as &$v)
-				{
-					if ($v['package']['name'] == 'fzaninotto/faker')
-					{
-						$v['package']['version'] = '1.5.0';
-						$v['package']['dist']['url'] = storage_path('telenok/composer/' . $fileName . '.zip');
-					}
-				}
+				$zip->extractTo($directoryUnzipped);
+				$zip->close();
 			}
 			else
 			{
-				$jsonArray['repositories'][] = [
-					'type' => 'package',
-					'package' => [
-						'name' => 'fzaninotto/faker',
-						'version' => '1.5.0',
-						'dist' => [
-							'url' => storage_path('telenok/composer/' . $fileName . '.zip'),
-							'type' => 'zip',
-						]
-					]
-				];
+				throw \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 			}
 
-			file_put_contents($tmpComposerJsonFile, json_encode($jsonArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+			$this->appendLogFile('processing', $this->LL('Package file processing'));
 
-			$input = new \Symfony\Component\Console\Input\ArrayInput([
-					'command' => 'require',
-					'--working-dir' => base_path(),
-					'packages' => ['fzaninotto/faker'],
-				]);
+			$contentDir = $this->getFolderContent($directoryUnzipped);
 
-			$out = new \Symfony\Component\Console\Output\BufferedOutput();
-			$application = new \Composer\Console\Application();
-			$application->setAutoExit(false);
-			$application->run($input, $out);
-
-			if (strpos($out->fetch(), 'is invalid') !== false)
+			if (count($contentDir) == 1 && is_dir(reset($contentDir))) 
 			{
-				throw new \Exception();
+				$contentDir = $this->getFolderContent((string) reset($contentDir));
+
+				$composerJsonPath = \Illuminate\Support\Collection::make($contentDir)->keys()->first(function($key, $value)
+				{
+					if (strpos($value, 'composer.json') !== FALSE)
+					{
+						return TRUE;
+					}
+					else
+					{
+						return FALSE;
+					}
+				});
+
+				if (!$composerJsonPath)
+				{
+					throw new \Exception('Cant find composer.json');
+				}
+
+				//modify composer.json
+				$this->appendLogFile('modify', $this->LL('Modify composer.json'));
+
+				$jsonArray = json_decode(file_get_contents($composerPath), true);
+				$jsonPackageArray = json_decode(file_get_contents($composerJsonPath), true);
+
+				if (!($packageName = array_get($jsonPackageArray, 'name')))
+				{
+					throw new \Exception('Empty package name');
+				}
+
+				if (is_array(array_get($jsonArray, 'repositories')))
+				{
+					foreach ($jsonArray['repositories'] as &$v)
+					{
+						if ($v['package']['name'] == $packageName)
+						{
+							$v['package']['version'] = 'dev-master';
+							$v['package']['dist']['url'] = $packagePath;
+						}
+					}
+				}
+				else
+				{
+					$jsonArray['repositories'][] = [
+						'type' => 'package',
+						'package' => [
+							'name' => $packageName,
+							'version' => 'dev-master',
+							'dist' => [
+								'url' => $packagePath,
+								'type' => 'zip',
+							]
+						]
+					];
+				}
+
+				$this->appendLogFile('store composer.json', $this->LL('Store new version of composer.json'));
+
+				file_put_contents($composerPath, json_encode($jsonArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+
+				$this->appendLogFile('run', $this->LL('Run composer'));
+
+				$input = new \Symfony\Component\Console\Input\ArrayInput([
+						'command' => 'require',
+						'--working-dir' => base_path(),
+						'packages' => [$packageName],
+					]);
+
+				ob_start();
+				
+				$out = new \Symfony\Component\Console\Output\NullOutput();
+				$application = new \Composer\Console\Application();
+				$application->setAutoExit(false);
+				$exitCode = $application->run($input, $out);
+
+				ob_end_clean();
+				
+				if ($exitCode !== 0)
+				{
+					throw new \Exception('Error during installing package. Sorry, try again.');
+				}
+
+				\File::deleteDirectory($directoryUnzipped);
+				\File::delete(storage_path('telenok/composer/log'));
 			}
-			
-			var_dump($out->fetch());
-			
-			dd('ssssssssssssss');
+			else
+			{
+				throw \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Package archive contains wrong amount of folders');
+			}
 
-			$request = $this->getRequest(); 
-
-			//file_get_contents('http://telenok.com/package/get/process?' . http_build_query(['key' => $request->input('key')]));
-			//file_put_contents(base_path('aa.zip'), file_get_contents("https://api.github.com/repos/laravel/framework/zipball/master"));
-
-			return [
-				'tabKey' => $this->getTabKey() . '-new-' . $tabKey,
-				'tabLabel' => $this->LL('list.create.' . (in_array($modelType, ['file', 'directory'], true) ? $modelType : "")),
-				'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array( 
-					'controller' => $this,
-					'currentDirectory' => addslashes($currentDirectory),
-					'modelType' => $modelType,
-					'model' => null,
-					'tabKey' => $tabKey,
-					'modelCurrentDirectory' => new \SplFileInfo($currentDirectory),
-					'routerParam' => $this->getRouterParam('create'),
-					'uniqueId' => str_random(),  
-				), $this->getAdditionalViewParam()))->render()
-			];
+			return ['finished' => $this->LL('Finished')];
 		}
 		catch (\Exception $ex) 
 		{
+			\File::delete(storage_path('telenok/composer/log'));
+			
 			return [
 				'exception' => $ex->getMessage(),
 			];
 		}
 	}
-	
-	
+
     public function create()
 	{
 		try

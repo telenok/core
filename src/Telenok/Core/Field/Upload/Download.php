@@ -41,8 +41,13 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 				}
 			}
 
+			header('HTTP/1.0 206 Partial Content');
+
 			$headers["Content-Length"] = $size;
-			//$headers["Content-disposition"] = "attachment; filename=\"" . basename($model->{$field->code}->originalFileName()) . "\"";
+			$headers["Content-Length"] = $size;
+			$headers["Content-Disposition"] = 'inline';
+			$headers['Accept-Ranges'] = 'bytes';
+			$headers["Content-disposition"] = "attachment; filename=\"" . basename($model->{$field->code}->originalFileName()) . "\"";
 
 			return \Response::stream(function () use ($stream) {
 				fpassthru($stream);

@@ -23,20 +23,27 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function getListFieldContent($field, $item, $type = null)
     {
-		if ($item->{$field->code}->exists())
+		try
 		{
-			if ($item->{$field->code}->isImage())
+			if ($item->{$field->code}->exists())
 			{
-				return '<img src="' . $item->{$field->code}->downloadImageLink(140) .'" alt="" />';
+				if ($item->{$field->code}->isImage())
+				{
+					return '<img src="' . $item->{$field->code}->downloadImageLink(140) .'" alt="" />';
+				}
+				else
+				{
+					return '<a href="' . $item->{$field->code}->downloadStreamLink()  .'" target="_blank">' . $this->LL('download') . '</a>';
+				}
 			}
-			else
+			else if ($item->{$field->code}->path())
 			{
-				return '<a href="' . $item->{$field->code}->downloadStreamLink()  .'" target="_blank">' . $this->LL('download') . '</a>';
+				throw new \Symfony\Component\Translation\Exception\NotFoundResourceException;
 			}
 		}
-		else if ($item->{$field->code}->path())
+		catch (\Symfony\Component\Translation\Exception\NotFoundResourceException $e)
 		{
-			return '<i class="fa fa-exclamation-triangle"></i> File not found';
+			return '<i class="fa fa-exclamation-triangle red"></i> File not found';
 		}
     }
 	

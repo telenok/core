@@ -229,6 +229,12 @@
         
 		<script type="text/javascript">
 
+			jQuery.ajaxSetup({
+				headers: {
+					'X-CSRF-Token': jQuery('meta[name="csrf-token"]').attr('content')
+				}
+			});
+
 			jQuery(function($)
 			{
 				setInterval(function()
@@ -242,14 +248,7 @@
 						}
 					});
 				}, 1000*600);
-			});
-
-			jQuery.ajaxSetup({
-				headers: {
-					'X-CSRF-Token': jQuery('meta[name="csrf-token"]').attr('content')
-				}
-			});
-
+			}); 
 		</script>
 	</body>
 @stop
