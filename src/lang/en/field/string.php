@@ -9,4 +9,5 @@ return array(
     'property.string_default' => 'Default',
     'property.string_regex' => 'Regular expression',
     'property.string_password' => 'Element with type="password"',
+    'property.string_unique' => 'Unique',
 );

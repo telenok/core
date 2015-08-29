@@ -274,13 +274,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 					\App\Telenok\Core\Model\Object\Field::create($toSave);
 				}
 
-				if (!$this->validateMethodExists($belongToObject, $belongTo['method']))
+				if ($this->validateMethodExists($belongToObject, $belongTo['method']))
 				{
-					$this->updateModelFile($belongToObject, $belongTo, 'hasManyToMany', __DIR__);
+					\Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$belongTo['method'], 'class'=>$classBelongTo]));
 				}
 				else
 				{
-					\Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$belongTo['method'], 'class'=>$classBelongTo]));
+					$this->updateModelFile($belongToObject, $belongTo, 'hasManyToMany', __DIR__);
 				} 
 			}
 
@@ -296,14 +296,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                     $table->unique([$pivotField, $codeFieldHasMany], 'uniq_key');
                 });
             }
-
-            if (!$this->validateMethodExists($hasManyObject, $hasMany['method']))
+			
+            if ($this->validateMethodExists($hasManyObject, $hasMany['method']))
             {
-                $this->updateModelFile($hasManyObject, $hasMany, 'hasManyToMany', __DIR__);
+                \Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));
             } 
             else
             {
-                \Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));
+				$this->updateModelFile($hasManyObject, $hasMany, 'hasManyToMany', __DIR__);
             }
         }
         catch (\Exception $e) 

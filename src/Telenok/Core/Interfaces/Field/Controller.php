@@ -414,7 +414,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 			{
 				$stub = str_replace('{{' . $k . '}}', $v, $stub);
 			}
-
+			
 			\File::append(app_path(static::$macroFile), $stub);
 			
 			\Telenok\Core\Interfaces\Field\Relation\Controller::readMacroFile();

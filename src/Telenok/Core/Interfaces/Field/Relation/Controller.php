@@ -10,7 +10,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	{
 		$path = app_path(static::$macroFile);
 		
-		touch($path);
+		if (!file_exists($path))
+		{
+			file_put_contents($path, '<?php ' . PHP_EOL . PHP_EOL);
+		}
 		
 		require $path;
 	}

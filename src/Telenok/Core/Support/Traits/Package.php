@@ -22,7 +22,14 @@ trait Package
 				return strpos('\\' . trim(get_class($this), '\\') . '\\', $item->getBaseClass()) !== FALSE;
 			})->first();
 
-            $ns[$class] = strtolower($package->getKey());
+			if ($package)
+			{
+				$ns[$class] = strtolower($package->getKey());
+			}
+			else
+			{
+				$ns[$class] = '';
+			}
         }
 
         return $ns[$class];

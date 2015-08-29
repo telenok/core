@@ -20,11 +20,10 @@ trait Language
 
     public function LL($key = '', $param = [])
     {
-		 
-		 
-		
-        $k = "{$this->getPackage()}::{$this->getLanguageDirectory()}/{$this->getKey()}.$key";
-        $kDefault = "{$this->getPackage()}::default.$key";
+		$package = $this->getPackage();
+
+        $k = "{$package}::{$this->getLanguageDirectory()}/{$this->getKey()}.$key";
+        $kDefault = "{$package}::default.$key";
         $kStandart = "module/{$this->getKey()}.$key";
 
         $word = trans($k, $param);
@@ -39,9 +38,9 @@ trait Language
             {
                 $word = trans($kStandart, $param);
 
-                if ($kDefault === $word)
+                if ($kStandart === $word)
                 {
-                    return $k;
+                    return trans($key, $param);
                 }
             }
         }

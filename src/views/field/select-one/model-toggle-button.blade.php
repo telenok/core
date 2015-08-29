@@ -7,8 +7,8 @@
     {
         $domAttr['disabled'] = 'disabled';
         $disabled = true; 
-    }
-
+    } 
+	
     $localeDefault = config('app.localeDefault');
     $locale = config('app.locale');
 
@@ -37,13 +37,21 @@
                     $checked = ($model->exists && strcmp($k, $model->{$field->code}) === 0) || (!$model->exists && strcmp($k, $default) === 0) ? 1 : 0;
 					
 					$domAttr['id'] .= '-' . $k;
+					
+					if ($checked)
+					{
+						$domAttr['checked'] = 'checked';
+					}
+					else
+					{
+						unset($domAttr['checked']);
+					}
 
                 ?>
                 <label class="btn btn-white btn-sm btn-primary @if ($checked) active @endif" @if ($disabled) disabled="disabled" @endif>
                    
-                    {!! Form::radio($field->code, $k, $checked, $domAttr) !!}
-                       
-                    <input type="radio" @if ($checked) checked="checked" @endif name="{{$field->code}}" value="{{$k}}" @if ($disabled) disabled="disabled" @endif /> {{$v}}
+                    {!! Form::radio($field->code, $k, $checked, $domAttr) !!} {{$v}}
+                    
                 </label>
                 @endforeach
             </div>

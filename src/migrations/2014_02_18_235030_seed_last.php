@@ -669,7 +669,7 @@ class SeedLast extends Migration {
                 'icon_class' => 'ace-icon fa fa-facebook blue',
             ]
         );
-        
+
         (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
                 'title' => ['en' => 'Twitter', 'ru' => 'Твиттер'],
@@ -687,6 +687,26 @@ class SeedLast extends Migration {
                 'allow_update' => 1, 
                 'field_order' => 4,
                 'icon_class' => 'ace-icon fa fa-twitter light-blue',
+            ]
+        ); 
+
+        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+            [
+                'title' => ['en' => 'Skype', 'ru' => 'Skype'],
+                'title_list' => ['en' => 'Skype', 'ru' => 'Skype'],
+                'key' => 'string',
+                'code' => 'skype',
+                'active' => 1,
+                'field_object_type' => 'user',
+                'field_object_tab' => 'contact',
+                'show_in_form' => 1,
+                'show_in_list' => 0,
+                'allow_search' => 1,
+                'multilanguage' => 0,
+                'allow_create' => 1,
+                'allow_update' => 1, 
+                'field_order' => 4,
+                'icon_class' => 'ace-icon fa fa-skype light-blue',
             ]
         ); 
 

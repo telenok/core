@@ -7,7 +7,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     protected $key = 'string';
 
-    protected $specialField = ['string_default', 'string_regex', 'string_password', 'string_max', 'string_min', 'string_list_size'];
+    protected $specialField = ['string_default', 'string_regex', 'string_password', 'string_unique', 'string_max', 'string_min', 'string_list_size'];
     protected $ruleList = ['string_regex' => ['valid_regex']];
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
@@ -187,6 +187,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
             $fields['rule'][] = 'required';
         }
+		
+		if ($input->get('string_unique'))
+		{
+			$fields['rule'][] = "unique:{$table},{$fieldName},:id:,id";
+		}
         
         if ($string_regex = trim($input->get('string_regex')))
         {

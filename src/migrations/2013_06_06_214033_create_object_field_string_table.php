@@ -40,6 +40,11 @@ class CreateObjectFieldStringTable extends Migration {
 				{
 					$table->integer('string_list_size')->unsigned()->nullable();
 				}
+
+				if (!\Schema::hasColumn('object_field', 'string_unique'))
+				{
+					$table->integer('string_unique')->unsigned()->nullable();
+				}
 			});
 		}
 	}

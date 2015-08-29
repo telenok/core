@@ -144,7 +144,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 $mime = finfo_file($finfo, $file);
                 finfo_close($finfo); 
 
-                $file = app('\Symfony\Component\HttpFoundation\File\UploadedFile', [$file, $basename, $mime, $size, UPLOAD_ERR_OK]);
+                $file = app('\Symfony\Component\HttpFoundation\File\UploadedFile', [$file, $basename, $mime, $size, null, true]);
             }
         }
 
@@ -157,7 +157,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			throw new \Exception($file->getErrorMessage());
 		}
 
-		if ($file !== null && $file->isValid())
+		if ($file !== null)
 		{
 			try
 			{ 

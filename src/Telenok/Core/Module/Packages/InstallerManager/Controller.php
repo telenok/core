@@ -179,6 +179,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			$this->appendLogFile('download package', $this->LL('Download package'));
 
 			$url = 'http://telenok.local/account/package/download/' . urlencode($packageId) . '/' . urlencode($versionId);
+			$url .= '?laravelVersion=' . urlencode(app()->version());
+
+			\App\Telenok\Core\Model\Web\Domain::active()->get()->each(function($item) use (&$url) 
+			{
+				$url .= '&domain[]=' . urlencode($item->domain);
+			});
 
 			$directory = storage_path('telenok/composer/' . $packageRandomKey);
 			$directoryUnzipped = $directory . '/unzipped'; 

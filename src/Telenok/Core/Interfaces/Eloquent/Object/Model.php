@@ -86,7 +86,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
     public function __call($method, $parameters)
     {
         if (static::hasMacro($method)) 
-		{
+		{		
             if (static::$macros[$method] instanceof \Closure)
 			{
                 return static::$macros[$method]->call($this, $parameters);
