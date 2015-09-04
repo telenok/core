@@ -27,13 +27,15 @@ ob_start();
 			var button_type = jQuery(this).data('btn-clicked');
 
 			@section('buttonType')
-				if (button_type == 'delete.close')
-				{ 
-					if (confirm('{{ $controller->LL('notice.sure.delete') }}'))
-					{
-						$el.attr('action', "{!! $controller->getUrlDelete(['id' => $controller->getEventResource()->get('model')->getKey()]) !!}");
+				@if ($controller->getConfig('routerDelete') !== FALSE)
+					if (button_type == 'delete.close')
+					{ 
+						if (confirm('{{ $controller->LL('notice.sure.delete') }}'))
+						{
+							$el.attr('action', "{!! $controller->getUrlDelete(['id' => $controller->getEventResource()->get('model')->getKey()]) !!}");
+						}
 					}
-				}
+				@endif
 			@show
 
 			@yield('beforeAjax')
@@ -57,7 +59,7 @@ ob_start();
 				{
 					window.location = data.redirect;
 				}
-				else if (data.success == 0)
+				else if (!data.success)
 				{
 					$errorContainer.prepend('<div class="alert alert-danger">{{$controller->LL('notice.error.undefined')}}<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
 				}

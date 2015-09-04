@@ -1,4 +1,5 @@
 <div class="col-xs-12">
+	@if ($controller->getConfig('showTabs', true))
 	<div class="tabbable">
 		<ul class="nav nav-tabs" id='form-nav-{{$controller->getUniqueId()}}'>
 
@@ -63,4 +64,32 @@
 
 			?>
 	</div>
+	@else
+	
+		@foreach($controller->getFields()->sortBy('field_order') as $field) 
+
+			@include($controller->getFieldView())
+
+		@endforeach 
+		
+		<?php
+
+		ob_start();
+
+		?>
+
+		@section('scriptForm')
+		@show
+
+		<?php
+
+		$jsCode = ob_get_contents();
+
+		ob_end_clean();
+
+		$controllerAction->addJsCode($jsCode); 
+
+		?>
+		
+	@endif
 </div>	

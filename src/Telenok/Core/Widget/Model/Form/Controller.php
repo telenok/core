@@ -37,6 +37,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		'uniqueId' => 'adadad94820sdvbxjkh',
 		'model' => (\App\...\Object\Type::find(10) || 299 ),
 		'modelType' => for security reason (\App\...\Object\Type::find(10) || type code like 'user' || 299 || '\App\Model\Package'),
+		'showTabs' => true,
 		'fieldOnly' => [
 			'id',
 			'title', 
@@ -59,9 +60,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		'modelView' => 'core::widget.form.model',
 		'formView' => 'core::widget.form.form',
 		'fieldView' => 'core::widget.form.field',
-		'routerStore' => 'some.router.store',
-		'routerUpdate' => 'some.router.update',
-		'routerDelete' => 'some.router.delete',
+		'routerStore' => 'some.router.store', // or FALSE
+		'routerUpdate' => 'some.router.update', // or FALSE
+		'routerDelete' => 'some.router.delete', // or FALSE
 		'redirectAfterCreate' => 'some.router.afterProcessingCreate' or 'http://some.url/to/page,
 		'redirectAfterUpdate' => 'some.router.afterProcessingUpdate' or 'http://some.url/to/page,
 		'redirectAfterDelete' => 'some.router.afterProcessingDelete' or 'http://some.url/to/page,
@@ -105,9 +106,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		try
 		{
 			return view($this->getModelView(), [
-				'urlParam' => $this->getUrlStore(['typeId' => $this->getEventResource()->get('type')->getKey()]),
+				'urlParam' => $this->getConfig('routerStore') === FALSE ? '' : $this->getUrlStore(['typeId' => $this->getEventResource()->get('type')->getKey()]),
 				'controller' => $this,
-				'canCreate' => true,
+				'canCreate' => $this->getConfig('routerStore') !== FALSE,
 			])->render();
 		}
 		catch (\Exception $ex) 
@@ -136,10 +137,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		try
 		{
 			return view($this->getModelView(), [
-				'urlParam' => $this->getUrlUpdate(['id' => $this->getEventResource()->get('model')->getKey()]),
+				'urlParam' => $this->getConfig('routerUpdate') ===  FALSE ? '' : $this->getUrlUpdate(['id' => $this->getEventResource()->get('model')->getKey()]),
 				'controller' => $this,
-				'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
-				'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
+				'success' => $this->getRequest()->input('success'),
+				'canUpdate' => $this->getConfig('routerUpdate') ===  FALSE ? FALSE : app('auth')->can('update', $eventResource->get('model')),
+				'canDelete' => $this->getConfig('routerDelete') === FALSE ? FALSE : app('auth')->can('delete', $eventResource->get('model')),
 			])->render();
 		}
 		catch (\Exception $ex) 
@@ -440,7 +442,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 		$this->uniqueId = $this->getConfig('uniqueId', str_random());
 		$this->id = intval($this->getConfig('id'));
-		$this->formClass = $this->getConfig('id', $this->formClass);
+		$this->formClass = $this->getConfig('formClass', $this->formClass);
 		$this->modelView = $this->getConfig('modelView', $this->modelView);
 		$this->formView = $this->getConfig('formView', $this->formView);
 		$this->fieldView = $this->getConfig('fieldView', $this->fieldView);
