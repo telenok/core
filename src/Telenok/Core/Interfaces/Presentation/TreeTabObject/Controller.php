@@ -214,7 +214,7 @@ abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\
         {
             $f = $model->getObjectField()->get($field);
             app('telenok.config.repository')
-                    ->getObjectFieldController()->get($f->key)
+                    ->getObjectFieldController($f->key)
                     ->getFilterQuery($f, $model, $query, $f->code, $str);
         });
     }

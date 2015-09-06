@@ -14,7 +14,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		if ($item instanceof \Illuminate\Support\Collection)
 		{
 			return 'Complex array';
-		} else
+		} 
+		else
 		{
 			return \Str::limit($item->{$field->code}, 20);
 		}
@@ -29,7 +30,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		if (is_array($v))
 		{
 			return \Illuminate\Support\Collection::make($v);
-		} else
+		} 
+		else
 		{
 			return $v;
 		}
@@ -40,7 +42,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		if ($value instanceof \Illuminate\Support\Collection)
 		{
 			$value_ = $value->toArray();
-		} else
+		} 
+		else
 		{
 			$value_ = $value === null ? [] : $value;
 		}
@@ -50,7 +53,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null)
 	{
-		
 	}
 
 	public function preProcess($model, $type, $input)
@@ -76,5 +78,4 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		return parent::postProcess($model, $type, $input);
 	}
-
 }

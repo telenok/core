@@ -89,7 +89,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 			throw new \Exception($this->LL('error.class_model.name'));
 		}
 
-		$input->put('class_model', '\\' . implode($classNameCollection->all(), '\\'));
+		$input->put('class_model', '\\' . implode('\\', $classNameCollection->all()));
 
 		$classModel = $input->get('class_model');
 
@@ -124,7 +124,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 			return ucfirst($item);
 		});
 
-		$input->put('class_controller', '\\' . implode($classNameCollection->all(), '\\'));
+		$input->put('class_controller', '\\' . implode('\\', $classNameCollection->all()));
 
 		$classController = $input->get('class_controller');
 

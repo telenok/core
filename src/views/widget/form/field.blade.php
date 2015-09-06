@@ -1,5 +1,5 @@
 
-{!! app('telenok.config.repository')->getObjectFieldController()->get($field->key)->getFormModelContent(
+{!! app('telenok.config.repository')->getObjectFieldController($field->key)->getFormModelContent(
 	$controller, 
 	$controller->getEventResource()->get('model'), 
 	$field, 

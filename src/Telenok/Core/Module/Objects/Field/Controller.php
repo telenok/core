@@ -24,7 +24,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 		}
         
 		
-		return app('telenok.config.repository')->getObjectFieldController()->get($fieldKey)->getFormFieldContent($model, $uniqueId);
+		return app('telenok.config.repository')->getObjectFieldController($fieldKey)->getFormFieldContent($model, $uniqueId);
 	}
 	
     public function getTreeListTypes()
@@ -45,7 +45,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
         if ($key)
         {
-            app('telenok.config.repository')->getObjectFieldController()->get($key)->validate($model, $input, $message);
+            app('telenok.config.repository')->getObjectFieldController($key)->validate($model, $input, $message);
         }
 
         return $this;
@@ -87,7 +87,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 		}
 		else
 		{
-			app('telenok.config.repository')->getObjectFieldController()->get($input->get('key'))->preProcess($model, $type, $input);
+			app('telenok.config.repository')->getObjectFieldController($input->get('key'))->preProcess($model, $type, $input);
 		}
 		
         return parent::preProcess($model, $type, $input);
@@ -95,7 +95,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
     public function postProcess($model, $type, $input)
     {   
-        $field = app('telenok.config.repository')->getObjectFieldController()->get($input->get('key'));
+        $field = app('telenok.config.repository')->getObjectFieldController($input->get('key'));
 
         $field->postProcess($model, $type, $input);  
 

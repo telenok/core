@@ -161,7 +161,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				$f = $this->getModel()->getObjectField()->get('title');
 
 				app('telenok.config.repository')
-						->getObjectFieldController()->get($f->key)
+						->getObjectFieldController($f->key)
 						->getFilterQuery($f, $this->getModel(), $query, $f->code, $str);
 			});       
 		} 

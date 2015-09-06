@@ -2,54 +2,67 @@
 
 class Repository {
 
-	public function getValue($event, $type, $flush = false)
+	public function getValue($event, $key = '')
 	{
-		static $list = [];
-
-		if (!isset($list[$type]) || $flush)
+		try
 		{
-			try
+			$collection = \Illuminate\Support\Collection::make();
+
+			\Event::fire($event, $collection);
+
+			$list = \Illuminate\Support\Collection::make();
+
+			foreach ($collection as $class)
 			{
-				$collection = \Illuminate\Support\Collection::make();
+				$object = app($class);
 
-				\Event::fire($event, $collection);
-
-				$list[$type] = \Illuminate\Support\Collection::make();
-
-				foreach ($collection as $class)
-				{
-					$object = app($class);
-
-					$list[$type]->put($object->getKey(), $object);
-				}
-			}
-			catch (\Exception $e)
-			{
-				throw new \RuntimeException('Failed to fire event "' . $event . '". Error: ' . $e->getMessage());
+				$list->put($object->getKey(), $object);
 			}
 		}
+		catch (\Exception $e)
+		{
+			throw new \RuntimeException('Failed to fire event "' . $event . '". Error: ' . $e->getMessage());
+		}
 
-		return $list[$type];
+		if ($key)
+		{
+			$el = $list->get($key);
+			
+			if ($el)
+			{
+				$class = get_class($el);
+				
+				return app($class);
+			}
+			else
+			{
+				throw new \RuntimeException('Failed to fire event "' . $event . '" with key "' . $key . '". Error: ' . $e->getMessage());
+			}
+		}
+		else
+		{
+			return $list;
+		}
 	}
 	
-	public function getAclResourceFilter($flush = false)
+	public function getAclResourceFilter($key = '')
 	{ 
-		return $this->getValue('telenok.acl.filter.resource', 'acl.filter', $flush);
+		return $this->getValue('telenok.acl.filter.resource', $key);
 	}
 	
-	public function getPackage($flush = false)
-	{ 
-		return $this->getValue('telenok.repository.package', 'package', $flush);
+	public function getPackage($key = '')
+	{
+		return $this->getValue('telenok.repository.package', $key);
 	}
 
-	public function getSetting($flush = false)
+	public function getSetting($key = '')
 	{
-		return $this->getValue('telenok.repository.setting', 'setting', $flush);
+		return $this->getValue('telenok.repository.setting', $key);
 	}
 
-	public function getObjectFieldController($flush = false)
+	public function getObjectFieldController($key = '')
 	{
-		return $this->getValue('telenok.repository.objects-field', 'objects-field', $flush);
+		return $this->getValue('telenok.repository.objects-field', $key);
 	}
 
 	public function getObjectFieldViewModel($flush = false)
@@ -84,104 +97,84 @@ class Repository {
 		return $list;
 	}
 
-	public function getModuleGroup($flush = false)
+	public function getModuleGroup()
 	{
-		static $list = null;
-
-		if ($list === null || $flush)
+		try
 		{
-			try
-			{
-				$list = \Illuminate\Support\Collection::make();
+			$list = \Illuminate\Support\Collection::make();
 
-				\App\Telenok\Core\Model\Web\ModuleGroup::active()->get()->each(function($item) use (&$list)
-				{
-					$object = app($item->controller_class);
-					$object->setModelModuleGroup($item);
-					$list->put($object->getKey(), $object);
-				});
-			}
-			catch (\Exception $e)
+			\App\Telenok\Core\Model\Web\ModuleGroup::active()->get()->each(function($item) use (&$list)
 			{
-				throw new \RuntimeException('Failed to get module-group. Error: ' . $e->getMessage());
-			}
+				$object = app($item->controller_class);
+				$object->setModelModuleGroup($item);
+				$list->put($object->getKey(), $object);
+			});
+		}
+		catch (\Exception $e)
+		{
+			throw new \RuntimeException('Failed to get module-group. Error: ' . $e->getMessage());
 		}
 
 		return $list;
 	}
 
-	public function getModule($flush = false)
+	public function getModule()
 	{
-		static $list = null;
-
-		if ($list === null || $flush)
+		try
 		{
-			try
-			{
-				$list = \Illuminate\Support\Collection::make();
+			$list = \Illuminate\Support\Collection::make();
 
-				\App\Telenok\Core\Model\Web\Module::active()->get()->each(function($item) use (&$list)
-				{
-					$object = app($item->controller_class);
-					$object->setModelModule($item);
-					$list->put($object->getKey(), $object);
-				});
-			}
-			catch (\Exception $e)
+			\App\Telenok\Core\Model\Web\Module::active()->get()->each(function($item) use (&$list)
 			{
-				throw new \RuntimeException('Failed to get module. Error: ' . $e->getMessage());
-			}
+				$object = app($item->controller_class);
+				$object->setModelModule($item);
+				$list->put($object->getKey(), $object);
+			});
+		}
+		catch (\Exception $e)
+		{
+			throw new \RuntimeException('Failed to get module. Error: ' . $e->getMessage());
 		}
 
 		return $list;
 	}
 
-	public function getWidgetGroup($flush = false)
+	public function getWidgetGroup()
 	{
-		static $list = null;
-
-		if ($list === null || $flush)
+		try
 		{
-			try
-			{
-				$list = \Illuminate\Support\Collection::make();
+			$list = \Illuminate\Support\Collection::make();
 
-				\App\Telenok\Core\Model\Web\WidgetGroup::active()->get()->each(function($item) use (&$list)
-				{
-					$object = app($item->controller_class);
-					$object->setWidgetGroupModel($item);
-					$list->put($object->getKey(), $object);
-				});
-			}
-			catch (\Exception $e)
+			\App\Telenok\Core\Model\Web\WidgetGroup::active()->get()->each(function($item) use (&$list)
 			{
-				throw new \RuntimeException('Failed to get widget. Error: ' . $e->getMessage());
-			}
+				$object = app($item->controller_class);
+				$object->setWidgetGroupModel($item);
+				$list->put($object->getKey(), $object);
+			});
+		}
+		catch (\Exception $e)
+		{
+			throw new \RuntimeException('Failed to get widget. Error: ' . $e->getMessage());
 		}
 
 		return $list;
 	}
 
-	public function getWidget($flush = false)
+	public function getWidget()
 	{
-		static $list = null;
-
-		if ($list === null || $flush)
+		try
 		{
-			try
-			{
-				$list = \Illuminate\Support\Collection::make();
+			$list = \Illuminate\Support\Collection::make();
 
-				\App\Telenok\Core\Model\Web\Widget::active()->get()->each(function($item) use (&$list)
-				{
-					$object = app($item->controller_class);
-					$list->put($object->getKey(), $object);
-				});
-			}
-			catch (\Exception $e)
+			\App\Telenok\Core\Model\Web\Widget::active()->get()->each(function($item) use (&$list)
 			{
-				throw new \RuntimeException('Failed to get widget. Error: ' . $e->getMessage());
-			}
+				$object = app($item->controller_class);
+				$list->put($object->getKey(), $object);
+			});
+		}
+		catch (\Exception $e)
+		{
+			throw new \RuntimeException('Failed to get widget. Error: ' . $e->getMessage());
 		}
 
 		return $list;

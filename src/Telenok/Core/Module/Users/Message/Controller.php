@@ -14,7 +14,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
         return 'user-message';
     }
 
-    public function getPackage()
+    public static function getPackage()
     {
         return 'core';
     }

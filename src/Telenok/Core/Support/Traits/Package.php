@@ -8,7 +8,7 @@ trait Package
     {
         static $ns = [];
 
-        $class = get_class($this);
+        $class = get_called_class();
 
         if (!isset($ns[$class]))
         {
@@ -38,7 +38,5 @@ trait Package
     public function setPackage($param)
     {
         $this->package = $param;
-
-        return $this;
     }
 }

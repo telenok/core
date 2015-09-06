@@ -18,13 +18,6 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 	protected static $listFieldDate = [];
     protected static $macros = [];
 
-	
-	
-	
-	
-	
-	
-
     /**
      * Register a custom macro.
      *
@@ -484,7 +477,7 @@ abstract class Model extends \Illuminate\Database\Eloquent\Model {
 
 		return $model;
 	}
-
+	
 	protected function validatorCustomAttributes()
 	{
 		static $attr = null;

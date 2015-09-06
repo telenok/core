@@ -27,7 +27,7 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 		{
             $type = $model->fieldObjectType()->first();
                         
-			if ($controllers = app('telenok.config.repository')->getObjectFieldController()->get($model->key))
+			if ($controllers = app('telenok.config.repository')->getObjectFieldController($model->key))
 			{
 				$controllers->processFieldDelete($model, $type);
 			}
@@ -35,7 +35,7 @@ class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
 			$model->deleteFieldResourcePermission($type);
 		});
 	}
-
+	
 	public function createFieldResource($type)
 	{
 		$code = 'object_field.' . $type->code . '.' . $this->code;

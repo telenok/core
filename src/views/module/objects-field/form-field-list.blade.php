@@ -1,28 +1,52 @@
+<?php
+
+	$jsUnique = str_random();
+
+?>
+
 	@if (!in_array($field->code, ['key', 'field_view'], true))
 
-		{!! app('telenok.config.repository')->getObjectFieldController()->get($field->key)->getFormModelContent($controller, $model, $field, $uniqueId) !!}
+		{!! app('telenok.config.repository')->getObjectFieldController($field->key)->getFormModelContent($controller, $model, $field, $uniqueId) !!}
 
 	@elseif ($field->code == "field_view" && $model->exists)
 
         <?php
 
-            $views = app('telenok.config.repository')->getObjectFieldViewModel()->get($model->key, []);
+            $viewsCollection = collect(app('telenok.config.repository')->getObjectFieldViewModel()->get($model->key, []));
+			
+			$viewsCollection->push(app('telenok.config.repository')->getObjectFieldController($model->key)->getViewModel());
+			
+			if ($model->{$field->code})
+			{
+				$viewsCollection->push( $model->{$field->code} );
+			}
 
-            if (empty($viewsCollection))
-            {
-                $views[] = app('telenok.config.repository')->getObjectFieldController()->get($model->key)->getViewModel();
-            }
-            
-            $views = array_combine($views, $views);
+			$views = [];
+
+			foreach($viewsCollection->all() as $v)
+			{
+				$views[] = "<option value='" . e($v). "' " . ($model->{$field->code} == $v ? 'selected' : '') . ">" . e($v) . "</option>";
+			}
         ?>
-
+	
 		<div class="form-group">
 			{!! Form::label('key', $field->translate('title'), array('class' => 'col-sm-3 control-label no-padding-right')) !!}
 			<div class="col-sm-9">
-                {!! Form::select($field->code, $views, $model->{$field->code}) !!}
+				<select data-placeholder="{{$controller->LL('notice.choose')}}" id="input{{$jsUnique}}" name="{{$field->code}}">
+				 {!! implode('', $views) !!}
+				 </select>
+				 <script type="text/javascript">
+					 jQuery("#input{{ $jsUnique }}").chosen({
+						 create_option: true,
+						 keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
+						 lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
+						 width: '350px',
+						 search_contains: true
+					 });
+				 </script>
 			</div>
 		</div>
-
+	
 	@elseif ($field->code=='key')
 
 		{!! Form::hidden('key', $model->{$field->code}) !!}
