@@ -27,7 +27,7 @@ class CoreServiceProvider extends ServiceProvider {
 		app('auth')->extend('custom', function()
 		{
 			return new \App\Telenok\Core\Security\Guard(
-					new \App\Telenok\Core\Security\UserProvider($this->app['hash'], $this->app['config']['auth.model']), $this->app['session.store']
+				new \App\Telenok\Core\Security\UserProvider($this->app['hash'], $this->app['config']['auth.model']), $this->app['session.store']
 			);
 		});		
 		

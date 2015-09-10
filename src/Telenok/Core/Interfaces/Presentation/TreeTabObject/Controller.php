@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Interfaces\Presentation\TreeTabObject;
 
-abstract class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {
+class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {
 
     protected $key = '';
     protected $parent = '';

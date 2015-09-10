@@ -21,16 +21,17 @@
         $disabled = true; 
     }
 
-			
 	$selected = [];
 
-	if ($field->relation_one_to_many_has)
+	$v_ = $model->{$field->code};
+
+	if ($field->relation_one_to_many_has && $v_)
 	{
-		$selected = $model->{$field->code}->modelKeys();
+		$selected = $v_->modelKeys();
 	}
 	else
 	{
-		$selected = $model->{$field->code};
+		$selected = $v_;
 	}
 	
 	if ($v = \App\Telenok\Core\Model\Object\Sequence::whereIn('id', (array)$selected)->get())

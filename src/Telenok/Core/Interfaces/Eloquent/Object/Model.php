@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Interfaces\Eloquent\Object;
 
-abstract class Model extends \Illuminate\Database\Eloquent\Model {
+class Model extends \Illuminate\Database\Eloquent\Model {
 
 	use \Illuminate\Database\Eloquent\SoftDeletes; 
 

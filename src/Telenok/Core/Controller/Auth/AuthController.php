@@ -5,7 +5,6 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Controller {
 	use \Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 	
 	protected $key = 'auth';
-	protected $languageDirectory = 'controller';
 
 	/**
 	 * Create a new authentication controller instance.
@@ -18,7 +17,8 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		$this->auth = $auth;
 		$this->registrar = $registrar;
-
+		$this->languageDirectory = 'controller';
+		
 		//$this->middleware('guest', ['except' => 'getLogout']);
 	}
 

@@ -4,7 +4,7 @@ trait Language
 {
 	use Package;
 	
-	protected $languageDirectory;
+	protected $languageDirectory = '';
 
 	public function getLanguageDirectory()
     {
@@ -20,10 +20,17 @@ trait Language
 
     public function LL($key = '', $param = [])
     {
+		if ( ($v = trans($key, $param)) && $v != $key )
+		{
+			return $v;
+		}
+		
 		$package = $this->getPackage();
 
         $k = "{$package}::{$this->getLanguageDirectory()}/{$this->getKey()}.$key";
+        $kNoPackage = "{$this->getLanguageDirectory()}/{$this->getKey()}.$key";
         $kDefault = "{$package}::default.$key";
+        $kDefaultCore = "core::default.$key";
         $kStandart = "module/{$this->getKey()}.$key";
 
         $word = trans($k, $param);
@@ -31,18 +38,23 @@ trait Language
         // not found in current wordspace
         if ($k === $word)
         {
-            $word = trans($kDefault, $param);
+			$word = trans($kNoPackage, $param);
 
-            // not found in default wordspace
-            if ($kDefault === $word)
-            {
-                $word = trans($kStandart, $param);
+			if ($kNoPackage === $word)
+			{
+				$word = trans($kDefault, $param);
 
-                if ($kStandart === $word)
-                {
-                    return trans($key, $param);
-                }
-            }
+				// not found in default wordspace
+				if ($kDefault === $word)
+				{
+					$word = trans($kDefaultCore, $param);
+
+					if ($kDefaultCore === $word)
+					{
+						return trans($kStandart, $param);
+					}
+				}
+			}
         }
 
         return $word;

@@ -1,12 +1,11 @@
 <?php namespace Telenok\Core\Interfaces\Module;
 
-abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Module\IModule {
+class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Module\IModule {
 
     protected $permissionKey = '';
     protected $parent = '';
     protected $group = '';
     protected $icon = 'fa fa-desktop';  
-    protected $languageDirectory = 'module';
     protected $modelModule; 
     protected $modelRepository; 
 
@@ -22,6 +21,8 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 				}
 			});
 		}
+		
+		$this->languageDirectory = 'module';
     }
 
     public function getHeader()

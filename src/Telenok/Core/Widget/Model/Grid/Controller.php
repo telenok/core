@@ -29,27 +29,28 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	echo (new \App\Telenok\Core\Html\Grid\Controller())->form([
 		'modelType' => (model object \App\...\Object\Type::find(10) || 299 || '\App\Model\Package' or type code eg 'user'),
-		'button' => [
-			[
-				'create' => function($controller)
-				{
-					return '
-							"sExtends": "text",
-							"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i>' . e($controller->LL('list.btn.create')) . '",
-							"sButtonClass": "btn-success btn-sm disabled",
-							"fnClick": function(nButton, oConfig, oFlash) { window.location = "' . route("some.route") . '"; }
-						';
-				}
-				'refresh' => function($controller)
-				{
-					return ' 
-							"sExtends": "text",
-							"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i>' . e($controller->LL('list.btn.refresh')) . '",
-							'sButtonClass': "btn-success btn-sm disabled",
-							"fnClick": function(nButton, oConfig, oFlash) { window.location = "' . route("some.route.name") . '"; }
-						';
-				},
-			]
+		'buttonTop' => [
+			'create' => function($controller)
+			{
+				return '
+						"sExtends": "text",
+						"sButtonText": "<i class=\'fa fa-plus smaller-90\'></i> ' . e($controller->LL('list.btn.create')) . '",
+						"sButtonClass": "btn-success btn-sm",
+						"fnClick": function(nButton, oConfig, oFlash) { window.location = "' . $controller->getUrlCreate() . '"; }
+					';
+			},
+			'refresh' => function($controller)
+			{
+				return '
+						"sExtends": "text",
+						"sButtonText": "<i class=\'fa fa-refresh smaller-90\'></i> ' . e($controller->LL('list.btn.refresh')) . '",
+						"sButtonClass": "btn-success btn-sm",
+						"fnClick": function(nButton, oConfig, oFlash) 
+						{
+							jQuery(this.dom.table).dataTable().fnReloadAjax();
+						}					
+					';
+			}
 		],
 		'buttonTopOrder' => ['create', 'refresh'],
 		'routerList' => 'cmf.widget.grid.list',
@@ -133,7 +134,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return app('\Telenok\Core\Interfaces\Field\Relation\Controller')->getTitleList($id, $closure);
 	}
 
-	public function getList($typeId = 0, $closure = null)
+	public function getList($typeId = 0, $closure = null, $btnActionView = 'core::widget.grid.buttonAction')
 	{
 		$input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
 		
@@ -222,7 +223,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				$put[$field->code] = $config->get($field->key)->getListFieldContent($field, $item, $this->getModelType());
 			}
 
-			$put['tableManageItem'] = view('core::widget.grid.buttonAction', ['controller' => $this, 'item' => $item])->render();
+			$put['tableManageItem'] = $btnActionView ? view($btnActionView, ['controller' => $this, 'item' => $item])->render() : '';
 
 			$content[] = $put;
 		}

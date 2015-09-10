@@ -2,7 +2,7 @@
 
 namespace Telenok\Core\Interfaces\Controller\Frontend;
 
-abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
+class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	protected $controllerModel;
 	protected $container = [];
@@ -11,10 +11,16 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	protected $cssCode = [];
 	protected $jsCode = [];
 	protected $cacheTime = 3600;
-	protected $languageDirectory = 'controller';
 	protected $frontendView = 'core::controller.frontend';
 	protected $backendView = 'core::controller.frontend-container';
 
+	public function __construct()
+	{
+		$this->languageDirectory = 'controller';
+
+		parent::__construct();
+	}
+	
 	public function setCacheTime($param = 0)
 	{
 		$this->cacheTime = min($this->getCacheTime(), $param);

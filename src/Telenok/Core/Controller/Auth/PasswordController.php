@@ -5,8 +5,7 @@ use Telenok\Core\Contract\Auth\PasswordBroker;
 
 class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller {
 
-	protected $key = 'backend-password-reset';
-	protected $languageDirectory = 'controller';
+	protected $key = 'backend-password-reset'; 
 	protected $emailView = 'core::email.password-reset';
 	protected $resetView = 'core::controller.backend-password-reset';
 
@@ -28,6 +27,8 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 		);
 		
 		$this->auth = $auth; 
+		
+		$this->languageDirectory = 'controller';
 	}
 
 	/**

@@ -62,10 +62,11 @@ ob_start();
 			jQuery('#table-{{$controller->getUniqueId()}}').dataTable(param);
 
 
+			@if ($deleteRouter = $controller->getRouterDelete())
 			jQuery('#table-{{$controller->getUniqueId()}}').data('deleteRow', function(obj, id)
 			{
 				jQuery.ajax({
-					url: "{!! route($controller->getRouterDelete(), ['id' => '--id--']) !!}".replace("--id--", id),
+					url: "{!! route($deleteRouter, ['id' => '--id--']) !!}".replace("--id--", id),
 					type: "post",
 
 				}).done(function(data)
@@ -76,6 +77,7 @@ ob_start();
 					}
 				});
 			});
+			@endif
 
 		}); 
 		

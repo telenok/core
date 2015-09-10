@@ -2,7 +2,7 @@
 
 use \Telenok\Core\Interfaces\Presentation\IPresentation;
 
-abstract class Controller extends \Telenok\Core\Interfaces\Module\Controller implements IPresentation {
+class Controller extends \Telenok\Core\Interfaces\Module\Controller implements IPresentation {
 
     protected $presentation = 'simple';
     protected $presentationView = '';

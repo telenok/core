@@ -1,11 +1,17 @@
 <?php namespace Telenok\Core\Interfaces\Setting;
 
-abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
+class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
  
     protected $ruleList = [];
-    protected $formSettingContentView = ''; 
-    protected $languageDirectory = 'setting'; 
+    protected $formSettingContentView = '';
 
+	public function __construct()
+	{
+		$this->languageDirectory = 'setting';
+
+		parent::__construct();
+	}
+	
 	public function getFormSettingContent($field, $model, $uniqueId)
 	{
 		return view($this->getFormSettingContentView(), [

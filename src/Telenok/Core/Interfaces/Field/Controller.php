@@ -1,12 +1,11 @@
 <?php namespace Telenok\Core\Interfaces\Field;
 
-abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Field\IField {
+class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Field\IField {
 
 	protected $ruleList = [];
 	protected $specialField = [];
 	protected $specialDateField = [];
 	protected $allowMultilanguage = true;
-	protected $languageDirectory = 'field';
 	protected $displayLength = 5;
 	protected $viewModel;
 	protected $viewField;
@@ -17,6 +16,10 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	protected $routeWizardEdit;
 	protected $routeWizardChoose;
 
+	public function __construct()
+	{
+		$this->languageDirectory = 'field';
+	}
 
 	public function getViewModel()
 	{

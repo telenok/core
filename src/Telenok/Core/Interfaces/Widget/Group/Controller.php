@@ -1,11 +1,17 @@
 <?php namespace Telenok\Core\Interfaces\Widget\Group;
 
-abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
+class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
  
-    protected $icon = 'fa fa-desktop';
-    protected $languageDirectory = 'widget-group';
+    protected $icon = 'fa fa-desktop'; 
     protected $widgetGroupModel;
 
+	public function __construct()
+	{
+		$this->languageDirectory = 'widget-group';
+
+		parent::__construct();
+	}
+	
     public function getIcon()
     {
         return $this->icon;

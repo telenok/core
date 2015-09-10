@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Interfaces\Widget;
 
-abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
+class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
 	
 	protected $parent = '';
 	protected $group = '';
@@ -10,8 +10,14 @@ abstract class Controller extends \Telenok\Core\Interfaces\Controller\Controller
 	protected $frontendView = '';
 	protected $structureView = '';
 	protected $frontendController;
-	protected $cacheTime = 3600; 
-    protected $languageDirectory = 'widget';
+	protected $cacheTime = 3600;  
+	
+	public function __construct()
+	{
+		$this->languageDirectory = 'widget';
+
+		parent::__construct();
+	}
 
 	public function getIcon()
 	{
