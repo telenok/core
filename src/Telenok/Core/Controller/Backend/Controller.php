@@ -159,6 +159,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 		$setArray['listModuleMenuTop'] = $listModuleMenuTop;
 		$setArray['controller'] = $this;
 
+		if ($this->getRequest()->has('external_event'))
+		{
+			\Event::fire('telenok.external_event', $this);
+		}
+		
 		return view('core::controller.backend', $setArray)->render();
 	}
 

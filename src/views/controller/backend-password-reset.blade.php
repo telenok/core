@@ -148,5 +148,17 @@
 				return false;
 			}); 
         </script>
+		
+		@foreach($controller->getJsFile() as $file)
+
+		<script src="{!! $file['file'] !!}"></script>
+
+		@endforeach
+
+		@foreach($controller->getJsCode() as $code)
+
+			{!! $code !!} 
+
+		@endforeach
     </body>
 @stop

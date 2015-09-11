@@ -8,8 +8,6 @@
 
 @section('body')
 <body>
-
-
     <div class="main-container">
 
         <div class="main-content">
@@ -86,5 +84,17 @@
             </div><!--/.page-content-->
         </div><!--/.main-content-->
     </div>
+	
+	@foreach($controller->getJsFile() as $file)
+
+	<script src="{!! $file['file'] !!}"></script>
+
+	@endforeach
+
+	@foreach($controller->getJsCode() as $code)
+
+		{!! $code !!} 
+
+	@endforeach
 </body>
 @stop

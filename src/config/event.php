@@ -117,6 +117,11 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
     app('telenok.config.repository')->compileSetting();
 });
 
+\Event::listen('telenok.external_event', function($controller)
+{
+    app('\App\Telenok\Core\Module\Packages\InstallerManager\Controller')->processExternalEvent($controller);
+});
+
 \Event::listen('illuminate.query', function($sql, $bindings, $time)
 {
     if (config('querylog'))

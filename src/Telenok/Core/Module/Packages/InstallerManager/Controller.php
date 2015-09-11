@@ -774,5 +774,28 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         }
         
         return $listTree;
-    } 
+    }
+	
+	public function processExternalEvent($controller)
+	{
+		if ($this->getRequest()->get('external_event') == 'install_package' && ($package = $this->getRequest()->get('package_key')))
+		{
+			$controller->addJsCode('
+				<script>
+					telenok.addModule(
+						"' . $this->getKey() . '", 
+						"' . route('cmf.module.installer-manager.action.param') . '", 
+						function(moduleKey) 
+						{
+							telenok.processModuleContent(moduleKey);
+							
+							telenok.getPresentation("tree-tab-object-installer-manager").addTabByURL({
+								url : "' . route('cmf.module.installer-manager.view', ['id' => $package]) . '"
+							});
+						}
+					);
+				</script>
+			');
+		}
+	}
 } 

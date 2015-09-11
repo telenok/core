@@ -1,3 +1,18 @@
+<?php
+
+ob_start();
+
+?>
+
+    @yield('body')
+	
+<?php
+
+$htmlCode = ob_get_contents();
+
+ob_end_clean();
+	
+?>
 <!doctype html>
 <html> 
     <head>
@@ -54,8 +69,25 @@
         {!! HTML::script('packages/telenok/core/js/dropzone/dropzone.js') !!}
         {!! HTML::script('packages/telenok/core/js/script.js') !!}
     @show
+	
+		@foreach($controller->getCssFile() as $file)
+
+		<link href="{!! $file['file'] !!}" rel="stylesheet" />
+
+		@endforeach
+		
+		@foreach($controller->getCssCode() as $code)
+
+		<style>
+
+			{!! $code !!}
+
+		</style>
+
+		@endforeach
+	
     </head>
 
-    
-    @yield('body')
+	{!! $htmlCode !!} 
+
 </html>
