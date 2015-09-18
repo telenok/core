@@ -142,16 +142,6 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 		$input->put('relation_many_to_many_has', $sequenceTypeId);
 		$input->put('active', 1);
 		$input->put('multilanguage', 0);
-		$input->put('show_in_list', 0);
-		$input->put('show_in_form', 1);
-		$input->put('allow_search', 1);
-		$input->put('allow_create', 1);
-		$input->put('allow_update', 1);
-		
-		if (!$input->get('field_order'))
-		{
-			$input->put('field_order', 5);
-		}
 
 		if (!$input->get('field_object_tab'))
 		{

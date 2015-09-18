@@ -29,7 +29,7 @@
         </span>
         @endif 
 		
-        {!! Form::text($disabled ? str_random() : "{$field->code}", $value, $domAttr) !!}
+        {!! Form::text($disabled ? str_random() : $field->code, $value, $domAttr) !!}
 
 		@if ($field->translate('description'))
         <span title="" data-content="{{ $field->translate('description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 

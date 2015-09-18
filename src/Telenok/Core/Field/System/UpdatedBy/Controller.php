@@ -55,13 +55,9 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 		$input->put('code', 'updated_by_user');
 		$input->put('active', 1);
 		$input->put('multilanguage', 0);
-		$input->put('show_in_list', 0);
-		$input->put('show_in_form', 1);
-		$input->put('allow_search', 1);
 		$input->put('allow_create', 0);
-		$input->put('allow_update', 1); 
+		$input->put('allow_update', 0); 
 		$input->put('relation_one_to_many_belong_to', \DB::table('object_type')->where('code', 'user')->pluck('id'));
-		$input->put('field_order', 2);
 
 		if (!$input->get('field_object_tab'))
 		{

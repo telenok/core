@@ -112,7 +112,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		$field['multilanguage'] = 0;
 		$field['rule'][] = 'integer';
 
-		$field['integer_unsigned_default'] = $input->get('integer_unsigned_min');
+		$field['integer_unsigned_default'] = $input->get('integer_unsigned_default', null);
 
 		if ($input->get('required'))
 		{

@@ -83,7 +83,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 		// preprocessing at field controller
 		if (!app('telenok.config.repository')->getObjectFieldController()->has($input->get('key')))
 		{
-			throw new \Exception('There are not field with key "' . $input->get('key') . '"');
+			throw new \Exception('There are not field controller for field key "' . $input->get('key') . '"');
 		}
 		else
 		{
