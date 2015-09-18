@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Model\System;
 
-class Language extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Language extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	protected $guarded = [];
 	protected $table = 'language';

@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Model\Object;
 
-class Version extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Version extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	protected $table = 'object_version';
 	protected $hasVersioning = false;

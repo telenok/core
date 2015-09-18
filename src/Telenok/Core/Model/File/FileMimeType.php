@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Model\File;
 
-class FileMimeType extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+class FileMimeType extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	protected $table = 'file_mime_type';
 	protected $ruleList = ['title' => ['required', 'min:1'], 'mime_type' => ['required', 'unique:file_mime_type,mime_type,:id:,id']];

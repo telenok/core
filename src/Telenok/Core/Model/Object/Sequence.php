@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Model\Object;
 
-class Sequence extends \Telenok\Core\Interfaces\Eloquent\Object\Model {  
+class Sequence extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {  
 
 	protected $table = 'object_sequence';
 	protected $hasVersioning = false;

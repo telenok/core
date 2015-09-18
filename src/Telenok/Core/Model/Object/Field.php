@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Model\Object;
 
-class Field extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Field extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	protected $ruleList = ['title' => ['required', 'min:1'], 'title_list' => ['required', 'min:1'], 'code' => ['required', 'unique:object_field,code,:id:,id,field_object_type,:field_object_type:', 'regex:/^[A-Za-z][A-Za-z0-9_]*$/']];
 	protected $table = 'object_field';

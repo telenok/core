@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Model\Object;
 
-class Tab extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Tab extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	protected $ruleList = ['title' => ['required', 'min:1'], 'code' => ['required', 'unique:object_tab,code,:id:,id,tab_object_type,:tab_object_type:', 'regex:/^[A-Za-z][A-Za-z0-9_.-]*$/']];
 	protected $table = 'object_tab';
