@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Model\Security;
 
-class Permission extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Permission extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	protected $ruleList = ['title' => ['required', 'min:1'], 'code' => ['required', 'unique:permission,code,:id:,id', 'regex:/^[A-Za-z][A-Za-z0-9_.-]*$/']];
 	protected $table = 'permission';

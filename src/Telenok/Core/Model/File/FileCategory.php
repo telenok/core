@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Model\File;
 
-class FileCategory extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+class FileCategory extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	protected $table = 'file_category';
 	protected $ruleList = ['title' => ['required', 'min:1']];
