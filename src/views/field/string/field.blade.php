@@ -1,3 +1,6 @@
+
+@include('core::field.common-view.field-view')
+
 <div class="form-group">
     {!! Form::label("string_regex", $controller->LL("property.string_regex"), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
     <div class="col-sm-9">

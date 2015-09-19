@@ -1,4 +1,6 @@
 
+@include('core::field.common-view.field-view')
+
 <div class="form-group">
     {!! Form::label("integer_default", $controller->LL('property.default'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
     <div class="col-sm-9">

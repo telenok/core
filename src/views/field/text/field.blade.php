@@ -1,3 +1,6 @@
+
+@include('core::field.common-view.field-view')
+
 <div class="form-group">
     {!! Form::label('text_width', $controller->LL('property.width'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
     <div class="col-sm-9">

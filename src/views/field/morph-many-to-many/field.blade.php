@@ -1,4 +1,6 @@
 
+@include('core::field.common-view.field-view')
+
 <?php
     if (!$model->exists || $model->morph_many_to_many_has || !$model->morph_many_to_many_belong_to)
     {

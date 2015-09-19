@@ -1,4 +1,6 @@
 
+@include('core::field.common-view.field-view')
+
 <?php
     if (!$model->exists || $model->relation_one_to_one_has || !$model->relation_one_to_one_belong_to)
     {

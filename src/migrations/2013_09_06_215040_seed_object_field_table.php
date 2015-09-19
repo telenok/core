@@ -85,6 +85,7 @@ class SeedObjectFieldTable extends Migration {
                         'field_order' => 7,
                     ]
             );
+			
             DB::table('object_field')->insert(
                     [
                         'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),

@@ -78,7 +78,8 @@ return [
     'property.description' => 'Description',
     'property.bordercolor' => 'Border color',
     'property.bgcolor' => 'Background color',
-    
+    'property.field_view' => 'View of field',
+	
     'error.table.nonexists' => 'Table ":table" doesnt exist in database',
     'error.field.create' => 'Cant create field ":key" in table ":table"',
     'error.file.update' => 'Error update file :file',
