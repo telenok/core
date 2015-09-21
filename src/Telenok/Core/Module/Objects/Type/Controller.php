@@ -188,7 +188,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 						foreach ($param as $k => $v)
 						{
-							$stub = str_replace('{{' . $k . '}}', $v, $stub);
+							$stub = str_replace('{{' . $k . '}}', addcslashes($v, "'"), $stub);
 						}
 
 						\File::put($file, $stub);

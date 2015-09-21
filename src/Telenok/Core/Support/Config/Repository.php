@@ -36,7 +36,7 @@ class Repository {
 			}
 			else
 			{
-				throw new \RuntimeException('Failed to fire event "' . $event . '" with key "' . $key . '". Error: ' . $e->getMessage());
+				throw new \RuntimeException('Failed to fire event "' . $event . '" with key "' . $key . '". Error: Class "' . e($el) . '" not exists.');
 			}
 		}
 		else

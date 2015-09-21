@@ -6,10 +6,33 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $cssFilePath = [];
 	protected $cssCode = [];
 	protected $jsCode = [];
-	
+
+	public function hasAddedCssFile($filePath = '', $key = '')
+	{
+		foreach($this->cssFilePath as $k => $p)
+		{
+			if ($p['file'] == $filePath)
+			{
+				return true;
+			}
+			else if (!is_array($key) && strpos(".$k.", ".$key.") !== FALSE)
+			{
+				return true;
+			}
+		}
+	}
+
 	public function addCssFile($filePath, $key = '', $order = 1000000)
 	{
-		$this->cssFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
+		if (!$this->hasAddedCssFile($filePath, $key))
+		{
+			if (is_array($key))
+			{
+				$key = implode(".", $key);
+			}
+			
+			$this->cssFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
+		}
 
 		return $this;
 	}
@@ -21,9 +44,32 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
 	}
 
+	public function hasAddedJsFile($filePath = '', $key = '')
+	{
+		foreach($this->jsFilePath as $k => $p)
+		{
+			if ($p['file'] == $filePath)
+			{
+				return true;
+			}
+			else if (!is_array($key) && strpos(".$k.", ".$key.") !== FALSE)
+			{
+				return true;
+			}
+		}
+	}
+
 	public function addJsFile($filePath, $key = '', $order = 100000)
 	{
-		$this->jsFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
+		if (!$this->hasAddedJsFile($filePath, $key))
+		{
+			if (is_array($key))
+			{
+				$key = implode(".", $key);
+			}
+			
+			$this->jsFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
+		}
 
 		return $this;
 	}

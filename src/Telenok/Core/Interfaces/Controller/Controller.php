@@ -8,6 +8,8 @@ class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core
     protected $key = '';
     protected $request; 
 	
+	public function __construct() {}
+	
     public function getName()
     {
         return $this->LL('name');
