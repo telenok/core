@@ -731,6 +731,25 @@ class SeedLast extends Migration {
             ]
         );
 
+		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+			[
+				'title' => ['en' => 'Language', 'ru' => "Язык"],
+				'title_list' => ['en' => 'Language', 'ru' => "Язык"],
+				'key' => 'string',
+				'code' => 'language',
+				'active' => 1,
+				'field_object_type' => 'user',
+				'field_object_tab' => 'main',
+				'field_view' => 'core::special.field.user-language',
+				'show_in_form' => 1,
+				'show_in_list' => 0,
+				'allow_search' => 1,
+				'multilanguage' => 0,
+				'allow_create' => 1,
+				'allow_update' => 1, 
+				'field_order' => 6,
+			]
+		);
 
 		\App\Telenok\Core\Model\Object\Type::all()->each(function($item)
 		{

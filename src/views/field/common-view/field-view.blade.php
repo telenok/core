@@ -5,6 +5,11 @@
 	$viewsCollection = collect(app('telenok.config.repository')->getObjectFieldViewModel()->get($controller->getKey(), []));
 
 	$viewsCollection->push($controller->getViewModel());
+	
+	if ($model->field_view)
+	{
+		$viewsCollection->push($model->field_view);
+	}
 
 	$views = ['<option>' . $controller->LL('property.default'). '</option>'];
 
