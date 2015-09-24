@@ -11,61 +11,61 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
     public function getModelFillableField($model, $field)
     {
-		return [];
+        return [];
     } 
 
-	/**
-	 * Return Object Type linked to the field
-	 * 
-	 * @param \App\Telenok\Core\Model\Object\Field $field
-	 * @return \App\Telenok\Core\Model\Object\Type
-	 * 
-	 */
-	public function getLinkedModelType($field)
-	{
-		return \App\Telenok\Core\Model\Object\Type::whereIn('id', [$field->morph_many_to_many_has, $field->morph_many_to_many_belong_to])->first();
-	} 
+    /**
+     * Return Object Type linked to the field
+     * 
+     * @param \App\Telenok\Core\Model\Object\Field $field
+     * @return \App\Telenok\Core\Model\Object\Type
+     * 
+     */
+    public function getLinkedModelType($field)
+    {
+        return \App\Telenok\Core\Model\Object\Type::whereIn('id', [$field->morph_many_to_many_has, $field->morph_many_to_many_belong_to])->first();
+    } 
 
-	public function getLinkedField($field)
-	{
-		return $field->morph_many_to_many_has ? 'morph_many_to_many_has' : 'morph_many_to_many_belong_to';
-	}
+    public function getLinkedField($field)
+    {
+        return $field->morph_many_to_many_has ? 'morph_many_to_many_has' : 'morph_many_to_many_belong_to';
+    }
 
-	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
-	{
-		$linkedField = $this->getLinkedField($field);
-		
-		return
-		[
-			'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
-			'urlListTable' => route($this->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $uniqueId]),
-			'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $this->getChooseTypeId($field)]),
-			'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
-			'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
-		];
-	}
+    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    {
+        $linkedField = $this->getLinkedField($field);
+        
+        return
+        [
+            'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
+            'urlListTable' => route($this->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $uniqueId]),
+            'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $this->getChooseTypeId($field)]),
+            'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
+            'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
+        ];
+    }
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null)
     {
-		if (!empty($value))
-		{
-			$method = camel_case($field->code);
-			$relatedQuery = $model->$method();
+        if (!empty($value))
+        {
+            $method = camel_case($field->code);
+            $relatedQuery = $model->$method();
 
-			$relatedTable = $relatedQuery->getRelated()->getTable();
-			
-			$query->join($relatedQuery->getTable(), function($join) use ($model, $relatedQuery)
-			{
-				$join->on($relatedQuery->getForeignKey(), '=', $model->getTable() . '.id');
-			});
+            $relatedTable = $relatedQuery->getRelated()->getTable();
+            
+            $query->join($relatedQuery->getTable(), function($join) use ($model, $relatedQuery)
+            {
+                $join->on($relatedQuery->getForeignKey(), '=', $model->getTable() . '.id');
+            });
 
-			$query->join($relatedTable, function($join) use ($relatedTable, $relatedQuery)
-			{
-				$join->on($relatedQuery->getOtherKey(), '=', $relatedTable . '.id');
-			});
+            $query->join($relatedTable, function($join) use ($relatedTable, $relatedQuery)
+            {
+                $join->on($relatedQuery->getOtherKey(), '=', $relatedTable . '.id');
+            });
 
-			$query->whereIn($relatedTable . '.id', (array)$value);
-		}
+            $query->whereIn($relatedTable . '.id', (array)$value);
+        }
     }
 
     public function getFilterContent($field = null)
@@ -77,7 +77,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
         $class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
 
-		$model = app($class);
+        $model = app($class);
 
         $model::withPermission()->take(20)->groupBy($model->getTable() . '.id')->get()->each(function($item) use (&$option)
         {
@@ -116,84 +116,84 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                 });
             </script>';
     }
-	
+    
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
-    { 		
-		if ($field->morph_many_to_many_has || $field->morph_many_to_many_belong_to)
-		{
-			return parent::getFormModelContent($controller, $model, $field, $uniqueId);
-		}
-	} 
+    {         
+        if ($field->morph_many_to_many_has || $field->morph_many_to_many_belong_to)
+        {
+            return parent::getFormModelContent($controller, $model, $field, $uniqueId);
+        }
+    } 
 
     public function saveModelField($field, $model, $input)
     {
-		// if creating field
-		if ($model instanceof \Telenok\Core\Model\Object\Field && !$input->get('id'))
-		{
-			return $model;
-		}
+        // if creating field
+        if ($model instanceof \Telenok\Core\Model\Object\Field && !$input->get('id'))
+        {
+            return $model;
+        }
 
-		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
-		{
-			$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
-			$idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
+        if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
+        {
+            $idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
+            $idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
 
-			if ( (!empty($idsAdd) || !empty($idsDelete)))
-			{ 
-				$method = camel_case($field->code);
+            if ( (!empty($idsAdd) || !empty($idsDelete)))
+            { 
+                $method = camel_case($field->code);
 
-				if (in_array('*', $idsDelete, true))
-				{
-					$model->$method()->detach();
-				}
-				else if (!empty($idsDelete))
-				{
-					$model->$method()->detach($idsDelete);
-				}
+                if (in_array('*', $idsDelete, true))
+                {
+                    $model->$method()->detach();
+                }
+                else if (!empty($idsDelete))
+                {
+                    $model->$method()->detach($idsDelete);
+                }
 
-				foreach($idsAdd as $id)
-				{
-					try
-					{
-						$model->$method()->attach($id);
-					}
-					catch(\Exception $e) {}
-				}
-			}
-		}
+                foreach($idsAdd as $id)
+                {
+                    try
+                    {
+                        $model->$method()->attach($id);
+                    }
+                    catch(\Exception $e) {}
+                }
+            }
+        }
 
         return $model;
     }
 
     public function preProcess($model, $type, $input)
     {
-		if (!$input->get('morph_many_to_many_belong_to'))
-		{
-			$this->validateExistsInputField($input, ['field_has', 'morph_many_to_many_has']);
-		}
-		
-		if (!$input->get('morph_many_to_many_has') && $input->get('field_has'))
-		{
-			$input->put('morph_many_to_many_has', $input->get('field_has'));
-		}
+        if (!$input->get('morph_many_to_many_belong_to'))
+        {
+            $this->validateExistsInputField($input, ['field_has', 'morph_many_to_many_has']);
+        }
+        
+        if (!$input->get('morph_many_to_many_has') && $input->get('field_has'))
+        {
+            $input->put('morph_many_to_many_has', $input->get('field_has'));
+        }
 
-		$input->put('morph_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_many_to_many_has'))->orWhere('id', $input->get('morph_many_to_many_has'))->pluck('id')));
-		$input->put('multilanguage', 0);
-		$input->put('allow_sort', 0); 
+        $input->put('morph_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_many_to_many_has'))->orWhere('id', $input->get('morph_many_to_many_has'))->pluck('id')));
+        $input->put('multilanguage', 0);
+        $input->put('allow_sort', 0); 
 
         return parent::preProcess($model, $type, $input);
     } 
-	
+    
     public function postProcess($model, $type, $input)
     { 
         try
         {
-			$model->fill(['morph_many_to_many_has' => $input->get('morph_many_to_many_has')])->save();
-			
-			if (!$input->get('morph_many_to_many_has'))
-			{
-				return parent::postProcess($model, $type, $input);
-			} 
+            $model->fill(['morph_many_to_many_has' => $input->get('morph_many_to_many_has')])->save();
+            
+            if (!$input->get('morph_many_to_many_has'))
+            {
+                return parent::postProcess($model, $type, $input);
+            } 
 
             $typeMorphMany = $model->fieldObjectType()->first();
             $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_many_to_many_has')); 
@@ -229,7 +229,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             ];
 
             if (!\Schema::hasTable($pivotTable)) 
-			{
+            {
                 \Schema::create($pivotTable, function(Blueprint $table) use ($morphManyCode, $typeMorphMany, $typeBelongTo)
                 {
                     $table->increments('id');
@@ -244,58 +244,58 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
             if ($input->get('create_belong') !== false) 
             {
-				$title = $input->get('title_belong', []);
-				$title_list = $input->get('title_list_belong', []);
+                $title = $input->get('title_belong', []);
+                $title_list = $input->get('title_list_belong', []);
 
-				foreach($typeMorphMany->title->all() as $language => $val)
-				{
-					$title[$language] = array_get($title, $language, $model->translate('title', $language) . ' [morphMany]');
-				}
+                foreach($typeMorphMany->title->all() as $language => $val)
+                {
+                    $title[$language] = array_get($title, $language, $model->translate('title', $language) . ' [morphMany]');
+                }
 
-				foreach($typeMorphMany->title_list->all() as $language => $val)
-				{
-					$title_list[$language] = array_get($title_list, $language, $model->translate('title_list', $language) . ' [morphMany]');
-				}
+                foreach($typeMorphMany->title_list->all() as $language => $val)
+                {
+                    $title_list[$language] = array_get($title_list, $language, $model->translate('title_list', $language) . ' [morphMany]');
+                }
 
-				$tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
+                $tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
 
-				$toSave = [
-					'title' => $title,
-					'title_list' => $title_list,
-					'key' => $this->getKey(),
-					'code' => $morphToCode,
-					'field_object_type' => $typeBelongTo->getKey(),
-					'field_object_tab' => $tabTo->getKey(),
-					'morph_many_to_many_belong_to' => $typeMorphMany->getKey(),
-					'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
-					'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
-					'allow_search' => $input->get('allow_search_belong', $model->allow_search),
-					'multilanguage' => 0,
-					'active' => $input->get('active_belong', $model->active),
-					'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
-					'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
-					'allow_create' => $input->get('allow_create_belong', $model->allow_create),
-					'allow_update' => $input->get('allow_update_belong', $model->allow_update),
-					'field_order' => $input->get('field_order_belong', $model->field_order),
-				];
+                $toSave = [
+                    'title' => $title,
+                    'title_list' => $title_list,
+                    'key' => $this->getKey(),
+                    'code' => $morphToCode,
+                    'field_object_type' => $typeBelongTo->getKey(),
+                    'field_object_tab' => $tabTo->getKey(),
+                    'morph_many_to_many_belong_to' => $typeMorphMany->getKey(),
+                    'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
+                    'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
+                    'allow_search' => $input->get('allow_search_belong', $model->allow_search),
+                    'multilanguage' => 0,
+                    'active' => $input->get('active_belong', $model->active),
+                    'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
+                    'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
+                    'allow_create' => $input->get('allow_create_belong', $model->allow_create),
+                    'allow_update' => $input->get('allow_update_belong', $model->allow_update),
+                    'field_order' => $input->get('field_order_belong', $model->field_order),
+                ];
 
 
-				$validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
+                $validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
 
-				if ($validator->passes()) 
-				{
-					\App\Telenok\Core\Model\Object\Field::create($toSave);
-				}
+                if ($validator->passes()) 
+                {
+                    \App\Telenok\Core\Model\Object\Field::create($toSave);
+                }
 
-				if (!$this->validateMethodExists($morphToObject, $morphTo['method']))
-				{
-					$this->updateModelFile($morphToObject, $morphTo, 'morphTo', __DIR__);
-				} 
-				else
-				{
-					\Session::flash('warning.morphManyTo', $this->LL('error.method.defined', ['method' => $morphTo['method'], 'class' => $classModelMorphTo]));
-				} 
-			}
+                if (!$this->validateMethodExists($morphToObject, $morphTo['method']))
+                {
+                    $this->updateModelFile($morphToObject, $morphTo, 'morphTo', __DIR__);
+                } 
+                else
+                {
+                    \Session::flash('warning.morphManyTo', $this->LL('error.method.defined', ['method' => $morphTo['method'], 'class' => $classModelMorphTo]));
+                } 
+            }
 
             if (!$this->validateMethodExists($morphManyObject, $morphMany['method']))
             {

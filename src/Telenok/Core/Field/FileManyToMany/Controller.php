@@ -10,71 +10,71 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     protected $viewModel = "core::field.file-many-to-many.model";
     protected $viewField = "core::field.file-many-to-many.field";
-	
+    
     protected $routeListTable = "cmf.field.relation-many-to-many.list.table";
     protected $routeListTitle = "cmf.field.relation-many-to-many.list.title";
-	protected $routeUpload = 'cmf.field.file-many-to-many.upload';
+    protected $routeUpload = 'cmf.field.file-many-to-many.upload';
 
-	public function getRouteUpload()
-	{
-		return $this->routeUpload;
-	}
-	
-	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
-	{
-		$linkedField = $this->getLinkedField($field);
-		
-		return
-		[
-			'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
-			'urlListTable' => route($this->getRouteListTable(), ['id' => (int)$model->getKey(), 'fieldId' => $field->getKey(), 'uniqueId' => $uniqueId]),
-			'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $field->{$linkedField}]),
-			'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
-			'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
-		];
-	}
-	
+    public function getRouteUpload()
+    {
+        return $this->routeUpload;
+    }
+    
+    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    {
+        $linkedField = $this->getLinkedField($field);
+        
+        return
+        [
+            'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
+            'urlListTable' => route($this->getRouteListTable(), ['id' => (int)$model->getKey(), 'fieldId' => $field->getKey(), 'uniqueId' => $uniqueId]),
+            'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $field->{$linkedField}]),
+            'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
+            'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
+        ];
+    }
+    
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
-    { 		
-		if ($field->relation_many_to_many_has)
-		{
-			return parent::getFormModelContent($controller, $model, $field, $uniqueId);
-		}
-	} 
+    {         
+        if ($field->relation_many_to_many_has)
+        {
+            return parent::getFormModelContent($controller, $model, $field, $uniqueId);
+        }
+    } 
 
     public function getListFieldContent($field, $item, $type = null)
     {
-		$file = $item->{camel_case($field->code)}()->first();
-		
-		if ($file)
-		{
-			return $file->isImage() ? "<img src='" . \URL::asset($file->path) . "' alt='' width='140' />" : "<a href='" . \URL::asset($file->path) . "' target='_blank'>" . e($file->translate('title')) . '</a>';
-		}
+        $file = $item->{camel_case($field->code)}()->first();
+        
+        if ($file)
+        {
+            return $file->isImage() ? "<img src='" . \URL::asset($file->path) . "' alt='' width='140' />" : "<a href='" . \URL::asset($file->path) . "' target='_blank'>" . e($file->translate('title')) . '</a>';
+        }
     }
 
     public function getModelSpecialAttribute($model, $key, $value)
     {
         try
         {
-			if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
-			{
-				$value = $value ? : '[]';
+            if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
+            {
+                $value = $value ? : '[]';
 
-				$v = json_decode($value, true);
+                $v = json_decode($value, true);
 
-				if (is_array($v))
-				{
-					return \Illuminate\Support\Collection::make($v);
-				}
-				else
-				{
-					return $v;
-				}
-			}
-			else
-			{
-				return parent::getModelSpecialAttribute($model, $key, $value);
-			}
+                if (is_array($v))
+                {
+                    return \Illuminate\Support\Collection::make($v);
+                }
+                else
+                {
+                    return $v;
+                }
+            }
+            else
+            {
+                return parent::getModelSpecialAttribute($model, $key, $value);
+            }
         }
         catch (\Exception $e)
         {
@@ -84,61 +84,61 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     public function setModelSpecialAttribute($model, $key, $value)
     {
-		if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
-		{
-			$default = [];
+        if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
+        {
+            $default = [];
 
-			if ($value instanceof \Illuminate\Support\Collection) 
-			{
-				if ($value->count())
-				{
-					$value = $value->toArray();
-				}
-				else
-				{
-					$value = $default;
-				}
-			}
-			else
-			{
-				$value = $value ? : $default;
-			} 
+            if ($value instanceof \Illuminate\Support\Collection) 
+            {
+                if ($value->count())
+                {
+                    $value = $value->toArray();
+                }
+                else
+                {
+                    $value = $default;
+                }
+            }
+            else
+            {
+                $value = $value ? : $default;
+            } 
 
-			$model->setAttribute($key, json_encode($value, JSON_UNESCAPED_UNICODE));
-		}
-		else
-		{
-			parent::setModelSpecialAttribute($model, $key, $value);
-		}
+            $model->setAttribute($key, json_encode($value, JSON_UNESCAPED_UNICODE));
+        }
+        else
+        {
+            parent::setModelSpecialAttribute($model, $key, $value);
+        }
         
         return $this;
     }
 
     public function preProcess($model, $type, $input)
     {
-		$input->put('relation_many_to_many_has', \App\Telenok\Core\Model\Object\Type::whereCode('file')->pluck('id'));
+        $input->put('relation_many_to_many_has', \App\Telenok\Core\Model\Object\Type::whereCode('file')->pluck('id'));
 
-		if (!$input->get('show_in_form_belong'))
-		{
-			$input->put('show_in_form_belong', 0);
-		} 
+        if (!$input->get('show_in_form_belong'))
+        {
+            $input->put('show_in_form_belong', 0);
+        } 
 
         return parent::preProcess($model, $type, $input);
     } 
-	
-	public function upload()
-	{ 
-		if (!$this->getRequest()->has('title'))
-		{
-			$this->getRequest()->merge(['title' => ['en' => 'Some file']]);
-		}
+    
+    public function upload()
+    { 
+        if (!$this->getRequest()->has('title'))
+        {
+            $this->getRequest()->merge(['title' => ['en' => 'Some file']]);
+        }
 
-		$this->getRequest()->merge(['active' => 1]);
+        $this->getRequest()->merge(['active' => 1]);
 
-		$file = app('\App\Telenok\Core\Module\Objects\Lists\Controller');
+        $file = app('\App\Telenok\Core\Module\Objects\Lists\Controller');
 
-		$model = $file->save(null, 'file'); 
-		
-		return $model->id;
-	}	
+        $model = $file->save(null, 'file'); 
+        
+        return $model->id;
+    }    
 }

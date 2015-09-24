@@ -7,16 +7,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     protected $key = 'datetime-range'; 
     protected $allowMultilanguage = false;
-	protected $specialDateField = ['datetime_range_default_start', 'datetime_range_default_end'];
+    protected $specialDateField = ['datetime_range_default_start', 'datetime_range_default_end'];
 
     public function getDateField($model, $field)
     { 
-		return [$field->code . '_start', $field->code . '_end'];
+        return [$field->code . '_start', $field->code . '_end'];
     } 
 
     public function getModelFillableField($model, $field)
     {
-		return $this->getDateField($model, $field);
+        return $this->getDateField($model, $field);
     } 
 
     public function getListFieldContent($field, $item, $type = null)
@@ -56,14 +56,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
         try
         {
-			if (in_array($key, ['datetime_range_default_start', 'datetime_range_default_end'], true) && $value === null)
-			{ 
+            if (in_array($key, ['datetime_range_default_start', 'datetime_range_default_end'], true) && $value === null)
+            { 
                 return \Carbon\Carbon::now();
             }
-			else
-			{
-				return parent::getModelSpecialAttribute($model, $key, $value);
-			}
+            else
+            {
+                return parent::getModelSpecialAttribute($model, $key, $value);
+            }
         }
         catch (\Exception $e)
         {
@@ -74,7 +74,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     public function setModelSpecialAttribute($model, $key, $value)
     {
         if (in_array($key, ['datetime_range_default_start', 'datetime_range_default_end'], true))
-		{
+        {
             if ($value === null)
             {
                 $value = \Carbon\Carbon::now();
@@ -83,7 +83,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             {
                 $value = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value);
             }
-		}
+        }
 
         return parent::setModelSpecialAttribute($model, $key, $value);
     }
@@ -98,10 +98,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
     {
-		if ($value !== null)
-		{
-			$query->where(function($query) use ($value, $name, $model)
-			{
+        if ($value !== null)
+        {
+            $query->where(function($query) use ($value, $name, $model)
+            {
                 if ($v = trim(array_get($value, 'start')))
                 {
                     $query->where($model->getTable() . '.' . $name . '_end', '>=', $v);
@@ -111,41 +111,41 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 {
                     $query->where($model->getTable() . '.' . $name . '_start', '<=', $v);
                 }
-			});
-		}
+            });
+        }
     }
 
-	public function processFieldDelete($model, $type)
-	{
-		\Schema::table($type->code, function($table) use ($model)
-		{
-			$table->dropColumn($model->code . '_start');
-			$table->dropColumn($model->code . '_end');
-		});
-
-		return true;
-	}
-
-	public function postProcess($model, $type, $input)
+    public function processFieldDelete($model, $type)
     {
-		$table = $model->fieldObjectType()->first()->code;
+        \Schema::table($type->code, function($table) use ($model)
+        {
+            $table->dropColumn($model->code . '_start');
+            $table->dropColumn($model->code . '_end');
+        });
+
+        return true;
+    }
+
+    public function postProcess($model, $type, $input)
+    {
+        $table = $model->fieldObjectType()->first()->code;
         $fieldName = $model->code;
 
-		if (!\Schema::hasColumn($table, $fieldName . '_start'))
-		{
-			\Schema::table($table, function(Blueprint $table) use ($fieldName)
-			{
-				$table->timestamp($fieldName . '_start')->nullable();
-			});
-		}
+        if (!\Schema::hasColumn($table, $fieldName . '_start'))
+        {
+            \Schema::table($table, function(Blueprint $table) use ($fieldName)
+            {
+                $table->timestamp($fieldName . '_start')->nullable();
+            });
+        }
 
-		if (!\Schema::hasColumn($table, $fieldName . '_end'))
-		{
-			\Schema::table($table, function(Blueprint $table) use ($fieldName)
-			{
-				$table->timestamp($fieldName . '_end')->nullable();
-			});
-		}
+        if (!\Schema::hasColumn($table, $fieldName . '_end'))
+        {
+            \Schema::table($table, function(Blueprint $table) use ($fieldName)
+            {
+                $table->timestamp($fieldName . '_end')->nullable();
+            });
+        }
 
         $fields = []; 
         

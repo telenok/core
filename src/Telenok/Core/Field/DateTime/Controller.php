@@ -7,11 +7,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     protected $key = 'datetime'; 
     protected $allowMultilanguage = false;
-	protected $specialDateField = ['datetime_default'];
+    protected $specialDateField = ['datetime_default'];
 
     public function getDateField($model, $field)
     { 
-		return [$field->code];
+        return [$field->code];
     }
 
     public function getListFieldContent($field, $item, $type = null)
@@ -33,14 +33,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
         try
         {
-			if ($key == 'datetime_default' && $value === null)
-			{ 
+            if ($key == 'datetime_default' && $value === null)
+            { 
                 return \Carbon\Carbon::now();
             }
-			else
-			{
-				return parent::getModelSpecialAttribute($model, $key, $value);
-			}
+            else
+            {
+                return parent::getModelSpecialAttribute($model, $key, $value);
+            }
         }
         catch (\Exception $e)
         {
@@ -58,10 +58,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
     {
-		if ($value !== null)
-		{
-			$query->where(function($query) use ($value, $name, $model)
-			{
+        if ($value !== null)
+        {
+            $query->where(function($query) use ($value, $name, $model)
+            {
                 if ($v = trim(array_get($value, 'start')))
                 {
                     $query->where($model->getTable() . '.' . $name, '>=', $v);
@@ -71,35 +71,35 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 {
                     $query->where($model->getTable() . '.' . $name, '<=', $v);
                 }
-			});
-		}
+            });
+        }
     }
 
     public function setModelSpecialAttribute($model, $key, $value)
     {  
         if ($key == 'datetime_default')
-		{
+        {
             if ($value === null)
             {
                 $value = \Carbon\Carbon::now();
             }
-		}
+        }
 
         return parent::setModelSpecialAttribute($model, $key, $value);
     }
     
     public function postProcess($model, $type, $input)
     {
-		$table = $model->fieldObjectType()->first()->code;
+        $table = $model->fieldObjectType()->first()->code;
         $fieldName = $model->code;
 
-		if (!\Schema::hasColumn($table, $fieldName))
-		{
-			\Schema::table($table, function(Blueprint $table) use ($fieldName)
-			{
-				$table->timestamp($fieldName)->nullable();
-			});
-		}
+        if (!\Schema::hasColumn($table, $fieldName))
+        {
+            \Schema::table($table, function(Blueprint $table) use ($fieldName)
+            {
+                $table->timestamp($fieldName)->nullable();
+            });
+        }
         
         $fields = []; 
         
@@ -109,7 +109,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
             $fields['rule'][] = 'required';
         }
-		
+        
         $model->fill($fields)->save();
         
         return parent::postProcess($model, $type, $input);
