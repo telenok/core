@@ -871,6 +871,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
         }
         catch (\Exception $e)
         {
+            
+            throw $e;
             return ['exception' => 1];
         }
     }

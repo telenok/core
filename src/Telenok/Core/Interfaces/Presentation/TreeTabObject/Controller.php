@@ -381,7 +381,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'type' => $eventResource->get('type'), 
                     'fields' => $eventResource->get('fields'), 
                     'uniqueId' => str_random(), 
-                    'success' => TRUE,
+                    'success' => true,
                     'warning' => \Session::get('warning'),
 					'routerParam' => $this->getRouterParam('update', $eventResource->get('type'), $eventResource->get('model')),
 					'canUpdate' => app('auth')->can('update', $eventResource->get('model')),

@@ -87,7 +87,7 @@ return [
 	'error.tab.field.key' => 'Please, choose tab. Set "Id" or "Code" for tab of field in "field_object_tab" key',
 	'error.file.upload.require' => 'Please, upload required file in field ":attribute"',
 	'error.access' => 'Sorry, access denied',
-	
+    
     'title.view' => 'View',
     'title.field.filter' => 'Filtering fields',
     'title.tree' => 'Tree',

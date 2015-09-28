@@ -458,10 +458,16 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 	public function processFieldDelete($model, $type)
 	{
-		\Schema::table($type->code, function($table) use ($model)
-		{
-			$table->dropColumn($model->code);
-		});
+        try
+        {
+            \Schema::table($type->code, function($table) use ($model)
+            {
+                $table->dropColumn($model->code);
+            });
+        }
+        catch (\Exception $e)
+        {
+        }
 
 		return true;
 	}
