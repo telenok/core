@@ -61,19 +61,6 @@ class Field extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 		
         $resource->forceDelete();
 	}
-
-	public function delete()
-	{
-		\DB::transaction(function()
-		{
-			if ($this->forceDeleting == FALSE)
-			{
-				throw new \LogicException('Sorry, Object Field can be only FORCE DELETED with all linked data');
-			}
-
-			parent::delete();
-		});
-	}
 	
 	public function getFillable()
 	{ 

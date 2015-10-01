@@ -45,7 +45,7 @@
 		{
 			jQuery.ajax({
 					type: "get",
-					url: "{!! route('cmf.module.installer-manager.install-package.status', ['packageId' => array_get($packageInfo, 'key'), 'versionId' => 'latest']) !!}",
+					url: "{!! route('telenok.module.installer-manager.install-package.status', ['packageId' => array_get($packageInfo, 'key'), 'versionId' => 'latest']) !!}",
 					dataType: 'json'
 				})
 				.done(function(data)
@@ -83,7 +83,7 @@
 
 		jQuery.ajax({
 				type: "POST",
-				url: "{!! route('cmf.module.installer-manager.install-package', ['packageId' => array_get($packageInfo, 'key'), 'versionId' => 'latest']) !!}",
+				url: "{!! route('telenok.module.installer-manager.install-package', ['packageId' => array_get($packageInfo, 'key'), 'versionId' => 'latest']) !!}",
 				dataType: 'json'
 			})
 			.always(function()

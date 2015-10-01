@@ -66,7 +66,7 @@
 						type: "GET",
 						url: "{!! 
 							route(
-									'cmf.module.objects-field.field.form', 
+									'telenok.module.objects-field.field.form', 
 									[
 										'fieldKey' => '--fieldKey--', 
 										'modelId' => '--modelId--',

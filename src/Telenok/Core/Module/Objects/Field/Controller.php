@@ -34,11 +34,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
         return $types;
     }
 
-    public function delete($id = null, $force = false)
-	{
-		return parent::delete($id, true);
-	}
-
     public function validate($model = null, $input = [], $message = [])
     {
         $key = $model->exists && $model->key ? $model->key : $input->get('key');

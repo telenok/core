@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 
 	protected $key = 'created-by';
-    protected $routeListTitle = "cmf.field.relation-one-to-many.list.title";
+    protected $routeListTitle = "telenok.field.relation-one-to-many.list.title";
 
 	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
@@ -57,8 +57,10 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 		$input->put('allow_create', 0);
 		$input->put('allow_update', 0); 
 		$input->put('relation_one_to_many_belong_to', \DB::table('object_type')->where('code', 'user')->pluck('id'));
+		$input->put('multilanguage', 0);
+		$input->put('allow_sort', 0);
 
-		if (!$input->get('field_object_tab'))
+        if (!$input->get('field_object_tab'))
 		{
 			$input->put('field_object_tab', 'additionally');
 		}
@@ -78,9 +80,6 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 				$table->integer($fieldName)->unsigned()->nullable();
 			});
 		}
-		
-		$input->put('multilanguage', 0);
-		$input->put('allow_sort', 0);
 		
 		return $this;
 	}

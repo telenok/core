@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 
 	protected $key = 'deleted-by';
-    protected $routeListTitle = "cmf.field.relation-one-to-many.list.title";
+    protected $routeListTitle = "telenok.field.relation-one-to-many.list.title";
 
 	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
@@ -22,28 +22,48 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 		return $field->relation_one_to_many_belong_to ? [$field->code, 'deleted_at'] : [];
     } 
 
-	public function getModelAttribute($model, $key, $value, $field)
-	{ 
-		if ($key == 'deleted_at' && $value === null)
-		{
-			$value = \Carbon\Carbon::now();
-		}
-		
-		return $value;
-	}
-
     public function setModelAttribute($model, $key, $value, $field)
     { 
-		if ($key == 'deleted_by_user' && $value === null)
+		if ($key == 'deleted_by_user' && $value === null && $model->deleted_at !== null)
 		{
 			$value = app('auth')->check() ? app('auth')->user()->id : 0; 
 		} 
-		else if ($key == 'deleted_at' && $value === null)
-		{
-			$value = \Carbon\Carbon::now();
-		}
 
 		$model->setAttribute($key, $value);
+    }
+
+    public function getFilterContentOption($field = null)
+    {
+        return ["<option value='*'>" . $this->LL('title.value.any') . "</option>"];
+    }
+    
+	public function getTitleList($id = null, $closure = null)
+    {
+        $list = ['value' => "*", 'text' => $this->LL('title.value.any')];
+     
+        if ($list_ = parent::getTitleList($id, $closure))
+        {
+            $list = $list + $list_;
+        }
+
+        return $list;
+    }
+
+    public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
+    {
+		if (empty($value))
+        {
+            $query->whereNull($model->getTable() . '.deleted_at');
+        }
+        else
+        {
+            $query->whereNotNull($model->getTable() . '.deleted_at');
+
+            if (!in_array("*", $value))
+            {
+                parent::getFilterQuery($field, $model, $query, $name, $value);
+            }
+        }
     }
 
 	public function preProcess($model, $type, $input)
@@ -58,7 +78,9 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 		$input->put('allow_create', 0);
 		$input->put('allow_update', 0); 
 		$input->put('relation_one_to_many_belong_to', \DB::table('object_type')->where('code', 'user')->pluck('id'));
-
+		$input->put('multilanguage', 0);
+		$input->put('allow_sort', 0);
+        
 		if (!$input->get('field_object_tab'))
 		{
 			$input->put('field_object_tab', 'additionally');
@@ -80,9 +102,6 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 			});
 		}
 		
-		$input->put('multilanguage', 0);
-		$input->put('allow_sort', 0);
-		
 		return $this;
 	}
 
@@ -95,7 +114,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 	{
 		return [
 			'model' => [
-				'deleted_by' => ['en' => 'Deleted by', 'ru' => 'Удалено'],
+				'deleted_by' => ['en' => 'Deleted by', 'ru' => 'Создано'],
 			],
 		];
 	}

@@ -39,7 +39,7 @@
 
                                                 <div class="space-6"></div>
 
-                                                {!! Form::open(['route' => 'cmf.login.process', 'method' => 'post', 'id' => 'login']) !!}
+                                                {!! Form::open(['route' => 'telenok.login.process', 'method' => 'post', 'id' => 'login']) !!}
 												
 													<div class="login-notice alert alert-danger display-none" id='login-error'>
 														{!! $controller->LL('error.login.title') !!}<br><br>
@@ -107,7 +107,7 @@
                                                     {{ $controller->LL('title-email-password') }}
                                                 </p>
 
-                                                {!! Form::open(['route' => 'cmf.password.reset.email.process', 'method' => 'post', 'id' => 'password-reset']) !!}
+                                                {!! Form::open(['route' => 'telenok.password.reset.email.process', 'method' => 'post', 'id' => 'password-reset']) !!}
 
 													<div class="password-reset-notice alert alert-danger display-none" id='password-reset-error'>
 														{!! $controller->LL('error.password.reset.title') !!}<br><br>
@@ -175,7 +175,7 @@
 			{
 				jQuery.ajax({
 						type: "POST",
-						url: "{!! route('cmf.password.reset.email.process') !!}",
+						url: "{!! route('telenok.password.reset.email.process') !!}",
 						data: jQuery(this).serialize(),
 						dataType: 'json',
 						success: function(data)
@@ -200,7 +200,7 @@
 			{
 				jQuery.ajax({
 						type: "POST",
-						url: "{!! route('cmf.login.process') !!}",
+						url: "{!! route('telenok.login.process') !!}",
 						data: jQuery(this).serialize(),
 						dataType: 'json',
 						success: function(data)

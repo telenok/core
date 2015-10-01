@@ -18,7 +18,7 @@
                 { 
                     jQuery('#modal-{{$jsPresentationUnique}}').append('body').modal('show').data('model-data', function(id)
                     {
-                        var url = "{!! route("cmf.module.objects-lists.action.param", ['typeId' => '__typeId__']) !!}".replace("__typeId__", id);
+                        var url = "{!! route("telenok.module.objects-lists.action.param", ['typeId' => '__typeId__']) !!}".replace("__typeId__", id);
 
                         jQuery.ajax({
                                 method: 'get',
@@ -41,7 +41,7 @@
                                     
                                     telenok.processModuleContent(data.key);
 
-                                    var url = "{!! route("cmf.module.objects-lists.create", ['id' => '__id__']) !!}".replace("__id__", id);
+                                    var url = "{!! route("telenok.module.objects-lists.create", ['id' => '__id__']) !!}".replace("__id__", id);
 
                                     this_.addTabByURL({url : url});
 

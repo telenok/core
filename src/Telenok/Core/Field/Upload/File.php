@@ -18,12 +18,12 @@ class File {
 
 	public function downloadStreamLink()
 	{
-		return route('cmf.download.stream.file', ['modelId' => $this->model->id, 'fieldId' => $this->field->id]);
+		return route('telenok.download.stream.file', ['modelId' => $this->model->id, 'fieldId' => $this->field->id]);
 	}
 
 	public function downloadImageLink($width = 0, $height = 0, $toDo = File::TODO_RESIZE)
 	{
-		return route('cmf.download.image.file', [
+		return route('telenok.download.image.file', [
 					'modelId' => $this->model->id, 
 					'fieldId' => $this->field->id, 
 					'toDo' => $toDo, 

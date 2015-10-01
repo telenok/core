@@ -4,12 +4,12 @@
 <?php
 
     $user = $model->deletedByUser()->first();
-
+    
 ?>
 
 <div class="form-group" data-field-key='{{ $field->code }}'>
-	{!! Form::label(str_random(), $controller->LL('title'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
-	<div class="col-xs-8">
+	{!! Form::label(str_random(), $controller->LL('title'), array('class'=>'col-xs-2 control-label text-right')) !!}
+	<div class="col-xs-10">
 		<div class="input-group">
 			<span class="input-group-addon">
 				<i class="fa fa-calendar bigger-110"></i>

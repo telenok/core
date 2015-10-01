@@ -179,7 +179,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterActionParam($param = [])
     {
-		return route($this->routerActionParam ?: "cmf.module.{$this->getKey()}.action.param", $param);
+		return route($this->routerActionParam ?: "telenok.module.{$this->getKey()}.action.param", $param);
     } 
 	
     public function setRouterList($param)
@@ -191,7 +191,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterList($param = [])
     {
-        return route($this->routerList ?: "cmf.module.{$this->getKey()}.list", $param);
+        return route($this->routerList ?: "telenok.module.{$this->getKey()}.list", $param);
     }	
 	
     public function setRouterContent($param)
@@ -203,7 +203,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 	
     public function getRouterContent($param = [])
     {
-        return route($this->routerContent ?: "cmf.module.{$this->getKey()}", $param);
+        return route($this->routerContent ?: "telenok.module.{$this->getKey()}", $param);
     }
 	
     public function setRouterCreate($param)
@@ -215,7 +215,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     
     public function getRouterCreate($param = [])
     {
-        return route($this->routerCreate ?: "cmf.module.{$this->getKey()}.create", $param);
+        return route($this->routerCreate ?: "telenok.module.{$this->getKey()}.create", $param);
     }
 	
     public function setRouterEdit($param)
@@ -227,7 +227,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterEdit($param = [])
     {
-        return route($this->routerEdit ?: "cmf.module.{$this->getKey()}.edit", $param);
+        return route($this->routerEdit ?: "telenok.module.{$this->getKey()}.edit", $param);
     }
 	
     public function setRouterDelete($param)
@@ -239,7 +239,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterDelete($param = [])
     {
-        return route($this->routerDelete ?: "cmf.module.{$this->getKey()}.delete", $param);
+        return route($this->routerDelete ?: "telenok.module.{$this->getKey()}.delete", $param);
     }
 	
     public function setRouterStore($param)
@@ -251,7 +251,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterStore($param = [])
     {
-        return route($this->routerStore ?: "cmf.module.{$this->getKey()}.store", $param);
+        return route($this->routerStore ?: "telenok.module.{$this->getKey()}.store", $param);
     }
 	
     public function setRouterUpdate($param)
@@ -263,7 +263,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterUpdate($param = [])
     {
-        return route($this->routerUpdate ?: "cmf.module.{$this->getKey()}.update", $param);
+        return route($this->routerUpdate ?: "telenok.module.{$this->getKey()}.update", $param);
     }
 	
     public function setRouterListEdit($param)
@@ -275,7 +275,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterListEdit($param = [])
     {
-		return route($this->routerListEdit ?: "cmf.module.{$this->getKey()}.list.edit", $param);
+		return route($this->routerListEdit ?: "telenok.module.{$this->getKey()}.list.edit", $param);
     }
 	
     public function setRouterListDelete($param)
@@ -287,7 +287,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterListDelete($param = [])
     {
-		return route($this->routerListDelete ?: "cmf.module.{$this->getKey()}.list.delete", $param);
+		return route($this->routerListDelete ?: "telenok.module.{$this->getKey()}.list.delete", $param);
     }
 	
     public function setRouterListLock($param)
@@ -299,12 +299,12 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterLock($param = [])
     {
-		return route($this->routerLock ?: "cmf.module.{$this->getKey()}.lock", $param);
+		return route($this->routerLock ?: "telenok.module.{$this->getKey()}.lock", $param);
     }
 
     public function getRouterListLock($param = [])
     {
-		return route($this->routerListLock ?: "cmf.module.{$this->getKey()}.list.lock", $param);
+		return route($this->routerListLock ?: "telenok.module.{$this->getKey()}.list.lock", $param);
     }
 	
     public function setRouterListUnlock($param)
@@ -316,7 +316,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterListUnlock($param = [])
     {
-		return route($this->routerListUnlock ?: "cmf.module.{$this->getKey()}.list.unlock", $param);
+		return route($this->routerListUnlock ?: "telenok.module.{$this->getKey()}.list.unlock", $param);
     }
 	
     public function setRouterListTree($param)
@@ -328,7 +328,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterListTree($param = [])
     {
-		return route($this->routerListTree ?: "cmf.module.{$this->getKey()}.list.tree", $param);
+		return route($this->routerListTree ?: "telenok.module.{$this->getKey()}.list.tree", $param);
     }
 
     public function setModelListClass($param)
@@ -379,6 +379,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     {
         return \App\Telenok\Core\Model\Object\Sequence::getModel($id);
     }
+    
+    public function getModelTrashed($id)
+    {
+        return \App\Telenok\Core\Model\Object\Sequence::getModelTrashed($id);
+    }
  
     public function getType($id)
     {
@@ -387,7 +392,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getTypeByModelId($id)
     {
-        return \App\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType;
+        return \App\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType;
     }
     
     public function getModelByTypeId($id)
@@ -497,6 +502,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 		{
 			$this->getFilterSubQuery($input->get('filter', []), $model, $query);
 		}
+        else
+        {
+			$this->getFilterSubQuery(null, $model, $query);
+        }
         
         $orderByField = $input->get('mDataProp_' . $input->get('iSortCol_0'));
         
@@ -527,7 +536,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     {
         $id = $this->getRequest()->input('treeId', 0);
 
-        $query = $model->newQuery();
+        $query = $model->withTrashed();
 
         if ($model->treeForming())
         {
@@ -848,7 +857,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     { 
         try
         {
-	        $model = $this->getModelList()->findOrFail($id);
+	        $model = $this->getModelTrashed($id);
 		
 			if (!app('auth')->can('delete', $id))
 			{
@@ -857,7 +866,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 			
 			\DB::transaction(function() use ($model, $force)
 			{
-				if ($force)
+				if ($force || $model->trashed())
 				{
 					$model->forceDelete();
 				}

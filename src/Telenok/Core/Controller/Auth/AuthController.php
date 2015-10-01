@@ -1,9 +1,11 @@
-<?php namespace Telenok\Core\Controller\Auth;
+<?php
 
-class AuthController extends \Telenok\Core\Interfaces\Controller\Controller {
- 
+namespace Telenok\Core\Controller\Auth;
+
+class AuthController extends \Telenok\Core\Interfaces\Controller\Backend\Controller {
+
     use \Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-    
+
     protected $key = 'auth';
 
     /**
@@ -18,7 +20,7 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Controller {
         $this->auth = $auth;
         $this->registrar = $registrar;
         $this->languageDirectory = 'controller';
-        
+
         //$this->middleware('guest', ['except' => 'getLogout']);
     }
 
@@ -47,17 +49,32 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Controller {
         if ($v->fails())
         {
             return json_encode(['error' => 1]);
-        }
+        } 
         else
         {
             $credentials = $request->only('username', 'password');
 
             if ($this->auth->attempt($credentials, $request->has('remember')))
             {
-                return json_encode(['success' => 1, 'redirect' => route('cmf.content')]);
+                if (app('auth')->can('read', 'control_panel'))
+                {
+                    return json_encode(['success' => 1, 'redirect' => route('telenok.content')]);
+                } 
+                else
+                {
+                    return json_encode(['success' => 1, 'redirect' => route('error.access-denied')]);
+                }
             }
 
             return json_encode(['error' => 1]);
         }
     }
+
+    public function logout()
+    {
+        app('auth')->logout();
+
+        return ['success' => true];
+    }
+
 }

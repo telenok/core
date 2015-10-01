@@ -69,7 +69,7 @@
 		<div class="clearfix">
 			<select class="chosen" data-placeholder="{{$controller->LL('page.select')}}" id="module-web-page-widget-list-page-list" 
 					onchange="telenok.getPresentation('{{$presentationModuleKey}}').addTabByURL({
-									url:'{!! route("cmf.module.web-page-constructor.view.page.container", ['id' => '--id--', 'languageId' => ':languageId:']) !!}'
+									url:'{!! route("telenok.module.web-page-constructor.view.page.container", ['id' => '--id--', 'languageId' => ':languageId:']) !!}'
 											.replace(/--id--/gi, parseInt(this.value, 10))
 											.replace(/:languageId:/gi, parseInt(telenok_module_web_language_id, 10)),
 									after: function() { updateContainer(); }
@@ -249,7 +249,7 @@
 		function reloadWebPageContainer()
 		{
 			telenok.getPresentation('{{$presentationModuleKey}}').addTabByURL({
-					url:'{!! route("cmf.module.web-page-constructor.view.page.container", ['id' => '--id--', 'languageId' => ':languageId:']) !!}'
+					url:'{!! route("telenok.module.web-page-constructor.view.page.container", ['id' => '--id--', 'languageId' => ':languageId:']) !!}'
 							.replace(/--id--/gi, parseInt(telenok_module_web_page_pid, 10))
 							.replace(/:languageId:/gi, parseInt(telenok_module_web_language_id, 10)),
 					after: function() { updateContainer(); }
@@ -274,7 +274,7 @@
 					{
 						jQuery.ajax(
 							{
-								'url' : '{!! route("cmf.module.web-page-constructor.view.page.insert.widget", ['languageId' => ':languageId:', 'key' => ':key:', 'bufferId' => ':bufferId:', 'container' => ':container:', 'id' => '--id--', 'pageId' => ':pageId:', 'order' => ':order:']) !!}'
+								'url' : '{!! route("telenok.module.web-page-constructor.view.page.insert.widget", ['languageId' => ':languageId:', 'key' => ':key:', 'bufferId' => ':bufferId:', 'container' => ':container:', 'id' => '--id--', 'pageId' => ':pageId:', 'order' => ':order:']) !!}'
 									.replace(/:container:/gi, jQuery(ui.item).closest(".frontend-container").data('container-id'))
 									.replace(/:key:/gi, jQuery(ui.item).data('widget-key'))
 									.replace(/:languageId:/gi, parseInt(telenok_module_web_language_id, 10))
@@ -346,7 +346,7 @@
 					var this_ = this;
 
 					jQuery.ajax({
-						url: '{!! route("cmf.module.web-page-constructor.view.page.remove.widget", ['id' => '--id--']) !!}'
+						url: '{!! route("telenok.module.web-page-constructor.view.page.remove.widget", ['id' => '--id--']) !!}'
 							.replace(/--id--/gi, jQuery(this).closest(".telenok-widget-box").data('widget-id')),
 						context: document.body
 					})
@@ -378,7 +378,7 @@
 				.click(function(event)
 				{	
 					jQuery.ajax({
-						url: '{!! route("cmf.module.objects-lists.wizard.edit", ['id' => '--id--', 'chooseBtn' => 0, 'saveBtn' => 1]) !!}'
+						url: '{!! route("telenok.module.objects-lists.wizard.edit", ['id' => '--id--', 'chooseBtn' => 0, 'saveBtn' => 1]) !!}'
 								.replace(/--id--/gi, jQuery(this).closest(".telenok-widget-box").data('widget-id')),					
 						method: 'get',
 						dataType: 'json'
@@ -422,7 +422,7 @@
 					var this_ = this;
 
 					jQuery.ajax({
-						url: '{!! route("cmf.module.web-page-constructor.view.buffer.add.widget", ['id' => '--id--', 'key' => ':key:']) !!}'
+						url: '{!! route("telenok.module.web-page-constructor.view.buffer.add.widget", ['id' => '--id--', 'key' => ':key:']) !!}'
 							.replace(/--id--/gi, jQuery(this).closest(".telenok-widget-box").data('widget-id'))
 							.replace(/:key:/gi, jQuery(this).data('action')),
 						context: document.body
@@ -483,7 +483,7 @@
 					this_ = this;
 
 					jQuery.ajax({
-						url: '{!! route("cmf.module.web-page-constructor.view.buffer.delete.widget", ['id' => '--id--']) !!}'
+						url: '{!! route("telenok.module.web-page-constructor.view.buffer.delete.widget", ['id' => '--id--']) !!}'
 							.replace(/--id--/gi, jQuery(this).closest("a").data('widget-buffer-id')),
 						context: document.body
 					})
@@ -513,7 +513,7 @@
 				keepTypingMsg: "{{$controller->LL('notice.typing')}}",
 				lookingForMsg: "{{$controller->LL('notice.looking-for')}}",
 				type: "GET",
-				url: "{!! route("cmf.module.web-page-constructor.list.page") !!}",
+				url: "{!! route("telenok.module.web-page-constructor.list.page") !!}",
 				dataType: "json",
 				minTermLength: 1,
 				afterTypeDelay: 1000

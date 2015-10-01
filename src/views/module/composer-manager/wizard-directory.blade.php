@@ -41,9 +41,9 @@
 						"ajax": {
 							"url" : function( node ){
 								if( node == -1 ){
-									return "{!! URL::route("cmf.module.file-browser.wizard.tree") !!}";
+									return "{!! URL::route("telenok.module.file-browser.wizard.tree") !!}";
 								} else {
-									return "{!! URL::route("cmf.module.file-browser.wizard.tree") !!}?id=" + encodeURIComponent(node.data( "path" ));
+									return "{!! URL::route("telenok.module.file-browser.wizard.tree") !!}?id=" + encodeURIComponent(node.data( "path" ));
 								}
 							},
 							"data": function(n) {
@@ -62,7 +62,7 @@
 					} 
 
 					jQuery.getJSON(
-						"{!! URL::route("cmf.module.file-browser.wizard.process") !!}?op=create&path=" + encodeURIComponent(data.rslt.parent.data( "path" )) + "&new=" + encodeURIComponent(data.rslt.name),
+						"{!! URL::route("telenok.module.file-browser.wizard.process") !!}?op=create&path=" + encodeURIComponent(data.rslt.parent.data( "path" )) + "&new=" + encodeURIComponent(data.rslt.name),
 						function(mes) {
 							data.rslt.obj.data( "path", mes.path).attr('id', mes.id)
 						});
@@ -76,7 +76,7 @@
 					} 
 
 					jQuery.getJSON(
-						"{!! URL::route("cmf.module.file-browser.wizard.process") !!}?op=rename&path=" + encodeURIComponent(data.rslt.obj.data( "path" )) + "&new=" + encodeURIComponent(data.rslt.new_name),
+						"{!! URL::route("telenok.module.file-browser.wizard.process") !!}?op=rename&path=" + encodeURIComponent(data.rslt.obj.data( "path" )) + "&new=" + encodeURIComponent(data.rslt.new_name),
 						function(data) {
 						});
 				});

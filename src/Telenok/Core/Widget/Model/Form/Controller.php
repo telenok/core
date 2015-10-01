@@ -228,7 +228,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     public function getRouterStore()
     {
-        return $this->routerStore ?: "cmf.widget.form.store";
+        return $this->routerStore ?: "telenok.widget.form.store";
     }
 
     public function getUrlStore($param = [])
@@ -252,7 +252,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     public function getRouterUpdate()
     {
-        return $this->routerUpdate ?: "cmf.widget.form.update";
+        return $this->routerUpdate ?: "telenok.widget.form.update";
     }
 
     public function getUrlUpdate($param = [])

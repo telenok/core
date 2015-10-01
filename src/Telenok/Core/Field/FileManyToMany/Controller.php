@@ -11,9 +11,9 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     protected $viewModel = "core::field.file-many-to-many.model";
     protected $viewField = "core::field.file-many-to-many.field";
     
-    protected $routeListTable = "cmf.field.relation-many-to-many.list.table";
-    protected $routeListTitle = "cmf.field.relation-many-to-many.list.title";
-    protected $routeUpload = 'cmf.field.file-many-to-many.upload';
+    protected $routeListTable = "telenok.field.relation-many-to-many.list.table";
+    protected $routeListTitle = "telenok.field.relation-many-to-many.list.title";
+    protected $routeUpload = 'telenok.field.file-many-to-many.upload';
 
     public function getRouteUpload()
     {

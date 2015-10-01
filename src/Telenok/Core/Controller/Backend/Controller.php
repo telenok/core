@@ -6,10 +6,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
     public function __construct()
     {
-        if (!app()->runningInConsole())
-        {
-            $this->beforeFilter('control-panel', ['except' => ['errorAccessDenied']]);
-        }
+        $this->middleware('auth.backend', ['except' => ['errorAccessDenied']]);
     }
 
     public function updateBackendUISetting($key = null, $value = null)
@@ -31,52 +28,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
         }
     }
 
-    public function login()
-    {
-        $username = trim($this->getRequest()->input('username'));
-        $password = trim($this->getRequest()->input('password'));
-        $remember = intval($this->getRequest()->input('remember'));
-
-        if ($username && $password && (app('auth')->attempt(['username' => $username, 'password' => $password], $remember) || app('auth')->attempt(['email' => $username, 'password' => $password], $remember)))
-        {
-            if (app('auth')->can('read', 'control_panel'))
-            {
-                return app('redirect')->route('cmf.content');
-            }
-            else
-            {
-                return app('redirect')->route('error.access-denied');
-            }
-        }
-
-        return view('core::controller.backend-login', ['controller' => $this])->render();
-    }
-
-    public function logout()
-    {
-        app('auth')->logout();
-
-        return ['success' => true];
-    }
-
     public function errorAccessDenied()
     {
         return view('core::controller.backend-denied', ['controller' => $this])->render();
     }
 
-    public function frontendAreaWidgetList()
+    public function validateSession()
     {
-        return view('core::controller.backend-frontend-iframe-widget-list', ['controller' => $this])->render();
-    }
-
-    public function frontendArea()
-    {
-        return view('core::controller.backend-frontend-iframe-content', ['controller' => $this])->render();
-    }
-
-    public function updateCsrf()
-    {
-        return ['csrf_token' => csrf_token()];
+        return ['logined' => (int)app('auth')->check()];
     }
 
     public function getContent()

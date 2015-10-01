@@ -206,17 +206,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 		$model->getFieldForm()->each(function($field) use ($input, $query, $controller, $model)
 		{
-			if ($field->allow_search)
+			if ($field->allow_search && $input->has($field->code))
 			{
-				if ($input->has($field->code))
-				{
-					$controller->get($field->key)->getFilterQuery($field, $model, $query, $field->code, $input->get($field->code));
-				}
-				else
-				{
-                    $controller->get($field->key)->getFilterQuery($field, $model, $query, $field->code, null);
-				}
+                $controller->get($field->key)->getFilterQuery($field, $model, $query, $field->code, $input->get($field->code));
 			}
+            else
+            {
+                $controller->get($field->key)->getFilterQuery($field, $model, $query, $field->code, null);
+            }
         });
     }
     
@@ -233,7 +230,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getListItem($model)
     {  
-        $query = $model::select($model->getTable() . '.*')->withPermission();
+        $query = $model::withTrashed()->select($model->getTable() . '.*')->withPermission();
 
         $this->getFilterQuery($model, $query); 
 
@@ -481,7 +478,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             throw new \LogicException($this->LL('error.access'));
         }
 
-        $model = $this->getModel($id);
+        $model = $this->getModelTrashed($id);
 		
         try
         {
@@ -489,7 +486,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			{
 				//\Event::fire('workflow.delete.before', (new \Telenok\Core\Workflow\Event())->setResourceCode("object_type.{$type->code}"));
 
-				if ($force)
+				if ($force || $model->trashed())
 				{
 					$model->forceDelete();
 				}

@@ -91,6 +91,7 @@ return [
     'title.view' => 'View',
     'title.field.filter' => 'Filtering fields',
     'title.tree' => 'Tree',
+    'title.value.any' => 'Any value',
     
     'error' => [
         'undefined' => 'Sorry, an error occurred',

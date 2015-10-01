@@ -99,7 +99,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	
     public function getRouterView($param = [])
     {
-        return route("cmf.module.{$this->getKey()}.view", $param);
+        return route("telenok.module.{$this->getKey()}.view", $param);
     }
 	
     private function getFolderContent($dir)
@@ -784,13 +784,13 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				<script>
 					telenok.addModule(
 						"' . $this->getKey() . '", 
-						"' . route('cmf.module.installer-manager.action.param') . '", 
+						"' . route('telenok.module.installer-manager.action.param') . '", 
 						function(moduleKey) 
 						{
 							telenok.processModuleContent(moduleKey);
 							
 							telenok.getPresentation("tree-tab-object-installer-manager").addTabByURL({
-								url : "' . route('cmf.module.installer-manager.view', ['id' => $package]) . '"
+								url : "' . route('telenok.module.installer-manager.view', ['id' => $package]) . '"
 							});
 						}
 					);

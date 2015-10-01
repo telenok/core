@@ -183,7 +183,7 @@
                             { 
                                 telenok.addModule(
                                     "object-sequence", 
-                                    "{!! route("cmf.module.objects-sequence.action.param", []) !!}", 
+                                    "{!! route("telenok.module.objects-sequence.action.param", []) !!}", 
                                     function(moduleKey) 
                                     {
                                         param = telenok.getModule(moduleKey);
@@ -211,21 +211,7 @@
         </div>
 
 
-        <div class="modal fade backend-notice">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header table-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4>{{$controller->LL("notice.title")}}</h4>
-					</div>
-					<div class="modal-body">
-					</div>
-					<div class="modal-footer">
-						<button class="btn" data-dismiss="modal">{{$controller->LL("btn.close")}}</button> 
-					</div>
-				</div>
-			</div>
-        </div>
+
         
 		<script type="text/javascript">
 
@@ -235,22 +221,10 @@
 				}
 			});
 
-			jQuery(function($)
-			{
-				setInterval(function()
-				{
-					jQuery.ajax({
-						url: "{!! route('cmf.update.csrf') !!}",
-						dataType: "json",
-						success: function(data)
-						{
-							jQuery('meta[name="csrf-token"]').attr('content', data.csrf_token);
-						}
-					});
-				}, 1000*600);
-			}); 
 		</script>
 		
+        @include('core::controller.backend-modal-login')
+        
 		@foreach($controller->getJsFile() as $file)
 
 		<script src="{!! $file['file'] !!}"></script>

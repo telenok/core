@@ -156,7 +156,7 @@
 									"fnClick": function(nButton, oConfig, oFlash) 
 									{ 
 										telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-											url: '{!! route("cmf.module.composer-manager.composer-json.edit") !!}'
+											url: '{!! route("telenok.module.composer-manager.composer-json.edit") !!}'
 										}); 
 									}
 								},

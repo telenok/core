@@ -40,7 +40,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
         $collection->put('order', 100000);
         $collection->put('devider_before', false);
         $collection->put('devider_after', false);
-        $collection->put('content', '<a href="#" onclick="jQuery.ajax(\'' . route('cmf.logout') . '\').done(function() { window.location = window.location; } ); return false;"><i class="fa fa-power-off"></i> ' . $this->LL('btn.logout') . '</a>');
+        $collection->put('content', '<a href="#" onclick="jQuery.ajax(\'' . route('telenok.logout') . '\').done(function() { window.location = window.location; } ); return false;"><i class="fa fa-power-off"></i> ' . $this->LL('btn.logout') . '</a>');
 
         return $collection;
     }

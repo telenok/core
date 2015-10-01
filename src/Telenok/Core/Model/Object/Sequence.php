@@ -12,6 +12,11 @@ class Sequence extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 		return $this->morphTo('model', 'class_model', 'id');
 	}
 
+	public static function getModelTrashed($id)
+	{
+		return app(\App\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType->class_model)->withTrashed()->findOrFail($id);
+	}
+
 	public static function getModel($id)
 	{
 		return app(\App\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType->class_model)->findOrFail($id);
@@ -28,10 +33,8 @@ class Sequence extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 					$this->model->forceDelete();
 				}
 			}
-			else
-			{
-				parent::delete();
-			}
+            
+            parent::delete();
 		});
     }
 

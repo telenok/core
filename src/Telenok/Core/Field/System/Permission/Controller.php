@@ -12,7 +12,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	{
 		return
 		[
-			'urlListTitle' => route("cmf.field.permission.list.title"),
+			'urlListTitle' => route("telenok.field.permission.list.title"),
 		];
 	}
 
@@ -198,5 +198,5 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 ->where('spr_filter_' . $permissionId . '.acl_permission_object_sequence', $permissionId);
             }
 		}
-    } 
+    }
 }

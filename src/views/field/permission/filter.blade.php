@@ -28,7 +28,7 @@
                 keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
                 lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
                 type: "GET",
-                url: "{!! URL::route("cmf.field.permission.list.title") !!}", 
+                url: "{!! URL::route("telenok.field.permission.list.title") !!}", 
                 dataType: "json",
                 minTermLength: 1
             }, 

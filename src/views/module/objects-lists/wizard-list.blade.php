@@ -27,7 +27,7 @@
 				"bAutoWidth": true,
 				"bProcessing": true,
 				"bServerSide": true,
-				"sAjaxSource" : '{!! URL::route("cmf.module.{$controller->getKey()}.wizard.list", ["id" => empty($typeList) ? $type->getKey() : $typeList]) !!}',
+				"sAjaxSource" : '{!! URL::route("telenok.module.{$controller->getKey()}.wizard.list", ["id" => empty($typeList) ? $type->getKey() : $typeList]) !!}',
 				"bDeferRender": '',
 				"bJQueryUI": false,
 				"sDom": "<'row'<'col-md-6'T><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",

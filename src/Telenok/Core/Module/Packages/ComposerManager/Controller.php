@@ -550,7 +550,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				break;
 
 			case 'composer-json-update':
-				return [ route("cmf.module.composer-manager.composer-json.update", ['id' => $filePath, 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey]) ];
+				return [ route("telenok.module.composer-manager.composer-json.update", ['id' => $filePath, 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey]) ];
 				break;
 
 			default:

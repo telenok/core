@@ -755,37 +755,40 @@ class SeedLast extends Migration {
 		{
 			if ($item->treeable && !$item->field()->where('code', 'tree_parent')->count())
 			{ 
-				$modelField = new \App\Telenok\Core\Model\Object\Field();
-				
-				$modelField->storeOrUpdate([
+				(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
 					'key' => 'tree',
 					'field_object_type' => $item->getKey(),
 					'field_object_tab' => 'main',
 					'field_order' => 20,
 				]);
-    
-                $modelField = null;
-			} 
-
-			$modelField = new \App\Telenok\Core\Model\Object\Field();
+			}
 
 			try
 			{
-				$modelField->storeOrUpdate([
+				(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
 					'key' => 'permission',
 					'field_object_type' => $item->getKey(),
-				]); 
-			} catch (\Exception $ex) {}
+				]);
+			} 
+            catch (\Exception $ex) {}
 
 			try
 			{
-				$modelField->storeOrUpdate([
+				(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
 					'key' => 'locked-by',
 					'field_object_type' => $item->getKey(),
 				]); 
-			} catch (\Exception $ex) {}
-
-			$modelField = null;
+			} 
+            catch (\Exception $ex) {}
+            
+			try
+			{
+				(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+					'key' => 'deleted-by',
+					'field_object_type' => $item->getKey(),
+				]); 
+			} 
+            catch (\Exception $ex) {}
 		});
 
 		\App\Telenok\Core\Model\Object\Sequence::where('treeable', 1)->get()->each(function($item)
@@ -1192,6 +1195,13 @@ class SeedLast extends Migration {
 			'value' => 'https://youtube.com/',
 			'code' => 'app.social.youtube.url',
 		]);
-
+        
+		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
+			'title' => ['en' => 'User autologout period', 'ru' => 'Время автоматического разлогинивания пользователя'],
+			'active' => 1,
+			'value' => 20,
+			'code' => 'auth.logout.period',
+            'description' => ['en' => 'Time in minuts of inactivity to automatic logout user', 'ru' => 'Время в минутах неактиности пользователя для автоматического разлогинивания'],
+		]);
 	}
 }

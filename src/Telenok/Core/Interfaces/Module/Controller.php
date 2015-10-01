@@ -11,16 +11,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
     public function __construct()
     {
-		if (!app()->runningInConsole())
-		{
-			$this->beforeFilter(function()
-			{
-				if (!app('auth')->can('read', $this->getPermissionKey()))
-				{
-					return app('redirect')->route('error.access-denied');
-				}
-			});
-		}
+        $this->middleware('auth.backend.module:' . $this->getPermissionKey()); 
 		
 		$this->languageDirectory = 'module';
     }
@@ -100,7 +91,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
     public function getRouterActionParam($param = [])
     {
-		return route("cmf.module.{$this->getKey()}.action.param", $param);
+		return route("telenok.module.{$this->getKey()}.action.param", $param);
     }  
 	
     public function getActionParam()
@@ -110,7 +101,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 			'presentationModuleKey' => $this->getPresentationModuleKey(),
             'presentationBlockContent' => $this->getPresentationContent(),
             'key' => $this->getKey(),
-            'url' => route("cmf.module.{$this->getKey()}"),
+            'url' => route("telenok.module.{$this->getKey()}"),
             'breadcrumbs' => $this->getBreadcrumbs(),
             'pageHeader' => $this->getPageHeader(), 
         ));

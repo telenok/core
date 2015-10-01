@@ -1,7 +1,6 @@
 <?php namespace Telenok\Core\Field\RelationOneToMany;
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
 class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
@@ -75,7 +74,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
 				$alias = $linkedTable . '_O2O_' . $field->code;
 				
-				$query->join($linkedTable . ' as ' . $alias, function($join) use ($linkedTable, $relatedQuery, $model, $alias)
+				$query->join($linkedTable . ' as ' . $alias, function($join) use ($relatedQuery, $model, $alias)
 				{
 					$join->on($model->getTable() . '.id', '=', $alias . '.' . $relatedQuery->getPlainForeignKey());
 				});
@@ -85,10 +84,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		}
     }
 
+    public function getFilterContentOption($field = null)
+    {
+        return [];
+    }
+    
     public function getFilterContent($field = null)
     {
         $uniqueId = str_random();
-        $option = [];
+        $option = $this->getFilterContentOption($field);
         
         $id = $field->relation_one_to_many_has ?: $field->relation_one_to_many_belong_to;
         

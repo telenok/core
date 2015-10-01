@@ -77,27 +77,27 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 	public function getRouteListTable()
 	{
-		return $this->routeListTable ? : "cmf.field.{$this->getKey()}.list.table";
+		return $this->routeListTable ? : "telenok.field.{$this->getKey()}.list.table";
 	}
 
 	public function getRouteListTitle()
 	{
-		return $this->routeListTitle ? : "cmf.field.{$this->getKey()}.list.title";
+		return $this->routeListTitle ? : "telenok.field.{$this->getKey()}.list.title";
 	}
 
 	public function getRouteWizardCreate()
 	{
-		return $this->routeWizardCreate ? : 'cmf.module.objects-lists.wizard.create';
+		return $this->routeWizardCreate ? : 'telenok.module.objects-lists.wizard.create';
 	}
 
 	public function getRouteWizardEdit()
 	{
-		return $this->routeWizardEdit ? : 'cmf.module.objects-lists.wizard.edit';
+		return $this->routeWizardEdit ? : 'telenok.module.objects-lists.wizard.edit';
 	}
 
 	public function getRouteWizardChoose()
 	{
-		return $this->routeWizardChoose ? : 'cmf.module.objects-lists.wizard.choose';
+		return $this->routeWizardChoose ? : 'telenok.module.objects-lists.wizard.choose';
 	}
 
 	public function getSpecialField($model)

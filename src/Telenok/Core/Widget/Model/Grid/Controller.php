@@ -11,10 +11,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $buttonTopOrder;
 	protected $fieldOnly = [];
 	protected $fieldExcept = [];
-	protected $routerList = 'cmf.widget.grid.list';
-	protected $routerCreate = 'cmf.widget.form.create';
-	protected $routerEdit = 'cmf.widget.form.edit';
-	protected $routerDelete = 'cmf.widget.form.delete';
+	protected $routerList = 'telenok.widget.grid.list';
+	protected $routerCreate = 'telenok.widget.form.create';
+	protected $routerEdit = 'telenok.widget.form.edit';
+	protected $routerDelete = 'telenok.widget.form.delete';
 	protected $displayLength = 10;
 	protected $enableColumnSelect = true;
 	protected $enableColumnAction = true;
@@ -53,10 +53,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 			}
 		],
 		'buttonTopOrder' => ['create', 'refresh'],
-		'routerList' => 'cmf.widget.grid.list',
-		'routerCreate' => 'cmf.widget.form.create',
-		'routerEdit' => 'cmf.widget.form.edit',
-		'routerDelete' => 'cmf.widget.form.delete',
+		'routerList' => 'telenok.widget.grid.list',
+		'routerCreate' => 'telenok.widget.form.create',
+		'routerEdit' => 'telenok.widget.form.edit',
+		'routerDelete' => 'telenok.widget.form.delete',
 		'enableColumnSelect' => true,
 		'enableColumnAction' => false,
 	]);
@@ -153,7 +153,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         $sEcho = $input->get('sEcho');
         $iDisplayStart = $input->get('iDisplayStart', 0); 
 		
-        $query = $this->getModel()->select($this->getModel()->getTable() . '.*')->withPermission();
+        $query = $this->getModel()->withTrashed()->select($this->getModel()->getTable() . '.*')->withPermission();
 
         if ($str = trim($input->get('sSearch')))
         {

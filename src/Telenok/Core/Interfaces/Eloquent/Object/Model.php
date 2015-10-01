@@ -216,6 +216,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		{
 			\DB::transaction(function()
 			{
+                if (app('auth')->check())
+                {
+                    $this->deleted_by_user = app('auth')->user()->id;
+                    $this->save();
+                }
+                
 				parent::delete();
 			});
 		}

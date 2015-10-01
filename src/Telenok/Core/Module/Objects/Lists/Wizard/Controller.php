@@ -8,27 +8,27 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 
     public function getRouterCreate($param = [])
     {
-        return route("cmf.module.{$this->getKey()}.wizard.create", $param);
+        return route("telenok.module.{$this->getKey()}.wizard.create", $param);
     }
 
     public function getRouterEdit($param = [])
     {
-        return route("cmf.module.{$this->getKey()}.wizard.edit", $param);
+        return route("telenok.module.{$this->getKey()}.wizard.edit", $param);
     }
 
     public function getRouterStore($param = [])
     {
-        return route("cmf.module.{$this->getKey()}.wizard.store", $param);
+        return route("telenok.module.{$this->getKey()}.wizard.store", $param);
     }
 
     public function getRouterUpdate($param = [])
     {
-        return route("cmf.module.{$this->getKey()}.wizard.update", $param);
+        return route("telenok.module.{$this->getKey()}.wizard.update", $param);
     }
 
     public function getRouterChooseTypeId($param = [])
     {
-        return route("cmf.module.{$this->getKey()}.wizard.choose.type", $param);
+        return route("telenok.module.{$this->getKey()}.wizard.choose.type", $param);
     }
 
     public function getPresentationListWizardView()
@@ -50,8 +50,8 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     { 
 		return parent::typeForm($type)
 				->setPresentationModelView($this->getPresentationModelView())
-				->setRouterStore("cmf.module.{$this->getKey()}.wizard.store")
-				->setRouterUpdate("cmf.module.{$this->getKey()}.wizard.update");
+				->setRouterStore("telenok.module.{$this->getKey()}.wizard.store")
+				->setRouterUpdate("telenok.module.{$this->getKey()}.wizard.update");
     }    
 	
     public function create()

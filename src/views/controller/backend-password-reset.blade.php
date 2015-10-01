@@ -39,7 +39,7 @@
 
                                                 <div class="space-6"></div>
 
-                                                {!! Form::open(['route' => 'cmf.password.reset.token.process', 'method' => 'post', 'id' => 'password-reset', 'autocomplete' => "off"]) !!}
+                                                {!! Form::open(['route' => 'telenok.password.reset.token.process', 'method' => 'post', 'id' => 'password-reset', 'autocomplete' => "off"]) !!}
 													<input type="hidden" name="_token" value="{{ csrf_token() }}">
 													<input type="hidden" name="token" value="{{ $token }}">
 													
@@ -98,7 +98,7 @@
 
                                             <div class="toolbar clearfix">
                                                 <div>
-                                                    <a href="{!! route("cmf.login.content") !!}" class="forgot-password-link">
+                                                    <a href="{!! route("telenok.login.control-panel") !!}" class="forgot-password-link">
                                                         <i class="fa fa-arrow-left"></i>
                                                         {{ $controller->LL('back-login') }}
                                                     </a>
@@ -127,7 +127,7 @@
 			{
 				jQuery.ajax({
 						type: "POST",
-						url: "{!! route('cmf.password.reset.token.process') !!}",
+						url: "{!! route('telenok.password.reset.token.process') !!}",
 						data: jQuery(this).serialize(),
 						dataType: 'json',
 						success: function(data)

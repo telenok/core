@@ -35,6 +35,7 @@ class SeedDomainTable extends Migration {
                     'allow_search' => 1,
                     'field_order' => 3,
                     'string_list_size' => 150,
+                    'string_unique' => 1,
                 ]
         );
 
