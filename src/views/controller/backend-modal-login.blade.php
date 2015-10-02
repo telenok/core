@@ -8,7 +8,7 @@
                             <div class="widget-main">
                                 <h4 class="header blue lighter bigger" style="margin-top: 0;">
                                     <i class="fa fa-user green"></i>
-                                    Sorry, your session has expired
+                                    {{ $controller->LL('session-expired') }}
                                 </h4>
 
                                 <div class="space-6"></div>
@@ -16,23 +16,23 @@
                                 {!! Form::open(['route' => 'telenok.login.process', 'method' => 'post', 'id' => 'form-session-expired']) !!}
                                     
                                     <div id="login-error" class="login-notice alert alert-danger display-none">
-                                        <strong>Whoops!</strong> There were some problems with your input<br><br>
+                                        {!! $controller->LL('error.login.title') !!}<br><br>
                                         <ul>
-                                            <li>Wrong username or password</li>
+                                            <li>{{ $controller->LL('error.login') }}</li>
                                         </ul>
                                     </div>
 
                                     <fieldset>
                                         <label class="block clearfix">
                                             <span class="block input-icon input-fa fa-right">
-                                                <input type="text" value="" placeholder="Your login" class="form-control" name="username">
+                                                <input type="text" value="" placeholder="{{ $controller->LL('username') }}" class="form-control" name="username">
                                                 <i class="ace-icon fa fa-user"></i>
                                             </span>
                                         </label>
 
                                         <label class="block clearfix">
                                             <span class="block input-icon input-fa fa-right">
-                                                <input type="password" placeholder="Your password" class="form-control" autocomplete="off" name="password">
+                                                <input type="password" placeholder="{{ $controller->LL('password') }}" class="form-control" autocomplete="off" name="password">
                                                 <i class="ace-icon fa fa-lock"></i>
                                             </span>
                                         </label>
@@ -40,14 +40,17 @@
                                         <div class="space"></div>
 
                                         <div class="clearfix">
+                                            
+                                            @if (!session('expire_on_close'))
                                             <label class="inline">
                                                 <input type="checkbox" value="1" name="remember">
-                                                <span class="lbl"> Remember Me</span>
+                                                <span class="lbl"> {{ $controller->LL('remember') }}</span>
                                             </label>
+                                            @endif 
 
                                             <button class="width-35 pull-right btn btn-sm btn-primary" type="submit">
                                                 <i class="fa fa-key"></i>
-                                                Login
+                                                {{ $controller->LL('login') }}
                                             </button>
                                         </div>
 
@@ -93,10 +96,6 @@ ob_start();
             jQuery('#modal-autologout').modal('hide');
             
             jQuery('#modal-autologout form').get(0).reset();
-            
-            $('#modalElement').on('hidden', function(){
-                $(this).data('modal', null);
-            });
         };
 
         setInterval(function()
@@ -137,6 +136,10 @@ ob_start();
                     if (data.success)
                     {
                         hideModalLogin();
+                    }
+                    else
+                    {
+                        jQuery('#login-error').show();
                     }
                 }
             });

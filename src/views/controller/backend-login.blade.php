@@ -49,6 +49,7 @@
 													</div>
 
                                                     <fieldset>
+
                                                         <label class="block clearfix">
                                                             <span class="block input-icon input-fa fa-right">
                                                                 <input type="text" name="username" class="form-control" placeholder="{{ $controller->LL('username') }}" value="{{ old('username') }}" />
@@ -66,18 +67,23 @@
                                                         <div class="space"></div>
 
                                                         <div class="clearfix">
+
+                                                            @if (!session('expire_on_close'))
                                                             <label class="inline">
                                                                 <input type="checkbox" name='remember' value="1" @if (old('remember'))checked="checked"@endif/>
                                                                 <span class="lbl"> {{ $controller->LL('remember') }}</span>
                                                             </label>
+                                                            @endif
 
                                                             <button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
                                                                 <i class="fa fa-key"></i>
                                                                 {{ $controller->LL('login') }}
                                                             </button>
+
                                                         </div>
 
                                                         <div class="space-4"></div>
+
                                                     </fieldset>
                                                 {!! Form::close() !!}
 

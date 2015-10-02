@@ -6,6 +6,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
     public function __construct()
     {
+        $this->languageDirectory = 'controller';
+        
         $this->middleware('auth.backend', ['except' => ['errorAccessDenied']]);
     }
 
