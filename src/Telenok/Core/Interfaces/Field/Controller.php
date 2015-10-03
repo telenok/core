@@ -374,7 +374,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 		}
 		catch (\Exception $e)
 		{
-			
 		}
 
 		return false;

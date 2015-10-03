@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateObjectFieldIntegerTable extends Migration {
+class CreateObjectFieldDecimalTable extends Migration {
 
     public function up()
     {
@@ -13,17 +13,17 @@ class CreateObjectFieldIntegerTable extends Migration {
             {
                 if (!\Schema::hasColumn('object_field', 'decimal_min'))
                 {
-                    $table->decimal('decimal_min')->default(0)->nullable();
+                    $table->decimal('decimal_min', 30, 10)->default(0)->nullable();
                 }
 
                 if (!\Schema::hasColumn('object_field', 'decimal_max'))
                 {
-                    $table->decimal('decimal_max')->default(0)->nullable();
+                    $table->decimal('decimal_max', 30, 10)->default(0)->nullable();
                 }
 
                 if (!\Schema::hasColumn('object_field', 'decimal_default'))
                 {
-                    $table->decimal('decimal_default')->default(null)->nullable();
+                    $table->decimal('decimal_default', 30, 10)->default(null)->nullable();
                 }
 
                 if (!\Schema::hasColumn('object_field', 'decimal_precision'))

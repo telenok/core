@@ -7,9 +7,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     protected $key = 'decimal';
     protected $specialField = ['decimal_default', 'decimal_min', 'decimal_max', 'decimal_precision', 'decimal_scale'];
     protected $ruleList = [
-                'decimal_default' => ['string', 'max:30'], 
-                'decimal_min' => ['string', 'max:30'], 
-                'decimal_precision' => ['integer', 'max:30'],
+                'decimal_default' => ['string', 'max:37'], 
+                'decimal_min' => ['string', 'max:37'], 
+                'decimal_precision' => ['integer', 'max:37'],
+                'decimal_scale' => ['integer', 'max:37'],
             ];
     protected $allowMultilanguage = false;
 
@@ -85,7 +86,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
             $value = $value->value();
         }
-        else if (in_array($key, ['decimal_precision', 'decimal_scale'], true) && $value === null)
+        else if (in_array($key, ['decimal_default', 'decimal_min', 'decimal_max', 'decimal_precision', 'decimal_scale'], true) && $value === null)
         {            
             if ($key == 'decimal_default')
             {
@@ -103,6 +104,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
         return parent::setModelSpecialAttribute($model, $key, $value);
     }
+
+    public function validate($model = null, $input = [], $messages = [])
+	{
+		if ($input->get('decimal_precision') < $input->get('decimal_scale'))
+        {
+			throw $this->validateException()->setMessageError($this->LL('error.precision_scale'));
+        }
+
+		return parent::validate($model, $input, $messages);
+	}
 
     public function postProcess($model, $type, $input)
     {

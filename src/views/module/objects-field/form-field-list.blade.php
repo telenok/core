@@ -80,6 +80,8 @@
 						success: function(data)
 						{
 							jQuery('#field-form-content-{{$uniqueId}}').html(data).show();
+                            
+                            jQuery('#field-form-content-{{$uniqueId}} .help-button').popover();
 						}
 					});
 
