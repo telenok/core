@@ -1,5 +1,7 @@
 <?php namespace Telenok\Core\Field\Upload;
 
+use \App\Telenok\Core\Field\Upload\File;
+
 class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function stream($modelId, $fieldId)

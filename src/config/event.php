@@ -71,6 +71,7 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
 {
     $list->push('App\Telenok\Core\Field\Integer\Controller');
     $list->push('App\Telenok\Core\Field\IntegerUnsigned\Controller');
+    $list->push('App\Telenok\Core\Field\Decimal\Controller');
     $list->push('App\Telenok\Core\Field\Text\Controller');
     $list->push('App\Telenok\Core\Field\String\Controller');
     $list->push('App\Telenok\Core\Field\ComplexArray\Controller');

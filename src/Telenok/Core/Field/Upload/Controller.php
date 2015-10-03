@@ -1,7 +1,6 @@
 <?php namespace Telenok\Core\Field\Upload;
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;  
+use \App\Telenok\Core\Field\Upload\File;
 
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 

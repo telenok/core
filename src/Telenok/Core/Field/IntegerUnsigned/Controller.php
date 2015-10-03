@@ -37,7 +37,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
         if ($value === null)
         {
-            $default = $field->integer_unsigned_default?:0;
+            $default = $field->integer_unsigned_default;
             
             $model->setAttribute($key, $default);
         }
