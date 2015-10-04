@@ -777,6 +777,8 @@ class SeedLast extends Migration {
 				(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
 					'key' => 'locked-by',
 					'field_object_type' => $item->getKey(),
+					'allow_search' => 1,
+					'show_in_list' => 0,
 				]); 
 			} 
             catch (\Exception $ex) {}
@@ -786,6 +788,8 @@ class SeedLast extends Migration {
 				(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
 					'key' => 'deleted-by',
 					'field_object_type' => $item->getKey(),
+					'allow_search' => 1,
+					'show_in_list' => 0,
 				]); 
 			} 
             catch (\Exception $ex) {}
