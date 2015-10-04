@@ -138,9 +138,11 @@
 	\Route::get('telenok/password/reset/{token}', array('as' => 'telenok.password.reset.token', 'uses' => "\App\Telenok\Core\Controller\Auth\PasswordController@getReset"));
 	\Route::post('telenok/password/reset/process', array('as' => 'telenok.password.reset.token.process', 'uses' => "\App\Telenok\Core\Controller\Auth\PasswordController@postReset"));
 
-	// Module System\Setting
+	// Module Setting\Tools
 	\Route::get('telenok/module/php-console/action-param', array('as' => 'telenok.module.php-console.action.param', 'uses' => "App\Telenok\Core\Module\Tools\PhpConsole\Controller@getActionParam"));
-	\Route::get('telenok/module/database-console/action-param', array('as' => 'telenok.module.database-console.action.param', 'uses' => "App\Telenok\Core\Module\Tools\DatabaseConsole\Controller@getActionParam"));
+	\Route::post('telenok/module/php-console/process-code', array('as' => 'telenok.module.php-console.process-code', 'uses' => "App\Telenok\Core\Module\Tools\PhpConsole\Controller@processCode"));
+	
+    \Route::get('telenok/module/database-console/action-param', array('as' => 'telenok.module.database-console.action.param', 'uses' => "App\Telenok\Core\Module\Tools\DatabaseConsole\Controller@getActionParam"));
 	
 	// Module Packages\ComposerManager
 	\Route::get('telenok/module/packages/composer-manager/action-param', array('as' => 'telenok.module.composer-manager.action.param', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getActionParam"));

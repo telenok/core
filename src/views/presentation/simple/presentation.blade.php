@@ -63,7 +63,7 @@
 					  '<div id="' + domId + '" class="telenok-presentation row ui-helper-hidden">'
 					+ '	<div>'
 					+ '	 <div class="page-header position-relativee"></div>'
-					+ '	 <div class="col-xs-12 telenok-presentation-content">{!! $content !!}</div>'
+					+ '	 <div class="col-xs-12 telenok-presentation-content"></div>'
 					+ '	</div>'
 					+ '</div>'
 					);

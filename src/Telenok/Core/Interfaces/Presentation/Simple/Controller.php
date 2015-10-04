@@ -99,6 +99,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
                 'key' => $this->getKey(),
                 'breadcrumbs' => $this->getBreadcrumbs(),
                 'pageHeader' => $this->getPageHeader(),
+                'content' => $this->getContent(),
             ];
         }
         catch (\Exception $e)
@@ -116,7 +117,6 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 			'presentationModuleKey' => $this->getPresentationModuleKey(),
             'uniqueId' => str_random(),
 			'controller' => $this,
-            'content' => $this->getContent(),
             'key' => $this->getKey(),
             'breadcrumbs' => $this->getBreadcrumbs(),
             'pageHeader' => $this->getPageHeader(),
