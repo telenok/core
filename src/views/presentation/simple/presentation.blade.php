@@ -44,12 +44,24 @@
 			},
 			addContent: function(param)
 			{
-				if (!param.content) return this;
+                if (!param.content) return this; 
 
-				var id = this.presentationDomId + '-tab-' + param.tabKey;
-				var content = jQuery('div.telenok-presentation-content', '#' + this.presentationDomId);
+                jQuery('#' + this.presentationDomId + ' div.module-content').hide();
 
-				content.append("<div class='tab-pane' id='" + id + "'>" + param.content + "</div>");
+                var $moduleContent = jQuery('#' + this.presentationDomId + ' #' + param.presentationModuleKey);
+
+                if ($moduleContent.size())
+                {
+                    $moduleContent.show();
+                }
+                else
+                {
+                    var content = jQuery('<div id="' + param.presentationModuleKey + '" class="module-content"></div>').append(param.content);
+
+                    jQuery('div.telenok-presentation-content', '#' + this.presentationDomId).append(content);
+                }
+                
+                jQuery('div#' + this.presentationDomId).show();
 
 				return this;
 			},
@@ -59,7 +71,7 @@
 
 				if (!jQuery('div#' + domId).size())
 				{
-					jQuery('.page-content').append(
+					jQuery('div.page-content').append(
 					  '<div id="' + domId + '" class="telenok-presentation row ui-helper-hidden">'
 					+ '	<div>'
 					+ '	 <div class="page-header position-relativee"></div>'

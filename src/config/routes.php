@@ -143,8 +143,10 @@
 	\Route::post('telenok/module/php-console/process-code', array('as' => 'telenok.module.php-console.process-code', 'uses' => "App\Telenok\Core\Module\Tools\PhpConsole\Controller@processCode"));
 	
     \Route::get('telenok/module/database-console/action-param', array('as' => 'telenok.module.database-console.action.param', 'uses' => "App\Telenok\Core\Module\Tools\DatabaseConsole\Controller@getActionParam"));
-	
-	// Module Packages\ComposerManager
+	\Route::post('telenok/module/database-console/process-select', array('as' => 'telenok.module.database-console.process-select', 'uses' => "App\Telenok\Core\Module\Tools\DatabaseConsole\Controller@processSelect"));
+	\Route::post('telenok/module/database-console/process-statement', array('as' => 'telenok.module.database-console.process-statement', 'uses' => "App\Telenok\Core\Module\Tools\DatabaseConsole\Controller@processStatement"));
+
+    // Module Packages\ComposerManager
 	\Route::get('telenok/module/packages/composer-manager/action-param', array('as' => 'telenok.module.composer-manager.action.param', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getActionParam"));
 	\Route::get('telenok/module/packages/composer-manager', array('as' => 'telenok.module.composer-manager', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getContent"));
 	\Route::get('telenok/module/packages/composer-manager/list', array('as' => 'telenok.module.composer-manager.list', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getList"));
