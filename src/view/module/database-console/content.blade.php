@@ -42,7 +42,7 @@
                     <div class="result-success display-none" style="overflow: auto;">
 
                         <table class="table table-striped table-bordered table-hover result">
-                            <caption>Query result</caption>
+                            <caption>{{$controller->LL('result.title')}}</caption>
                             <thead>
                                 <tr>
 
@@ -131,7 +131,7 @@
                         {
                             jQuery.each(data[0], function(k, v)
                             {
-                                $head.append('<td>' + k +'</td>');
+                                jQuery('<td></td>').text(k.substr(0, 100)).appendTo($head);
                             });
 
                             jQuery.each(data, function(k, v)
@@ -140,7 +140,7 @@
 
                                 jQuery.each(v, function(k_, v_)
                                 {
-                                    $tr.append('<td>' + v_ +'</td>');
+                                    jQuery('<td></td>').text(v_).appendTo($tr);
                                 });
 
                                 $body.append($tr);

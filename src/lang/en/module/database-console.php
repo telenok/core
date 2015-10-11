@@ -14,9 +14,8 @@ return array(
     'content.statement' => 'You INSERT, UPDATE or DELETE query',
     
     'error.select' => 'Error',
-    'result.select' => 'Result',
     'result.select.empty' => 'Empty',
     
-    'result.title' => 'Result',
+    'result.title' => 'Query result',
     'result.total' => 'Total rows affecting :total'
 );
