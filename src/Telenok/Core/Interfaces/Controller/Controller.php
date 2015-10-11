@@ -6,10 +6,23 @@ class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core
     use \Illuminate\Foundation\Bus\DispatchesCommands;
 
     protected $key = '';
-    protected $request; 
+    protected $request;
+    protected $vendorName = 'telenok';
+
+    public function __construct() {}
 	
-	public function __construct() {}
-	
+    public function getVendorName()
+    {
+        return $this->vendorName;
+    }
+
+    public function setVendorName($key)
+    {
+        $this->vendorName = $key;
+		
+		return $this;
+    }
+    
     public function getName()
     {
         return $this->LL('name');

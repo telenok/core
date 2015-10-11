@@ -73,7 +73,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         });
     }
 
-    public function parent()
+    public function parent_()
     {
         if (!$this->getParent()) return false;
         
@@ -91,7 +91,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
     public function getRouterActionParam($param = [])
     {
-		return route("telenok.module.{$this->getKey()}.action.param", $param);
+		return route($this->getVendorName() . ".module.{$this->getKey()}.action.param", $param);
     }  
 	
     public function getActionParam()
@@ -101,7 +101,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 			'presentationModuleKey' => $this->getPresentationModuleKey(),
             'presentationBlockContent' => $this->getPresentationContent(),
             'key' => $this->getKey(),
-            'url' => route("telenok.module.{$this->getKey()}"),
+            'url' => route($this->getVendorName() . ".module.{$this->getKey()}"),
             'breadcrumbs' => $this->getBreadcrumbs(),
             'pageHeader' => $this->getPageHeader(), 
         ));
@@ -111,7 +111,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
     {
         $breadcrumbs = [];
         
-        if ($this->getParent()) $breadcrumbs[] = $this->parent()->getName();
+        if ($this->getParent()) $breadcrumbs[] = $this->parent_()->getName();
         
         $breadcrumbs[] = $this->getName();
         

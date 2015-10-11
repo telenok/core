@@ -145,7 +145,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
         $template = ($model = $this->getWidgetModel()) && $model->getKey() ? 'widget.' . $model->getKey() : $this->getFrontendView();
         
-		return $template ? \File::get(app('view.finder')->find($template)) : "";
+		return $template ? \File::get(app('view')->getFinder()->find($template)) : "";
 	}
 
 	public function getInsertContent($id = 0)
@@ -327,4 +327,3 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 }
-

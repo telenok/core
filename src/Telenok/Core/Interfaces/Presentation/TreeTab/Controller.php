@@ -38,7 +38,12 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     protected $lockInListPeriod = 3600;
     protected $lockInFormPeriod = 300;
 
-	public function getLockInListPeriod()
+    protected $displayType = 1;
+            
+    public static $DISPLAY_TYPE_STANDART = 1;
+    public static $DISPLAY_TYPE_WIZARD = 2;
+
+    public function getLockInListPeriod()
     {
         return $this->lockInListPeriod;
     }
@@ -179,7 +184,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterActionParam($param = [])
     {
-		return route($this->routerActionParam ?: "telenok.module.{$this->getKey()}.action.param", $param);
+		return route($this->routerActionParam ?: $this->getVendorName() . ".module.{$this->getKey()}.action.param", $param);
     } 
 	
     public function setRouterList($param)
@@ -191,7 +196,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterList($param = [])
     {
-        return route($this->routerList ?: "telenok.module.{$this->getKey()}.list", $param);
+        return route($this->routerList ?: $this->getVendorName() . ".module.{$this->getKey()}.list", $param);
     }	
 	
     public function setRouterContent($param)
@@ -203,7 +208,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 	
     public function getRouterContent($param = [])
     {
-        return route($this->routerContent ?: "telenok.module.{$this->getKey()}", $param);
+        return route($this->routerContent ?: $this->getVendorName() . ".module.{$this->getKey()}", $param);
     }
 	
     public function setRouterCreate($param)
@@ -215,7 +220,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     
     public function getRouterCreate($param = [])
     {
-        return route($this->routerCreate ?: "telenok.module.{$this->getKey()}.create", $param);
+        return route($this->routerCreate ?: $this->getVendorName() . ".module.{$this->getKey()}." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "create", $param);
     }
 	
     public function setRouterEdit($param)
@@ -227,7 +232,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterEdit($param = [])
     {
-        return route($this->routerEdit ?: "telenok.module.{$this->getKey()}.edit", $param);
+        return route($this->routerEdit ?: $this->getVendorName() . ".module.{$this->getKey()}." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "edit", $param);
     }
 	
     public function setRouterDelete($param)
@@ -239,7 +244,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterDelete($param = [])
     {
-        return route($this->routerDelete ?: "telenok.module.{$this->getKey()}.delete", $param);
+        return route($this->routerDelete ?: $this->getVendorName() . ".module.{$this->getKey()}." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "delete", $param);
     }
 	
     public function setRouterStore($param)
@@ -251,7 +256,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterStore($param = [])
     {
-        return route($this->routerStore ?: "telenok.module.{$this->getKey()}.store", $param);
+        return route($this->routerStore ?: $this->getVendorName() . ".module.{$this->getKey()}." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "store", $param);
     }
 	
     public function setRouterUpdate($param)
@@ -263,7 +268,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterUpdate($param = [])
     {
-        return route($this->routerUpdate ?: "telenok.module.{$this->getKey()}.update", $param);
+        return route($this->routerUpdate ?: $this->getVendorName() . ".module.{$this->getKey()}." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "update", $param);
     }
 	
     public function setRouterListEdit($param)
@@ -275,7 +280,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterListEdit($param = [])
     {
-		return route($this->routerListEdit ?: "telenok.module.{$this->getKey()}.list.edit", $param);
+		return route($this->routerListEdit ?: $this->getVendorName() . ".module.{$this->getKey()}.list.edit", $param);
     }
 	
     public function setRouterListDelete($param)
@@ -287,7 +292,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterListDelete($param = [])
     {
-		return route($this->routerListDelete ?: "telenok.module.{$this->getKey()}.list.delete", $param);
+		return route($this->routerListDelete ?: $this->getVendorName() . ".module.{$this->getKey()}.list.delete", $param);
     }
 	
     public function setRouterListLock($param)
@@ -299,12 +304,12 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterLock($param = [])
     {
-		return route($this->routerLock ?: "telenok.module.{$this->getKey()}.lock", $param);
+		return route($this->routerLock ?: $this->getVendorName() . ".module.{$this->getKey()}.lock", $param);
     }
 
     public function getRouterListLock($param = [])
     {
-		return route($this->routerListLock ?: "telenok.module.{$this->getKey()}.list.lock", $param);
+		return route($this->routerListLock ?: $this->getVendorName() . ".module.{$this->getKey()}.list.lock", $param);
     }
 	
     public function setRouterListUnlock($param)
@@ -316,7 +321,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterListUnlock($param = [])
     {
-		return route($this->routerListUnlock ?: "telenok.module.{$this->getKey()}.list.unlock", $param);
+		return route($this->routerListUnlock ?: $this->getVendorName() . ".module.{$this->getKey()}.list.unlock", $param);
     }
 	
     public function setRouterListTree($param)
@@ -328,7 +333,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getRouterListTree($param = [])
     {
-		return route($this->routerListTree ?: "telenok.module.{$this->getKey()}.list.tree", $param);
+		return route($this->routerListTree ?: $this->getVendorName() . ".module.{$this->getKey()}.list.tree", $param);
     }
 
     public function setModelListClass($param)
@@ -995,7 +1000,6 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 		return \Response::json(['success' => 1]);
 	}
 
-
     public function store($id = null)
     {   
         try 
@@ -1123,5 +1127,22 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 	public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null)
 	{
 	}
+    
+    public function getDisplayType()
+    {
+        return $this->displayType;
+    }
+    
+    public function setDisplayType($type)
+    {
+        $this->displayType = $type;
+        
+        return $this;
+    }
+    
+    public function isDisplayTypeWizard()
+    {
+        return $this->displayType == static::$DISPLAY_TYPE_WIZARD;
+    }
 }
 

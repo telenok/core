@@ -29,7 +29,8 @@
 	\Route::post('telenok/module/objects-lists/store/type/{id}', array('as' => 'telenok.module.objects-lists.store', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@store"));
 	\Route::post('telenok/module/objects-lists/update/type/{id}', array('as' => 'telenok.module.objects-lists.update', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@update"));
 	\Route::post('telenok/module/objects-lists/delete/{id}', array('as' => 'telenok.module.objects-lists.delete', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@delete"));
-	\Route::get('telenok/module/objects-lists/list', array('as' => 'telenok.module.objects-lists.list', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@getList"));
+
+    \Route::get('telenok/module/objects-lists/list', array('as' => 'telenok.module.objects-lists.list', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@getList"));
 	\Route::get('telenok/module/objects-lists/list/json', array('as' => 'telenok.module.objects-lists.list.json', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@getListJson"));
 	\Route::get('telenok/module/objects-lists/list/edit/', array('as' => 'telenok.module.objects-lists.list.edit', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@editList"));
 	\Route::post('telenok/module/objects-lists/list/delete', array('as' => 'telenok.module.objects-lists.list.delete', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@deleteList"));
@@ -37,7 +38,8 @@
 	\Route::post('telenok/module/objects-lists/lock', array('as' => 'telenok.module.objects-lists.lock', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@lock"));
 	\Route::post('telenok/module/objects-lists/list/unlock', array('as' => 'telenok.module.objects-lists.list.unlock', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@unlockList"));
 	\Route::get('telenok/module/objects-lists/list/tree', array('as' => 'telenok.module.objects-lists.list.tree', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@getTreeList"));
-	\Route::get('telenok/module/objects-lists/wizard/create/type', array('as' => 'telenok.module.objects-lists.wizard.create', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@create"));
+	
+    \Route::get('telenok/module/objects-lists/wizard/create/type', array('as' => 'telenok.module.objects-lists.wizard.create', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@create"));
 	\Route::get('telenok/module/objects-lists/wizard/edit', array('as' => 'telenok.module.objects-lists.wizard.edit', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@edit"));
 	\Route::post('telenok/module/objects-lists/wizard/store/type/{id}', array('as' => 'telenok.module.objects-lists.wizard.store', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@store"));
 	\Route::post('telenok/module/objects-lists/wizard/update/type/{id}', array('as' => 'telenok.module.objects-lists.wizard.update', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@update"));

@@ -4,8 +4,35 @@
 
 jQuery(function()
 {
-    jQuery(document).on('show.bs.modal', '.modal', function() {
-        jQuery(this).css("z-index", parseInt(jQuery('.modal-backdrop').css('z-index')) + 1);
+    jQuery(document).on('show.bs.modal', '.modal', function()
+    {
+        var maxZ = parseInt(jQuery('.modal-backdrop').css('z-index')) || 1040;
+
+        jQuery('.modal:visible').each(function()
+        {
+            maxZ = Math.max(parseInt(jQuery(this).css('z-index')), maxZ);
+        });
+ 
+        jQuery('.modal-backdrop').css('z-index', maxZ);
+        jQuery(this).css("z-index", maxZ + 1);
+        jQuery('.modal-dialog', this).css("z-index", maxZ + 2);
+    });
+    
+    jQuery(document).on('hidden.bs.modal', '.modal', function () 
+    {
+        if (jQuery('.modal:visible').length)
+        {
+            jQuery(document.body).addClass('modal-open');
+
+           var maxZ = 1040;
+
+           jQuery('.modal:visible').each(function()
+           {
+               maxZ = Math.max(parseInt(jQuery(this).css('z-index')), maxZ);
+           });
+
+           jQuery('.modal-backdrop').css('z-index', maxZ-1);
+       }
     });
 });
 
@@ -155,27 +182,35 @@ var telenokJS = Clazzzz.extend(
         jQuery('.page-content div.telenok-presentation').hide();
         jQuery('.page-content div#' + domId).show();
     },
-    processModuleContent: function(moduleKey) 
-    { 
+    preConfigure: function(moduleKey)
+    {
         var param = this.getModule(moduleKey) || {};
 
         if (!param.preCallingPresentationFlag)
         {
             this.preCallingPresentation(moduleKey);
         }
-        
-        param = this.getModule(moduleKey);
 
         param.preCallingPresentationFlag = true;
-
+        
         this.setModuleParam(moduleKey, param);
+    },
+    postConfigure: function(moduleKey)
+    {
+        this.postCallingPresentation(moduleKey); 
+    },
+    processModuleContent: function(moduleKey) 
+    { 
+        this.preConfigure(moduleKey);
+
+        var param = this.getModule(moduleKey) || {};
 
         if (this.hasPresentation(param.presentationModuleKey))
         {
             this.getPresentation(param.presentationModuleKey).callMe(param);
         }
 
-        this.postCallingPresentation(moduleKey); 
+        this.postConfigure(moduleKey);
     },
     updateUserUISetting: function(key, value)
     {

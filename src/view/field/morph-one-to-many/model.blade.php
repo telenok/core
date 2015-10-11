@@ -1,3 +1,5 @@
+@extends('core::layout.model-field')
+
 <?php
 
     $method = camel_case($field->code);
@@ -108,7 +110,7 @@
 
 							if (aoColumns.length)
 							{
-								presentation.addDataTable({
+								telenok.addDataTable({
 									domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}",
 									bRetrieve : true,
 									aoColumns : aoColumns,
@@ -149,7 +151,7 @@
 
 							if (aoColumns.length)
 							{
-								presentation.addDataTable({
+								telenok.addDataTable({
 									domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition",
 									sDom: "<'row'<'col-md-6'T>r>t<'row'<'col-md-6'T>>",
 									bRetrieve : true,

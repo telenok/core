@@ -254,27 +254,23 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 }
 </script>
 
-	
-	
 @section('script')
 	@parent
-	
+
 	@section('ajaxDone')
- 
+
 		jQuery.gritter.add({
 			title: '{{$controller->LL('notice.saved')}}! {{$controller->LL('notice.saved.description')}}',
 			text: '{{$controller->LL('notice.saved.thank.you')}}!',
 			class_name: 'gritter-success gritter-light',
 			time: 3000,
 		});
-		
+
 		$el.closest('div.modal').html(data.tabContent); 
 
 	@stop
 
 @stop
-
-<div class="modal-backdrop fade in"></div>
 
 <div class="modal-dialog">
 	<div class="modal-content">
@@ -284,11 +280,9 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 			<h4>{{ \App\Telenok\Core\Model\Object\Type::where('code', $model->getTable())->first()->translate('title') }}</h4>
 		</div>
 
-
 @section('notice')
 	@parent
 @stop
-
 
 @section('form') 
 

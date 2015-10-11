@@ -13,10 +13,10 @@ class CoreServiceProvider extends ServiceProvider {
             $object->setRequest($app['request']);
         });
 
-        $this->loadViewsFrom(__DIR__ . '/../../views', 'core');
-        $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'core');
+        $this->loadViewsFrom(realpath(__DIR__ . '/../../view'), 'core');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/../../lang'), 'core');
 
-        $this->publishes([__DIR__ . '/../../../public' => public_path('packages/telenok/core')], 'public');
+        $this->publishes([realpath(__DIR__ . '/../../../public') => public_path('packages/telenok/core')], 'public');
 
         include __DIR__ . '/../../config/routes.php';
         include __DIR__ . '/../../config/event.php';

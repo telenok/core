@@ -1,33 +1,27 @@
+@extends('core::layout.model-field')
+
 <?php
     
-    $domAttr = ['class' => 'col-md-6', 'disabled' => 'disabled'];
     $method = camel_case($field->code);
     $jsUnique = str_random();
- 
-    $linkedField = $field->relation_many_to_many_has ? 'relation_many_to_many_has' : 'relation_many_to_many_belong_to';
+
+	$disabledCreateFile = false;  
 	
-	$disabledCreateLinkedType = false;
-
-	$linkedType = $controller->getLinkedModelType($field);
-
-	if (!app('auth')->can('create', 'object_type.' . $linkedType->code))
+	if (!app('auth')->can('create', 'object_type.file'))
 	{
-		$disabledCreateLinkedType = true;
-	}
-
+		$disabledCreateFile = true;
+	} 
 ?>
     <div class="widget-box transparent" data-field-key='{{ $field->code }}'>
         <div class="widget-header widget-header-small">
-			<h4 class="row">
-				<span class="col-sm-12">
-					<i class="ace-icon fa fa-list-ul"></i>
-					{{ $field->translate('title_list') }}
-				</span>
-			</h4>
+            <h4>
+                <i class="fa fa-list-ul"></i>
+                {{ $field->translate('title_list') }}
+            </h4> 
         </div>
         <div class="widget-body"> 
  
-            <div class="widget-main form-group field-list">
+            <div class="widget-main field-list">
 
                 <ul class="nav nav-tabs" id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab">
                     <li class="active">
@@ -36,7 +30,7 @@
                             {{$controller->LL('current')}}
                         </a>
                     </li>
-					@if ( 
+                    @if ( 
 							((!$model->exists && $field->allow_create && $permissionCreate) 
 								|| 
 							($model->exists && $field->allow_update && $permissionUpdate))
@@ -47,24 +41,50 @@
                             {{$controller->LL('addition')}}
                         </a>
                     </li>
-					@endif
+                    @endif
+					
+                    @if ( 
+							((!$model->exists && $field->allow_create && $permissionCreate) || ($model->exists && $field->allow_update && $permissionUpdate))
+								&&
+							!$disabledCreateFile
+						)
+                    <li>
+                        <a data-toggle="tab" href="#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload">
+                            <i class="green fa fa-upload bigger-110"></i>
+                            {{$controller->LL('upload')}}
+                        </a>
+                    </li>
+                    @endif
+
                 </ul>
 
                 <div class="tab-content">
                     <div id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-current" class="tab-pane in active">
                         <table class="table table-striped table-bordered table-hover" id="telenok-{{$controller->getKey()}}-{{$jsUnique}}" role="grid"></table>
                     </div>
-					@if ( 
+					
+                    @if (
 							((!$model->exists && $field->allow_create && $permissionCreate) 
 								|| 
-							($model->exists && $field->allow_update && $permissionUpdate))
+							($model->exists && $field->allow_update && $permissionUpdate)) 
 						)
                     <div id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-addition" class="tab-pane">
                         <table class="table table-striped table-bordered table-hover" id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition" role="grid"></table>
                     </div>
-					@endif
+                    @endif
+					
+                    @if ( 
+							((!$model->exists && $field->allow_create && $permissionCreate) || ($model->exists && $field->allow_update && $permissionUpdate))
+								&&
+							!$disabledCreateFile
+						)
+                    <div id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload" class="tab-pane ">
+						<button onclick="Dropzone.forElement('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone').processQueue(); return false;" class="btn btn-sm btn-success">Upload</button>
+						<div id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone" class="form-group dropzone">
+						</div>
+                    </div>
+                    @endif
                 </div>
-
             
                 <script type="text/javascript">
 
@@ -76,7 +96,7 @@
                     var aButtons = []; 
 					
 							@foreach($controller->getFormModelTableColumn($field, $model, $jsUnique) as $row)
-                            aoColumns.push({!! json_encode($row) !!});
+                                aoColumns.push({!! json_encode($row) !!});
 							@endforeach 
 
 							aButtons.push({
@@ -89,19 +109,19 @@
                                         });
 
 							@if ($model->exists && $field->allow_update && $permissionUpdate)
-								aButtons.push({
+							aButtons.push({
                                             "sExtends": "text",
                                             "sButtonText": "<i class='fa fa-trash-o smaller-90'></i> {{ $controllerParent->LL('list.btn.delete.all') }}",
                                             'sButtonClass': 'btn-sm btn-danger',
                                             "fnClick": function(nButton, oConfig, oFlash) {
                                                 removeAllM2M{{$jsUnique}}();
                                             }
-                                        });
+                                        });								
 							@endif
 
 							if (aoColumns.length)
 							{
-								presentation.addDataTable({
+								telenok.addDataTable({
 									domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}",
 									bRetrieve : true,
 									aoColumns : aoColumns,
@@ -113,24 +133,29 @@
 									}
 								});
 							}
-							
+
 							aButtons = [];
 
 							@if ( 
 									((!$model->exists && $field->allow_create && $permissionCreate) 
 										|| 
-									($model->exists && $field->allow_update && $permissionUpdate)) && !$disabledCreateLinkedType
+									($model->exists && $field->allow_update && $permissionUpdate)) && !$disabledCreateFile
 								)
 							aButtons.push({
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
-									'sButtonClass': 'btn-success btn-sm',
-									"fnClick": function(nButton, oConfig, oFlash) {
-										createM2M{{$jsUnique}}(this, '{!! $urlWizardCreate !!}');
-									}
-								});
+								"sExtends": "text",
+								"sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
+								'sButtonClass': 'btn-success btn-sm',
+								"fnClick": function(nButton, oConfig, oFlash) {
+									createM2M{{$jsUnique}}(this, '{!! $urlWizardCreate !!}');
+								}
+							});
 							@endif	
-
+							
+							@if ( 
+									((!$model->exists && $field->allow_create && $permissionCreate) 
+										|| 
+									($model->exists && $field->allow_update && $permissionUpdate)) 
+								)
 							aButtons.push({
 									"sExtends": "text",
 									"sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.choose') }}",
@@ -138,12 +163,12 @@
 									"fnClick": function(nButton, oConfig, oFlash) {
 										chooseM2M{{$jsUnique}}(this, '{!! $urlWizardChoose !!}');
 									}
-								});
-
+							});
+							@endif
 
 							if (aoColumns.length)
 							{
-								presentation.addDataTable({
+								telenok.addDataTable({
 									domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition",
 									sDom: "<'row'<'col-md-6'T>r>t<'row'<'col-md-6'T>>",
 									bRetrieve : true,
@@ -163,7 +188,36 @@
  
 
     <script type="text/javascript">
-        
+		try
+		{
+			jQuery("div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone").dropzone({
+					url: "{!! route($controller->getRouteUpload()) !!}",
+					paramName: "upload", // The name that will be used to transfer the file
+					maxFilesize: 2.5, // MB
+					addRemoveLinks : true,
+					dictDefaultMessage :
+					'<span class="bigger-150 bolder"><i class="fa fa-caret-right red"></i> Drop files</span> to upload \
+					<span class="smaller-80 grey">(or click)</span> <br /> \
+					<i class="upload-icon fa fa-cloud-upload blue fa fa-3x"></i>',
+					dictResponseError: 'Error while uploading file!',
+					autoProcessQueue: false,
+					//change the previewTemplate to use Bootstrap progress bars
+					previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-details\">\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n    <div class=\"dz-size\" data-dz-size></div>\n    <img data-dz-thumbnail />\n  </div>\n  <div class=\"progress progress-small progress-success progress-striped active\"><span class=\"bar\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-success-mark\"><span></span></div>\n  <div class=\"dz-error-mark\"><span></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n</div>"
+				});
+
+			Dropzone.forElement('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone')
+				.on("success", function(file, id) {
+					jQuery('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload').append(
+						'<input type="hidden" class="{{$field->code}}_add_{{$jsUnique}}" name="{{$field->code}}_add[]" value="' + id + '" />'
+					);
+				});
+
+			Dropzone.forElement('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone').on("sending", function(file, xhr, formData) {
+					formData.append("title", file.name);
+				});
+		}
+		catch(e) {}
+			
         function addM2M{{$jsUnique}}(val) 
         {
             jQuery('<input type="hidden" class="{{$field->code}}_add_{{$jsUnique}}" name="{{$field->code}}_add[]" value="'+val+'" />')
@@ -203,29 +257,63 @@
                 method: 'get',
                 dataType: 'json'
             }).done(function(data) {
-
+				
                 if (!jQuery('#modal-{{$jsUnique}}').size())
                 {
                     jQuery('body').append('<div id="modal-{{$jsUnique}}" class="modal fade" role="dialog" aria-labelledby="label"></div>');
                 }
-				
+
 				var $modal = jQuery('#modal-{{$jsUnique}}');
 
                 $modal.data('model-data', function(data)
                 {
 					data.tableManageItem = '<button class="btn btn-minier btn-danger trash-it" title="{{$controller->LL('list.btn.delete')}}" onclick="deleteM2MAddition{{$jsUnique}}(this); return false;">'
                         + '<i class="fa fa-trash-o"></i></button>';
-				
+					
                     var $dt = jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").dataTable();
                     var a = $dt.fnAddData(data, true);
                     var oSettings = $dt.fnSettings();
                     var nTr = oSettings.aoData[ a[0] ].nTr;
 
                     addM2M{{$jsUnique}}(data.id);
+                    
                 });
-
+					
 				$modal.html(data.tabContent);
-
+					
+				$modal.modal('show').on('hidden', function() 
+                { 
+                    jQuery(this).html(""); 
+                });
+            });
+        }
+        
+        function editM2M{{$jsUnique}}(obj, url) 
+        {
+            jQuery.ajax({
+                url: url,
+                method: 'get',
+                dataType: 'json'
+            }).done(function(data) { 
+				
+                if (!jQuery('#modal-{{$jsUnique}}').size())
+                {
+                    jQuery('body').append('<div id="modal-{{$jsUnique}}" class="modal fade" role="dialog" aria-labelledby="label"></div>');
+                }
+				
+				var $modal = jQuery('#modal-{{$jsUnique}}');
+				
+                $modal.data('model-data', function(data)
+                {  
+                    var $table = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
+                    var $dt = $table.dataTable();
+                    var $tr = jQuery(obj).closest('tr');
+                        $dt.fnUpdate({title: data.title}, $tr[0], 1);
+                    
+                });
+						
+				$modal.html(data.tabContent);
+				
 				$modal.modal('show').on('hidden', function() 
                 { 
                     jQuery(this).html(""); 
@@ -233,49 +321,17 @@
             });
         }
 
-        function editTableRow{{$jsUnique}}(obj, url) 
-        {
-            jQuery.ajax({
-                url: url,
-                method: 'get',
-                dataType: 'json'
-            }).done(function(data) {
-
-                if (!jQuery('#modal-{{$jsUnique}}').size())
-                {
-                    jQuery('body').append('<div id="modal-{{$jsUnique}}" class="modal fade" role="dialog" aria-labelledby="label"></div>');
-                }
-
-                var $modal = jQuery('#modal-{{$jsUnique}}');
-
-                $modal.data('model-data', function(data)
-                {  
-                    var $table = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
-                    var $dt = $table.dataTable();
-                    var $tr = jQuery(obj).closest('tr');
-                        $dt.fnUpdate({title: data.title}, $tr[0], 1);
-                });
-
-                $modal.html(data.tabContent);
-
-                $modal.modal('show').on('hidden', function() 
-                { 
-                    jQuery(this).html(""); 
-                });
-            });
-        }
-
-        function deleteTableRow{{$jsUnique}}(obj) 
+        function deleteM2M{{$jsUnique}}(obj) 
         {
             var $dt = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}").dataTable();
             var $tr = jQuery(obj).closest("tr");
-
+            
             var data = $dt.fnGetData($tr[0]);
-
+            
             $tr.toggleClass('line-through red');
             jQuery('button.trash-it i', $tr).toggleClass('fa fa-trash-o').toggleClass('fa fa-power-off');
             jQuery('button.trash-it', $tr).toggleClass('btn-danger').toggleClass('btn-success');
-
+            
             removeM2M{{$jsUnique}}(data.id);
         }
 
@@ -298,29 +354,30 @@
                 method: 'get',
                 dataType: 'json'
             }).done(function(data) {
-
+				
                 if (!jQuery('#modal-{{$jsUnique}}').size())
                 {
                     jQuery('body').append('<div id="modal-{{$jsUnique}}" class="modal fade" role="dialog" aria-labelledby="label"></div>');
                 }
-
-				var $modal = jQuery('#modal-{{$jsUnique}}');
+				
+				$modal = jQuery('#modal-{{$jsUnique}}');
 
                 $modal.data('model-data', function(data)
-                {	
+                {
 					data.tableManageItem = '<button class="btn btn-minier btn-danger trash-it" title="{{$controller->LL('list.btn.delete')}}" onclick="deleteM2MAddition{{$jsUnique}}(this); return false;">'
                         + '<i class="fa fa-trash-o"></i></button>';
-					
+				
                     var $dt = jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").dataTable();
                     var a = $dt.fnAddData(data, true);
                     var oSettings = $dt.fnSettings();
                     var nTr = oSettings.aoData[ a[0] ].nTr;
 
                     addM2M{{$jsUnique}}(data.id);
+
                 });
-
+				
 				$modal.html(data.tabContent);
-
+					
 				$modal.modal('show').on('hidden', function() 
                 { 
                     jQuery(this).html(""); 

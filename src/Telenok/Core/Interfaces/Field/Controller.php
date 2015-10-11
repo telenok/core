@@ -67,22 +67,22 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 	public function getViewField()
 	{
-		return $this->viewField ? : "core::field.{$this->getKey()}.field";
+		return $this->viewField ? : $this->getPackage() . "::field.{$this->getKey()}.field";
 	}
 
 	public function getViewFilter()
 	{
-		return $this->viewFilter ? : "core::field.{$this->getKey()}.filter";
+		return $this->viewFilter ? : $this->getPackage() . "::field.{$this->getKey()}.filter";
 	}
 
 	public function getRouteListTable()
 	{
-		return $this->routeListTable ? : "telenok.field.{$this->getKey()}.list.table";
+		return $this->routeListTable ? : $this->getVendorName() . ".field.{$this->getKey()}.list.table";
 	}
 
 	public function getRouteListTitle()
 	{
-		return $this->routeListTitle ? : "telenok.field.{$this->getKey()}.list.title";
+		return $this->routeListTitle ? : $this->getVendorName() . ".field.{$this->getKey()}.list.title";
 	}
 
 	public function getRouteWizardCreate()

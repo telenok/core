@@ -224,10 +224,6 @@ body.telenok-backend .modal-dialog {
     width: 1000px; 
 }
 
-body.telenok-backend .modal-backdrop {
-  position: fixed !important;
-}
-
 body.telenok-backend .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
     height: 28px;
     width: 150px !important;

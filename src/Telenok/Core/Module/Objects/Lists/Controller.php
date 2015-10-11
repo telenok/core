@@ -10,14 +10,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     protected $presentationContentView = 'core::module.objects-lists.content';
     protected $presentationModelView = 'core::module.objects-lists.model';
     protected $presentationTreeView = 'core::module.objects-lists.tree';
-	
+
     protected $presentationFormModelView = 'core::presentation.tree-tab-object.form';
     protected $presentationFormFieldListView = 'core::presentation.tree-tab-object.form-field-list';
 
 	public function getModelFieldViewKey($field) {}
 
     public function getModelFieldView($field) {}
-	
+
 	public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null) {}
 
     public function getActionParam()
@@ -25,7 +25,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         if ($typeId = $this->getRequest()->input('typeId', 0))
         {
             $type = $this->getType($typeId); 
-            
+
 			if ($type->classController())
 			{
 				return $this->typeForm($type)->getActionParam();
@@ -365,6 +365,41 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 </div>';
     } 
 
+    public function createWizard() 
+    {
+        $this->displayType = static::$DISPLAY_TYPE_WIZARD;
+        
+        return $this->create();
+    }
+
+    public function editWizard($id = 0) 
+    {
+        $this->displayType = static::$DISPLAY_TYPE_WIZARD;
+        
+        return $this->edit($id);
+    }
+
+    public function storeWizard($id = null) 
+    {
+        $this->displayType = static::$DISPLAY_TYPE_WIZARD;
+        
+        return $this->store($id);
+    }
+
+    public function updateWizard($id = null) 
+    {
+        $this->displayType = static::$DISPLAY_TYPE_WIZARD;
+        
+        return $this->update($id);
+    }
+
+    public function deleteWizard($id = null, $force = false)
+    {
+        $this->displayType = static::$DISPLAY_TYPE_WIZARD;
+        
+        return $this->delete($id, $force);
+    }
+    
     public function create()
     {   
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
@@ -382,7 +417,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         if ($type->classController())
         {
-            return $this->typeForm($type)->create();
+            return $this->typeForm($type)->setDisplayType($this->displayType)->create();
         }
 
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
@@ -430,7 +465,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         if ($type->classController())
         {
-            return $this->typeForm($type)->edit($id);
+            return $this->typeForm($type)->setDisplayType($this->displayType)->edit($id);
         } 
 
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
@@ -470,7 +505,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         if ($c = $type->classController())
         {
-            return app($c)->delete($id, $force);
+            return app($c)->setDisplayType($this->displayType)->delete($id, $force);
         } 
 				
         if (!app('auth')->can('delete', $id))
@@ -617,7 +652,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 			if ($type->classController())
 			{
-				return $this->typeForm($type)->store();
+				return $this->typeForm($type)->setDisplayType($this->displayType)->store();
 			}
 
 			$model = $this->save($input, $type); 
@@ -661,7 +696,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 			if ($type->classController())
 			{
-				return $this->typeForm($type)->update();
+				return $this->typeForm($type)->setDisplayType($this->displayType)->update();
 			}
 
 			$model = $this->save($input, $type); 

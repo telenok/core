@@ -476,14 +476,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
 		try
 		{
-			return route($this->routerActionParam ?: "telenok.module.{$this->getKey()}.action.param", $param);
+			return route($this->routerActionParam ?: $this->getVendorName() . ".module.{$this->getKey()}.action.param", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
             $param['typeId'] = array_get($param, 'typeId', $this->getTypeList()->getKey());
             $param['treeId'] = array_get($param, 'treeId', 0);
 
-			return route("telenok.module.objects-lists.action.param", $param);
+			return route($this->getVendorName() . ".module.objects-lists.action.param", $param);
 		}
     } 
     
@@ -491,11 +491,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
 		try
 		{
-			return route($this->routerList ?: "telenok.module.{$this->getKey()}.list", $param);
+			return route($this->routerList ?: $this->getVendorName() . ".module.{$this->getKey()}.list", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return route("telenok.module.objects-lists.list", $param);
+			return route($this->getVendorName() . ".module.objects-lists.list", $param);
 		}
     }	
 
@@ -503,13 +503,13 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
 		try
 		{
-			return route($this->routerContent ?:"telenok.module.{$this->getKey()}", $param);
+			return route($this->routerContent ?:$this->getVendorName() . ".module.{$this->getKey()}", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
             $param['typeId'] = array_get($param, 'typeId', $this->getTypeList()->getKey());
 
-			return route("telenok.module.objects-lists", $param);
+			return route($this->getVendorName() . ".module.objects-lists", $param);
 		}
     }
     
@@ -517,11 +517,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
 		try
 		{
-			return route($this->routerCreate ?: "telenok.module.{$this->getKey()}.create", $param);
+			return route($this->routerCreate ?: $this->getVendorName() . ".module.{$this->getKey()}.create", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return route("telenok.module.objects-lists.create", $param);
+			return route($this->getVendorName() . ".module.objects-lists." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "create", $param);
 		} 
     }
 	
@@ -529,11 +529,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
 		try
 		{
-			return route($this->routerEdit ?:"telenok.module.{$this->getKey()}.edit", $param);
+			return route($this->routerEdit ?: $this->getVendorName() . ".module.{$this->getKey()}.edit", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return route("telenok.module.objects-lists.edit", $param);
+			return route("telenok.module.objects-lists." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "edit", $param);
 		} 
     }
     
@@ -545,7 +545,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return route("telenok.module.objects-lists.delete", $param);
+			return route("telenok.module.objects-lists." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "delete", $param);
 		} 
     }
     
@@ -557,7 +557,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return route("telenok.module.objects-lists.store", $param);
+			return route("telenok.module.objects-lists." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "store", $param);
 		} 
     }
     
@@ -569,7 +569,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return route("telenok.module.objects-lists.update", $param);
+			return route("telenok.module.objects-lists." . ($this->isDisplayTypeWizard() ? "wizard." : "") . "update", $param);
 		} 
     }
 	
@@ -605,7 +605,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return route("telenok.module.objects-lists.lock", $param);
+			return route($this->getVendorName() . ".module.objects-lists.lock", $param);
 		} 
     }
 	
@@ -613,11 +613,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
 		try
 		{
-			return route($this->routerListLock ?: "telenok.module.{$this->getKey()}.list.lock", $param);
+			return route($this->routerListLock ?: $this->getVendorName() . ".module.{$this->getKey()}.list.lock", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return route("telenok.module.objects-lists.list.lock", $param);
+			return route($this->getVendorName() . ".module.objects-lists.list.lock", $param);
 		} 
     }
 	
@@ -625,11 +625,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
 		try
 		{
-			return route($this->routerListUnlock ?: "telenok.module.{$this->getKey()}.list.unlock", $param);
+			return route($this->routerListUnlock ?: $this->getVendorName() . ".module.{$this->getKey()}.list.unlock", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
-			return route("telenok.module.objects-lists.list.unlock", $param);
+			return route($this->getVendorName() . ".module.objects-lists.list.unlock", $param);
 		} 
     }
 	
@@ -644,14 +644,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
 		try
 		{
-			return route($this->routerListTree ?: "telenok.module.{$this->getKey()}.list.tree", $param);
+			return route($this->routerListTree ?: $this->getVendorName() . ".module.{$this->getKey()}.list.tree", $param);
 		} 
 		catch (\InvalidArgumentException $ex) 
 		{
             $param['typeId'] = array_get($param, 'typeId', $this->getTypeList()->getKey());
             $param['treeId'] = array_get($param, 'treeId', 0);
 
-			return route("telenok.module.objects-lists.list.tree", $param);
+			return route($this->getVendorName() . ".module.objects-lists.list.tree", $param);
 		} 
     }
 

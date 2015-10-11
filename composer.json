@@ -25,7 +25,7 @@
     },
     "autoload": {
         "classmap": [
-            "src/migrations"
+            "src/migration"
         ],
         "psr-0": {
             "Telenok\\Core": "src/"
@@ -33,9 +33,8 @@
     },
     "scripts": {
         "post-update-cmd": [
-            "php artisan vendor:publish --tag=\"public\" --provider=\"Vendor\\Providers\\CoreServiceProvider\"",
-            "php artisan vendor:publish --tag=\"migrations\" --provider=\"Vendor\\Providers\\CoreServiceProvider\"",
-            "php artisan vendor:publish --tag=\"seeds\" --provider=\"Vendor\\Providers\\CoreServiceProvider\"" 
+            "php artisan vendor:publish --tag=\"public\" --provider=\"Telenok\\Core\\Providers\\CoreServiceProvider\" --force",
+            "php artisan migrate --force --path=\"vendor/telenok/core/src/migration\""
         ]
     },
     "extra": {
