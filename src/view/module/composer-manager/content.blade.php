@@ -124,16 +124,24 @@
 		var currentDirectory{{$jsContentUnique}} = '{!! $currentDirectory !!}';
 
         var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
-        var aoColumns = []; 
-                aoColumns.push({ "mData": "tableCheckAll", "sTitle": '<label><input type="checkbox" name="checkHeader" class="ace ace-switch ace-switch-6" onclick="var tb=jQuery(\'#' + 
-                            presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));"><span class="lbl"></span></label>',
-							"mDataProp": null, "sClass": "center", "sWidth": "20px", 
-							"sDefaultContent": '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]"><span class="lbl"></span></label>', 
-							"bSortable": false});
+        var aoColumns = [];
+
+                aoColumns.push({ "mData": "tableCheckAll", "sTitle": 
+                        '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
+                        + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
+                        + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
+                        + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
+                        + '<span class="lbl">' 
+                        + '</span></label>',
+                        "mDataProp": null, "sClass": "center", "sWidth": "20px", 
+                        "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
+                        "bSortable": false});
+                
+                aoColumns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false });
+
                 @foreach((array)$fields as $key => $field)
                     @if ($key==0)
                         aoColumns.push({ "mData": "{{ $field}}", "sTitle": "{{ $controller->LL("field." . $field) }}", "bSortable": false });
-                        aoColumns.push({ "mData": "tableManageItem", "sTitle": "{{ $controller->LL('action') }}", "bSortable": false });
                     @else
                         aoColumns.push({ "mData": "{{ $field}}", "sTitle": "{{ $controller->LL("field." . $field) }}", "bSortable": false });
                     @endif

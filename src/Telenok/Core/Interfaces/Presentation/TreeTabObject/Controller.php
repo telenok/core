@@ -152,7 +152,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			
             foreach ($items->slice(0, $this->displayLength, true) as $k => $item)
             {
-                $put = ['tableCheckAll' => '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]" value="'.$item->getKey().'" /><span class="lbl"></span></label>'];
+                $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item->getKey().'"><span class="lbl"></span>'];
 
                 foreach ($fields as $field)
                 {

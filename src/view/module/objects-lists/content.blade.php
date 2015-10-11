@@ -87,19 +87,23 @@
     <script type="text/javascript">
 
         var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
-		
         var aoColumns = []; 
 
-                aoColumns.push({ "mData": "tableCheckAll", "sTitle": '<label><input type="checkbox" name="checkHeader" class="ace ace-switch ace-switch-6" onclick="var tb=jQuery(\'#' + 
-                            presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));"><span class="lbl"></span></label>', 
-							"mDataProp": null, "sClass": "center", "sWidth": "20px", 
-							"sDefaultContent": '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]"><span class="lbl"></span></label>', 
-							"bSortable": false});
+                aoColumns.push({ "mData": "tableCheckAll", "sTitle": 
+                        '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
+                        + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
+                        + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
+                        + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
+                        + '<span class="lbl">' 
+                        + '</span></label>',
+                        "mDataProp": null, "sClass": "center", "sWidth": "20px", 
+                        "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
+                        "bSortable": false});
+
+                aoColumns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false });
+
                 @foreach($fields as $key => $field)
                         aoColumns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $field->translate('title_list') }}", "mDataProp": null, "bSortable": @if ($field->allow_sort) true @else false @endif });
-                    @if ( ($key==1 && $fields->count() > 1) || ($key==0 && $fields->count() < 2) )
-                        aoColumns.push({ "mData": "tableManageItem", "sTitle": "{{ $controller->LL('action') }}", "bSortable": false });
-                    @endif
                 @endforeach
 
                 presentation.addDataTable({

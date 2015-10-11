@@ -215,7 +215,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         foreach($collection as $item)
         {
-            $put = ['tableCheckAll' => '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]" value="' . $item->getRealpath() . '" /><span class="lbl"></span></label>'];
+            $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item->getRealpath().'"><span class="lbl"></span>'];
 
 			if ($item->isDir())
 			{
@@ -252,25 +252,39 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             'aaData' => $content
         ];
     } 
-
+    
     public function getListButton($item)
     {
-        return '
-                <div class="hidden-phone visible-lg btn-group">
-				' . (
-				$item->isReadable() && ($item->isFile() || $item->isDir()) ? '
-                    <button class="btn btn-minier btn-info disable" title="'.$this->LL('list.btn.edit').'" 
+        $collection = \Illuminate\Support\Collection::make();
+        
+        $collection->put('open', ['order' => 0 , 'content' => '<div class="hidden-phone visible-lg btn-group">']);
+        $collection->put('close', ['order' => PHP_INT_MAX, 'content' => '</div>']);
+        
+        if ($item->isReadable() && ($item->isFile() || $item->isDir()))
+        {
+            $collection->put('edit', ['order' => 0 , 'content' => 
+                    '<button class="btn btn-minier btn-info disable" title="'.$this->LL('list.btn.edit').'" 
                         onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \'' 
                         . $this->getRouterEdit(['id' => $item->getRealPath()]) . '\'});">
                         <i class="fa fa-pencil"></i>
-                    </button> ' : ''
-				) . '
-                    <button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
+                    </button>'
+                ]);
+        }
+
+        $collection->put('delete', ['order' => 1 , 'content' => 
+                    '<button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
                         onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure.delete') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
                         . $this->getRouterDelete(['id' => $item->getRealPath()]) . '\');">
                         <i class="fa fa-trash-o"></i>
-                    </button>
-                </div>';
+                    </button>'
+            ]);
+
+        app('events')->fire($this->getListButtonEventKey(), $collection);
+
+        return $this->getAdditionalListButton($item, $collection)->sort(function($a, $b)
+                    {
+                        return array_get($a, 'order', 0) > array_get($b, 'order', 0) ? 1 : -1;
+                    })->implode('content');
     }
 
     public function create()

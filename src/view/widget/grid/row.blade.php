@@ -7,6 +7,10 @@
 
 			@foreach($fields as $key => $field)
 
+                @if ($controller->enableColumnAction())
+                    aoColumns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false }); 
+                @endif
+            
 				@if ($n++ == 0)
 					@if ($controller->enableColumnSelect())
 						aoColumns.push({ 
@@ -21,12 +25,7 @@
 							"sDefaultContent": '<label><input type="checkbox" class="ace ace-switch ace-switch-6" name="tableCheckAll[]"><span class="lbl"></span></label>',
 							"bSortable": false
 						});
-					@endif
-
-					@if ($controller->enableColumnAction())
-						aoColumns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false }); 
-					@endif
-			
+					@endif 
 				@endif
 					
 				aoColumns.push({ 

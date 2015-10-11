@@ -20,6 +20,14 @@ a:hover {
     margin-right: 0;
 }
 
+.btn.btn-white.btn-transparent.no-hover,
+.btn.btn-white.btn-transparent.no-hover:focus,
+.btn.btn-white.btn-transparent.no-hover:hover,
+.btn.btn-white.btn-transparent.no-hover:active {
+    background: none !important;
+    border: none !important;
+}
+
 .table th, .table td {
     vertical-align: middle !important;
 }
