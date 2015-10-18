@@ -1,5 +1,3 @@
-@extends('core::layout.model-field')
-
 <?php
 
     $method = camel_case($field->code);

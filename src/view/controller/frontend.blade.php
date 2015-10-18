@@ -23,8 +23,8 @@ ob_end_clean();
 	<head>
 		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 		<title>{{$page->translate('title_ceo')}}</title>
-        <meta name="description" content="{{$page->translate('description_ceo')}}"></meta>
-        <meta name="keywords" content="{{$page->translate('keywords_ceo')}}"></meta>
+        <meta name="description" content="{{$page->translate('description_ceo')}}" />
+        <meta name="keywords" content="{{$page->translate('keywords_ceo')}}" />
 		<meta name="csrf-token" content="{{ csrf_token() }}" />		
 		
 		@foreach($controllerAction->getCssFile() as $file)
@@ -53,6 +53,8 @@ ob_end_clean();
 			//$controllerAction->addCssFile('http://fonts.googleapis.com/css?family=Open+Sans', 'fonts.googleapis');
 			
 			//$controllerAction->addJsFile('js/custom.js', 'custom', 10000000);
+			
+            $controllerAction->addJsFile('packages/telenok/core/js/jquery.js', 'jquery', 0);
 
 		?>
 		
@@ -77,4 +79,4 @@ ob_end_clean();
 		</script>
 		
 	</body>
-</html 
+</html>

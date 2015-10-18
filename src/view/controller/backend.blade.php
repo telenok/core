@@ -3,6 +3,11 @@
 @section('head')
     <title>Backend</title>
     @parent
+    
+        <script>
+            var CKEDITOR_BASEPATH = '/packages/telenok/core/js/ckeditor/';
+        </script>
+        {!! HTML::script('packages/telenok/core/js/ckeditor/ckeditor.js') !!}
 @stop
 
 @section('body')

@@ -90,7 +90,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
 		$class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
 
-		$model = new $class;
+		$model = app($class);
 
 		$model::withPermission()->groupBy($model->getTable() . '.id')->take(20)->get()->each(function($item) use (&$option)
 		{

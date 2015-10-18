@@ -116,7 +116,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
             return $item->get('order');
         });
 
-
+        
         $setArray['listModuleMenuTop'] = $listModuleMenuTop;
         $setArray['controller'] = $this;
 
@@ -124,6 +124,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
         {
             \Event::fire('telenok.external_event', $this);
         }
+        
+        \Event::fire('telenok.backend.controller.content', $setArray);
+        
+        $this->addJsCode(view('core::layout.helper-js', $setArray)->render());
         
         return view('core::controller.backend', $setArray)->render();
     }

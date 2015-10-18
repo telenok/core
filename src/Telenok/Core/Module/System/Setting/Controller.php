@@ -8,4 +8,3 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     protected $modelListClass = '\App\Telenok\Core\Model\System\Setting';
 
 }
-

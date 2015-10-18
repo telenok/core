@@ -8,6 +8,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	public function __construct()
 	{
 		$this->languageDirectory = 'setting';
+        
+        parent::__construct();
 	}
 	
 	public function getFormSettingContent($field, $model, $uniqueId)

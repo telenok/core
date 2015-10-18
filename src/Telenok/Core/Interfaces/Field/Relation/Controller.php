@@ -52,7 +52,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		$class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
 
-		$model = new $class;
+		$model = app($class);
 
 		$query = $model::withPermission()
 			->join('object_translation', function($join) use ($model)

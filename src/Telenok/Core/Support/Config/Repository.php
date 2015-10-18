@@ -226,13 +226,13 @@ class Repository {
 
 				if ($page->page_domain && $domain->getKey() == $page->page_domain)
 				{
-					$routeDomain[$page->page_domain][] = '	Route::get("' . implode("/", array_map("rawurlencode", explode("/", $page->getAttribute('url_pattern')))) . '", array("as" => "page_' . $page->getKey() . '",'
+					$routeDomain[$page->page_domain][] = '\Route::get("' . implode("/", array_map("rawurlencode", explode("/", $page->getAttribute('url_pattern')))) . '", array("as" => "page_' . $page->getKey() . '",'
 							. ' "uses" => "' . addcslashes($page->pagePageController->controller_class, '"') . '@' . $page->pagePageController->controller_method . '"));'
 					;
 				}
 				else if (!$page->page_domain)
 				{
-					$routeCommon[$page->getKey()] = 'Route::get("' . implode("/", array_map("rawurlencode", explode("/", $page->getAttribute('url_pattern')))) . '", array("as" => "page_' . $page->getKey() . '",'
+					$routeCommon[$page->getKey()] = '\Route::get("' . implode("/", array_map("rawurlencode", explode("/", $page->getAttribute('url_pattern')))) . '", array("as" => "page_' . $page->getKey() . '",'
 							. ' "uses" => "' . addcslashes($page->pagePageController->controller_class, '"') . '@' . $page->pagePageController->controller_method . '"));'
 					;
 				}
@@ -243,7 +243,7 @@ class Repository {
 		{
 			if (!empty($routeDomain[$domain->getKey()]) && !empty($routeDomain[$domain->getKey()]))
 			{
-				$content[] = 'Route::group(array("domain" => "' . $domain->domain . '"), function() {';
+				$content[] = '\Route::group(array("domain" => "' . $domain->domain . '"), function() {';
 
 				foreach ($routeDomain[$domain->getKey()] as $dC)
 				{

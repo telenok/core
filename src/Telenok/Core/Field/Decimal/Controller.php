@@ -34,7 +34,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             $value = $field->decimal_default;
         }
         
-        return \Telenok\Core\Field\Integer\BigDecimal::create($value, $field->decimal_scale);
+        return \App\Telenok\Core\Field\Decimal\BigDecimal::create($value, $field->decimal_scale);
     }
 
     public function setModelAttribute($model, $key, $value, $field)

@@ -194,32 +194,37 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             'aaData' => $content
         ];
     } 
-
+    
     public function getListButton($item)
     {
+        $random = str_random();
+        
         $collection = \Illuminate\Support\Collection::make();
         
-        $collection->put('open', ['order' => 0 , 'content' => '<div class="hidden-phone visible-lg btn-group">']);
-        $collection->put('close', ['order' => PHP_INT_MAX, 'content' => '</div>']);
+        $collection->put('open', ['order' => 0 , 'content' => 
+            '<div class="dropdown">
+                <a class="btn btn-white no-hover btn-transparent btn-xs dropdown-toggle" href="#" role="button" style="border:none;"
+                        type="button" id="' . $random . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-menu-hamburger text-muted"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="' . $random . '">
+            ']);
         
-        if ($item->isReadable() && ($item->isFile() || $item->isDir()))
-        {
-            $collection->put('edit', ['order' => 0 , 'content' => 
-                    '<button class="btn btn-minier btn-info disable" title="'.$this->LL('list.btn.edit').'" 
-                        onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \'' 
-                        . $this->getRouterEdit(['id' => $item->getRealPath()]) . '\'});">
-                        <i class="fa fa-pencil"></i>
-                    </button>'
-                ]);
-        }
-
-        $collection->put('delete', ['order' => 1 , 'content' => 
-                    '<button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
-                        onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure.delete') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
-                        . $this->getRouterDelete(['id' => $item->getRealPath()]) . '\');">
-                        <i class="fa fa-trash-o"></i>
-                    </button>'
-            ]);
+        $collection->put('close', ['order' => PHP_INT_MAX, 'content' => 
+                '</ul>
+            </div>']);
+        
+        $collection->put('edit', ['order' => 1000, 'content' => 
+                '<li><a href="#" onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \'' 
+                        . $this->getRouterEdit(['id' => $item->getRealPath()]) . '\'}); return false;">' 
+                    . ' <i class="fa fa-pencil"></i> ' . $this->LL('list.btn.edit') . '</a>
+                </li>']);
+        
+        $collection->put('delete', ['order' => 2000, 'content' => 
+                '<li><a href="#" onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure.delete') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
+                        . $this->getRouterDelete(['id' => $item->getRealPath()]) . '\'); return false;">'
+                    . ' <i class="fa fa-trash-o"></i> ' . $this->LL('list.btn.delete') . '</a>
+                </li>']);
 
         app('events')->fire($this->getListButtonEventKey(), $collection);
 

@@ -174,7 +174,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         
         $class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
         
-        $model = new $class;
+        $model = app($class);
         
         $query = $model::withPermission()->take(20)->groupBy($model->getTable() . '.id');
         
