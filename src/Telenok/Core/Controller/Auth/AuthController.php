@@ -58,15 +58,15 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Backend\Control
             {
                 if (app('auth')->can('read', 'control_panel'))
                 {
-                    return json_encode(['success' => 1, 'redirect' => route('telenok.content')]);
+                    return json_encode(['success' => 1, 'redirect' => route('telenok.content'), 'csrf_token' => csrf_token()]);
                 } 
                 else
                 {
-                    return json_encode(['success' => 1, 'redirect' => route('error.access-denied')]);
+                    return json_encode(['success' => 1, 'redirect' => route('error.access-denied'), 'csrf_token' => csrf_token()]);
                 }
             }
 
-            return json_encode(['error' => 1]);
+            return json_encode(['error' => 1, 'csrf_token' => csrf_token()]);
         }
     }
 

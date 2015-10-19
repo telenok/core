@@ -103,21 +103,27 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	
     public function getList()
     {
-		//		$composerLock = json_decode(file_get_contents(base_path('composer.lock')), JSON_UNESCAPED_SLASHES);
-		
+        $input = new \Symfony\Component\Console\Input\ArrayInput([
+                'command' => 'show',
+                '--working-dir' => base_path(),
+                '--installed' => true,
+            ]);
+
+        $out = new \Symfony\Component\Console\Output\BufferedOutput();
+        $application = new \Composer\Console\Application();
+        $application->setAutoExit(false);
+
+        $application->run($input, $out);
+        
+        dd( '111', $out->fetch() );
+        
+        
+        
+        
         $content = []; 
 
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
 
-		$currentDirectory = $input->get('currentDirectory');
-
-		if (strstr($currentDirectory, base_path()) === FALSE)
-		{
-			$currentDirectory = base_path();
-		}
-		
-		$directory = new \SplFileInfo($currentDirectory);
-        
 		$sEcho = $input->get('sEcho');
         $uniqueId = $input->get('uniqueId');
         $iDisplayStart = $input->get('iDisplayStart', 0);
@@ -323,6 +329,31 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			];
 		}
 	}
+    
+    public function edit($id = 0)
+    {
+        $input = new \Symfony\Component\Console\Input\ArrayInput([
+                'command' => 'show',
+                'package' => $id,
+                '--working-dir' => base_path(),
+            ]);
+
+        $out = new \Symfony\Component\Console\Output\BufferedOutput();
+        $application = new \Composer\Console\Application();
+        $application->setAutoExit(false);
+
+        $application->run($input, $out);
+
+        return [
+            'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array( 
+                'controller' => $this,
+                'success' => true,
+                'routerParam' => $this->getRouterParam('update'),
+                'content' => $out->fetch(),
+                'uniqueId' => str_random(),  
+            ), $this->getAdditionalViewParam()))->render()
+        ];
+    }
 
     public function update($id = null)
 	{

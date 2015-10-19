@@ -1135,22 +1135,7 @@ class SeedLast extends Migration {
 				$item->update(['class_model' => $modelClassNew]);
 			}
 		});
-
-		//Setting
-		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'ACL enabled', 'ru' => 'ACL разрешено'],
-			'active' => 1,
-			'value' => 0,
-			'code' => 'app.acl.enabled',
-		]);
-
-		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'Version enabled', 'ru' => 'Version разрешено'],
-			'active' => 1,
-			'value' => 0,
-			'code' => 'app.version.enabled',
-		]);
-
+ 
 		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
 			'title' => ['en' => 'Minimum password length', 'ru' => 'Минимальная длина пароля'],
 			'active' => 1,
@@ -1206,6 +1191,21 @@ class SeedLast extends Migration {
 			'value' => 20,
 			'code' => 'auth.logout.period',
             'description' => ['en' => 'Time in minuts of inactivity to automatic logout user', 'ru' => 'Время в минутах неактиности пользователя для автоматического разлогинивания'],
+		]);
+        
+		//Setting
+		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
+			'title' => ['en' => 'ACL enabled', 'ru' => 'ACL разрешено'],
+			'active' => 1,
+			'value' => 1,
+			'code' => 'app.acl.enabled',
+		]);
+
+		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
+			'title' => ['en' => 'Version enabled', 'ru' => 'Version разрешено'],
+			'active' => 1,
+			'value' => 1,
+			'code' => 'app.version.enabled',
 		]);
 	}
 }

@@ -37,19 +37,9 @@
 
 	@section('formField')
 	
-	{!! Form::hidden('content') !!}
-	
 	<div class="form-group">
 		<div class="col-sm-9">
-			<div contenteditable="true">
-			  <pre id="{{$jsContentUnique}}"><code class="json">{{$content}}</code></pre>
-			</div>
-			<script>
-				jQuery('pre#{{$jsContentUnique}} code').each(function(i, block) 
-				{
-				  hljs.highlightBlock(block);
-				});
-			</script>
+            {{$content}}
 		</div>
 	</div>
 	@stop

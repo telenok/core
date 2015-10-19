@@ -83,10 +83,11 @@ ob_start();
         {
             logined = false;
             
-            jQuery('#modal-autologout').modal('show').modal({
+            jQuery('#modal-autologout').modal({
                 backdrop: 'static',
                 keyboard: false
-            });
+            })
+            .modal('show');
         };
         
         var hideModalLogin = function()
@@ -114,7 +115,7 @@ ob_start();
                     }
                 });
             }
-        }, 10000);
+        }, 60000);
         
         jQuery(document).ajaxSuccess(function(event,request, settings, data)
         {
