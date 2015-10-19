@@ -20,10 +20,19 @@
 
 			return;
 		}
-		else if (button_type=='save' || button_type=='save.close')
+		else if (button_type=='save' || button_type=='save.close' || button_type=='save.update')
 		{	
 			var $content = jQuery('pre#{{$jsContentUnique}} code').text();
 			jQuery("input#content-{{$jsContentUnique}}").val($content);
+            
+            if (button_type=='save.update')
+            {
+                jQuery("input#action-{{$jsContentUnique}}").val("save.update");
+            }
+            else
+            {
+                jQuery("input#action-{{$jsContentUnique}}").val("save");
+            }
 		}
 		@stop
 		
@@ -57,6 +66,7 @@
 	@section('formField') 
 
 	<input type="hidden" name="content" value="" id="content-{{$jsContentUnique}}" />
+	<input type="hidden" name="action" value="" id="action-{{$jsContentUnique}}" />
 
 	<div class="form-group">
 		<div class="col-sm-12">
@@ -66,7 +76,7 @@
 			<script>
 				jQuery('pre#{{$jsContentUnique}} code').each(function(i, block) 
 				{
-				  hljs.highlightBlock(block);
+                    hljs.highlightBlock(block);
 				});
 			</script>
 		</div>
@@ -81,7 +91,7 @@
         <button type="submit" class="btn btn-info" onclick="jQuery(this).closest('form').data('btn-clicked', 'save.close');">
             {{$controller->LL('btn.save.close')}}
         </button>
-        <button type="submit" class="btn btn-danger" onclick="jQuery(this).closest('form').data('btn-clicked', 'update');">
+        <button type="submit" class="btn btn-danger" onclick="jQuery(this).closest('form').data('btn-clicked', 'save.update');">
             {{$controller->LL('btn.update.packages')}}
         </button>
         <button type="submit" class="btn" onclick="jQuery(this).closest('form').data('btn-clicked', 'close');">

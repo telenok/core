@@ -12,7 +12,7 @@ return array(
 	'list.btn.action' => 'Actions',
 	'list.btn.edit.composer.json' => 'Edit composer.json', 
 
-	'btn.update.packages' => 'Update all packages',
+	'btn.update.packages' => 'Save and update all packages',
 	
     'btn.update.package' => 'Update',
     'btn.update.close.package' => 'Update and close',

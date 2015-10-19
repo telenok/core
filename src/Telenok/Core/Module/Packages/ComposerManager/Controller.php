@@ -46,7 +46,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 	public function composerJsonUpdate()
 	{
-		\File::makeDirectory(storage_path('telenok/composer'), 0775, true, true);
+        \File::makeDirectory(storage_path('telenok/composer'), 0775, true, true);
 
 		$lastFile = storage_path('telenok/composer/composer.last.json');
 		$validateFile = storage_path('telenok/composer/composer.validate.json');
@@ -60,13 +60,13 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 		try
 		{ 
-			$json = $this->getRequest()->input('content');
+			$json = $this->getRequest()->get('content');
 
 			$content = json_decode($json);
 
 			if ($content === null)
 			{
-				throw new \Exception();
+                throw new \Exception();
 			}
 
 			file_put_contents($validateFile, $json);
@@ -88,12 +88,19 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 			file_put_contents($lastFile, file_get_contents(base_path('composer.json')));
 			file_put_contents(base_path('composer.json'), $json);
+            
+            if ($this->getRequest()->get('action') == "save.update")
+            {
+                $this->updatePackages();
+            }
 		} 
 		catch (\Exception $e) 
 		{
 			\File::delete($validateFile);
 
-			throw new \Exception($this->LL('error.json'));
+            return [
+                'error' => $this->LL('error.json'),
+            ];
 		}
 		
 		\File::delete($validateFile);
@@ -216,6 +223,25 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         return $out->fetch();
     }
     
+    public function updatePackages($id = [])
+    {
+        ob_start();
+
+        $input = new \Symfony\Component\Console\Input\ArrayInput([
+                'command' => 'update',
+                'packages' => ($id ? (array)$id : []),
+                '--working-dir' => base_path(),
+            ]);
+
+        $out = new \Symfony\Component\Console\Output\BufferedOutput();
+        $application = new \Composer\Console\Application();
+        $application->setAutoExit(false);
+
+        $application->run($input, $out);
+
+        ob_end_clean();
+    }
+    
     public function edit($id = 0)
     {
         $id = $this->getRequest()->get('id');
@@ -240,21 +266,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		{
             $id = $this->getRequest()->get('id');
 
-            ob_start();
-
-            $input = new \Symfony\Component\Console\Input\ArrayInput([
-                    'command' => 'update',
-                    'packages' => [$id],
-                    '--working-dir' => base_path(),
-                ]);
-
-            $out = new \Symfony\Component\Console\Output\BufferedOutput();
-            $application = new \Composer\Console\Application();
-            $application->setAutoExit(false);
-
-            $application->run($input, $out);
-
-            ob_end_clean();
+            $this->updatePackage($id);
             
 			return [
                 'tabKey' => "{$this->getTabKey()}-" . md5($id),
@@ -279,7 +291,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     public function delete($id = null, $force = false)
     { 
         $id = $this->getRequest()->get('id');
-        
+
 		try
 		{
             ob_start();
@@ -295,7 +307,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             $application->setAutoExit(false);
 
             $application->run($input, $out);
-            
+
             ob_end_clean();
 
             return ['success' => 1];
