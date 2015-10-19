@@ -153,9 +153,10 @@
 	\Route::get('telenok/module/packages/composer-manager', array('as' => 'telenok.module.composer-manager', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getContent"));
 	\Route::get('telenok/module/packages/composer-manager/list', array('as' => 'telenok.module.composer-manager.list', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getList"));
 
-	\Route::get('telenok/module/packages/composer-manager/edit', array('as' => 'telenok.module.composer-manager.edit', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@edit"));
-	\Route::get('telenok/module/packages/composer-manager/update', array('as' => 'telenok.module.composer-manager.update', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@update"));
-	\Route::get('telenok/module/packages/composer-manager/delete', array('as' => 'telenok.module.composer-manager.delete', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@delete"));
+    
+    \Route::get('telenok/module/packages/composer-manager/edit', array('as' => 'telenok.module.composer-manager.edit', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@edit"));
+	\Route::post('telenok/module/packages/composer-manager/update', array('as' => 'telenok.module.composer-manager.update', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@update"));
+	\Route::post('telenok/module/packages/composer-manager/delete', array('as' => 'telenok.module.composer-manager.delete', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@delete"));
 
     \Route::get('telenok/module/packages/composer-manager/composer-json/edit', array('as' => 'telenok.module.composer-manager.composer-json.edit', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@getComposerJsonContent"));
 	\Route::post('telenok/module/packages/composer-manager/composer-json/update', array('as' => 'telenok.module.composer-manager.composer-json.update', 'uses' => "App\Telenok\Core\Module\Packages\ComposerManager\Controller@composerJsonUpdate"));

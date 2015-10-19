@@ -82,7 +82,7 @@
             {{$controller->LL('btn.save.close')}}
         </button>
         <button type="submit" class="btn btn-danger" onclick="jQuery(this).closest('form').data('btn-clicked', 'update');">
-            {{$controller->LL('btn.save.update.packages')}}
+            {{$controller->LL('btn.update.packages')}}
         </button>
         <button type="submit" class="btn" onclick="jQuery(this).closest('form').data('btn-clicked', 'close');">
             {{$controller->LL('btn.close')}}

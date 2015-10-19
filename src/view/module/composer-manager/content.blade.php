@@ -30,72 +30,7 @@
                                 <input type="text" value="" name="filter[name]"> 
                             </div>
                         </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label no-padding-right">{{$controller->LL('filter.contain')}}</label>
-                            <div class="col-sm-9">
-                                <input type="text" value="" name="filter[contain]"> 
-                            </div>
-                        </div>
-                        
-                        <div class="form-group ">
-                            <label class="col-sm-3 control-label no-padding-right">{{$controller->LL('filter.size')}}</label>
-                            <div class="col-sm-9">
-                                <div class="input-group col-sm-1">
-                                    <div class="input-group">
-                                        <span class="input-group-addon datepickerbutton">
-                                            <i class="fa fa-circle-o bigger-110"></i>
-                                        </span>
-                                        <input type="text" value="" name="filter[size][min]">
-                                    </div>           
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-arrow-right"></i>
-                                    </span>
-                                    <div class="input-group">
-                                        <input type="text" value="" name="filter[size][max]">
-                                        <span class="input-group-addon datepickerbutton">
-                                            <i class="fa fa-circle bigger-110"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group ">
-                            <label class="col-sm-3 control-label no-padding-right">{{$controller->LL('filter.last.modify')}}</label>
-                            <div class="col-sm-9">
-                                <div class="input-group col-sm-1">
-                                    <div id="datetime-picker-last-modify-start-{{$jsContentUnique}}" class="input-group">
-                                        <span class="input-group-addon datepickerbutton">
-                                            <i class="fa fa-clock-o bigger-110"></i>
-                                        </span>
-                                        <input type="text" value="" name="filter[last_modify][start]">
-                                    </div>           
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-arrow-right"></i>
-                                    </span>
-                                    <div id="datetime-picker-last-modify-end-{{$jsContentUnique}}" class="input-group">
-                                        <input type="text" value="" name="filter[last_modify][end]">
-                                        <span class="input-group-addon datepickerbutton">
-                                            <i class="fa fa-clock-o bigger-110"></i>
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <script type="text/javascript">
-                                    jQuery("#datetime-picker-last-modify-start-{{$jsContentUnique}}, #datetime-picker-last-modify-end-{{$jsContentUnique}}").datetimepicker(
-                                    {
-                                        format: "YYYY-MM-DD HH:mm:ss",
-                                        useSeconds: true,
-                                        pick12HourFormat: false,
-                                        autoclose: true,
-                                        minuteStep: 1,
-                                        useCurrent: true
-                                    });
-                                </script> 
-                            </div>
-                        </div>
-                         
+ 
                         <div class="form-group center">
 							<div class="hr hr-8 dotted"></div>
 							<button onclick="presentationTableFilter{{$jsContentUnique}}(this);" class="btn btn-sm btn-info">
@@ -167,61 +102,14 @@
 											url: '{!! route("telenok.module.composer-manager.composer-json.edit") !!}'
 										}); 
 									}
-								},
-								{
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-plus'></i> {{ $controller->LL('list.btn.package.add') }}",
-									"fnClick": function(nButton, oConfig, oFlash) 
-									{ 
-										telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-											url: '{--!! $controller->getRouterCreate() !!--}',
-											data: {
-												currentDirectory: currentDirectory{{$jsContentUnique}},
-												modelType : 'directory'
-											}
-										}); 
-									}
-								},
+								}
 							]
 						}
 					],
-					
-					tableListBtnCreate: 
-						{
-							"sExtends": "collection",
-							'sButtonClass': 'btn btn-sm btn-success',
-							"sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controller->LL('list.btn.select') }}",
-							"aButtons": [ 
-								{
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-folder'></i> {{ $controller->LL('btn.update') }}",
-									"fnClick": function(nButton, oConfig, oFlash) 
-									{ 
-										telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-											url: '{--!! $controller->getRouterCreate() !!--}',
-											data: {
-												currentDirectory: currentDirectory{{$jsContentUnique}},
-												modelType : 'directory'
-											}
-										}); 
-									}
-								},
-								{
-									"sExtends": "text",
-									'sButtonClass': '',
-									"sButtonText": "<i class='fa fa-file'></i> {{ $controller->LL('btn.remove') }}",
-									"fnClick": function(nButton, oConfig, oFlash) {
-										telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-											url: '{--!! $controller->getRouterCreate() !!--}', 
-											data: {
-												currentDirectory: currentDirectory{{$jsContentUnique}},
-												modelType : 'file'
-											}
-										}); 
-									}
-								}
-							]
-						},
+
+                    tableListBtnCreate: false,
+
+					tableListBtnSelected: false
                 });
                 
                 
