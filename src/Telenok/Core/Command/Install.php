@@ -177,7 +177,7 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
     {
         while (true)
         {
-            $name = $this->ask('What is database user\'s password: ');
+            $name = $this->ask('What is database user\'s password: ', "");
 
             try
             {
@@ -213,7 +213,7 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
     {
         while (true)
         {
-            $name = $this->ask('What is database prefix [empty default]: ');
+            $name = $this->ask('What is database prefix [empty default]: ', "");
 
             try
             {
