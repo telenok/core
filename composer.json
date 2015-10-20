@@ -3,7 +3,6 @@
     "description": "Telenok CMS Core engine",
     "keywords": ["telenok", "core", "laravel"],
     "homepage": "http://telenok.com",
-    "minimum-stability": "dev",
     "license": "commercial",
     "support": {
         "email": "support@telenok.com",
