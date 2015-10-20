@@ -341,29 +341,42 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getListButtonExtended($item, $type, $canDelete)
     {
-        return '<div class="hidden-phone visible-lg btn-group">
-                    <button class="btn btn-minier btn-info" title="'.$this->LL('list.btn.edit').'" 
-                        onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \'' 
-                        . $this->getRouterEdit(['id' => $item->getKey()]) . '\'});return false;">
-                        <i class="fa fa-pencil"></i>
-                    </button>
+        $random = str_random();
+        
+        $collection = \Illuminate\Support\Collection::make();
+        
+        $collection->put('open', ['order' => 0 , 'content' => 
+            '<div class="dropdown">
+                <a class="btn btn-white no-hover btn-transparent btn-xs dropdown-toggle" href="#" role="button" style="border:none;"
+                        type="button" id="' . $random . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-menu-hamburger text-muted"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="' . $random . '">
+            ']);
+        
+        $collection->put('close', ['order' => PHP_INT_MAX, 'content' => 
+                '</ul>
+            </div>']);
+        
+        $collection->put('edit', ['order' => 1000, 'content' => 
+                '<li><a href="#" onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \'' 
+                        . $this->getRouterEdit(['id' => $item->getKey()]) . '\'}); return false;">' 
+                    . ' <i class="fa fa-pencil"></i> ' . $this->LL('list.btn.edit') . '</a>
+                </li>']);
+        
+        $collection->put('delete', ['order' => 2000, 'content' => 
+                '<li><a href="#" onclick="if (confirm(\'' . $this->LL('notice.sure.delete') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
+                        . $this->getRouterDelete(['id' => $item->getKey()]) . '\'); return false;">'
+                    . ' <i class="fa fa-trash-o"></i> ' . $this->LL('list.btn.delete') . '</a>
+                </li>']);
 
-                    <button class="btn btn-minier btn-light" onclick="return false;" title="' . $this->LL('list.btn.' . ($item->active ? 'active' : 'inactive')) . '">
-                        <i class="fa fa-check ' . ($item->active ? 'green' : 'white'). '"></i>
-                    </button>
+        app('events')->fire($this->getListButtonEventKey(), $collection);
 
-                    <button class="btn btn-minier btn-light" onclick="return false;" title="' . $this->LL('list.btn.' . ($item->locked() ? 'locked' : 'unlocked')) . '">
-                        <i class="fa fa-' . ($item->locked() ? 'lock ' . (app('auth')->user()->id == $item->locked_by_user ? 'green' : 'red') : 'unlock green'). '"></i>
-                    </button>
-
-                    ' . ($canDelete ? '
-                    <button class="btn btn-minier btn-danger" title="'.$this->LL('list.btn.delete').'" 
-                        onclick="if (confirm(\'' . $this->LL('notice.sure.delete') . '\')) telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').deleteByURL(this, \'' 
-                        . $this->getRouterDelete(['id' => $item->getKey()]) . '\');return false;">
-                        <i class="fa fa-trash-o"></i>
-                    </button>' : '') . '
-                </div>';
-    } 
+        return $this->getAdditionalListButton($item, $collection)->sort(function($a, $b)
+                    {
+                        return array_get($a, 'order', 0) > array_get($b, 'order', 0) ? 1 : -1;
+                    })->implode('content');
+    }
 
     public function createWizard() 
     {

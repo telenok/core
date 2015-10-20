@@ -29,7 +29,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         ];
     }
 
-    public function getComposerJsonContent()
+    public function getComposerJsonContent($success = false)
 	{
         return [
             'tabKey' => "{$this->getTabKey()}-{$this->getParent()}-" . str_random(),
@@ -37,6 +37,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             'tabContent' => view($this->presentationComposerJsonView, array(
 				'routerParam' => $this->getRouterParam('composer-json-update'),
                 'controller' => $this,
+                'success' => $success,
 				'content' => file_get_contents(base_path('composer.json')),
                 'gridId' => $this->getGridId(),
                 'uniqueId' => str_random(),
@@ -53,14 +54,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 		if (file_exists($validateFile) && (time() - filemtime($validateFile) < $this->timeProcessLimit))
 		{
-			throw new \Exception($this->LL('error.json.locked'));
+			return \Response::json(['error' => $this->LL('error.json.locked')], 417 /* Expectation Failed */);
 		}
 
 		touch($validateFile);
 
 		try
 		{ 
-			$json = $this->getRequest()->get('content');
+			$json = $this->getRequest()->input('content');
 
 			$content = json_decode($json);
 
@@ -89,7 +90,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			file_put_contents($lastFile, file_get_contents(base_path('composer.json')));
 			file_put_contents(base_path('composer.json'), $json);
             
-            if ($this->getRequest()->get('action') == "save.update")
+            if ($this->getRequest()->input('action') == "save.update")
             {
                 $this->updatePackages();
             }
@@ -98,14 +99,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		{
 			\File::delete($validateFile);
 
-            return [
-                'error' => $this->LL('error.json'),
-            ];
+			return \Response::json(['error' => $this->LL('error.json')], 417 /* Expectation Failed */);
 		}
 		
 		\File::delete($validateFile);
 
-		return $this->getComposerJsonContent();
+		return $this->getComposerJsonContent(true);
 	}
 	
     public function getList()
@@ -229,7 +228,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $input = new \Symfony\Component\Console\Input\ArrayInput([
                 'command' => 'update',
-                'packages' => ($id ? (array)$id : []),
+                //'packages' => ($id ? (array)$id : []),
                 '--working-dir' => base_path(),
             ]);
 
@@ -244,7 +243,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     
     public function edit($id = 0)
     {
-        $id = $this->getRequest()->get('id');
+        $id = $this->getRequest()->input('id');
 
         return [
             'tabKey' => "{$this->getTabKey()}-" . md5($id),
@@ -264,7 +263,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	{
 		try
 		{
-            $id = $this->getRequest()->get('id');
+            $id = $this->getRequest()->input('id');
 
             $this->updatePackage($id);
             
@@ -290,7 +289,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function delete($id = null, $force = false)
     { 
-        $id = $this->getRequest()->get('id');
+        $id = $this->getRequest()->input('id');
 
 		try
 		{

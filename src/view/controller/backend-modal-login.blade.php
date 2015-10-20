@@ -134,9 +134,15 @@ ob_start();
                 method: 'post',
                 success: function(data)
                 {
+                    if (data.csrf_token)
+                    {
+                        jQuery('meta[name="csrf-token"]').attr('content', data.csrf_token);
+                    }
+                    
                     if (data.success)
                     {
                         hideModalLogin();
+                        jQuery('#login-error').hide();
                     }
                     else
                     {

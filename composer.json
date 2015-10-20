@@ -20,7 +20,7 @@
         "ext-bcmath": "*",
         "laravel/framework": "~5.1",
         "illuminate/html": "5.*",
-        "composer/composer": "@dev",
+        "composer/composer": "dev-master",
         "imagine/imagine": "~0.5"
     },
     "autoload": {

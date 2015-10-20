@@ -172,7 +172,7 @@
             <div class="main-content clearfix">
                 <div class="breadcrumbs breadcrumbs-fixed">
                     <ul class="breadcrumb">
-                        <li><i class="ace-icon fa fa-home home-icon"></i> <a href="telenok/">{{ $controller->LL('home') }}</a></li> 
+                        <li><i class="ace-icon fa fa-home home-icon"></i> {{ $controller->LL('home') }}</li> 
                     </ul>
 
                     <div class="nav-search"> 

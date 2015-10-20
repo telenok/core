@@ -239,7 +239,7 @@
             });
         }
 
-        function editTableRow{{$jsUnique}}(obj, url) 
+        function editTableRow{{$uniqueId}}(obj, url) 
         {
             jQuery.ajax({
                 url: url,

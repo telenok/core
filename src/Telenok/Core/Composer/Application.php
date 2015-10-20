@@ -12,7 +12,7 @@ class Application extends \Composer\Console\Application {
     {
         $input = new \Symfony\Component\Console\Input\ArrayInput([]);
         $output = new \Symfony\Component\Console\Output\BufferedOutput();
-        
+
         $this->setAutoExit(false);
         $this->setIO(new \Composer\IO\ConsoleIO($input, $output, $this->getHelperSet()));
         

@@ -10,8 +10,8 @@ return array(
     'tab.title.select' => 'Select queries',
     'tab.title.statement' => 'Insert, Update, Delete queries',
     
-    'content.select' => 'You SELECT query',
-    'content.statement' => 'You INSERT, UPDATE or DELETE query',
+    'content.select' => 'Your SELECT query',
+    'content.statement' => 'Your INSERT, UPDATE or DELETE query',
     
     'error.select' => 'Error',
     'result.select.empty' => 'Empty',

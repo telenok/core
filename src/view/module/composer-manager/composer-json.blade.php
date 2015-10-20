@@ -46,7 +46,7 @@
 			else if (button_type=='save')
 			{
 				jQuery.gritter.add({
-					title: '{{$controller->LL('notice.saved')}}! {{$controller->LL('notice.saved.description')}}',
+					title: '{{$controller->LL('notice.saved.description')}}',
 					text: '{{$controller->LL('notice.saved.thank.you')}}!',
 					class_name: 'gritter-success gritter-light',
 					time: 3000,

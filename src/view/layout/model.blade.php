@@ -75,7 +75,14 @@
 			}
 			catch(e)
 			{
-				var jsonError = jsonResponse.error.message;
+                if (jsonResponse.error.message)
+                {
+                    var jsonError = jsonResponse.error.message;
+                }
+                else
+                {
+                    var jsonError = jsonResponse.error;
+                }
 			}
 
 			var $errorContainer = jQuery('div.error-container', $el);
