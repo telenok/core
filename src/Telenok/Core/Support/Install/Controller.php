@@ -190,7 +190,7 @@ class Controller {
 
 	public function setDbPassword($param = '')
 	{
-		$this->dbPassword = $param;
+		$this->dbPassword = $param ? $param : '';
 
 		return $this;
 	}
