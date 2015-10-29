@@ -1,8 +1,5 @@
 <?php namespace Telenok\Core\Field\Upload;
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;  
-
 class File {
 
 	protected $model;

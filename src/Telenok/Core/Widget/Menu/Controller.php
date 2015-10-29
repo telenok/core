@@ -6,22 +6,8 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
     protected $parent = 'standart';
 	protected $frontendView = "core::widget.menu.widget-frontend";
 
-	public function getContent($structure = null)
+	public function getNotCachedContent($model, $structure = null)
 	{
-        if (!($model = $this->getWidgetModel()))
-        {
-            return;
-        }
-        
-        $structure = $structure === null ? $model->structure : $structure;
-        
-        $this->setCacheTime($model->cache_time);
-        
-        if (($content = $this->getCachedContent()) !== false)
-        {
-            return $content;
-        }
-
         $menuType = array_get($structure, 'menu_type');
         $nodeIds = array_get($structure, 'node_ids');
         $ids = [];
@@ -42,17 +28,13 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
                     ->orderBy('pivot_tree_attr.tree_order')
                     ->get();
         
-        $content = view('widget.' . $model->getKey(), [
+        return view('widget.' . $model->getKey(), [
                         'controller' => $this, 
                         'frontendController' => $this->getFrontendController(),
                         'pages' => $pages,
                         'nodeIds' => $ids,
                         'menu_type' => $menuType,
                     ])->render();
-
-        $this->setCachedContent($content);
-
-        return $content;
 	}
 
     public function preProcess($model, $type, $input)

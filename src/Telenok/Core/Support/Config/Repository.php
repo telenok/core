@@ -217,7 +217,7 @@ class Repository {
 
 		foreach ($domains->all() as $domain)
 		{
-			foreach ($pages->all() as $key => $page)
+			foreach ($pages->all() as $page)
 			{
 				if (!method_exists($page->pagePageController->controller_class, $page->pagePageController->controller_method))
 				{
@@ -226,13 +226,13 @@ class Repository {
 
 				if ($page->page_domain && $domain->getKey() == $page->page_domain)
 				{
-					$routeDomain[$page->page_domain][] = '\Route::get("' . implode("/", array_map("rawurlencode", explode("/", $page->getAttribute('url_pattern')))) . '", array("as" => "page_' . $page->getKey() . '",'
+					$routeDomain[$page->page_domain][] = '\Route::get("' . $page->getAttribute('url_pattern') . '", array("as" => "page_' . $page->getKey() . '",'
 							. ' "uses" => "' . addcslashes($page->pagePageController->controller_class, '"') . '@' . $page->pagePageController->controller_method . '"));'
 					;
 				}
 				else if (!$page->page_domain)
 				{
-					$routeCommon[$page->getKey()] = '\Route::get("' . implode("/", array_map("rawurlencode", explode("/", $page->getAttribute('url_pattern')))) . '", array("as" => "page_' . $page->getKey() . '",'
+					$routeCommon[$page->getKey()] = '\Route::get("' . $page->getAttribute('url_pattern') . '", array("as" => "page_' . $page->getKey() . '",'
 							. ' "uses" => "' . addcslashes($page->pagePageController->controller_class, '"') . '@' . $page->pagePageController->controller_method . '"));'
 					;
 				}

@@ -30,7 +30,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     }
 
     public function postProcess($model, $type, $input)
-    { 
+    {
         \Event::fire('telenok.compile.route');
 
         return $this;

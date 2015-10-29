@@ -6,6 +6,12 @@
     <div class="widget-header widget-header-small">
 		<h5 class="widget-title lighter">{{$header}}. {{$widgetOnPage->translate('title')}}</h5>
 
+		<div class="widget-toolbar">
+            <a data-action="close" href="#">
+				<i class="ace-icon fa fa-times"></i>
+			</a>
+		</div>
+
 		<div class="widget-toolbar no-border">
 			<a data-action="cut" href="#">
 				<i class="ace-icon fa fa-scissors"></i>
@@ -21,10 +27,6 @@
 
 			<a data-action="settings" href="#">
 				<i class="ace-icon fa fa-cog"></i>
-			</a>
-
-            <a data-action="close" href="#">
-				<i class="ace-icon fa fa-times"></i>
 			</a>
 		</div>
     </div>

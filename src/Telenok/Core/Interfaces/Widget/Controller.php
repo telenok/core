@@ -10,9 +10,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $frontendView = '';
 	protected $structureView = '';
 	protected $frontendController;
-	protected $cacheTime = 3600;  
-	
-	public function __construct()
+	protected $cacheTime = 3600;
+    protected $widgetTemplateDirectory = 'resources/views/widget/';
+
+
+    public function __construct()
 	{
 		$this->languageDirectory = 'widget';
 
@@ -86,7 +88,30 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     
 	public function getContent($structure = null)
 	{
-		return '';
+        if (!($model = $this->getWidgetModel()))
+        {
+            return;
+        }
+
+        $this->setCacheTime($model->cache_time);
+
+        if (($content = $this->getCachedContent()) !== false)
+        {
+            return $content;
+        }
+
+        $structure = $structure === null ? $model->structure : $structure;
+
+        $content = $this->getNotCachedContent($model, $structure);
+
+        $this->setCachedContent($content);
+
+        return $content;
+	}
+    
+	public function getNotCachedContent($model, $structure = null)
+	{
+        return wiew('widget.' . $model->getKey(), ['controller' => $this, 'frontendController' => $this->getFrontendController()])->render();
 	}
 
 	public function children()
@@ -289,7 +314,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	public function getStructureContent($model = null, $uniqueId = null)
 	{
         $this->setWidgetModel($model);
-        
+
 		return view($this->getStructureView(), [
 					'controller' => $this,
 					'model' => $model,
@@ -323,7 +348,27 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     }
 	
     public function postProcess($model, $type, $input)
-    { 
+    {
+        $templateFile = $this->getFileTemplatePath($model);
+
+        \File::makeDirectory(dirname(realpath($templateFile)), 0777, true, true);
+
+        if ($t = trim($input->get('template_content')))
+        {
+            $viewContent = $t;
+        }
+        else
+        {
+            $viewContent = $this->getViewContent();
+        }
+
+        \File::put($templateFile, $viewContent);
+
         return $this;
+    }
+    
+    public function getFileTemplatePath($model = null)
+    {
+        return base_path($this->widgetTemplateDirectory) . $model->getKey() . '.blade.php';
     }
 }

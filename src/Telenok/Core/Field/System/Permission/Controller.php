@@ -86,6 +86,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		$input->put('active', 1);
 		$input->put('multilanguage', 0);
 		$input->put('field_order', $input->get('field_order', 3)); 
+		$input->put('allow_search', $input->get('allow_search', 1));
 
 		if (!$input->get('field_object_tab'))
 		{

@@ -26,25 +26,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     public function postProcess($model, $type, $input)
     { 
         if ($input->get('key'))
-        {
-            \File::makeDirectory(base_path("resources/views/widget/"), 0777, true, true);
-
-            $templateFile = base_path("resources/views/widget/") . $model->getKey() . '.blade.php';
-
-            if ($t = trim($input->get('template_content')))
-            {
-                $viewContent = $t;
-            }
-            else
-            {
-                $viewContent = app('telenok.config.repository')->getWidget()->get($input->get('key'))->getViewContent();
-            }
-             
-            \File::put($templateFile, $viewContent);
-            
+        {   
             app('telenok.config.repository')->getWidget()->get($input->get('key'))->postProcess($model, $type, $input);
         }
-        
+
         return parent::postProcess($model, $type, $input);
     }
     

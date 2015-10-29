@@ -1,1 +1,1 @@
-Content of widget ID: "{{$widget ? $widget->getKey() : ''}}" and KEY: "{{$controller->getKey()}}"
+Content of widget ID: "{{($w = $controller->getWidgetModel()) ? $w->getKey() : 'null'}}" and KEY: "{{$controller->getKey()}}"

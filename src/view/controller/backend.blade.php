@@ -8,6 +8,7 @@
             var CKEDITOR_BASEPATH = '/packages/telenok/core/js/ckeditor/';
         </script>
         {!! HTML::script('packages/telenok/core/js/ckeditor/ckeditor.js') !!}
+        {!! HTML::script('packages/telenok/core/js/ckeditor/fixes/bootstrap.js') !!}
 @stop
 
 @section('body')

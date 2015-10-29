@@ -43,11 +43,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 						})
 						->orderBy('widget_order')->get();
 
-		$widgetConfig = app('telenok.config.repository')->getWidget();
+		$widgetRepository = app('telenok.config.repository')->getWidget();
 
-		$wop->each(function($w) use (&$content, $widgetConfig)
+		$wop->each(function($w) use (&$content, $widgetRepository)
 		{
-			$content[$w->container][] = $widgetConfig->get($w->key)->getInsertContent($w->getKey());
+			$content[$w->container][] = $widgetRepository->get($w->key)->getInsertContent($w->getKey());
 		});
 
 		return view($this->backendView, $content)->render();
@@ -89,32 +89,29 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$listWidget = app('telenok.config.repository')->getWidget();
 		$pageId = intval(str_replace('page_', '', \Route::currentRouteName()));
 
-		try
-		{
-			$page = \App\Telenok\Core\Model\Web\Page::findOrFail($pageId);
+        $page = \App\Telenok\Core\Model\Web\Page::findOrFail($pageId);
 
-			$this->setCacheTime($page->cache_time);
+        $this->setCacheTime($page->cache_time);
 
-			if ($t = $page->translate('template_view'))
-			{
-				$this->setFrontendView($t);
-			}
+        if ($t = $page->translate('template_view'))
+        {
+            $this->setFrontendView($t);
+        }
+        else if (($v = $page->pagePageController) && ($controllerTemplate = $v->template_view))
+        {
+            $this->setFrontendView($controllerTemplate);
+        }
 
-			foreach ($this->container as $containerId)
-			{
-				$page->widget()->active()->get()->filter(function($item) use ($containerId)
-				{
-					return $item->container === $containerId;
-				})->each(function($item) use (&$content, $containerId, $listWidget)
-				{
-					$content[$containerId][] = $listWidget->get($item->key)->setWidgetModel($item)->setFrontendController($this)->getContent();
-				});
-			}
-		}
-		catch (\Exception $e)
-		{
-			throw $e;
-		}
+        foreach ($this->container as $containerId)
+        {
+            $page->widget()->active()->get()->filter(function($item) use ($containerId)
+            {
+                return $item->container === $containerId;
+            })->each(function($item) use (&$content, $containerId, $listWidget)
+            {
+                $content[$containerId][] = $listWidget->get($item->key)->setWidgetModel($item)->setFrontendController($this)->getContent();
+            });
+        }
 
 		return view($this->getFrontendView(), [
 			'page' => $page,

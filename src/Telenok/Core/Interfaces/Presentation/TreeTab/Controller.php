@@ -643,7 +643,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         if ($str)
         {
-            $query = $sequence->withTreeAttr()->active();
+            $query = $sequence->withTreeAttr();
 
             $this->getFilterQueryLike($str, $query, $sequence, 'title');
         }
@@ -653,7 +653,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
             if ($treeId == 0)
             {
-                $query = \App\Telenok\Core\Model\Object\Sequence::withChildren(2)->orderBy('pivot_tree_children.tree_order')->active();
+                $query = \App\Telenok\Core\Model\Object\Sequence::withChildren(2)->orderBy('pivot_tree_children.tree_order');
             }
             else
             {

@@ -278,6 +278,10 @@ body.telenok-backend ul.nav-tabs:empty {
     border: 0;
 }
 
+body.telenok-backend .nav-tabs > li > a > .badge {
+    padding: 0 5px !important;
+}
+
 body.telenok-backend div.tab-content:empty {
     border: 0;
 } 

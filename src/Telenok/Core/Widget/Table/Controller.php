@@ -9,22 +9,8 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 	protected $row = 2;
 	protected $col = 2;
 
-	public function getContent($structure = null)
+	public function getNotCachedContent($model, $structure = null)
 	{ 
-        if (!($model = $this->getWidgetModel()))
-        {
-            return;
-        }
-
-        $structure = $structure === null ? $model->structure : $structure;
-        
-        $this->setCacheTime($model->cache_time);
-
-        if (($content = $this->getCachedContent()) !== false)
-        {
-            return $content; 
-        }  
-
         $containerIds = $structure->get('containerIds', []);
 
         if (!$structure->has('row'))
@@ -49,7 +35,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
             }
         }
 
-        $content = view('widget.' . $model->getKey(), [
+        return view('widget.' . $model->getKey(), [
                             'widget' => $this->getWidgetModel(),
                             'id' => $this->getWidgetModel()->getKey(),
                             'key' => $this->getKey(),
@@ -57,10 +43,6 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
                             'controller' => $this,
                             'frontendController' => $this->getFrontendController(),
                         ])->render();
-        
-        $this->setCachedContent($content);
-        
-		return $content;
 	}
 
 	public function getContainerContent($container_id = "")
@@ -347,7 +329,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
             {
                 for($y = 0; $y < $row; $y++)
                 {
-                    if (\App\Telenok\Core\Model\Web\WidgetOnPage::where('container', 'container-' . $model->id . '-' . $x . '-' . $y)->count())
+                    if (\App\Telenok\Core\Model\Web\WidgetOnPage::where('container', 'container-' . $model->id . '-' . $y . '-' . $x)->count())
                     {
                         throw new \Exception($this->LL('widget.has.child'));
                     }
@@ -358,7 +340,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
             {
                 for($y = $inputRow; $y < $row; $y++)
                 {
-                    if (\App\Telenok\Core\Model\Web\WidgetOnPage::where('container', 'container-' . $model->id . '-' . $x . '-' . $y)->count())
+                    if (\App\Telenok\Core\Model\Web\WidgetOnPage::where('container', 'container-' . $model->id . '-' . $y . '-' . $x)->count())
                     {
                         throw new \Exception($this->LL('widget.has.child'));
                     }

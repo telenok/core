@@ -32,7 +32,7 @@
     },
     "scripts": {
         "post-update-cmd": [
-            "php artisan vendor:publish --tag=\"public\" --provider=\"Telenok\\Core\\Providers\\CoreServiceProvider\" --force",
+            "php artisan vendor:publish --tag=\"public\" --provider=\"Telenok\\Core\\CoreServiceProvider\" --force",
             "php artisan migrate --force --path=\"vendor/telenok/core/src/migrations\""
         ]
     },

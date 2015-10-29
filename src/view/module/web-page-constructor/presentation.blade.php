@@ -28,10 +28,6 @@
 			padding-left: 2px;
 		}
 
-		div.module-web-page-view-container .widget-toolbar {
-			padding-right: 2px;
-		}
-
 		div.module-web-page-view-container .row [class*="span"] {
 			margin-left: 2px;
 		}

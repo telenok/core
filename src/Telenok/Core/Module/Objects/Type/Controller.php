@@ -411,6 +411,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 				'field_object_type' => $model->getKey(),
 				'field_object_tab' => $tabAdditionally->getKey(),
 				'field_order' => 1,
+				'show_in_list' => 0,
+				'show_in_form' => 1,
 			]);
 		}
 
@@ -421,6 +423,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 				'field_object_type' => $model->getKey(),
 				'field_object_tab' => $tabAdditionally->getKey(),
 				'field_order' => 2,
+				'show_in_list' => 0,
+				'show_in_form' => 1,
 			]);
 		}
 
@@ -431,6 +435,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 				'field_object_type' => $model->getKey(),
 				'field_object_tab' => $tabAdditionally->getKey(),
 				'field_order' => 3,
+				'show_in_list' => 0,
+				'show_in_form' => 1,
 			]);
 		}
 
@@ -443,7 +449,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 					'field_object_type' => $model->getKey(),
 					'field_object_tab' => $tabMain->getKey(),
 					'field_order' => 10,
-				]);
+                    'show_in_list' => 0,
+                    'show_in_form' => 1,
+                ]);
 
 				\App\Telenok\Core\Model\Object\Sequence::where('sequences_object_type', $model->getKey())
 						->update(['treeable' => 1]);
@@ -510,6 +518,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 			(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
 				'key' => 'permission',
 				'field_object_type' => $model->getKey(),
+				'show_in_list' => 0,
+				'show_in_form' => 1,
 			]);
 		}
 	}
