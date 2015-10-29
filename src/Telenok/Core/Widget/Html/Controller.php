@@ -14,4 +14,11 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 	{
         return file_get_contents($this->getFileTemplatePath($model));
 	}
+    
+	public function getViewContent()
+	{       
+        $model = $this->getWidgetModel();
+
+        return $model ? file_get_contents($this->getFileTemplatePath($model)) : '';
+	}
 }

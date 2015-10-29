@@ -37,4 +37,15 @@ class WidgetOnPage extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
         return parent::preProcess($type, $input);
     }
     
+    public function delete()
+    {
+        $key = $this->key;
+        
+        parent::delete();
+        
+        if ($this->forceDeleting)
+        {
+            app('telenok.config.repository')->getWidget()->get($key)->delete($this);
+        }
+    }
 }

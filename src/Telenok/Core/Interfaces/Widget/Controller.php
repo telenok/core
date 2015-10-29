@@ -336,10 +336,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		{
 			return $widget;
 		}
-	} 
+	}
+    
+    public function delete($model)
+    {
+        @unlink($this->getFileTemplatePath($model));
+        
+        return $this;
+    }
     
 	public function validate($model = null, $input = [])
 	{
+        return $this;
 	}
 	
     public function preProcess($model, $type, $input)

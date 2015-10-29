@@ -49,7 +49,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 	{
 		$content = [];
 
-		$wop = \App\Telenok\Core\Model\Web\WidgetOnPage::where('container', $container_id)->orderBy('widget_order')->get();
+		$wop = \App\Telenok\Core\Model\Web\WidgetOnPage::where('container', $container_id)->active()->orderBy('widget_order')->get();
 
 		$widgetConfig = app('telenok.config.repository')->getWidget();
 
