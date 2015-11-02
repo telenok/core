@@ -9,7 +9,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 	protected $row = 2;
 	protected $col = 2;
 
-	public function getNotCachedContent($model, $structure = null)
+	public function getNotCachedContent()
 	{ 
         $containerIds = $structure->get('containerIds', []);
 
@@ -35,7 +35,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
             }
         }
 
-        return view('widget.' . $model->getKey(), [
+        return view($this->getFrontendView(), [
                             'widget' => $this->getWidgetModel(),
                             'id' => $this->getWidgetModel()->getKey(),
                             'key' => $this->getKey(),
@@ -55,7 +55,11 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 
 		$wop->each(function($w) use (&$content, $widgetConfig)
 		{
-            $content[] = $widgetConfig->get($w->key)->setWidgetModel($w)->setFrontendController($this)->getContent();
+            $content[] = $widgetConfig->get($w->key)
+                            ->setWidgetModel($w)
+                            ->setFrontendController($this)
+                            ->setConfig($w->structure)
+                            ->getContent();
 		});
 
 		return $content;

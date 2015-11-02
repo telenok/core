@@ -9,11 +9,14 @@
 
 
 
-	post('widget/form/store/{typeId}', array('as' => 'telenok.widget.form.store', 'uses' => "Telenok\Core\Widget\Model\Form\Controller@store"));
-	post('widget/form/update/{id}', array('as' => 'telenok.widget.form.update', 'uses' => "Telenok\Core\Widget\Model\Form\Controller@update"));
-	post('widget/form/delete/{id}', array('as' => 'telenok.widget.form.delete', 'uses' => "Telenok\Core\Widget\Model\Form\Controller@delete"));
+	post('widget/form/store/{typeId}', array('as' => 'telenok.widget.form.store', 'uses' => "\App\Telenok\Core\Widget\Model\Form\Controller@store"));
+	post('widget/form/update/{id}', array('as' => 'telenok.widget.form.update', 'uses' => "\App\Telenok\Core\Widget\Model\Form\Controller@update"));
+	post('widget/form/delete/{id}', array('as' => 'telenok.widget.form.delete', 'uses' => "\App\Telenok\Core\Widget\Model\Form\Controller@delete"));
 	
-	get('widget/grid/{typeId}', array('as' => 'telenok.widget.grid.list', 'uses' => "Telenok\Core\Widget\Model\Grid\Controller@getList"));
+	get('widget/grid/{typeId}', array('as' => 'telenok.widget.grid.list', 'uses' => "\App\Telenok\Core\Widget\Model\Grid\Controller@getList"));
+
+    
+	get('widget/menu/tree', array('as' => 'telenok.widget.menu.tree.list', 'uses' => "\App\Telenok\Core\Widget\Menu\Controller@getTreeList"));
 
 	
 	get('download/stream/{modelId}/{fieldId}', array('as' => 'telenok.download.stream.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@stream"));

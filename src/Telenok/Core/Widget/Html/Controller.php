@@ -5,20 +5,11 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
     protected $key = 'html';
     protected $parent = 'standart';
 
-    public function getFileTemplatePath($model = null)
-    {
-        return base_path($this->widgetTemplateDirectory) . $model->getKey() . '.html';
-    }
-
-	public function getNotCachedContent($model, $structure = null)
+	public function getNotCachedContent()
 	{
-        return file_get_contents($this->getFileTemplatePath($model));
-	}
-    
-	public function getViewContent()
-	{       
-        $model = $this->getWidgetModel();
-
-        return $model ? file_get_contents($this->getFileTemplatePath($model)) : '';
+        if ($t = $this->getFileTemplatePath())
+        {
+            return \File::get($t);
+        }
 	}
 }

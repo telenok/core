@@ -26,7 +26,7 @@
             
             <div class="form-group">
                 <div class="col-sm-12"> 
-                    {!!  Form::textarea("template_content", $controller->getViewContent(), ['class' => 'form-control']) !!}
+                    {!!  Form::textarea("template_content", $controller->getTemplateContent(), ['class' => 'form-control']) !!}
                 </div>
             </div>
 		</div>

@@ -109,7 +109,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
                 return $item->container === $containerId;
             })->each(function($item) use (&$content, $containerId, $listWidget)
             {
-                $content[$containerId][] = $listWidget->get($item->key)->setWidgetModel($item)->setFrontendController($this)->getContent();
+                $content[$containerId][] = $listWidget->get($item->key)
+                                            ->setWidgetModel($item)
+                                            ->setConfig($item->structure)
+                                            ->setFrontendController($this)
+                                            ->getContent();
             });
         }
 

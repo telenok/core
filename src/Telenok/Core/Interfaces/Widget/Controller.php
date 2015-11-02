@@ -11,6 +11,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $structureView = '';
 	protected $frontendController;
 	protected $cacheTime = 3600;
+	protected $cacheKey;
+    protected $config = [];
     protected $widgetTemplateDirectory = 'resources/views/widget/';
 
 
@@ -26,7 +28,30 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this->icon;
 	}
 
-	public function setWidgetModel($param)
+    public function setConfig($config = [])
+    {
+		$this->config = $config;
+
+		$this->frontendView = $this->getConfig('frontend_view', $this->getFrontendView());
+		$this->cacheTime = $this->getConfig('cache_time', $this->cacheTime);
+		$this->cacheKey = $this->getConfig('cache_key', $this->cacheKey);
+
+        return $this;
+    }
+
+	public function getConfig($key = null, $default = null)
+	{
+		if (empty($key))
+		{
+			return $this->config;
+		}
+		else
+		{
+			return array_get($this->config, $key, $default);
+		}
+	}
+
+    public function setWidgetModel($param)
 	{
 		$this->widgetModel = $param;
 		$this->setCacheTime($param->cache_time);
@@ -58,11 +83,19 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function getCacheKey()
 	{
-        if ($m = $this->getWidgetModel())
+        if ($this->cacheKey)
+        {
+            return $this->cacheKey . config('app.locale', config('app.localeDefault'));
+        }
+        else if ($m = $this->getWidgetModel())
         {
             return $m->getKey() . config('app.locale', config('app.localeDefault'));
         }
-        
+        else
+        {
+            throw new \Exception($this->LL('Setup cache-key for widget ' . $this->getKey()));
+        }
+
 		return false;
 	}
 
@@ -86,32 +119,25 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
 	}
     
-	public function getContent($structure = null)
+	public function getContent()
 	{
-        if (!($model = $this->getWidgetModel()))
-        {
-            return;
-        }
-
-        $this->setCacheTime($model->cache_time);
+        $this->setCacheTime($this->getCacheTime());
 
         if (($content = $this->getCachedContent()) !== false)
         {
             return $content;
         }
 
-        $structure = $structure === null ? $model->structure : $structure;
-
-        $content = $this->getNotCachedContent($model, $structure);
+        $content = $this->getNotCachedContent();
 
         $this->setCachedContent($content);
 
         return $content;
 	}
     
-	public function getNotCachedContent($model, $structure = null)
+	public function getNotCachedContent()
 	{
-        return wiew('widget.' . $model->getKey(), ['controller' => $this, 'frontendController' => $this->getFrontendController()])->render();
+        return wiew($this->getFrontendView(), ['controller' => $this, 'frontendController' => $this->getFrontendController()])->render();
 	}
 
 	public function children()
@@ -133,12 +159,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 			return $key == $item->getParent();
 		});
 	}
-    
-	public static function make()
-	{
-        return new static;
-	}
-    
+
 	public function getBackendView()
 	{
 		return $this->backendView ? : "core::module.web-page-constructor.widget-backend";
@@ -146,7 +167,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function getFrontendView()
 	{
-		return $this->frontendView ? : "core::module.web-page-constructor.widget-frontend";
+        if ($m = $this->getWidgetModel())
+        {
+            return 'widget.' . $m->getKey();
+        }
+        else if ($this->frontendView)
+        {
+            return $this->frontendView;
+        }
+        else
+        {
+            return "core::module.web-page-constructor.widget-frontend";
+        }
 	}
 
 	public function getStructureView()
@@ -166,12 +198,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this->frontendController;
     }
     
-	public function getViewContent()
+	public function getTemplateContent()
 	{
-        $template = ($model = $this->getWidgetModel()) && $model->getKey() ? 'widget.' . $model->getKey() : $this->getFrontendView();
-        
-		return $template ? \File::get(app('view')->getFinder()->find($template)) : "";
+		return ($p = $this->getFileTemplatePath()) ? \File::get($p) : "";
 	}
+    
+    public function getFileTemplatePath()
+    {
+		return ($t = $this->getFrontendView()) ? app('view')->getFinder()->find($t) : false;
+    }
 
 	public function getInsertContent($id = 0)
 	{
@@ -337,10 +372,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 			return $widget;
 		}
 	}
-    
+
     public function delete($model)
     {
-        @unlink($this->getFileTemplatePath($model));
+        @unlink($this->getFileTemplatePath());
         
         return $this;
     }
@@ -357,26 +392,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	
     public function postProcess($model, $type, $input)
     {
-        $templateFile = $this->getFileTemplatePath($model);
+        $templateFile = $this->getFileTemplatePath();
 
         \File::makeDirectory(dirname(realpath($templateFile)), 0777, true, true);
 
-        if ($t = trim($input->get('template_content')))
-        {
-            $viewContent = $t;
-        }
-        else
-        {
-            $viewContent = $this->getViewContent();
-        }
-
-        \File::put($templateFile, $viewContent);
+        \File::put($templateFile, $input->get('template_content'));
 
         return $this;
-    }
-    
-    public function getFileTemplatePath($model = null)
-    {
-        return base_path($this->widgetTemplateDirectory) . $model->getKey() . '.blade.php';
     }
 }

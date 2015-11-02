@@ -62,4 +62,14 @@ class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core
     {
         return $this->request;
     }
+    
+	/**
+	 * Get new instance
+	 * 
+	 * @return $this
+	 */
+    public static function make()
+	{
+        return new static;
+	}
 }

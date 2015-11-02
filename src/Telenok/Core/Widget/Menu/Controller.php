@@ -6,36 +6,125 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
     protected $parent = 'standart';
 	protected $frontendView = "core::widget.menu.widget-frontend";
 
-	public function getNotCachedContent($model, $structure = null)
+    protected $menuType = 'root';
+    protected $nodeIds = [];
+    protected $objectType = null;
+
+
+    public function setConfig($config = [])
+    {
+        parent::setConfig($config);
+        
+        if ($m = $this->getWidgetModel())
+        {
+            $structure = $m->structure;
+
+            $this->menuType = array_get($structure, 'menu_type');
+            $this->nodeIds = array_get($structure, 'node_ids');
+            $this->objectType = array_get($structure, 'object_type');
+        }
+        else 
+        {
+            $this->menuType = $this->getConfig('menu_type', $this->cacheTime);
+            $this->nodeIds = $this->getConfig('node_ids', $this->nodeIds);
+            $this->objectType = $this->getConfig('object_type', $this->cacheTime);
+        }
+
+        return $this;
+    }
+
+	public function getNotCachedContent()
 	{
-        $menuType = array_get($structure, 'menu_type');
-        $nodeIds = array_get($structure, 'node_ids');
         $ids = [];
 
-        if ($menuType == 1)
+        if ($this->menuType == 1)
         {
-            $ids = json_decode('[' . $nodeIds . ']'); 
+            $ids = json_decode('[' . $this->nodeIds . ']'); 
         }
-        else if ($menuType == 2)
+        else if ($this->menuType == 2)
         {
-            $ids = str_replace('{', ',[', $nodeIds);
+            $ids = str_replace('{', ',[', $this->nodeIds);
             $ids = str_replace('}', ']', $ids);
             $ids = json_decode('[' . $ids . ']');
         }
 
-        $pages = \App\Telenok\Core\Model\Web\Page::withTreeAttr()->whereIn('page.id', array_flatten($ids))->active()->withPermission()
-                    ->orderBy(\DB::raw('CONCAT(pivot_tree_attr.tree_path, pivot_tree_attr.tree_id)'))
+		$class = \App\Telenok\Core\Model\Object\Sequence::getModel($this->objectType)->class_model;
+
+        $model = app($class);
+
+        $idsArray = array_flatten($ids); 
+
+        array_walk($idsArray, 'trim');
+        array_walk($idsArray, 'intval');
+
+        $items = $model::withTreeAttr()
+                    ->active()
+                    ->withPermission()
+                    ->whereIn($model->getTable() . '.id', $idsArray)
+                    ->orderBy(\DB::raw('FIELD("' . $model->getTable() . '.id", "' . implode('", "', $idsArray) . '")'))
                     ->orderBy('pivot_tree_attr.tree_order')
                     ->get();
-        
-        return view('widget.' . $model->getKey(), [
+
+        return view($this->getFrontendView(), [
                         'controller' => $this, 
                         'frontendController' => $this->getFrontendController(),
-                        'pages' => $pages,
+                        'items' => $items,
                         'nodeIds' => $ids,
-                        'menu_type' => $menuType,
+                        'menu_type' => $this->menuType,
                     ])->render();
 	}
+
+    public function getTreeList()
+    {
+        $typeId = $this->getRequest()->input('typeId');
+
+		$term = trim($this->getRequest()->input('term'));
+
+		$return = [];
+
+		$model = app('\App\Telenok\Core\Model\Object\Sequence');
+
+        $objectFolderId = \App\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->pluck('id');
+
+        $query = $model::whereIn('sequences_object_type', [$objectFolderId, $typeId])
+            ->withPermission()
+            ->withTreeAttr()
+			->join('object_translation', function($join) use ($model)
+			{
+				$join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id');
+			})
+			->where(function($query) use ($term, $model)
+			{
+				if (trim($term))
+				{
+					\Illuminate\Support\Collection::make(explode(' ', $term))
+					->reject(function($i)
+					{
+						return !trim($i);
+					})
+					->each(function($i) use ($query)
+					{
+						$query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
+					});
+
+					$query->orWhere($model->getTable() . '.id', (int) $term);
+				}
+			});
+
+		$query->groupBy($model->getTable() . '.id')
+                ->orderBy('tree_depth')
+                ->orderBy('tree_order')->get()->each(function($item) use (&$return)
+		{
+			$return[] = [
+                            'id' => $item->id, 
+                            'title'  => $item->translate('title'),
+                            'pid' => $item->tree_pid,
+                            'depth' => $item->tree_depth
+                        ];
+		});
+
+		return $return;
+    }
 
     public function preProcess($model, $type, $input)
     { 

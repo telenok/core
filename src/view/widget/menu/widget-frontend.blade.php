@@ -11,33 +11,20 @@
 
                     @if (is_array($idLeve3))
 
-
-                    @else
-
-                        @if ($page = $pages->find($idLeve3))
-
-                        @endif
+                    @elseif ($item = $items->find($idLeve3))
 
                     @endif
 
                 @endforeach
             
-            @else
-            
-                @if ($page = $pages->find($idLeve2))
-
-                @endif
+            @elseif ($item = $items->find($idLeve2))
 
             @endif
 
         @endforeach
 
-    @else
-
-        @if ($page = $pages->find($idLevel1))
-
-        @endif
-
+    @elseif ($item = $items->find($idLevel1))
+        {{ $item->translate('title') }}
     @endif
 
 @endforeach

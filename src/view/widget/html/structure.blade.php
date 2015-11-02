@@ -13,7 +13,7 @@
             
             <div class="form-group">
                 <div class="col-sm-12"> 
-                    {!!  Form::textarea("template_content", $controller->getViewContent(), ['class' => 'form-control', 'id' => 'editor-' . $uniqueId]) !!}
+                    {!!  Form::textarea("template_content", $controller->getTemplateContent(), ['class' => 'form-control', 'id' => 'editor-' . $uniqueId]) !!}
 
                     <script>
                         CKEDITOR.replace( 'editor-{{$uniqueId}}' );
