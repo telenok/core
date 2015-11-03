@@ -923,25 +923,25 @@ class SeedLast extends Migration {
 		(new \App\Telenok\Core\Model\Web\ModuleGroup())->storeOrUpdate([
 			'title' => ['en' => 'Content', 'ru' => 'Содержание'],
 			'active' => 1,
-			'controller_class' => 'Telenok\Core\ModuleGroup\Content\Controller',
+			'controller_class' => '\App\Telenok\Core\ModuleGroup\Content\Controller',
 		]);
 
 		(new \App\Telenok\Core\Model\Web\ModuleGroup())->storeOrUpdate([
 			'title' => ['en' => 'User', 'ru' => 'Пользователь'],
 			'active' => 1,
-			'controller_class' => 'Telenok\Core\ModuleGroup\User\Controller',
+			'controller_class' => '\App\Telenok\Core\ModuleGroup\User\Controller',
 		]);
 
 		(new \App\Telenok\Core\Model\Web\ModuleGroup())->storeOrUpdate([
 			'title' => ['en' => 'Веб', 'ru' => 'Web'],
 			'active' => 1,
-			'controller_class' => 'Telenok\Core\ModuleGroup\Web\Controller',
+			'controller_class' => '\App\Telenok\Core\ModuleGroup\Web\Controller',
 		]);
 
 		(new \App\Telenok\Core\Model\Web\ModuleGroup())->storeOrUpdate([
 			'title' => ['en' => 'Setting', 'ru' => 'Настройки'],
 			'active' => 1,
-			'controller_class' => 'Telenok\Core\ModuleGroup\Setting\Controller',
+			'controller_class' => '\App\Telenok\Core\ModuleGroup\Setting\Controller',
 		]);
 
 		//Module
@@ -1093,26 +1093,38 @@ class SeedLast extends Migration {
 		(new \App\Telenok\Core\Model\Web\WidgetGroup())->storeOrUpdate([
 			'title' => ['en' => 'Standart', 'ru' => 'Стандартные'],
 			'active' => 1,
-			'controller_class' => 'Telenok\Core\WidgetGroup\Standart\Controller',
+			'controller_class' => '\App\Telenok\Core\WidgetGroup\Standart\Controller',
 		]);
 
 		// Widget
 		(new \App\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
 			'title' => ['en' => 'Html', 'ru' => 'Html'],
 			'active' => 1,
-			'controller_class' => 'Telenok\Core\Widget\Html\Controller',
+			'controller_class' => '\App\Telenok\Core\Widget\Html\Controller',
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
 			'title' => ['en' => 'Table', 'ru' => 'Таблица'],
 			'active' => 1,
-			'controller_class' => 'Telenok\Core\Widget\Table\Controller',
+			'controller_class' => '\App\Telenok\Core\Widget\Table\Controller',
 		]);
 
 		(new \App\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
 			'title' => ['en' => 'Menu', 'ru' => 'Menu'],
 			'active' => 1,
-			'controller_class' => 'Telenok\Core\Widget\Menu\Controller',
+			'controller_class' => '\App\Telenok\Core\Widget\Menu\Controller',
+		]);
+
+		(new \App\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
+			'title' => ['en' => 'Rich text editor', 'ru' => 'Редактор'],
+			'active' => 1,
+			'controller_class' => '\App\Telenok\Core\Widget\Rte\Controller',
+		]);
+
+		(new \App\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
+			'title' => ['en' => 'Php code', 'ru' => 'Php код'],
+			'active' => 1,
+			'controller_class' => '\App\Telenok\Core\Widget\Php\Controller',
 		]);
 
         //Change classes

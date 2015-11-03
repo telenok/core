@@ -8,6 +8,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $widgetModel;
 	protected $backendView = '';
 	protected $frontendView = '';
+	protected $defaultFrontendView = 'core::module.web-page-constructor.widget-frontend';
 	protected $structureView = '';
 	protected $frontendController;
 	protected $cacheTime = 3600;
@@ -33,8 +34,16 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->config = $config;
 
 		$this->frontendView = $this->getConfig('frontend_view', $this->getFrontendView());
-		$this->cacheTime = $this->getConfig('cache_time', $this->cacheTime);
 		$this->cacheKey = $this->getConfig('cache_key', $this->cacheKey);
+
+        if ($m = $this->getWidgetModel())
+        {
+            $this->cacheTime = array_get($m->structure, 'cache_time',$this->cacheTime);
+        }
+        else
+        {
+    		$this->cacheTime = $this->getConfig('cache_time', $this->cacheTime);
+        }
 
         return $this;
     }
@@ -105,7 +114,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         {
             return \Cache::get($k, false);
         }
-        
+
 		return false;
 	}
 
@@ -177,7 +186,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         }
         else
         {
-            return "core::module.web-page-constructor.widget-frontend";
+            return $this->defaultFrontendView;
         }
 	}
 
@@ -205,7 +214,21 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     
     public function getFileTemplatePath()
     {
-		return ($t = $this->getFrontendView()) ? app('view')->getFinder()->find($t) : false;
+        try
+        {
+            if ($this->getFrontendView() !== $this->defaultFrontendView)
+            {
+                return app('view')->getFinder()->find($this->getFrontendView());
+            }
+            else 
+            {
+                return false;
+            }
+        } 
+        catch (\Exception $ex) 
+        {
+            return false;
+        }
     }
 
 	public function getInsertContent($id = 0)
@@ -375,7 +398,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     public function delete($model)
     {
-        @unlink($this->getFileTemplatePath());
+        if ($p = $this->getFileTemplatePath())
+        {
+            @unlink($p);
+        }
         
         return $this;
     }
@@ -394,6 +420,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     {
         $templateFile = $this->getFileTemplatePath();
 
+        if (!$templateFile)
+        {
+            $templateFile = base_path($this->widgetTemplateDirectory . $model->getKey() . '.blade.php');
+        }
+        
         \File::makeDirectory(dirname(realpath($templateFile)), 0777, true, true);
 
         \File::put($templateFile, $input->get('template_content'));

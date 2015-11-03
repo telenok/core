@@ -4,7 +4,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 
     protected $key = 'menu';
     protected $parent = 'standart';
-	protected $frontendView = "core::widget.menu.widget-frontend";
+	protected $defaultFrontendView = "core::widget.menu.widget-frontend";
 
     protected $menuType = 'root';
     protected $nodeIds = [];
@@ -33,6 +33,21 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
         return $this;
     }
 
+    public function getMenuType()
+    {
+        return $this->menuType;
+    }
+
+    public function getNodeIds()
+    {
+        return $this->nodeIds;
+    }
+
+    public function getObjectType()
+    {
+        return $this->objectType;
+    }
+    
 	public function getNotCachedContent()
 	{
         $ids = [];

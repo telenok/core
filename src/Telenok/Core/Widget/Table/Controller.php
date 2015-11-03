@@ -5,29 +5,42 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 	protected $key = 'table';
 	protected $parent = 'standart';
 	protected $backendView = "core::widget.table.widget-backend";
-	protected $frontendView = "core::widget.table.widget-frontend";
+	protected $defaultFrontendView = "core::widget.table.widget-frontend";
 	protected $row = 2;
 	protected $col = 2;
+    protected $containerIds = [];
 
+    public function setConfig($config = [])
+    {
+        parent::setConfig($config);
+        
+        if ($m = $this->getWidgetModel())
+        {
+            $structure = $m->structure;
+
+            $this->row = array_get($structure, 'row');
+            $this->col = array_get($structure, 'col');
+            $this->containerIds = array_get($structure, 'containerIds');
+        }
+        else 
+        {
+            $this->row = $this->getConfig('row', $this->row);
+            $this->col = $this->getConfig('col', $this->col);
+            $this->containerIds = $this->getConfig('containerIds', $this->containerIds);
+        }
+
+        return $this;
+    }
+    
 	public function getNotCachedContent()
 	{ 
-        $containerIds = $structure->get('containerIds', []);
-
-        if (!$structure->has('row'))
-        {
-            $structure->put('row', $this->row);
-        }
-
-        if (!$structure->has('col'))
-        {
-            $structure->put('col', $this->col);
-        }
+        $containerIds = $this->containerIds;
 
         $rows = [];
 
-        for ($r = 0; $r < $structure->get('row'); $r++)
+        for ($r = 0; $r < $this->row; $r++)
         {
-            for ($c = 0; $c < $structure->get('col'); $c++)
+            for ($c = 0; $c < $this->col; $c++)
             {
                 $container_id = $containerIds["$r:$c"];
 

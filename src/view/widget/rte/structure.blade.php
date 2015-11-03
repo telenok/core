@@ -17,6 +17,11 @@
 
                     <script>
                         CKEDITOR.replace( 'editor-{{$uniqueId}}' );
+                        
+                        CKEDITOR.instances['editor-{{$uniqueId}}'].on("change", function(e) {
+                             CKEDITOR.instances['editor-{{$uniqueId}}'].updateElement();
+                        });
+                        
                     </script>
                 </div>
             </div>
