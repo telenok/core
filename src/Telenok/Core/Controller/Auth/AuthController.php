@@ -64,7 +64,7 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Backend\Control
                 }
             }
 
-            return json_encode(['error' => 1, 'csrf_token' => csrf_token()]);
+            return json_encode(['error' => 1]);
         }
     }
 

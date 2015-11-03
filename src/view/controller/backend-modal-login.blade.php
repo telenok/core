@@ -13,7 +13,7 @@
 
                                 <div class="space-6"></div>
 
-                                {!! Form::open(['route' => 'telenok.login.process', 'method' => 'post', 'id' => 'form-session-expired']) !!}
+                                <form action="{!! route('telenok.login.process') !!}" method='post' id='form-session-expired'>
                                     
                                     <div id="login-error" class="login-notice alert alert-danger display-none">
                                         {!! $controller->LL('error.login.title') !!}<br><br>
@@ -98,22 +98,32 @@ ob_start();
             
             jQuery('#modal-autologout form').get(0).reset();
         };
+        
+        var validateSession = function()
+        {
+            jQuery.ajax({
+                url: "{!! route('telenok.validate.session') !!}",
+                dataType: "json",
+                success: function(data)
+                {
+                    if (!data.logined)
+                    {
+                        showModalLogin();
+                    }
+
+                    if (data.csrf_token)
+                    {
+                        jQuery('meta[name="csrf-token"]').attr('content', data.csrf_token);
+                    }
+                }
+            });
+        }
 
         setInterval(function()
         {
             if (logined)
             {
-                jQuery.ajax({
-                    url: "{!! route('telenok.validate.session') !!}",
-                    dataType: "json",
-                    success: function(data)
-                    {
-                        if (!data.logined)
-                        {
-                            showModalLogin();
-                        }
-                    }
-                });
+                validateSession();
             }
         }, 60000);
         
@@ -121,6 +131,7 @@ ob_start();
         {
             if (settings.dataType == 'json' && data.error == 'unauthorized' && logined) 
             {
+                validateSession();
                 showModalLogin();
             }
         });
@@ -134,11 +145,6 @@ ob_start();
                 method: 'post',
                 success: function(data)
                 {
-                    if (data.csrf_token)
-                    {
-                        jQuery('meta[name="csrf-token"]').attr('content', data.csrf_token);
-                    }
-                    
                     if (data.success)
                     {
                         hideModalLogin();

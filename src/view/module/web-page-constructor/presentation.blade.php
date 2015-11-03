@@ -63,7 +63,7 @@
 		</h3>
 
 
-		<div class="clearfix">
+        <div class="clearfix" style="white-space: nowrap; display: inline-block;">
 			<select class="chosen" data-placeholder="{{$controller->LL('page.select')}}" id="module-web-page-widget-list-page-list" 
 					onchange="telenok.getPresentation('{{$presentationModuleKey}}').addTabByURL({
 									url:'{!! route("telenok.module.web-page-constructor.view.page.container", ['id' => '--id--', 'languageId' => ':languageId:']) !!}'

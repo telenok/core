@@ -37,7 +37,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
     public function validateSession()
     {
-        return ['logined' => (int)app('auth')->check()];
+        return ['logined' => (int)app('auth')->check(), 'csrf_token' => csrf_token()];
     }
 
     public function getContent()

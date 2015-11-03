@@ -44,7 +44,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 	}
 
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
-    { 		
+    {
 		if ($field->relation_one_to_many_has || $field->relation_one_to_many_belong_to)
 		{
 			return parent::getFormModelContent($controller, $model, $field, $uniqueId);

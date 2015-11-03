@@ -30,7 +30,7 @@
                         "sInfo": "{{ trans('core::default.table.showed') }}",
                         "sInfoEmpty": "{{ trans('core::default.table.empty.showed') }}",
                         "sZeroRecords": "{{ trans('core::default.table.empty.filtered') }}",
-                        "sInfoFiltered": "",
+                        "sInfoFiltered": ""
                     }
                 }, param));
         };
