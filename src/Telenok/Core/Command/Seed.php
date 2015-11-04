@@ -34,7 +34,7 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 
             $this->processingController->createBaseTable($this);
 
-            $this->call('migrate', array('--force', '--path' => 'vendor/telenok/core/src/migrations'));
+            $this->call('migrate', array('--force' => true, '--path' => 'vendor/telenok/core/src/migrations'));
 
             $this->processingController->touchInstallFlag();
 

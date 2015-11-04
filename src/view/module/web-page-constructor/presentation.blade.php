@@ -219,7 +219,6 @@
 						}
 						?>    
 					</select>
- 
 
 					<hr class="sep-1">
 
@@ -231,8 +230,8 @@
 			</div>
 		</div> 
 	</div>
-	
-	
+
+
 	<script type="text/javascript">
 
 		jQuery("div#module-web-page-widget-list").draggable({

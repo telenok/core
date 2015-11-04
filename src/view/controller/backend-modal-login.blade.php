@@ -77,11 +77,13 @@ ob_start();
 
     jQuery(function()
     {
-        var logined = true;
+        var modalShows = false;
         
         var showModalLogin = function()
         {
-            logined = false;
+            if (modalShows) return;
+            
+            modalShows = true;
             
             jQuery('#modal-autologout').modal({
                 backdrop: 'static',
@@ -92,10 +94,10 @@ ob_start();
         
         var hideModalLogin = function()
         {
-            logined = true;
-            
+            modalShows = false;
+
             jQuery('#modal-autologout').modal('hide');
-            
+
             jQuery('#modal-autologout form').get(0).reset();
         };
         
@@ -121,18 +123,14 @@ ob_start();
 
         setInterval(function()
         {
-            if (logined)
-            {
-                validateSession();
-            }
+            validateSession();
         }, 60000);
         
         jQuery(document).ajaxSuccess(function(event,request, settings, data)
         {
-            if (settings.dataType == 'json' && data.error == 'unauthorized' && logined) 
+            if (settings.dataType == 'json' && data.error == 'unauthorized') 
             {
                 validateSession();
-                showModalLogin();
             }
         });
         

@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.6.0",
         "ext-bcmath": "*",
         "laravel/framework": "~5.1",
         "illuminate/html": "5.*",
@@ -31,9 +31,11 @@
         }
     },
     "scripts": {
-        "post-update-cmd": [
-            "php artisan vendor:publish --tag=\"public\" --provider=\"Telenok\\Core\\CoreServiceProvider\" --force",
-            "php artisan migrate --force --path=\"vendor/telenok/core/src/migrations\""
+        "post-package-install": [
+            "Telenok\\Core\\CoreServiceProvider::postPackageInstallUpdate"
+        ],
+        "post-package-update": [
+            "Telenok\\Core\\CoreServiceProvider::postPackageInstallUpdate"
         ]
     },
     "extra": {

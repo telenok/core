@@ -129,4 +129,18 @@ class CoreServiceProvider extends ServiceProvider {
     {
         return [];
     }
+
+    public static function postPackageInstallUpdate(PackageEvent $event)
+    {
+        app('artisan')->call('migrate', [
+            '--path' => 'vendor/telenok/core/src/migrations', 
+            '--force' => true
+        ]);
+
+        app('artisan')->call('vendor:publish', [
+            '--tag' => 'public', 
+            '--provider' => 'Telenok\\Core\\CoreServiceProvider',
+            '--force' => true
+        ]);
+    }
 }
