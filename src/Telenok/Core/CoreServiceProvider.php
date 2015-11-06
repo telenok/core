@@ -1,6 +1,8 @@
 <?php namespace Telenok\Core;
 
 use Illuminate\Support\ServiceProvider;
+use Composer\Installer\PackageEvent;
+use Composer\Script\Event;
 
 class CoreServiceProvider extends ServiceProvider {
 
@@ -23,6 +25,7 @@ class CoreServiceProvider extends ServiceProvider {
 
         $this->commands('command.telenok.install');
         $this->commands('command.telenok.seed');
+        $this->commands('command.telenok.packagesupdate');
 
         app('auth')->extend('custom', function()
         {
@@ -73,6 +76,11 @@ class CoreServiceProvider extends ServiceProvider {
         $this->app['command.telenok.seed'] = $this->app->share(function($app)
         {
             return new \App\Telenok\Core\Command\Seed();
+        });
+
+        $this->app['command.telenok.packagesupdate'] = $this->app->share(function($app)
+        {
+            return new \App\Telenok\Core\Command\PackagesUpdate();
         });
 
         $this->registerMemcache();
@@ -128,19 +136,5 @@ class CoreServiceProvider extends ServiceProvider {
     public function provides()
     {
         return [];
-    }
-
-    public static function postPackageInstallUpdate(PackageEvent $event)
-    {
-        app('artisan')->call('migrate', [
-            '--path' => 'vendor/telenok/core/src/migrations', 
-            '--force' => true
-        ]);
-
-        app('artisan')->call('vendor:publish', [
-            '--tag' => 'public', 
-            '--provider' => 'Telenok\\Core\\CoreServiceProvider',
-            '--force' => true
-        ]);
     }
 }

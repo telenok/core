@@ -30,14 +30,6 @@
             "Telenok\\Core": "src/"
         }
     },
-    "scripts": {
-        "post-package-install": [
-            "Telenok\\Core\\CoreServiceProvider::postPackageInstallUpdate"
-        ],
-        "post-package-update": [
-            "Telenok\\Core\\CoreServiceProvider::postPackageInstallUpdate"
-        ]
-    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
