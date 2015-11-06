@@ -1,8 +1,6 @@
 <?php namespace Telenok\Core;
 
 use Illuminate\Support\ServiceProvider;
-use Composer\Installer\PackageEvent;
-use Composer\Script\Event;
 
 class CoreServiceProvider extends ServiceProvider {
 
