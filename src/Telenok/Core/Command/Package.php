@@ -6,13 +6,13 @@ class Package extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
 
     protected $name = 'telenok:package {action=refresh} {--provider=null}';
     protected $description = 'Updating Telenok CMS packages';
-    protected $signature = 'telenok:packages-update
+    protected $signature = 'telenok:package
                         {action : Can be "refresh" or "add-provider"}
                         {--provider= : For action="add-provider". The service provider should be added to app.php. Example: "Telenok\News\NewsServiceProvider"}';
 
     public function fire()
     {
-        if ($this->argument('action') == 'package-update')
+        if ($this->argument('action') == 'refresh')
         {
             $this->info('Updating Telenok CMS packages');
 
