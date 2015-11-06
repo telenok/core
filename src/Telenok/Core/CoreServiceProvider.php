@@ -23,7 +23,7 @@ class CoreServiceProvider extends ServiceProvider {
 
         $this->commands('command.telenok.install');
         $this->commands('command.telenok.seed');
-        $this->commands('command.telenok.packagesupdate');
+        $this->commands('command.telenok.package');
 
         app('auth')->extend('custom', function()
         {
@@ -76,9 +76,9 @@ class CoreServiceProvider extends ServiceProvider {
             return new \App\Telenok\Core\Command\Seed();
         });
 
-        $this->app['command.telenok.packagesupdate'] = $this->app->share(function($app)
+        $this->app['command.telenok.package'] = $this->app->share(function($app)
         {
-            return new \App\Telenok\Core\Command\PackagesUpdate();
+            return new \App\Telenok\Core\Command\Package();
         });
 
         $this->registerMemcache();
