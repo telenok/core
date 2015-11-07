@@ -16,6 +16,11 @@ class CreateObjectFieldTextTable extends Migration {
 					$table->string('text_width')->default('')->nullable();
 				}
 
+				if (!\Schema::hasColumn('object_field', 'text_rte'))
+				{
+					$table->integer('text_rte')->default('0')->nullable();
+				}
+
 				if (!\Schema::hasColumn('object_field', 'text_height'))
 				{
 					$table->string('text_height')->default('')->nullable();

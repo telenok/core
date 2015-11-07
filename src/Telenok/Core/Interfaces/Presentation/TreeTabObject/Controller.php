@@ -655,4 +655,18 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		} 
     }
 
+    public function getName()
+    {
+        return $this->LL('name', [], $this->getTypeList()->translate('title'));
+    }
+
+    public function getHeader()
+    {
+        return $this->LL('header.title', [], $this->getTypeList()->translate('title'));
+    }    
+
+    public function getHeaderDescription()
+    {
+        return $this->LL('header.description', [], trans('core::default.header.description'));
+    }
 }

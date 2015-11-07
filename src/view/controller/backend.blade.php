@@ -220,13 +220,12 @@
 
         
 		<script type="text/javascript">
-
-			jQuery.ajaxSetup({
-				headers: {
-					'X-CSRF-Token': jQuery('meta[name="csrf-token"]').attr('content')
-				}
-			});
-
+            jQuery.ajaxSetup({
+                beforeSend: function (xhr)
+                {
+                   xhr.setRequestHeader("X-CSRF-TOKEN", jQuery('meta[name="csrf-token"]').attr('content'));
+                }
+            });
 		</script>
 		
         @include('core::controller.backend-modal-login')

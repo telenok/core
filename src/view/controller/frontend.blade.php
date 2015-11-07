@@ -71,11 +71,12 @@ ob_end_clean();
 		@endforeach
 		
 		<script type="text/javascript">
-			jQuery(function () {
-				jQuery.ajaxSetup({
-					headers: { 'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content') }
-				});
-			});
+            jQuery.ajaxSetup({
+                beforeSend: function (xhr)
+                {
+                   xhr.setRequestHeader("X-CSRF-TOKEN", jQuery('meta[name="csrf-token"]').attr('content'));
+                }
+            });
 		</script>
 		
 	</body>

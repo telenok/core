@@ -1,6 +1,12 @@
 
 @include('core::field.common-view.field-view')
 
+<?php 
+
+    $textUnique = str_random();
+
+?>
+
 <div class="form-group">
     {!! Form::label('text_width', $controller->LL('property.width'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
     <div class="col-sm-9">
@@ -14,9 +20,15 @@
     </div>
 </div>
 
+<div class="form-group">
+    {!! Form::label('text_rte', $controller->LL('property.rte'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+    <div class="col-sm-9">
+        {!! Form::checkbox('text_rte', 1, $model->text_rte) !!}
+    </div>
+</div>
 
 
-<div id="div_string_default">
+<div id="string_default{{$textUnique}}">
 
 </div>
 
@@ -46,11 +58,11 @@
 	{
 		if (jQuery('input:checked[name=multilanguage]', $form{{$uniqueId}}).val() == 1)
 		{
-			jQuery('#div_string_default', $form{{$uniqueId}}).html(string_default_multilanguage{{$uniqueId}});
+			jQuery('#string_default{{$textUnique}}').html(string_default_multilanguage{{$uniqueId}});
 		}
 		else
 		{
-			jQuery('#div_string_default', $form{{$uniqueId}}).html(string_default{{$uniqueId}});
+			jQuery('#string_default{{$textUnique}}').html(string_default{{$uniqueId}});
 		}
 	};
 

@@ -93,6 +93,8 @@ return [
     'title.tree' => 'Tree',
     'title.value.any' => 'Any value',
     
+    'header.description' => 'creating and editing',
+    
     'error' => [
         'undefined' => 'Sorry, an error occurred',
         'required' => 'Field ":key" required',

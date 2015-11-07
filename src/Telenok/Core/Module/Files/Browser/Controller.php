@@ -26,7 +26,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	
 	public function getTreeContent()
     {
-        return;
     }
 
     public function getContent()

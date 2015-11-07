@@ -78,7 +78,7 @@ class CoreServiceProvider extends ServiceProvider {
 
         $this->app['command.telenok.package'] = $this->app->share(function($app)
         {
-            return new \App\Telenok\Core\Command\Package();
+            return new \App\Telenok\Core\Command\Package($app['composer']);
         });
 
         $this->registerMemcache();

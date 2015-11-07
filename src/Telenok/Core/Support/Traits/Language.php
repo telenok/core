@@ -18,7 +18,7 @@ trait Language
         return $this;
     }
 
-    public function LL($key = '', $param = [])
+    public function LL($key = '', $param = [], $default = '')
     {
 		if ( ($v = trans($key, $param)) && $v != $key )
 		{
@@ -35,8 +35,13 @@ trait Language
 
         $word = trans($k, $param);
 
+        // not found in current wordspace and have default value
+        if ($k === $word && !empty($default))
+        {
+            return $default;
+        }
         // not found in current wordspace
-        if ($k === $word)
+        else if ($k === $word)
         {
 			$word = trans($kNoPackage, $param);
 

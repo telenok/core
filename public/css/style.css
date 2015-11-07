@@ -218,7 +218,7 @@ div.widget-header.widget-header-green { background: linear-gradient(to bottom, #
 }
 
 .dataTables_wrapper .pagination li {display: none;}
-.dataTables_wrapper .pagination li.prev, 
+.dataTables_wrapper .pagination li.previous,
 .dataTables_wrapper .pagination li.next {display: inline;}
 
 .dataTable th[class*="sort"]:after {

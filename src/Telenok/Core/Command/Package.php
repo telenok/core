@@ -1,6 +1,7 @@
 <?php namespace Telenok\Core\Command;
 
 use Illuminate\Console\Command;
+use Illuminate\Foundation\Composer;
 
 class Package extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 

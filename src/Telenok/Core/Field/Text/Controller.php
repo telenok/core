@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	protected $key = 'text';
-	protected $specialField = ['text_width', 'text_height', 'text_default'];
+	protected $specialField = ['text_width', 'text_height', 'text_default', 'text_rte'];
    
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
     {
