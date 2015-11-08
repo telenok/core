@@ -1,5 +1,3 @@
-@extends('core::layout.model-field')
-
 <?php
     
     $domAttr = ['class' => 'col-md-6', 'disabled' => 'disabled'];

@@ -1,5 +1,3 @@
-@extends('core::layout.model-field')
-
 <?php
     
     $method = camel_case($field->code);
@@ -201,6 +199,9 @@
 					<i class="upload-icon fa fa-cloud-upload blue fa fa-3x"></i>',
 					dictResponseError: 'Error while uploading file!',
 					autoProcessQueue: false,
+                    headers: {
+                        'X-CSRF-Token': jQuery('meta[name="csrf-token"]').attr('content')
+                    },
 					//change the previewTemplate to use Bootstrap progress bars
 					previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-details\">\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n    <div class=\"dz-size\" data-dz-size></div>\n    <img data-dz-thumbnail />\n  </div>\n  <div class=\"progress progress-small progress-success progress-striped active\"><span class=\"bar\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-success-mark\"><span></span></div>\n  <div class=\"dz-error-mark\"><span></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n</div>"
 				});

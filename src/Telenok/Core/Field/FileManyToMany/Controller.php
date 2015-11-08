@@ -44,11 +44,25 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     public function getListFieldContent($field, $item, $type = null)
     {
-        $file = $item->{camel_case($field->code)}()->first();
-        
-        if ($file)
+        if ($item instanceof \Telenok\Core\Model\File\File)
         {
-            return $file->isImage() ? "<img src='" . \URL::asset($file->path) . "' alt='' width='140' />" : "<a href='" . \URL::asset($file->path) . "' target='_blank'>" . e($file->translate('title')) . '</a>';
+            $file = $item;
+        }
+        else 
+        {
+            $file = $item->{camel_case($field->code)}()->first();
+        }
+        
+        if ($file && $file->upload_path)
+        {
+            if ($file->isImage())
+            {
+                return "<img src='" . $file->upload->downloadImageLink() . "' alt='' width='140' />";
+            }
+            else
+            {
+                return "<a href='" . $file->upload->downloadStreamLink() . "' target='_blank'>" . e($file->translate('title')) . '</a>';
+            }
         }
     }
 
