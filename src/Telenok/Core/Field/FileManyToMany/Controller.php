@@ -44,24 +44,24 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     public function getListFieldContent($field, $item, $type = null)
     {
+        $object = $item->{camel_case($field->code)}()->first();
+        
         if ($item instanceof \Telenok\Core\Model\File\File)
         {
-            $file = $item;
+            return $object->translate('title');
         }
-        else 
+        else
         {
-            $file = $item->{camel_case($field->code)}()->first();
-        }
-        
-        if ($file && $file->upload_path)
-        {
-            if ($file->isImage())
+            if ($object && $object->upload_path)
             {
-                return "<img src='" . $file->upload->downloadImageLink() . "' alt='' width='140' />";
-            }
-            else
-            {
-                return "<a href='" . $file->upload->downloadStreamLink() . "' target='_blank'>" . e($file->translate('title')) . '</a>';
+                if ($object->isImage())
+                {
+                    return "<img src='" . $object->upload->downloadImageLink() . "' alt='' width='140' />";
+                }
+                else
+                {
+                    return "<a href='" . $object->upload->downloadStreamLink() . "' target='_blank'>" . e($object->translate('title')) . '</a>';
+                }
             }
         }
     }
