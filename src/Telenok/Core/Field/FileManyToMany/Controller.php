@@ -45,7 +45,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     public function getListFieldContent($field, $item, $type = null)
     {
         $object = $item->{camel_case($field->code)}()->first();
-        
+
         if ($item instanceof \Telenok\Core\Model\File\File)
         {
             return $object->translate('title');
@@ -72,18 +72,16 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         {
             if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
             {
-                $value = $value ? : '[]';
+				if ($key == 'file_many_to_many_allow_ext')
+				{
+					$value = $value ? : json_encode(\Telenok\Core\Field\Upload\File::IMAGE_EXTENSION);
+				}
+				else if ($key == 'file_many_to_many_allow_mime')
+				{
+					$value = $value ? : json_encode(\Telenok\Core\Field\Upload\File::IMAGE_MIME_TYPE);
+				}
 
-                $v = json_decode($value, true);
-
-                if (is_array($v))
-                {
-                    return \Illuminate\Support\Collection::make($v);
-                }
-                else
-                {
-                    return $v;
-                }
+				return \Illuminate\Support\Collection::make((array)json_decode($value, true));
             }
             else
             {
@@ -100,25 +98,20 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     {
         if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
         {
-            $default = [];
+			if ($value instanceof \Illuminate\Support\Collection) 
+			{
+				$value = $value->toArray();
+			}
+			else if ($key == 'file_many_to_many_allow_ext')
+			{
+				$value = $value ? : \Telenok\Core\Field\Upload\File::IMAGE_EXTENSION;
+			} 
+			else if ($key == 'file_many_to_many_allow_mime')
+			{
+				$value = $value ? : \Telenok\Core\Field\Upload\File::IMAGE_MIME_TYPE;
+			} 
 
-            if ($value instanceof \Illuminate\Support\Collection) 
-            {
-                if ($value->count())
-                {
-                    $value = $value->toArray();
-                }
-                else
-                {
-                    $value = $default;
-                }
-            }
-            else
-            {
-                $value = $value ? : $default;
-            } 
-
-            $model->setAttribute($key, json_encode($value, JSON_UNESCAPED_UNICODE));
+			$model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
         }
         else
         {

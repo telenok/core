@@ -93,6 +93,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		\App\Telenok\Core\Model\Object\Field::where(function($query) use ($model, $type)
 			{
 				$query->whereIn('code', [
+					$model->code,
 					$model->code . '_path',
 					$model->code . '_size',
 					$model->code . '_original_file_name',
@@ -281,10 +282,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 						}
 					}
 				}
-				
+
 				throw $e;
 			}
-			
+
 			/*
 			 * remove old file linked to current field of $model
 			 */
@@ -388,12 +389,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
 		$input->put('multilanguage', 0);
 		$input->put('allow_sort', 0); 
-        
+
         if (!$input->get('upload_allow_size', 0))
         {
             $input->put('upload_allow_size', $this->maxSiteDefault); 
         }
-		
+
         return parent::preProcess($model, $type, $input);
     } 
  

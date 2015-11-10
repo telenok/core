@@ -199,18 +199,18 @@ class Repository {
 
         $pages = \App\Telenok\Core\Model\Web\Page::whereHas('pageDomain', function($query) use ($domains)
                 {
-					$domains = $domains->modelKeys();
-
-					$query->whereNull('page_domain')
-							->orWhere('page_domain', 0)
-							->orWhereIn('page_domain', $domains? : [0]);
-                })
+                    $query->whereIn('page_domain', $domains->modelKeys() ? : [0]);
+                }, '>=', 0)
                 ->whereHas('pagePageController', function($query)
 				{
 					$now = \Carbon\Carbon::now();
-					$query->where('active', 1)
+
+                    $query->where(function($query) use ($now)
+                    {
+                        $query->where('active', 1)
 							->where('active_at_start', '<=', $now)
 							->where('active_at_end', '>=', $now);
+                    });
 				})
                 ->active()
                 ->get();

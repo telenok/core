@@ -209,7 +209,20 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     
 	public function getTemplateContent()
 	{
-		return ($p = $this->getFileTemplatePath()) ? \File::get($p) : "";
+        if (($p = $this->getFileTemplatePath()) && ($content = file_get_contents($p)))
+        {
+            return $content;
+        }
+        else
+        {
+            try
+            {
+                return file_get_contents(app('view')->getFinder()->find("{$this->getPackage()}::widget.{$this->getKey()}.widget-frontend"));
+            } 
+            catch (\Exception $ex)
+            {
+            }
+        }
 	}
     
     public function getFileTemplatePath()
@@ -402,20 +415,20 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         {
             @unlink($p);
         }
-        
+
         return $this;
     }
-    
+
 	public function validate($model = null, $input = [])
 	{
         return $this;
 	}
-	
+
     public function preProcess($model, $type, $input)
     { 
         return $this;
     }
-	
+
     public function postProcess($model, $type, $input)
     {
         $templateFile = $this->getFileTemplatePath();
@@ -424,10 +437,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         {
             $templateFile = base_path($this->widgetTemplateDirectory . $model->getKey() . '.blade.php');
         }
-        
+
         \File::makeDirectory(dirname(realpath($templateFile)), 0777, true, true);
 
-        \File::put($templateFile, $input->get('template_content'));
+        \File::put($templateFile, $input->get('template_content', $this->getTemplateContent()));
 
         return $this;
     }

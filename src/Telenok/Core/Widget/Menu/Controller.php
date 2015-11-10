@@ -27,7 +27,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
         {
             $this->menuType = $this->getConfig('menu_type', $this->cacheTime);
             $this->nodeIds = $this->getConfig('node_ids', $this->nodeIds);
-            $this->objectType = $this->getConfig('object_type', $this->cacheTime);
+            $this->objectType = $this->getConfig('object_type', $this->objectType);
         }
 
         return $this;
@@ -63,7 +63,11 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
             $ids = json_decode('[' . $ids . ']');
         }
 
-		$class = \App\Telenok\Core\Model\Object\Sequence::getModel($this->objectType)->class_model;
+        $class = \App\Telenok\Core\Model\Object\Type::where(function($query)
+        {
+            $query->where('id', $this->objectType);
+            $query->orWhere('code', $this->objectType);
+        })->first()->class_model;
 
         $model = app($class);
 
