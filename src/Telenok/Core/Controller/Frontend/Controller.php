@@ -14,6 +14,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller
         app('view')->composer('*', function($view)
         {
             $view->with(['controllerAction' => $this]);
-        });        
+        });
+
+            (new \App\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
+                'title' => ['en' => 'Product', 'ru' => 'Товар'],
+                'active' => 1,
+                'controller_class' => '\App\Telenok\Shop\Widget\Product\Controller',
+            ]);      
     }
 }
