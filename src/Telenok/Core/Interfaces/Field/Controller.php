@@ -418,7 +418,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 			}
 			
 			\File::append(app_path(static::$macroFile), $stub);
-			
+
 			\Telenok\Core\Interfaces\Field\Relation\Controller::readMacroFile();
 		}
 		catch (\Exception $e)

@@ -296,7 +296,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                     $table->unique([$pivotField, $codeFieldHasMany], 'uniq_key');
                 });
             }
-			
+
             if ($this->validateMethodExists($hasManyObject, $hasMany['method']))
             {
                 \Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));

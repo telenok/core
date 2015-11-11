@@ -46,7 +46,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     {
         $object = $item->{camel_case($field->code)}()->first();
 
-        if ($item instanceof \Telenok\Core\Model\File\File)
+        if ($object instanceof \Telenok\Core\Model\File\File)
         {
             return $object->translate('title');
         }

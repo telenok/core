@@ -131,13 +131,8 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 	
     public function preProcess($model, $type, $input)
     {
-        if (!$input->get('relation_many_to_many_has'))
-        {
-            return $this;
-        }
-        
 		$sequenceTypeId = \DB::table('object_type')->where('code', 'object_sequence')->pluck('id');
-		
+
 		$translationSeed = $this->translationSeed();
 
         if (!$input->get('title'))
@@ -165,7 +160,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
 		$input->put('field_object_tab', $tab->getKey());  
 
-		$toSave = [
+        $toSave = [
 			'title' => array_get($translationSeed, 'model.children'),
 			'title_list' => array_get($translationSeed, 'model.children'),
 			'key' => 'tree',

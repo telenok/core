@@ -78,20 +78,7 @@
 						)
                     <div id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload" class="tab-pane ">
 						<button onclick="Dropzone.forElement('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone').processQueue(); return false;" class="btn btn-sm btn-success">Upload</button>
-						
-                        {!! Form::select('category', 
-                            \App\Telenok\Core\Model\File\FileCategory::active()->get(['title', 'id'])
-                                ->transform(function($item) { 
-                                    return ['title' => $item->translate('title'), 'id' => $item->id]; 
-                                })->sortBy('title')->lists('title', 'id'), 
-                            [], 
-                            [
-                                'id' => 'select-file-category-' . $jsUnique, 
-                                'size' => 4,
-                                'multiple' => 'multiple'
-                            ]) !!}
-                        
-                        <div id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone" class="form-group dropzone">
+						<div id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone" class="form-group dropzone">
 						</div>
                     </div>
                     @endif
@@ -228,7 +215,6 @@
 
 			Dropzone.forElement('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone').on("sending", function(file, xhr, formData) {
 					formData.append("title", file.name);
-					formData.append("category", jQuery('select-file-category-{{$jsUnique}}').val());
 				});
 		}
 		catch(e) {}
