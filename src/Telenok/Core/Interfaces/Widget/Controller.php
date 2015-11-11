@@ -29,6 +29,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this->icon;
 	}
 
+    public function getParent()
+    {
+        return $this->parent;
+    }
+    
     public function setConfig($config = [])
     {
 		$this->config = $config;
@@ -147,26 +152,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	public function getNotCachedContent()
 	{
         return view($this->getFrontendView(), ['controller' => $this, 'frontendController' => $this->getFrontendController()])->render();
-	}
-
-	public function children()
-	{
-		return app('telenok.config.repository')->getWidget()->filter(function($item)
-				{
-					return $this->getKey() == $item->getParent();
-				});
-	}
-
-	public function parent()
-	{
-		$list = app('telenok.config.repository')->getWidget()->all();
-        
-		$key = $this->getKey();
-
-		return array_filter($list, function($item) use ($key)
-		{
-			return $key == $item->getParent();
-		});
 	}
 
 	public function getBackendView()

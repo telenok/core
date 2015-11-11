@@ -314,4 +314,3 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         return parent::postProcess($model, $type, $input);
     }  
 }
-

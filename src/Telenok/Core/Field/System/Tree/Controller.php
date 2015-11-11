@@ -8,7 +8,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 	protected $key = 'tree';
 
     protected $viewModel = "core::field.relation-many-to-many.model";
-    protected $viewField = "core::field.relation-many-to-many.field";
+    protected $viewField = "core::field.tree.field";
 
 	public function getChooseTypeId($field)
 	{
@@ -131,12 +131,25 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 	
     public function preProcess($model, $type, $input)
     {
+        if (!$input->get('relation_many_to_many_has'))
+        {
+            return $this;
+        }
+        
 		$sequenceTypeId = \DB::table('object_type')->where('code', 'object_sequence')->pluck('id');
 		
 		$translationSeed = $this->translationSeed();
 
-		$input->put('title', array_get($translationSeed, 'model.parent'));
-		$input->put('title_list', array_get($translationSeed, 'model.parent')); 
+        if (!$input->get('title'))
+        {
+            $input->put('title', array_get($translationSeed, 'model.parent'));
+        }
+        
+        if (!$input->get('title_list'))
+        {
+            $input->put('title_list', array_get($translationSeed, 'model.parent')); 
+        }
+
 		$input->put('key', 'tree');
 		$input->put('code', 'tree_parent');
 		$input->put('relation_many_to_many_has', $sequenceTypeId);
@@ -167,13 +180,17 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 			'active' => $input->get('active'),
 			'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
 			'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
-			'allow_create' => 0,
-			'allow_update' => 0,
+			'allow_create' => $input->get('allow_create'),
+			'allow_update' => $input->get('allow_update'),
 			'field_order' => $input->get('field_order'),
-		];  
+		];
  
 		$validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
 
+        $fieldObjectType = \App\Telenok\Core\Model\Object\Type::find($input->get('field_object_type'));
+        $fieldObjectType->treeable = 1;
+        $fieldObjectType->save();
+        
 		if ($input->get('create_belong') !== false && $validator->passes()) 
 		{
 			\App\Telenok\Core\Model\Object\Field::create($toSave);
@@ -183,10 +200,10 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     }
 
     public function postProcess($model, $type, $input) 
-	{ 
+	{
 		return $this;
 	}
-
+    
 	public function translationSeed()
 	{
 		return [
@@ -197,4 +214,3 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 		];
 	}
 }
-

@@ -218,7 +218,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			if (!$input->get('relation_one_to_many_has'))
 			{
 				return parent::postProcess($model, $type, $input);
-			} 
+			}
 
             $relatedTypeOfModelField = $model->fieldObjectType()->first();   // eg object \App\Telenok\Core\Model\Object\Type which DB-field "code" is "author"
 

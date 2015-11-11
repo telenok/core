@@ -28,5 +28,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     {
         return $this->widgetGroupModel;
     }
+
+	public function children()
+	{
+		return app('telenok.config.repository')->getWidget()->filter(function($item)
+				{
+					return $this->getKey() == $item->getParent();
+				});
+	}
 }
 

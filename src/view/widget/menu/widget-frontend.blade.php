@@ -1,4 +1,10 @@
 
+@foreach($items as $item)
+
+    {{ $item->translate('title') }}
+
+@endforeach
+
 @foreach($nodeIds as $idLevel1)
 
     @if (is_array($idLevel1))
@@ -18,7 +24,7 @@
                 @endforeach
             
             @elseif ($item = $items->find($idLeve2))
-
+                {{ $item->translate('title') }}
             @endif
 
         @endforeach

@@ -132,13 +132,13 @@
 								<ul id="module-web-page-widget-list-item" class="dropdown-menu dropdown-success">
 
 					<?php
-					foreach ($widget as $w)
+					foreach ($g->children() as $w)
 					{
 						?>
 
-									<li>
-										<a href="javascript:void(0)" class="dragabble" data-widget-key="{{$w->getKey()}}" data-widget-id="0" data-widget-buffer-id="0" data-widget-buffer-key="0"><i class="{{$w->getIcon()}}"></i> {{ $w->getName() }}</a>
-									</li>
+                                    <li>
+                                        <a href="javascript:void(0)" class="dragabble" data-widget-key="{{$w->getKey()}}" data-widget-id="0" data-widget-buffer-id="0" data-widget-buffer-key="0"><i class="{{$w->getIcon()}}"></i> {{ $w->getName() }}</a>
+                                    </li>
 
 						<?php
 					}

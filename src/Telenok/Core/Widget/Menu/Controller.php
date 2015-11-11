@@ -77,10 +77,11 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
         array_walk($idsArray, 'intval');
 
         $items = $model::withTreeAttr()
+                    ->withChildren(100)
                     ->active()
                     ->withPermission()
                     ->whereIn($model->getTable() . '.id', $idsArray)
-                    ->orderBy(\DB::raw('FIELD("' . $model->getTable() . '.id", "' . implode('", "', $idsArray) . '")'))
+                    ->orderBy(\DB::raw('FIELD(' . $model->getTable() . '.id, "' . implode('", "', $idsArray) . '")'))
                     ->orderBy('pivot_tree_attr.tree_order')
                     ->get();
 
