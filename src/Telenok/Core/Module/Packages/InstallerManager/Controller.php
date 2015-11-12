@@ -155,7 +155,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		}
 		else
 		{
-			file_put_contents($file, '');
+			file_put_contents($file, '', LOCK_EX);
 		}
 	}
 
@@ -173,7 +173,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			$composerPath = base_path('composer.json');
 			$composerTmpPath = base_path('composer.tmp.json');
 
-			file_put_contents($composerTmpPath, file_get_contents($composerPath));
+			file_put_contents($composerTmpPath, file_get_contents($composerPath), LOCK_EX);
 			
 			// download package
 			$this->appendLogFile('download package', $this->LL('Download package'));
@@ -194,7 +194,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			\File::makeDirectory($directory, 0775, true, true);
 			\File::makeDirectory($directoryUnzipped, 0775, true, true);
 
-			file_put_contents($packagePath, file_get_contents($url));
+			file_put_contents($packagePath, file_get_contents($url), LOCK_EX);
 
 			// extract zip file
 			$this->appendLogFile('unzip package', $this->LL('Unzip package'));
@@ -275,7 +275,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 				$this->appendLogFile('store composer.json', $this->LL('Store new version of composer.json'));
 
-				file_put_contents($composerPath, json_encode($jsonArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+				file_put_contents($composerPath, json_encode($jsonArray, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), LOCK_EX);
 
 				$this->appendLogFile('run', $this->LL('Run composer'));
 
@@ -447,7 +447,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			}
 			else if ($modelType == 'file')
 			{
-				\File::put($modelPath, $this->getRequest()->input('content', ''));
+				file_put_contents($modelPath, $this->getRequest()->input('content', ''), LOCK_EX);
 			}
 			else
 			{
@@ -522,7 +522,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 				if (strlen($this->getRequest()->input('content', '')) && \File::size($modelPath) < $this->getMaxSizeToView())
 				{
-					\File::put($model->getRealPath(), $this->getRequest()->input('content'));
+					file_put_contents($model->getRealPath(), $this->getRequest()->input('content'), LOCK_EX);
 				}
 
 				if ($model->getRealPath() != $pathNew)

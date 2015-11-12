@@ -12,7 +12,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		
 		if (!file_exists($path))
 		{
-			file_put_contents($path, '<?php ' . PHP_EOL . PHP_EOL);
+			file_put_contents($path, '<?php ' . PHP_EOL . PHP_EOL, LOCK_EX);
 		}
 		
 		require $path;

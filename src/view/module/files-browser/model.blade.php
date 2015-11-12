@@ -80,7 +80,7 @@
 
 			@else
 
-			{!! Form::textarea('content', $model ? \File::get($model->getRealPath()) : '', ['class' => 'form-control']) !!}
+			{!! Form::textarea('content', $model ? file_get_contents($model->getRealPath()) : '', ['class' => 'form-control']) !!}
 
 			@endif
 		</div>

@@ -254,7 +254,11 @@ class Repository {
 			}
 		}
 
-		\File::put($path . '/' . $file, '<?php ' . PHP_EOL . PHP_EOL . implode(PHP_EOL, $content) . PHP_EOL . implode(PHP_EOL, $routeCommon) . PHP_EOL . PHP_EOL . '?>');
+		file_put_contents(
+            $path . '/' . $file, 
+            '<?php ' . PHP_EOL . PHP_EOL . implode(PHP_EOL, $content) . PHP_EOL . implode(PHP_EOL, $routeCommon) . PHP_EOL . PHP_EOL . '?>', 
+            LOCK_EX
+        );
 	}
 
 	public function compileSetting()

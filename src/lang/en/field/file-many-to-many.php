@@ -7,5 +7,7 @@ return array(
 	'property.file_many_to_many_allow_mime' => 'Mime type allowed',
 	'upload' => 'Upload',
 
-
+    'choose.categories' => 'Categories',
+    
+    'file.list' => 'List',
 );

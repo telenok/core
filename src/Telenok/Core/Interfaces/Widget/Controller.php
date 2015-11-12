@@ -425,7 +425,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
         \File::makeDirectory(dirname(realpath($templateFile)), 0777, true, true);
 
-        \File::put($templateFile, $input->get('template_content', $this->getTemplateContent()));
+        file_put_contents($templateFile, $input->get('template_content', $this->getTemplateContent()), LOCK_EX);
 
         return $this;
     }

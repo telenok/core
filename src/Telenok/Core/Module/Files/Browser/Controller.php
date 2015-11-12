@@ -363,7 +363,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			}
 			else if ($modelType == 'file')
 			{
-				\File::put($modelPath, $this->getRequest()->input('content', ''));
+				file_put_contents($modelPath, $this->getRequest()->input('content', ''), LOCK_EX);
 			}
 			else
 			{
@@ -438,7 +438,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 				if (strlen($this->getRequest()->input('content', '')) && \File::size($modelPath) < $this->getMaxSizeToView())
 				{
-					\File::put($model->getRealPath(), $this->getRequest()->input('content'));
+					file_put_contents($model->getRealPath(), $this->getRequest()->input('content'), LOCK_EX);
 				}
 
 				if ($model->getRealPath() != $pathNew)

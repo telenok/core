@@ -233,7 +233,7 @@
             });
         }
 
-        function editTableRow{{$jsUnique}}(obj, url) 
+        function editTableRow{{$uniqueId}}(obj, url) 
         {
             jQuery.ajax({
                 url: url,
@@ -265,7 +265,7 @@
             });
         }
 
-        function deleteTableRow{{$jsUnique}}(obj) 
+        function deleteTableRow{{$uniqueId}}(obj) 
         {
             var $dt = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}").dataTable();
             var $tr = jQuery(obj).closest("tr");

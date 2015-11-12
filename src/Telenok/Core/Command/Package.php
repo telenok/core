@@ -63,7 +63,7 @@ class Package extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
                 }
             }
             
-            file_put_contents(config_path('app.php'), $c);
+            file_put_contents(config_path('app.php'), $c, LOCK_EX);
         }
     }
 }

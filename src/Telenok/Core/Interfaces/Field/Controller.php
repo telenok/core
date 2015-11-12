@@ -396,7 +396,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 		try
 		{
-			$stub = \File::get($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.stub");
+			$stub = file_get_contents($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.stub");
 
 			$param['class_name'] = get_class($model);
 
@@ -407,17 +407,17 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 			$res = preg_replace('/\}\s*(\?\>)?$/', $stub, \File::get($file)) . PHP_EOL . PHP_EOL . '}' . PHP_EOL . '?>';
 
-			\File::put($file, $res);
+			file_put_contents($file, $res, LOCK_EX);
 
 
-			$stub = \File::get($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.macro.stub");
+			$stub = file_get_contents($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.macro.stub");
 
 			foreach ($param as $k => $v)
 			{
 				$stub = str_replace('{{' . $k . '}}', $v, $stub);
 			}
 			
-			\File::append(app_path(static::$macroFile), $stub);
+			file_put_contents(app_path(static::$macroFile), $stub, FILE_APPEND | LOCK_EX);
 
 			\Telenok\Core\Interfaces\Field\Relation\Controller::readMacroFile();
 		}

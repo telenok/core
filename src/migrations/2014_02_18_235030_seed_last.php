@@ -760,17 +760,10 @@ class SeedLast extends Migration {
 					'field_object_type' => $item->getKey(),
 					'field_object_tab' => 'main',
 					'field_order' => 20,
+                    'allow_create' => 1,
+                    'allow_update' => 1,
 				]);
 			}
-
-			try
-			{
-				(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
-					'key' => 'permission',
-					'field_object_type' => $item->getKey(),
-				]);
-			} 
-            catch (\Exception $ex) {}
 
 			try
 			{
@@ -779,6 +772,7 @@ class SeedLast extends Migration {
 					'field_object_type' => $item->getKey(),
 					'allow_search' => 1,
 					'show_in_list' => 0,
+                    'field_order' => 3,
 				]); 
 			} 
             catch (\Exception $ex) {}
@@ -790,7 +784,18 @@ class SeedLast extends Migration {
 					'field_object_type' => $item->getKey(),
 					'allow_search' => 1,
 					'show_in_list' => 0,
+                    'field_order' => 4,
 				]); 
+			} 
+            catch (\Exception $ex) {}
+
+			try
+			{
+				(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+					'key' => 'permission',
+					'field_object_type' => $item->getKey(),
+                    'field_order' => 10,
+				]);
 			} 
             catch (\Exception $ex) {}
 		});

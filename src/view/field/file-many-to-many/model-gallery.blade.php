@@ -10,6 +10,37 @@
 		$disabledCreateFile = true;
 	} 
 ?>
+
+<div class="row" id="aaa">
+    
+    
+    
+</div>
+
+
+<script type="text/javascript">
+    jQuery.ajax('{!! $urlListTable !!}')
+        .done(function(data)
+        {
+            if (data instanceof Array)
+            {
+                data.forEach(function(item, i, arr) 
+                {
+                    jQuery("#aaa").append(item.upload);
+                });            
+            }
+        });
+</script>
+
+
+
+
+
+
+
+
+
+
     <div class="widget-box transparent" data-field-key='{{ $field->code }}'>
         <div class="widget-header widget-header-small">
             <h4>

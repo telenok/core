@@ -29,7 +29,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
         }
 
         
-        file_put_contents($file, $this->getRequest()->get('content'));
+        file_put_contents($file, $this->getRequest()->get('content'), LOCK_EX);
 
         if (file_exists($file))
         {

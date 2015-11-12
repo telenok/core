@@ -28,7 +28,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			{
 				if ($item->{$field->code}->isImage())
 				{
-					return '<img src="' . $item->{$field->code}->downloadImageLink(140) .'" alt="" />';
+					return '<img src="' . $item->{$field->code}->downloadImageLink(140, 140) .'" alt="" />';
 				}
 				else
 				{

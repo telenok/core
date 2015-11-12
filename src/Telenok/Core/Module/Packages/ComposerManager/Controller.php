@@ -70,7 +70,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 throw new \Exception();
 			}
 
-			file_put_contents($validateFile, $json);
+			file_put_contents($validateFile, $json, LOCK_EX);
 
 			$input = new \Symfony\Component\Console\Input\ArrayInput([
 					'command' => 'validate',
@@ -87,8 +87,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				throw new \Exception();
 			}
 
-			file_put_contents($lastFile, file_get_contents(base_path('composer.json')));
-			file_put_contents(base_path('composer.json'), $json);
+			file_put_contents($lastFile, file_get_contents(base_path('composer.json')), LOCK_EX);
+			file_put_contents(base_path('composer.json'), $json, LOCK_EX);
             
             if ($this->getRequest()->input('action') == "save.update")
             {

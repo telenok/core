@@ -44,26 +44,40 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     public function getListFieldContent($field, $item, $type = null)
     {
-        $object = $item->{camel_case($field->code)}()->first();
+        $linkedObject = $item->{camel_case($field->code)}()->first();
 
-        if ($object instanceof \Telenok\Core\Model\File\File)
+        $content = '';
+        
+        if ($linkedObject instanceof \Telenok\Core\Model\File\File)
         {
-            return $object->translate('title');
+            $item->{camel_case($field->code)}()->get()->take(5)->each(function($item) use (&$content)
+                {
+                    if ($item->upload->exists())
+                    {
+                        if ($item->upload->isImage())
+                        {
+                            $content .= " <img src='" . $item->upload->downloadImageLink(140, 140) . "' alt='" . e($item->translate('title')) . "' />";
+                        }
+                        else
+                        {
+                            $content .= " <a href='" . $item->upload->downloadStreamLink() . "' target='_blank'>" . e($item->translate('title')) . '</a>';
+                        }
+                    }
+                    else 
+                    {
+                        $content .= ' ' . e($item->translate('title'));
+                    }
+                });
         }
         else
         {
-            if ($object && $object->upload_path)
-            {
-                if ($object->isImage())
+            $item->{camel_case($field->code)}()->get()->take(5)->each(function($item) use (&$content)
                 {
-                    return "<img src='" . $object->upload->downloadImageLink() . "' alt='' width='140' />";
-                }
-                else
-                {
-                    return "<a href='" . $object->upload->downloadStreamLink() . "' target='_blank'>" . e($object->translate('title')) . '</a>';
-                }
-            }
+                    $content .= ' ' . e($item->translate('title'));
+                });
         }
+
+        return $content;
     }
 
     public function getModelSpecialAttribute($model, $key, $value)
@@ -134,20 +148,23 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     } 
     
     public function upload()
-    { 
+    {
         $request = $this->getRequest();
-        
+
         if (!$request->has('title'))
         {
             $request->merge(['title' => ['en' => 'Some file']]);
         }
-        
-        $request->merge(['active' => 1]);
+
+        $request->merge([
+            'active' => 1,
+            'category_add' => (array)$request->get('category', [])
+        ]);
 
         $file = app('\App\Telenok\Core\Model\File\File');
 
         $model = $file->storeOrUpdate($request->all(), true); 
-        
+
         return $model->id;
     }    
 }

@@ -9,7 +9,7 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 	{
         if ($t = $this->getFileTemplatePath())
         {
-            return \File::get($t);
+            return file_get_contents($t);
         }
 	}
 }

@@ -95,7 +95,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 		if (preg_match('/^\\\\App\\\\Model\\\\.+/', $classModel) !== 1 && !class_exists($classModel))
 		{
-			throw new \Exception($this->LL('error.class_model.store'));
+			throw new \Exception($this->LL('error.class_model.store', ['class' => $classModel]));
 		}
 	}
 
@@ -134,7 +134,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 		}
 		else if (preg_match('/^\\\\App\\\\Http\\\\Controllers\\\\.+/', $classController) !== 1)
 		{
-			throw new \Exception($this->LL('error.class_controller.store'));
+			throw new \Exception($this->LL('error.class_controller.store', ['class' => $classController]));
 		}
 	}
 
@@ -184,14 +184,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 							'title' => $model->translate('title', $locale),
 						];
 
-						$stub = \File::get(__DIR__ . '/stubs/locale.stub');
+						$stub = file_get_contents(__DIR__ . '/stubs/locale.stub');
 
 						foreach ($param as $k => $v)
 						{
 							$stub = str_replace('{{' . $k . '}}', addcslashes($v, "'"), $stub);
 						}
 
-						\File::put($file, $stub);
+						file_put_contents($file, $stub, LOCK_EX);
 					}
 					catch (\Exception $e)
 					{
@@ -225,14 +225,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 					'table' => $model->code,
 				];
 
-				$stub = \File::get(__DIR__ . '/stubs/model.stub');
+				$stub = file_get_contents(__DIR__ . '/stubs/model.stub');
 
 				foreach ($param as $k => $v)
 				{
 					$stub = str_replace('{{' . $k . '}}', $v, $stub);
 				}
 
-				\File::put($file, $stub);
+				file_put_contents($file, $stub, LOCK_EX);
 			}
 			catch (\Exception $e)
 			{
@@ -272,14 +272,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 					'classTree' => "",
 				];
 
-				$stub = \File::get(__DIR__ . '/stubs/controller.stub');
+				$stub = file_get_contents(__DIR__ . '/stubs/controller.stub');
 
 				foreach ($param as $k => $v)
 				{
 					$stub = str_replace('{{' . $k . '}}', $v, $stub);
 				}
 
-				\File::put($file, $stub);
+				file_put_contents($file, $stub, LOCK_EX);
 			}
 			catch (\Exception $e)
 			{
@@ -448,9 +448,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 					'key' => 'tree',
 					'field_object_type' => $model->getKey(),
 					'field_object_tab' => $tabMain->getKey(),
-					'field_order' => 10,
                     'show_in_list' => 0,
                     'show_in_form' => 1,
+                    'allow_create' => 1,
+                    'allow_update' => 1,
+					'field_order' => 20,
                 ]);
 
 				\App\Telenok\Core\Model\Object\Sequence::where('sequences_object_type', $model->getKey())
@@ -520,6 +522,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 				'field_object_type' => $model->getKey(),
 				'show_in_list' => 0,
 				'show_in_form' => 1,
+                'field_order' => 10,
 			]);
 		}
 	}

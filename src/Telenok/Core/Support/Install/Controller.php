@@ -257,7 +257,7 @@ class Controller {
 			throw new \Exception('Cant create "' . $path . '" file');
 		}
 		
-		$stub = \File::get($path);
+		$stub = file_get_contents($path);
 
 		foreach ($param as $k => $v)
 		{
@@ -271,7 +271,7 @@ class Controller {
 			}
 		}
 		
-		\File::put($path, $stub);
+		file_put_contents($path, $stub, LOCK_EX);
 	}
 
 	public function processConfigDatabaseFile()
@@ -298,7 +298,7 @@ class Controller {
 			throw new \Exception('Cant create "' . $path . '" file');
 		}
 		
-		$stub = \File::get($path);
+		$stub = file_get_contents($path);
 
 		foreach ($param as $k => $v)
 		{
@@ -346,7 +346,7 @@ class Controller {
 			throw new \Exception('Cant create table in database. Please, validate setting in app/config/database.php or set its again with current console command.');
 		}
 
-		\File::put($path, $stub);
+		file_put_contents($path, $stub, LOCK_EX);
 	}
 
 	public function installFlag()

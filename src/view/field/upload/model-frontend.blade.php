@@ -15,7 +15,7 @@
 		
         @if (!empty($model->{$field->code . '_path'}))
 			@if ($model->{$field->code}->isImage($field, $model))
-			<img src="{!! $model->{$field->code}->downloadImageLink(140) !!}" alt="" />
+			<img src="{!! $model->{$field->code}->downloadImageLink(140, 140) !!}" alt="" />
 			<br>
 			@else
 			<a href="{!! $model->{$field->code}->downloadStreamLink() !!}" target="_blank">Download [{{ $model->{$field->code . '_original_file_name'} }}]</a>

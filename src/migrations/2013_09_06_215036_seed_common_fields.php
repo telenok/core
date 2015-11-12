@@ -200,7 +200,7 @@ class SeedCommonFields extends Migration {
                     'show_in_form' => 1,
                     'show_in_list' => 0,
                     'allow_search' => 1,
-                    'field_order' => 12,
+                    'field_order' => 1,
                 ]
         );
 
@@ -219,10 +219,8 @@ class SeedCommonFields extends Migration {
                     'show_in_form' => 1,
                     'show_in_list' => 0,
                     'allow_search' => 1,
-                    'field_order' => 13,
+                    'field_order' => 2,
                 ]
         );
     }
-
-
 }
