@@ -28,11 +28,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			{
 				if ($item->{$field->code}->isImage())
 				{
-					return '<img src="' . $item->{$field->code}->downloadImageLink(140, 140) .'" alt="" />';
+					return '<img src="' . $item->{$field->code}->downloadImageLink(70, 70) .'" title="' . e($item->translate('title')) . '" />';
 				}
 				else
 				{
-					return '<a href="' . $item->{$field->code}->downloadStreamLink()  .'" target="_blank">' . $this->LL('download') . '</a>';
+					return '<a href="' . $item->{$field->code}->downloadStreamLink()  .'" target="_blank" '
+                            . ' title="' . e($item->translate('title')) . '">' . $this->LL('download') . '</a>';
 				}
 			}
 			else if ($item->{$field->code}->path())

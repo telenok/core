@@ -89,7 +89,7 @@
 
                                 <div class="widget-main field-list">
 
-                                    <form class="form-horizontal">
+                                    <div class="form-horizontal">
 
                                         <div class="form-group">
 
@@ -127,7 +127,7 @@
                                         
                                         <div class="row">
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>

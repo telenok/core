@@ -1,0 +1,7 @@
+
+    {{class_name}}::macro('{{method}}', function()
+        {
+            return $this->belongsToMany('{{class}}', '{{table}}', '{{field_1}}', '{{field_2}}')
+                ->withTimestamps()
+                ->withPivot('order');
+        });

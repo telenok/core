@@ -134,4 +134,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		return $item->$method()->take(8)->get();
 	}
 
+    public function schemeCreateExtraField($table, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null)
+    {
+        
+    }
 }

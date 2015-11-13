@@ -259,6 +259,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 					\Schema::table($tableBelongTo, function(Blueprint $table) use ($relatedSQLField)
 					{
 						$table->integer($relatedSQLField)->unsigned()->nullable();
+                        
+                        $this->schemeCreateExtraField($table, $relatedSQLField);
 					});
 				}
 

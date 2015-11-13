@@ -15,10 +15,12 @@
 
         @if ($model->{$field->code}->exists())
 			@if ($model->{$field->code}->isImage())
-			<img src="{!! $model->{$field->code}->downloadImageLink(140, 140) !!}" alt="" />
+			<img src="{!! $model->{$field->code}->downloadImageLink(140, 140) !!}" title="{{$model->translate('title')}}" />
 			<br>
 			@endif
-			<a href="{!! $model->{$field->code}->downloadStreamLink() !!}" target="_blank">Download [{{ $model->{$field->code . '_original_file_name'} }}]</a>
+			<a href="{!! $model->{$field->code}->downloadStreamLink() !!}" 
+               title="{{$model->translate('title')}}"
+               target="_blank">Download [{{ $model->{$field->code . '_original_file_name'} }}]</a>
 			<br>
 		@elseif ($model->{$field->code}->path())
 			<i class="fa fa-exclamation-triangle"></i> File not found

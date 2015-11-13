@@ -21,7 +21,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
         $collection->put('order', 100000);
         $collection->put('li', '<li class="light-blue user-profile">');
         $collection->put('content', '<a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
-                <img class="nav-user-photo" src="' . (app('auth')->user()->avatar_path ?: 'packages/telenok/core/image/anonym.png') . '" alt="Anonym">
+                <img class="nav-user-photo" src="' . (app('auth')->user()->avatar_path ?: 'packages/telenok/core/image/anonym.png') . '" title="Anonym">
                 <span id="user_info">
                      ' . $this->LL('welcome', ['username' => app('auth')->user()->username]) . '
                 </span>

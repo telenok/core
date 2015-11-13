@@ -438,7 +438,9 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
                         $table->string("{$relatedSQLField}_type")->nullable();
 
-                        $table->index(array("{$relatedSQLField}_id", "{$relatedSQLField}_type"));                    
+                        $table->index(array("{$relatedSQLField}_id", "{$relatedSQLField}_type"));           
+                        
+                        $this->schemeCreateExtraField($table, $relatedSQLField);
 					});
 				} 
 				catch (\Exception $ex) {}

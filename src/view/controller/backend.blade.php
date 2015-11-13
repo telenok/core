@@ -66,7 +66,7 @@
 					<li class="light-blue user-profile">
 
 						<a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
-							<img class="nav-user-photo" src="packages/telenok/core/image/anonym.png" alt="Anonym">
+							<img class="nav-user-photo" src="packages/telenok/core/image/anonym.png" title="Anonym">
 							<span id="user_info">
 								Welcome,John!
 							</span>

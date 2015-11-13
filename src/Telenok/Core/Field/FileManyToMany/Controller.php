@@ -56,7 +56,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
                     {
                         if ($item->upload->isImage())
                         {
-                            $content .= " <img src='" . $item->upload->downloadImageLink(140, 140) . "' alt='" . e($item->translate('title')) . "' />";
+                            $content .= " <img src='" . $item->upload->downloadImageLink(70, 70) . "' title='" . e($item->translate('title')) . "' />";
                         }
                         else
                         {
@@ -146,6 +146,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
         return parent::preProcess($model, $type, $input);
     } 
+    
+    public function schemeCreateExtraField($table, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null)
+    {
+        $table->integer('order')->unsigned()->nullable();
+    }
     
     public function upload()
     {

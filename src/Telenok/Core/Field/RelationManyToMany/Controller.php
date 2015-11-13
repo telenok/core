@@ -280,7 +280,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 				}
 				else
 				{
-					$this->updateModelFile($belongToObject, $belongTo, 'hasManyToMany', __DIR__);
+					$this->updateModelFile($belongToObject, $belongTo, 'belongToMany', __DIR__);
 				} 
 			}
 
@@ -294,6 +294,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                     $table->integer($pivotField)->unsigned()->nullable();
 
                     $table->unique([$pivotField, $codeFieldHasMany], 'uniq_key');
+                    
+                    $this->schemeCreateExtraField($table, $codeFieldHasMany, $pivotField, $tableHasMany, $tableBelongTo);
                 });
             }
 
@@ -303,7 +305,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             } 
             else
             {
-				$this->updateModelFile($hasManyObject, $hasMany, 'hasManyToMany', __DIR__);
+				$this->updateModelFile($hasManyObject, $hasMany, 'hasMany', __DIR__);
             }
         }
         catch (\Exception $e) 

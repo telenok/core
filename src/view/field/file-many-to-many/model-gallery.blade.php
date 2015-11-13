@@ -11,36 +11,6 @@
 	} 
 ?>
 
-<div class="row" id="aaa">
-    
-    
-    
-</div>
-
-
-<script type="text/javascript">
-    jQuery.ajax('{!! $urlListTable !!}')
-        .done(function(data)
-        {
-            if (data instanceof Array)
-            {
-                data.forEach(function(item, i, arr) 
-                {
-                    jQuery("#aaa").append(item.upload);
-                });            
-            }
-        });
-</script>
-
-
-
-
-
-
-
-
-
-
     <div class="widget-box transparent" data-field-key='{{ $field->code }}'>
         <div class="widget-header widget-header-small">
             <h4>
@@ -49,8 +19,77 @@
             </h4> 
         </div>
         <div class="widget-body"> 
- 
             <div class="widget-main field-list">
+
+                <div class="row" id="aaa"></div>
+
+                <style>
+                    .hover-group {
+                        display: block;
+                        overflow: hidden;
+                    }
+
+                    .hover-group {
+                        position: relative;
+                    }
+
+                    .hover-group .hover-toggle {
+                        position: absolute;      
+                        bottom: 0;
+                        display: none;
+                    }
+
+                    .hover-group:hover .hover-toggle {
+                        display: block;
+                    }
+                </style>
+
+                    
+                    <?php
+                    
+                    if ($model->{$method}()->take(1)->count())
+                    {
+                        $items = $model->{$method}()->take(100)->get();
+                    ?>
+                
+                    <div class="row">
+                        <ul class="list-inline" id="sortable">
+                        @foreach($items as $item)
+                        <li class="col-md-2">
+                            <div class="hover-group thumbnail">
+                                <div class="image-wrapper">
+                                    <img src="{!! $item->upload->downloadImageLink(200, 200) !!}" title="{{$item->translate('title')}}" class="img-responsive">
+                                </div>
+                                <h5>{{$item->translate('title')}}</h5>
+                                <div class="hover-toggle btn-group">
+                                    <button class="btn btn-sm btn-success">Edit</button>
+                                    <button class="btn btn-sm btn-danger">Unlink</button>
+                                </div>
+                            </div>
+                        </li>
+                        @endforeach
+                        </ul>
+                    </div>
+
+                    <script>
+                        jQuery( "#sortable" ).sortable();
+                    </script>
+                    <?php
+
+                    }
+                    ?>
+                
+                
+                
+                
+                 
+
+
+
+
+
+
+
 
                 <ul class="nav nav-tabs" id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab">
                     <li class="active">

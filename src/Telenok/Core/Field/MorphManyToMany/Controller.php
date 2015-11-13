@@ -239,6 +239,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                     $table->string($morphManyCode . '_type')->nullable();
 
                     $table->unique(['morph_id', $morphManyCode . '_linked_id', $morphManyCode . '_type'], 'uniq_key');
+                    
+                    $this->schemeCreateExtraField($table, $morphManyCode, $typeMorphMany, $typeBelongTo);
                 });
             }
 
