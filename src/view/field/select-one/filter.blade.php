@@ -28,9 +28,7 @@ $jsUnique = str_random();
             }
         }
     } 
-    catch (\Exception $exc)
-    {
-    }
+    catch (\Exception $e) {}
     
     ?>
 </select>

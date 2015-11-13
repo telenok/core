@@ -895,8 +895,6 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
         }
         catch (\Exception $e)
         {
-            
-            throw $e;
             return ['exception' => 1];
         }
     }
@@ -1011,22 +1009,15 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 	}
 
     public function store($id = null)
-    {   
-        try 
-		{
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+    {
+        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
 
-			$model = null;
+        $model = null;
 
-            \DB::transaction(function() use (&$model, $input)
-            { 
-                $model = $this->save($input); 
-            });
-        } 
-        catch (\Exception $e) 
-        {   
-			throw $e;
-        } 
+        \DB::transaction(function() use (&$model, $input)
+        { 
+            $model = $this->save($input); 
+        });
 
         $return = [];
 		
@@ -1043,23 +1034,16 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
     
     public function update($id = null)
-    { 
-        try 
-        {
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+    {
+        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
 
-            $model = null;
+        $model = null;
 
-            \DB::transaction(function() use (&$model, $input)
-            { 
-                $model = $this->save($input); 
-            });
-        } 
-        catch (\Exception $e) 
-        {   
-			throw $e;
-        }
- 
+        \DB::transaction(function() use (&$model, $input)
+        { 
+            $model = $this->save($input); 
+        });
+
         $return = []; 
 		
         $return['content'] = view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge([

@@ -70,10 +70,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				$return[] = ['value' => $item->id, 'text' => "[{$item->translate('title_type')}#{$item->id}] " . $item->translate('title')];
 			});
 		}
-		catch (\Exception $e)
-		{
-			echo $e;
-		}
+        catch (\Exception $e) {}
 
 		return $return;
 	}

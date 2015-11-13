@@ -261,30 +261,23 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function update($id = null)
 	{
-		try
-		{
-            $id = $this->getRequest()->input('id');
+        $id = $this->getRequest()->input('id');
 
-            $this->updatePackage($id);
-            
-			return [
-                'tabKey' => "{$this->getTabKey()}-" . md5($id),
-                'tabLabel' => $id,			
-                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array( 
-                        'controller' => $this,
-                        'success' => true,
-                        'content' => $this->getPackageData($id),
-                        'id' => $id,
-                        'model' => [],
-                        'routerParam' => $this->getRouterParam('update'),
-                        'uniqueId' => str_random(),  
-                    ), $this->getAdditionalViewParam()))->render()
-                ];
-		}
-		catch (\Exception $e)
-		{
-			throw $e;
-		}
+        $this->updatePackage($id);
+
+        return [
+            'tabKey' => "{$this->getTabKey()}-" . md5($id),
+            'tabLabel' => $id,			
+            'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array( 
+                    'controller' => $this,
+                    'success' => true,
+                    'content' => $this->getPackageData($id),
+                    'id' => $id,
+                    'model' => [],
+                    'routerParam' => $this->getRouterParam('update'),
+                    'uniqueId' => str_random(),  
+                ), $this->getAdditionalViewParam()))->render()
+            ];
 	}
 
     public function delete($id = null, $force = false)

@@ -150,7 +150,7 @@ class SeedLast extends Migration {
 				{
 					\App\Telenok\Core\Security\Acl::addResource("object_field.{$type->code}.{$field->code}", 'Object ' . $type->code . '. Field ' . $field->code);
 				}
-				catch (\Exception $exc) {}
+                catch (\Exception $e) {}
 			});
 		});
 
@@ -775,7 +775,7 @@ class SeedLast extends Migration {
                     'field_order' => 3,
 				]); 
 			} 
-            catch (\Exception $ex) {}
+            catch (\Exception $e) {}
             
 			try
 			{
@@ -787,7 +787,7 @@ class SeedLast extends Migration {
                     'field_order' => 4,
 				]); 
 			} 
-            catch (\Exception $ex) {}
+            catch (\Exception $e) {}
 
 			try
 			{
@@ -797,7 +797,7 @@ class SeedLast extends Migration {
                     'field_order' => 10,
 				]);
 			} 
-            catch (\Exception $ex) {}
+            catch (\Exception $e) {}
 		});
 
 		\App\Telenok\Core\Model\Object\Sequence::where('treeable', 1)->get()->each(function($item)

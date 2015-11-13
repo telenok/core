@@ -12,7 +12,7 @@ class Validator extends \Illuminate\Validation\Validator {
         $message = str_replace(':attribute', $this->getAttribute($attribute), $message);
 
         if (method_exists($this, $replacer = "replace{$rule}")) {
-            $message = $this->$replacer($message, $attribute, $rule, $parameters);
+            $message = $this->{$replacer}($message, $attribute, $rule, $parameters);
         }
 
         $matches = [];
@@ -56,7 +56,7 @@ class Validator extends \Illuminate\Validation\Validator {
 
                 foreach ($value as $v)
                 {
-                    if ($this->$method($attribute, $v, $parameters, $this)) 
+                    if ($this->{$method}($attribute, $v, $parameters, $this)) 
                     {
                         $error = false;
                         break;
@@ -68,7 +68,7 @@ class Validator extends \Illuminate\Validation\Validator {
                     $this->addFailure($attribute, $rule, $parameters);
                 }
             } 
-            else if (!$this->$method($attribute, $value, $parameters, $this)) 
+            else if (!$this->{$method}($attribute, $value, $parameters, $this)) 
             {
                 $this->addFailure($attribute, $rule, $parameters);
             }

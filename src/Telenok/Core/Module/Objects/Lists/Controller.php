@@ -317,9 +317,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         }
         catch (\Exception $e) 
         {
-			throw $e;
-
-
 			return [
                 'gridId' => $this->getGridId(), 
                 'sEcho' => $sEcho,
@@ -657,23 +654,16 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function store($id = null)
     {
-        try 
+        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+
+        $type = $this->getType($id);
+
+        if ($type->classController())
         {
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+            return $this->typeForm($type)->setDisplayType($this->displayType)->store();
+        }
 
-			$type = $this->getType($id);
-
-			if ($type->classController())
-			{
-				return $this->typeForm($type)->setDisplayType($this->displayType)->store();
-			}
-
-			$model = $this->save($input, $type); 
-        } 
-        catch (\Exception $e) 
-        {   
-			throw $e;
-        } 
+        $model = $this->save($input, $type);
         
 		$fields = $model->getFieldForm();
 

@@ -1,5 +1,0 @@
-
-    {{class_name}}::macro('{{method}}', function()
-        {
-            return $this->hasMany('{{class}}', '{{field}}');
-        });

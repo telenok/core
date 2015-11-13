@@ -8,7 +8,7 @@
 	$title = '';
 	$id = 0; 
 
-	if ($model->exists && $result = $model->$method)
+	if ($model->exists && $result = $model->{$method})
 	{
 		$title = $result->translate('title');
 		$id = $result->id;

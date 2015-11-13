@@ -65,7 +65,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			{
 				$method = camel_case($field->code);
 
-				$relatedQuery = $model->$method();
+				$relatedQuery = $model->{$method}();
 
 				$linkedTable = $relatedQuery->getRelated()->getTable();
 
@@ -140,14 +140,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		{
 			$method = camel_case($field->code);
 
-			$relatedQuery = $model->$method();
+			$relatedQuery = $model->{$method}();
 
 			try
 			{
 				$relatedQuery->getRelated()->findOrFail((int) $input->get($field->code, 0))
 						->storeOrUpdate([$relatedQuery->getPlainForeignKey() => $model->getKey()], true);
 			}
-			catch (\Exception $e) {}
+            catch (\Exception $e) {}
 		}
 
 		return $model;
@@ -174,120 +174,119 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
 	public function postProcess($model, $type, $input)
 	{
-		try
-		{
-			$model->fill(['relation_one_to_one_has' => $input->get('relation_one_to_one_has')])->save();
+        $model->fill(['relation_one_to_one_has' => $input->get('relation_one_to_one_has')])->save();
 
-			if (!$input->get('relation_one_to_one_has'))
-			{
-				return parent::postProcess($model, $type, $input);
-			}
+        if (!$input->get('relation_one_to_one_has'))
+        {
+            return parent::postProcess($model, $type, $input);
+        }
 
-			$relatedTypeOfModelField = $model->fieldObjectType()->first();   // eg object \App\Telenok\Core\Model\Object\Type which DB-field "code" is "author"
+        $relatedTypeOfModelField = $model->fieldObjectType()->first();   // eg object \App\Telenok\Core\Model\Object\Type which DB-field "code" is "author"
 
-			$classModelHasOne = $relatedTypeOfModelField->class_model;
-			$codeFieldHasOne = $model->code;
-			$codeTypeHasOne = $relatedTypeOfModelField->code;
+        $classModelHasOne = $relatedTypeOfModelField->class_model;
+        $codeFieldHasOne = $model->code;
+        $codeTypeHasOne = $relatedTypeOfModelField->code;
 
-			$typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('relation_one_to_one_has'));
-			$tableBelongTo = $typeBelongTo->code;
-			$classBelongTo = $typeBelongTo->class_model;
+        $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('relation_one_to_one_has'));
+        $tableBelongTo = $typeBelongTo->code;
+        $classBelongTo = $typeBelongTo->class_model;
 
-			$relatedSQLField = $codeFieldHasOne . '_' . $codeTypeHasOne;
+        $relatedSQLField = $codeFieldHasOne . '_' . $codeTypeHasOne;
 
-			$hasOne = [
-				'method' => camel_case($codeFieldHasOne),
-				'class' => $classBelongTo,
-				'field' => $relatedSQLField,
-			];
+        $hasOne = [
+            'method' => camel_case($codeFieldHasOne),
+            'class' => $classBelongTo,
+            'field' => $relatedSQLField,
+        ];
 
-			$belongTo = [
-				'method' => camel_case($relatedSQLField),
-				'class' => $classModelHasOne,
-				'field' => $relatedSQLField,
-			];
+        $belongTo = [
+            'method' => camel_case($relatedSQLField),
+            'class' => $classModelHasOne,
+            'field' => $relatedSQLField,
+        ];
 
-			$hasOneObject = app($classModelHasOne);
-			$belongToObject = app($classBelongTo);
+        $hasOneObject = app($classModelHasOne);
+        $belongToObject = app($classBelongTo);
 
-			if ($input->get('create_belong') !== false)
-			{
-				$title = $input->get('title_belong', []);
-				$title_list = $input->get('title_list_belong', []);
+        if ($input->get('create_belong') !== false)
+        {
+            $title = $input->get('title_belong', []);
+            $title_list = $input->get('title_list_belong', []);
 
-				foreach ($relatedTypeOfModelField->title->all() as $language => $val)
-				{
-					$title[$language] = array_get($title, $language, $val . '/' . $model->translate('title', $language));
-				}
+            foreach ($relatedTypeOfModelField->title->all() as $language => $val)
+            {
+                $title[$language] = array_get($title, $language, $val . '/' . $model->translate('title', $language));
+            }
 
-				foreach ($relatedTypeOfModelField->title_list->all() as $language => $val)
-				{
-					$title_list[$language] = array_get($title_list, $language, $val . '/' . $model->translate('title_list', $language));
-				}
+            foreach ($relatedTypeOfModelField->title_list->all() as $language => $val)
+            {
+                $title_list[$language] = array_get($title_list, $language, $val . '/' . $model->translate('title_list', $language));
+            }
 
-				$tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
+            $tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
 
-				$toSave = [
-					'title' => $title,
-					'title_list' => $title_list,
-					'key' => $this->getKey(),
-					'code' => $relatedSQLField,
-					'field_object_type' => $typeBelongTo->getKey(),
-					'field_object_tab' => $tabTo->getKey(),
-					'relation_one_to_one_belong_to' => $relatedTypeOfModelField->getKey(),
-					'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
-					'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
-					'allow_search' => $input->get('allow_search_belong', $model->allow_search),
-					'multilanguage' => 0,
-					'active' => $input->get('active_belong', $model->active),
-					'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
-					'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
-					'allow_create' => $input->get('allow_create_belong', $model->allow_create),
-					'allow_update' => $input->get('allow_update_belong', $model->allow_update),
-					'field_order' => $input->get('field_order_belong', $model->field_order),
-				];
+            $toSave = [
+                'title' => $title,
+                'title_list' => $title_list,
+                'key' => $this->getKey(),
+                'code' => $relatedSQLField,
+                'field_object_type' => $typeBelongTo->getKey(),
+                'field_object_tab' => $tabTo->getKey(),
+                'relation_one_to_one_belong_to' => $relatedTypeOfModelField->getKey(),
+                'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
+                'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
+                'allow_search' => $input->get('allow_search_belong', $model->allow_search),
+                'multilanguage' => 0,
+                'active' => $input->get('active_belong', $model->active),
+                'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
+                'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
+                'allow_create' => $input->get('allow_create_belong', $model->allow_create),
+                'allow_update' => $input->get('allow_update_belong', $model->allow_update),
+                'field_order' => $input->get('field_order_belong', $model->field_order),
+            ];
 
-				$validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
+            $validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
 
-				if ($validator->passes())
-				{
-					\App\Telenok\Core\Model\Object\Field::create($toSave);
-				}
+            if ($validator->passes())
+            {
+                \App\Telenok\Core\Model\Object\Field::create($toSave);
+            }
 
-				if (!\Schema::hasColumn($tableBelongTo, $relatedSQLField))
-				{
-					\Schema::table($tableBelongTo, function(Blueprint $table) use ($relatedSQLField)
-					{
-						$table->integer($relatedSQLField)->unsigned()->nullable();
-                        
-                        $this->schemeCreateExtraField($table, $relatedSQLField);
-					});
-				}
+            if (!\Schema::hasColumn($tableBelongTo, $relatedSQLField))
+            {
+                \Schema::table($tableBelongTo, function(Blueprint $table) use ($relatedSQLField)
+                {
+                    $table->integer($relatedSQLField)->unsigned()->nullable();
 
-				if (!$this->validateMethodExists($belongToObject, $belongTo['method']))
-				{
-					$this->updateModelFile($belongToObject, $belongTo, 'belongsTo', __DIR__);
-				}
-				else
-				{
-					\Session::flash('warning.hasOneBelongTo', $this->LL('error.method.defined', ['method' => $belongTo['method'], 'class' => $classBelongTo]));
-				}
-			}
+                    $this->schemeCreateExtraField($table, $relatedSQLField);
+                });
+            }
 
-			if (!$this->validateMethodExists($hasOneObject, $hasOne['method']))
-			{
-				$this->updateModelFile($hasOneObject, $hasOne, 'hasOne', __DIR__);
-			}
-			else
-			{
-				\Session::flash('warning.hasOne', $this->LL('error.method.defined', ['method' => $hasOne['method'], 'class' => $classModelHasOne]));
-			}
-		}
-		catch (\Exception $e)
-		{
-			throw $e;
-		}
+            if (!$this->validateMethodExists($belongToObject, $belongTo['method']))
+            {
+                $this->updateModelFile($belongToObject, $belongTo, 'belongsTo');
+            }
+            else
+            {
+                \Session::flash('warning.hasOneBelongTo', $this->LL('error.method.defined', ['method' => $belongTo['method'], 'class' => $classBelongTo]));
+            }
+        }
+
+        if (!$this->validateMethodExists($hasOneObject, $hasOne['method']))
+        {
+            $this->updateModelFile($hasOneObject, $hasOne, 'hasOne');
+        }
+        else
+        {
+            \Session::flash('warning.hasOne', $this->LL('error.method.defined', ['method' => $hasOne['method'], 'class' => $classModelHasOne]));
+        }
 
 		return parent::postProcess($model, $type, $input);
 	}
+    
+
+    public function getStubFileDirectory()
+    {
+        return __DIR__;
+    }
 }

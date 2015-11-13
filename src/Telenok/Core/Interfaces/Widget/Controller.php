@@ -204,9 +204,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             {
                 return file_get_contents(app('view')->getFinder()->find("{$this->getPackage()}::widget.{$this->getKey()}.widget-frontend"));
             } 
-            catch (\Exception $ex)
-            {
-            }
+            catch (\Exception $e) {}
         }
 	}
     
@@ -218,15 +216,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             {
                 return app('view')->getFinder()->find($this->getFrontendView());
             }
-            else 
-            {
-                return false;
-            }
         } 
-        catch (\Exception $ex) 
-        {
-            return false;
-        }
+        catch (\Exception $e) {}
+
+        return false;
     }
 
 	public function getInsertContent($id = 0)

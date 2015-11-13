@@ -367,19 +367,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 		try
 		{
-			if (method_exists($object, $method) || preg_match("/function\s+{$method}\s*\(/", \File::get($file)))
+			if (method_exists($object, $method) || preg_match("/function\s+{$method}\s*\(/", file_get_contents($file)))
 			{
 				return true;
 			}
 		}
-		catch (\Exception $e)
-		{
+        catch (\Exception $e)
+        {
+    		return false;
 		}
-
-		return false;
 	}
 
-	public function fill($field, $model, $input)
+	public function fill___($field, $model, $input)
 	{
 		return $this;
 	}
@@ -389,27 +388,17 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 		return $model;
 	}
 
-	public function updateModelFile($model, $param, $stubFile, $dir)
+	public function updateModelFile($model, $param, $stubFile)
 	{
 		$reflector = new \ReflectionClass($model);
 		$file = $reflector->getFileName();
+        $dir = $this->getStubFileDirectory();
 
 		try
 		{
-			$stub = file_get_contents($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.stub");
-
 			$param['class_name'] = get_class($model);
 
-			foreach ($param as $k => $v)
-			{
-				$stub = str_replace('{{' . $k . '}}', $v, $stub);
-			}
-
-			$res = preg_replace('/\}\s*(\?\>)?$/', $stub, \File::get($file)) . PHP_EOL . PHP_EOL . '}' . PHP_EOL . '?>';
-
-			file_put_contents($file, $res, LOCK_EX);
-
-
+            // update /app/Model/macro.php
 			$stub = file_get_contents($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.macro.stub");
 
 			foreach ($param as $k => $v)
@@ -419,6 +408,22 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 			
 			file_put_contents(app_path(static::$macroFile), $stub, FILE_APPEND | LOCK_EX);
 
+
+            // update class file
+			$stub = file_get_contents($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.stub");
+
+
+			foreach ($param as $k => $v)
+			{
+				$stub = str_replace('{{' . $k . '}}', $v, $stub);
+			}
+
+			$res = preg_replace('/\}\s*(\?\>)?$/', $stub, file_get_contents($file)) . PHP_EOL . PHP_EOL . '}' . PHP_EOL . '?>';
+
+			file_put_contents($file, $res, LOCK_EX);
+
+
+            // reload /app/Model/macro.php
 			\Telenok\Core\Interfaces\Field\Relation\Controller::readMacroFile();
 		}
 		catch (\Exception $e)
@@ -464,9 +469,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
                 $table->dropColumn($model->code);
             });
         }
-        catch (\Exception $e)
-        {
-        }
+        catch (\Exception $e) {}
 
 		return true;
 	}
@@ -546,4 +549,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 		return $tabTo;
 	}
 
+    public function getStubFileDirectory()
+    {
+        return __DIR__;
+    }
 }

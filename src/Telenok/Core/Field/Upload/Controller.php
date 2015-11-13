@@ -80,7 +80,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 								{
 									$disk->delete($file);
 								}
-								catch (\Exception $e) {}
+                                catch (\Exception $e) {}
 							}
 						}
 					}
@@ -279,7 +279,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 							{
 								$disk->delete($file);
 							}
-							catch (\Exception $e) {}
+                            catch (\Exception $e) {}
 						}
 					}
 				}
@@ -308,7 +308,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 							{
 								$disk->delete($file);
 							}
-							catch (\Exception $e) {}
+                            catch (\Exception $e) {}
 						}
 					}
 				}
@@ -425,7 +425,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 					'field_order' => $model->field_order + 1,
 				]
 			);
-		} catch (\Exception $ex) {}
+		} 
+        catch (\Exception $e) {}
 	
 		try
 		{ 
@@ -448,7 +449,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 					'field_order' => $model->field_order + 2,
 				]
 			);
-		} catch (\Exception $ex) {}
+		}
+        catch (\Exception $e) {}
 
 		try
 		{ 
@@ -470,7 +472,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 					'field_order' => $model->field_order + 3,
 				]
 			);
-		} catch (\Exception $ex) {}
+		}
+        catch (\Exception $e) {}
 
 		try
 		{ 
@@ -492,7 +495,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 					'field_order' => $model->field_order + 4,
 				]
 			); 
-		} catch (\Exception $ex) {}
+		}
+        catch (\Exception $e) {}
 
 		try
 		{ 
@@ -514,7 +518,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 					'field_order' => $model->field_order + 5, 
 				]
 			);
-		} catch (\Exception $ex) {} 
+		}
+        catch (\Exception $e) {}
 
         $fields = []; 
 

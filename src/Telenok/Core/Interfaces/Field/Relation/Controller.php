@@ -94,7 +94,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	{
 		return '<div class="hidden-phone visible-lg btn-group">
                     <button class="btn btn-minier btn-info" title="' . $this->LL('list.btn.edit') . '" 
-                        onclick="editTableRow' . $uniqueId . '(this, \'' . route($this->getRouteWizardEdit(), ['id' => $item->getKey(), 'saveBtn' => 1, 'chooseBtn' => 0]) . '\'); return false;">
+                        onclick="editTableRow' . $field->code . $uniqueId . '(this, \'' . route($this->getRouteWizardEdit(), ['id' => $item->getKey(), 'saveBtn' => 1, 'chooseBtn' => 0]) . '\'); return false;">
                         <i class="fa fa-pencil"></i>
                     </button>
 
@@ -104,7 +104,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                     ' .
 				($canUpdate ? '
                     <button class="btn btn-minier btn-danger trash-it" title="' . $this->LL('list.btn.delete') . '" 
-                        onclick="deleteTableRow' . $uniqueId . '(this); return false;">
+                        onclick="deleteTableRow' . $field->code . $uniqueId . '(this); return false;">
                         <i class="fa fa-trash-o"></i>
                     </button>' : ''
 				) . '
@@ -131,7 +131,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	{
 		$method = camel_case($field->code);
 
-		return $item->$method()->take(8)->get();
+		return $item->{$method}()->take(8)->get();
 	}
 
     public function schemeCreateExtraField($table, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null)

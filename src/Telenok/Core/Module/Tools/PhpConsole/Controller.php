@@ -17,7 +17,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
         {
             \File::makeDirectory($dir, 0775, true, true);
         } 
-        catch (\Exception $exc) {}
+        catch (\Exception $e) {}
         
         
         $finder = \Symfony\Component\Finder\Finder::create()

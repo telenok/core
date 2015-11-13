@@ -124,7 +124,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     {
         $method = camel_case($field->code);
 
-        return $item->$method ? $item->$method()->take(8)->get() : [];
+        return $item->{$method} ? $item->{$method}()->take(8)->get() : [];
     }
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
@@ -261,14 +261,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
                 if (in_array('*', $idsDelete, true))
                 {
-                    $model->$method()->get()->each(function($item) use ($relatedField) 
+                    $model->{$method}()->get()->each(function($item) use ($relatedField) 
                     {
                         $item->fill([$relatedField . '_id' => 0, $relatedField . '_type' => null])->save();
                     });
                 }
                 else if (!empty($idsDelete))
                 {
-                    $model->$method()->whereIn('id', $idsDelete)->get()->each(function($item) use ($relatedField) 
+                    $model->{$method}()->whereIn('id', $idsDelete)->get()->each(function($item) use ($relatedField) 
                     {
                         $item->fill([$relatedField . '_id' => 0, $relatedField . '_type' => null])->save();
                     });
@@ -283,9 +283,9 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                         try
                         {
                             $linked = $relatedModel::findOrFail($id);
-                            $model->$method()->save( $linked );
+                            $model->{$method}()->save( $linked );
                         } 
-                        catch(\Exception $e) {}
+                        catch (\Exception $e) {}
                     }
                 });
             }
@@ -344,153 +344,149 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     
     public function postProcess($model, $type, $input)
     {
-        try 
+        $model->fill(['morph_one_to_many_has' => $input->get('morph_one_to_many_has')])->save();
+
+        if (!$input->get('morph_one_to_many_has'))
         {
-            $model->fill(['morph_one_to_many_has' => $input->get('morph_one_to_many_has')])->save();
-            
-            if (!$input->get('morph_one_to_many_has'))
+            return parent::postProcess($model, $type, $input);
+        } 
+
+        $relatedTypeOfModelField = $model->fieldObjectType()->first();   // eg object \App\Telenok\Core\Model\Object\Type which DB-field "code" is "author"
+
+        $classModelHasMany = $relatedTypeOfModelField->class_model;
+        $codeFieldHasMany = $model->code; 
+        $codeTypeHasMany = $relatedTypeOfModelField->code; 
+
+        $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_one_to_many_has')); 
+        $tableBelongTo = $typeBelongTo->code;
+        $classBelongTo = $typeBelongTo->class_model;
+
+        $relatedSQLField = $codeFieldHasMany . 'able';
+
+        $hasMany = [
+                'method' => camel_case($codeFieldHasMany),
+                'name' => $relatedSQLField,
+                'class' => $classBelongTo,
+                'type' => $relatedSQLField . '_type',
+                'foreignKey' => $relatedSQLField . '_id',
+                'otherKey' => 'id',
+            ];
+
+        $belongTo = [
+                'method' => camel_case($relatedSQLField),
+                'name' => $relatedSQLField,
+                'type' => $relatedSQLField . '_type',
+                'id' => $relatedSQLField . '_id',
+            ];
+
+        $hasManyObject = app($classModelHasMany);
+        $belongToObject = app($classBelongTo);
+
+        if ($input->get('create_belong') !== false) 
+        {
+            $title = $input->get('title_belong', []);
+            $title_list = $input->get('title_list_belong', []);
+
+            foreach($relatedTypeOfModelField->title->all() as $language => $val)
             {
-                return parent::postProcess($model, $type, $input);
-            } 
-
-            $relatedTypeOfModelField = $model->fieldObjectType()->first();   // eg object \App\Telenok\Core\Model\Object\Type which DB-field "code" is "author"
-
-            $classModelHasMany = $relatedTypeOfModelField->class_model;
-            $codeFieldHasMany = $model->code; 
-            $codeTypeHasMany = $relatedTypeOfModelField->code; 
-
-            $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_one_to_many_has')); 
-            $tableBelongTo = $typeBelongTo->code;
-            $classBelongTo = $typeBelongTo->class_model;
-
-            $relatedSQLField = $codeFieldHasMany . 'able';
-
-            $hasMany = [
-                    'method' => camel_case($codeFieldHasMany),
-                    'name' => $relatedSQLField,
-                    'class' => $classBelongTo,
-                    'type' => $relatedSQLField . '_type',
-                    'foreignKey' => $relatedSQLField . '_id',
-                    'otherKey' => 'id',
-                ];
-
-            $belongTo = [
-                    'method' => camel_case($relatedSQLField),
-                    'name' => $relatedSQLField,
-                    'type' => $relatedSQLField . '_type',
-                    'id' => $relatedSQLField . '_id',
-                ];
-
-            $hasManyObject = app($classModelHasMany);
-            $belongToObject = app($classBelongTo);
-
-            if ($input->get('create_belong') !== false) 
-            {
-                $title = $input->get('title_belong', []);
-                $title_list = $input->get('title_list_belong', []);
-
-                foreach($relatedTypeOfModelField->title->all() as $language => $val)
-                {
-                    $title[$language] = array_get($title, $language, $model->translate('title', $language) . ' [morphTo]');
-                }
-
-                foreach($relatedTypeOfModelField->title_list->all() as $language => $val)
-                {
-                    $title_list[$language] = array_get($title_list, $language, $model->translate('title_list', $language) . ' [morphTo]');
-                } 
-        
-                $tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
-  
-                $toSave = [
-                    'title' => $title,
-                    'title_list' => $title_list,
-                    'key' => $this->getKey(),
-                    'code' => $relatedSQLField,
-                    'field_object_type' => $typeBelongTo->getKey(),
-                    'field_object_tab' => $tabTo->getKey(),
-                    'morph_one_to_many_belong_to' => \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id'),
-                    'morph_one_to_many_belong_to_type_list' => [$relatedTypeOfModelField->getKey()],
-                    'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
-                    'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
-                    'allow_search' => $input->get('allow_search_belong', $model->allow_search),
-                    'multilanguage' => 0,
-                    'active' => $input->get('active_belong', $model->active),
-                    'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
-                    'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
-                    'allow_create' => $input->get('allow_create_belong', $model->allow_create),
-                    'allow_update' => $input->get('allow_update_belong', $model->allow_update),
-                    'field_order' => $input->get('field_order_belong', $model->field_order),
-                ];
-
-
-                $f = \App\Telenok\Core\Model\Object\Field::where(function($query) use ($relatedSQLField, $model)
-                        {
-                            $query->where('code', $relatedSQLField);
-                            $query->where('field_object_type', $model->morph_one_to_many_has);
-                        })
-                        ->first();
-
-                if ($f)
-                {
-                    $tList = $f->morph_one_to_many_belong_to_type_list;
-
-                    $tList->push($relatedTypeOfModelField->getKey());
-
-                    $f->morph_one_to_many_belong_to_type_list = $tList;
-
-                    $f->update();
-                }
-                else
-                {
-                    $validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
-                    
-                    if ($validator->passes()) 
-                    {
-                        \App\Telenok\Core\Model\Object\Field::create($toSave);
-                    }
-                }
-
-                try
-                {
-                    \Schema::table($tableBelongTo, function(Blueprint $table) use ($relatedSQLField)
-                    {
-                        $table->unsignedInteger("{$relatedSQLField}_id")->nullable();
-
-                        $table->string("{$relatedSQLField}_type")->nullable();
-
-                        $table->index(array("{$relatedSQLField}_id", "{$relatedSQLField}_type"));
-                        
-                        $this->schemeCreateExtraField($table, $relatedSQLField);
-                    });
-                } 
-                catch (\Exception $ex) {}
-
-                if (!$this->validateMethodExists($belongToObject, $belongTo['method']))
-                {
-                    $this->updateModelFile($belongToObject, $belongTo, 'morphTo', __DIR__);
-                }
-                else
-                {
-                    \Session::flash('warning.morphOneTo', $this->LL('error.method.defined', ['method'=>$belongTo['method'], 'class'=>$classBelongTo]));
-                } 
+                $title[$language] = array_get($title, $language, $model->translate('title', $language) . ' [morphTo]');
             }
 
-            if (!$this->validateMethodExists($hasManyObject, $hasMany['method']))
+            foreach($relatedTypeOfModelField->title_list->all() as $language => $val)
             {
-                $this->updateModelFile($hasManyObject, $hasMany, 'morphMany', __DIR__);
+                $title_list[$language] = array_get($title_list, $language, $model->translate('title_list', $language) . ' [morphTo]');
             } 
+
+            $tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
+
+            $toSave = [
+                'title' => $title,
+                'title_list' => $title_list,
+                'key' => $this->getKey(),
+                'code' => $relatedSQLField,
+                'field_object_type' => $typeBelongTo->getKey(),
+                'field_object_tab' => $tabTo->getKey(),
+                'morph_one_to_many_belong_to' => \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id'),
+                'morph_one_to_many_belong_to_type_list' => [$relatedTypeOfModelField->getKey()],
+                'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
+                'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
+                'allow_search' => $input->get('allow_search_belong', $model->allow_search),
+                'multilanguage' => 0,
+                'active' => $input->get('active_belong', $model->active),
+                'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
+                'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
+                'allow_create' => $input->get('allow_create_belong', $model->allow_create),
+                'allow_update' => $input->get('allow_update_belong', $model->allow_update),
+                'field_order' => $input->get('field_order_belong', $model->field_order),
+            ];
+
+
+            $f = \App\Telenok\Core\Model\Object\Field::where(function($query) use ($relatedSQLField, $model)
+                    {
+                        $query->where('code', $relatedSQLField);
+                        $query->where('field_object_type', $model->morph_one_to_many_has);
+                    })
+                    ->first();
+
+            if ($f)
+            {
+                $tList = $f->morph_one_to_many_belong_to_type_list;
+
+                $tList->push($relatedTypeOfModelField->getKey());
+
+                $f->morph_one_to_many_belong_to_type_list = $tList;
+
+                $f->update();
+            }
             else
             {
-                \Session::flash('warning.morphManyHas', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));
+                $validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
+
+                if ($validator->passes()) 
+                {
+                    \App\Telenok\Core\Model\Object\Field::create($toSave);
+                }
             }
+
+            try
+            {
+                \Schema::table($tableBelongTo, function(Blueprint $table) use ($relatedSQLField)
+                {
+                    $table->unsignedInteger("{$relatedSQLField}_id")->nullable();
+
+                    $table->string("{$relatedSQLField}_type")->nullable();
+
+                    $table->index(array("{$relatedSQLField}_id", "{$relatedSQLField}_type"));
+
+                    $this->schemeCreateExtraField($table, $relatedSQLField);
+                });
+            } 
+            catch (\Exception $e) {}
+
+            if (!$this->validateMethodExists($belongToObject, $belongTo['method']))
+            {
+                $this->updateModelFile($belongToObject, $belongTo, 'morphTo');
+            }
+            else
+            {
+                \Session::flash('warning.morphOneTo', $this->LL('error.method.defined', ['method'=>$belongTo['method'], 'class'=>$classBelongTo]));
+            } 
         }
-        catch (\Exception $e) 
+
+        if (!$this->validateMethodExists($hasManyObject, $hasMany['method']))
         {
-            throw $e;
+            $this->updateModelFile($hasManyObject, $hasMany, 'morphMany');
+        } 
+        else
+        {
+            \Session::flash('warning.morphManyHas', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));
         }
 
         return parent::postProcess($model, $type, $input);
     } 
 
+    public function getStubFileDirectory()
+    {
+        return __DIR__;
+    }
 }
-

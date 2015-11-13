@@ -57,7 +57,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		if (!empty($value))
 		{
 			$method = camel_case($field->code);
-			$relatedQuery = $model->$method();
+			$relatedQuery = $model->{$method}();
 
 			$relatedTable = $relatedQuery->getRelated()->getTable();
 			
@@ -143,11 +143,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
 				if (in_array('*', $idsDelete, true))
 				{
-					$model->$method()->detach();
+					$model->{$method}()->detach();
 				}
 				else if (!empty($idsDelete))
 				{
-					$model->$method()->detach($idsDelete);
+					$model->{$method}()->detach($idsDelete);
 				}
 
 				foreach($idsAdd as $id)
@@ -156,10 +156,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 					{
 						if (app('auth')->can('update', $id))
 						{
-							$model->$method()->attach($id);
+							$model->{$method}()->attach($id);
 						}
 					}
-					catch(\Exception $e) {}
+                    catch (\Exception $e) {}
 				}
 			}
 		}
@@ -188,131 +188,129 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
  
     public function postProcess($model, $type, $input)
     {
-        try 
+        $model->fill(['relation_many_to_many_has' => $input->get('relation_many_to_many_has')])->save();
+
+        if (!$input->get('relation_many_to_many_has'))
         {
-			$model->fill(['relation_many_to_many_has' => $input->get('relation_many_to_many_has')])->save();
+            return parent::postProcess($model, $type, $input);
+        }
 
-			if (!$input->get('relation_many_to_many_has'))
-			{
-				return parent::postProcess($model, $type, $input);
-			}
+        $relatedTypeOfModelField = $model->fieldObjectType()->first();
 
-            $relatedTypeOfModelField = $model->fieldObjectType()->first();
+        $classModelHasMany = $relatedTypeOfModelField->class_model;
+        $tableHasMany = $relatedTypeOfModelField->code;
+        $codeFieldHasMany = $model->code; 
+        $codeTypeHasMany = $relatedTypeOfModelField->code; 
 
-            $classModelHasMany = $relatedTypeOfModelField->class_model;
-            $tableHasMany = $relatedTypeOfModelField->code;
-            $codeFieldHasMany = $model->code; 
-            $codeTypeHasMany = $relatedTypeOfModelField->code; 
+        $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('relation_many_to_many_has')); 
+        $tableBelongTo = $typeBelongTo->code;
+        $classBelongTo = $typeBelongTo->class_model;
 
-            $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('relation_many_to_many_has')); 
-            $tableBelongTo = $typeBelongTo->code;
-            $classBelongTo = $typeBelongTo->class_model;
+        $pivotTable = 'pivot_relation_m2m_' . $codeFieldHasMany . '_' . $codeTypeHasMany;
+        $pivotField = $codeFieldHasMany . '_' . $codeTypeHasMany;
 
-            $pivotTable = 'pivot_relation_m2m_' . $codeFieldHasMany . '_' . $codeTypeHasMany;
-            $pivotField = $codeFieldHasMany . '_' . $codeTypeHasMany;
+        $hasMany = [
+                'method' => camel_case($codeFieldHasMany),
+                'class' => $classBelongTo,
+                'table' => $pivotTable,
+                'field_1' => $pivotField,
+                'field_2' => $codeFieldHasMany,
+            ];
 
-            $hasMany = [
-                    'method' => camel_case($codeFieldHasMany),
-                    'class' => $classBelongTo,
-                    'table' => $pivotTable,
-                    'field_1' => $pivotField,
-                    'field_2' => $codeFieldHasMany,
-                ];
+        $belongTo = [
+                'method' => camel_case($codeFieldHasMany . '_' . $codeTypeHasMany),
+                'class' => $classModelHasMany,
+                'table' => $pivotTable,
+                'field_1' => $codeFieldHasMany,
+                'field_2' => $pivotField,
+            ];
 
-            $belongTo = [
-                    'method' => camel_case($codeFieldHasMany . '_' . $codeTypeHasMany),
-                    'class' => $classModelHasMany,
-                    'table' => $pivotTable,
-                    'field_1' => $codeFieldHasMany,
-                    'field_2' => $pivotField,
-                ];
+        $hasManyObject = app($classModelHasMany);
+        $belongToObject = app($classBelongTo);
 
-            $hasManyObject = app($classModelHasMany);
-            $belongToObject = app($classBelongTo);
+        if ($input->get('create_belong') !== false) 
+        {
+            $title = $input->get('title_belong', []);
+            $title_list = $input->get('title_list_belong', []);
 
-            if ($input->get('create_belong') !== false) 
+            foreach($relatedTypeOfModelField->title->all() as $language => $val)
             {
-				$title = $input->get('title_belong', []);
-				$title_list = $input->get('title_list_belong', []);
-
-				foreach($relatedTypeOfModelField->title->all() as $language => $val)
-				{
-					$title[$language] = array_get($title, $language, $val . '/' . $model->translate('title', $language));
-				}
-
-				foreach($relatedTypeOfModelField->title_list->all() as $language => $val)
-				{
-					$title_list[$language] = array_get($title_list, $language, $val . '/' . $model->translate('title_list', $language));
-				}
-
-				$tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
-
-				$toSave = [
-					'title' => $title,
-					'title_list' => $title_list,
-					'key' => $this->getKey(),
-					'code' => $pivotField,
-					'field_object_type' => $typeBelongTo->getKey(),
-					'field_object_tab' => $tabTo->getKey(),
-					'relation_many_to_many_belong_to' => $relatedTypeOfModelField->getKey(),
-					'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
-					'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
-					'allow_search' => $input->get('allow_search_belong', $model->allow_search),
-					'multilanguage' => 0,
-					'active' => $input->get('active_belong', $model->active),
-					'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
-					'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
-					'allow_create' => $input->get('allow_create_belong', $model->allow_create),
-					'allow_update' => $input->get('allow_update_belong', $model->allow_update),
-					'field_order' => $input->get('field_order_belong', $model->field_order),
-				];
-
-				$validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
-
-				if ($validator->passes()) 
-				{
-					\App\Telenok\Core\Model\Object\Field::create($toSave);
-				}
-
-				if ($this->validateMethodExists($belongToObject, $belongTo['method']))
-				{
-					\Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$belongTo['method'], 'class'=>$classBelongTo]));
-				}
-				else
-				{
-					$this->updateModelFile($belongToObject, $belongTo, 'belongToMany', __DIR__);
-				} 
-			}
-
-            if (!\Schema::hasTable($pivotTable)) 
-			{
-                \Schema::create($pivotTable, function(Blueprint $table) use ($codeFieldHasMany, $pivotField, $tableHasMany, $tableBelongTo)
-                {
-                    $table->increments('id');
-                    $table->timestamps();
-                    $table->integer($codeFieldHasMany)->unsigned()->nullable();
-                    $table->integer($pivotField)->unsigned()->nullable();
-
-                    $table->unique([$pivotField, $codeFieldHasMany], 'uniq_key');
-                    
-                    $this->schemeCreateExtraField($table, $codeFieldHasMany, $pivotField, $tableHasMany, $tableBelongTo);
-                });
+                $title[$language] = array_get($title, $language, $val . '/' . $model->translate('title', $language));
             }
 
-            if ($this->validateMethodExists($hasManyObject, $hasMany['method']))
+            foreach($relatedTypeOfModelField->title_list->all() as $language => $val)
             {
-                \Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));
-            } 
+                $title_list[$language] = array_get($title_list, $language, $val . '/' . $model->translate('title_list', $language));
+            }
+
+            $tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
+
+            $toSave = [
+                'title' => $title,
+                'title_list' => $title_list,
+                'key' => $this->getKey(),
+                'code' => $pivotField,
+                'field_object_type' => $typeBelongTo->getKey(),
+                'field_object_tab' => $tabTo->getKey(),
+                'relation_many_to_many_belong_to' => $relatedTypeOfModelField->getKey(),
+                'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
+                'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
+                'allow_search' => $input->get('allow_search_belong', $model->allow_search),
+                'multilanguage' => 0,
+                'active' => $input->get('active_belong', $model->active),
+                'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
+                'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
+                'allow_create' => $input->get('allow_create_belong', $model->allow_create),
+                'allow_update' => $input->get('allow_update_belong', $model->allow_update),
+                'field_order' => $input->get('field_order_belong', $model->field_order),
+            ];
+
+            $validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
+
+            if ($validator->passes()) 
+            {
+                \App\Telenok\Core\Model\Object\Field::create($toSave);
+            }
+
+            if ($this->validateMethodExists($belongToObject, $belongTo['method']))
+            {
+                \Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$belongTo['method'], 'class'=>$classBelongTo]));
+            }
             else
             {
-				$this->updateModelFile($hasManyObject, $hasMany, 'hasMany', __DIR__);
-            }
+                $this->updateModelFile($belongToObject, $belongTo, 'belongToMany');
+            } 
         }
-        catch (\Exception $e) 
+
+        if (!\Schema::hasTable($pivotTable)) 
         {
-            throw $e;
+            \Schema::create($pivotTable, function(Blueprint $table) use ($codeFieldHasMany, $pivotField, $tableHasMany, $tableBelongTo)
+            {
+                $table->increments('id');
+                $table->timestamps();
+                $table->integer($codeFieldHasMany)->unsigned()->nullable();
+                $table->integer($pivotField)->unsigned()->nullable();
+
+                $table->unique([$pivotField, $codeFieldHasMany], 'uniq_key');
+
+                $this->schemeCreateExtraField($table, $codeFieldHasMany, $pivotField, $tableHasMany, $tableBelongTo);
+            });
+        }
+
+        if ($this->validateMethodExists($hasManyObject, $hasMany['method']))
+        {
+            \Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));
+        } 
+        else
+        {
+            $this->updateModelFile($hasManyObject, $hasMany, 'hasMany');
         }
 
         return parent::postProcess($model, $type, $input);
-    }  
+    }
+    
+    public function getStubFileDirectory()
+    {
+        return __DIR__;
+    }
 }

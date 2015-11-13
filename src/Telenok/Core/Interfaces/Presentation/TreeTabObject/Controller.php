@@ -316,18 +316,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function store($id = null)
     {
-        try 
-        {
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
 
-            $type = $this->getTypeList();
+        $type = $this->getTypeList();
 
-			$model = $this->save($input, $type); 
-        } 
-        catch (\Exception $e) 
-        {
-			throw $e;
-        }
+        $model = $this->save($input, $type);
 
 		$fields = $model->getFieldForm();
             
@@ -355,18 +348,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function update($id = null)
     {
-        try 
-        {
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
 
-            $type = $this->getTypeList();
-			
-			$model = $this->save($input, $type); 
-        } 
-        catch (\Exception $e) 
-        {   
-			throw $e;
-        }  
+        $type = $this->getTypeList();
+
+        $model = $this->save($input, $type);
 	
 		$fields = $model->getFieldForm();
             

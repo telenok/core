@@ -154,20 +154,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function store($typeId = 0)
 	{
-        try 
-        {
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
 
-			$type = $this->getTypeById($typeId);
+        $type = $this->getTypeById($typeId);
 
-			$model = $this->getModelByTypeId($type->getKey());
+        $model = $this->getModelByTypeId($type->getKey());
 
-			$model_ = $model->storeOrUpdate($input, true);
-        } 
-        catch (\Exception $e) 
-        {   
-			throw $e;
-        }
+        $model_ = $model->storeOrUpdate($input, true);
 		
 		$v = $input->get('redirect_after_store');
 		
@@ -185,18 +178,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function update($id)
 	{
-        try 
-        {
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
 
-			$model = $this->getModelById($id);
-			
-			$model_ = $model->storeOrUpdate($input, true);			
-        } 
-        catch (\Exception $e) 
-        {   
-			throw $e;
-        }
+        $model = $this->getModelById($id);
+
+        $model_ = $model->storeOrUpdate($input, true);
 		
 		$v = $input->get('redirect_after_update');
 		

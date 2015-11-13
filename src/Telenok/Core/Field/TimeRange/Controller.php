@@ -34,7 +34,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
             if ($value === null)
             {
-                $value = $field->$key ?: null;
+                $value = $field->{$key} ?: null;
             }
             else if (is_scalar($value) && $value)
             {

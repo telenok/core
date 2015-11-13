@@ -239,7 +239,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 			foreach ($this->getMultilanguage() as $fieldCode)
 			{
-				$value = $this->$fieldCode->all();
+                $value = $this->{$fieldCode}->all();
 
 				foreach ($value as $language => $string)
 				{
@@ -362,7 +362,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		
 		foreach($this->getAttributes() as $k => $v)
 		{
-			$t[$k] = $this->$k;
+            $t[$k] = $this->{$k};
 		}
 		
 		$input = \Illuminate\Support\Collection::make($t)->merge($input);
@@ -378,7 +378,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 				foreach($model->getAttributes() as $k => $v)
 				{
-					$t[$k] = $model->$k;
+                    $t[$k] = $model->{$k};
 				}
 
 				$input = \Illuminate\Support\Collection::make($t)->merge($input);
@@ -405,12 +405,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			}
 			else if (!$model->exists)
 			{
-				$model->$fillable = null;
+                $model->{$fillable} = null;
 				$input->put($fillable, null);
 			}
 			else
 			{
-				//$input->put($fillable, $model->$fillable);
+				//$input->put($fillable, $model->{$fillable});
 			}
 		}
 
@@ -797,13 +797,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		$locale = $locale ? : config('app.locale');
 
-		if ($this->$field instanceof \Illuminate\Support\Collection)
+        if ($this->{$field} instanceof \Illuminate\Support\Collection)
 		{
-			$translated = $this->$field->get($locale);
+            $translated = $this->{$field}->get($locale);
 
-			return $translated ? : $this->$field->get(app('config')->get('app.localeDefault'));
+            return $translated ? : $this->{$field}->get(app('config')->get('app.localeDefault'));
 		}
-		else if (($this->$field instanceof \ArrayAccess && ($v = $this->$field)) || (($v = json_decode($this->$field, true)) && json_last_error() === JSON_ERROR_NONE))
+        else if (($this->{$field} instanceof \ArrayAccess && ($v = $this->{$field})) || (($v = json_decode($this->{$field}, true)) && json_last_error() === JSON_ERROR_NONE))
 		{
 			if (isset($v[$locale]))
 			{
@@ -815,12 +815,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			}
 			else
 			{
-				return $this->$field;
+                return $this->{$field};
 			}
 		}
 		else
 		{
-			return $this->$field;
+            return $this->{$field};
 		}
 	}
 

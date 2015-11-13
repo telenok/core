@@ -50,7 +50,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         if (!empty($value))
         {
             $method = camel_case($field->code);
-            $relatedQuery = $model->$method();
+            $relatedQuery = $model->{$method}();
 
             $relatedTable = $relatedQuery->getRelated()->getTable();
             
@@ -144,20 +144,20 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
                 if (in_array('*', $idsDelete, true))
                 {
-                    $model->$method()->detach();
+                    $model->{$method}()->detach();
                 }
                 else if (!empty($idsDelete))
                 {
-                    $model->$method()->detach($idsDelete);
+                    $model->{$method}()->detach($idsDelete);
                 }
 
                 foreach($idsAdd as $id)
                 {
                     try
                     {
-                        $model->$method()->attach($id);
+                        $model->{$method}()->attach($id);
                     }
-                    catch(\Exception $e) {}
+                    catch (\Exception $e) {}
                 }
             }
         }
@@ -185,135 +185,132 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     } 
     
     public function postProcess($model, $type, $input)
-    { 
-        try
+    {
+        $model->fill(['morph_many_to_many_has' => $input->get('morph_many_to_many_has')])->save();
+
+        if (!$input->get('morph_many_to_many_has'))
         {
-            $model->fill(['morph_many_to_many_has' => $input->get('morph_many_to_many_has')])->save();
-            
-            if (!$input->get('morph_many_to_many_has'))
+            return parent::postProcess($model, $type, $input);
+        } 
+
+        $typeMorphMany = $model->fieldObjectType()->first();
+        $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_many_to_many_has')); 
+
+        $morphManyCode = $model->code;
+        $morphToCode = $morphManyCode . '_' . $typeMorphMany->code;
+
+        $classModelMorphMany = $typeMorphMany->class_model;
+        $classModelMorphTo = $typeBelongTo->class_model;
+
+
+        $morphManyObject = app($classModelMorphMany);
+        $morphToObject = app($classModelMorphTo);
+
+        $pivotTable = 'pivot_morph_m2m_' . $morphManyCode . '_' . $typeBelongTo->code;
+
+        $morphMany = [
+            'method' => camel_case($morphManyCode),
+            'name' => $morphManyCode,
+            'class' => $classModelMorphTo,
+            'table' => $pivotTable,
+            'foreignKey' => $morphManyCode . '_linked_id',
+            'otherKey' => 'morph_id',
+        ];
+
+        $morphTo = [
+            'method' => camel_case($morphToCode),
+            'name' => $morphManyCode,
+            'class' => $classModelMorphMany,
+            'table' => $pivotTable,
+            'foreignKey' => 'morph_id',
+            'otherKey' => $morphManyCode . '_linked_id',
+        ];
+
+        if (!\Schema::hasTable($pivotTable)) 
+        {
+            \Schema::create($pivotTable, function(Blueprint $table) use ($morphManyCode, $typeMorphMany, $typeBelongTo)
             {
-                return parent::postProcess($model, $type, $input);
-            } 
+                $table->increments('id');
+                $table->timestamps();
+                $table->integer('morph_id')->unsigned()->nullable();
+                $table->integer($morphManyCode . '_linked_id')->unsigned()->nullable();
+                $table->string($morphManyCode . '_type')->nullable();
 
-            $typeMorphMany = $model->fieldObjectType()->first();
-            $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_many_to_many_has')); 
+                $table->unique(['morph_id', $morphManyCode . '_linked_id', $morphManyCode . '_type'], 'uniq_key');
 
-            $morphManyCode = $model->code;
-            $morphToCode = $morphManyCode . '_' . $typeMorphMany->code;
+                $this->schemeCreateExtraField($table, $morphManyCode, $typeMorphMany, $typeBelongTo);
+            });
+        }
 
-            $classModelMorphMany = $typeMorphMany->class_model;
-            $classModelMorphTo = $typeBelongTo->class_model;
- 
+        if ($input->get('create_belong') !== false) 
+        {
+            $title = $input->get('title_belong', []);
+            $title_list = $input->get('title_list_belong', []);
 
-            $morphManyObject = app($classModelMorphMany);
-            $morphToObject = app($classModelMorphTo);
-
-            $pivotTable = 'pivot_morph_m2m_' . $morphManyCode . '_' . $typeBelongTo->code;
-
-            $morphMany = [
-                'method' => camel_case($morphManyCode),
-                'name' => $morphManyCode,
-                'class' => $classModelMorphTo,
-                'table' => $pivotTable,
-                'foreignKey' => $morphManyCode . '_linked_id',
-                'otherKey' => 'morph_id',
-            ];
-
-            $morphTo = [
-                'method' => camel_case($morphToCode),
-                'name' => $morphManyCode,
-                'class' => $classModelMorphMany,
-                'table' => $pivotTable,
-                'foreignKey' => 'morph_id',
-                'otherKey' => $morphManyCode . '_linked_id',
-            ];
-
-            if (!\Schema::hasTable($pivotTable)) 
+            foreach($typeMorphMany->title->all() as $language => $val)
             {
-                \Schema::create($pivotTable, function(Blueprint $table) use ($morphManyCode, $typeMorphMany, $typeBelongTo)
-                {
-                    $table->increments('id');
-                    $table->timestamps();
-                    $table->integer('morph_id')->unsigned()->nullable();
-                    $table->integer($morphManyCode . '_linked_id')->unsigned()->nullable();
-                    $table->string($morphManyCode . '_type')->nullable();
-
-                    $table->unique(['morph_id', $morphManyCode . '_linked_id', $morphManyCode . '_type'], 'uniq_key');
-                    
-                    $this->schemeCreateExtraField($table, $morphManyCode, $typeMorphMany, $typeBelongTo);
-                });
+                $title[$language] = array_get($title, $language, $model->translate('title', $language) . ' [morphMany]');
             }
 
-            if ($input->get('create_belong') !== false) 
+            foreach($typeMorphMany->title_list->all() as $language => $val)
             {
-                $title = $input->get('title_belong', []);
-                $title_list = $input->get('title_list_belong', []);
-
-                foreach($typeMorphMany->title->all() as $language => $val)
-                {
-                    $title[$language] = array_get($title, $language, $model->translate('title', $language) . ' [morphMany]');
-                }
-
-                foreach($typeMorphMany->title_list->all() as $language => $val)
-                {
-                    $title_list[$language] = array_get($title_list, $language, $model->translate('title_list', $language) . ' [morphMany]');
-                }
-
-                $tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
-
-                $toSave = [
-                    'title' => $title,
-                    'title_list' => $title_list,
-                    'key' => $this->getKey(),
-                    'code' => $morphToCode,
-                    'field_object_type' => $typeBelongTo->getKey(),
-                    'field_object_tab' => $tabTo->getKey(),
-                    'morph_many_to_many_belong_to' => $typeMorphMany->getKey(),
-                    'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
-                    'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
-                    'allow_search' => $input->get('allow_search_belong', $model->allow_search),
-                    'multilanguage' => 0,
-                    'active' => $input->get('active_belong', $model->active),
-                    'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
-                    'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
-                    'allow_create' => $input->get('allow_create_belong', $model->allow_create),
-                    'allow_update' => $input->get('allow_update_belong', $model->allow_update),
-                    'field_order' => $input->get('field_order_belong', $model->field_order),
-                ];
-
-
-                $validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
-
-                if ($validator->passes()) 
-                {
-                    \App\Telenok\Core\Model\Object\Field::create($toSave);
-                }
-
-                if (!$this->validateMethodExists($morphToObject, $morphTo['method']))
-                {
-                    $this->updateModelFile($morphToObject, $morphTo, 'morphTo', __DIR__);
-                } 
-                else
-                {
-                    \Session::flash('warning.morphManyTo', $this->LL('error.method.defined', ['method' => $morphTo['method'], 'class' => $classModelMorphTo]));
-                } 
+                $title_list[$language] = array_get($title_list, $language, $model->translate('title_list', $language) . ' [morphMany]');
             }
 
-            if (!$this->validateMethodExists($morphManyObject, $morphMany['method']))
+            $tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
+
+            $toSave = [
+                'title' => $title,
+                'title_list' => $title_list,
+                'key' => $this->getKey(),
+                'code' => $morphToCode,
+                'field_object_type' => $typeBelongTo->getKey(),
+                'field_object_tab' => $tabTo->getKey(),
+                'morph_many_to_many_belong_to' => $typeMorphMany->getKey(),
+                'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
+                'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
+                'allow_search' => $input->get('allow_search_belong', $model->allow_search),
+                'multilanguage' => 0,
+                'active' => $input->get('active_belong', $model->active),
+                'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
+                'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
+                'allow_create' => $input->get('allow_create_belong', $model->allow_create),
+                'allow_update' => $input->get('allow_update_belong', $model->allow_update),
+                'field_order' => $input->get('field_order_belong', $model->field_order),
+            ];
+
+
+            $validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
+
+            if ($validator->passes()) 
             {
-                $this->updateModelFile($morphManyObject, $morphMany, 'morphMany', __DIR__);
+                \App\Telenok\Core\Model\Object\Field::create($toSave);
+            }
+
+            if (!$this->validateMethodExists($morphToObject, $morphTo['method']))
+            {
+                $this->updateModelFile($morphToObject, $morphTo, 'morphTo');
             } 
             else
             {
-                \Session::flash('warning.morphManyHas', $this->LL('error.method.defined', ['method' => $morphMany['method'], 'class' => $classModelMorphMany]));
-            }
+                \Session::flash('warning.morphManyTo', $this->LL('error.method.defined', ['method' => $morphTo['method'], 'class' => $classModelMorphTo]));
+            } 
         }
-        catch (\Exception $e) 
+
+        if (!$this->validateMethodExists($morphManyObject, $morphMany['method']))
         {
-            throw $e;
+            $this->updateModelFile($morphManyObject, $morphMany, 'morphMany');
+        } 
+        else
+        {
+            \Session::flash('warning.morphManyHas', $this->LL('error.method.defined', ['method' => $morphMany['method'], 'class' => $classModelMorphMany]));
         }
 
         return parent::postProcess($model, $type, $input);
-    } 
-}
+    }
 
+    public function getStubFileDirectory()
+    {
+        return __DIR__;
+    }
+}

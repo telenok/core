@@ -237,7 +237,7 @@
             });
         }
 
-        function editTableRow{{$uniqueId}}(obj, url) 
+        function editTableRow{{$field->code}}{{$uniqueId}}(obj, url) 
         {
             jQuery.ajax({
                 url: url,
@@ -270,7 +270,7 @@
             });
         }
 
-        function deleteTableRow{{$uniqueId}}(obj) 
+        function deleteTableRow{{$field->code}}{{$uniqueId}}(obj) 
         {
             var $dt = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}").dataTable();
             var $tr = jQuery(obj).closest("tr");
@@ -345,7 +345,7 @@
         $title = '';
         $id = 0;
 
-		if ($model->exists && $model->{$field->code . '_type'} && $result = $model->$method()->first())
+		if ($model->exists && $model->{$field->code . '_type'} && $result = $model->{$method}()->first())
         {
             $title = $result->translate('title');
             $id = $result->id;

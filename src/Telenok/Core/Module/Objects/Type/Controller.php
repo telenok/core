@@ -24,10 +24,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 		{
 			\App\Telenok\Core\Security\Acl::addResource($resCode, $title);
 		}
-		catch (\Exception $ex)
-		{
-			
-		}
+        catch (\Exception $e) {}
 
 		$resCodeOwn = 'object_type.' . $model->code . '.own';
 
@@ -48,10 +45,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 				'active' => 1
 			]);
 		}
-		catch (\Exception $ex)
-		{
-			
-		}
+        catch (\Exception $e) {}
 	}
 
 	public function validateClassModel($model, $type = null, $input = [])
@@ -292,23 +286,16 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 	{
 		$table = $model->code;
 
-		try
-		{
-			if (!\Schema::hasTable($table))
-			{
-				\Schema::create($table, function(\Illuminate\Database\Schema\Blueprint $table) use ($model)
-				{
-					$table->increments('id');
-					$table->timestamps();
-					$table->softDeletes();
-					$table->text('title')->nullable();
-				});
-			}
-		}
-		catch (\Exception $e)
-		{
-			throw $e;
-		}
+        if (!\Schema::hasTable($table))
+        {
+            \Schema::create($table, function(\Illuminate\Database\Schema\Blueprint $table) use ($model)
+            {
+                $table->increments('id');
+                $table->timestamps();
+                $table->softDeletes();
+                $table->text('title')->nullable();
+            });
+        }
 	}
 
 	public function createObjectField($model, $type = null, $input = [])

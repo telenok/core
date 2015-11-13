@@ -108,7 +108,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
         {
             list($code, $method) = explode('@', $item, 2);
 
-            $listModuleMenuTop->push($config->getModule()->get($code)->$method());
+            $listModuleMenuTop->push($config->getModule()->get($code)->{$method}());
         });
 
         $listModuleMenuTop->sortBy(function($item)

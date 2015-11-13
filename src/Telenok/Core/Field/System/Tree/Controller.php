@@ -58,14 +58,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 			{
 				foreach($idsParentAdd as $id)
 				{
-					try
-					{
-						$model->makeLastChildOf($id);
-					}
-					catch(\Exception $e) {
-
-						throw $e;
-					}
+                    $model->makeLastChildOf($id);
 				}
 			}
 		}
@@ -94,7 +87,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
 						$child->makeLastChildOf($model);
 					}
-					catch(\Exception $e) {}
+                    catch (\Exception $e) {}
 				}
 			}
 		}

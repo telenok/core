@@ -72,11 +72,11 @@ interface IField extends \Telenok\Core\Interfaces\Support\IRequest {
     public function validateMethodExists($object, $method);
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! DELETE ?
-    public function fill($field, $model, $input);
+    public function fill___($field, $model, $input);
 
     public function saveModelField($field, $model, $input);
 
-    public function updateModelFile($model, $param, $stubFile, $dir);
+    public function updateModelFile($model, $param, $stubFile);
 
     public function validator($model = null, $input = [], $message = [], $customAttribute = []);
 

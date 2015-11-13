@@ -135,6 +135,63 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         return $this;
     }
 
+    public function saveModelField($field, $model, $input)
+    {
+		// if created field
+		if ($model instanceof \Telenok\Core\Model\Object\Field && !$input->get('id'))
+		{
+			return $model;
+		}
+
+		$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
+        $idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
+        $idsSort = array_unique((array)$input->get("{$field->code}_sort", []));
+
+		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
+		{
+			if ( !empty($idsAdd) || !empty($idsDelete) || !empty($idsSort) )
+			{ 
+				$method = camel_case($field->code);
+
+				if (in_array('*', $idsDelete, true))
+				{
+                    $model->{$method}()->detach();
+				}
+				else if (!empty($idsDelete))
+				{
+                    $model->{$method}()->detach($idsDelete);
+				}
+
+                // attach new ids
+                $maxSort = (int)$model->{$method}()->max('sort');
+
+                foreach($idsAdd as $id)
+                {
+                    try
+                    {
+                        if (app('auth')->can('update', $id))
+                        {
+                            $model->{$method}()->attach($id, ['sort' => ++$maxSort]);
+                        }
+                    }
+                    catch (\Exception $e) {}
+                }
+
+                //update sort
+                foreach($idsSort as $id => $sort)
+                {
+                    try
+                    {
+                        $model->{$method}()->updateExistingPivot($id, ['sort' => $sort]);
+                    }
+                    catch (\Exception $e) {}
+                }
+			}
+		}
+	
+        return $model;
+    }
+    
     public function preProcess($model, $type, $input)
     {
         $input->put('relation_many_to_many_has', \App\Telenok\Core\Model\Object\Type::whereCode('file')->pluck('id'));
@@ -149,7 +206,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     
     public function schemeCreateExtraField($table, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null)
     {
-        $table->integer('order')->unsigned()->nullable();
+        $table->integer('sort')->unsigned()->nullable();
     }
     
     public function upload()
@@ -171,5 +228,10 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         $model = $file->storeOrUpdate($request->all(), true); 
 
         return $model->id;
-    }    
+    }
+
+    public function getStubFileDirectory()
+    {
+        return __DIR__;
+    }
 }
