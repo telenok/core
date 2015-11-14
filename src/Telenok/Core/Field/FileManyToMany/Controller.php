@@ -50,7 +50,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         
         if ($linkedObject instanceof \Telenok\Core\Model\File\File)
         {
-            $item->{camel_case($field->code)}()->get()->take(5)->each(function($item) use (&$content)
+            $item->{camel_case($field->code)}()->sortBy('sort')->get()->take(5)->each(function($item) use (&$content)
                 {
                     if ($item->upload->exists())
                     {
@@ -60,7 +60,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
                         }
                         else
                         {
-                            $content .= " <a href='" . $item->upload->downloadStreamLink() . "' target='_blank'>" . e($item->translate('title')) . '</a>';
+                            $content .= " <a href='" . $item->upload->downloadStreamLink() . "' target='_blank'>" . e(\Str::limit($item->translate('title'), 20)) . '</a>';
                         }
                     }
                     else 
@@ -73,7 +73,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         {
             $item->{camel_case($field->code)}()->get()->take(5)->each(function($item) use (&$content)
                 {
-                    $content .= ' ' . e($item->translate('title'));
+                    $content .= ' ' . e(\Str::limit($item->translate('title'), 20));
                 });
         }
 

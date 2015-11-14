@@ -17,7 +17,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         } 
         else
         {
-            return \Str::limit($item->{$field->code}, 20);
+            return e(\Str::limit($item->{$field->code}, 20));
         }
     }
 

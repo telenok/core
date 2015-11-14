@@ -345,7 +345,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 	public function getListFieldContent($field, $item, $type = null)
 	{
-		return \Str::limit($item->translate((string) $field->code), 20);
+		return e(\Str::limit($item->translate((string) $field->code), 20));
 	}
 
 	public function validate($model = null, $input = [], $messages = [])

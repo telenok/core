@@ -23,7 +23,7 @@
 
 	$selected = [];
 
-	$v_ = $model->{$field->code};
+	$v_ = $model->{camel_case($field->code)};
 
 	if ($field->relation_one_to_many_has && $v_)
 	{

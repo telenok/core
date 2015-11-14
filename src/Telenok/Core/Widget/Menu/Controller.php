@@ -80,9 +80,21 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
                     ->withChildren(100)
                     ->active()
                     ->withPermission()
-                    ->whereIn($model->getTable() . '.id', $idsArray)
+                    ->where(function($query) use ($idsArray, $model)
+                    {
+                        if ($this->menuType == 1)
+                        {
+                            $query->whereIn($model->getTable() . '.id', $idsArray);
+                            $query->orWhereIn('pivot_tree_children.tree_pid', $idsArray);
+                        }
+                        else
+                        {
+                            $query->whereIn($model->getTable() . '.id', $idsArray);
+                        }
+                    })
                     ->orderBy(\DB::raw('FIELD(' . $model->getTable() . '.id, "' . implode('", "', $idsArray) . '")'))
-                    ->orderBy('pivot_tree_attr.tree_order')
+                    ->orderBy('pivot_tree_children.tree_depth')
+                    ->orderBy('pivot_tree_children.tree_depth')
                     ->get();
 
         return view($this->getFrontendView(), [

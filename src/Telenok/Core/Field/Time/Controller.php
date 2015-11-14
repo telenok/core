@@ -18,7 +18,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {  
         $value = $item->{$field->code};
         
-        return $value ? $value->toTimeString() : "";
+        return e($value ? $value->toTimeString() : "");
     } 
 
     public function setModelAttribute($model, $key, $value, $field)

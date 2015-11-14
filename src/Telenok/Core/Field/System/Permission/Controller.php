@@ -155,7 +155,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				$items[] = $row->translate('title');
 			}
 
-			return '"' . implode('", "', $items) . '"' . (count($rows) > 7 ? ', ...' : '');
+			return e('"' . implode('", "', $items) . '"' . (count($rows) > 7 ? ', ...' : ''));
 		}
 	}
     

@@ -17,7 +17,9 @@
         $disabled = true; 
     }
 
-	if ($model->exists && ($v = \App\Telenok\Core\Model\Object\Sequence::whereIn('id', (array)$model->{$field->code}->modelKeys())->get()))
+	if ($model->exists 
+            && ($r = $model->{camel_case($field->code)}) 
+            && ($v = \App\Telenok\Core\Model\Object\Sequence::whereIn('id', (array)$r->modelKeys())->get()))
 	{
 		$values = $v->transform(function($item)
 		{
@@ -43,7 +45,7 @@
 		<div>
             @endif	
             
-            {!! Form::select($field->code . '[]', $values, $model->exists ? $model->{$field->code}->keys() : [], $domAttr) !!}
+            {!! Form::select($field->code . '[]', $values, $model->exists && ($v = $model->{camel_case($field->code)}) ? $v->modelKeys() : [], $domAttr) !!}
             {!! Form::hidden($field->code . '_delete[]', '*') !!}
 
 			<?php

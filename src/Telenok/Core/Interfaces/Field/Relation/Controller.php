@@ -123,15 +123,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				$items[] = \Str::limit($row->translate('title'), 20);
 			}
 
-			return '"' . implode('", "', $items) . '"' . (count($rows) > 7 ? ', ...' : '');
+			return e('"' . implode('", "', $items) . '"' . (count($rows) > 7 ? ', ...' : ''));
 		}
 	}
 
 	public function getListFieldContentItems($field, $item, $type = null)
 	{
-		$method = camel_case($field->code);
-
-		return $item->{$method}()->take(8)->get();
+		return $item->{camel_case($field->code)}()->take(8)->get();
 	}
 
     public function schemeCreateExtraField($table, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null)

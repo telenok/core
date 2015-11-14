@@ -118,7 +118,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
             $val = array_get(array_combine($key, $title), $value);
 
-            return \Str::limit($val, 30);
+            return e(\Str::limit($val, 20));
         }
     }
     

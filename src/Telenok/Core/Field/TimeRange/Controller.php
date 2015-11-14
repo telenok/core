@@ -25,7 +25,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         $value[] = ($v = $item->{$field->code . '_start'}) ? $v->toTimeString() : "";
         $value[] = ($v = $item->{$field->code . '_end'}) ? $v->toTimeString() : "";
         
-        return count($value) ? implode(' ... ', $value) : '';
+        return e(count($value) ? implode(' ... ', $value) : '');
     } 
 
     public function setModelAttribute($model, $key, $value, $field)

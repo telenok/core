@@ -168,7 +168,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
             $val = array_only(array_slice(array_combine($key, $title), 0, 10, true), $value);
 
-            return \Str::limit(implode(', ', $val), 30);
+            return e(\Str::limit(implode(', ', $val), 30));
         }
     }
     

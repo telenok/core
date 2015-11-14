@@ -2,6 +2,7 @@
     
     $jsUnique = str_random();
     $disabled = false;
+    $method = camel_case($field->code);
 	$values = [];
 
     $domAttr = [
