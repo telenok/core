@@ -177,7 +177,17 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             $input->put('morph_many_to_many_has', $input->get('field_has'));
         }
 
-        $input->put('morph_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_many_to_many_has'))->orWhere('id', $input->get('morph_many_to_many_has'))->pluck('id')));
+        // can be zero if process field belong_to
+		if ($input->get('morph_many_to_many_has'))
+		{
+			$input->put('morph_many_to_many_belong_to', 0);
+            $input->put('morph_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_many_to_many_has'))->orWhere('id', $input->get('morph_many_to_many_has'))->pluck('id')));
+        }
+        else
+        {
+			$input->put('morph_many_to_many_has', 0);
+        }
+
         $input->put('multilanguage', 0);
         $input->put('allow_sort', 0); 
 
@@ -186,8 +196,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     
     public function postProcess($model, $type, $input)
     {
-        $model->fill(['morph_many_to_many_has' => $input->get('morph_many_to_many_has')])->save();
-
         if (!$input->get('morph_many_to_many_has'))
         {
             return parent::postProcess($model, $type, $input);

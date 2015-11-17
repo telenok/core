@@ -9,7 +9,9 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		$model = \App\Telenok\Core\Model\Object\Sequence::getModel($modelId);
 		$field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
 		
-		if (app('auth')->can('read', 'object_field.' . $model->getTable() . '.' . $field->code))
+        $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]);
+        
+		if (!in_array(false, $responses, true) && app('auth')->can('read', $model))
 		{
 			$fileData = $model->{$field->code};
 
@@ -24,7 +26,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 			$headers = ["Content-type" => $fs->getMimetype($file)];
 
 			// Check for request for part of the stream
-			$range = \Request::header('Range');
+			$range = $this->getRequest()->header('Range');
 
 			if($range != null)
 			{
@@ -67,8 +69,10 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		$field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
 
 		$fileData = $model->{$field->code};
+		
+        $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]);
 
-		if ($fileData->isImage() && app('auth')->can('read', 'object_field.' . $model->getTable() . '.' . $field->code))
+		if (!in_array(false, $responses, true) && $fileData->isImage() && app('auth')->can('read', $model))
 		{
 			$width = intval($width); 
 			$height = intval($height);
@@ -121,9 +125,8 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 							}, 200, [
 								"Content-Type" => $fs->getMimetype($filePath),
 								"Content-Length" => $fs->getSize($filePath),
-								//"Cache-Control" => "must-revalidate",
-								//"Etag" => md5($filePath . $width . $height),
-								//"Last-Modified" => $field->updated_at->toRfc2822String(),
+								"Etag" => md5($filePath . $width . $height),
+								"Last-Modified" => $field->updated_at->toRfc2822String(),
 							]);
 							
 			return $response;
@@ -138,11 +141,31 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		switch ($toDo)
 		{
+			case File::TODO_RESIZE_PROPORTION:
+    				return $this->resizeProportion($image, $width, $height);
+                break;
+
 			case File::TODO_RESIZE:
 			default:
 				return $this->resize($image, $width, $height);
 
 		}
+	}
+
+	public function resizeProportion($image, $width, $height)
+	{
+		$size = $image->getSize();
+
+		if ($width == 0)
+		{
+			$width = $size->getWidth() * ($height/$size->getHeight());
+		}
+		else if ($height == 0)
+		{
+			$height = $size->getHeight() * ($width/$size->getWidth());
+		}
+		
+		return $image->thumbnail(new \Imagine\Image\Box($width, $height));
 	}
 
 	public function resize($image, $width, $height)

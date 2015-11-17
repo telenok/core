@@ -106,8 +106,6 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
     $list->push('select-many#core::field.select-many.model-checkbox-button');
     $list->push('select-many#core::field.select-many.model-select-box');
     $list->push('select-many#core::field.select-many.model-toggle-button');
-
-    $list->push('file-many-to-many#core::field.file-many-to-many.model-gallery');
 });
 
 \Event::listen('telenok.compile.route', function()

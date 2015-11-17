@@ -12,8 +12,9 @@ class File {
     const IMAGE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif'];
     const IMAGE_MIME_TYPE = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'];
     const TODO_RESIZE = 'resize';
+    const TODO_RESIZE_PROPORTION = 'resize_proportion';
 
-	public function downloadStreamLink()
+    public function downloadStreamLink()
 	{
 		return route('telenok.download.stream.file', ['modelId' => $this->model->id, 'fieldId' => $this->field->id]);
 	}

@@ -134,7 +134,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
 		$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
         $idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
-        
+
 		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
 		{
 			if ( (!empty($idsAdd) || !empty($idsDelete)))
@@ -163,7 +163,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 				}
 			}
 		}
-	
+
         return $model;
     }
 
@@ -173,23 +173,31 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		{
 			$this->validateExistsInputField($input, ['field_has', 'relation_many_to_many_has']);
 		}
-		
+
 		if (!$input->get('relation_many_to_many_has') && $input->get('field_has'))
 		{
 			$input->put('relation_many_to_many_has', $input->get('field_has'));
 		}
 
-		$input->put('relation_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('relation_many_to_many_has'))->orWhere('id', $input->get('relation_many_to_many_has'))->pluck('id')));
-		$input->put('multilanguage', 0);
+        // can be zero if process field belong_to
+		if ($input->get('relation_many_to_many_has'))
+		{
+            $input->put('relation_many_to_many_belong_to', 0);
+    		$input->put('relation_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('relation_many_to_many_has'))->orWhere('id', $input->get('relation_many_to_many_has'))->pluck('id')));
+        }
+        else
+        {
+            $input->put('relation_many_to_many_has', 0);
+        }
+        
+        $input->put('multilanguage', 0);
 		$input->put('allow_sort', 0);
-		
+
         return parent::preProcess($model, $type, $input);
     } 
- 
+
     public function postProcess($model, $type, $input)
     {
-        $model->fill(['relation_many_to_many_has' => $input->get('relation_many_to_many_has')])->save();
-
         if (!$input->get('relation_many_to_many_has'))
         {
             return parent::postProcess($model, $type, $input);
@@ -288,8 +296,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             {
                 $table->increments('id');
                 $table->timestamps();
-                $table->integer($codeFieldHasMany)->unsigned()->nullable();
-                $table->integer($pivotField)->unsigned()->nullable();
+                $table->integer($codeFieldHasMany)->unsigned()->default(0)->nullable();
+                $table->integer($pivotField)->unsigned()->default(0)->nullable();
 
                 $table->unique([$pivotField, $codeFieldHasMany], 'uniq_key');
 

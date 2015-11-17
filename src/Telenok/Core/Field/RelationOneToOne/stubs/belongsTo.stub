@@ -1,7 +1,5 @@
 
-/*
     public function {{method}}()
     {
         return $this->belongsTo('{{class}}', '{{field}}');
     }
-*/

@@ -1,8 +1,5 @@
 <?php namespace Telenok\Core\Field\FileManyToMany;
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;  
-
 class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     protected $key = 'file-many-to-many'; 
@@ -10,7 +7,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     protected $viewModel = "core::field.file-many-to-many.model";
     protected $viewField = "core::field.file-many-to-many.field";
-    
+
     protected $routeListTable = "telenok.field.relation-many-to-many.list.table";
     protected $routeListTitle = "telenok.field.relation-many-to-many.list.title";
     protected $routeUpload = 'telenok.field.file-many-to-many.upload';
@@ -19,11 +16,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     {
         return $this->routeUpload;
     }
-    
+
     public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         $linkedField = $this->getLinkedField($field);
-        
+
         return
         [
             'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
@@ -33,13 +30,10 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
         ];
     }
-    
+
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
-    {         
-        if ($field->relation_many_to_many_has)
-        {
-            return parent::getFormModelContent($controller, $model, $field, $uniqueId);
-        }
+    {
+        return parent::getFormModelContent($controller, $model, $field, $uniqueId);
     } 
 
     public function getListFieldContent($field, $item, $type = null)
@@ -47,10 +41,10 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         $linkedObject = $item->{camel_case($field->code)}()->first();
 
         $content = '';
-        
+
         if ($linkedObject instanceof \Telenok\Core\Model\File\File)
         {
-            $item->{camel_case($field->code)}()->sortBy('sort')->get()->take(5)->each(function($item) use (&$content)
+            $item->{camel_case($field->code)}()->orderBy('sort')->get()->take(5)->each(function($item) use (&$content)
                 {
                     if ($item->upload->exists())
                     {
@@ -60,7 +54,9 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
                         }
                         else
                         {
-                            $content .= " <a href='" . $item->upload->downloadStreamLink() . "' target='_blank'>" . e(\Str::limit($item->translate('title'), 20)) . '</a>';
+                            $content .= " <a href='" . $item->upload->downloadStreamLink() . "' 
+                                target='_blank' title='" . e($item->translate('title')) . "'>"
+                                    . e(\Str::limit($item->translate('title'), 20)) . "</a>";
                         }
                     }
                     else 
@@ -194,12 +190,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     
     public function preProcess($model, $type, $input)
     {
-        $input->put('relation_many_to_many_has', \App\Telenok\Core\Model\Object\Type::whereCode('file')->pluck('id'));
-
-        if (!$input->get('show_in_form_belong'))
-        {
-            $input->put('show_in_form_belong', 0);
-        } 
+        // can be zero if process field belong_to
+		if ($input->get('relation_many_to_many_has'))
+		{
+    		$input->put('relation_many_to_many_has', \App\Telenok\Core\Model\Object\Type::whereCode('file')->pluck('id'));
+        }
 
         return parent::preProcess($model, $type, $input);
     } 
@@ -213,7 +208,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     {
         $request = $this->getRequest();
 
-        if (!$request->has('title'))
+        if (!$request->get('title'))
         {
             $request->merge(['title' => ['en' => 'Some file']]);
         }

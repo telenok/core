@@ -5,13 +5,13 @@
 	$viewsCollection = collect(app('telenok.config.repository')->getObjectFieldViewModel()->get($controller->getKey(), []));
 
 	$viewsCollection->push($controller->getViewModel());
-	
+
 	if ($model->field_view)
 	{
 		$viewsCollection->push($model->field_view);
 	}
 
-	$views = ['<option>' . $controller->LL('property.default'). '</option>'];
+	$views = ['<option></option>'];
 
 	foreach($viewsCollection->unique()->all() as $v)
 	{
@@ -22,7 +22,7 @@
 <div class="form-group">
 	{!! Form::label('key', $controller->LL('property.field_view'), array('class' => 'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-9">
-		<select data-placeholder="{{$controller->LL('notice.choose')}}" id="input{{$jsUnique}}" name="field_view">
+		<select id="input{{$jsUnique}}" name="field_view">
 		 {!! implode('', $views) !!}
 		 </select>
 		 <script type="text/javascript">
@@ -31,7 +31,9 @@
 				 keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
 				 lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
 				 width: '350px',
-				 search_contains: true
+				 search_contains: true,
+                 allow_single_deselect: true,
+                 placeholder_text_single: "{{ $controller->LL('property.default') }}"
 			 });
 		 </script>
 	</div>

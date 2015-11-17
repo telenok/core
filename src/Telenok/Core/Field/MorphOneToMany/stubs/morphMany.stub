@@ -1,7 +1,5 @@
 
-/*
     public function {{method}}()
     {
         return $this->morphMany('{{class}}', '{{name}}', '{{type}}', '{{foreignKey}}', '{{otherKey}}');
     }
-*/
