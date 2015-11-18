@@ -90,7 +90,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		{
 			$input->put('field_object_tab', 'additionally');
 		}
-		
+
 		$tab = $this->getFieldTab($input->get('field_object_type'), $input->get('field_object_tab'));
 
 		$input->put('field_object_tab', $tab->getKey());  
@@ -100,7 +100,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
-		$permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
+        $permissions = $model->type()->permissionType()->get();
+
+        if (!$permissions->count())
+        {
+            $permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
+        }
+
 		$this->setViewModel($field, $controller->getModelFieldView($field), $controller->getModelFieldViewKey($field));
 
 		return view($this->getViewModel(), array_merge([

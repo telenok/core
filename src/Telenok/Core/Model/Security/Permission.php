@@ -15,5 +15,9 @@ class Permission extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 		return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_permission_object_sequence');
 	}
 
+    public function permissionTypeObjectType()
+    {
+        return $this->belongsToMany('\App\Telenok\Core\Model\Object\Type', 'pivot_relation_m2m_permission_type_object_type', 'permission_type', 'permission_type_object_type')->withTimestamps();
+    }
 }
 

@@ -859,7 +859,25 @@ class SeedLast extends Migration {
 		\App\Telenok\Core\Security\Acl::user($user)->setGroup($groupSuperAdmin);
 		\App\Telenok\Core\Security\Acl::group($groupSuperAdmin)->setRole($roleSuperAdmin);
 
-
+        // ACL Type's Permissions
+		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+			'title' => ['en' => 'Type permissions', 'ru' => 'Разрешения для типа'],
+			'title_list' => ['en' => 'Type permissions', 'ru' => 'Разрешения для типа'],
+			'key' => 'relation-many-to-many',
+			'code' => 'permission_type',
+			'active' => 1,
+			'field_object_type' => 'object_type',
+			'relation_many_to_many_has' => 'permission',
+			'field_object_tab' => 'additionally',
+			'multilanguage' => 0,
+			'show_in_form' => 1,
+			'show_in_list' => 1,
+			'allow_search' => 1,
+			'allow_create' => 1,
+			'allow_update' => 1,
+			'field_order' => 10,
+		]);
+        
 		//Folder
 		$folderSystem = (new \App\Telenok\Core\Model\System\Folder())->storeOrUpdate([
 					'title' => ['en' => 'System', 'ru' => 'Система'],
