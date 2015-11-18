@@ -89,7 +89,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$listWidget = app('telenok.config.repository')->getWidget();
 		$pageId = intval(str_replace('page_', '', \Route::currentRouteName()));
 
-        $page = \App\Telenok\Core\Model\Web\Page::findOrFail($pageId);
+        try
+        {
+            $page = \App\Telenok\Core\Model\Web\Page::withPermission()->findOrFail($pageId);
+        }
+        catch (\Exception $e)
+        {
+            app()->abort(404);
+        }
 
         $this->setCacheTime($page->cache_time);
 
@@ -107,7 +114,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             $page->widget()->active()->get()->filter(function($item) use ($containerId)
             {
                 return $item->container === $containerId;
-            })->each(function($item) use (&$content, $containerId, $listWidget)
+            })
+            ->each(function($item) use (&$content, $containerId, $listWidget)
             {
                 $content[$containerId][] = $listWidget->get($item->key)
                                             ->setWidgetModel($item)

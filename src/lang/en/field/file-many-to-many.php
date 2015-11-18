@@ -9,6 +9,7 @@ return array(
 	'sort' => 'Sorting',
 
     'choose.categories' => 'Categories',
+    'permission.read' => 'Read permission',
     
     'file.list' => 'List',
 );

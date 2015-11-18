@@ -30,7 +30,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		try
 		{
-			$query = \App\Telenok\Core\Model\Object\Sequence::select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title AS title_type')
+			$query = \App\Telenok\Core\Model\Object\Sequence::withPermission()
+                    ->select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title AS title_type')
 					->join($typeTable, function($join) use ($sequenceTable, $typeTable)
 					{
 						$join->on($sequenceTable . '.sequences_object_type', '=', $typeTable . '.id');

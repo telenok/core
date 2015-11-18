@@ -9,7 +9,6 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     protected $viewField = "core::field.file-many-to-many.field";
 
     protected $routeListTable = "telenok.field.relation-many-to-many.list.table";
-    protected $routeListTitle = "telenok.field.relation-many-to-many.list.title";
     protected $routeUpload = 'telenok.field.file-many-to-many.upload';
 
     public function getRouteUpload()
@@ -23,13 +22,73 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
         return
         [
-            'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
+            'urlListTitle' => route($this->getRouteListTitle()),
             'urlListTable' => route($this->getRouteListTable(), ['id' => (int)$model->getKey(), 'fieldId' => $field->getKey(), 'uniqueId' => $uniqueId]),
             'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $field->{$linkedField}]),
             'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
             'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
         ];
     }
+
+	public function getTitleList($id = null, $closure = null)
+	{
+		$term = trim($this->getRequest()->input('term'));
+		$return = [];
+
+		$sequence = new \App\Telenok\Core\Model\Object\Sequence();
+
+		$sequenceTable = $sequence->getTable();
+		$typeTable = (new \App\Telenok\Core\Model\Object\Type())->getTable();
+
+		$sequence->addMultilanguage('title_type');
+
+		try
+		{
+			$query = \App\Telenok\Core\Model\Object\Sequence::withPermission()
+                    ->select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title AS title_type')
+					->join($typeTable, function($join) use ($sequenceTable, $typeTable)
+					{
+						$join->on($sequenceTable . '.sequences_object_type', '=', $typeTable . '.id');
+					})
+					->where(function ($query) use ($sequenceTable, $typeTable, $term)
+					{
+						$query->where($sequenceTable . '.id', $term);
+
+						$query->orWhere(function ($query) use ($sequenceTable, $term)
+						{
+							\Illuminate\Support\Collection::make(explode(' ', $term))
+									->reject(function($i) { return !trim($i); })
+									->each(function($i) use ($query, $sequenceTable)
+							{
+								$query->where($sequenceTable . '.title', 'like', "%{$i}%");
+							});
+						});
+
+						$query->orWhere(function ($query) use ($typeTable, $term)
+						{
+							\Illuminate\Support\Collection::make(explode(' ', $term))
+									->reject(function($i) { return !trim($i); })
+									->each(function($i) use ($query, $typeTable)
+							{
+								$query->where($typeTable . '.title', 'like', "%{$i}%");
+							});
+						});
+					});
+			
+			if ($closure instanceof \Closure)
+			{
+				$closure($query);
+			}
+			
+			$query->take(20)->get()->each(function($item) use (&$return)
+			{
+				$return[] = ['value' => $item->id, 'text' => "[{$item->translate('title_type')}#{$item->id}] " . $item->translate('title')];
+			});
+		}
+        catch (\Exception $e) {}
+
+		return $return;
+	}
 
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     {
@@ -198,12 +257,12 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
         return parent::preProcess($model, $type, $input);
     } 
-    
+
     public function schemeCreateExtraField($table, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null)
     {
         $table->integer('sort')->unsigned()->nullable();
     }
-    
+
     public function upload()
     {
         $request = $this->getRequest();
@@ -215,7 +274,6 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
         $request->merge([
             'active' => 1,
-            'category_add' => (array)$request->get('category', [])
         ]);
 
         $file = app('\App\Telenok\Core\Model\File\File');

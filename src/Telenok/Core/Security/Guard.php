@@ -26,11 +26,11 @@ class Guard extends \Illuminate\Auth\Guard {
     */
     public function can($permissionCode = null, $resourceCode = null)
     { 
-        if (!config('app.acl.enabled')) 
+        if (!config('app.acl.enabled') || app('auth')->hasRole('super_administrator'))
         {
 			return true;
         }
-		
+
         if ($this->check()) 
         {
             if (\App\Telenok\Core\Security\Acl::user()->can($permissionCode, $resourceCode))

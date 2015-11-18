@@ -75,7 +75,8 @@
 	get('field/permission/list/title', array('as' => 'telenok.field.permission.list.title', 'uses' => "\App\Telenok\Core\Field\System\Permission\Controller@getTitleList"));
 
 	post('field/file-many-to-many/upload', array('as' => 'telenok.field.file-many-to-many.upload', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@upload"));
- 
+ 	get('field/file-many-to-many/list/title', array('as' => 'telenok.field.file-many-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@getTitleList"));
+
 
 	// Module Dashboard 
 	get('telenok/module/dashboard', array('as' => 'telenok.module.dashboard', 'uses' => "App\Telenok\Core\Module\Dashboard\Controller@getContent"));

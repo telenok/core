@@ -1,5 +1,5 @@
 <?php
-    
+
     $domAttr = ['class' => 'col-md-6', 'disabled' => 'disabled'];
     $method = camel_case($field->code);
     $jsUnique = str_random();
@@ -116,7 +116,7 @@
                                                 {!! Form::label("", $controller->LL('choose.categories'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 
                                                 <div class="col-sm-5">
-                                                    {!! Form::select('category[]', 
+                                                    {!! Form::select('category_add[]', 
                                                         \App\Telenok\Core\Model\File\FileCategory::active()->get(['title', 'id'])
                                                             ->transform(function($item) { 
                                                                 return ['title' => $item->translate('title'), 'id' => $item->id]; 
@@ -124,11 +124,56 @@
                                                         [], 
                                                         [
                                                             'id' => 'select-file-category-' . $jsUnique, 
-                                                            'size' => 4,
                                                             'multiple' => 'multiple'
                                                         ]) !!}
                                                 </div>
+                                                <script type="text/javascript">
+                                                    jQuery("#select-file-category-{{ $jsUnique }}").chosen({
+                                                        create_option: false,
+                                                        keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
+                                                        lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
+                                                        width: '350px',
+                                                        search_contains: true
+                                                    });
+                                                </script>
                                             </div>
+
+                                            <div class="form-group">
+
+                                                {!! Form::label("", $controller->LL('permission.read'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+
+                                                <div class="col-sm-5">
+                                                    <select class="chosen" multiple 
+                                                        data-placeholder="{{$controller->LL('notice.choose')}}" 
+                                                        id="select-file-permission-{{$jsUnique}}" 
+                                                        name="permission[read][]"></select>
+                                                </div>
+                                                <script type="text/javascript">
+                                                    jQuery("#select-file-permission-{{$jsUnique}}").ajaxChosen({ 
+                                                        keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
+                                                        lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
+                                                        type: "GET",
+                                                        url: "{!! $urlListTitle !!}", 
+                                                        dataType: "json",
+                                                        minTermLength: 1
+                                                    }, 
+                                                    function (data) 
+                                                    {
+                                                        var results = [];
+
+                                                        jQuery.each(data, function (i, val) {
+                                                            results.push({ value: val.value, text: val.text });
+                                                        });
+
+                                                        return results;
+                                                    },
+                                                    {
+                                                        width: "100%",
+                                                        no_results_text: "{{ $controller->LL('notice.not-found') }}"
+                                                    });
+                                                </script>
+                                            </div>
+
 
                                             <div class="form-group">
 
@@ -191,7 +236,7 @@
                                             <div class="image-wrapper">
                                                 <img src="{!! $item->upload->downloadImageLink(200, 200) !!}" title="{{$item->translate('title')}}" class="img-responsive">
                                             </div>
-                                            <span>{{$item->translate('title')}}</span>
+                                            <span>{{\Str::limit($item->translate('title'), 30)}}</span>
                                         </div>
                                     </li>
                                     @endforeach
@@ -509,9 +554,9 @@
                                 maxFilesize: 2.5, // MB
                                 addRemoveLinks : true,
                                 dictDefaultMessage :
-                                '<span class="bigger-150 bolder"><i class="fa fa-caret-right red"></i> Drop files</span> to upload \
-                                <span class="smaller-80 grey">(or click)</span> <br /> \
-                                <i class="upload-icon fa fa-cloud-upload blue fa fa-3x"></i>',
+                                    '<span class="bigger-150 bolder"><i class="fa fa-caret-right red"></i> Drop files</span> to upload \
+                                    <span class="smaller-80 grey">(or click)</span> <br /> \
+                                    <i class="upload-icon fa fa-cloud-upload blue fa fa-3x"></i>',
                                 dictResponseError: 'Error while uploading file!',
                                 autoProcessQueue: false,
                                 headers: {
@@ -537,7 +582,17 @@
                                 {
                                     arr.forEach(function(item, i, arr) 
                                     {
-                                        formData.append("category[]", item);
+                                        formData.append("category_add[]", item);
+                                    });
+                                }
+
+                                var arr = jQuery('#select-file-permission-{{$jsUnique}}').val();
+
+                                if (arr instanceof Array)
+                                {
+                                    arr.forEach(function(item, i, arr) 
+                                    {
+                                        formData.append("permission[read][]", item);
                                     });
                                 }
                             });

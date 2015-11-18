@@ -10,8 +10,11 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		$field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
 		
         $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]);
-        
-		if (!in_array(false, $responses, true) && app('auth')->can('read', $model))
+
+		if (!in_array(false, $responses, true) 
+            && (($model instanceof \App\Telenok\Core\Model\File\File && app('auth')->can('read', $model))
+                || (!($model instanceof \App\Telenok\Core\Model\File\File) && 
+                    app('auth')->can('read', 'object_field.' . $model->getTable() . '.' . $field->code))))
 		{
 			$fileData = $model->{$field->code};
 
@@ -56,13 +59,13 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 			return \Response::stream(function () use ($stream) {
 				fpassthru($stream);
 			}, $response_code, $headers);
-		}	
+		}
 		else
 		{
 			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
 		}
 	}
-	
+
 	public function image($modelId, $fieldId, $toDo, $width, $height, $secureKey)
 	{
 		$model = \App\Telenok\Core\Model\Object\Sequence::getModel($modelId);
@@ -72,7 +75,10 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		
         $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]);
 
-		if (!in_array(false, $responses, true) && $fileData->isImage() && app('auth')->can('read', $model))
+		if (!in_array(false, $responses, true) 
+            && (($model instanceof \App\Telenok\Core\Model\File\File && app('auth')->can('read', $model))
+                || (!($model instanceof \App\Telenok\Core\Model\File\File) && 
+                    app('auth')->can('read', 'object_field.' . $model->getTable() . '.' . $field->code))))
 		{
 			$width = intval($width); 
 			$height = intval($height);
