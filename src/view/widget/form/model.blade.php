@@ -185,7 +185,7 @@ $controllerAction->addJsCode($jsCode);
 		@section('btnList')
 
 		@if ((isset($canCreate) && $canCreate) || (isset($canUpdate) && $canUpdate))
-		<button type="submit" class="btn btn-success" onclick="jQuery(this).closest('form').data('btn-clicked', 'save');">
+		<button type="submit" class="btn btn-success" onclick="jQuery(this).closest('form').data('btn-clicked', 'save');" autofocus="autofocus">
 			{{ $controller->LL('btn.save') }}
 		</button>
 		@endif

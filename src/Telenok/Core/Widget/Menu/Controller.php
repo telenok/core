@@ -10,11 +10,10 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
     protected $nodeIds = [];
     protected $objectType = null;
 
-
     public function setConfig($config = [])
     {
         parent::setConfig($config);
-        
+
         if ($m = $this->getWidgetModel())
         {
             $structure = $m->structure;
@@ -47,27 +46,42 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
     {
         return $this->objectType;
     }
-    
+
+	public function getCacheKey()
+	{
+        if ($key = parent::getCacheKey())
+        {
+            return $key . $this->getMenuType() . $this->getNodeIds();
+        }
+        else
+        {
+            return false;
+        }
+	}
+
 	public function getNotCachedContent()
 	{
         $ids = [];
 
         if ($this->menuType == 1)
         {
-            $ids = json_decode('[' . $this->nodeIds . ']'); 
+            $ids = (array)json_decode('[' . $this->nodeIds . ']'); 
         }
         else if ($this->menuType == 2)
         {
             $ids = str_replace('{', ',[', $this->nodeIds);
             $ids = str_replace('}', ']', $ids);
-            $ids = json_decode('[' . $ids . ']');
+            $ids = (array)json_decode('[' . $ids . ']');
         }
 
         $class = \App\Telenok\Core\Model\Object\Type::where(function($query)
         {
             $query->where('id', $this->objectType);
             $query->orWhere('code', $this->objectType);
-        })->first()->class_model;
+        })
+        ->active()
+        ->first()
+        ->class_model;
 
         $model = app($class);
 
@@ -77,9 +91,9 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
         array_walk($idsArray, 'intval');
 
         $items = $model::withTreeAttr()
+                    ->withPermission()
                     ->withChildren(100)
                     ->active()
-                    ->withPermission()
                     ->where(function($query) use ($idsArray, $model)
                     {
                         if ($this->menuType == 1)

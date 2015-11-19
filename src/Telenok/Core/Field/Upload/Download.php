@@ -133,8 +133,12 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 								"Content-Length" => $fs->getSize($filePath),
 								"Etag" => md5($filePath . $width . $height),
 								"Last-Modified" => $field->updated_at->toRfc2822String(),
+								"Cache-Control" => 'private, must-revalidate',
+								"Expires" => date(\DateTime::RFC822, strtotime("2 day")),
+								"Vary" => 'Content-ID',
+								"Content-ID" => md5($filePath . $width . $height),
 							]);
-							
+
 			return $response;
 		}
 		else

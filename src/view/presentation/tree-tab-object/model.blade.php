@@ -82,7 +82,7 @@
     <div class='form-actions center no-margin'>
 		
 		@if ( (isset($canCreate) && $canCreate) || (isset($canUpdate) && $canUpdate) )
-        <button type="submit" class="btn btn-success" onclick="jQuery(this).closest('form').data('btn-clicked', 'save');">
+        <button type="submit" class="btn btn-success" onclick="jQuery(this).closest('form').data('btn-clicked', 'save');" autofocus="autofocus">
             {{ $controller->LL('btn.save') }}
         </button>
         <button type="submit" class="btn btn-info" onclick="jQuery(this).closest('form').data('btn-clicked', 'save.close');">

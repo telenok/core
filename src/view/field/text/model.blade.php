@@ -122,7 +122,7 @@
 		<h4 class="row">
 			<span class="col-sm-12">
 				<i class="ace-icon fa fa-list-ul"></i>
-				{!! Form::label("{$field->code}", $field->translate('title'), array('class'=>'control-label')) !!}
+				{{ $field->translate('title') }}
 			</span>
 		</h4>
 	</div>

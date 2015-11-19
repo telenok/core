@@ -1,4 +1,8 @@
 
+a:focus {
+  outline: none;
+}
+
 a:link, a:visited {
     color: #333333;
 }

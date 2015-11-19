@@ -99,11 +99,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
         if ($this->cacheKey)
         {
-            return $this->cacheKey . config('app.locale', config('app.localeDefault'));
+            return $this->cacheKey . $this->getFrontendView() . config('app.locale', config('app.localeDefault'));
         }
         else if ($m = $this->getWidgetModel())
         {
-            return $m->getKey() . config('app.locale', config('app.localeDefault'));
+            return $m->getKey() . $this->getFrontendView() . config('app.locale', config('app.localeDefault'));
         }
         else
         {

@@ -85,7 +85,7 @@
 
 	@section('formBtn')
     <div class='form-actions center no-margin'>
-        <button type="submit" class="btn btn-success" onclick="jQuery(this).closest('form').data('btn-clicked', 'save');">
+        <button type="submit" class="btn btn-success" onclick="jQuery(this).closest('form').data('btn-clicked', 'save');" autofocus="autofocus">
             {{$controller->LL('btn.save')}}
         </button>
         <button type="submit" class="btn btn-info" onclick="jQuery(this).closest('form').data('btn-clicked', 'save.close');">

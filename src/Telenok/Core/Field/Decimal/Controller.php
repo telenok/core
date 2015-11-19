@@ -16,7 +16,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function getListFieldContent($field, $item, $type = null)
     {
-        return $item->{$field->code};
+        return $item->{$field->code}->value();
     }
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null)
