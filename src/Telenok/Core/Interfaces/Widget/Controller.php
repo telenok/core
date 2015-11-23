@@ -38,17 +38,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     {
 		$this->config = $config;
 
-		$this->frontendView = $this->getConfig('frontend_view', $this->getFrontendView());
-		$this->cacheKey = $this->getConfig('cache_key', $this->cacheKey);
-
         if ($m = $this->getWidgetModel())
         {
             $this->cacheTime = array_get($m->structure, 'cache_time',$this->cacheTime);
         }
-        else
-        {
-    		$this->cacheTime = $this->getConfig('cache_time', $this->cacheTime);
-        }
+
+		$this->frontendView = $this->getConfig('frontend_view', $this->getFrontendView());
+		$this->cacheKey = $this->getConfig('cache_key', $this->cacheKey);
+        $this->cacheTime = $this->getConfig('cache_time', $this->cacheTime);
 
         return $this;
     }
@@ -177,7 +174,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function getStructureView()
 	{
-		return $this->structureView ? : "core::widget.{$this->getKey()}.structure";
+        return $this->structureView ? : "{$this->getPackage()}::widget.{$this->getKey()}.structure";
 	}
     
     public function setFrontendController($param = null)

@@ -8,17 +8,19 @@
 	post('telenok/user/update/ui-setting', array('as' => 'telenok.user.update.ui-setting', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@updateBackendUISetting"));
 
 
-
+    // Widget Form
 	post('widget/form/store/{typeId}', array('as' => 'telenok.widget.form.store', 'uses' => "\App\Telenok\Core\Widget\Model\Form\Controller@store"));
 	post('widget/form/update/{id}', array('as' => 'telenok.widget.form.update', 'uses' => "\App\Telenok\Core\Widget\Model\Form\Controller@update"));
 	post('widget/form/delete/{id}', array('as' => 'telenok.widget.form.delete', 'uses' => "\App\Telenok\Core\Widget\Model\Form\Controller@delete"));
 	
+    // Widget Grid
 	get('widget/grid/{typeId}', array('as' => 'telenok.widget.grid.list', 'uses' => "\App\Telenok\Core\Widget\Model\Grid\Controller@getList"));
 
-    
+    // Widget Menu
 	get('widget/menu/tree', array('as' => 'telenok.widget.menu.tree.list', 'uses' => "\App\Telenok\Core\Widget\Menu\Controller@getTreeList"));
 
-	
+    
+	// Object Field Upload
 	get('download/stream/{modelId}/{fieldId}', array('as' => 'telenok.download.stream.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@stream"));
 	get('download/image/{modelId}/{fieldId}/{toDo}/{width}/{height}/{secureKey}', array('as' => 'telenok.download.image.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@image"));
 
@@ -77,7 +79,10 @@
 	post('field/file-many-to-many/upload', array('as' => 'telenok.field.file-many-to-many.upload', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@upload"));
  	get('field/file-many-to-many/list/title', array('as' => 'telenok.field.file-many-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@getTitleList"));
 
+	get('field/text/ckeditor.config.js', array('as' => 'telenok.field.text.ckeditor.config', 'uses' => "App\Telenok\Core\Field\Text\Controller@getCKEditorConfig"));	
+	get('packages/telenok/core/js/ckeditor_addons/plugins/widget_inline/plugin.js', array('as' => 'telenok.field.text.plugin.widget_inline.config', 'uses' => "App\Telenok\Core\Field\Text\Controller@getCKEditorPluginWidgetInline"));	
 
+    
 	// Module Dashboard 
 	get('telenok/module/dashboard', array('as' => 'telenok.module.dashboard', 'uses' => "App\Telenok\Core\Module\Dashboard\Controller@getContent"));
 
@@ -176,3 +181,4 @@
 	
 	post('telenok/module/packages/installer-manager/update', array('as' => 'telenok.module.installer-manager.update', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@update"));
 	post('telenok/module/packages/installer-manager/delete', array('as' => 'telenok.module.installer-manager.delete', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@delete"));
+

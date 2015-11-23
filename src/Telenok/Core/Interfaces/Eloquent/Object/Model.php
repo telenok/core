@@ -851,6 +851,21 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 				});
 	}
 
+	public function scopeTranslateField($query, $linkedTableAlias = '', $translateTableAlias = '', $translateField = '', $language = '')
+	{
+        $translateModel = app('\App\Telenok\Core\Model\Object\Translation');
+
+        $translateTableAlias = $translateTableAlias ?: $translateModel->getTable();
+        
+        $query->leftJoin($translateModel->getTable() . ' AS ' . $translateTableAlias, function($join) 
+                use ($linkedTableAlias, $translateTableAlias, $translateField, $language)
+        {
+            $join   ->on($linkedTableAlias . '.id', '=', $translateTableAlias . '.translation_object_model_id')
+                    ->on($translateTableAlias . '.translation_object_field_code', '=', \DB::raw("'" . $translateField . "'"))
+                    ->on($translateTableAlias . '.translation_object_language', '=', \DB::raw("'" . ($language ? : config('app.locale')) . "'"));
+        });
+	}
+
 	// ->permission() - can current user read (read - by default)
 	// ->permission('write', null) - can current user read
 	// ->permission(null, 'user_authorized') - can authorized user read 

@@ -51,7 +51,6 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 			header('HTTP/1.0 206 Partial Content');
 
 			$headers["Content-Length"] = $size;
-			$headers["Content-Length"] = $size;
 			$headers["Content-Disposition"] = 'inline';
 			$headers['Accept-Ranges'] = 'bytes';
 			$headers["Content-disposition"] = "attachment; filename=\"" . basename($model->{$field->code}->originalFileName()) . "\"";
@@ -74,6 +73,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		$fileData = $model->{$field->code};
 		
         $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]);
+        $request = $this->getRequest();
 
 		if (!in_array(false, $responses, true) 
             && (($model instanceof \App\Telenok\Core\Model\File\File && app('auth')->can('read', $model))
@@ -122,7 +122,23 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 			{
 				$filePath = $fileData->path();
 			}
-
+            
+            if ($modifySince = $request->header('If-Modified-Since')) 
+            {
+               $modifiedSince = explode(';', $modifySince);
+               $modifiedSince = strtotime($modifiedSince[0]);
+            } 
+            else 
+            {
+               $modifiedSince = 0;
+            }
+            
+            if ($field->updated_at->getTimestamp() <= $modifiedSince)
+            {
+                header('HTTP/1.1 304 Not Modified');
+                exit();
+            }
+            
 			$fs = $fileData->disk()->getDriver();
 			$stream = $fs->readStream($filePath);
 			
@@ -131,12 +147,12 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 							}, 200, [
 								"Content-Type" => $fs->getMimetype($filePath),
 								"Content-Length" => $fs->getSize($filePath),
-								"Etag" => md5($filePath . $width . $height),
+								"Etag" => ($m5 = md5($filePath . $width . $height)),
 								"Last-Modified" => $field->updated_at->toRfc2822String(),
 								"Cache-Control" => 'private, must-revalidate',
-								"Expires" => date(\DateTime::RFC822, strtotime("2 day")),
+								"Expires" => date(\DateTime::RFC822, strtotime("20 day")),
 								"Vary" => 'Content-ID',
-								"Content-ID" => md5($filePath . $width . $height),
+								"Content-ID" => $m5,
 							]);
 
 			return $response;

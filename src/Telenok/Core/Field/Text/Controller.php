@@ -8,6 +8,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	protected $key = 'text';
 	protected $specialField = ['text_width', 'text_height', 'text_default', 'text_rte'];
    
+    protected $ckEditorConfigView = "core::field.text.rte-config";
+
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
     {
 		if ($value !== null && trim($value))
@@ -47,7 +49,19 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
         if ($field->multilanguage)
         {
+            if ($value)
+            {
+                foreach($value as $k => $v)
+                {
+                    $value[$k] = app('\App\Telenok\Core\Field\Text\Processing')->setRawValue($v);
+                }
+            }
+            
             $value = \Illuminate\Support\Collection::make(json_decode($value ?: '[]', true));
+        }
+        else
+        {
+            $value = app('\App\Telenok\Core\Field\Text\Processing')->setRawValue($value);
         }
 
         return $value;
@@ -142,16 +156,24 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		}
 
         $fields = []; 
-        
+
         if ($input->get('required'))
         {
             $fields['rule'][] = 'required';
         }
- 
-        
+
         $model->fill($fields)->save();
 
         return parent::postProcess($model, $type, $input);
-    }	
-}
+    }
 
+    public function getCKEditorConfig()
+    {
+        return view($this->ckEditorConfigView);
+    }
+
+    public function getCKEditorPluginWidgetInline()
+    {
+        return view("core::field.text.rte-plugin-widget-inline");
+    }
+}

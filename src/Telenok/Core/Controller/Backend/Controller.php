@@ -43,7 +43,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
     public function getContent()
     {
         $listModuleMenuLeft = \Illuminate\Support\Collection::make();
-        \Event::fire('telenok.module.menu.left', $listModuleMenuLeft);
+        \Event::fire('telenok.module.menu.left', [$listModuleMenuLeft]);
 
         $config = app('telenok.config.repository');
 
@@ -102,7 +102,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
         $listModuleMenuTopCollection = \Illuminate\Support\Collection::make();
 
-        \Event::fire('telenok.module.menu.top', $listModuleMenuTopCollection);
+        \Event::fire('telenok.module.menu.top', [$listModuleMenuTopCollection]);
 
         $listModuleMenuTopCollection->each(function($item) use ($listModuleMenuTop, $config)
         {
@@ -116,17 +116,16 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
             return $item->get('order');
         });
 
-        
         $setArray['listModuleMenuTop'] = $listModuleMenuTop;
         $setArray['controller'] = $this;
 
-        if ($this->getRequest()->has('external_event'))
+        if ($this->getRequest()->has('backend_external_event'))
         {
-            \Event::fire('telenok.external_event', $this);
+            \Event::fire('telenok.backend.external', [$this]);
         }
-        
-        \Event::fire('telenok.backend.controller.content', $setArray);
-        
+
+        \Event::fire('telenok.backend.controller.content', [$setArray]);
+
         $this->addJsCode(view('core::layout.helper-js', $setArray)->render());
         
         return view('core::controller.backend', $setArray)->render();

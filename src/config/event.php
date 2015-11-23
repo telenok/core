@@ -118,7 +118,7 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
     app('telenok.config.repository')->compileSetting();
 });
 
-\Event::listen('telenok.external_event', function($controller)
+\Event::listen('telenok.backend.external', function($controller)
 {
     app('\App\Telenok\Core\Module\Packages\InstallerManager\Controller')->processExternalEvent($controller);
 });

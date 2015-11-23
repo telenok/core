@@ -778,7 +778,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	
 	public function processExternalEvent($controller)
 	{
-		if ($this->getRequest()->get('external_event') == 'install_package' && ($package = $this->getRequest()->get('package_key')))
+		if ($this->getRequest()->get('backend_external_event') == 'install_package' && ($package = $this->getRequest()->get('package_key')))
 		{
 			$controller->addJsCode('
 				<script>

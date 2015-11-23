@@ -75,7 +75,7 @@ class Repository {
 			{
 				$collection = \Illuminate\Support\Collection::make();
 
-				\Event::fire('telenok.repository.objects-field.view.model', $collection);
+				\Event::fire('telenok.repository.objects-field.view.model', [$collection]);
 
 				$l = [];
 
