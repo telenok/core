@@ -6,7 +6,6 @@ class Processing {
 
     public function getProcessed()
     {
-        $content = '';
         $v = $this->getRawValue();
         $doc = new \DOMDocument();
         
@@ -23,7 +22,7 @@ class Processing {
             {
                 $repositoryWidgets = app('telenok.config.repository')->getWidget(); 
                 
-                $node = $dom->createElement("span", $repositoryWidgets->get($wop->key)
+                $node = $doc->createElement("span", $repositoryWidgets->get($wop->key)
                                                     ->setWidgetModel($wop)
                                                     ->setConfig($wop->structure)
                                                     ->setFrontendController(app('controllerRequest'))
@@ -31,13 +30,13 @@ class Processing {
             }
             else
             {
-                $node = $dom->createElement("span", "");
+                $node = $doc->createElement("span", "");
             }
             
             $widgetInlineElement->parentNode->replaceChild($node, $widgetInlineElement);
         }
         
-        return $content;
+        return mb_substr($doc->saveHTML($doc->getElementsByTagName('body')->item(0)), 6, -7);
     }
 
     public function setRawValue($rawValue)
