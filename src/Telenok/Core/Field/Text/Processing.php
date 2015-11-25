@@ -6,22 +6,38 @@ class Processing {
 
     public function getProcessed()
     {
+        $content = '';
         $v = $this->getRawValue();
-        
         $doc = new \DOMDocument();
+        
         @$doc->loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . "\n" . $v);
         $widgetInline = $doc->getElementsByTagName('widget_inline');
 
-        for ($i = 0; $i < $widgetInline->length; $i++) {
+        for ($i = 0; $i < $widgetInline->length; $i++)
+        {
+            $widgetInlineElement = $widgetInline->item($i);
 
-            $label = $widgetInline->item($i);
-
-            return $label->getAttribute('data-widget-id');
+            $wop = \App\Telenok\Core\Model\Web\WidgetOnPage::withPermission()->find((int)$widgetInlineElement->getAttribute('data-widget-id'));
+            
+            if ($wop)
+            {
+                $repositoryWidgets = app('telenok.config.repository')->getWidget(); 
+                
+                $node = $dom->createElement("span", $repositoryWidgets->get($wop->key)
+                                                    ->setWidgetModel($wop)
+                                                    ->setConfig($wop->structure)
+                                                    ->setFrontendController(app('controllerRequest'))
+                                                    ->getContent());
+            }
+            else
+            {
+                $node = $dom->createElement("span", "");
+            }
+            
+            $widgetInlineElement->parentNode->replaceChild($node, $widgetInlineElement);
         }
         
-        dd();
-        
-        return '';
+        return $content;
     }
 
     public function setRawValue($rawValue)

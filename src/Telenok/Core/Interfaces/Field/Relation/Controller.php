@@ -42,7 +42,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			}
 		}
 
-		throw new \Exception('Please, define one or more keys "' . implode('", "', (array) $param) . '"');
+		throw new \Exception('Please, define one or more keys "' . implode('", "', (array) $param) 
+                . '" for object_field "' . $input->get('code') . '"'
+                . ' and object_type "' . $input->get('field_object_type') . '"'
+                );
 	}
 
 	public function getTitleList($id = null, $closure = null)

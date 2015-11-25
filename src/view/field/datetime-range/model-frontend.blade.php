@@ -35,9 +35,9 @@
 
     $random = str_random();
 	
-	$controllerAction->addCssFile(asset('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.css'), 'datetimepicker', 100);
-	$controllerAction->addJsFile(asset('packages/telenok/core/js/bootstrap/lib/moment.js'), 'moment', 100);
-	$controllerAction->addJsFile(asset('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.js'), 'datetimepicker', 101);
+	$controllerRequest->addCssFile(asset('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.css'), 'datetimepicker', 100);
+	$controllerRequest->addJsFile(asset('packages/telenok/core/js/bootstrap/lib/moment.js'), 'moment', 100);
+	$controllerRequest->addJsFile(asset('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.js'), 'datetimepicker', 101);
 
 ?>
 
@@ -107,7 +107,7 @@ $jsCode = <<<EOF
 </script>
 EOF;
 		
-$controllerAction->addJsCode($jsCode); 
+$controllerRequest->addJsCode($jsCode); 
 
 ?>
  

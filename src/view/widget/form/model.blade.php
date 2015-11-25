@@ -115,7 +115,7 @@ $jsCode = ob_get_contents();
 
 ob_end_clean();
 
-$controllerAction->addJsCode($jsCode); 
+$controllerRequest->addJsCode($jsCode); 
 	
 ?>
 

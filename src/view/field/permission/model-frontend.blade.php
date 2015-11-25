@@ -75,8 +75,8 @@
 
 				<?php
 
-				$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.chosen/chosen.css'), 'chosen', 20);
-				$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.chosen/chosen.js'), 'chosen', 20);
+				$controllerRequest->addCssFile(asset('packages/telenok/core/js/jquery.chosen/chosen.css'), 'chosen', 20);
+				$controllerRequest->addJsFile(asset('packages/telenok/core/js/jquery.chosen/chosen.js'), 'chosen', 20);
 				
 				ob_start();
 
@@ -121,7 +121,7 @@
 
 				ob_end_clean();
 
-				$controllerAction->addJsCode($jsCode); 
+				$controllerRequest->addJsCode($jsCode); 
 
 				?>
 					

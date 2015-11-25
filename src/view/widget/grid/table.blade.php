@@ -89,20 +89,20 @@ $jsCode = ob_get_contents();
 
 ob_end_clean();
 
-$controllerAction->addJsCode($jsCode); 
+$controllerRequest->addJsCode($jsCode); 
 
-$controllerAction->addCssFile(asset('packages/telenok/core/css/jquery-ui.css'), 'jquery-ui', 0); 
-$controllerAction->addCssFile(asset('packages/telenok/core/js/bootstrap/css/bootstrap.min.css'), 'bootstrap', 10);
-$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.css'), 'datatables', 20);
-$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.css'), 'datatables.tabletool', 21);
-$controllerAction->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.css'), 'datatables.bootstrap', 22); 
+$controllerRequest->addCssFile(asset('packages/telenok/core/css/jquery-ui.css'), 'jquery-ui', 0); 
+$controllerRequest->addCssFile(asset('packages/telenok/core/js/bootstrap/css/bootstrap.min.css'), 'bootstrap', 10);
+$controllerRequest->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.css'), 'datatables', 20);
+$controllerRequest->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.css'), 'datatables.tabletool', 21);
+$controllerRequest->addCssFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.css'), 'datatables.bootstrap', 22); 
 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.js'), 'jquery', 0); 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery-ui.js'), 'jquery-ui', 1); 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/bootstrap/js/bootstrap.min.js'), 'bootstrap', 10); 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.js'), 'datatables', 11); 
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.js'), 'datatables.bootstrap', 15);
-$controllerAction->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.js'), 'datatables.tabletool', 19); 
+$controllerRequest->addJsFile(asset('packages/telenok/core/js/jquery.js'), 'jquery', 0); 
+$controllerRequest->addJsFile(asset('packages/telenok/core/js/jquery-ui.js'), 'jquery-ui', 1); 
+$controllerRequest->addJsFile(asset('packages/telenok/core/js/bootstrap/js/bootstrap.min.js'), 'bootstrap', 10); 
+$controllerRequest->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.js'), 'datatables', 11); 
+$controllerRequest->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.js'), 'datatables.bootstrap', 15);
+$controllerRequest->addJsFile(asset('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.js'), 'datatables.tabletool', 19); 
 
 ?>
 

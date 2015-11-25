@@ -27,13 +27,13 @@ ob_end_clean();
         <meta name="keywords" content="{{$page->translate('keywords_ceo')}}" />
 		<meta name="csrf-token" content="{{ csrf_token() }}" />		
 		
-		@foreach($controllerAction->getCssFile() as $file)
+		@foreach($controllerRequest->getCssFile() as $file)
 
 		<link href="{!! $file['file'] !!}" rel="stylesheet" />
 
 		@endforeach
 		
-		@foreach($controllerAction->getCssCode() as $code)
+		@foreach($controllerRequest->getCssCode() as $code)
 
 		<style>
 
@@ -50,21 +50,21 @@ ob_end_clean();
 		
 		<?php
 
-			//$controllerAction->addCssFile('http://fonts.googleapis.com/css?family=Open+Sans', 'fonts.googleapis');
+			//$controllerRequest->addCssFile('http://fonts.googleapis.com/css?family=Open+Sans', 'fonts.googleapis');
 			
-			//$controllerAction->addJsFile('js/custom.js', 'custom', 10000000);
+			//$controllerRequest->addJsFile('js/custom.js', 'custom', 10000000);
 			
-            $controllerAction->addJsFile('packages/telenok/core/js/jquery.js', 'jquery', 0);
+            $controllerRequest->addJsFile('packages/telenok/core/js/jquery.js', 'jquery', 0);
 
 		?>
 		
-		@foreach($controllerAction->getJsFile() as $file)
+		@foreach($controllerRequest->getJsFile() as $file)
 
 		<script src="{!! $file['file'] !!}"></script>
 
 		@endforeach
 
-		@foreach($controllerAction->getJsCode() as $code)
+		@foreach($controllerRequest->getJsCode() as $code)
 
 			{!! $code !!} 
 

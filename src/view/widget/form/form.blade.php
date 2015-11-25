@@ -60,7 +60,7 @@
 
 			ob_end_clean();
 
-			$controllerAction->addJsCode($jsCode); 
+			$controllerRequest->addJsCode($jsCode); 
 
 			?>
 	</div>
@@ -87,7 +87,7 @@
 
 		ob_end_clean();
 
-		$controllerAction->addJsCode($jsCode); 
+		$controllerRequest->addJsCode($jsCode); 
 
 		?>
 		

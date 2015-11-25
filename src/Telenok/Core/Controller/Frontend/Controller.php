@@ -13,7 +13,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller
     {
         app('view')->composer('*', function($view)
         {
-            $view->with(['controllerAction' => $this]);
+            $view->with(['controllerRequest' => $this]);
+        });
+
+        app()->singleton('controllerRequest', function ($app)
+        {
+            return $this;
         });
     }
 }
