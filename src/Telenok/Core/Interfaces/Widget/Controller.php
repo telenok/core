@@ -148,7 +148,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     
 	public function getNotCachedContent()
 	{
-        return view($this->getFrontendView(), ['controller' => $this, 'frontendController' => $this->getFrontendController()])->render();
+        return view($this->getFrontendView(), ['controller' => $this])->render();
 	}
 
 	public function getBackendView()

@@ -54,7 +54,6 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
                             'key' => $this->getKey(),
                             'rows' => $rows,
                             'controller' => $this,
-                            'frontendController' => $this->getFrontendController(),
                         ])->render();
 	}
 

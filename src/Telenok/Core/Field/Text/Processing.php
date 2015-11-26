@@ -53,6 +53,6 @@ class Processing {
     
     public function __toString()
     {
-        return $this->getRawValue();
+        return (string)$this->getRawValue();
     }
 }

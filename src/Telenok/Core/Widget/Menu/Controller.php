@@ -113,7 +113,6 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
 
         return view($this->getFrontendView(), [
                         'controller' => $this, 
-                        'frontendController' => $this->getFrontendController(),
                         'items' => $items,
                         'nodeIds' => $ids,
                         'menu_type' => $this->menuType,
