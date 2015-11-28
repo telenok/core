@@ -93,14 +93,20 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	}
 
 	public function getCacheKey()
-	{
+	{ 
+        $append = $this->getFrontendView() 
+                    . "." . config('app.locale', config('app.localeDefault'))
+                    . "." . implode('', (array)app('router')->getCurrentRoute()->parameters())
+                    . "." . collect($this->getRequest()->all())->toJson();
+
+        
         if ($this->cacheKey)
         {
-            return $this->cacheKey . $this->getFrontendView() . config('app.locale', config('app.localeDefault'));
+            return $this->cacheKey . $append;
         }
         else if ($m = $this->getWidgetModel())
         {
-            return $m->getKey() . $this->getFrontendView() . config('app.locale', config('app.localeDefault'));
+            return $m->getKey() . $append;
         }
         else
         {
@@ -122,7 +128,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function setCachedContent($param = '')
 	{
-        if (($k = $this->getCacheKey()) !== false && ($t = $this->getCacheTime()))
+        if (($t = $this->getCacheTime()) && ($k = $this->getCacheKey()) !== false)
         {
             \Cache::put($k, $param, $t);
         }
@@ -136,16 +142,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
         if (($content = $this->getCachedContent()) !== false)
         {
-            return $content;
+            return $this->processContent($content);
         }
 
         $content = $this->getNotCachedContent();
 
         $this->setCachedContent($content);
 
-        $content = $this->processContent($content);
-        
-        return $content;
+        return $this->processContent($content);
 	}
     
 	public function getNotCachedContent()
@@ -226,7 +230,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     
     public function getFrontendController()
     {
-        return $this->frontendController;
+        return $this->frontendController ?: app('controllerRequest');
     }
     
 	public function getTemplateContent()

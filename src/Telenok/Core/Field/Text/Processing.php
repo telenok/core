@@ -7,6 +7,7 @@ class Processing {
     public function getProcessed()
     {
         $v = $this->getRawValue();
+        $toRemove = [];
         $doc = new \DOMDocument();
 
         @$doc->loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . "\n" . $v);
@@ -32,8 +33,13 @@ class Processing {
             }
             else
             {
-                $widgetInlineElement->parentNode->removeChild($widgetInlineElement);
+                $toRemove[] = $widgetInlineElement;
             }
+        }
+        
+        foreach($toRemove as $remove)
+        {
+            $remove->parentNode->removeChild($remove);
         }
 
         return mb_substr($doc->saveHTML($doc->getElementsByTagName('body')->item(0)), 6, -7);

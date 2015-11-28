@@ -14,7 +14,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $frontendView = 'core::controller.frontend';
 	protected $backendView = 'core::controller.frontend-container';
 
-	public function __construct()
+    protected $cacheKey = 'frontend-controller';
+
+
+    public function __construct()
 	{
 		$this->languageDirectory = 'controller';
 
@@ -85,8 +88,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	public function getContent()
 	{
 		$content = [];
-
-		$listWidget = app('telenok.config.repository')->getWidget();
+        
 		$pageId = intval(str_replace('page_', '', \Route::currentRouteName()));
 
         try
@@ -98,8 +100,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             app()->abort(404);
         }
 
-        $this->setCacheTime($page->cache_time);
-
         if ($t = $page->translate('template_view'))
         {
             $this->setFrontendView($t);
@@ -108,7 +108,26 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         {
             $this->setFrontendView($controllerTemplate);
         }
+        
+        $this->setCacheTime($page->cache_time);
 
+        
+        if (($content = $this->getCachedContent()) !== false)
+        {
+            return $this->processContent($content);
+        }
+        
+        $content = $this->getNotCachedContent($page);
+
+        $this->setCachedContent($content);
+
+        return $this->processContent($content);
+	}
+    
+	public function getNotCachedContent($page)
+	{
+		$listWidget = app('telenok.config.repository')->getWidget();
+        
         foreach ($this->container as $containerId)
         {
             $page->widget()->active()->get()->filter(function($item) use ($containerId)
@@ -126,10 +145,43 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         }
 
 		return view($this->getFrontendView(), [
-			'page' => $page,
-			'controller' => $this,
-			'content' => $content,
-		])->render();
+                    'page' => $page,
+                    'controller' => $this,
+                    'content' => $content,
+                ])->render();
+    }
+    
+    public function processContent($content = '')
+    {
+        return $content;
+    }
+
+	public function getCacheKey()
+	{        
+            return $this->cacheKey ? $this->cacheKey . $this->getFrontendView() 
+                    . "." . config('app.locale', config('app.localeDefault'))
+                    . "." . implode('', (array)app('router')->getCurrentRoute()->parameters())
+                    . "." . collect($this->getRequest()->all())->toJson() : false;
+	}
+
+	public function getCachedContent()
+	{
+        if (($k = $this->getCacheKey()) !== false)
+        {
+            return \Cache::get($k, false);
+        }
+
+		return false;
+	}
+
+	public function setCachedContent($param = '')
+	{
+        if (($t = $this->getCacheTime()) && ($k = $this->getCacheKey()) !== false)
+        {
+            \Cache::put($k, $param, $t);
+        }
+        
+		return $this;
 	}
 
 	public function hasAddedCssFile($filePath = '', $key = '')
