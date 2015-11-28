@@ -143,6 +143,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
         $this->setCachedContent($content);
 
+        $content = $this->processContent($content);
+        
         return $content;
 	}
     
@@ -150,6 +152,44 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
         return view($this->getFrontendView(), ['controller' => $this])->render();
 	}
+    
+    public function processContent($content = '')
+    {
+        $content = $this->processContentJsCode($content);
+        
+        return $content;
+    }
+
+    public function processContentJsCode($content = '')
+    {
+        $jsCode = '';
+
+        $doc = new \DOMDocument();
+
+        @$doc->loadHTML('<?xml version="1.0" encoding="UTF-8"?><html><body>' . $content);
+
+        $scriptNodes = $doc->getElementsByTagName('script');
+
+        for ($i = 0; $i < $scriptNodes->length; $i++)
+        {
+            $scriptNode = $scriptNodes->item($i);
+
+            if (!$scriptNode->getAttribute('data-skip-moving'))
+            {
+                $jsCode .= $doc->saveHTML($scriptNode);
+            }
+        }
+
+        while($scriptNodes->length)
+        {
+            $scriptNode = $scriptNodes->item(0);
+            $scriptNode->parentNode->removeChild($scriptNode);
+        }
+
+        app('controllerRequest')->addJsCode($jsCode);
+
+        return mb_substr($doc->saveHTML($doc->getElementsByTagName('body')->item(0)), 6, -7);
+    }
 
 	public function getBackendView()
 	{

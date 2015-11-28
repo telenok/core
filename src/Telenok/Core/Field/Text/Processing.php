@@ -8,7 +8,7 @@ class Processing {
     {
         $v = $this->getRawValue();
         $doc = new \DOMDocument();
-        
+
         @$doc->loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . "\n" . $v);
         $widgetInline = $doc->getElementsByTagName('widget_inline');
 
@@ -17,25 +17,25 @@ class Processing {
             $widgetInlineElement = $widgetInline->item($i);
 
             $wop = \App\Telenok\Core\Model\Web\WidgetOnPage::withPermission()->find((int)$widgetInlineElement->getAttribute('data-widget-id'));
-            
+
             if ($wop)
             {
                 $repositoryWidgets = app('telenok.config.repository')->getWidget(); 
-                
+
                 $node = $doc->createElement("span", $repositoryWidgets->get($wop->key)
                                                     ->setWidgetModel($wop)
                                                     ->setConfig($wop->structure)
                                                     ->setFrontendController(app('controllerRequest'))
                                                     ->getContent());
+
+                $widgetInlineElement->parentNode->replaceChild($node, $widgetInlineElement);
             }
             else
             {
-                $node = $doc->createElement("span", "");
+                $widgetInlineElement->parentNode->removeChild($widgetInlineElement);
             }
-            
-            $widgetInlineElement->parentNode->replaceChild($node, $widgetInlineElement);
         }
-        
+
         return mb_substr($doc->saveHTML($doc->getElementsByTagName('body')->item(0)), 6, -7);
     }
 

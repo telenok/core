@@ -35,11 +35,7 @@ ob_end_clean();
 		
 		@foreach($controllerRequest->getCssCode() as $code)
 
-		<style>
-
 			{!! $code !!}
-
-		</style>
 
 		@endforeach		
 
