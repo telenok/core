@@ -72,7 +72,7 @@ return [
     'error.file.update' => 'Ошибка обновления файла :file',
     'error.widget.link.nonexistent' => 'Оригинальный связанный виджет не создан или удален',
 	'error.tab.field.key' => 'Пожалуйста, выберите вкладку. Укажите "Id" или "Code" в поле "field_object_tab" для расположения элемента во вкладке',
-	'error.file.upload.require' => 'Пожалуйста, загрузите обязательный файл в поле ":attribute"',
+	'error.file.upload.required' => 'Пожалуйста, загрузите обязательный файл в поле ":attribute"',
 	'error.access' => 'Извините, в доступе отказано',
 
     'error' => array(

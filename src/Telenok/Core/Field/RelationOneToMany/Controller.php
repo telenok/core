@@ -183,20 +183,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                 catch (\Exception $e) {}
 			}
         }
-        else if ($field->relation_one_to_many_belong_to)
+        else if ($field->relation_one_to_many_belong_to && $v = (int) $input->get($field->code, 0))
 		{
-			try
-			{
-                // just validation input value
-                \App\Telenok\Core\Model\Object\Sequence::getModelByTypeId($field->relation_one_to_many_belong_to)
-                    ->findOrFail((int) $input->get($field->code, 0));
-			}
-            catch (\Exception $e) {}
+            // just validation input value
+            \App\Telenok\Core\Model\Object\Sequence::getModelByTypeId($field->relation_one_to_many_belong_to)
+                ->findOrFail($v);
 		}
 
-        if ($field->rule->get('required') && !$relatedQuery->count())
+        if ($field->required && !$relatedQuery->count())
         {
-            throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError("Field {$field->code} required");
+			throw new \Exception($this->LL('error.field.required', ['attribute' => $field->translate('title')]));
         }
 
         return $model;

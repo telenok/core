@@ -185,15 +185,14 @@
         function removeAllM2M{{$jsUnique}}() 
         {
             jQuery("input.{{$field->code}}_delete_{{$jsUnique}}").remove();
-            
+
             var $table = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
-            
+            var $dt = $table.dataTable();
+                $dt.fnClearTable();
+                $dt.fnDraw();
+
             jQuery('<input type="hidden" class="{{$field->code}}_delete_{{$jsUnique}}" name="{{$field->code}}_delete[]" value="*" />')
-                    .insertBefore($table);
-            
-            jQuery('tbody tr', $table).addClass('line-through red');
-            jQuery('tbody tr button.trash-it i', $table).removeClass('fa fa-trash-o').addClass('fa fa-power-off');
-            jQuery('tbody tr button.trash-it', $table).removeClass('btn-danger').addClass('btn-success');
+                        .insertBefore($table);
         }
 
         function createM2M{{$jsUnique}}(obj, url) 
@@ -239,7 +238,9 @@
                 url: url,
                 method: 'get',
                 dataType: 'json'
-            }).done(function(data) {
+            })
+            .done(function(data) 
+            {
 
                 if (!jQuery('#modal-{{$jsUnique}}').size())
                 {
@@ -272,9 +273,8 @@
 
             var data = $dt.fnGetData($tr[0]);
 
-            $tr.toggleClass('line-through red');
-            jQuery('button.trash-it i', $tr).toggleClass('fa fa-trash-o').toggleClass('fa fa-power-off');
-            jQuery('button.trash-it', $tr).toggleClass('btn-danger').toggleClass('btn-success');
+            var rownum = $dt.fnGetPosition($tr[0]);
+                $dt.fnDeleteRow(rownum);
 
             removeM2M{{$jsUnique}}(data.id);
         }

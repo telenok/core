@@ -1,5 +1,8 @@
 
 <script type="text/javascript">
+    
+    var telenok = telenok || {};
+    
     if (telenok.addDataTable == undefined)
     {
         telenok.addDataTable = function(param)

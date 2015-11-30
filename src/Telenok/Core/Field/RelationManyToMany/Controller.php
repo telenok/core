@@ -135,11 +135,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
         $idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
 
+        $method = camel_case($field->code);
+
 		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
 		{
 			if ( (!empty($idsAdd) || !empty($idsDelete)))
 			{ 
-				$method = camel_case($field->code);
 
 				if (in_array('*', $idsDelete, true))
 				{
@@ -163,6 +164,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 				}
 			}
 		}
+
+        if ($field->required && !$model->{$method}()->count())
+        {
+            throw new \Exception($this->LL('error.field.required', ['attribute' => $field->translate('title')]));
+        }
 
         return $model;
     }
