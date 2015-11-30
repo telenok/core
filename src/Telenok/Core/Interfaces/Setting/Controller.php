@@ -48,6 +48,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     public function validateException()
     {
-        return new \Telenok\Core\Support\Exception\Validate;
+        return new \Telenok\Core\Support\Exception\Validator;
     }
 }

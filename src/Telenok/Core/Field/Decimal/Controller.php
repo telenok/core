@@ -115,6 +115,22 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		return parent::validate($model, $input, $messages);
 	}
 
+    public function preProcess($model, $type, $input)
+    {
+        $rule = ['numeric'];
+
+        if ($input->get('required'))
+        {
+            $rule[] = 'required';
+        }
+
+        $input->put('rule', $rule);
+        $input->put('multilanguage', 0);
+        $input->put('decimal_default', $input->get('decimal_default', null));
+        
+        return parent::preProcess($model, $type, $input);
+    } 
+
     public function postProcess($model, $type, $input)
     {
         $table = $model->fieldObjectType()->first()->getAttribute('code');
@@ -127,19 +143,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 $table->decimal($fieldName)->nullable();
             });
         }
-
-        $field = [];
-        $field['multilanguage'] = 0;
-        $field['rule'][] = 'numeric';
-
-        $field['decimal_default'] = $input->get('decimal_default', null);
-
-        if ($input->get('required'))
-        {
-            $field['rule'][] = 'required';
-        }
-
-        $model->fill($field)->save();
 
         return parent::postProcess($model, $type, $input);
     }

@@ -60,6 +60,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         $input->put('multilanguage', 0);
         $input->put('allow_sort', 0);
 
+		if ($input->get('required'))
+		{
+			$input->put('rule', ['required']);
+		}
+        else
+        {
+			$input->put('rule', []);
+        }
+        
         return parent::preProcess($model, $type, $input);
     }
 

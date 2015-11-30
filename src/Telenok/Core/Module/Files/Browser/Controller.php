@@ -347,7 +347,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 			if ($validator->fails())
 			{
-				throw (new \Telenok\Core\Support\Exception\Validate())->setMessageError($validator->messages());
+				throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError($validator->messages());
 			}
 			
 			$modelPath = $currentDirectory->getRealPath() . DIRECTORY_SEPARATOR . $name;
@@ -383,7 +383,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				), $this->getAdditionalViewParam()))->render()
 			];
 		}
-		catch (\Telenok\Core\Support\Exception\Validate $e)
+		catch (\Telenok\Core\Support\Exception\Validator $e)
 		{
 			throw $e;
 		}
@@ -423,7 +423,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 			if ($validator->fails())
 			{
-				throw (new \Telenok\Core\Support\Exception\Validate())->setMessageError($validator->messages());
+				throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError($validator->messages());
 			}
 
 			if ($modelType == 'directory')
@@ -464,7 +464,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				), $this->getAdditionalViewParam()))->render()
 			];
 		}
-		catch (\Telenok\Core\Support\Exception\Validate $e)
+		catch (\Telenok\Core\Support\Exception\Validator $e)
 		{
 			throw $e;
 		}
@@ -505,7 +505,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
             return ['success' => 1];
 		}
-		catch (\Telenok\Core\Support\Exception\Validate $e)
+		catch (\Telenok\Core\Support\Exception\Validator $e)
 		{
 			throw $e;
 		}

@@ -136,12 +136,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			return $model;
 		}
 
+        $relatedQuery = $model->{camel_case($field->code)}();
+
 		if ($field->relation_one_to_one_has)
 		{
-			$method = camel_case($field->code);
-
-			$relatedQuery = $model->{$method}();
-
 			try
 			{
 				$relatedQuery->getRelated()->findOrFail((int) $input->get($field->code, 0))
@@ -149,6 +147,21 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			}
             catch (\Exception $e) {}
 		}
+        else if ($field->relation_one_to_one_belong_to)
+		{
+			try
+			{
+                // just validation input value
+                \App\Telenok\Core\Model\Object\Sequence::getModelByTypeId($field->relation_one_to_one_belong_to)
+                    ->findOrFail((int) $input->get($field->code, 0));
+			}
+            catch (\Exception $e) {}
+		}
+
+        if ($field->rule->get('required') && !$relatedQuery->count())
+        {
+            throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError("Field {$field->code} required");
+        }
 
 		return $model;
 	}
@@ -178,6 +191,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
 		$input->put('multilanguage', 0);
 		$input->put('allow_sort', 0);
+
+		if ($input->get('required'))
+		{
+			$input->put('rule', ['required']);
+		}
+        else
+        {
+			$input->put('rule', []);
+        }
 
 		return parent::preProcess($model, $type, $input);
 	}
@@ -253,7 +275,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                 'field_order' => $input->get('field_order_belong', $model->field_order),
             ];
 
-            $validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
+            $validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
 
             if ($validator->passes())
             {

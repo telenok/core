@@ -421,7 +421,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function validateException()
     {
-        return new \Telenok\Core\Support\Exception\Validate;
+        return new \Telenok\Core\Support\Exception\Validator;
     } 
     
     public function getActionParam()

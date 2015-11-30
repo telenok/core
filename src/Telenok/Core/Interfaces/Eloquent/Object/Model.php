@@ -444,7 +444,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		
 				if ($validator->fails())
 				{
-					throw (new \Telenok\Core\Support\Exception\Validate())->setMessageError($validator->messages());
+					throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError($validator->messages());
 				}
 
 				if ($type->classController())
@@ -472,7 +472,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 				}
 			});
 		}
-		catch (\Telenok\Core\Support\Exception\Validate $e)
+		catch (\Telenok\Core\Support\Exception\Validator $e)
 		{
 			throw $e;
 		}

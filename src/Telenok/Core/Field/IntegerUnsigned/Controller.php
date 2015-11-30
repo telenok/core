@@ -95,6 +95,32 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         return parent::setModelSpecialAttribute($model, $key, $value);
     }
 
+    public function preProcess($model, $type, $input)
+    {
+        $rule = ['integer'];
+
+        if ($input->get('required'))
+        {
+            $rule[] = 'required';
+        }
+
+        if ($input->get('integer_unsigned_min'))
+        {
+            $rule[] = "min:" . (int)$input->get('integer_unsigned_min');
+        }
+
+        if ($input->get('integer_unsigned_max'))
+        {
+            $rule[] = "max:" . (int)$input->get('integer_unsigned_max');
+        }
+
+        $input->put('rule', $rule);
+        $input->put('multilanguage', 0);
+        $input->put('integer_unsigned_default', $input->get('integer_unsigned_default', null));
+        
+        return parent::preProcess($model, $type, $input);
+    } 
+
     public function postProcess($model, $type, $input)
     {
         $table = $model->fieldObjectType()->first()->code;
@@ -107,29 +133,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 $table->integer($fieldName)->unsigned()->nullable();
             });
         }
-
-        $field = [];
-        $field['multilanguage'] = 0;
-        $field['rule'][] = 'integer';
-
-        $field['integer_unsigned_default'] = $input->get('integer_unsigned_default', null);
-
-        if ($input->get('required'))
-        {
-            $field['rule'][] = 'required';
-        }
-
-        if ($input->get('integer_unsigned_min'))
-        {
-            $field['rule'][] = "min:" . (int)$input->get('integer_unsigned_min');
-        }
-
-        if ($input->get('integer_unsigned_max'))
-        {
-            $field['rule'][] = "max:" . (int)$input->get('integer_unsigned_max');
-        }
-
-        $model->fill($field)->save();
 
         return parent::postProcess($model, $type, $input);
     }

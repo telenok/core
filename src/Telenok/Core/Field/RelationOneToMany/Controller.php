@@ -148,10 +148,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
         $idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
 
+        $method = camel_case($field->code);
+        $relatedQuery = $model->{$method}();
+
         if ((!empty($idsAdd) || !empty($idsDelete)) && $field->relation_one_to_many_has)
         { 
-            $method = camel_case($field->code);
-
             $relatedField = $field->code . '_' . ($relatedTable = $model->getTable());
 
 			if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
@@ -171,10 +172,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 					});
 				}
 
-				$method = camel_case($field->code);
-
-				$relatedQuery = $model->{$method}();
-
 				try
 				{
 					foreach($idsAdd as $id)
@@ -186,10 +183,25 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                 catch (\Exception $e) {}
 			}
         }
+        else if ($field->relation_one_to_many_belong_to)
+		{
+			try
+			{
+                // just validation input value
+                \App\Telenok\Core\Model\Object\Sequence::getModelByTypeId($field->relation_one_to_many_belong_to)
+                    ->findOrFail((int) $input->get($field->code, 0));
+			}
+            catch (\Exception $e) {}
+		}
+
+        if ($field->rule->get('required') && !$relatedQuery->count())
+        {
+            throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError("Field {$field->code} required");
+        }
 
         return $model;
     }
-	
+
     public function preProcess($model, $type, $input)
     {
 		if (!$input->get('relation_one_to_many_belong_to'))
@@ -290,7 +302,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                 'field_order' => $input->get('field_order_belong', $model->field_order),
             ];
 
-            $validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
+            $validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
 
             if ($validator->passes()) 
             {
@@ -325,7 +337,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         {
             \Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));
         }
-
+        
         return parent::postProcess($model, $type, $input);
     }
     

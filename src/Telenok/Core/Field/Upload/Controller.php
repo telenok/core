@@ -396,6 +396,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             $input->put('upload_allow_size', $this->maxSiteDefault); 
         }
 
+		if ($input->get('required'))
+		{
+			$input->put('rule', ['required']);
+		}
+        else
+        {
+			$input->put('rule', []);
+        }
+
         return parent::preProcess($model, $type, $input);
     } 
  
@@ -520,15 +529,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			);
 		}
         catch (\Exception $e) {}
-
-        $fields = []; 
-
-        if ($input->get('required'))
-        {
-            $fields['rule'][] = 'required';
-        }
-
-        $model->fill($fields)->save(); 
 
 		return parent::postProcess($model, $type, $input);
 	}

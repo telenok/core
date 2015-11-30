@@ -6,8 +6,17 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
     public function __construct()
     {
+        app("\App\Telenok\Core\Model\User\User")->find(1442)->storeOrUpdate([
+        //app("\App\Telenok\Core\Model\Web\Page")->find(1343)->storeOrUpdate([
+            'title' => 'Some Title',
+            'one_to' => 1343,
+            //'one_to_user' => 430,
+        ]);
+
+        dd('sssssssssssss');
+
         $this->languageDirectory = 'controller';
-        
+
         $this->middleware('auth.backend', ['except' => ['errorAccessDenied']]);
     }
 

@@ -22,6 +22,16 @@ class Sequence extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 		return app(\App\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType->class_model)->findOrFail($id);
 	}
 
+    public static function getTypeById($id)
+    {
+        return \App\Telenok\Core\Model\Object\Type::where('id', $id)->active()->firstOrFail();
+    } 
+
+    public static function getModelByTypeId($id)
+    {
+        return app(static::getTypeById($id)->class_model);
+    }
+
 	public function delete()
 	{
 		\DB::transaction(function()
@@ -57,7 +67,6 @@ class Sequence extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
     {
         return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_resource_object_sequence');
     }
-
 
     public function aclSubject()
     {

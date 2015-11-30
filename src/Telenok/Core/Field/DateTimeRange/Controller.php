@@ -126,6 +126,20 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         return true;
     }
 
+    public function preProcess($model, $type, $input)
+    {
+		if ($input->get('required'))
+		{
+			$input->put('rule', ['required']);
+		}
+        else
+        {
+			$input->put('rule', []);
+        }
+		
+        return parent::preProcess($model, $type, $input);
+    } 
+
     public function postProcess($model, $type, $input)
     {
         $table = $model->fieldObjectType()->first()->code;
@@ -146,17 +160,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 $table->timestamp($fieldName . '_end')->nullable();
             });
         }
-
-        $fields = []; 
-        
-        $fields['rule'] = [];
-        
-        if ($input->get('required'))
-        {
-            $fields['rule'][] = 'required';
-        }
-
-        $model->fill($fields)->save();
 
         return parent::postProcess($model, $type, $input);
     }

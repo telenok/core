@@ -164,7 +164,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     public function getListFieldContent($field, $item, $type = null)
     {  
         return e(\Str::limit($item->translate((string)$field->code), $field->string_list_size ?: 20));
-    } 
+    }
 
     public function postProcess($model, $type, $input)
     {
@@ -179,10 +179,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			});
 		}
 
-        $fields = []; 
-        
-        $fields['rule'] = [];
-        
+        $fields = ['rule' => []]; 
+
         if ($input->get('required'))
         {
             $fields['rule'][] = 'required';

@@ -448,7 +448,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             }
             else
             {
-                $validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
+                $validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
 
                 if ($validator->passes()) 
                 {

@@ -443,7 +443,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 	public function validateException()
 	{
-		return new \Telenok\Core\Support\Exception\Validate;
+		return new \Telenok\Core\Support\Exception\Validator;
 	}
 
 	public function preProcess($model, $type, $input)

@@ -304,7 +304,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
             return ['success' => 1];
 		}
-		catch (\Telenok\Core\Support\Exception\Validate $e)
+		catch (\Telenok\Core\Support\Exception\Validator $e)
 		{
 			throw $e;
 		}
