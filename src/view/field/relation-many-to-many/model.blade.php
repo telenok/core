@@ -108,7 +108,7 @@
                             retrieve : true,
                             columns : columns,
                             order: [],
-                            pageLength : {{$displayLength}},
+                            pageLength : {{$pageLength}},
                             ajax : '{!! $urlListTable !!}', 
                             buttons: buttons
                         });

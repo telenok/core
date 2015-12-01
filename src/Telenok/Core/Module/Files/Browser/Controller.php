@@ -59,9 +59,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		
 		$directory = new \SplFileInfo($currentDirectory);
         
-		$sEcho = $input->get('sEcho');
+		$draw = $input->get('draw');
         $uniqueId = $input->get('uniqueId');
-        $iDisplayStart = $input->get('iDisplayStart', 0);
+        $pageStart = $input->get('pageStart', 0);
         $iTotalDisplayRecords = $input->get('pageLength', 20);
 		
         $collection = \Symfony\Component\Finder\Finder::create()->in($directory->getPathname());
@@ -122,11 +122,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $iter = -1;
         $iter2 = 0;
         
-        $collection->filter(function($i) use ($iDisplayStart, $iTotalDisplayRecords, &$iter, &$iter2)
+        $collection->filter(function($i) use ($pageStart, $iTotalDisplayRecords, &$iter, &$iter2)
         {
             $iter++;
             
-            if ($iter < $iDisplayStart || $iter > $iDisplayStart + $iTotalDisplayRecords + 1)
+            if ($iter < $pageStart || $iter > $pageStart + $iTotalDisplayRecords + 1)
             {
                 return false;
             }
@@ -187,10 +187,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         return [
             'gridId' => $this->getGridId(),
-            'sEcho' => $sEcho,
+            'draw' => $draw,
             'iTotalRecords' => $iter,
             'iTotalDisplayRecords' => $iter,
-            'aaData' => $content
+            'data' => $content
         ];
     } 
     

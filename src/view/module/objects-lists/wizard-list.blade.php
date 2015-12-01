@@ -31,7 +31,7 @@
                     deferRender : true,
                     JQueryUI : false,
                     dom : "<'row'<'col-md-6'T><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
-                    columns : aoColumns,
+                    columns : columns,
                     buttons : [],
                     language : {
                         paginate : {

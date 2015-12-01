@@ -128,9 +128,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
 
-		$sEcho = $input->get('sEcho');
+		$draw = $input->get('draw');
         $uniqueId = $input->get('uniqueId');
-        $iDisplayStart = $input->get('iDisplayStart', 0);
+        $pageStart = $input->get('pageStart', 0);
         $iTotalDisplayRecords = $input->get('pageLength', 20);
 		
         $filter = (array)$input->get('filter');
@@ -160,10 +160,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         
         return [
             'gridId' => $this->getGridId(),
-            'sEcho' => $sEcho,
+            'draw' => $draw,
             'iTotalRecords' => $collection->count(),
             'iTotalDisplayRecords' => $collection->count(),
-            'aaData' => $content
+            'data' => $content
         ];
     } 
     

@@ -6,7 +6,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 	protected $specialField = [];
 	protected $specialDateField = [];
 	protected $allowMultilanguage = true;
-	protected $displayLength = 5;
+	protected $pageLength = 5;
 	protected $viewModel;
 	protected $viewField;
 	protected $viewFilter;
@@ -180,7 +180,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 					'permissionCreate' => app('auth')->can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
 					'permissionUpdate' => app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
 					'permissionDelete' => app('auth')->can('delete', 'object_field.' . $model->getTable() . '.' . $field->code),
-					'displayLength' => $this->displayLength,
+					'pageLength' => $this->pageLength,
 					'uniqueId' => $uniqueId,
 				],
 				(array)$this->getModelFieldViewVariable($controller, $model, $field, $uniqueId),
@@ -202,9 +202,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 	public function getTableList($id = null, $fieldId = null, $uniqueId = null)
 	{
 		$term = trim($this->getRequest()->input('search.value'));
-		$iDisplayStart = intval($this->getRequest()->input('start', 0));
-		$pageLength = intval($this->getRequest()->input('pageLength', 10));
-		$sEcho = $this->getRequest()->input('sEcho');
+		$pageStart = intval($this->getRequest()->input('start', 0));
+		$pageLength = intval($this->getRequest()->input('pageLength', $this->pageLength));
+		$draw = $this->getRequest()->input('draw');
 		$content = [];
 
 		try
@@ -231,7 +231,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 				});
 			}
 
-			$query->skip($iDisplayStart)->take($this->displayLength + 1);
+			$query->skip($pageStart)->take($pageLength + 1);
 
 			$items = $query->get();
 
@@ -244,7 +244,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 			$canUpdate = app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code);
 
-			foreach ($items->slice(0, $this->displayLength, true) as $k => $item)
+			foreach ($items->slice(0, $pageLength, true) as $k => $item)
 			{
 				$c = [];
 
@@ -259,19 +259,19 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 			}
 
 			return [
-				'sEcho' => $sEcho,
-				'iTotalRecords' => ($iDisplayStart + $items->count()),
-				'iTotalDisplayRecords' => ($iDisplayStart + $items->count()),
-				'aaData' => $content
+				'draw' => $draw,
+				'iTotalRecords' => ($pageStart + $items->count()),
+				'iTotalDisplayRecords' => ($pageStart + $items->count()),
+				'data' => $content
 			];
 		}
 		catch (\Exception $e)
 		{
 			return [
-				'sEcho' => $sEcho,
+				'draw' => $draw,
 				'iTotalRecords' => 0,
 				'iTotalDisplayRecords' => 0,
-				'aaData' => [],
+				'data' => [],
 				'exception' => $e->getMessage(),
 			];
 		}
@@ -290,19 +290,17 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 		foreach ($objectField as $key => $field)
 		{
 			$fields[$field->code] = [
-				"mData" => $field->code,
-				"sTitle" => e($field->translate('title_list')),
-				"mDataProp" => null,
-				"bSortable" => $field->allow_sort ? true : false,
+				"data" => $field->code,
+				"title" => e($field->translate('title_list')),
+				"orderable" => $field->allow_sort ? true : false,
 			];
 
 			if (($key == 1 && $objectField->count() > 1) || $objectField->count() == 1)
 			{
 				$fields['tableManageItem'] = [
-					"mData" => 'tableManageItem',
-					"sTitle" => e($this->LL('action')),
-					"mDataProp" => null,
-					"bSortable" => false,
+					"data" => 'tableManageItem',
+					"title" => e($this->LL('action')),
+					"orderable" => false,
 				];
 			}
 		}

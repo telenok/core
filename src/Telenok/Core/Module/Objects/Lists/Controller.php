@@ -234,7 +234,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $this->getFilterQuery($model, $query); 
 
-        return $query->groupBy($model->getTable() . '.id')->orderBy($model->getTable() . '.updated_at', 'desc')->skip($this->getRequest()->input('iDisplayStart', 0))->take($this->displayLength + 1);
+        return $query->groupBy($model->getTable() . '.id')
+                ->orderBy($model->getTable() . '.updated_at', 'desc')
+                ->skip($this->getRequest()->input('start', 0))
+                ->take($this->getRequest()->input('length', $this->pageLength) + 1);
     }
 
     public function getListJson()
@@ -273,9 +276,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
 
-        $total = $input->get('pageLength', $this->displayLength);
-        $sEcho = $input->get('sEcho');
-        $iDisplayStart = $input->get('iDisplayStart', 0); 
+        $draw = $input->get('draw');
+        $start = $input->get('start', 0); 
+        $length = $input->get('length', $this->pageLength);
 
         try
         {
@@ -294,12 +297,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			}
 
             $model = $this->getModelByTypeId($input->get('typeId', 0)); 
-            
+
             $items = $this->getListItem($model)->get();
 
 			$config = app('telenok.config.repository')->getObjectFieldController();
 
-            foreach ($items->slice(0, $this->displayLength, true) as $item)
+            foreach ($items->slice(0, $length, true) as $item)
             {
                 $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item->getKey().'"><span class="lbl"></span>'];
 
@@ -318,21 +321,21 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         catch (\Exception $e) 
         {
 			return [
+                'data' => [],
+                'draw' => $draw,
                 'gridId' => $this->getGridId(), 
-                'sEcho' => $sEcho,
-                'iTotalRecords' => 0,
-                'iTotalDisplayRecords' => 0,
-                'aaData' => [],
+                'recordsTotal' => 0,
+                'recordsFiltered' => 0,
                 'exception' => $e->getMessage(),
             ];
         } 
 
         return [
             'gridId' => $this->getGridId($model->getTable()), 
-            'sEcho' => $sEcho,
-            'iTotalRecords' => ($iDisplayStart + $items->count()),
-            'iTotalDisplayRecords' => ($iDisplayStart + $items->count()),
-            'aaData' => $content
+            'draw' => $draw,
+            'data' => $content,
+            'recordsTotal' => ($start + $items->count()),
+            'recordsFiltered' => ($start + $items->count()),
         ];
     }
 

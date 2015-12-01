@@ -40,9 +40,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		
 		$list = (array)json_decode(file_get_contents('http://telenok.local/package/lists/json'), true);
 		
-		$sEcho = $request->input('sEcho');
+		$draw = $request->input('draw');
         $uniqueId = $request->input('uniqueId');
-        $iDisplayStart = $request->input('iDisplayStart', 0);
+        $pageStart = $request->input('pageStart', 0);
         $iTotalDisplayRecords = $request->input('pageLength', 20);
 
         foreach($list as $item)
@@ -61,10 +61,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         return [
             'gridId' => $this->getGridId(),
-            'sEcho' => $sEcho,
+            'draw' => $draw,
             'iTotalRecords' => count($list),
             'iTotalDisplayRecords' => count($list),
-            'aaData' => $content
+            'data' => $content
         ];
     } 
 

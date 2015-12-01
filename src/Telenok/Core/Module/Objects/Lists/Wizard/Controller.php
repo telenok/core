@@ -43,7 +43,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         $this->additionalViewParam = parent::getAdditionalViewParam();
 		$this->additionalViewParam['presentation'] = $this->getPresentation();
         $this->additionalViewParam['presentationModuleKey'] = $this->getPresentationModuleKey();
-        $this->additionalViewParam['pageLength'] = $this->displayLength;
+        $this->additionalViewParam['pageLength'] = $this->pageLength;
 
         return $this->additionalViewParam;
     }
@@ -132,8 +132,8 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
         
-        $iDisplayStart = intval($input->get('iDisplayStart', 10));
-        $sEcho = $input->get('sEcho');
+        $pageStart = intval($input->get('pageStart', 10));
+        $draw = $input->get('draw');
 		$id = $input->get('id', 0);
 		$search = trim($input->get('search.value', 0));
 		
@@ -179,7 +179,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 			
 			$config = app('telenok.config.repository')->getObjectFieldController();
 
-            foreach ($items->slice(0, $this->displayLength, true) as $k => $item)
+            foreach ($items->slice(0, $this->pageLength, true) as $k => $item)
             {
                 $put = \Illuminate\Support\Collection::make(); 
 
@@ -197,19 +197,19 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         {
             return [
                 'gridId' => $this->getGridId(), 
-                'sEcho' => $sEcho,
+                'draw' => $draw,
                 'iTotalRecords' => 0,
                 'iTotalDisplayRecords' => 0,
-                'aaData' => []
+                'data' => []
             ];
         }
 
         return [
             'gridId' => $this->getGridId($model->getTable()), 
-            'sEcho' => $sEcho,
-            'iTotalRecords' => ($iDisplayStart + $items->count()),
-            'iTotalDisplayRecords' => ($iDisplayStart + $items->count()),
-            'aaData' => $content
+            'draw' => $draw,
+            'iTotalRecords' => ($pageStart + $items->count()),
+            'iTotalDisplayRecords' => ($pageStart + $items->count()),
+            'data' => $content
         ];
     }
 

@@ -26,7 +26,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
         $this->getFilterQuery($model, $query); 
 
-        return $query->groupBy($model->getTable() . '.id')->orderBy($model->getTable() . '.updated_at', 'desc')->skip($this->getRequest()->input('iDisplayStart', 0))->take($this->displayLength + 1);
+        return $query->groupBy($model->getTable() . '.id')
+                    ->orderBy($model->getTable() . '.updated_at', 'desc')
+                    ->skip($this->getRequest()->input('start', 0))
+                    ->take($this->getRequest()->input('length', $this->pageLength) + 1);
     }
 
     public function postProcess($model, $type, $input)

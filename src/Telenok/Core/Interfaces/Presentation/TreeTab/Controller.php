@@ -32,7 +32,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     protected $modelListClass = '';
     protected $modelTreeClass = ''; 
 
-    protected $displayLength = 15;
+    protected $pageLength = 15;
     protected $additionalViewParam = [];
 	
     protected $lockInListPeriod = 3600;
@@ -446,7 +446,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 			'presentationModuleKey' => $this->getPresentationModuleKey(),
             'controller' => $this,
             'uniqueId' => str_random(),
-            'pageLength' => $this->displayLength
+            'pageLength' => $this->pageLength
         ])->render();
     } 
 
@@ -565,7 +565,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         $this->getFilterQuery($model, $query); 
         
-        return $query->groupBy($model->getTable() . '.id')->orderBy($model->getTable() . '.updated_at', 'desc')->skip($this->getRequest()->input('iDisplayStart', 0))->take($this->displayLength + 1);
+        return $query->groupBy($model->getTable() . '.id')
+                ->orderBy($model->getTable() . '.updated_at', 'desc')
+                ->skip($this->getRequest()->input('start', 0))
+                ->take($this->getRequest()->input('length', $this->pageLength) + 1);
     }
 
     public function getListItemProcessed($field, $item)
@@ -752,14 +755,14 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
 
-        $total = $input->get('pageLength', $this->displayLength);
-        $sEcho = $input->get('sEcho');
-        $iDisplayStart = $input->get('iDisplayStart', 0);
+        $draw = $input->get('draw');
+        $start = $input->get('start', 0);
+        $length = $input->get('length', $this->pageLength);
 
         $model = $this->getModelList();
         $items = $this->getListItem($model)->get();
 
-        foreach ($items->slice(0, $this->displayLength, true) as $k => $item)
+        foreach ($items->slice(0, $length, true) as $k => $item)
         {
             $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item->getKey().'"><span class="lbl"></span>'];
 
@@ -774,11 +777,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
         }
 
         return [
+            'draw' => $draw,
+            'data' => $content,
             'gridId' => $this->getGridId(),
-            'sEcho' => $sEcho,
-            'iTotalRecords' => ($iDisplayStart + $items->count()),
-            'iTotalDisplayRecords' => ($iDisplayStart + $items->count()),
-            'aaData' => $content
+            'recordsTotal' => ($start + $items->count()),
+            'recordsFiltered' => ($start + $items->count()),
         ];
     } 
 

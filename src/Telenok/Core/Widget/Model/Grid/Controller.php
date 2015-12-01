@@ -15,7 +15,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $routerCreate = 'telenok.widget.form.create';
 	protected $routerEdit = 'telenok.widget.form.edit';
 	protected $routerDelete = 'telenok.widget.form.delete';
-	protected $displayLength = 10;
+	protected $pageLength = 10;
 	protected $enableColumnSelect = true;
 	protected $enableColumnAction = true;
 
@@ -149,9 +149,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             throw new \LogicException($this->LL('error.access.read'));
         } 
  
-        $total = $input->get('pageLength', $this->getDisplayLength());
-        $sEcho = $input->get('sEcho');
-        $iDisplayStart = $input->get('iDisplayStart', 0); 
+        $total = $input->get('pageLength', $this->getpageLength());
+        $draw = $input->get('draw');
+        $pageStart = $input->get('pageStart', 0); 
 		
         $query = $this->getModel()->withTrashed()->select($this->getModel()->getTable() . '.*')->withPermission();
 
@@ -206,14 +206,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
         $items = $query->groupBy($this->getModel()->getTable() . '.id')
 				->orderBy($this->getModel()->getTable() . '.updated_at', 'desc')
-				->skip($this->getRequest()->input('iDisplayStart', 0))
-				->take($this->getDisplayLength() + 1)->get();
+				->skip($this->getRequest()->input('pageStart', 0))
+				->take($this->getpageLength() + 1)->get();
 		
 		$config = app('telenok.config.repository')->getObjectFieldController();
 
 		$content = [];
 		
-		foreach ($items->slice(0, $this->getDisplayLength(), true) as $item)
+		foreach ($items->slice(0, $this->getpageLength(), true) as $item)
 		{
             $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item->getKey().'"><span class="lbl"></span>'];
 
@@ -228,10 +228,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 
         return [
-            'sEcho' => $sEcho,
-            'iTotalRecords' => ($iDisplayStart + $items->count()),
-            'iTotalDisplayRecords' => ($iDisplayStart + $items->count()),
-            'aaData' => $content
+            'draw' => $draw,
+            'iTotalRecords' => ($pageStart + $items->count()),
+            'iTotalDisplayRecords' => ($pageStart + $items->count()),
+            'data' => $content
         ];
 	}
 	
@@ -505,7 +505,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->routerCreate = $this->getConfig('routerCreate', $this->routerCreate);
 		$this->routerEdit = $this->getConfig('routerEdit', $this->routerEdit);
 		$this->routerDelete = $this->getConfig('routerDelete', $this->routerDelete);
-		$this->displayLength = $this->getConfig('displayLength', $this->displayLength);
+		$this->pageLength = $this->getConfig('pageLength', $this->pageLength);
 		$this->enableColumnSelect = $this->getConfig('enableColumnSelect', $this->enableColumnSelect);
 		$this->enableColumnAction = $this->getConfig('enableColumnAction', $this->enableColumnAction);
 
@@ -550,8 +550,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return app($this->getModelType()->class_model);
     }
 	
-	public function getDisplayLength()
+	public function getpageLength()
 	{
-		return $this->displayLength;
+		return $this->pageLength;
 	}
 }
