@@ -43,7 +43,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		$sEcho = $request->input('sEcho');
         $uniqueId = $request->input('uniqueId');
         $iDisplayStart = $request->input('iDisplayStart', 0);
-        $iTotalDisplayRecords = $request->input('iDisplayLength', 20);
+        $iTotalDisplayRecords = $request->input('pageLength', 20);
 
         foreach($list as $item)
         {

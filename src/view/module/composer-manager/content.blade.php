@@ -56,63 +56,61 @@
 
     <script type="text/javascript">
 
-		var currentDirectory{{$jsContentUnique}} = '{!! $currentDirectory !!}';
+        (function()
+        {
+            var currentDirectory{{$jsContentUnique}} = '{!! $currentDirectory !!}';
 
-        var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
-        var aoColumns = [];
+            var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
+            var columns = [];
 
-                aoColumns.push({ "mData": "tableCheckAll", "sTitle": 
-                        '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
-                        + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
-                        + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
-                        + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
-                        + '<span class="lbl">' 
-                        + '</span></label>',
-                        "mDataProp": null, "sClass": "center", "sWidth": "20px", 
-                        "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
-                        "bSortable": false});
+            columns.push({ "mData": "tableCheckAll", "sTitle": 
+                    '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
+                    + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
+                    + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
+                    + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
+                    + '<span class="lbl">' 
+                    + '</span></label>',
+                    "mDataProp": null, "sClass": "center", "sWidth": "20px", 
+                    "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
+                    "bSortable": false});
                 
-                aoColumns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false });
+            columns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false });
 
-                @foreach((array)$fields as $key => $field)
-                    @if ($key==0)
-                        aoColumns.push({ "mData": "{{ $field}}", "sTitle": "{{ $controller->LL("field." . $field) }}", "bSortable": false });
-                    @else
-                        aoColumns.push({ "mData": "{{ $field}}", "sTitle": "{{ $controller->LL("field." . $field) }}", "bSortable": false });
-                    @endif
-                @endforeach
+            @foreach((array)$fields as $key => $field)
+                @if ($key==0)
+                    columns.push({ "mData": "{{ $field}}", "sTitle": "{{ $controller->LL("field." . $field) }}", "bSortable": false });
+                @else
+                    columns.push({ "mData": "{{ $field}}", "sTitle": "{{ $controller->LL("field." . $field) }}", "bSortable": false });
+                @endif
+            @endforeach
 
-                presentation.addDataTable({
-                    aoColumns : aoColumns,
-					aaSorting: [],
-                    sAjaxSource : '{!! $controller->getRouterList(['uniqueId' => $jsContentUnique]) !!}',
-                    domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
-					aButtons: [
-						{
-							"sExtends": "collection",
-							'sButtonClass': 'btn btn-sm btn-success',
-							"sButtonText": "<i class='fa fa-list'></i> {{ $controller->LL('list.btn.action') }}",
-							"aButtons": [ 
-								{
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-pencil'></i> {{ $controller->LL('list.btn.edit.composer.json') }}",
-									"fnClick": function(nButton, oConfig, oFlash) 
-									{ 
-										telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-											url: '{!! route("telenok.module.composer-manager.composer-json.edit") !!}'
-										}); 
-									}
-								}
-							]
-						}
-					],
+            presentation.addDataTable({
+                columns : columns,
+                order : [],
+                ajax : '{!! $controller->getRouterList(['uniqueId' => $jsContentUnique]) !!}',
+                domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
+                buttons: [
+                    {
+                        text : "<i class='fa fa-list'></i> {{ $controller->LL('list.btn.action') }}",
+                        className : 'btn btn-sm btn-success',
+                        buttons : [ 
+                            {
+                                text : "<i class='fa fa-pencil'></i> {{ $controller->LL('list.btn.edit.composer.json') }}",
+                                action : function (e, dt, button, config)
+                                { 
+                                    telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
+                                        url: '{!! route("telenok.module.composer-manager.composer-json.edit") !!}'
+                                    }); 
+                                }
+                            }
+                        ]
+                    }
+                ],
+                tableListBtnCreate: false,
+                tableListBtnSelected: false
+            });
+        })();
 
-                    tableListBtnCreate: false,
-
-					tableListBtnSelected: false
-                });
-                
-                
         function presentationTableFilter{{$jsContentUnique}}(dom_obj, erase)
         {
 			var $form = jQuery(dom_obj).closest('form');
@@ -130,9 +128,7 @@
 
             
             jQuery('#telenok-{{$controller->getPresentation()}}-presentation-grid-{{$gridId}}')
-                .dataTable()
-                .fnReloadAjax('{!! $controller->getRouterList() !!}?' + (erase ? '' : jQuery.param($form.serializeArray())));
+                .DataTable().ajax.url('{!! $controller->getRouterList() !!}?' + (erase ? '' : jQuery.param($form.serializeArray()))).load();
         }
-                
     </script>
 </div>

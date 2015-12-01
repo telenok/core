@@ -91,7 +91,7 @@
                                             "sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.refresh') }}",
                                             'sButtonClass': 'btn-sm',
                                             "fnClick": function(nButton, oConfig, oFlash) {
-                                                jQuery('#' + "telenok-{{$controller->getKey()}}-{{$jsUnique}}").dataTable().fnReloadAjax();
+                                                jQuery('#' + "telenok-{{$controller->getKey()}}-{{$jsUnique}}").DataTable().ajax.reload();
                                             }
                                         });
 
@@ -113,7 +113,7 @@
 									bRetrieve : true,
 									aoColumns : aoColumns,
 									aaSorting: [],
-									iDisplayLength : {{$displayLength}},
+									pageLength : {{$displayLength}},
 									sAjaxSource : '{!! $urlListTable !!}', 
 									oTableTools: {
 										aButtons : aButtons

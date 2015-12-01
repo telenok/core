@@ -219,7 +219,7 @@
 								"sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controller->LL('list.btn.refresh') }}",
 								'sButtonClass': 'btn-sm',
 								"fnClick": function(nButton, oConfig, oFlash) {
-									jQuery('#' + param.domId).dataTable().fnReloadAjax();
+									jQuery('#' + param.domId).DataTable().ajax.reload();
 								}
 							});
 					}
@@ -356,36 +356,36 @@
 
 				param = jQuery.extend({}, {
                     "searchDelay": 1000,
-					"multipleSelection": true,
-					"aoColumns": [],
+					//"multipleSelection": true,
+					"columns": [],
 					"autoWidth": false,
-					"bProcessing": true,
-					"bServerSide": param.sAjaxSource ? true : false,
-					"bDeferRender": '',
-					"bJQueryUI": false,
-					"iDisplayLength": {{ $iDisplayLength }},
-					"sDom": "<'row'<'col-md-9'T><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
+					"processing": true,
+					"serverSide": param.sAjaxSource ? true : false,
+					"deferRender": true,
+					"JQueryUI": false,
+					"pageLength": {{ $pageLength }},
+					"dom": "<'row'<'col-md-9'T><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
 					"oTableTools": {
 						@section('tableListBtn')
 						"aButtons": aButtons
 						@show 				
 					},
-					"oLanguage": {
-						"oPaginate": {
-							"sNext": "{{ trans('core::default.btn.next') }}",
-							"sPrevious": "{{ trans('core::default.btn.prev') }}", 
+					"language": {
+						"paginate": {
+							"next": "{{ trans('core::default.btn.next') }}",
+							"previous": "{{ trans('core::default.btn.prev') }}", 
 						},
-						"sEmptyTable": "{{ trans('core::default.table.empty') }}",
-						"sSearch": "{{ trans('core::default.btn.search') }} ",
-						"sSearchPlaceholder": "{{ trans('core::default.table.placeholder.search') }} ",
-						"sInfo": "{{ trans('core::default.table.showed') }}",
-						"sInfoEmpty": "{{ trans('core::default.table.empty.showed') }}",
-						"sZeroRecords": "{{ trans('core::default.table.empty.filtered') }}",
-						"sInfoFiltered": "",
+						"emptyTable": "{{ trans('core::default.table.empty') }}",
+						"search": "{{ trans('core::default.btn.search') }} ",
+						"searchPlaceholder": "{{ trans('core::default.table.placeholder.search') }} ",
+						"info": "{{ trans('core::default.table.showed') }}",
+						"infoEmpty": "{{ trans('core::default.table.empty.showed') }}",
+						"zeroRecords": "{{ trans('core::default.table.empty.filtered') }}",
+						"infoFiltered": "",
 					}
 				}, param);
 
-				jQuery('#' + param.domId).dataTable(param);
+				jQuery('#' + param.domId).DataTable(param);
 
 				return this;
 			},
@@ -394,8 +394,7 @@
 				if (jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId).size())
 				{
 					jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId)
-							.dataTable()
-							.fnReloadAjax(param.url + (param.data ? '?' + jQuery.param(param.data) : ''));
+                        .DataTable().ajax.url(param.url + (param.data ? '?' + jQuery.param(param.data) : '')).load();
 				}
 				return this;
 			},

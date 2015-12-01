@@ -38,7 +38,7 @@ ob_start();
 				"bDeferRender": '',
 				"bJQueryUI": false,
 				"sAjaxSource": "{!! $controller->getUrlList()!!}",
-				"iDisplayLength": {{ $controller->getDisplayLength() }},
+				"pageLength": {{ $controller->getDisplayLength() }},
 				"sDom": "<'row'<'col-md-8'T><'col-md-4'f>r>t<'row'<'col-md-5'T><'col-md-6'p>>",
 				"oTableTools": {
 					"aButtons": aButtons

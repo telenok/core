@@ -60,7 +60,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                             "sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controller->LL('list.btn.refresh') }}",
                             'sButtonClass': 'btn-sm',
                             "fnClick": function(nButton, oConfig, oFlash) {
-                                jQuery('#' + param.domId).dataTable().fnReloadAjax();
+                                jQuery('#' + param.domId).DataTable().ajax.reload();
                             }
                         });
                 }
@@ -203,7 +203,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                 "bServerSide": param.sAjaxSource ? true : false,
                 "bDeferRender": '',
                 "bJQueryUI": false,
-                "iDisplayLength": {{ $iDisplayLength }},
+                "pageLength": {{ $pageLength }},
                 "sDom": "<'row'<'col-md-6'T><'col-md-6'f>r>t<'row'<'col-md-6'T><'col-md-6'p>>",
                 "oTableTools": {
                     @section('tableListBtn')
@@ -233,8 +233,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
             if (jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId).size())
             {
                 jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId)
-                        .dataTable()
-                        .fnReloadAjax(param.url + (param.data ? '?' + jQuery.param(param.data) : ''));
+                    .DataTable().ajax.url(param.url + (param.data ? '?' + jQuery.param(param.data) : '')).load();
             }
             return this;
         },

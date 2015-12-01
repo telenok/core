@@ -47,7 +47,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 						"sButtonClass": "btn-success btn-sm",
 						"fnClick": function(nButton, oConfig, oFlash) 
 						{
-							jQuery(this.dom.table).dataTable().fnReloadAjax();
+							jQuery(this.dom.table).DataTable().ajax.reload();
 						}					
 					';
 			}
@@ -149,7 +149,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             throw new \LogicException($this->LL('error.access.read'));
         } 
  
-        $total = $input->get('iDisplayLength', $this->getDisplayLength());
+        $total = $input->get('pageLength', $this->getDisplayLength());
         $sEcho = $input->get('sEcho');
         $iDisplayStart = $input->get('iDisplayStart', 0); 
 		
@@ -473,7 +473,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 						"sButtonClass": "btn-success btn-sm",
 						"fnClick": function(nButton, oConfig, oFlash) 
 						{
-							jQuery(this.dom.table).dataTable().fnReloadAjax();
+							jQuery(this.dom.table).DataTable().ajax.reload();
 						}					
 					';
 			}

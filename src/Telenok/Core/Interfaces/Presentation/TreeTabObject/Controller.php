@@ -135,7 +135,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
         
-        $total = $input->get('iDisplayLength', $this->displayLength);
+        $total = $input->get('pageLength', $this->displayLength);
         $sEcho = $input->get('sEcho');
         $iDisplayStart = $input->get('iDisplayStart', 0); 
 

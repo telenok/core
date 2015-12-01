@@ -27,7 +27,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 					'presentation' => $this->getPresentation(),
 					'presentationModuleKey' => $this->getPresentationModuleKey(),
 					'controller' => $this,
-					'iDisplayLength' => $this->displayLength,
+					'pageLength' => $this->displayLength,
 					'uniqueId' => str_random()
 				])->render();
 	}

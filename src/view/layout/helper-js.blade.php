@@ -10,30 +10,27 @@
             jQuery('#' + param.domId).dataTable(
                 jQuery.extend({}, {
                     "searchDelay": 1000,
-                    "multipleSelection": true,
-                    "aoColumns": [],
+                    "columns": [],
                     "autoWidth": false,
-                    "bProcessing": true,
-                    "bServerSide": param.sAjaxSource ? true : false,
-                    "bDeferRender": '',
-                    "bJQueryUI": false,
-                    "iDisplayLength": (param.iDisplayLength ? param.iDisplayLength : 20),
-                    "sDom": "<'row'<'col-md-9'T><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
-                    "oTableTools": {
-                        "aButtons": param.aButtons || []
-                    },
-                    "oLanguage": {
-                        "oPaginate": {
-                            "sNext": "{{ trans('core::default.btn.next') }}",
-                            "sPrevious": "{{ trans('core::default.btn.prev') }}", 
+                    "processing": true,
+                    "serverSide": param.ajax ? true : false,
+                    "deferRender": true,
+                    "jQueryUI": false,
+                    "pageLength": (param.pageLength ? param.pageLength : 20),
+                    "dom": "<'row'<'col-md-9'B><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
+                    "buttons": param.aButtons || [],
+                    "language": {
+                        "paginate": {
+                            "next": "{{ trans('core::default.btn.next') }}",
+                            "previous": "{{ trans('core::default.btn.prev') }}", 
                         },
-                        "sEmptyTable": "{{ trans('core::default.table.empty') }}",
-                        "sSearch": "{{ trans('core::default.btn.search') }} ",
-                        "sSearchPlaceholder": "{{ trans('core::default.table.placeholder.search') }} ",
-                        "sInfo": "{{ trans('core::default.table.showed') }}",
-                        "sInfoEmpty": "{{ trans('core::default.table.empty.showed') }}",
-                        "sZeroRecords": "{{ trans('core::default.table.empty.filtered') }}",
-                        "sInfoFiltered": ""
+                        "emptyTable": "{{ trans('core::default.table.empty') }}",
+                        "search": "{{ trans('core::default.btn.search') }} ",
+                        "searchPlaceholder": "{{ trans('core::default.table.placeholder.search') }} ",
+                        "info": "{{ trans('core::default.table.showed') }}",
+                        "infoEmpty": "{{ trans('core::default.table.empty.showed') }}",
+                        "zeroRecords": "{{ trans('core::default.table.empty.filtered') }}",
+                        "infoFiltered": ""
                     }
                 }, param));
         };

@@ -68,95 +68,92 @@
             
                 <script type="text/javascript">
 
+                (function()
+                {
                     jQuery('ul.nav-tabs#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab a:first').tab('show');
 
                     var presentation = telenok.getPresentation('{{ $controllerParent->getPresentationModuleKey()}}');
 
-                    var aoColumns = []; 
-                    var aButtons = []; 
-					
-							@foreach($controller->getFormModelTableColumn($field, $model, $jsUnique) as $row)
-                            aoColumns.push({!! json_encode($row) !!});
-							@endforeach 
+                    var columns = []; 
+                    var buttons = []; 
 
-							aButtons.push({
-                                            "sExtends": "text",
-                                            "sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.refresh') }}",
-                                            'sButtonClass': 'btn-sm',
-                                            "fnClick": function(nButton, oConfig, oFlash) {
-                                                jQuery('#' + "telenok-{{$controller->getKey()}}-{{$jsUnique}}").dataTable().fnReloadAjax();
-                                            }
-                                        });
+                    @foreach($controller->getFormModelTableColumn($field, $model, $jsUnique) as $row)
+                    columns.push({!! json_encode($row) !!});
+                    @endforeach 
+                    
+                    if (columns.length)
+                    {
+                        buttons.push({
+                            text : "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.refresh') }}",
+                            className : 'btn-sm',
+                            action : function (e, dt, button, config)
+                            {
+                                dt.ajax.reload();
+                            }
+                        });
 
-							@if ($model->exists && $field->allow_update && $permissionUpdate)
-								aButtons.push({
-                                            "sExtends": "text",
-                                            "sButtonText": "<i class='fa fa-trash-o smaller-90'></i> {{ $controllerParent->LL('list.btn.delete.all') }}",
-                                            'sButtonClass': 'btn-sm btn-danger',
-                                            "fnClick": function(nButton, oConfig, oFlash) {
-                                                removeAllM2M{{$jsUnique}}();
-                                            }
-                                        });
-							@endif
+                        @if ($model->exists && $field->allow_update && $permissionUpdate)
+                            buttons.push({
+                                text : "<i class='fa fa-trash-o smaller-90'></i> {{ $controllerParent->LL('list.btn.delete.all') }}",
+                                className : 'btn-sm btn-danger',
+                                action : function (e, dt, button, config)
+                                {
+                                    removeAllM2M{{$jsUnique}}();
+                                }
+                            });
+                        @endif
 
-							if (aoColumns.length)
-							{
-                                telenok.addDataTable({
-									domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}",
-									bRetrieve : true,
-									aoColumns : aoColumns,
-									aaSorting: [],
-									iDisplayLength : {{$displayLength}},
-									sAjaxSource : '{!! $urlListTable !!}', 
-									oTableTools: {
-										aButtons : aButtons
-									}
-								});
-							}
-							
-							aButtons = [];
+                        telenok.addDataTable({
+                            domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}",
+                            retrieve : true,
+                            columns : columns,
+                            order: [],
+                            pageLength : {{$displayLength}},
+                            ajax : '{!! $urlListTable !!}', 
+                            buttons: buttons
+                        });
+                    }
+                    
+                    buttons = [];
 
-							@if ( 
-									((!$model->exists && $field->allow_create && $permissionCreate) 
-										|| 
-									($model->exists && $field->allow_update && $permissionUpdate)) && !$disabledCreateLinkedType
-								)
-							aButtons.push({
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
-									'sButtonClass': 'btn-success btn-sm',
-									"fnClick": function(nButton, oConfig, oFlash) {
-										createM2M{{$jsUnique}}(this, '{!! $urlWizardCreate !!}');
-									}
-								});
-							@endif	
+                    if (columns.length)
+                    {
+                        @if ( 
+                                ((!$model->exists && $field->allow_create && $permissionCreate) 
+                                    || 
+                                ($model->exists && $field->allow_update && $permissionUpdate)) && !$disabledCreateLinkedType
+                            )
+                        buttons.push({
+                            text : "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
+                            className : 'btn-success btn-sm',
+                            action : function (e, dt, button, config)
+                            {
+                                createM2M{{$jsUnique}}('{!! $urlWizardCreate !!}');
+                            }
+                        });
+                        @endif	
 
-							aButtons.push({
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.choose') }}",
-									'sButtonClass': 'btn-yellow btn-sm',
-									"fnClick": function(nButton, oConfig, oFlash) {
-										chooseM2M{{$jsUnique}}(this, '{!! $urlWizardChoose !!}');
-									}
-								});
-
-
-							if (aoColumns.length)
-							{
-								telenok.addDataTable({
-									domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition",
-									sDom: "<'row'<'col-md-6'T>r>t<'row'<'col-md-6'T>>",
-									bRetrieve : true,
-									aoColumns : aoColumns,
-									aaSorting: [],
-									aaData : [], 
-									oTableTools: {
-										aButtons : aButtons
-									}
-								});
-							}
+                        buttons.push({
+                            text : "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.choose') }}",
+                            className : 'btn-yellow btn-sm',
+                            action : function (e, dt, button, config)
+                            {
+                                chooseM2M{{$jsUnique}}('{!! $urlWizardChoose !!}');
+                            }
+                        });
+                            
+                        telenok.addDataTable({
+                            domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition",
+                            dom: "<'row'<'col-md-6'T>r>t<'row'<'col-md-6'T>>",
+                            retrieve : true,
+                            columns : columns,
+                            order: [],
+                            data : [], 
+                            buttons: buttons
+                        });
+                    }
+                })();
                 </script>
- 
             </div>
         </div>
     </div>
@@ -187,15 +184,13 @@
             jQuery("input.{{$field->code}}_delete_{{$jsUnique}}").remove();
 
             var $table = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
-            var $dt = $table.dataTable();
-                $dt.fnClearTable();
-                $dt.fnDraw();
+            $table.DataTable().clear().draw('page');
 
             jQuery('<input type="hidden" class="{{$field->code}}_delete_{{$jsUnique}}" name="{{$field->code}}_delete[]" value="*" />')
                         .insertBefore($table);
         }
 
-        function createM2M{{$jsUnique}}(obj, url) 
+        function createM2M{{$jsUnique}}(url) 
         {
             jQuery.ajax({
                 url: url,
@@ -214,11 +209,8 @@
                 {
 					data.tableManageItem = '<button class="btn btn-minier btn-danger trash-it" title="{{$controller->LL('list.btn.delete')}}" onclick="deleteM2MAddition{{$jsUnique}}(this); return false;">'
                         + '<i class="fa fa-trash-o"></i></button>';
-				
-                    var $dt = jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").dataTable();
-                    var a = $dt.fnAddData(data, true);
-                    var oSettings = $dt.fnSettings();
-                    var nTr = oSettings.aoData[ a[0] ].nTr;
+
+                    jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").DataTable().row.add(data).draw();
 
                     addM2M{{$jsUnique}}(data.id);
                 });
@@ -268,30 +260,28 @@
 
         function deleteTableRow{{$field->code}}{{$uniqueId}}(obj) 
         {
-            var $dt = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}").dataTable();
-            var $tr = jQuery(obj).closest("tr");
+            var $dt = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}").DataTable();
+            var row = $dt.row( jQuery(obj).parents('tr') )
+            var data = row.data();
 
-            var data = $dt.fnGetData($tr[0]);
-
-            var rownum = $dt.fnGetPosition($tr[0]);
-                $dt.fnDeleteRow(rownum);
+                row.remove().draw();
 
             removeM2M{{$jsUnique}}(data.id);
         }
 
         function deleteM2MAddition{{$jsUnique}}(obj) 
         {
-            var $dt = jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").dataTable();
-            var $tr = jQuery(obj).closest("tr");
+            var $dt = jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").DataTable();
             
-            var data = $dt.fnGetData($tr[0]);
-            var rownum = $dt.fnGetPosition($tr[0]);
-                $dt.fnDeleteRow(rownum);
+            var row = $dt.row( jQuery(obj).parents('tr') )
+            var data = row.data();
+
+                row.remove().draw(); 
             
             removeM2M{{$jsUnique}}(data.id);
         } 
 
-        function chooseM2M{{$jsUnique}}(obj, url) 
+        function chooseM2M{{$jsUnique}}(url) 
         {
             jQuery.ajax({
                 url: url,
@@ -311,10 +301,7 @@
 					data.tableManageItem = '<button class="btn btn-minier btn-danger trash-it" title="{{$controller->LL('list.btn.delete')}}" onclick="deleteM2MAddition{{$jsUnique}}(this); return false;">'
                         + '<i class="fa fa-trash-o"></i></button>';
 					
-                    var $dt = jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").dataTable();
-                    var a = $dt.fnAddData(data, true);
-                    var oSettings = $dt.fnSettings();
-                    var nTr = oSettings.aoData[ a[0] ].nTr;
+                    jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").DataTable().row.add(data).draw();
 
                     addM2M{{$jsUnique}}(data.id);
                 });
@@ -327,5 +314,4 @@
                 });
             });
         }
-
     </script>

@@ -203,7 +203,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 	{
 		$term = trim($this->getRequest()->input('sSearch'));
 		$iDisplayStart = intval($this->getRequest()->input('iDisplayStart', 0));
-		$iDisplayLength = intval($this->getRequest()->input('iDisplayLength', 10));
+		$pageLength = intval($this->getRequest()->input('pageLength', 10));
 		$sEcho = $this->getRequest()->input('sEcho');
 		$content = [];
 

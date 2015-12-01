@@ -140,7 +140,6 @@
 
             
             jQuery('#telenok-{{$controller->getPresentation()}}-presentation-grid-{{$gridId}}')
-                .dataTable()
-                .fnReloadAjax('{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}&' + (erase ? '' : jQuery.param($form.serializeArray())));
+                .DataTable().ajax.url('{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}&' + (erase ? '' : jQuery.param($form.serializeArray()))).load();
         }
     </script>

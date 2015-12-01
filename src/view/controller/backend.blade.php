@@ -16,74 +16,84 @@
 @section('body')
     <body class="no-skin telenok-backend">
         <div class="navbar navbar-default navbar-fixed-top">
-            <div class="navbar-inner">
-				<a class="navbar-brand" href="telenok/"><small>{{config('app.backend.brand')}}</small></a>
-				<ul class="nav ace-nav pull-right">
+            <div id="navbar-container" class="navbar-container">
+                <button data-target="#sidebar" id="menu-toggler" class="navbar-toggle menu-toggler pull-left" type="button">
+					<span class="sr-only">Toggle sidebar</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+                <div class="navbar-header pull-left">
+                    <a class="navbar-brand" href="telenok/"><small>{{config('app.backend.brand')}}</small></a>
+                </div>
+                <div class="navbar-buttons navbar-header pull-right" role="navigation">
+                    <ul class="nav ace-nav">
 
-					@foreach($listModuleMenuTop as $itemFirstLevel)
+                        @foreach($listModuleMenuTop as $itemFirstLevel)
 
-					@if (!$itemFirstLevel->get('parent'))
+                        @if (!$itemFirstLevel->get('parent'))
 
-						@if ($itemFirstLevel->get('li'))
-                            {!! $itemFirstLevel->get('li') !!}
-						@else
-						<li>
-						@endif
+                            @if ($itemFirstLevel->get('li'))
+                                {!! $itemFirstLevel->get('li') !!}
+                            @else
+                            <li>
+                            @endif
 
-						{!! $itemFirstLevel->get('content') !!}
+                            {!! $itemFirstLevel->get('content') !!}
 
-							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close" id="user_menu">
-								@foreach($listModuleMenuTop as $itemSecondLevel)
+                                <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close" id="user_menu">
+                                    @foreach($listModuleMenuTop as $itemSecondLevel)
 
-								@if ($itemFirstLevel->get('key') == $itemSecondLevel->get('parent'))
+                                    @if ($itemFirstLevel->get('key') == $itemSecondLevel->get('parent'))
 
-									@if ($itemSecondLevel->get('devider_before'))
-										<li class="divider"></li>
-									@endif
+                                        @if ($itemSecondLevel->get('devider_before'))
+                                            <li class="divider"></li>
+                                        @endif
 
-									@if ($itemFirstLevel->get('li'))
-                                        {!! $itemFirstLevel->get('li') !!}
-									@else
-									<li>
-									@endif
+                                        @if ($itemFirstLevel->get('li'))
+                                            {!! $itemFirstLevel->get('li') !!}
+                                        @else
+                                        <li>
+                                        @endif
 
-									{!! $itemSecondLevel->get('content') !!}
+                                        {!! $itemSecondLevel->get('content') !!}
 
-									@if ($itemSecondLevel->get('devider_after'))
-										<li class="divider"></li>
-									@endif
+                                        @if ($itemSecondLevel->get('devider_after'))
+                                            <li class="divider"></li>
+                                        @endif
 
-									</li>
-								@endif
+                                        </li>
+                                    @endif
 
-								@endforeach
-							</ul>
-						</li>
+                                    @endforeach
+                                </ul>
+                            </li>
 
-					@endif
+                        @endif
 
-					@endforeach
+                        @endforeach
 
-					<!--
-					<li class="light-blue user-profile">
+                        <!--
+                        <li class="light-blue user-profile">
 
-						<a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
-							<img class="nav-user-photo" src="packages/telenok/core/image/anonym.png" title="Anonym">
-							<span id="user_info">
-								Welcome,John!
-							</span>
-							<i class="fa fa-caret-down"></i>
-						</a>
-						<ul class="pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer" id="user_menu">
-							<li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
-							<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
-							<li class="divider"></li>
-							<li><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
-						</ul> 
-					</li>
+                            <a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
+                                <img class="nav-user-photo" src="packages/telenok/core/image/anonym.png" title="Anonym">
+                                <span id="user_info">
+                                    Welcome,John!
+                                </span>
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                            <ul class="pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer" id="user_menu">
+                                <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+                                <li><a href="#"><i class="fa fa-user"></i> Profile</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
+                            </ul> 
+                        </li>
 
-					-->
-				</ul>
+                        -->
+                    </ul>
+                </div>
             </div>
         </div>
 

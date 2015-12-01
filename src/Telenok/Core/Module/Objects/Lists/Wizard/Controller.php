@@ -43,7 +43,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         $this->additionalViewParam = parent::getAdditionalViewParam();
 		$this->additionalViewParam['presentation'] = $this->getPresentation();
         $this->additionalViewParam['presentationModuleKey'] = $this->getPresentationModuleKey();
-        $this->additionalViewParam['iDisplayLength'] = $this->displayLength;
+        $this->additionalViewParam['pageLength'] = $this->displayLength;
 
         return $this->additionalViewParam;
     }

@@ -33,7 +33,6 @@ ob_end_clean();
         {!! HTML::style('packages/telenok/core/js/bootstrap/css/ace.css') !!}
         {!! HTML::style('packages/telenok/core/js/bootstrap/css/ace-skins.min.css') !!}
         {!! HTML::style('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.css') !!}
-        {!! HTML::style('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.css') !!}
 
         {!! HTML::style('packages/telenok/core/js/dropzone/dropzone.css') !!}
 		
@@ -44,8 +43,6 @@ ob_end_clean();
         {!! HTML::script('packages/telenok/core/js/jquery.gritter.js') !!}
         {!! HTML::script('packages/telenok/core/js/jquery.punch.js') !!}
         {!! HTML::script('packages/telenok/core/js/jquery.datatables/jquery.datatables.js') !!}
-        {!! HTML::script('packages/telenok/core/js/jquery.datatables/jquery.datatables.tabletool.js') !!}
-        {!! HTML::script('packages/telenok/core/js/jquery.datatables/jquery.datatables.bootstrap.js') !!}
         {!! HTML::script('packages/telenok/core/js/jquery.jstree/jstree.js') !!}
         
         {!! HTML::style('packages/telenok/core/js/jquery.chosen/chosen.css') !!}

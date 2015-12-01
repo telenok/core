@@ -446,7 +446,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 			'presentationModuleKey' => $this->getPresentationModuleKey(),
             'controller' => $this,
             'uniqueId' => str_random(),
-            'iDisplayLength' => $this->displayLength
+            'pageLength' => $this->displayLength
         ])->render();
     } 
 
@@ -752,7 +752,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
 
-        $total = $input->get('iDisplayLength', $this->displayLength);
+        $total = $input->get('pageLength', $this->displayLength);
         $sEcho = $input->get('sEcho');
         $iDisplayStart = $input->get('iDisplayStart', 0);
 

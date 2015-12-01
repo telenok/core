@@ -62,7 +62,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		$sEcho = $input->get('sEcho');
         $uniqueId = $input->get('uniqueId');
         $iDisplayStart = $input->get('iDisplayStart', 0);
-        $iTotalDisplayRecords = $input->get('iDisplayLength', 20);
+        $iTotalDisplayRecords = $input->get('pageLength', 20);
 		
         $collection = \Symfony\Component\Finder\Finder::create()->in($directory->getPathname());
 
