@@ -135,7 +135,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         $iDisplayStart = intval($input->get('iDisplayStart', 10));
         $sEcho = $input->get('sEcho');
 		$id = $input->get('id', 0);
-		$sSearch = trim($input->get('sSearch', 0));
+		$search = trim($input->get('search.value', 0));
 		
         try
         {
@@ -159,7 +159,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 				$query->whereIn('osequence_wizard_list.sequences_object_type', $typeList);
 			}
 
-			if ($sSearch)
+			if ($search)
 			{
 				$query->join('object_translation as object_translation_list', function($join) use ($model, $typeList)
 				{
@@ -168,10 +168,10 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 				
 				$query->groupBy($model->getTable() . '.id');
 				
-				$query->where(function($query) use ($sSearch, $model)
+				$query->where(function($query) use ($search, $model)
 				{
-					$query->orWhere('object_translation_list.translation_object_string', 'like', '%' . $sSearch . '%');
-					$query->orWhere($model->getTable() . '.id', (int)$sSearch);
+					$query->orWhere('object_translation_list.translation_object_string', 'like', '%' . $search . '%');
+					$query->orWhere($model->getTable() . '.id', (int)$search);
 				});
 			}
 			

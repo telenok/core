@@ -11,7 +11,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     
     public function getAdditionalViewParam()
     {
-        $this->additionalViewParam['sSearch'] = $this->getRequest()->input('sSearch');
+        $this->additionalViewParam['search'] = $this->getRequest()->input('search.value');
         
         return $this->additionalViewParam;
     }   

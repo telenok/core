@@ -498,7 +498,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     {
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
         
-        if ($str = trim($input->get('sSearch')))
+        if ($str = trim($input->get('search.value')))
         {
             $this->getFilterQueryLike($str, $query, $model, 'title');
         } 

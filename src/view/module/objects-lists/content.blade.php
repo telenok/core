@@ -86,40 +86,43 @@
 
     <script type="text/javascript">
 
-        var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
-        var aoColumns = []; 
+        (function()
+        {
+            var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
+            var columns = []; 
 
-                aoColumns.push({ "mData": "tableCheckAll", "sTitle": 
-                        '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
-                        + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
-                        + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
-                        + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
-                        + '<span class="lbl">' 
-                        + '</span></label>',
-                        "mDataProp": null, "sClass": "center", "sWidth": "20px", 
-                        "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
-                        "bSortable": false});
+            columns.push({ "mData": "tableCheckAll", "sTitle": 
+                    '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
+                    + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
+                    + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
+                    + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
+                    + '<span class="lbl">' 
+                    + '</span></label>',
+                    "mDataProp": null, "sClass": "center", "sWidth": "20px", 
+                    "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
+                    "bSortable": false});
 
-                aoColumns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false });
+            columns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false });
 
-                @foreach($fields as $key => $field)
-                        aoColumns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $field->translate('title_list') }}", "mDataProp": null, "bSortable": @if ($field->allow_sort) true @else false @endif });
-                @endforeach
+            @foreach($fields as $key => $field)
+            columns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $field->translate('title_list') }}", "mDataProp": null, "bSortable": @if ($field->allow_sort) true @else false @endif });
+            @endforeach
 
-                presentation.addDataTable({
-                    aoColumns : aoColumns,
-					aaSorting: [],
-                    sAjaxSource : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
-                    domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
-                    btnCreateUrl : '{!! $controller->getRouterCreate(['id' => $type->getKey()]) !!}',
-                    btnCreateTitle : '{{ $controller->LL('list.btn.create') }}',
-                    btnListEditUrl : '{!! $controller->getRouterListEdit(['id' => $type->getKey()]) !!}',
-                    btnListDeleteUrl : '{!! $controller->getRouterListDelete(['id' => $type->getKey()]) !!}',
-                    btnListLockUrl : '{!! $controller->getRouterListLock(['id' => $type->getKey()]) !!}',
-                    btnListUnlockUrl : '{!! $controller->getRouterListUnlock(['id' => $type->getKey()]) !!}',
-                    btnCreateDisabled : '{{ !app('auth')->can('create', "object_type.{$type->code}") }}',
-                    btnListDeleteDisabled : '{{ !app('auth')->can('delete', "object_type.{$type->code}") }}'
-                });
+            presentation.addDataTable({
+                columns : columns,
+                order: [],
+                ajax : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
+                domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
+                btnCreateUrl : '{!! $controller->getRouterCreate(['id' => $type->getKey()]) !!}',
+                btnCreateTitle : '{{ $controller->LL('list.btn.create') }}',
+                btnListEditUrl : '{!! $controller->getRouterListEdit(['id' => $type->getKey()]) !!}',
+                btnListDeleteUrl : '{!! $controller->getRouterListDelete(['id' => $type->getKey()]) !!}',
+                btnListLockUrl : '{!! $controller->getRouterListLock(['id' => $type->getKey()]) !!}',
+                btnListUnlockUrl : '{!! $controller->getRouterListUnlock(['id' => $type->getKey()]) !!}',
+                btnCreateDisabled : '{{ !app('auth')->can('create', "object_type.{$type->code}") }}',
+                btnListDeleteDisabled : '{{ !app('auth')->can('delete', "object_type.{$type->code}") }}'
+            });
+        })();
 
         function presentationTableFilter{{$uniqueId}}(dom_obj, erase)
         {

@@ -220,7 +220,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
         $translate = new \App\Telenok\Core\Model\Object\Translation();
         
-        if ($title = trim($this->getRequest()->input('sSearch')))
+        if ($title = trim($this->getRequest()->input('search.value')))
         {
             $this->getFilterQueryLike($title, $query, $model, 'title');
         } 

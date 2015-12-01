@@ -121,7 +121,7 @@
                                 ($model->exists && $field->allow_update && $permissionUpdate)) && !$disabledCreateLinkedType
                             )
                         buttons.push({
-                             : "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
+                            text : "<i class='fa fa-plus smaller-90'></i> {{ $controllerParent->LL('list.btn.create') }}",
                             className : 'btn-success btn-sm',
                             action : function (e, dt, button, config)
                             {

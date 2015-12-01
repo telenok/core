@@ -201,8 +201,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 	public function getTableList($id = null, $fieldId = null, $uniqueId = null)
 	{
-		$term = trim($this->getRequest()->input('sSearch'));
-		$iDisplayStart = intval($this->getRequest()->input('iDisplayStart', 0));
+		$term = trim($this->getRequest()->input('search.value'));
+		$iDisplayStart = intval($this->getRequest()->input('start', 0));
 		$pageLength = intval($this->getRequest()->input('pageLength', 10));
 		$sEcho = $this->getRequest()->input('sEcho');
 		$content = [];

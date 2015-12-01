@@ -45,9 +45,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 						"sExtends": "text",
 						"sButtonText": "<i class=\'fa fa-refresh smaller-90\'></i> ' . e($controller->LL('list.btn.refresh')) . '",
 						"sButtonClass": "btn-success btn-sm",
-						"fnClick": function(nButton, oConfig, oFlash) 
+                        action : function (e, dt, button, config)
 						{
-							jQuery(this.dom.table).DataTable().ajax.reload();
+							dt.ajax.reload();
 						}					
 					';
 			}
@@ -155,7 +155,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		
         $query = $this->getModel()->withTrashed()->select($this->getModel()->getTable() . '.*')->withPermission();
 
-        if ($str = trim($input->get('sSearch')))
+        if ($str = trim($input->get('search.value')))
         {
 			$query->where(function($query) use ($str, $query)
 			{
@@ -471,9 +471,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 						"sExtends": "text",
 						"sButtonText": "<i class=\'fa fa-refresh smaller-90\'></i> ' . e($controller->LL('list.btn.refresh')) . '",
 						"sButtonClass": "btn-success btn-sm",
-						"fnClick": function(nButton, oConfig, oFlash) 
+                        action : function (e, dt, button, config)
 						{
-							jQuery(this.dom.table).DataTable().ajax.reload();
+							dt.ajax.reload();
 						}					
 					';
 			}

@@ -12,40 +12,41 @@
 		</div>
 
 		<script type="text/javascript">
+            (function()
+            {
+                var columns = []; 
+                @foreach($fields as $key => $field)
+                @if ($key==0)
+                columns.push({ "mData": "choose", "sTitle": "{{ $controller->LL('btn.choose') }}", "bSortable": false });
+                @endif
+                columns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $field->translate('title_list') }}"});
+                @endforeach
 
-			var aoColumns = []; 
-			@foreach($fields as $key => $field)
-				@if ($key==0)
-					aoColumns.push({ "mData": "choose", "sTitle": "{{ $controller->LL('btn.choose') }}", "bSortable": false });
-				@endif
-				aoColumns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $field->translate('title_list') }}"});
-			@endforeach
-
-			jQuery('#table-{{$gridId}}').dataTable({
-				"multipleSelection": true,
-				"aaSorting": [],
-				"bAutoWidth": true,
-				"bProcessing": true,
-				"bServerSide": true,
-				"sAjaxSource" : '{!! URL::route("telenok.module.{$controller->getKey()}.wizard.list", ["id" => empty($typeList) ? $type->getKey() : $typeList]) !!}',
-				"bDeferRender": '',
-				"bJQueryUI": false,
-				"sDom": "<'row'<'col-md-6'T><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
-				"aoColumns" : aoColumns,
-				"oTableTools": {"aButtons": []},
-				"oLanguage": {
-					"oPaginate": {
-						"sNext": "{{ trans('core::default.btn.next') }}",
-						"sPrevious": "{{ trans('core::default.btn.prev') }}", 
-					},
-					"sEmptyTable": "{{ trans('core::default.table.empty') }}",
-					"sSearch": "{{ trans('core::default.btn.search') }} ",
-					"sInfo": "{{ trans('core::default.table.showed') }}",
-					"sInfoEmpty": "{{ trans('core::default.table.empty.showed') }}",
-					"sZeroRecords": "{{ trans('core::default.table.empty.filtered') }}",
-					"sInfoFiltered": "",
-				}
-			});
+                jQuery('#table-{{$gridId}}').dataTable({
+                    order: [],
+                    autoWidth : true,
+                    processing : true,
+                    serverSide : true,
+                    ajax : '{!! URL::route("telenok.module.{$controller->getKey()}.wizard.list", ["id" => empty($typeList) ? $type->getKey() : $typeList]) !!}',
+                    deferRender : true,
+                    JQueryUI : false,
+                    dom : "<'row'<'col-md-6'T><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
+                    columns : aoColumns,
+                    buttons : [],
+                    language : {
+                        paginate : {
+                            next : "{{ trans('core::default.btn.next') }}",
+                            previous : "{{ trans('core::default.btn.prev') }}", 
+                        },
+                        emptyTable : "{{ trans('core::default.table.empty') }}",
+                        search : "{{ trans('core::default.btn.search') }} ",
+                        info : "{{ trans('core::default.table.showed') }}",
+                        infoEmpty : "{{ trans('core::default.table.empty.showed') }}",
+                        zeroRecords : "{{ trans('core::default.table.empty.filtered') }}",
+                        infoFiltered : ""
+                    }
+                });
+            })();
 		</script>
 	</div>
 </div>

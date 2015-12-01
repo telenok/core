@@ -24,9 +24,6 @@
                 <div class="widget-main">
                     <form class="form-horizontal" onsubmit="return false;">
                         
-                        
-                        
-                        
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right">{{$controller->LL('filter.name')}}</label>
                             <div class="col-sm-9">
@@ -126,113 +123,119 @@
 
 		var currentDirectory{{$jsContentUnique}} = '{!! $currentDirectory !!}';
 
-        var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
-        var aoColumns = [];
+        (function()
+        {
+            var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
+            var columns = [];
 
-                aoColumns.push({ "mData": "tableCheckAll", "sTitle": 
-                        '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
-                        + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
-                        + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
-                        + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
-                        + '<span class="lbl">' 
-                        + '</span></label>',
-                        "mDataProp": null, "sClass": "center", "sWidth": "20px", 
-                        "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
-                        "bSortable": false});
+            columns.push({ 
+                data: "tableCheckAll", 
+                title : '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
+                    + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').DataTable();' 
+                    + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.table().body());' 
+                    + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb.table().body()).prop(\'checked\'));">'
+                    + '<span class="lbl">' 
+                    + '</span></label>',
+                className : "center", 
+                width : "20px", 
+                defaultContent : '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
+                orderable : false
+            });
 
-                aoColumns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false });
+            columns.push({ 
+                data : "tableManageItem", 
+                title : "", 
+                orderable : false 
+            });
 
-                @foreach((array)$fields as $key => $field)
-                    @if ($key==0)
-                        aoColumns.push({ "mData": "{{ $field}}", "sTitle": "{{ $controller->LL("field." . $field) }}", "bSortable": false });
-                    @else
-                        aoColumns.push({ "mData": "{{ $field}}", "sTitle": "{{ $controller->LL("field." . $field) }}", "bSortable": false });
-                    @endif
-                @endforeach
+            @foreach((array)$fields as $key => $field)
+                @if ($key==0)
+                    columns.push({ data : "{{ $field}}", title: "{{ $controller->LL("field." . $field) }}", orderable : false });
+                @else
+                    columns.push({ data : "{{ $field}}", title : "{{ $controller->LL("field." . $field) }}", orderable : false });
+                @endif
+            @endforeach
 
-                presentation.addDataTable({
-                    aoColumns : aoColumns,
-					aaSorting: [],
-                    sAjaxSource : '{!! $controller->getRouterList(['uniqueId' => $jsContentUnique]) !!}',
-                    domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}", 
-					tableListBtnCreate: {
-							"sExtends": "collection",
-							'sButtonClass': 'btn btn-sm btn-success',
-							"sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controller->LL('list.btn.create') }}",
-							"aButtons": [ 
-								{
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-folder'></i> {{ $controller->LL('btn.create.directory') }}",
-									"fnClick": function(nButton, oConfig, oFlash) 
-									{ 
-										telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-											url: '{!! $controller->getRouterCreate() !!}',
-											data: {
-												currentDirectory: currentDirectory{{$jsContentUnique}},
-												modelType : 'directory'
-											}
-										}); 
-									}
-								},
-								{
-									"sExtends": "text",
-									'sButtonClass': '',
-									"sButtonText": "<i class='fa fa-file'></i> {{ $controller->LL('btn.create.file') }}",
-									"fnClick": function(nButton, oConfig, oFlash) {
-										telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-											url: '{!! $controller->getRouterCreate() !!}', 
-											data: {
-												currentDirectory: currentDirectory{{$jsContentUnique}},
-												modelType : 'file'
-											}
-										}); 
-									}
-								}
-							]
-						},
-                    tableListBtnSelected: {
-							"sExtends": "collection",
-							'sButtonClass': 'btn btn-sm btn-light',
-							"sButtonText": "<i class='fa fa-check-square-o smaller-90'></i> {{ $controller->LL('list.btn.select') }}",
-							"aButtons": [ 
-								{
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-pencil-square-o'></i> {{ $controller->LL('btn.edit') }}",
-									"fnClick": function(nButton, oConfig, oFlash) 
-										{
-                                            telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-                                                url: '{!! $controller->getRouterListEdit() !!}', 
-                                                data: jQuery('input[name=tableCheckAll\\[\\]]:checked', this.dom.table).serialize() 
-                                            });
+            presentation.addDataTable({
+                columns : columns,
+                order : [],
+                ajax : '{!! $controller->getRouterList(['uniqueId' => $jsContentUnique]) !!}',
+                domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}", 
+                tableListBtnCreate: {
+                        "sExtends": "collection",
+                        'sButtonClass': 'btn btn-sm btn-success',
+                        "sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controller->LL('list.btn.create') }}",
+                        "aButtons": [ 
+                            {
+                                "sExtends": "text",
+                                "sButtonText": "<i class='fa fa-folder'></i> {{ $controller->LL('btn.create.directory') }}",
+                                "fnClick": function(nButton, oConfig, oFlash) 
+                                { 
+                                    telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
+                                        url: '{!! $controller->getRouterCreate() !!}',
+                                        data: {
+                                            currentDirectory: currentDirectory{{$jsContentUnique}},
+                                            modelType : 'directory'
                                         }
-								},
-								{
-									"sExtends": "text",
-									'sButtonClass': '',
-									"sButtonText": "<i class='fa fa-trash-o'></i> {{ $controller->LL('btn.delete') }}",
-									"fnClick": function(nButton, oConfig, oFlash) 
-                                        {
-                            				var this_ = this;
-
-                                            jQuery.ajax({
-                                                url: '{!! $controller->getRouterListDelete() !!}',
-                                                method: 'get',
-                                                dataType: 'json',
-                                                data: jQuery('input[name=tableCheckAll\\[\\]]:checked', this.dom.table).serialize() 
-                                            }).done(function(data) {
-                                                if (data.success) {
-                                                    jQuery('input[name=tableCheckAll\\[\\]]:checked', this_.dom.table).closest("tr").remove();
-                                                }
-                                                else {
-                                                    //
-                                                }  
-                                            }); 
+                                    }); 
+                                }
+                            },
+                            {
+                                "sExtends": "text",
+                                'sButtonClass': '',
+                                "sButtonText": "<i class='fa fa-file'></i> {{ $controller->LL('btn.create.file') }}",
+                                "fnClick": function(nButton, oConfig, oFlash) {
+                                    telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
+                                        url: '{!! $controller->getRouterCreate() !!}', 
+                                        data: {
+                                            currentDirectory: currentDirectory{{$jsContentUnique}},
+                                            modelType : 'file'
                                         }
-								}
-							]
-						}
-                });
-                
+                                    }); 
+                                }
+                            }
+                        ]
+                    },
+                tableListBtnSelected: {
+                        "sExtends": "collection",
+                        'sButtonClass': 'btn btn-sm btn-light',
+                        "sButtonText": "<i class='fa fa-check-square-o smaller-90'></i> {{ $controller->LL('list.btn.select') }}",
+                        "aButtons": [ 
+                            {
+                                "sExtends": "text",
+                                "sButtonText": "<i class='fa fa-pencil-square-o'></i> {{ $controller->LL('btn.edit') }}",
+                                action : function (e, dt, button, config)
+                                    {
+                                        telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
+                                            url: '{!! $controller->getRouterListEdit() !!}', 
+                                            data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize() 
+                                        });
+                                    }
+                            },
+                            {
+                                "sExtends": "text",
+                                'sButtonClass': '',
+                                "sButtonText": "<i class='fa fa-trash-o'></i> {{ $controller->LL('btn.delete') }}",
+                                action : function (e, dt, button, config)
+                                    {
+                                        var this_ = this;
+
+                                        jQuery.ajax({
+                                            url: '{!! $controller->getRouterListDelete() !!}',
+                                            method: 'get',
+                                            dataType: 'json',
+                                            data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize() 
+                                        }).done(function(data) {
+                                            if (data.success) {
+                                                jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).closest("tr").remove();
+                                            }
+                                        }); 
+                                    }
+                            }
+                        ]
+                    }
+            });
+        })();
                 
         function presentationTableFilter{{$jsContentUnique}}(dom_obj, erase)
         {

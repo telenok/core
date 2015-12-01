@@ -35,15 +35,15 @@ ob_start();
 				"autoWidth": false,
 				"bProcessing": true,
 				"bServerSide": true,
-				"bDeferRender": '',
+				"bDeferRender": true,
 				"bJQueryUI": false,
-				"sAjaxSource": "{!! $controller->getUrlList()!!}",
+				"ajax": "{!! $controller->getUrlList()!!}",
 				"pageLength": {{ $controller->getDisplayLength() }},
 				"sDom": "<'row'<'col-md-8'T><'col-md-4'f>r>t<'row'<'col-md-5'T><'col-md-6'p>>",
 				"oTableTools": {
 					"aButtons": aButtons
 				},
-                "oSearch": {"sSearch": ""},
+                search : {search : ""},
 				"oLanguage": {
 					"oPaginate": {
 						"sNext": "{{ trans('core::default.btn.next') }}",

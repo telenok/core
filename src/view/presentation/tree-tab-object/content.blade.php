@@ -85,34 +85,35 @@
 
 
     <script type="text/javascript">
+        (function()
+        {
+            var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
+            var columns = [];
 
-        var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
-        var aoColumns = [];
-        
-            aoColumns.push({ "mData": "tableCheckAll", "sTitle": 
-                        '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
-                        + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
-                        + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
-                        + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
-                        + '<span class="lbl">' 
-                        + '</span></label>',
-                        "mDataProp": null, "sClass": "center", "sWidth": "20px", 
-                        "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
-                        "bSortable": false});
+            columns.push({ "mData": "tableCheckAll", "sTitle": 
+                '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
+                + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
+                + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
+                + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
+                + '<span class="lbl">' 
+                + '</span></label>',
+                "mDataProp": null, "sClass": "center", "sWidth": "20px", 
+                "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
+                "bSortable": false});
 
-            aoColumns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false }); 
+            columns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false }); 
 
             @foreach($fields as $key => $field)
-					aoColumns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $field->translate('title_list') }}", "bSortable": @if ($field->allow_sort) true @else false @endif });
+            columns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $field->translate('title_list') }}", "bSortable": @if ($field->allow_sort) true @else false @endif });
 			@endforeach
 
 			presentation.addDataTable({
-				aoColumns : aoColumns, 
-				aaSorting: [],
-                @if (isset($sSearch))
-                oSearch: {"sSearch": "{{$sSearch}}"},
+				columns : columns, 
+				order : [],
+                @if (isset($search))
+                search: {search : "{{$search}}"},
                 @endif
-				sAjaxSource : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
+				ajax : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
 				domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
 				btnCreateUrl : '{!! $controller->getRouterCreate(['id' => $type->getKey()]) !!}',
 				btnListEditUrl : '{!! $controller->getRouterListEdit(['id' => $type->getKey()]) !!}',
@@ -122,6 +123,7 @@
 				btnCreateDisabled : '{{ !app('auth')->can('create', "object_type.{$type->code}") }}',
 				btnListDeleteDisabled : '{!!  !app('auth')->can('delete', "object_type.{$type->code}") !!}'
 			});
+        })();
 
         function presentationTableFilter{{$uniqueId}}(dom_obj, erase)
         {

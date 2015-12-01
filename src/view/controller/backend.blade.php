@@ -211,7 +211,7 @@
 
                                         param.data = param.data || {};
                                         
-                                        param.data = jQuery.extend({}, param.data, {sSearch: jQuery('input', obj).val()})
+                                        param.data = jQuery.extend({}, param.data, {search: jQuery('input', obj).val()})
 
                                         telenok.setModuleParam(moduleKey, param);                                  
 

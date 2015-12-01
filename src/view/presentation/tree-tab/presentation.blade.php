@@ -185,21 +185,21 @@
 			},
 			addDataTable: function(param)
 			{
-				var aButtons = param.aButtons || [];
+				var buttons = param.buttons || [];
 				var this_ = this;
 
 				@section('tableListBtnCreate')
 					if (param.tableListBtnCreate)
 					{
-						aButtons.push(param.tableListBtnCreate);
+						buttons.push(param.tableListBtnCreate);
 					}
 					else if (param.tableListBtnCreate !== false)
 					{
-						aButtons.push({
-							"sExtends": "text",
-							"sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controller->LL('list.btn.create') }}",
-							'sButtonClass': 'btn-success btn-sm' + (param.btnCreateDisabled ? ' disabled ' : ''),
-							"fnClick": function(nButton, oConfig, oFlash) {
+						buttons.push({
+							text : "<i class='fa fa-plus smaller-90'></i> {{ $controller->LL('list.btn.create') }}",
+							className : 'btn-success btn-sm' + (param.btnCreateDisabled ? ' disabled ' : ''),
+                            action : function (e, dt, button, config)
+                            {
 								if (param.btnCreateDisabled || !param.btnCreateUrl) return false;
 								else this_.addTabByURL({url : param.btnCreateUrl});
 							}
@@ -210,57 +210,55 @@
 				@section('tableListBtnRefresh')
 					if (param.tableListBtnRefresh)
 					{
-						aButtons.push(param.tableListBtnRefresh);
+						buttons.push(param.tableListBtnRefresh);
 					}
 					else if (param.tableListBtnRefresh !== false)
 					{
-						aButtons.push({
-								"sExtends": "text",
-								"sButtonText": "<i class='fa fa-refresh smaller-90'></i> {{ $controller->LL('list.btn.refresh') }}",
-								'sButtonClass': 'btn-sm',
-								"fnClick": function(nButton, oConfig, oFlash) {
-									jQuery('#' + param.domId).DataTable().ajax.reload();
-								}
-							});
+						buttons.push({
+                            text : "<i class='fa fa-refresh smaller-90'></i> {{ $controller->LL('list.btn.refresh') }}",
+                            className : 'btn-sm',
+                            action : function (e, dt, button, config)
+                            {
+                                dt.ajax.reload();
+                            }
+                        });
 					}
 				@show 
 
 				@section('tableListBtnSelected')
 					if (param.tableListBtnSelected)
 					{
-						aButtons.push(param.tableListBtnSelected);
+						buttons.push(param.tableListBtnSelected);
 					}
 					else if (param.tableListBtnSelected !== false)
 					{
-						aButtons.push({
-							"sExtends": "collection",
-							'sButtonClass': 'btn btn-sm btn-light',
-							"sButtonText": "<i class='fa fa-check-square-o smaller-90'></i> {{ $controller->LL('list.btn.select') }}",
-							"aButtons": [ 
+						buttons.push({
+							extend: 'collection',
+							className : 'btn btn-sm btn-light',
+							text : "<i class='fa fa-check-square-o smaller-90'></i> {{ $controller->LL('list.btn.select') }}",
+							buttons : [ 
 								{
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-pencil-square-o'></i> {{ $controller->LL('btn.edit') }}",
-									"fnClick": function(nButton, oConfig, oFlash) 
-										{
-											if (param.btnListEditUrl)
-											{
-												this_.addTabByURL({
-													url: param.btnListEditUrl, 
-													data: jQuery('input[name=tableCheckAll\\[\\]]:checked', this.dom.table).serialize() 
-												});
-											}
+									text: "<i class='fa fa-pencil-square-o'></i> {{ $controller->LL('btn.edit') }}",
+                                    action : function (e, dt, button, config)
+                                    {
+                                        if (param.btnListEditUrl)
+                                        {
+                                            this_.addTabByURL({
+                                                url: param.btnListEditUrl, 
+                                                data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize() 
+                                            });
+                                        }
 									}
 								},
 								{
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-lock'></i> {{ $controller->LL('btn.lock') }}",
-									"fnClick": function(nButton, oConfig, oFlash) 
+									text : "<i class='fa fa-lock'></i> {{ $controller->LL('btn.lock') }}",
+                                    action : function (e, dt, button, config)
                                     {
-                                        if (param.btnListLockUrl && jQuery('input[name=tableCheckAll\\[\\]]:checked', this.dom.table).size())
+                                        if (param.btnListLockUrl && jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).size())
                                         {
                                             jQuery.ajax({
                                                 url: param.btnListLockUrl, 
-                                                data: jQuery('input[name=tableCheckAll\\[\\]]:checked', this.dom.table).serialize(),
+                                                data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize(),
                                                 method: 'get',
                                                 dataType: 'json',
                                             }).done(function(data) 
@@ -279,15 +277,14 @@
 									}
 								},
 								{
-									"sExtends": "text",
-									"sButtonText": "<i class='fa fa-unlock'></i> {{ $controller->LL('btn.unlock') }}",
-									"fnClick": function(nButton, oConfig, oFlash) 
+									text : "<i class='fa fa-unlock'></i> {{ $controller->LL('btn.unlock') }}",
+                                    action : function (e, dt, button, config)
                                     {
-                                        if (param.btnListUnlockUrl && jQuery('input[name=tableCheckAll\\[\\]]:checked', this.dom.table).size())
+                                        if (param.btnListUnlockUrl && jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).size())
                                         {
                                             jQuery.ajax({
                                                 url: param.btnListUnlockUrl, 
-                                                data: jQuery('input[name=tableCheckAll\\[\\]]:checked', this.dom.table).serialize(),
+                                                data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize(),
                                                 method: 'get',
                                                 dataType: 'json'
                                             }).done(function(data) 
@@ -306,10 +303,10 @@
 									}
 								},
 								{
-									"sExtends": "text",
-									'sButtonClass':  (param.btnListDeleteDisabled ? ' disabled ' : ''),
-									"sButtonText": "<i class='fa fa-trash-o'></i> {{ $controller->LL('btn.delete') }}",
-									"fnClick": function(nButton, oConfig, oFlash) {
+									className :  (param.btnListDeleteDisabled ? ' disabled ' : ''),
+									text : "<i class='fa fa-trash-o'></i> {{ $controller->LL('btn.delete') }}",
+                                    action : function (e, dt, button, config)
+                                    {
 										if (param.btnListDeleteDisabled || !param.btnListDeleteUrl) return false;
 										else 
                                         {
@@ -319,10 +316,10 @@
 												url: param.btnListDeleteUrl,
 												method: 'post',
 												dataType: 'json',
-												data: jQuery('input[name=tableCheckAll\\[\\]]:checked', this.dom.table).serialize() 
+												data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize() 
 											}).done(function(data) {
 												if (data.success) {
-													jQuery('input[name=tableCheckAll\\[\\]]:checked', this_.dom.table).closest("tr").remove();
+													jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).closest("tr").remove();
 												}
 												else {
 													//
@@ -339,49 +336,46 @@
 				@section('tableListBtnFilter')
 					if (param.tableListBtnFilter)
 					{
-						aButtons.push(param.tableListBtnFilter);
+						buttons.push(param.tableListBtnFilter);
 					}
 					else if (param.tableListBtnFilter !== false)
 					{
-						aButtons.push({
-								"sExtends": "text",
-								'sButtonClass': 'btn btn-sm btn-light',
-								"sButtonText": "<i class='fa fa-search'></i> {{ $controller->LL('btn.filter') }}",
-								"fnClick": function(nButton, oConfig, oFlash) {
-									jQuery('div.filter', jQuery(this.dom.table).closest('div.container-table')).toggle();
+						buttons.push({
+								className : 'btn btn-sm btn-light',
+								text : "<i class='fa fa-search'></i> {{ $controller->LL('btn.filter') }}",
+                                action : function (e, dt, button, config)
+                                {
+									jQuery('div.filter', dt.table().body().closest('div.container-table')).toggle();
 								}
 							});
 					}
 				@show
 
 				param = jQuery.extend({}, {
-                    "searchDelay": 1000,
-					//"multipleSelection": true,
-					"columns": [],
-					"autoWidth": false,
-					"processing": true,
-					"serverSide": param.sAjaxSource ? true : false,
-					"deferRender": true,
-					"JQueryUI": false,
-					"pageLength": {{ $pageLength }},
-					"dom": "<'row'<'col-md-9'T><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
-					"oTableTools": {
-						@section('tableListBtn')
-						"aButtons": aButtons
-						@show 				
-					},
-					"language": {
-						"paginate": {
-							"next": "{{ trans('core::default.btn.next') }}",
-							"previous": "{{ trans('core::default.btn.prev') }}", 
+                    searchDelay : 1000,
+					columns : [],
+					autoWidth : false,
+					processing : true,
+					serverSide : param.ajax ? true : false,
+					deferRender : true,
+					JQueryUI : false,
+					pageLength : {{ $pageLength }},
+					dom : "<'row'<'col-md-9'B><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
+                    @section('tableListBtn')
+                    buttons : buttons,
+                    @show 				
+					language : {
+						paginate : {
+							next : "{{ trans('core::default.btn.next') }}",
+							previous : "{{ trans('core::default.btn.prev') }}", 
 						},
-						"emptyTable": "{{ trans('core::default.table.empty') }}",
-						"search": "{{ trans('core::default.btn.search') }} ",
-						"searchPlaceholder": "{{ trans('core::default.table.placeholder.search') }} ",
-						"info": "{{ trans('core::default.table.showed') }}",
-						"infoEmpty": "{{ trans('core::default.table.empty.showed') }}",
-						"zeroRecords": "{{ trans('core::default.table.empty.filtered') }}",
-						"infoFiltered": "",
+						emptyTable : "{{ trans('core::default.table.empty') }}",
+						search : "{{ trans('core::default.btn.search') }} ",
+						searchPlaceholder : "{{ trans('core::default.table.placeholder.search') }} ",
+						info : "{{ trans('core::default.table.showed') }}",
+						infoEmpty : "{{ trans('core::default.table.empty.showed') }}",
+						zeroRecords : "{{ trans('core::default.table.empty.filtered') }}",
+						infoFiltered : "",
 					}
 				}, param);
 
