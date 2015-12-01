@@ -30,7 +30,7 @@
                     ajax : '{!! URL::route("telenok.module.{$controller->getKey()}.wizard.list", ["id" => empty($typeList) ? $type->getKey() : $typeList]) !!}',
                     deferRender : true,
                     JQueryUI : false,
-                    dom : "<'row'<'col-md-6'T><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
+                    dom : "<'row'<'col-md-6'B><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
                     columns : columns,
                     buttons : [],
                     language : {

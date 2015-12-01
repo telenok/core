@@ -104,13 +104,13 @@
                         @endif
 
                         telenok.addDataTable({
-                            domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}",
+                            domId : "telenok-{{$controller->getKey()}}-{{$jsUnique}}",
                             retrieve : true,
                             columns : columns,
-                            order: [],
+                            order : [],
                             pageLength : {{$pageLength}},
                             ajax : '{!! $urlListTable !!}', 
-                            buttons: buttons
+                            buttons : buttons
                         });
                     }
                     
@@ -143,13 +143,13 @@
                         });
                             
                         telenok.addDataTable({
-                            domId: "telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition",
-                            dom: "<'row'<'col-md-6'T>r>t<'row'<'col-md-6'T>>",
+                            domId : "telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition",
+                            dom : "<'row'<'col-md-6'B>r>t<'row'<'col-md-6'T>>",
                             retrieve : true,
                             columns : columns,
-                            order: [],
+                            order : [],
                             data : [], 
-                            buttons: buttons
+                            buttons : buttons
                         });
                     }
                 })();

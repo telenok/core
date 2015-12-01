@@ -39,7 +39,7 @@ ob_start();
 				"bJQueryUI": false,
 				"ajax": "{!! $controller->getUrlList()!!}",
 				"pageLength": {{ $controller->getpageLength() }},
-				"sDom": "<'row'<'col-md-8'T><'col-md-4'f>r>t<'row'<'col-md-5'T><'col-md-6'p>>",
+				"sDom": "<'row'<'col-md-8'B><'col-md-4'f>r>t<'row'<'col-md-5'T><'col-md-6'p>>",
 				"oTableTools": {
 					"aButtons": aButtons
 				},

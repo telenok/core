@@ -725,7 +725,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     public function getAdditionalListButton($item, $collection)
     {
         return $collection;
-    }    
+    }
 
     public function getAdditionalViewParam()
     {

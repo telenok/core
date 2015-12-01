@@ -202,9 +202,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 	public function getTableList($id = null, $fieldId = null, $uniqueId = null)
 	{
 		$term = trim($this->getRequest()->input('search.value'));
-		$pageStart = intval($this->getRequest()->input('start', 0));
-		$pageLength = intval($this->getRequest()->input('pageLength', $this->pageLength));
-		$draw = $this->getRequest()->input('draw');
+        
+        $draw = $this->getRequest()->input('draw');
+		$start = $this->getRequest()->input('start', 0);
+        $length = $this->getRequest()->get('length', $this->pageLength);
+        
 		$content = [];
 
 		try
@@ -231,7 +233,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 				});
 			}
 
-			$query->skip($pageStart)->take($pageLength + 1);
+			$query->skip($start)->take($length + 1);
 
 			$items = $query->get();
 
@@ -244,7 +246,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 			$canUpdate = app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code);
 
-			foreach ($items->slice(0, $pageLength, true) as $k => $item)
+			foreach ($items->slice(0, $length, true) as $item)
 			{
 				$c = [];
 
@@ -260,19 +262,19 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 			return [
 				'draw' => $draw,
-				'iTotalRecords' => ($pageStart + $items->count()),
-				'iTotalDisplayRecords' => ($pageStart + $items->count()),
-				'data' => $content
+				'data' => $content,
+				'recordsTotal' => ($start + $items->count()),
+				'recordsFiltered' => ($start + $items->count()),
 			];
 		}
 		catch (\Exception $e)
 		{
 			return [
 				'draw' => $draw,
-				'iTotalRecords' => 0,
-				'iTotalDisplayRecords' => 0,
 				'data' => [],
 				'exception' => $e->getMessage(),
+				'recordsTotal' => 0,
+				'recordsFiltered' => 0,
 			];
 		}
 	}
@@ -289,20 +291,20 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 		foreach ($objectField as $key => $field)
 		{
+			if (($key == 0 && $objectField->count() > 1) || $objectField->count() == 1)
+			{
+				$fields['tableManageItem'] = [
+					"data" => 'tableManageItem',
+					"title" => "",
+					"orderable" => false,
+				];
+			}
+            
 			$fields[$field->code] = [
 				"data" => $field->code,
 				"title" => e($field->translate('title_list')),
 				"orderable" => $field->allow_sort ? true : false,
 			];
-
-			if (($key == 1 && $objectField->count() > 1) || $objectField->count() == 1)
-			{
-				$fields['tableManageItem'] = [
-					"data" => 'tableManageItem',
-					"title" => e($this->LL('action')),
-					"orderable" => false,
-				];
-			}
 		}
 
 		return $fields;

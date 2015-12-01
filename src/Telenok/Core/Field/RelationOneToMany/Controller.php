@@ -21,7 +21,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
 		$linkedField = $this->getLinkedField($field);
-		
+
 		return [
 			'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
 			'urlListTable' => route($this->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $uniqueId]),
@@ -30,7 +30,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
 		];
 	}
-	
+
 	/**
 	 * Return Object Type linked to the field
 	 * 

@@ -56,7 +56,6 @@ return [
     'notice.locked.by.myself' => 'Warning! I locked record ', 
 	  
     'home' => 'Main',
-    'action' => 'Action',
 
     'entity.title' => 'Title',
     'current' => 'Current',

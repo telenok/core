@@ -43,8 +43,7 @@ return [
 
     'tree.root' => 'Дерево',
 
-    'home' => 'Главная',
-    'action' => 'Действие',
+    'home' => 'Главная', 
 
     'field' => ':attribute [:locale]',
 

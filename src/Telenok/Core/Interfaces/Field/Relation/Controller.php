@@ -44,8 +44,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		throw new \Exception('Please, define one or more keys "' . implode('", "', (array) $param) 
                 . '" for object_field "' . $input->get('code') . '"'
-                . ' and object_type "' . $input->get('field_object_type') . '"'
-                );
+                . ' and object_type "' . $input->get('field_object_type')
+                . '"');
 	}
 
 	public function getTitleList($id = null, $closure = null)
@@ -95,26 +95,53 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	public function getListButtonExtended($item, $field, $type, $uniqueId, $canUpdate)
 	{
-		return '<div class="hidden-phone visible-lg btn-group">
-                    <button class="btn btn-minier btn-info" title="' . $this->LL('list.btn.edit') . '" 
-                        onclick="editTableRow' . $field->code . $uniqueId . '(this, \'' . route($this->getRouteWizardEdit(), ['id' => $item->getKey(), 'saveBtn' => 1, 'chooseBtn' => 0]) . '\'); return false;">
-                        <i class="fa fa-pencil"></i>
-                    </button>
+        $random = str_random();
+        
+        $collection = \Illuminate\Support\Collection::make();
+        
+        $collection->put('open', ['order' => 0 , 'content' => 
+            '<div class="dropdown">
+                <a class="btn btn-white no-hover btn-transparent btn-xs dropdown-toggle" href="#" role="button" style="border:none;"
+                        type="button" id="' . $random . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-menu-hamburger text-muted"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="' . $random . '">
+            ']);
+        
+        $collection->put('close', ['order' => PHP_INT_MAX, 'content' => 
+                '</ul>
+            </div>']);
+        
+        $collection->put('edit', ['order' => 1000, 'content' => 
+                '<li><a href="#" onclick="editTableRow' . $field->code . $uniqueId . '(this, \'' 
+                    . route($this->getRouteWizardEdit(), ['id' => $item->getKey(), 'saveBtn' => 1, 'chooseBtn' => 0]) . '\'); return false;">' 
+                    . ' <i class="fa fa-pencil"></i> ' . $this->LL('list.btn.edit') . '</a>
+                </li>']);
+        
+        $collection->put('delete', ['order' => 2000, 'content' => 
+                '<li><a href="#" onclick="deleteTableRow' . $field->code . $uniqueId . '(this); return false;">'
+                    . ' <i class="fa fa-trash-o"></i> ' . $this->LL('list.btn.delete') . '</a>
+                </li>']);
 
-                    <button class="btn btn-minier btn-light" onclick="return false;" title="' . $this->LL('list.btn.' . ($item->active ? 'active' : 'inactive')) . '">
-                        <i class="fa fa-check ' . ($item->active ? 'green' : 'white') . '"></i>
-                    </button>
-                    ' .
-				($canUpdate ? '
-                    <button class="btn btn-minier btn-danger trash-it" title="' . $this->LL('list.btn.delete') . '" 
-                        onclick="deleteTableRow' . $field->code . $uniqueId . '(this); return false;">
-                        <i class="fa fa-trash-o"></i>
-                    </button>' : ''
-				) . '
-                </div>';
+        app('events')->fire($this->getListButtonEventKey(), $collection);
+
+        return $this->getAdditionalListButton($item, $collection)->sort(function($a, $b)
+                    {
+                        return array_get($a, 'order', 0) > array_get($b, 'order', 0) ? 1 : -1;
+                    })->implode('content');
 	}
 
-	public function getListFieldContent($field, $item, $type = null)
+    public function getListButtonEventKey($param = null)
+    {
+        return 'telenok.field.' . $this->getKey();
+    }
+
+    public function getAdditionalListButton($item, $collection)
+    {
+        return $collection;
+    }
+
+    public function getListFieldContent($field, $item, $type = null)
 	{
 		$items = [];
 		$rows = \Illuminate\Support\Collection::make($this->getListFieldContentItems($field, $item, $type));
