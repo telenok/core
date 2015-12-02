@@ -360,7 +360,7 @@
 					deferRender : true,
 					JQueryUI : false,
 					pageLength : {{ $pageLength }},
-					dom : "<'row'<'col-md-9'B><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
+                    dom : "<'row'<'col-md-9'B><'col-md-3'f>r>t<'row'<'col-md-9'B><'col-md-3'p>>",
                     @section('tableListBtn')
                     buttons : buttons,
                     @show 				

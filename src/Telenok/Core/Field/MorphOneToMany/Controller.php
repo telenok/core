@@ -42,7 +42,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      */
     public function getLinkedModelType($field)
     {
-        return \App\Telenok\Core\Model\Object\Type::whereIn('id', [$field->morph_one_to_many_has, $field->morph_one_to_many_belong_to])->first();
+        return \App\Telenok\Core\Model\Object\Type::findMany([$field->morph_one_to_many_has, $field->morph_one_to_many_belong_to])->first();
     }
     
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)

@@ -197,7 +197,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                 deferRender : true,
                 JQueryUI : false,
                 pageLength : {{ $pageLength }},
-                dom : "<'row'<'col-md-6'B><'col-md-6'f>r>t<'row'<'col-md-6'T><'col-md-6'p>>",
+                dom : "<'row'<'col-md-9'B><'col-md-3'f>r>t<'row'<'col-md-9'B><'col-md-3'p>>",
                 @section('tableListBtn')
                 buttons : buttons,
                 @show

@@ -17,7 +17,7 @@
                     deferRender : true,
                     jQueryUI : false,
                     pageLength : (param.pageLength ? param.pageLength : 20),
-                    dom : "<'row'<'col-md-9'B><'col-md-3'f>r>t<'row'<'col-md-9'T><'col-md-3'p>>",
+                    dom : "<'row'<'col-md-9'B><'col-md-3'f>r>t<'row'<'col-md-9'B><'col-md-3'p>>",
                     buttons : param.buttons || [],
                     language : {
                         paginate : {

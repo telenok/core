@@ -7,6 +7,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	protected $key = 'permission';
     protected $allowMultilanguage = false; 
+	protected $specialField = ['permission_default'];
 
 	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
 	{
@@ -16,65 +17,34 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		];
 	}
 
-	public function getTitleList($id = null, $closure = null)
-	{
-		$term = trim($this->getRequest()->input('term'));
-		$return = [];
+    public function getModelSpecialAttribute($model, $key, $value)
+    {
+        if (in_array($key, ['permission_default'], true))
+        {
+            return \Illuminate\Support\Collection::make((array)json_decode($value, true));
+        }
 
-		$sequence = new \App\Telenok\Core\Model\Object\Sequence();
+        return parent::getModelSpecialAttribute($model, $key, $value);
+    }
 
-		$sequenceTable = $sequence->getTable();
-		$typeTable = (new \App\Telenok\Core\Model\Object\Type())->getTable();
-
-		$sequence->addMultilanguage('title_type');
-
-		try
-		{
-			$query = \App\Telenok\Core\Model\Object\Sequence::withPermission()
-                    ->select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title AS title_type')
-					->join($typeTable, function($join) use ($sequenceTable, $typeTable)
-					{
-						$join->on($sequenceTable . '.sequences_object_type', '=', $typeTable . '.id');
-					})
-					->where(function ($query) use ($sequenceTable, $typeTable, $term)
-					{
-						$query->where($sequenceTable . '.id', $term);
-
-						$query->orWhere(function ($query) use ($sequenceTable, $term)
-						{
-							\Illuminate\Support\Collection::make(explode(' ', $term))
-									->reject(function($i) { return !trim($i); })
-									->each(function($i) use ($query, $sequenceTable)
-							{
-								$query->where($sequenceTable . '.title', 'like', "%{$i}%");
-							});
-						});
-
-						$query->orWhere(function ($query) use ($typeTable, $term)
-						{
-							\Illuminate\Support\Collection::make(explode(' ', $term))
-									->reject(function($i) { return !trim($i); })
-									->each(function($i) use ($query, $typeTable)
-							{
-								$query->where($typeTable . '.title', 'like', "%{$i}%");
-							});
-						});
-					});
-			
-			if ($closure instanceof \Closure)
+    public function setModelSpecialAttribute($model, $key, $value)
+    {
+        if (in_array($key, ['permission_default'], true))
+        {
+			if ($value instanceof \Illuminate\Support\Collection) 
 			{
-				$closure($query);
+				$value = $value->toArray();
 			}
-			
-			$query->take(20)->get()->each(function($item) use (&$return)
-			{
-				$return[] = ['value' => $item->id, 'text' => "[{$item->translate('title_type')}#{$item->id}] " . $item->translate('title')];
-			});
-		}
-        catch (\Exception $e) {}
 
-		return $return;
-	}
+			$model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
+        }
+        else
+        {
+            return parent::setModelSpecialAttribute($model, $key, $value);
+        }
+
+        return $this;
+    }
 
 	public function preProcess($model, $type, $input)
 	{  

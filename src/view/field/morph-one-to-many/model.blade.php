@@ -148,7 +148,7 @@
 							{
 								telenok.addDataTable({
 									domId : "telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition",
-									dom : "<'row'<'col-md-6'B>r>t<'row'<'col-md-6'T>>",
+									dom : "<'row'<'col-md-6'B>r>t<'row'<'col-md-6'B>>",
 									retrieve : true,
 									columns : aoColumns,
 									order : [],
