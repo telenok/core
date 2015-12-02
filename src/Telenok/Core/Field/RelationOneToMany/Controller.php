@@ -49,7 +49,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		{
 			return parent::getFormModelContent($controller, $model, $field, $uniqueId);
 		}
-	} 
+	}
 
     public function getModelFillableField($model, $field)
     {
@@ -166,6 +166,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         return $this;
     }
 
+	public function fill($field, $model, $input)
+    {   
+        if (empty($input->get($field->code)) && $field->relation_one_to_many_belong_to)
+        {
+            $input->put($field->code, $field->relation_one_to_many_default);
+        }
+        
+        return parent::fill($field, $model, $input);
+    }
+    
     public function saveModelField($field, $model, $input)
     {
 		// if created field
@@ -180,37 +190,45 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         $method = camel_case($field->code);
         $relatedQuery = $model->{$method}();
 
-        if ((!empty($idsAdd) || !empty($idsDelete)) && $field->relation_one_to_many_has)
-        { 
+        if ($field->relation_one_to_many_has)
+        {
             $relatedField = $field->code . '_' . ($relatedTable = $model->getTable());
+            
+            if (!empty($idsDelete))
+            {
+                if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
+                {
+                    if (in_array('*', $idsDelete, true))
+                    {
+                        $model->{$method}()->get()->each(function($item) use ($relatedField) 
+                        {
+                            $item->fill([$relatedField => 0])->save();
+                        });
+                    }
+                    else if (!empty($idsDelete))
+                    {
+                        $model->{$method}()->whereIn('id', $idsDelete)->get()->each(function($item) use ($relatedField) 
+                        {
+                            $item->fill([$relatedField => 0])->save();
+                        });
+                    }
+                }
+            }
 
-			if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
-			{
-				if (in_array('*', $idsDelete, true))
-				{
-					$model->{$method}()->get()->each(function($item) use ($relatedField) 
-					{
-						$item->fill([$relatedField => 0])->save();
-					});
-				}
-				else if (!empty($idsDelete))
-				{
-					$model->{$method}()->whereIn('id', $idsDelete)->get()->each(function($item) use ($relatedField) 
-					{
-						$item->fill([$relatedField => 0])->save();
-					});
-				}
+            if (!$relatedQuery->count() && empty($idsAdd))
+            {
+                $idsAdd = $field->relation_one_to_many_default->all();
+            }   
 
-				try
-				{
-					foreach($idsAdd as $id)
-					{
-						$relatedQuery->getRelated()->findOrFail((int)$id)
-							->storeOrUpdate([$relatedQuery->getPlainForeignKey() => $model->getKey()], true);
-					}
-				}
-                catch (\Exception $e) {}
-			}
+            try
+            {
+                foreach($idsAdd as $id)
+                {
+                    $relatedQuery->getRelated()->findOrFail((int)$id)
+                        ->fill([$relatedField => $model->getKey()])->save();
+                }
+            }
+            catch (\Exception $e) {}
         }
         else if ($field->relation_one_to_many_belong_to && $v = (int) $input->get($field->code, 0))
 		{
@@ -218,7 +236,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             \App\Telenok\Core\Model\Object\Sequence::getModelByTypeId($field->relation_one_to_many_belong_to)
                 ->findOrFail($v);
 		}
-
+        
         if ($field->required && !$relatedQuery->count())
         {
 			throw new \Exception($this->LL('error.field.required', ['attribute' => $field->translate('title')]));

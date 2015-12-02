@@ -131,7 +131,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
 	public function fill($field, $model, $input)
     {
-        if (!(int) $input->get($field->code, 0))
+        if ($input->get($field->code) === null)
         {
             $input->put($field->code, $field->relation_one_to_one_default);
         }

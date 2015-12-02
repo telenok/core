@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
     protected $key = 'relation-many-to-many'; 
-    protected $specialField = array('relation_many_to_many_has', 'relation_many_to_many_belong_to');
+    protected $specialField = array('relation_many_to_many_has', 'relation_many_to_many_belong_to', 'relation_many_to_many_default');
     protected $allowMultilanguage = false;
 
     public function getModelFillableField($model, $field)
@@ -124,6 +124,35 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             </script>';
     } 
 
+    public function getModelSpecialAttribute($model, $key, $value)
+    {
+        if (in_array($key, ['relation_many_to_many_default'], true))
+        {
+            return \Illuminate\Support\Collection::make((array)json_decode($value, true));
+        }
+
+        return parent::getModelSpecialAttribute($model, $key, $value);
+    }
+
+    public function setModelSpecialAttribute($model, $key, $value)
+    {
+        if (in_array($key, ['relation_many_to_many_default'], true))
+        {
+			if ($value instanceof \Illuminate\Support\Collection) 
+			{
+				$value = $value->toArray();
+			}
+
+			$model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
+        }
+        else
+        {
+            return parent::setModelSpecialAttribute($model, $key, $value);
+        }
+
+        return $this;
+    }
+
     public function saveModelField($field, $model, $input)
     {
 		// if created field
@@ -151,6 +180,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 					$model->{$method}()->detach($idsDelete);
 				}
 
+                if (!$model->{$method}()->count() && empty($idsAdd))
+                {
+                    $idsAdd = $field->relation_many_to_many_default->all();
+                }   
+                
 				foreach($idsAdd as $id)
 				{
 					try

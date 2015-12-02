@@ -15,7 +15,8 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     public function getDateField($model, $field)
     { 
 		return ['created_at'];
-    } 
+    }
+
     public function getModelFillableField($model, $field)
     { 
 		return $field->relation_one_to_many_belong_to ? [$field->code, 'created_at'] : [];

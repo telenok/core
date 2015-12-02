@@ -315,3 +315,55 @@
             });
         }
     </script>
+
+@if ($model->{$linkedField})
+
+    <div class="form-group">
+        {!! Form::label('relation_many_to_many_default', $controller->LL('property.default'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+        <div class="col-sm-9">
+            <select class="chosen-select" multiple data-placeholder="{{$controller->LL('notice.choose')}}" 
+                    id="relation_many_to_many_default-{{$jsUnique}}" name="relation_many_to_many_default[]">
+
+                <option></option>
+
+            <?php
+
+                $subjects = \App\Telenok\Core\Model\Object\Sequence::getModelByTypeId($model->{$linkedField})
+                    ->active()->withPermission()
+                    ->whereIn($model->getKeyName(), $model->relation_many_to_many_default->all())
+                    ->get(['id', 'title']);
+
+                foreach ($subjects as $subject) 
+                {
+                    echo "<option value='{$subject->getKey()}' selected='selected'>[#{$subject->id}] {$subject->translate('title')}</option>";
+                }
+            ?>
+            </select>
+            <script type="text/javascript">
+                jQuery("#relation_one_to_many_default-{{$jsUnique}}").ajaxChosen({
+                    keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
+                    lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
+                    type: "GET",
+                    url: "{!! route($controller->getRouteListTitle(), ['id' => (int)$model->{$linkedField}]) !!}",
+                    dataType: "json",
+                    minTermLength: 1
+                },
+                function (data)
+                {
+                    var results = [];
+
+                    jQuery.each(data, function (i, val) 
+                    {
+                        results.push({value: val.value, text: val.text});
+                    });
+
+                    return results;
+                },
+                {
+                    width: "300px",
+                    no_results_text: "{{ $controller->LL('notice.not-found') }}"
+                });
+            </script>
+        </div>
+    </div>
+@endif

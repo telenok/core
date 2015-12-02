@@ -104,7 +104,7 @@
     <div class="form-group">
         {!! Form::label('relation_one_to_many_default', $controller->LL('property.default'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
         <div class="col-sm-9">
-            <select class="chosen-select" multiple data-placeholder="{{$controller->LL('notice.choose')}}" 
+            <select class="chosen-select" data-placeholder="{{$controller->LL('notice.choose')}}" 
                     id="relation_one_to_many_default-{{$jsUnique}}" name="relation_one_to_many_default">
 
                 <option></option>
