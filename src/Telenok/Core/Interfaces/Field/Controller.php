@@ -378,7 +378,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 		}
 	}
 
-	public function fill___($field, $model, $input)
+	public function fill($field, $model, $input)
 	{
 		return $this;
 	}

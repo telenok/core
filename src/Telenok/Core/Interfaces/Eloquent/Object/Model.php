@@ -570,6 +570,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function preProcess($type, $input)
 	{
+		$config = app('telenok.config.repository')->getObjectFieldController();
+
+		foreach ($type->field()->get() as $field)
+		{
+			$config->get($field->key)->fill($field, $this, $input);
+		}
+
 		return $this;
 	}
 

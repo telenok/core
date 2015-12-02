@@ -91,21 +91,33 @@
             var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
             var columns = []; 
 
-            columns.push({ "mData": "tableCheckAll", "sTitle": 
+            columns.push({ 
+                data : "tableCheckAll", 
+                title : 
                     '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
                     + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
                     + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
                     + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
                     + '<span class="lbl">' 
                     + '</span></label>',
-                    "mDataProp": null, "sClass": "center", "sWidth": "20px", 
-                    "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
-                    "bSortable": false});
+                className : "center", 
+                width : "20px", 
+                defaultContent : '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
+                orderable : false
+            });
 
-            columns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false });
+            columns.push({ 
+                data: "tableManageItem", 
+                title : "", 
+                orderable : false
+            });
 
             @foreach($fields as $key => $field)
-            columns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $field->translate('title_list') }}", "mDataProp": null, "bSortable": @if ($field->allow_sort) true @else false @endif });
+            columns.push({ 
+                data : "{{ $field->code }}", 
+                title : "{{ $field->translate('title_list') }}", 
+                orderable : @if ($field->allow_sort) true @else false @endif 
+            });
             @endforeach
 
             presentation.addDataTable({

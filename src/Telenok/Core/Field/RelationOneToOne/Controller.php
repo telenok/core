@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
 	protected $key = 'relation-one-to-one';
-	protected $specialField = ['relation_one_to_one_has', 'relation_one_to_one_belong_to'];
+	protected $specialField = ['relation_one_to_one_has', 'relation_one_to_one_belong_to', 'relation_one_to_one_default'];
 	protected $allowMultilanguage = false;
 
 	/**
@@ -129,6 +129,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             </script>';
 	}
 
+	public function fill($field, $model, $input)
+    {
+        if (!(int) $input->get($field->code, 0))
+        {
+            $input->put($field->code, $field->relation_one_to_one_default);
+        }
+        
+        return parent::fill($field, $model, $input);
+    }
+    
 	public function saveModelField($field, $model, $input)
 	{
 		if ($model instanceof \Telenok\Core\Model\Object\Field && !$input->get('id'))
@@ -137,7 +147,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		}
 
         $relatedQuery = $model->{camel_case($field->code)}();
-
+        
 		if ($field->relation_one_to_one_has)
 		{
 			try
@@ -147,7 +157,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			}
             catch (\Exception $e) {}
 		}
-        else if ($field->relation_one_to_one_belong_to && $v = $input->get($field->code, 0))
+        else if ($field->relation_one_to_one_belong_to && ($v = (int) $input->get($field->code, 0)))
 		{
             // just validation input value
             \App\Telenok\Core\Model\Object\Sequence::getModelByTypeId($field->relation_one_to_one_belong_to)

@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
     protected $key = 'relation-one-to-many'; 
-    protected $specialField = ['relation_one_to_many_has', 'relation_one_to_many_belong_to'];
+    protected $specialField = ['relation_one_to_many_has', 'relation_one_to_many_belong_to', 'relation_one_to_many_default'];
     protected $allowMultilanguage = false;
 
 	public function getLinkedField($field)
@@ -137,6 +137,35 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             </script>';
     } 
 
+    public function getModelSpecialAttribute($model, $key, $value)
+    {
+        if (in_array($key, ['relation_one_to_many_default'], true) && $model->relation_one_to_many_has)
+        {
+            return \Illuminate\Support\Collection::make((array)json_decode($value, true));
+        }
+
+        return parent::getModelSpecialAttribute($model, $key, $value);
+    }
+
+    public function setModelSpecialAttribute($model, $key, $value)
+    {
+        if (in_array($key, ['relation_one_to_many_default'], true) && $model->relation_one_to_many_has)
+        {
+			if ($value instanceof \Illuminate\Support\Collection) 
+			{
+				$value = $value->toArray();
+			}
+
+			$model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
+        }
+        else
+        {
+            return parent::setModelSpecialAttribute($model, $key, $value);
+        }
+
+        return $this;
+    }
+
     public function saveModelField($field, $model, $input)
     {
 		// if created field
@@ -214,7 +243,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		if ($input->get('relation_one_to_many_has'))
 		{
 			$input->put('relation_one_to_many_belong_to', 0);
-            $input->put('relation_one_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('relation_one_to_many_has'))->orWhere('id', $input->get('relation_one_to_many_has'))->pluck('id')));
+            $input->put('relation_one_to_many_has', (int)\App\Telenok\Core\Model\Object\Type::where('code', $input->get('relation_one_to_many_has'))->orWhere('id', $input->get('relation_one_to_many_has'))->pluck('id'));
         }
         else
         {
@@ -223,7 +252,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         
         $input->put('multilanguage', 0);
 		$input->put('allow_sort', 0);
-		
+
         return parent::preProcess($model, $type, $input);
     } 
 
@@ -333,7 +362,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         {
             \Session::flash('warning.hasMany', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));
         }
-        
+
         return parent::postProcess($model, $type, $input);
     }
     

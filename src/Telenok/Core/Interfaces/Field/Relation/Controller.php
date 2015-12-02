@@ -57,29 +57,43 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 		$model = app($class);
 
-		$query = $model::withPermission()
-			->join('object_translation', function($join) use ($model)
-			{
-				$join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id');
-			})
-			->where(function($query) use ($term, $model)
-			{
-				if (trim($term))
-				{
-					\Illuminate\Support\Collection::make(explode(' ', $term))
-					->reject(function($i)
-					{
-						return !trim($i);
-					})
-					->each(function($i) use ($query)
-					{
-						$query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
-					});
+		$query = $model::withPermission();
 
-					$query->orWhere($model->getTable() . '.id', (int) $term);
-				}
+        if (in_array('title', $model->getMultilanguage(), true))
+        {
+			$query->join('object_translation', function($join) use ($model)
+			{
+				$join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id')
+                    ->on('object_translation.translation_object_field_code', '=', \DB::raw("'title'"))
+                    ->on('object_translation.translation_object_language', '=', \DB::raw("'".config('app.locale')."'"));
 			});
+        }
 
+        $query->where(function($query) use ($term, $model)
+        {
+            if (trim($term))
+            {
+                \Illuminate\Support\Collection::make(explode(' ', $term))
+                ->reject(function($i)
+                {
+                    return !trim($i);
+                })
+                ->each(function($i) use ($query, $model)
+                {
+                    if (in_array('title', $model->getMultilanguage(), true))
+                    {
+                        $query->where('object_translation.translation_object_string', 'like', "%{$i}%");
+                    }
+                    else
+                    {
+                        $query->where($model->getTable() . '.title', 'like', "%{$i}%");
+                    }
+                });
+
+                $query->orWhere($model->getTable() . '.id', (int) $term);
+            }
+        });
+        
 		if ($closure instanceof \Closure)
 		{
 			$closure($query);
