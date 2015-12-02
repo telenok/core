@@ -168,7 +168,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
 		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
 		{
-			if ( (!empty($idsAdd) || !empty($idsDelete)))
+			if (!empty($idsDelete))
 			{ 
 
 				if (in_array('*', $idsDelete, true))
@@ -179,24 +179,24 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 				{
 					$model->{$method}()->detach($idsDelete);
 				}
+            }
 
-                if (!$model->{$method}()->count() && empty($idsAdd))
+            if (!$model->{$method}()->count() && empty($idsAdd))
+            {
+                $idsAdd = $field->relation_many_to_many_default->all();
+            }   
+
+            foreach($idsAdd as $id)
+            {
+                try
                 {
-                    $idsAdd = $field->relation_many_to_many_default->all();
-                }   
-                
-				foreach($idsAdd as $id)
-				{
-					try
-					{
-						if (app('auth')->can('update', $id))
-						{
-							$model->{$method}()->attach($id);
-						}
-					}
-                    catch (\Exception $e) {}
-				}
-			}
+                    if (app('auth')->can('update', $id))
+                    {
+                        $model->{$method}()->attach($id);
+                    }
+                }
+                catch (\Exception $e) {}
+            }
 		}
 
         if ($field->required && !$model->{$method}()->count())
