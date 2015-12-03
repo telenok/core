@@ -1,11 +1,11 @@
 <?php
-    
+
     $domAttr = ['class' => 'col-md-6', 'disabled' => 'disabled'];
     $method = camel_case($field->code);
     $jsUnique = str_random();
- 
+
     $linkedField = $field->relation_many_to_many_has ? 'relation_many_to_many_has' : 'relation_many_to_many_belong_to';
-	
+
 	$disabledCreateLinkedType = false;
 
 	$linkedType = $controller->getLinkedModelType($field);
@@ -14,7 +14,6 @@
 	{
 		$disabledCreateLinkedType = true;
 	}
-
 ?>
 <div class="widget-box transparent" data-field-key='{{ $field->code }}'>
     <div class="widget-header widget-header-small">
@@ -65,9 +64,7 @@
                 @endif
             </div>
 
-
             <script type="text/javascript">
-
             (function()
             {
                 jQuery('ul.nav-tabs#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab a:first').tab('show');
@@ -112,6 +109,12 @@
                         ajax : '{!! $urlListTable !!}', 
                         buttons : buttons
                     });
+                    
+                    jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}")
+                        .on('xhr.dt', function ( e, settings, json, xhr )
+                        {
+                            jQuery("input.{{$field->code}}_delete_{{$jsUnique}}").remove();
+                        });
                 }
 
                 buttons = [];
@@ -161,22 +164,53 @@
 
 <script type="text/javascript">
 
-    function addM2M{{$jsUnique}}(val) 
+    function markDeleted{{$jsUnique}}(val)
+    {
+        var $table = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
+        var $dt = $table.dataTable();
+        var $tr = jQuery("tbody tr", $table);
+
+        $tr.each(function(i, tr)
+        {
+            var data = $dt.fnGetData(tr);
+
+            if (data.id == val)
+            {
+                jQuery(tr).addClass('line-through red');
+                jQuery('button.trash-it i', tr).addClass('fa-power-off').removeClass('fa-trash-o');
+                jQuery('button.trash-it', tr).addClass('btn-danger').removeClass('btn-success');
+            }
+        });
+    }
+
+    function addM2MAdditional{{$jsUnique}}(val) 
     {
         jQuery('<input type="hidden" class="{{$field->code}}_add_{{$jsUnique}}" name="{{$field->code}}_add[]" value="'+val+'" />')
                 .insertBefore("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
-
-        jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='"+val+"']").remove();
-        jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='*']").remove();
     }
 
     function removeM2M{{$jsUnique}}(val) 
     {
+        var $table = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
+
+        if (jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='*']").size())
+        {
+            jQuery('tr', $table).removeClass('line-through red');
+            jQuery('button.trash-it i', $table).removeClass('fa-power-off').addClass('fa-trash-o');
+            jQuery('button.trash-it', $table).removeClass('btn-danger').addClass('btn-success');
+        }
+
+        jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='*']").remove();
+
         jQuery('<input type="hidden" class="{{$field->code}}_delete_{{$jsUnique}}" name="{{$field->code}}_delete[]" value="'+val+'" />')
                 .insertBefore("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
 
+        markDeleted{{$jsUnique}}(val);
+    }
+
+    function removeM2MAddition{{$jsUnique}}(val) 
+    {
         jQuery("input.{{$field->code}}_add_{{$jsUnique}}[value='"+val+"']").remove();
-        jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='*']").remove(); 
     }
 
     function removeAllM2M{{$jsUnique}}() 
@@ -184,10 +218,13 @@
         jQuery("input.{{$field->code}}_delete_{{$jsUnique}}").remove();
 
         var $table = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
-        $table.DataTable().clear().draw('page');
 
         jQuery('<input type="hidden" class="{{$field->code}}_delete_{{$jsUnique}}" name="{{$field->code}}_delete[]" value="*" />')
-                    .insertBefore($table);
+                .insertBefore($table);
+
+        jQuery('tbody tr', $table).addClass('line-through red');
+        jQuery('tbody tr button.trash-it i', $table).removeClass('fa fa-trash-o').addClass('fa fa-power-off');
+        jQuery('tbody tr button.trash-it', $table).removeClass('btn-danger').addClass('btn-success');
     }
 
     function createM2M{{$jsUnique}}(url) 
@@ -212,7 +249,7 @@
 
                 jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").DataTable().row.add(data).draw();
 
-                addM2M{{$jsUnique}}(data.id);
+                addM2MAdditional{{$jsUnique}}(data.id);
             });
 
             $modal.html(data.tabContent);
@@ -260,25 +297,24 @@
 
     function deleteTableRow{{$field->code}}{{$uniqueId}}(obj) 
     {
-        var $dt = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}").DataTable();
-        var row = $dt.row( jQuery(obj).parents('tr') )
-        var data = row.data();
+        var $dt = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}").dataTable();
+        var $tr = jQuery(obj).closest("tr");
 
-            row.remove().draw();
+        var data = $dt.fnGetData($tr[0]);
 
         removeM2M{{$jsUnique}}(data.id);
     }
 
     function deleteM2MAddition{{$jsUnique}}(obj) 
     {
-        var $dt = jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").DataTable();
+        var $dt = jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").dataTable();
+        var $tr = jQuery(obj).closest("tr");
 
-        var row = $dt.row( jQuery(obj).parents('tr') )
-        var data = row.data();
+        var data = $dt.fnGetData($tr[0]);
+        var rownum = $dt.fnGetPosition($tr[0]);
+            $dt.fnDeleteRow(rownum);
 
-            row.remove().draw(); 
-
-        removeM2M{{$jsUnique}}(data.id);
+        removeM2MAddition{{$jsUnique}}(data.id);
     } 
 
     function chooseM2M{{$jsUnique}}(url) 
@@ -303,7 +339,7 @@
 
                 jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").DataTable().row.add(data).draw();
 
-                addM2M{{$jsUnique}}(data.id);
+                addM2MAdditional{{$jsUnique}}(data.id);
             });
 
             $modal.html(data.tabContent);

@@ -16,13 +16,15 @@
         }
     }
     
-?>  
+    $urlListTitle = route($controller->getRouteListTitle(), ['id' => $type->getKey()]);
+    
+?>
 
-<div class="widget-box transparent" data-field-key='{{ $field->code }}'>
+<div class="widget-box transparent" data-field-key='{{ $model->code }}'>
     <div class="widget-header widget-header-small">
         <h4>
             <i class="fa fa-list-ul"></i>
-            {{ $field->translate('title_list') }}
+            {{ $controller->LL('property.default') }}
         </h4> 
     </div>
     <div class="widget-body"> 

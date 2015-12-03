@@ -218,7 +218,7 @@ div.widget-header.widget-header-green { background: linear-gradient(to bottom, #
     position: absolute;
     right: 30px;
     top: 25px;
-    color: white;
+    color: green;
 }
 
 .dataTables_wrapper .pagination li {display: none;}

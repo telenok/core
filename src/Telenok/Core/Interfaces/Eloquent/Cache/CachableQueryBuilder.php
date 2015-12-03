@@ -143,7 +143,7 @@ class CachableQueryBuilder extends Builder {
      */
     protected function getCacheInfo()
     {
-        return array($this->getCacheKey(), $this->cacheMinutes);
+        return [$this->getCacheKey(), $this->cacheMinutes];
     }
 
     /**

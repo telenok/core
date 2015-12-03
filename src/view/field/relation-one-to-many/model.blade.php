@@ -67,6 +67,7 @@
                 
                 
                 <script type="text/javascript">
+                    
                     (function()
                     {
                         jQuery('ul.nav-tabs#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab a:first').tab('show');
@@ -111,6 +112,12 @@
                                 ajax : '{!! $urlListTable !!}', 
                                 buttons: buttons
                             });
+                            
+                            jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}")
+                                .on('xhr.dt', function ( e, settings, json, xhr )
+                                {
+                                    jQuery("input.{{$field->code}}_delete_{{$jsUnique}}").remove();
+                                });
                         }
 
                         buttons = [];
@@ -158,24 +165,56 @@
     </div>
 
     <script type="text/javascript">
-        function addO2MHas{{$jsUnique}}(val) 
+
+        function markDeleted{{$jsUnique}}(val)
+        {
+            var $table = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
+            var $dt = $table.dataTable();
+            var $tr = jQuery("tbody tr", $table);
+
+            $tr.each(function(i, tr)
+            {
+                var data = $dt.fnGetData(tr);
+
+                if (data.id == val)
+                {
+                    jQuery(tr).addClass('line-through red');
+                    jQuery('button.trash-it i', tr).addClass('fa-power-off').removeClass('fa-trash-o');
+                    jQuery('button.trash-it', tr).addClass('btn-danger').removeClass('btn-success');
+                }
+            });
+        }
+
+        function addO2MHasAdditional{{$jsUnique}}(val) 
         {
             jQuery('<input type="hidden" class="{{$field->code}}_add_{{$jsUnique}}" name="{{$field->code}}_add[]" value="'+val+'" />')
                     .insertBefore("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
-
-            jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='"+val+"']").remove();
-            jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='*']").remove();
         }
-        
+
         function removeO2MHas{{$jsUnique}}(val) 
         {
+            var $table = jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
+
+            if (jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='*']").size())
+            {
+                jQuery('tr', $table).removeClass('line-through red');
+                jQuery('button.trash-it i', $table).removeClass('fa-power-off').addClass('fa-trash-o');
+                jQuery('button.trash-it', $table).removeClass('btn-danger').addClass('btn-success');
+            }
+            
+            jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='*']").remove();
+
             jQuery('<input type="hidden" class="{{$field->code}}_delete_{{$jsUnique}}" name="{{$field->code}}_delete[]" value="'+val+'" />')
                     .insertBefore("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}");
 
-            jQuery("input.{{$field->code}}_add_{{$jsUnique}}[value='"+val+"']").remove();
-            jQuery("input.{{$field->code}}_delete_{{$jsUnique}}[value='*']").remove(); 
+            markDeleted{{$jsUnique}}(val);
         }
-        
+
+        function removeO2MHasAddition{{$jsUnique}}(val) 
+        {
+            jQuery("input.{{$field->code}}_add_{{$jsUnique}}[value='"+val+"']").remove();
+        }
+
         function removeAllO2MHas{{$jsUnique}}() 
         {
             jQuery("input.{{$field->code}}_delete_{{$jsUnique}}").remove();
@@ -189,7 +228,7 @@
             jQuery('tbody tr button.trash-it i', $table).removeClass('fa fa-trash-o').addClass('fa fa-power-off');
             jQuery('tbody tr button.trash-it', $table).removeClass('btn-danger').addClass('btn-success');
         }
-        
+
         function createO2MHas{{$jsUnique}}(url) 
         {
             jQuery.ajax({
@@ -212,11 +251,8 @@
 				
                     var $dt = jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").dataTable();
                     var a = $dt.fnAddData(data, true);
-                    var oSettings = $dt.fnSettings();
-                    var nTr = oSettings.aoData[ a[0] ].nTr;
 
-                    addO2MHas{{$jsUnique}}(data.id);
-                    
+                    addO2MHasAdditional{{$jsUnique}}(data.id);
                 });
 				
 				$modal.html(data.tabContent);
@@ -249,7 +285,6 @@
                     var $dt = $table.dataTable();
                     var $tr = jQuery(obj).closest('tr');
                         $dt.fnUpdate({title: data.title}, $tr[0], 1);
-
                 });
 
                 $modal.html(data.tabContent);
@@ -268,10 +303,6 @@
 
             var data = $dt.fnGetData($tr[0]);
 
-            $tr.toggleClass('line-through red');
-            jQuery('button.trash-it i', $tr).toggleClass('fa fa-trash-o').toggleClass('fa fa-power-off');
-            jQuery('button.trash-it', $tr).toggleClass('btn-danger').toggleClass('btn-success');
-
             removeO2MHas{{$jsUnique}}(data.id);
         }
 
@@ -283,8 +314,8 @@
             var data = $dt.fnGetData($tr[0]);
             var rownum = $dt.fnGetPosition($tr[0]);
                 $dt.fnDeleteRow(rownum);
-            
-            removeO2MHas{{$jsUnique}}(data.id);
+
+            removeO2MHasAddition{{$jsUnique}}(data.id);
         } 
 
         function chooseO2MHas{{$jsUnique}}(url) 
@@ -312,7 +343,7 @@
                     var oSettings = $dt.fnSettings();
                     var nTr = oSettings.aoData[ a[0] ].nTr;
 
-                    addO2MHas{{$jsUnique}}(data.id);
+                    addO2MHasAdditional{{$jsUnique}}(data.id);
 
                 });
 				
