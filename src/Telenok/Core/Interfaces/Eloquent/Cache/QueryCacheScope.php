@@ -8,15 +8,6 @@ use Illuminate\Database\Eloquent\ScopeInterface;
 
 class QueryCacheScope implements ScopeInterface {
 
-    protected $cacheMinutes;
-    protected $cacheTags;
-
-    function __construct($cacheTags, $cacheMinutes = 60)
-    {
-        $this->cacheTags = $cacheTags;
-        $this->cacheMinutes = $cacheMinutes;
-    }
-
     /**
      * Apply the scope to a given Eloquent query builder.
      *
@@ -26,7 +17,7 @@ class QueryCacheScope implements ScopeInterface {
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->remember($this->cacheMinutes)->cacheTags($this->cacheTags);
+        $builder->remember($model->getCacheMinuts())->cacheTags($model->getCacheTags());
     }
 
     /**

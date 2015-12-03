@@ -3,14 +3,9 @@
 class Model extends \Illuminate\Database\Eloquent\Model {
 
 	use \Illuminate\Database\Eloquent\SoftDeletes; 
-    use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
-    
-    
-    protected $clearOnChange = true;
-    protected $cacheAll = true;
-    
-    
-	public $incrementing = false;
+	use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
+
+    public $incrementing = false;
 	public $timestamps = true;
 	protected $hasVersioning = true;
 	protected $ruleList = [];
@@ -23,7 +18,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	protected static $listMultilanguage = [];
 	protected static $listFieldDate = [];
     protected static $macros = [];
-
+    
     /**
      * Register a custom macro.
      *
@@ -102,7 +97,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	public static function boot()
 	{
 		parent::boot();
-
+        
 		static::creating(function($model)
 		{
 			$model->generateKeyId();

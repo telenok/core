@@ -1,42 +1,30 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Eloquent\Cache;
+<?php namespace Telenok\Core\Interfaces\Eloquent\Cache;
 
 use Telenok\Core\Interfaces\Eloquent\Cache\CachableQueryBuilder as QueryBuilder;
 
 trait QueryCache {
 
-    protected $cacheTagsPassed;
+    protected $cacheMinutes = 20;
 
-    /**
-     * Boot the Active Events trait for a model.
-     *
-     * @return void
-     */
+    
     public static function bootQueryCache()
     {
-        $model = parent::getModel();
-        $cacheTagsPassed = self::getCacheTags($model);
+        static::addGlobalScope(new QueryCacheScope());
 
-        if ($model->cacheAll)
+        static::creating(function($model)
         {
-            static::addGlobalScope(new QueryCacheScope($cacheTagsPassed));
-        }
-        if ($model->clearOnChange)
+            $model->clearCache();
+        });
+
+        static::updating(function($model)
         {
-            static::creating(function ()
-            {
-                parent::clearCache();
-            });
-            static::updating(function ()
-            {
-                parent::clearCache();
-            });
-            static::deleting(function ()
-            {
-                parent::clearCache();
-            });
-        }
+            $model->clearCache();
+        });
+
+        static::deleting(function($model)
+        {
+            $model->clearCache();
+        });
     }
 
     /**
@@ -49,28 +37,19 @@ trait QueryCache {
         return (new static)->newQueryWithoutScope(new QueryCacheScope(null));
     }
 
-    public static function clearCache()
+    public function clearCache()
     {
-        $tag = parent::getModel()->getTable();
-        \Cache::tags($tag)->flush();
+        \Cache::tags($this->getCacheTags())->flush();
     }
 
-    /**
-     * @param $model
-     * @return mixed
-     */
-    public static function getCacheTags($model)
+    public function getCacheMinuts()
     {
-        if ($model->cacheTags)
-        {
-            $cacheTags = $model->cacheTags;
-            return $cacheTags;
-        }
-        else
-        {
-            $cacheTags = $model->getTable();
-            return $cacheTags;
-        }
+        return $this->cacheMinutes;
+    }
+
+    public function getCacheTags()
+    {
+        return (array)$this->getTable();
     }
 
     /**
@@ -82,7 +61,7 @@ trait QueryCache {
     {
         $conn = $this->getConnection();
         $grammar = $conn->getQueryGrammar();
+
         return new QueryBuilder($conn, $grammar, $conn->getPostProcessor());
     }
-
 }

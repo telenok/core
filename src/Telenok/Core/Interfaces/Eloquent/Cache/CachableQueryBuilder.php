@@ -1,6 +1,5 @@
 <?php namespace Telenok\Core\Interfaces\Eloquent\Cache;
 
-use Cache;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Grammars\Grammar;
@@ -17,26 +16,15 @@ class CachableQueryBuilder extends Builder {
      * @var string
      */
     protected $cacheKey;
+    protected $cacheTags;
 
     /**
      * The number of minutes to cache the query.
      *
      * @var int
      */
-    protected $cacheMinutes;
-    protected $cache;
+    protected $cacheMinutes = 10;
 
-    /**
-     * Create a new query builder instance.
-     *
-     * @param  \Illuminate\Database\ConnectionInterface $connection
-     * @param  \Illuminate\Database\Query\Grammars\Grammar $grammar
-     * @param  \Illuminate\Database\Query\Processors\Processor $processor
-     */
-    public function __construct(ConnectionInterface $connection, Grammar $grammar, Processor $processor)
-    {
-        parent::__construct($connection, $grammar, $processor);
-    }
 
     /**
      * Create a new cachable query builder instance.
@@ -73,7 +61,9 @@ class CachableQueryBuilder extends Builder {
     public function getCached($columns = array('*'))
     {
         if (is_null($this->columns))
+        {
             $this->columns = $columns;
+        }
 
         // If the query is requested to be cached, we will cache it using a unique key
         // for this database connection and query statement, including the bindings
@@ -81,7 +71,8 @@ class CachableQueryBuilder extends Builder {
         list($key, $minutes) = $this->getCacheInfo();
 
         $callback = $this->getCacheCallback($columns);
-
+        
+        
         // If the "minutes" value is less than zero, we will use that as the indicator
         // that the value should be remembered values should be stored indefinitely
         // and if we have minutes we will use the typical remember function here.
@@ -89,15 +80,24 @@ class CachableQueryBuilder extends Builder {
         {
             //check if cache driver supports tags
             if ($this->getCacheTags())
-                return Cache::tags($this->getCacheTags())->rememberForever($key, $callback, 60);
+            {
+                return \Cache::tags($this->getCacheTags())->rememberForever($key, $callback, 60);
+            }
             else
-                return Cache::rememberForever($key, $callback, 60);
+            {
+                return \Cache::rememberForever($key, $callback, 60);
+            }
         }
+
         //check if cache driver supports tags
         if ($this->getCacheTags())
-            return Cache::tags($this->getCacheTags())->remember($key, $minutes, $callback);
+        {
+            return \Cache::tags($this->getCacheTags())->remember($key, $minutes, $callback);
+        }
         else
-            return Cache::remember($key, $minutes, $callback);
+        {
+            return \Cache::remember($key, $minutes, $callback);
+        }
     }
 
     /**
@@ -108,9 +108,9 @@ class CachableQueryBuilder extends Builder {
      */
     protected function getCacheCallback($columns)
     {
-        return function () use ($columns)
+        return function() use ($columns)
         {
-            return $this->getFresh($columns);
+            return parent::get($columns);
         };
     }
 
@@ -121,7 +121,7 @@ class CachableQueryBuilder extends Builder {
      */
     public function getCacheKey()
     {
-        return $this->cacheKey ? : $this->generateCacheKey();
+        return $this->generateCacheKey();
     }
 
     /**
@@ -160,9 +160,12 @@ class CachableQueryBuilder extends Builder {
             {
                 $this->cacheTags[] = $tag;
             }
+
             return $this;
         }
+
         $this->cacheTags[] = $cacheTags;
+
         return $this;
     }
 
@@ -172,10 +175,10 @@ class CachableQueryBuilder extends Builder {
      * @return \Illuminate\Cache\CacheManager
      */
     protected function getCacheTags()
-    {
-        if ((Cache::getDefaultDriver() != 'file') && (Cache::getDefaultDriver() != 'database'))
+    {        
+        if ((\Cache::getDefaultDriver() != 'file') && (\Cache::getDefaultDriver() != 'database'))
         {
-            return implode(",", $this->cacheTags);
+            return $this->cacheTags;
         }
     }
 
@@ -188,9 +191,10 @@ class CachableQueryBuilder extends Builder {
     public function get($columns = array('*'))
     {
         if (!is_null($this->cacheMinutes))
+        {
             return $this->getCached($columns);
+        }
 
-        return $this->getFresh($columns);
+        return parent::get($columns);
     }
-
 }
