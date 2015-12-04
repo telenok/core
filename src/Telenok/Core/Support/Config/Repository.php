@@ -154,7 +154,7 @@ class Repository {
 		}
 		catch (\Exception $e)
 		{
-			throw new \RuntimeException('Failed to get widget. Error: ' . $e->getMessage());
+			throw new \RuntimeException('Failed to get widget group. Error: ' . $e->getMessage());
 		}
 
 		return $list;
