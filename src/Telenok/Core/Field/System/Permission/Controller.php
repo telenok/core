@@ -101,20 +101,32 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	{ 
 		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.permission'))
 		{
+            $permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
+
 			$permissionList = (array)$input->get('permission', []);
 
+            $permissionListDefault = $field->permission_default;
+            
 			\App\Telenok\Core\Security\Acl::resource($model)->unsetPermission();
 
-			foreach($permissionList as $permissionCode => $persmissionIds)
-			{
-				if (!empty($persmissionIds))
-				{
-					foreach($persmissionIds as $id)
-					{
-						\App\Telenok\Core\Security\Acl::subject($id)->setPermission($permissionCode, $model);
-					}
-				}
-			}
+            foreach($permissions->all() as $permission)
+            {
+                $persmissionIds = [];
+                
+                if (isset($permissionList[$permission->code]))
+                {
+                    $persmissionIds = $permissionList[$permission->code];
+                }
+                else if ($permissionListDefault->get($permission->code))
+                {
+                    $persmissionIds = $permissionListDefault->get($permission->code);
+                }
+
+                foreach($persmissionIds as $id)
+                {
+                    \App\Telenok\Core\Security\Acl::subject($id)->setPermission($permission->code, $model);
+                }
+            }
 		}
 
 		return $model;

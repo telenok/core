@@ -554,11 +554,16 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 		$term = trim($this->getRequest()->input('term'));
 		$return = [];
 
-		$class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
+        if ($id)
+        {
+            $model = app(\App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model);
+        }
+        else
+        {
+            $model = app('\App\Telenok\Core\Model\Object\Sequence');
+        }
 
-		$model = app($class);
-
-		$query = $model::withPermission();
+		$query = $model::withPermission()->with('sequencesObjectType');
 
         if (in_array('title', $model->getMultilanguage(), true))
         {
@@ -594,15 +599,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
                 $query->orWhere($model->getTable() . '.id', (int) $term);
             }
         });
-        
+
 		if ($closure instanceof \Closure)
 		{
 			$closure($query);
 		}
-			
+
 		$query->take(20)->groupBy($model->getTable() . '.id')->get()->each(function($item) use (&$return)
 		{
-			$return[] = ['value' => $item->id, 'text' => "[{$item->id}] " . $item->translate('title')];
+			$return[] = ['value' => $item->id, 'text' => "[{$item->sequencesObjectType->translate('title')} #{$item->id}] " . $item->translate('title')];
 		});
 
 		return $return;

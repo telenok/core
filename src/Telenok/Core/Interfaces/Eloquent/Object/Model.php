@@ -3,7 +3,6 @@
 class Model extends \Illuminate\Database\Eloquent\Model {
 
 	use \Illuminate\Database\Eloquent\SoftDeletes; 
-	use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
 
     public $incrementing = false;
 	public $timestamps = true;

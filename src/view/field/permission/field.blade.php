@@ -15,9 +15,9 @@
             $permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
         }
     }
-    
-    $urlListTitle = route($controller->getRouteListTitle(), ['id' => $type->getKey()]);
-    
+
+    $urlListTitle = route($controller->getRouteListTitle(), ['id' => 0]);
+
 ?>
 
 <div class="widget-box transparent" data-field-key='{{ $model->code }}'>
@@ -40,7 +40,11 @@
                 @foreach($permissions as $permission) 
                 <div class="tab-pane active" id="{{$permission->code . $jsUnique}}">
                     <div class="controls" style="margin-left: 0;">
-                        <select class="chosen" multiple data-placeholder="{{$controller->LL('notice.choose')}}" id="permission-{{$permission->code . $jsUnique}}" name="permission[{{$permission->code}}][]">
+                        <select class="chosen" 
+                                multiple 
+                                data-placeholder="{{$controller->LL('notice.choose')}}" 
+                                id="permission-{{$permission->code . $jsUnique}}" 
+                                name="permission_default[{{$permission->code}}][]">
                             <?php
 
                             $sequence = new \App\Telenok\Core\Model\Object\Sequence();
