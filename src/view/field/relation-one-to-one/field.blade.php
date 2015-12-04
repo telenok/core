@@ -52,6 +52,7 @@
 <div class="form-group">
     {!! Form::label('relation_one_to_one_default', $controller->LL('property.default'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
     <div class="col-sm-9">
+        {!! Form::hidden('relation_one_to_one_default', 0) !!}
         <select class="chosen-select" data-placeholder="{{$controller->LL('notice.choose')}}" 
                 id="relation_one_to_one_default-{{$jsUnique}}" name="relation_one_to_one_default">
         

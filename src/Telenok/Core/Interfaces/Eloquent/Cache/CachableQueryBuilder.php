@@ -16,7 +16,8 @@ class CachableQueryBuilder extends Builder {
      * @var string
      */
     protected $cacheKey;
-    protected $cacheTags;
+    protected $cacheTags = [];
+    protected $cachePrefix;
 
     /**
      * The number of minutes to cache the query.
@@ -34,22 +35,11 @@ class CachableQueryBuilder extends Builder {
      * @return $this
      * @internal param Cache $cache
      */
-    public function remember($minutes, $key = null)
+    public function remember($minutes)
     {
-        list($this->cacheMinutes, $this->cacheKey) = array($minutes, $key);
+        $this->cacheMinutes = $minutes;
 
         return $this;
-    }
-
-    /**
-     * Indicate that the query results should be cached forever.
-     *
-     * @param  string $key
-     * @return \Illuminate\Database\Query\Builder|static
-     */
-    public function rememberForever($key = null)
-    {
-        return $this->remember(-1, $key);
     }
 
     /**
@@ -65,6 +55,15 @@ class CachableQueryBuilder extends Builder {
             $this->columns = $columns;
         }
 
+        $tags = $this->getCacheTags();
+
+        foreach ((array)$this->joins as $j)
+        {
+            $tags[] = $this->getCachePrefix() . $j->table;
+        }
+
+        $tags = array_unique($tags);
+
         // If the query is requested to be cached, we will cache it using a unique key
         // for this database connection and query statement, including the bindings
         // that are used on this query, providing great convenience when caching.
@@ -72,31 +71,14 @@ class CachableQueryBuilder extends Builder {
 
         $callback = $this->getCacheCallback($columns);
         
-        
-        // If the "minutes" value is less than zero, we will use that as the indicator
-        // that the value should be remembered values should be stored indefinitely
-        // and if we have minutes we will use the typical remember function here.
-        if ($minutes < 0)
-        {
-            //check if cache driver supports tags
-            if ($this->getCacheTags())
-            {
-                return \Cache::tags($this->getCacheTags())->rememberForever($key, $callback, 60);
-            }
-            else
-            {
-                return \Cache::rememberForever($key, $callback, 60);
-            }
-        }
-
         //check if cache driver supports tags
-        if ($this->getCacheTags())
+        if ($minutes && $tags)
         {
-            return \Cache::tags($this->getCacheTags())->remember($key, $minutes, $callback);
+            return \Cache::tags($tags)->remember($key, $minutes, $callback);
         }
         else
         {
-            return \Cache::remember($key, $minutes, $callback);
+            return $callback;
         }
     }
 
@@ -114,14 +96,19 @@ class CachableQueryBuilder extends Builder {
         };
     }
 
-    /**
-     * Get a unique cache key for the complete query.
-     *
-     * @return string
-     */
     public function getCacheKey()
     {
         return $this->generateCacheKey();
+    }
+
+    public function getCachePrefix()
+    {
+        return $this->cachePrefix;
+    }
+    
+    public function cachePrefix($prefix)
+    {
+        $this->cachePrefix = $prefix;
     }
 
     /**
@@ -175,7 +162,7 @@ class CachableQueryBuilder extends Builder {
      * @return \Illuminate\Cache\CacheManager
      */
     protected function getCacheTags()
-    {        
+    {
         if ((\Cache::getDefaultDriver() != 'file') && (\Cache::getDefaultDriver() != 'database'))
         {
             return $this->cacheTags;

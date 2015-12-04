@@ -53,6 +53,7 @@
     <div class="form-group">
         {!! Form::label('relation_many_to_many_default', $controller->LL('property.default'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
         <div class="col-sm-9">
+            {!! Form::hidden('relation_many_to_many_default[]', '') !!}
             <select class="chosen-select" multiple data-placeholder="{{$controller->LL('notice.choose')}}" 
                     id="relation_many_to_many_default-{{$jsUnique}}" name="relation_many_to_many_default[]">
 

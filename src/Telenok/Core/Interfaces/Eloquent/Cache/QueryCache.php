@@ -49,7 +49,12 @@ trait QueryCache {
 
     public function getCacheTags()
     {
-        return (array)$this->getTable();
+        return $this->getCachePrefix() . $this->getTable();
+    }
+
+    public function getCachePrefix()
+    {
+        return 'table_';
     }
 
     /**
