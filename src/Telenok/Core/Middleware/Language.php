@@ -17,18 +17,30 @@ class Language implements Middleware {
 	public function handle($request, \Closure $next)
 	{
         $localeCollection = $this->app->config->get('app.locales');
+
+		$segmentUrl = $request->segment(1);
         
-		$localeUrl = $request->segment(1);
-        $localeHost = $localeCollection->first(function($item) use ($request) { return strpos('.' . $request->getHost(), ".{$item}.") !== FALSE; });
-        
+        if ($segmentUrl == 'telenok')
+        {
+            if (app('auth')->check())
+            {
+                $locale = app('auth')->user()->locale;
+            }
+        }
+        else
+        {
+            $locale = $segmentUrl;
+        }
+
+        $localeHost = $localeCollection->first(function($item) use ($request) { return strpos('.' . $request->getHost(), ".{$item}.") !== FALSE; });            
         $localeCurrent = $this->app->config->get('app.locale');
         $sessionLocale = $this->app->session->get('app.locale');
-        
-		if (($localeUrl !== $sessionLocale && in_array($localeUrl, $localeCollection->all(), true)))
-		{
-            $this->app->session->set('app.locale', $localeUrl);
-            $this->app->setLocale($localeUrl);
-		}
+
+        if (($locale !== $sessionLocale && in_array($locale, $localeCollection->all(), true)))
+        {
+            $this->app->session->set('app.locale', $locale);
+            $this->app->setLocale($locale);
+        }
         else if ($localeHost !== $sessionLocale && in_array($localeHost, $localeCollection->all(), true))
         {
             $this->app->session->set('app.locale', $localeHost);

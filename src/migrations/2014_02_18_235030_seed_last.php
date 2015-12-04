@@ -736,7 +736,7 @@ class SeedLast extends Migration {
 				'title' => ['en' => 'Language', 'ru' => "Язык"],
 				'title_list' => ['en' => 'Language', 'ru' => "Язык"],
 				'key' => 'string',
-				'code' => 'language',
+				'code' => 'locale',
 				'active' => 1,
 				'field_object_type' => 'user',
 				'field_object_tab' => 'main',
