@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Widget\Rte;
 
-class Controller extends \Telenok\Core\Interfaces\Widget\Controller {
+class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 
     protected $key = 'rte';
     protected $parent = 'standart';

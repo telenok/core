@@ -230,7 +230,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getListItem($model)
     {  
-        $query = $model::withTrashed()->select($model->getTable() . '.*')->withPermission();
+        $query = $model::withPermission()->withTrashed();
 
         $this->getFilterQuery($model, $query); 
 
