@@ -229,8 +229,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     }
     
     public function getFrontendController()
-    {
-        return $this->frontendController ?: app('controllerRequest');
+    {   
+        try
+        {
+            return $this->frontendController ?: app('controllerRequest');
+        }
+        catch (\Exception $e) {}
     }
     
 	public function getTemplateContent()
