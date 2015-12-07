@@ -13,6 +13,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $frontendController;
 	protected $cacheTime = 3600;
 	protected $cacheKey;
+	protected $cacheEnabled = true;
     protected $config = [];
     protected $widgetTemplateDirectory = 'resources/views/widget/';
 
@@ -24,6 +25,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		parent::__construct();
 	}
 
+    public function setCacheEnabled($param)
+    {
+        $this->cacheEnabled = $param;
+        
+        return $this;
+    }
+
+    public function getCacheEnabled()
+    {
+        return $this->cacheEnabled;
+    }
+    
 	public function getIcon()
 	{
 		return $this->icon;
@@ -79,10 +92,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		$this->cacheTime = $param;
 
-        if ($c = $this->getFrontendController())
-        {
-            $c->setCacheTime($param);
-        }
+        ($c = $this->getFrontendController()) ? $c->setCacheTime($param) : '';
 
 		return $this;
 	}
@@ -92,12 +102,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this->cacheTime;
 	}
 
-	public function getCacheKey()
+	public function getCacheKey($additional = '')
 	{ 
         $append = $this->getFrontendView() 
                     . "." . config('app.locale', config('app.localeDefault'))
                     . "." . implode('', (array)app('router')->getCurrentRoute()->parameters())
-                    . "." . collect($this->getRequest()->all())->toJson();
+                    . "." . collect($this->getRequest()->all())->toJson()
+                    . ($additional ? "." . $additional : '');
 
         
         if ($this->cacheKey)
@@ -126,16 +137,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return false;
 	}
 
-	public function setCachedContent($param = '')
+	public function setCachedContent($content = '')
 	{
-        if (($t = $this->getCacheTime()) && ($k = $this->getCacheKey()) !== false)
+        if ($this->getCacheEnabled() 
+                && ($t = $this->getCacheTime()) 
+                && ($k = $this->getCacheKey()) !== false)
         {
-            \Cache::put($k, $param, $t);
+            \Cache::put($k, $content, $t);
         }
         
 		return $this;
 	}
-    
+
 	public function getContent()
 	{
         $this->setCacheTime($this->getCacheTime());
@@ -147,6 +160,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
         $content = $this->getNotCachedContent();
 
+        if ($this->getCacheEnabled() == false)
+        {
+            ($c = $this->getFrontendController()) ? $c->setCacheTime(0) : '';
+        }
+        
         $this->setCachedContent($content);
 
         return $this->processContent($content);

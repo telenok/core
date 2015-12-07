@@ -47,9 +47,9 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
         return $this->objectType;
     }
 
-	public function getCacheKey()
+	public function getCacheKey($additional = '')
 	{
-        if ($key = parent::getCacheKey())
+        if ($key = parent::getCacheKey($additional))
         {
             return $key . $this->getMenuType() . $this->getNodeIds();
         }

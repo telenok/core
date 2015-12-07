@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Controller\Frontend;
+<?php namespace Telenok\Core\Interfaces\Controller\Frontend;
 
 class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
@@ -15,7 +13,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $backendView = 'core::controller.frontend-container';
 
     protected $cacheKey = 'frontend-controller';
-
+    protected $pageMetaTitle;
+    protected $pageMetaDescription;
+    protected $pageMetaKeywords;
 
     public function __construct()
 	{
@@ -23,7 +23,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 		parent::__construct();
 	}
-	
+    
 	public function setCacheTime($param = 0)
 	{
 		$this->cacheTime = min($this->getCacheTime(), $param);
@@ -305,4 +305,42 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return '';
 	}
 
+    // page meta title
+    public function setPageMetaTitle($param)
+    {
+        $this->pageMetaTitle = $param;
+        
+        return $this;
+    }
+    
+    public function getPageMetaTitle()
+    {
+        return $this->pageMetaTitle;
+    }
+
+    // page meta description
+    public function setPageMetaDescription($param)
+    {
+        $this->pageMetaDescription = $param;
+        
+        return $this;
+    }
+    
+    public function getPageMetaDescription()
+    {
+        return $this->pageMetaDescription;
+    }
+
+    // page meta keywords
+    public function setPageMetaKeywords($param)
+    {
+        $this->pageMetaKeywords = $param;
+        
+        return $this;
+    }
+    
+    public function getPageMetaKeywords()
+    {
+        return $this->pageMetaKeywords;
+    }
 }
