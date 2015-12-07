@@ -1356,4 +1356,18 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_subject_object_sequence');
 	}
+    
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        
+        foreach($this->getFillable() as $f)
+        {
+            if (isset($this->attributes[$f]))
+            {
+                $this->{$f} = $this->attributes[$f];
+            }
+        }
+    }
+
 }

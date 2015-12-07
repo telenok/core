@@ -39,10 +39,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function setModelAttribute($model, $key, $value, $field)
     {
-        if ($value instanceof \App\Telenok\Core\Field\Decimal\BigDecimal)
+        if ($value instanceof \Telenok\Core\Field\Decimal\BigDecimal)
         {
             $value_ = $value->value();
-        } 
+        }
+        else if ($value !== null)
+        {
+            $value_ = $value;
+        }
         else
         {
             $value_ = $field->decimal_default;

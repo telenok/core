@@ -159,11 +159,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         }
 
         $content = $this->getNotCachedContent();
-
-        if ($this->getCacheEnabled() == false)
-        {
-            ($c = $this->getFrontendController()) ? $c->setCacheTime(0) : '';
-        }
         
         $this->setCachedContent($content);
 
