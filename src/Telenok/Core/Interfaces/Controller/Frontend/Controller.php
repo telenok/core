@@ -184,6 +184,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
 	}
 
+    public function validateSession()
+    {
+        return ['logined' => (int)app('auth')->check(), 'csrf_token' => csrf_token()];
+    }
+
 	public function hasAddedCssFile($filePath = '', $key = '')
 	{
 		foreach($this->cssFilePath as $k => $p)

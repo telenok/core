@@ -1,5 +1,7 @@
 <?php
 
+	get('validate/session', array('as' => 'validate.session', 'uses' => "\App\Telenok\Core\Controller\Frontend\Controller@validateSession"));
+
 	get('telenok', array('as' => 'telenok.content', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@getContent"));
 	get('telenok/error', array('as' => 'error.access-denied', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@errorAccessDenied"));
 	get('telenok/validate/session', array('as' => 'telenok.validate.session', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@validateSession"));

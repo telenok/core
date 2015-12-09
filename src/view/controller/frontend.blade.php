@@ -73,7 +73,27 @@ ob_end_clean();
                    xhr.setRequestHeader("X-CSRF-TOKEN", jQuery('meta[name="csrf-token"]').attr('content'));
                 }
             });
+
+            setInterval(function()
+            {
+                jQuery.ajax({
+                    url: "{!! route('validate.session') !!}",
+                    dataType: "json",
+                    success: function(data)
+                    {
+                        if (!data.logined)
+                        {
+                            //showModalLogin();
+                        }
+
+                        if (data.csrf_token)
+                        {
+                            jQuery('meta[name="csrf-token"]').attr('content', data.csrf_token);
+                        }
+                    }
+                });
+            }, 120000);
+
 		</script>
-		
 	</body>
 </html>

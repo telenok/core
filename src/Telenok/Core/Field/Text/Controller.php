@@ -49,15 +49,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
         if ($field->multilanguage)
         {
-            if ($value)
-            {
-                foreach($value as $k => $v)
-                {
-                    $value[$k] = app('\App\Telenok\Core\Field\Text\Processing')->setRawValue($v);
-                }
-            }
-            
             $value = \Illuminate\Support\Collection::make(json_decode($value ?: '[]', true));
+
+            foreach($value->all() as $k => $v)
+            {
+                $value->put($k, app('\App\Telenok\Core\Field\Text\Processing')->setRawValue($v));
+            }
         }
         else
         {
