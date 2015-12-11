@@ -52,7 +52,7 @@
 	post('telenok/module/objects-lists/wizard/update/type/{id}', array('as' => 'telenok.module.objects-lists.wizard.update', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@update"));
 	post('telenok/module/objects-lists/wizard/delete/{id}', array('as' => 'telenok.module.objects-lists.wizard.delete', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@delete"));
 	get('telenok/module/objects-lists/wizard/choose', array('as' => 'telenok.module.objects-lists.wizard.choose', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@choose"));
-	get('telenok/module/objects-lists/wizard/list', array('as' => 'telenok.module.objects-lists.wizard.list', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@getWizardList"));
+	get('telenok/module/objects-lists/wizard/list', array('as' => 'telenok.module.objects-lists.wizard.list', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Wizard\Controller@getList"));
 
 
 	// Fields

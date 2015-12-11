@@ -1,5 +1,10 @@
 <?php namespace Telenok\Core\Interfaces\Support;
 
+/**
+ * @class Telenok.Core.Interfaces.Support.PackageInfo
+ * @abstract
+ * Class describe data about package like title, key, base class, dedscription, image
+ */
 abstract class PackageInfo {
 
     use \Telenok\Core\Support\Traits\Language;

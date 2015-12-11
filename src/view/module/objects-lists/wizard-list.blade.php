@@ -15,36 +15,33 @@
             (function()
             {
                 var columns = []; 
+                
                 @foreach($fields as $key => $field)
-                @if ($key==0)
-                columns.push({ "mData": "choose", "sTitle": "{{ $controller->LL('btn.choose') }}", "bSortable": false });
-                @endif
-                columns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $field->translate('title_list') }}"});
+
+                    @if ($key==0)
+                        columns.push({ 
+                            data : "choose", 
+                            title : "{{ $controller->LL('btn.choose') }}", 
+                            className : "center", 
+                            orderable : false
+                        });
+                    @endif
+
+                    columns.push({
+                        data : "{{ $field->code }}",
+                        title : "{{ $field->translate('title_list') }}", 
+                        orderable : {{ (int)$field->allow_sort ? "true" : "false" }}
+                    });
+
                 @endforeach
 
-                jQuery('#table-{{$gridId}}').dataTable({
-                    order: [],
-                    autoWidth : true,
-                    processing : true,
-                    serverSide : true,
-                    ajax : '{!! URL::route("telenok.module.{$controller->getKey()}.wizard.list", ["id" => empty($typeList) ? $type->getKey() : $typeList]) !!}',
-                    deferRender : true,
-                    JQueryUI : false,
+                telenok.addDataTable({
+                    domId : 'table-{{$gridId}}',
+                    ajax : '{!! URL::route("telenok.module.{$controller->getKey()}.wizard.list", ["typeId" => empty($typeList) ? $type->getKey() : $typeList]) !!}',
                     dom : "<'row'<'col-md-6'B><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
                     columns : columns,
-                    buttons : [],
-                    language : {
-                        paginate : {
-                            next : "{{ trans('core::default.btn.next') }}",
-                            previous : "{{ trans('core::default.btn.prev') }}", 
-                        },
-                        emptyTable : "{{ trans('core::default.table.empty') }}",
-                        search : "{{ trans('core::default.btn.search') }} ",
-                        info : "{{ trans('core::default.table.showed') }}",
-                        infoEmpty : "{{ trans('core::default.table.empty.showed') }}",
-                        zeroRecords : "{{ trans('core::default.table.empty.filtered') }}",
-                        infoFiltered : ""
-                    }
+                    pageLength : 10,
+                    order : []
                 });
             })();
 		</script>

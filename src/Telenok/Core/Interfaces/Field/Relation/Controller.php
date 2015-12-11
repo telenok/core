@@ -48,7 +48,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 . '"');
 	}
 
-	public function getListButtonExtended($item, $field, $type, $uniqueId, $canUpdate)
+	public function getListButton($item, $field = null, $type = null, $uniqueId = null, $canUpdate = null)
 	{
         $random = str_random();
         

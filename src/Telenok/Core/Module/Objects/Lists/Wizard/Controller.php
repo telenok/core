@@ -85,7 +85,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     {
 		$typeList = [];
         $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
-		$id = $input->get('id', 0);
+		$id = $input->get('typeId', 0);
 		
 		try
 		{
@@ -123,20 +123,17 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         );
     }    
 	
-    public function getFilterQuery($model, $query) {}
-	
     public function getWizardList()
     {
         $content = [];
 		$typeList = [];
 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+        $input = $this->getRequest();  
         
-        $pageStart = intval($input->get('pageStart', 10));
+        $start = $input->get('start', 0); 
         $draw = $input->get('draw');
 		$id = $input->get('id', 0);
-		$search = trim($input->get('search.value', 0));
-		
+
         try
         {
 			if (is_array($id))
@@ -148,50 +145,10 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
             $type = $this->getType($id);
             $model = $this->getModelByTypeId($id);  
 			$query = $this->getListItem($model);
-
-			if (!empty($typeList))
-			{
-				$query->join('object_sequence as osequence_wizard_list', function($join) use ($model, $typeList)
-				{
-					$join->on($model->getTable() . '.id', '=', 'osequence_wizard_list.id');
-				}); 
-
-				$query->whereIn('osequence_wizard_list.sequences_object_type', $typeList);
-			}
-
-			if ($search)
-			{
-				$query->join('object_translation as object_translation_list', function($join) use ($model, $typeList)
-				{
-					$join->on($model->getTable() . '.id', '=', 'object_translation_list.translation_object_model_id');
-				}); 
-				
-				$query->groupBy($model->getTable() . '.id');
-				
-				$query->where(function($query) use ($search, $model)
-				{
-					$query->orWhere('object_translation_list.translation_object_string', 'like', '%' . $search . '%');
-					$query->orWhere($model->getTable() . '.id', (int)$search);
-				});
-			}
 			
 			$items = $query->get();
 			
-			$config = app('telenok.config.repository')->getObjectFieldController();
 
-            foreach ($items->slice(0, $this->pageLength, true) as $k => $item)
-            {
-                $put = \Illuminate\Support\Collection::make(); 
-
-                foreach ($model->getFieldList() as $field)
-                { 
-					$put->put($field->code, $config->get($field->key)->getListFieldContent($field, $item, $type));
-                }
-
-                $put->put('choose', $this->getChooseButton($item, $type, $put));
-
-                $content[] = $put->toArray();
-            }
         }
         catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) 
         {
@@ -207,12 +164,26 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         return [
             'gridId' => $this->getGridId($model->getTable()), 
             'draw' => $draw,
-            'iTotalRecords' => ($pageStart + $items->count()),
-            'iTotalDisplayRecords' => ($pageStart + $items->count()),
-            'data' => $content
+            'data' => $content,
+            'recordsTotal' => ($start + $items->count()),
+            'recordsFiltered' => ($start + $items->count()),
         ];
     }
 
+    public function fillListItem($item = null, $model = null, \Illuminate\Support\Collection $put, $type = null)
+    {
+        $config = app('telenok.config.repository')->getObjectFieldController();
+
+        foreach ($model->getFieldList() as $field)
+        { 
+            $put->put($field->code, $config->get($field->key)->getListFieldContent($field, $item, $type));
+        }
+
+        $put->put('choose', $this->getChooseButton($item, $type, $put));
+        
+        return $this;
+    }
+    
     public function getChooseButton($item, $type, $put)
     {
 		$uniq = str_random();

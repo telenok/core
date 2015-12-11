@@ -126,7 +126,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         
         $content = []; 
 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
+        $input = $this->getRequest();
 
 		$draw = $input->get('draw');
         $uniqueId = $input->get('uniqueId');
@@ -135,7 +135,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		
         $filter = (array)$input->get('filter');
         
-        if (($title = trim($input->get('search.value'))) || ($title = trim(array_get($filter, 'name'))))
+        if (($title = trim($input->input('search.value'))) || ($title = trim(array_get($filter, 'name'))))
         {
             $collection = $collection->filter(function($item) use ($title)
             {

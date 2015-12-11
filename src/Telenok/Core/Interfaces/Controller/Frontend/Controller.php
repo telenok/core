@@ -93,7 +93,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
         try
         {
-            $page = \App\Telenok\Core\Model\Web\Page::withPermission()->findOrFail($pageId);
+            $page = \Cache::remember(
+                $this->getCacheKey(), 
+                $this->getCacheTime(),
+                function() use ($pageId)
+                {
+                    return \App\Telenok\Core\Model\Web\Page::active()->withPermission()->findOrFail($pageId);
+                });
         }
         catch (\Exception $e)
         {
@@ -108,10 +114,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         {
             $this->setFrontendView($controllerTemplate);
         }
-        
+
         $this->setCacheTime($page->cache_time);
 
-        
         if (($content = $this->getCachedContent()) !== false)
         {
             return $this->processContent($content);

@@ -2,10 +2,20 @@
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * @class Telenok.Core.CoreServiceProvider
+ * Core service provider
+ */
 class CoreServiceProvider extends ServiceProvider {
 
     protected $defer = false;
 
+    /**
+     * @method boot
+     * @public
+     * Load config, routers, create singletons and others
+     * @return void
+     */
     public function boot()
     {
         $this->app->resolving(function(\Telenok\Core\Interfaces\Support\IRequest $object, $app)
@@ -65,8 +75,9 @@ class CoreServiceProvider extends ServiceProvider {
     }
 
     /**
+     * @method register
+     * @public
      * Register the service provider.
-     *
      * @return void
      */
     public function register()
@@ -91,6 +102,12 @@ class CoreServiceProvider extends ServiceProvider {
         $this->registerMemcache();
     }
 
+    /**
+     * @method registerMemcache
+     * @public
+     * Configure memcache
+     * @return void
+     */
     public function registerMemcache()
     {
         $cfg = $this->app['config'];
@@ -134,8 +151,9 @@ class CoreServiceProvider extends ServiceProvider {
     }
 
     /**
+     * @method provides
+     * @public
      * Get the services provided by the provider.
-     *
      * @return array
      */
     public function provides()

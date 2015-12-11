@@ -27,7 +27,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 			'urlListTitle' => route($this->getRouteListTitle(), ['id' => $field->{$linkedField}]),
 			'urlListTable' => route($this->getRouteListTable(), ["id" => (int)$model->getKey(), "fieldId" => $field->getKey(), "uniqueId" => $uniqueId]),
 			'urlWizardCreate' => route($this->getRouteWizardCreate(), [ 'id' => $this->getChooseTypeId($field), 'saveBtn' => 1, 'chooseBtn' => 1]),
-			'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $this->getChooseTypeId($field)]),
+			'urlWizardChoose' => route($this->getRouteWizardChoose(), ['typeId' => $this->getChooseTypeId($field)]),
 			'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
 		];
 	}

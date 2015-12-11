@@ -136,7 +136,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function getList($typeId = 0, $closure = null, $btnActionView = 'core::widget.grid.buttonAction')
 	{
-		$input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+		$input = $this->getRequest();  
 		
 		$this->setModelType($typeId);
 		$this->setModel();
@@ -155,7 +155,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		
         $query = $this->getModel()->withTrashed()->select($this->getModel()->getTable() . '.*')->withPermission();
 
-        if ($str = trim($input->get('search.value')))
+        if ($str = trim($input->input('search.value')))
         {
 			$query->where(function($query) use ($str, $query)
 			{

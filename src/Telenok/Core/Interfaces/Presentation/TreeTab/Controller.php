@@ -496,9 +496,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     
     public function getFilterQuery($model, $query)
     {
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
-        
-        if (($str = trim($input->get('search.value'))) || ($str = trim($input->get('term'))))
+        $input = $this->getRequest(); 
+
+        if (($str = trim($input->input('search.value'))) || ($str = trim($input->get('term'))))
         {
             $this->getFilterQueryLike($str, $query, $model, 'title');
         } 
@@ -512,11 +512,14 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 			$this->getFilterSubQuery(null, $model, $query);
         }
         
-        $orderByField = $input->get('mDataProp_' . $input->get('iSortCol_0'));
-        
-        if ($input->get('iSortCol_0', 0))
+        if ($input->get('order', 0) 
+                && ($orderByField = $input->input("columns.{$input->input('order.0.column')}.data"))
+                && $model->getFieldList()->filter(function($item) use ($orderByField)
+                    {
+                        return $orderByField === $item->code;
+                    })->count())
         {
-            $query->orderBy($model->getTable() . '.' . $orderByField, $input->get('sSortDir_0'));
+            $query->orderBy($model->getTable() . '.' . $orderByField, $input->input('order.0.dir') == 'asc' ? 'asc' : 'desc');
         }
     }
 
@@ -571,6 +574,22 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
                 ->take($this->getRequest()->input('length', $this->pageLength) + 1);
     }
 
+    public function fillListItem($item = null, $model = null, \Illuminate\Support\Collection $put)
+    {
+        $put->put('tableCheckAll', 
+                '<input type="checkbox" class="ace ace-checkbox-2" '
+                . 'name="tableCheckAll[]" value="' . $item->getKey() . '"><span class="lbl"></span>');
+
+        foreach ($model->getFieldList() as $field)
+        { 
+            $put->put($field->code, $this->getListItemProcessed($field, $item));
+        }
+
+        $put->put('tableManageItem', $this->getListButton($item));
+        
+        return $this;
+    }
+    
     public function getListItemProcessed($field, $item)
     {
         return $item->translate($field->code);
@@ -764,16 +783,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         foreach ($items->slice(0, $length, true) as $k => $item)
         {
-            $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item->getKey().'"><span class="lbl"></span>'];
+            $put = collect();
+            
+            $this->fillListItem($item, $model, $put);
 
-            foreach ($model->getFieldList() as $field)
-            { 
-                $put[$field->code] = $this->getListItemProcessed($field, $item);
-            }
-
-            $put['tableManageItem'] = $this->getListButton($item); 
-
-            $content[] = $put;
+            $content[] = $put->all();
         }
 
         return [

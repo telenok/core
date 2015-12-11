@@ -255,7 +255,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 					$c[$f->code] = $config->get($f->key)->getListFieldContent($f, $item, $type);
 				}
 
-				$c['tableManageItem'] = $this->getListButtonExtended($item, $field, $type, $uniqueId, $canUpdate);
+				$c['tableManageItem'] = $this->getListButton($item, $field, $type, $uniqueId, $canUpdate);
 
 				$content[] = $c;
 			}

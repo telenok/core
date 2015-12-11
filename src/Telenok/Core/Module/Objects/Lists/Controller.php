@@ -274,8 +274,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
         $content = [];
 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
-
+        $input = $this->getRequest(); 
         $draw = $input->get('draw');
         $start = $input->get('start', 0); 
         $length = $input->get('length', $this->pageLength);
@@ -289,7 +288,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             else 
             {
                 throw new \Exception();
-            } 
+            }
 
 			if ($type->classController())
 			{
@@ -300,22 +299,13 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
             $items = $this->getListItem($model)->get();
 
-			$config = app('telenok.config.repository')->getObjectFieldController();
-
             foreach ($items->slice(0, $length, true) as $item)
             {
-                $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item->getKey().'"><span class="lbl"></span>'];
+                $put = collect();
 
-                foreach ($model->getFieldList() as $field)
-                { 
-					$put[$field->code] = $config->get($field->key)->getListFieldContent($field, $item, $type);
-                }
+                $this->fillListItem($item, $model, $put, $type);
 
-				$canDelete = app('auth')->can('delete', $item);
-
-                $put['tableManageItem'] = $this->getListButtonExtended($item, $type, $canDelete);
-
-                $content[] = $put;
+                $content[] = $put->all();
             }
         }
         catch (\Exception $e) 
@@ -339,7 +329,26 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         ];
     }
 
-    public function getListButtonExtended($item, $type, $canDelete)
+    public function fillListItem($item = null, $model = null, \Illuminate\Support\Collection $put, $type = null)
+    {
+        $config = app('telenok.config.repository')->getObjectFieldController();
+        
+        $put->put('tableCheckAll', '<input type="checkbox" class="ace ace-checkbox-2" '
+                . 'name="tableCheckAll[]" value="' . $item->getKey() . '"><span class="lbl"></span>');
+
+        foreach ($model->getFieldList() as $field)
+        { 
+            $put->put($field->code, $config->get($field->key)->getListFieldContent($field, $item, $type));
+        }
+
+        $canDelete = app('auth')->can('delete', $item);
+
+        $put->put('tableManageItem', $this->getListButton($item, $type, $canDelete));
+        
+        return $this;
+    }
+
+    public function getListButton($item, $type = null, $canDelete = null)
     {
         $random = str_random();
         
