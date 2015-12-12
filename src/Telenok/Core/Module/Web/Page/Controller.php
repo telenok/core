@@ -12,6 +12,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
     public function getListItem($model = null)
     {
+        $model = $model ?: $this->getModelList();
+        
         $query = $model::withTrashed()->withTreeAttr()->withPermission()->where(function($query) use ($model)
         {
             if (!$this->getRequest()->input('multifield_search', false) && ($treeId = $this->getRequest()->input('treeId', 0)))

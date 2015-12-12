@@ -64,7 +64,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         {
 			$collection->name("*{$title}*");
         }
-        
+
         if ($input->has('filter'))
         {
             $filter = $input->get('filter');
@@ -110,16 +110,16 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         {
             $collection->depth(0);
         }
-        
+
         $collection->sortByType();
-        
+
         $c = collect();
-        
+
         foreach($collection as $f)
         {
             $c->push($f);
         }
-        
+
         return $c->slice($start, $length + 1);
     }
     

@@ -106,12 +106,17 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 		return $this->getComposerJsonContent(true);
 	}
-	
-    public function getListItem($model = null)
-    {
-        $composer = (new \Telenok\Core\Composer\Application())->getEmbeddedComposer();
 
+    public function getModelList() {}
+
+    public function getListItem($model = null)
+    {        
+        $input = $this->getRequest(); 
+        $composer = (new \Telenok\Core\Composer\Application())->getEmbeddedComposer();
         $collection = collect();
+
+        $start = $input->input('start', 0);
+        $length = $input->input('length', $this->pageLength);
 
         foreach ($composer->getRepositoryManager()->getLocalRepository()->getPackages() as $package) 
         {
@@ -139,8 +144,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         }
 
         return $collection->sortBy(function($item) { return $item->getName(); })
-                ->skip($input->input('start', 0))
-                ->take($input->input('length', $this->pageLength) + 1);
+                    ->slice($start, $length + 1);
     }
 
     public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null)
