@@ -334,6 +334,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 						{
 							$query->orWhere($model->getTable() . '.' . $name, 'like', '%' . trim($i) . '%');
 						});
+                        
+                $query->orWhere($model->getTable() . '.id', intval($value));
 			});
 		}
 	}

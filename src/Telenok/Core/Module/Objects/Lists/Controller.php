@@ -1,5 +1,7 @@
 <?php namespace Telenok\Core\Module\Objects\Lists;
 
+use \Telenok\Core\Interfaces\Presentation\IPresentation;
+
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {
 
     protected $key = 'objects-lists';
@@ -26,9 +28,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         {
             $type = $this->getType($typeId); 
 
-			if ($type->classController())
+			if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
 			{
-				return $this->typeForm($type)->getActionParam();
+				return $controllerProcessing->getActionParam();
 			}
         }
         else
@@ -82,9 +84,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         {
             $type = $this->getType($typeId); 
 
-			if ($type->classController())
+			if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
 			{
-				return $this->typeForm($type)->getTreeList();
+				return $controllerProcessing->getTreeList();
 			}
         }
         else
@@ -125,9 +127,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         {
             $type = $this->getType($typeId); 
             
-			if ($type->classController())
+			if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
 			{ 
-				return $this->typeForm($type)->getTreeContent();
+				return $controllerProcessing->getTreeContent();
 			}
         }
         else
@@ -148,9 +150,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             $model = $this->getModelByTypeId($this->getRequest()->input('typeId', 0));
             $type = $this->getType($this->getRequest()->input('typeId', 0)); 
 
-			if ($type->classController())
+			if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
 			{
-				return $this->typeForm($type)->getContent();
+				return $controllerProcessing->getContent();
 			} 
 
             $fields = $model->getFieldList(); 
@@ -228,7 +230,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         });
     }
 
-    public function getListItem($model)
+    public function getListItem($model = null)
     {  
         $query = $model::withPermission()->withTrashed();
 
@@ -237,7 +239,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         return $query->groupBy($model->getTable() . '.id')
                 ->orderBy($model->getTable() . '.updated_at', 'desc')
                 ->skip($this->getRequest()->input('start', 0))
-                ->take($this->getRequest()->input('length', $this->pageLength) + 1);
+                ->take($this->getRequest()->input('length', $this->pageLength) + 1)
+                ->get();
     }
 
     public function getListJson()
@@ -248,7 +251,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $type = $this->getType($this->getRequest()->input('treeId', 0));
         $model = $this->getModelByTypeId($this->getRequest()->input('treeId', 0));
         
-        $items = $this->getListItem($model)->get();
+        $items = $this->getListItem($model);
 
         $config = app('telenok.config.repository')->getObjectFieldController();
 
@@ -272,8 +275,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getList()
     {
+        $model = null;
         $content = [];
-
         $input = $this->getRequest(); 
         $draw = $input->get('draw');
         $start = $input->get('start', 0); 
@@ -284,26 +287,27 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             if ($typeId = $input->get('typeId', 0))
             {
                 $type = $this->getType($typeId);
+                $model = $this->getModelByTypeId($typeId); 
             }
             else 
             {
                 throw new \Exception();
             }
-
-			if ($type->classController())
+            
+			if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
 			{
-				return $this->typeForm($type)->getList();
+				$items = $controllerProcessing->getListItem();
 			}
-
-            $model = $this->getModelByTypeId($input->get('typeId', 0)); 
-
-            $items = $this->getListItem($model)->get();
+            else
+            {
+                $items = $this->getListItem($model);
+            }
 
             foreach ($items->slice(0, $length, true) as $item)
             {
                 $put = collect();
 
-                $this->fillListItem($item, $model, $put, $type);
+                $this->fillListItem($item, $put, $model, $type);
 
                 $content[] = $put->all();
             }
@@ -329,7 +333,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         ];
     }
 
-    public function fillListItem($item = null, $model = null, \Illuminate\Support\Collection $put, $type = null)
+    public function fillListItem($item = null, \Illuminate\Support\Collection $put, $model = null, $type = null)
     {
         $config = app('telenok.config.repository')->getObjectFieldController();
         
@@ -437,9 +441,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             throw new \LogicException($this->LL('error.access'));
         } 
 
-        if ($type->classController())
+        if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
         {
-            return $this->typeForm($type)->setDisplayType($this->displayType)->create();
+            return $controllerProcessing->setDisplayType($this->displayType)->create();
         }
 
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
@@ -485,9 +489,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             throw new \LogicException($this->LL('error.access'));
         }
 
-        if ($type->classController())
+        if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
         {
-            return $this->typeForm($type)->setDisplayType($this->displayType)->edit($id);
+            return $controllerProcessing->setDisplayType($this->displayType)->edit($id);
         } 
 
         $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
@@ -525,9 +529,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     { 
         $type = $this->getTypeByModelId($id);
 
-        if ($c = $type->classController())
+        if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
         {
-            return app($c)->setDisplayType($this->displayType)->delete($id, $force);
+            return $controllerProcessing->setDisplayType($this->displayType)->delete($id, $force);
         } 
 				
         if (!app('auth')->can('delete', $id))
@@ -586,9 +590,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 				continue;
 			}
 			
-            if ($type->classController())
+            if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
             {
-                $content[] = with(new \Illuminate\Support\Collection($this->typeForm($type)->edit($id_)))->get('tabContent');
+                $content[] = with(new \Illuminate\Support\Collection($controllerProcessing->edit($id_)))->get('tabContent');
             }
             else
             {
@@ -670,9 +674,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $type = $this->getType($id);
 
-        if ($type->classController())
+        if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
         {
-            return $this->typeForm($type)->setDisplayType($this->displayType)->store();
+            return $controllerProcessing->setDisplayType($this->displayType)->store();
         }
 
         $model = $this->save($input, $type);
@@ -709,9 +713,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             
             $type = $this->getType($id);            
 
-			if ($type->classController())
+        if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
 			{
-				return $this->typeForm($type)->setDisplayType($this->displayType)->update();
+				return $controllerProcessing->setDisplayType($this->displayType)->update();
 			}
 
 			$model = $this->save($input, $type); 

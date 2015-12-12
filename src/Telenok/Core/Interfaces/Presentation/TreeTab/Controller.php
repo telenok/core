@@ -1,8 +1,9 @@
 <?php namespace Telenok\Core\Interfaces\Presentation\TreeTab;
 
 use \Telenok\Core\Interfaces\Presentation\IPresentation;
+use \Telenok\Core\Interfaces\Controller\IEloquentProcessController;
 
-class Controller extends \Telenok\Core\Interfaces\Module\Controller implements IPresentation {
+class Controller extends \Telenok\Core\Interfaces\Module\Controller implements IPresentation, IEloquentProcessController {
 
     protected $tabKey = '';
     protected $presentation = 'tree-tab';
@@ -513,13 +514,16 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
         }
         
         if ($input->get('order', 0) 
-                && ($orderByField = $input->input("columns.{$input->input('order.0.column')}.data"))
-                && $model->getFieldList()->filter(function($item) use ($orderByField)
+                && ($orderByField = $input->input("columns.{$input->input('order.0.column')}.data")))
+        {
+            if (($model instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model
+                    && $model->getFieldList()->filter(function($item) use ($orderByField)
                     {
                         return $orderByField === $item->code;
-                    })->count())
-        {
-            $query->orderBy($model->getTable() . '.' . $orderByField, $input->input('order.0.dir') == 'asc' ? 'asc' : 'desc');
+                    })->count()) || !($model instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model))
+            {
+                $query->orderBy($model->getTable() . '.' . $orderByField, $input->input('order.0.dir') == 'asc' ? 'asc' : 'desc');
+            }
         }
     }
 
@@ -540,7 +544,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
         } 
     }
 
-    public function getListItem($model)
+    public function getListItem($model = null)
     {
         $id = $this->getRequest()->input('treeId', 0);
 
@@ -571,10 +575,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
         return $query->groupBy($model->getTable() . '.id')
                 ->orderBy($model->getTable() . '.updated_at', 'desc')
                 ->skip($this->getRequest()->input('start', 0))
-                ->take($this->getRequest()->input('length', $this->pageLength) + 1);
+                ->take($this->getRequest()->input('length', $this->pageLength) + 1)
+                ->get();
     }
 
-    public function fillListItem($item = null, $model = null, \Illuminate\Support\Collection $put)
+    public function fillListItem($item = null, \Illuminate\Support\Collection $put, $model = null)
     {
         $put->put('tableCheckAll', 
                 '<input type="checkbox" class="ace ace-checkbox-2" '
@@ -779,13 +784,13 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
         $length = $input->get('length', $this->pageLength);
 
         $model = $this->getModelList();
-        $items = $this->getListItem($model)->get();
+        $items = $this->getListItem($model);
 
         foreach ($items->slice(0, $length, true) as $k => $item)
         {
             $put = collect();
             
-            $this->fillListItem($item, $model, $put);
+            $this->fillListItem($item, $put, $model);
 
             $content[] = $put->all();
         }

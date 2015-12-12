@@ -1,5 +1,7 @@
 <?php namespace Telenok\Core\Interfaces\Eloquent\Object;
 
+use \Telenok\Core\Interfaces\Controller\IEloquentProcessController;
+
 class Model extends \Illuminate\Database\Eloquent\Model {
 
 	use \Illuminate\Database\Eloquent\SoftDeletes; 
@@ -418,7 +420,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		{
 			\DB::transaction(function() use ($type, $input, $model, $withEvent)
 			{
-				$classControllerObject = null;
+				$controllerProcessing = null;
 
 				$exists = $model->exists;
 
@@ -427,11 +429,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 					//\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
 				}
 
-				if ($c = $type->classController())
+				if (($c = $type->classController())
+                        && $controllerProcessing = app($c)
+                        && $controllerProcessing instanceof IEloquentProcessController
+                )
 				{
-					$classControllerObject = app($c);
-
-					$classControllerObject->preProcess($model, $type, $input);
+					$controllerProcessing->preProcess($model, $type, $input);
 				}
 
 				$model->preProcess($type, $input);
@@ -447,9 +450,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 					throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError($validator->messages());
 				}
 
-				if ($type->classController())
+				if ($controllerProcessing instanceof IEloquentProcessController)
 				{
-					$classControllerObject->validate($model, $input);
+					$controllerProcessing->validate($model, $input);
 				}
 
 				$model->fill($input->all())->push();
@@ -461,9 +464,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 				$model->postProcess($type, $input);
 
-				if ($type->classController())
+				if ($controllerProcessing instanceof IEloquentProcessController)
 				{
-					$classControllerObject->postProcess($model, $type, $input);
+					$controllerProcessing->postProcess($model, $type, $input);
 				}
 
 				if ($withEvent)

@@ -144,7 +144,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             $model = $this->getModelList();
             $type = $this->getTypeList();
 
-            $items = $this->getListItem($model)->get();
+            $items = $this->getListItem($model);
 
             $config = app('telenok.config.repository')->getObjectFieldController();
 
@@ -184,8 +184,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         ];
     }
 
-    public function getListItem($model)
-    {  
+    public function getListItem($model = null)
+    {
+        $model = $model?:$this->getModelList();
+
         $query = $model::withTrashed()->select($model->getTable() . '.*')->withPermission();
 
         $this->getFilterQuery($model, $query); 
@@ -193,7 +195,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         return $query->groupBy($model->getTable() . '.id')
                     ->orderBy($model->getTable() . '.updated_at', 'desc')
                     ->skip($this->getRequest()->input('start', 0))
-                    ->take($this->getRequest()->input('length', $this->pageLength) + 1);
+                    ->take($this->getRequest()->input('length', $this->pageLength) + 1)
+                    ->get();
     } 
 
     public function getTreeListTypes()
@@ -213,6 +216,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $query->where(function($query) use ($str, $query, $model, $field)
         {
             $f = $model->getObjectField()->get($field);
+
             app('telenok.config.repository')
                     ->getObjectFieldController($f->key)
                     ->getFilterQuery($f, $model, $query, $f->code, $str);
@@ -222,6 +226,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     public function getFilterQuery($model, $query)
     {
         $translate = new \App\Telenok\Core\Model\Object\Translation();
+        $input = $this->getRequest();
         
         if ($title = trim($this->getRequest()->input('search.value')))
         {
@@ -237,9 +242,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			$this->getFilterSubQuery(null, $model, $query);
         }
 
-        $orderByField = $this->getRequest()->input('mDataProp_' . $this->getRequest()->input('iSortCol_0'));
-        
-        if ($this->getRequest()->input('iSortCol_0', 0))
+        if ($input->get('order', 0) 
+                && ($orderByField = $input->input("columns.{$input->input('order.0.column')}.data"))
+                && $model->getFieldList()->filter(function($item) use ($orderByField)
+                    {
+                        return $orderByField === $item->code;
+                    })->count())
         {
             if (in_array($orderByField, $model->getMultilanguage(), true))
             { 
@@ -250,11 +258,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                             ->on($translate->getTable().'.translation_object_language', '=', \DB::raw("'".config('app.locale')."'"));
                 });
 
-                $query->orderBy($translate->getTable().'.translation_object_string', $this->getRequest()->input('sSortDir_0'));
+                $query->orderBy($translate->getTable().'.translation_object_string', $input->input('order.0.dir') == 'asc' ? 'asc' : 'desc');
             }
             else
             {
-                $query->orderBy($model->getTable() . '.' . $orderByField, $this->getRequest()->input('sSortDir_0'));
+                $query->orderBy($model->getTable() . '.' . $orderByField, $input->input('order.0.dir') == 'asc' ? 'asc' : 'desc');
             }
         }
     }

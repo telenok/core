@@ -118,60 +118,15 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
                 'gridId' => str_random(),
 				'saveBtn' => $input->get('saveBtn', true), 
 				'chooseBtn' => $input->get('chooseBtn', true),  
-                'contentForm' => ( $model->classController() ? $this->typeForm($model)->getFormContent($model, $type, $fields, $uniqueId) : FALSE),
+                'contentForm' => ( 
+                    ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
+                        ? $controllerProcessing->getFormContent($model, $type, $fields, $uniqueId) : FALSE),
             ))->render()
         );
     }    
-	
-    public function getWizardList()
-    {
-        $content = [];
-		$typeList = [];
 
-        $input = $this->getRequest();  
-        
-        $start = $input->get('start', 0); 
-        $draw = $input->get('draw');
-		$id = $input->get('id', 0);
-
-        try
-        {
-			if (is_array($id))
-			{
-				$typeList = $id;
-				$id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id');
-			}
-
-            $type = $this->getType($id);
-            $model = $this->getModelByTypeId($id);  
-			$query = $this->getListItem($model);
-			
-			$items = $query->get();
-			
-
-        }
-        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) 
-        {
-            return [
-                'gridId' => $this->getGridId(), 
-                'draw' => $draw,
-                'iTotalRecords' => 0,
-                'iTotalDisplayRecords' => 0,
-                'data' => []
-            ];
-        }
-
-        return [
-            'gridId' => $this->getGridId($model->getTable()), 
-            'draw' => $draw,
-            'data' => $content,
-            'recordsTotal' => ($start + $items->count()),
-            'recordsFiltered' => ($start + $items->count()),
-        ];
-    }
-
-    public function fillListItem($item = null, $model = null, \Illuminate\Support\Collection $put, $type = null)
-    {
+    public function fillListItem($item = null, \Illuminate\Support\Collection $put, $model = null, $type = null)
+    {        
         $config = app('telenok.config.repository')->getObjectFieldController();
 
         foreach ($model->getFieldList() as $field)

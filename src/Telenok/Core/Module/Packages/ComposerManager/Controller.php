@@ -107,10 +107,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		return $this->getComposerJsonContent(true);
 	}
 	
-    public function getList()
+    public function getListItem($model = null)
     {
         $composer = (new \Telenok\Core\Composer\Application())->getEmbeddedComposer();
-        
+
         $collection = collect();
 
         foreach ($composer->getRepositoryManager()->getLocalRepository()->getPackages() as $package) 
@@ -123,18 +123,13 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 $collection->put($package->getName(), $package);
             }
         }
-        
+
         $content = []; 
 
         $input = $this->getRequest();
 
-		$draw = $input->get('draw');
-        $uniqueId = $input->get('uniqueId');
-        $pageStart = $input->get('pageStart', 0);
-        $iTotalDisplayRecords = $input->get('pageLength', 20);
-		
         $filter = (array)$input->get('filter');
-        
+
         if (($title = trim($input->input('search.value'))) || ($title = trim(array_get($filter, 'name'))))
         {
             $collection = $collection->filter(function($item) use ($title)
@@ -143,30 +138,26 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             });
         }
 
-        foreach($collection->sortBy(function($item) { return $item->getName(); }) as $item)
-        {
-            $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item->getName().'"><span class="lbl"></span>'];
+        return $collection->sortBy(function($item) { return $item->getName(); })
+                ->skip($input->input('start', 0))
+                ->take($input->input('length', $this->pageLength) + 1);
+    }
 
-            $put['name'] = $item->getName();
-			$put['type'] = $item->getType();
-			$put['license'] = implode(', ', (array)$item->getLicense());
-			$put['version'] = $item->getPrettyVersion();
-			$put['description'] = $item->getDescription();
+    public function fillListItem($item = null, \Illuminate\Support\Collection $put)
+    {
+        $put->put('tableCheckAll', '<input type="checkbox" class="ace ace-checkbox-2" '
+                . 'name="tableCheckAll[]" value="'.$item->getName().'"><span class="lbl"></span>');
 
-            $put['tableManageItem'] = $this->getListButton($item);
-
-            $content[] = $put;
-        }
+        $put->put('name', $item->getName());
+        $put->put('type', $item->getType());
+        $put->put('license', implode(', ', (array)$item->getLicense()));
+        $put->put('version', $item->getPrettyVersion());
+        $put->put('description', $item->getDescription());
+        $put->put('tableManageItem', $this->getListButton($item));
         
-        return [
-            'gridId' => $this->getGridId(),
-            'draw' => $draw,
-            'iTotalRecords' => $collection->count(),
-            'iTotalDisplayRecords' => $collection->count(),
-            'data' => $content
-        ];
-    } 
-    
+        return $this;
+    }
+
     public function getListButton($item)
     {
         $random = str_random();

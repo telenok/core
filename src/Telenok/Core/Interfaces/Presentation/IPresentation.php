@@ -2,6 +2,8 @@
 
 interface IPresentation extends \Telenok\Core\Interfaces\Module\IModule {
     
+    public function getActionParam();
+
     public function getPresentation();
     
     public function setPresentation($key);
@@ -23,5 +25,19 @@ interface IPresentation extends \Telenok\Core\Interfaces\Module\IModule {
 	public function getModelFieldView($field);
 
 	public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null);
+    
+    public function setDisplayType($type);
+    
+    public function create();
+    
+    public function edit($id = null);
+    
+    public function store($id = null);
+    
+    public function update($id = null);
+    
+    public function save($input = [], $type = null);
+    
+    public function getListItem($model = null);
 }
 

@@ -44,7 +44,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         ];
     }
 
-    public function getList()
+    public function getListItem($model = null)
     {
         $content = []; 
         

@@ -10,7 +10,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     
     protected $presentation = 'tree-tab-object';
 
-    public function getListItem($model)
+    public function getListItem($model = null)
     {
         $query = $model::withTrashed()->withTreeAttr()->withPermission()->where(function($query) use ($model)
         {
@@ -29,7 +29,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
         return $query->groupBy($model->getTable() . '.id')
                     ->orderBy($model->getTable() . '.updated_at', 'desc')
                     ->skip($this->getRequest()->input('start', 0))
-                    ->take($this->getRequest()->input('length', $this->pageLength) + 1);
+                    ->take($this->getRequest()->input('length', $this->pageLength) + 1)
+                    ->get();
     }
 
     public function postProcess($model, $type, $input)
