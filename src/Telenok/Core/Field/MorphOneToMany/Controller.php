@@ -70,7 +70,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
                 if (is_array($v))
                 {
-                    return \Illuminate\Support\Collection::make($v);
+                    return collect($v);
                 }
                 else
                 {
@@ -276,7 +276,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                 
                 $relatedModel = app(\App\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_many_has)->class_model);
 
-                \Illuminate\Support\Collection::make($idsAdd)->each(function($id) use ($model, $method, $relatedModel) 
+                collect($idsAdd)->each(function($id) use ($model, $method, $relatedModel) 
                 {
                     if (intval($id)) 
                     {

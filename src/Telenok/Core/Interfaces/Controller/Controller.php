@@ -62,6 +62,16 @@ class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core
     {
         return $this->request;
     }
+
+	/**
+	 * Get collected http request
+     * 
+	 * @return \Illuminate\Support\Collection
+	 */
+    public function getRequestCollected()
+    {
+        return collect($this->request->input());
+    }
     
 	/**
 	 * Get new instance

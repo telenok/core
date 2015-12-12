@@ -13,8 +13,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
     public function updateBackendUISetting($key = null, $value = null)
     {
-        $key = $key ? : $this->getRequest()->input('key');
-        $value = $value ? : $this->getRequest()->input('value');
+        $input = $this->getRequest;
+
+        $key = $key ? : $input->input('key');
 
         if ($key)
         {
@@ -22,7 +23,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
             $userConfig = $user->configuration;
 
-            $userConfig->put($key, $value);
+            $userConfig->put($key, ($value ? : $input->input('value')));
 
             $user->configuration = $userConfig;
 
@@ -42,7 +43,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
     public function getContent()
     {
-        $listModuleMenuLeft = \Illuminate\Support\Collection::make();
+        $listModuleMenuLeft = collect();
         \Event::fire('telenok.module.menu.left', [$listModuleMenuLeft]);
 
         $config = app('telenok.config.repository');
@@ -98,9 +99,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
         $setArray['listModuleGroup'] = $listModuleGroup;
 
 
-        $listModuleMenuTop = \Illuminate\Support\Collection::make();
+        $listModuleMenuTop = collect();
 
-        $listModuleMenuTopCollection = \Illuminate\Support\Collection::make();
+        $listModuleMenuTopCollection = collect();
 
         \Event::fire('telenok.module.menu.top', [$listModuleMenuTopCollection]);
 

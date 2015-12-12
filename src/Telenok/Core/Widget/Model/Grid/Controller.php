@@ -142,16 +142,16 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		$this->setModel();
 		$this->setFields();
 
-		$this->setRouterEdit($input->get('routerEdit'));
+		$this->setRouterEdit($input->input('routerEdit'));
 		
         if (!app('auth')->can('read', "object_type.{$this->getModelType()->code}"))
         {
             throw new \LogicException($this->LL('error.access.read'));
         } 
  
-        $total = $input->get('pageLength', $this->getpageLength());
-        $draw = $input->get('draw');
-        $pageStart = $input->get('pageStart', 0); 
+        $total = $input->input('pageLength', $this->getpageLength());
+        $draw = $input->input('draw');
+        $pageStart = $input->input('pageStart', 0); 
 		
         $query = $this->getModel()->withTrashed()->select($this->getModel()->getTable() . '.*')->withPermission();
 
@@ -172,13 +172,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 			$closure($query);
 		}
 		
-		if ($input->get('multifield_search', false))
+		if ($input->input('multifield_search', false))
 		{
 			$controller = app('telenok.config.repository')->getObjectFieldController();
 
-			if (!$input->get('filter', []) instanceof \Illuminate\Support\Collection)
+			if (!$input->input('filter', []) instanceof \Illuminate\Support\Collection)
 			{
-				$input_ = \Illuminate\Support\Collection::make($input);
+				$input_ = collect($input);
 			}
 
 			$this->getModel()->getFieldForm()->each(function($field) use ($input_, $query, $controller)
@@ -249,7 +249,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 			->where('created_by_user', app('auth')->user()->getKey())
 			->where(function($query) use ($term)
 			{
-				\Illuminate\Support\Collection::make(explode(' ', $term))
+				collect(explode(' ', $term))
 				->reject(function($i)
 				{
 					return !trim($i);

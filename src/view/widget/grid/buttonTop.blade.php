@@ -1,7 +1,7 @@
 
 		<?php
 
-		$buttonTop = \Illuminate\Support\Collection::make($controller->getButtonTop());
+		$buttonTop = collect($controller->getButtonTop());
 		
 		?>
 

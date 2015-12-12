@@ -342,7 +342,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 					$value = $value ? : $this->defaultStorage;
 				}
 
-				return \Illuminate\Support\Collection::make((array)json_decode($value, true));
+				return collect((array)json_decode($value, true));
 			}
 			else
 			{

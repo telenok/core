@@ -61,7 +61,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 		$input->put('class_model', trim($input->get('class_model'), '\\ '));
 
-		$classNameCollection = \Illuminate\Support\Collection::make(explode('\\', $input->get('class_model')))
+		$classNameCollection = collect(explode('\\', $input->get('class_model')))
 				->filter(function($i)
 				{
 					return trim($i);
@@ -102,7 +102,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
 		$input->put('class_controller', trim($input->get('class_controller'), '\\ '));
 
-		$classNameCollection = \Illuminate\Support\Collection::make(explode('\\', $input->get('class_controller')))
+		$classNameCollection = collect(explode('\\', $input->get('class_controller')))
 				->filter(function($i)
 				{
 					return trim($i);

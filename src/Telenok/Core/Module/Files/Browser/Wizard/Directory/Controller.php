@@ -84,7 +84,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $basePath = base_path();
         $basePathLength = \Str::length($basePath);
         
-        $id = $basePath.$this->getRequest()->input('id');
+        $id = $basePath . $this->getRequest()->input('id');
         
         $listTree = [];
                 

@@ -142,7 +142,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 			{
 				if (trim($term))
 				{
-					\Illuminate\Support\Collection::make(explode(' ', $term))
+					collect(explode(' ', $term))
 					->reject(function($i)
 					{
 						return !trim($i);

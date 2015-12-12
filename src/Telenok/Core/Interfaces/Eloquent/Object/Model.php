@@ -361,20 +361,20 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 		// merge attributes if model filled via $model->fill() and plus ->storeOrUpdate([some attributes])
 		$t = [];
-		
+
 		foreach($this->getAttributes() as $k => $v)
 		{
             $t[$k] = $this->{$k};
 		}
-		
-		$input = \Illuminate\Support\Collection::make($t)->merge($input);
+
+		$input = collect($t)->merge($input);
 
 		try
 		{
 			if (!$this->exists)
 			{
 				$model = $this->findOrFail($input->get($this->getKeyName()));
-				
+
 				// if model exists - add its attributes to $input for process all attributes in events
 				$t = [];
 
@@ -383,7 +383,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                     $t[$k] = $model->{$k};
 				}
 
-				$input = \Illuminate\Support\Collection::make($t)->merge($input);
+				$input = collect($t)->merge($input);
 			}
 			else
 			{

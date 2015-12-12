@@ -481,7 +481,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     {     
         $query->where(function($query) use ($value, $model, $field)
         {
-            \Illuminate\Support\Collection::make(explode(' ', $value))
+            collect(explode(' ', $value))
                 ->filter(function($i) 
                 { 
                     return trim($i);
@@ -499,21 +499,21 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     {
         $input = $this->getRequest(); 
 
-        if (($str = trim($input->input('search.value'))) || ($str = trim($input->get('term'))))
+        if (($str = trim($input->input('search.value'))) || ($str = trim($input->input('term'))))
         {
             $this->getFilterQueryLike($str, $query, $model, 'title');
         } 
 
-		if ($input->get('multifield_search', false))
+		if ($input->input('multifield_search', false))
 		{
-			$this->getFilterSubQuery($input->get('filter', []), $model, $query);
+			$this->getFilterSubQuery($input->input('filter', []), $model, $query);
 		}
         else
         {
 			$this->getFilterSubQuery(null, $model, $query);
         }
         
-        if ($input->get('order', 0) 
+        if ($input->input('order', 0) 
                 && ($orderByField = $input->input("columns.{$input->input('order.0.column')}.data")))
         {
             if (($model instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model
@@ -533,7 +533,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
         {
 			$query->where(function($query) use ($value, $name, $model)
 			{
-				\Illuminate\Support\Collection::make(explode(' ', $value))
+				collect(explode(' ', $value))
 						->reject(function($i) { return !trim($i); })
 						->each(function($i) use ($query, $name, $model)
 				{
@@ -579,7 +579,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
                 ->get();
     }
 
-    public function fillListItem($item = null, \Illuminate\Support\Collection $put, $model = null)
+    public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null)
     {
         $put->put('tableCheckAll', 
                 '<input type="checkbox" class="ace ace-checkbox-2" '
@@ -602,11 +602,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getTreeList($id = null)
     {
-        $tree = \Illuminate\Support\Collection::make();
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $tree = collect();
+        $input = $this->getRequest(); 
 
-        $id = $id === null ? $input->get('treeId', 0) : $id;
-        $searchStr = $input->get('search_string');
+        $id = $id === null ? $input->input('treeId', 0) : $id;
+        $searchStr = $input->input('search_string');
             
         try
         {
@@ -706,7 +706,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     {
         $random = str_random();
         
-        $collection = \Illuminate\Support\Collection::make();
+        $collection = collect();
         
         $collection->put('open', ['order' => 0 , 'content' => 
             '<div class="dropdown">
@@ -770,26 +770,26 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function getModelFieldFilter($model = null)
     {
-        return \Illuminate\Support\Collection::make();
+        return collect();
     }
 
     public function getList()
     {
         $content = [];
 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $input = $this->getRequest(); 
 
-        $draw = $input->get('draw');
-        $start = $input->get('start', 0);
-        $length = $input->get('length', $this->pageLength);
+        $draw = $input->input('draw');
+        $start = $input->input('start', 0);
+        $length = $input->input('length', $this->pageLength);
 
         $model = $this->getModelList();
         $items = $this->getListItem($model);
 
-        foreach ($items->slice(0, $length, true) as $k => $item)
+        foreach ($items->slice(0, $length, true) as $item)
         {
             $put = collect();
-            
+
             $this->fillListItem($item, $put, $model);
 
             $content[] = $put->all();
@@ -809,31 +809,56 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 		switch ($action)
 		{
 			case 'create':
-				return [ $this->getRouterStore(['id' => $model->getKey(), 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', false), 'chooseSequence' => $this->getRequest()->input('chooseSequence', false)]) ];
+				return [ 
+                    $this->getRouterStore(
+                        [
+                            'id' => $model->getKey(), 
+                            'saveBtn' => $this->getRequest()->input('saveBtn', true), 
+                            'chooseBtn' => $this->getRequest()->input('chooseBtn', false), 
+                            'chooseSequence' => $this->getRequest()->input('chooseSequence', false)
+                        ])];
 				break;
 
 			case 'edit':
-				return [ $this->getRouterUpdate(['id' => $model->getKey(), 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'chooseSequence' => $this->getRequest()->input('chooseSequence', false)]) ];
+				return [ 
+                    $this->getRouterUpdate(
+                        [
+                            'id' => $model->getKey(), 
+                            'saveBtn' => $this->getRequest()->input('saveBtn', true), 
+                            'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 
+                            'chooseSequence' => $this->getRequest()->input('chooseSequence', false)
+                        ])];
 				break;
 
 			case 'store':
-				return [ $this->getRouterUpdate(['id' => $model->getKey(), 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'chooseSequence' => $this->getRequest()->input('chooseSequence', false)]) ];
+				return [ 
+                    $this->getRouterUpdate(
+                        [
+                            'id' => $model->getKey(),
+                            'saveBtn' => $this->getRequest()->input('saveBtn', true),
+                            'chooseBtn' => $this->getRequest()->input('chooseBtn', true),
+                            'chooseSequence' => $this->getRequest()->input('chooseSequence', false)
+                        ])];
 				break;
 
 			case 'update':
-				return [ $this->getRouterUpdate(['id' => $model->getKey(), 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'chooseSequence' => $this->getRequest()->input('chooseSequence', false)]) ];
+				return [ 
+                    $this->getRouterUpdate(
+                        [
+                            'id' => $model->getKey(), 
+                            'saveBtn' => $this->getRequest()->input('saveBtn', true), 
+                            'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 
+                            'chooseSequence' => $this->getRequest()->input('chooseSequence', false)
+                        ])];
 				break;
 
 			default:
 				return [];
-				break;
 		}
 	} 
 
     public function create()
     {  
-		$id = $this->getRequest()->input('id');
-		
         return [
             'tabKey' => $this->getTabKey().'-new-'.str_random(),
             'tabLabel' => $this->LL('list.create'),
@@ -1032,7 +1057,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function store($id = null)
     {
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $input = $this->getRequestCollected(); 
 
         $model = null;
 
@@ -1057,7 +1082,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     
     public function update($id = null)
     {
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+        $input = $this->getRequestCollected();  
 
         $model = null;
 
@@ -1082,7 +1107,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     public function save($input = [], $type = null)
     {   
-        $input = $input instanceof  \Illuminate\Support\Collection ? $input : \Illuminate\Support\Collection::make((array)$input);
+        $input = collect($input);
         $model = $this->getModelList();
 
         $validator = $this->validator($model, $input->all(), $this->LL('error'), ['table' => $model->getTable()]);

@@ -6,11 +6,11 @@ class Repository {
 	{
 		try
 		{
-			$collection = \Illuminate\Support\Collection::make();
+			$collection = collect();
 
 			\Event::fire($event, $collection);
 
-			$list = \Illuminate\Support\Collection::make();
+			$list = collect();
 
 			foreach ($collection as $class)
 			{
@@ -73,7 +73,7 @@ class Repository {
 		{
 			try
 			{
-				$collection = \Illuminate\Support\Collection::make();
+				$collection = collect();
 
 				\Event::fire('telenok.repository.objects-field.view.model', [$collection]);
 
@@ -86,7 +86,7 @@ class Repository {
 					$l[$fieldKey][] = $viewModel;
 				}
 
-				$list = \Illuminate\Support\Collection::make($l);
+				$list = collect($l);
 			}
 			catch (\Exception $e)
 			{
@@ -101,7 +101,7 @@ class Repository {
 	{
 		try
 		{
-			$list = \Illuminate\Support\Collection::make();
+			$list = collect();
 
 			\App\Telenok\Core\Model\Web\ModuleGroup::active()->get()->each(function($item) use (&$list)
 			{
@@ -122,7 +122,7 @@ class Repository {
 	{
 		try
 		{
-			$list = \Illuminate\Support\Collection::make();
+			$list = collect();
 
 			\App\Telenok\Core\Model\Web\Module::active()->get()->each(function($item) use (&$list)
 			{
@@ -143,7 +143,7 @@ class Repository {
 	{
 		try
 		{
-			$list = \Illuminate\Support\Collection::make();
+			$list = collect();
 
 			\App\Telenok\Core\Model\Web\WidgetGroup::active()->get()->each(function($item) use (&$list)
 			{
@@ -164,7 +164,7 @@ class Repository {
 	{
 		try
 		{
-			$list = \Illuminate\Support\Collection::make();
+			$list = collect();
 
 			\App\Telenok\Core\Model\Web\Widget::active()->get()->each(function($item) use (&$list)
 			{

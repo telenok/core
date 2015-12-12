@@ -97,7 +97,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 		$fields = $this->getFields();
 
-        $eventResource = \Illuminate\Support\Collection::make(['model' => $this->getModel(), 'type' => $this->getModelType(), 'fields' => $fields]);
+        $eventResource = collect(['model' => $this->getModel(), 'type' => $this->getModelType(), 'fields' => $fields]);
 
         //\Event::fire('workflow.form.create', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
 
@@ -128,7 +128,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 		$fields = $this->getFields();
 
-        $eventResource = \Illuminate\Support\Collection::make(['model' => $this->getModel(), 'type' => $this->getModelType(), 'fields' => $fields]);
+        $eventResource = collect(['model' => $this->getModel(), 'type' => $this->getModelType(), 'fields' => $fields]);
 
         //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
 
@@ -154,7 +154,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function store($typeId = 0)
 	{
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+        $input = $this->getRequestCollected();  
 
         $type = $this->getTypeById($typeId);
 
@@ -178,7 +178,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
 	public function update($id)
 	{
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+        $input = $this->getRequestCollected();  
 
         $model = $this->getModelById($id);
 
@@ -200,7 +200,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 			return ['success' => 0];
         }
 
-		$v = $this->getRequest()->get('redirect_after_delete');
+		$v = $this->getRequest()->input('redirect_after_delete');
 
 		return ['success' => 1, 'redirect' => app('router')->has($v) ? route($v) : $v];
 	}

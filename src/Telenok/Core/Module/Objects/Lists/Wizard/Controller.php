@@ -84,8 +84,8 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     public function choose()
     {
 		$typeList = [];
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
-		$id = $input->get('typeId', 0);
+        $input = $this->getRequest(); 
+		$id = $input->input('typeId', 0);
 		
 		try
 		{
@@ -116,8 +116,8 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
                 'fields' => $fields,
                 'uniqueId' => ($uniqueId = str_random()),
                 'gridId' => str_random(),
-				'saveBtn' => $input->get('saveBtn', true), 
-				'chooseBtn' => $input->get('chooseBtn', true),  
+				'saveBtn' => $input->input('saveBtn', true), 
+				'chooseBtn' => $input->input('chooseBtn', true),  
                 'contentForm' => ( 
                     ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
                         ? $controllerProcessing->getFormContent($model, $type, $fields, $uniqueId) : FALSE),
@@ -125,7 +125,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         );
     }    
 
-    public function fillListItem($item = null, \Illuminate\Support\Collection $put, $model = null, $type = null)
+    public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null, $type = null)
     {        
         $config = app('telenok.config.repository')->getObjectFieldController();
 

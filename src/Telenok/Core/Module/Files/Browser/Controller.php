@@ -46,11 +46,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getListItem($model = null)
     {
-        $content = []; 
-        
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
-        
-		$currentDirectory = $input->get('currentDirectory');
+        $input = $this->getRequest();
+        $start = $input->input('start', 0);
+        $length = $input->input('length', $this->pageLength);
+		$currentDirectory = $input->input('currentDirectory');
 		
 		if (strstr($currentDirectory, base_path()) === FALSE)
 		{
@@ -58,15 +57,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		}
 		
 		$directory = new \SplFileInfo($currentDirectory);
-        
-		$draw = $input->get('draw');
-        $uniqueId = $input->get('uniqueId');
-        $pageStart = $input->get('pageStart', 0);
-        $iTotalDisplayRecords = $input->get('pageLength', 20);
 		
         $collection = \Symfony\Component\Finder\Finder::create()->in($directory->getPathname());
 
-        if ($title = trim($input->get('sSearch')))
+        if ($title = trim($input->input('search.value')))
         {
 			$collection->name("*{$title}*");
         }
@@ -100,12 +94,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             {
                 $start = array_get($lastModify, 'start');
                 $end = array_get($lastModify, 'end');
-               
+
                 if ($start)
                 {
                     $collection->date('>= ' . $start);
                 }
-               
+
                 if ($end)
                 {
                     $collection->date('<= ' . $end);
@@ -119,86 +113,88 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         
         $collection->sortByType();
         
-        $iter = -1;
-        $iter2 = 0;
+        $c = collect();
         
-        $collection->filter(function($i) use ($pageStart, $iTotalDisplayRecords, &$iter, &$iter2)
+        foreach($collection as $f)
         {
-            $iter++;
-            
-            if ($iter < $pageStart || $iter > $pageStart + $iTotalDisplayRecords + 1)
-            {
-                return false;
-            }
-            else
-            {
-                $iter2++;
-            }
-        });
+            $c->push($f);
+        }
         
+        return $c->slice($start, $length + 1);
+    }
+    
+    public function getList()
+    {
+        $parent = parent::getList();
+        
+		$currentDirectory = $this->getRequest()->input('currentDirectory');
+        $uniqueId = $this->getRequest()->input('uniqueId');
+
+		if (strstr($currentDirectory, base_path()) === FALSE)
+		{
+			$currentDirectory = base_path();
+		}
+
+		$directory = new \SplFileInfo($currentDirectory);
+
 		if ($directory->getPathname() != base_path())
 		{
+
 			$link = '<i class="fa fa-level-up"></i> <i class="fa fa-folder"></i> '
 					. '<a href="#" onclick="currentDirectory' . $uniqueId . ' = \'' . addslashes($directory->getPath()). '\'; telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\')'
 					. '.reloadDataTableOnClick({url: \'' . $this->getRouterList() . '\', gridId: \'' . $this->getGridId() . '\', data : {uniqueId: \'' . $uniqueId . '\', currentDirectory: \'' . addslashes($directory->getPath()) . '\'}}); return false;">' . $directory->getPath() . '</a>';
 			
-			$content[] = [
-							'tableCheckAll' => '', 
-							'name' => $link,
-							'size' => '',
-							'updated_at' => '',
-							'perm' => '',
-							'writeable' => '',
-							'readable' => '',
-							'tableManageItem' => '',
-					];
-		} 
+            array_unshift(
+                $parent['data'],
+                [
+                    'tableCheckAll' => '', 
+                    'name' => $link,
+                    'size' => '',
+                    'updated_at' => '',
+                    'perm' => '',
+                    'writeable' => '',
+                    'readable' => '',
+                    'tableManageItem' => '',
+                ]);
+		}
+        
+        return $parent;
+    }
+    
+    public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null)
+    {
+        $uniqueId = $this->getRequest()->input('uniqueId');
+            
+        $put->put('tableCheckAll', '<input type="checkbox" class="ace ace-checkbox-2" '
+                . 'name="tableCheckAll[]" value="'.$item->getRealpath().'"><span class="lbl"></span>');
 
-        foreach($collection as $item)
+        if ($item->isDir())
         {
-            $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item->getRealpath().'"><span class="lbl"></span>'];
-
-			if ($item->isDir())
-			{
-				$put['name'] = '<i class="fa fa-folder"></i> '
-					. '<a href="#" onclick="currentDirectory' . $uniqueId . ' = \'' . addslashes($item->getPathname()). '\'; telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\')'
-					. '.reloadDataTableOnClick({url: \'' . $this->getRouterList() . '\', gridId: \'' . $this->getGridId() . '\', data : {uniqueId: \'' . $uniqueId . '\', currentDirectory: \'' . addslashes($item->getPathname()) . '\'}}); return false;">' . $item->getFilename() . '</a>';
-			}
-			else if ($item->isFile())
-			{
-				$put['name'] = '<i class="fa ' . ($item->isDir() ? 'fa-folder' : 'fa-file-o') . '"></i> ' . $item->getFilename();
-			}
-
-			$put['size'] = $item->isDir() ? "" : $item->getSize();
-			$put['updated_at'] = date('Y-m-d H:i:s', $item->getATime());
-			$put['perm'] = substr(sprintf('%o', $item->getPerms()), -4);
-			$put['writeable'] = $item->isWritable();
-			$put['readable'] = $item->isReadable();
-
-            $put['tableManageItem'] = $this->getListButton($item);
-
-            $content[] = $put;
+            $put->put('name', '<i class="fa fa-folder"></i> '
+                . '<a href="#" onclick="currentDirectory' . $uniqueId . ' = \'' . addslashes($item->getPathname()). '\'; telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\')'
+                . '.reloadDataTableOnClick({url: \'' . $this->getRouterList() . '\', '
+                    . 'gridId: \'' . $this->getGridId() . '\', data : {uniqueId: \'' . $uniqueId . '\', '
+                    . 'currentDirectory: \'' . addslashes($item->getPathname()) . '\'}}); return false;">' 
+                    . $item->getFilename() . '</a>');
+        }
+        else if ($item->isFile())
+        {
+            $put->put('name', '<i class="fa ' . ($item->isDir() ? 'fa-folder' : 'fa-file-o') . '"></i> ' . $item->getFilename());
         }
 
-        if ($iter2 > $iTotalDisplayRecords)
-        {
-            array_pop($content);
-        }
-
-        return [
-            'gridId' => $this->getGridId(),
-            'draw' => $draw,
-            'iTotalRecords' => $iter,
-            'iTotalDisplayRecords' => $iter,
-            'data' => $content
-        ];
-    } 
+        $put->put('size', $item->isDir() ? '' : $item->getSize());
+        $put->put('updated_at', date('Y-m-d H:i:s', $item->getATime()));
+        $put->put('perm', substr(sprintf('%o', $item->getPerms()), -4));
+        $put->put('writeable', $item->isWritable());
+        $put->put('readable', $item->isReadable());
+        $put->put('tableManageItem', $this->getListButton($item));
+    }
     
     public function getListButton($item)
     {
         $random = str_random();
         
-        $collection = \Illuminate\Support\Collection::make();
+        $collection = collect();
         
         $collection->put('open', ['order' => 0 , 'content' => 
             '<div class="dropdown">
@@ -231,6 +227,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     {
                         return array_get($a, 'order', 0) > array_get($b, 'order', 0) ? 1 : -1;
                     })->implode('content');
+    }
+    
+    public function getModelList()
+    {
     }
 
     public function create()
@@ -324,12 +324,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	{
 		try
 		{
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+            $input = $this->getRequest(); 
 
-			$modelType = $input->get('modelType');
-			$name = trim($input->get('name'));
+			$modelType = $input->input('modelType');
+			$name = trim($input->input('name'));
 
-			$currentDirectory = new \SplFileInfo($this->getRequest()->input('directory'));
+			$currentDirectory = new \SplFileInfo($input->input('directory'));
 
 			if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE)
 			{
@@ -363,7 +363,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			}
 			else if ($modelType == 'file')
 			{
-				file_put_contents($modelPath, $this->getRequest()->input('content', ''), LOCK_EX);
+				file_put_contents($modelPath, $input->input('content', ''), LOCK_EX);
 			}
 			else
 			{
@@ -397,12 +397,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	{
 		try
 		{
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+            $input = $this->getRequest(); 
             
-			$modelType = $input->get('modelType');
-			$modelPath = $input->get('modelPath');
-			$directory = trim($input->get('directory'));
-			$name = trim($input->get('name'));
+			$modelType = $input->input('modelType');
+			$modelPath = $input->input('modelPath');
+			$directory = trim($input->input('directory'));
+			$name = trim($input->input('name'));
 
 			$currentDirectory = new \SplFileInfo($directory);
 			$model = new \SplFileInfo($modelPath);
@@ -436,9 +436,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			{
 				$pathNew = $currentDirectory->getPathname() . DIRECTORY_SEPARATOR . $name; 
 
-				if (strlen($this->getRequest()->input('content', '')) && \File::size($modelPath) < $this->getMaxSizeToView())
+				if (strlen($input->input('content', '')) && \File::size($modelPath) < $this->getMaxSizeToView())
 				{
-					file_put_contents($model->getRealPath(), $this->getRequest()->input('content'), LOCK_EX);
+					file_put_contents($model->getRealPath(), $input->input('content'), LOCK_EX);
 				}
 
 				if ($model->getRealPath() != $pathNew)
@@ -517,9 +517,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     
     public function editList($id = null)
     { 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $input = $this->getRequest(); 
 
-        $ids = $input->get('tableCheckAll');
+        $ids = $input->input('tableCheckAll');
 
         if (empty($ids)) 
         {
@@ -659,9 +659,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $basePath = base_path();
         $basePathLength = \Str::length($basePath);
         
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
+        $input = $this->getRequest();
         
-        $id = $basePath . $input->get('id');
+        $id = $basePath . $input->input('id');
         
         $listTree = [];
                 
@@ -677,7 +677,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             );
         }
         
-        if (!$input->get('id'))
+        if (!$input->input('id'))
         {
             $listTree = array(
                 'data' => array(

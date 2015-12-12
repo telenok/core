@@ -219,7 +219,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 			{
 				$contentDir = $this->getFolderContent((string) reset($contentDir));
 
-				$composerJsonPath = \Illuminate\Support\Collection::make($contentDir)->keys()->first(function($key, $value)
+				$composerJsonPath = collect($contentDir)->keys()->first(function($key, $value)
 				{
 					if (strpos($value, 'composer.json') !== FALSE)
 					{
@@ -408,10 +408,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	{
 		try
 		{
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+            $input = $this->getRequest(); 
 
-			$modelType = $input->get('modelType');
-			$name = trim($input->get('name'));
+			$modelType = $input->input('modelType');
+			$name = trim($input->input('name'));
 
 			$currentDirectory = new \SplFileInfo($this->getRequest()->input('directory'));
 
@@ -481,12 +481,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	{
 		try
 		{
-            $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+            $input = $this->getRequest(); 
             
-			$modelType = $input->get('modelType');
-			$modelPath = $input->get('modelPath');
-			$directory = trim($input->get('directory'));
-			$name = trim($input->get('name'));
+			$modelType = $input->input('modelType');
+			$modelPath = $input->input('modelPath');
+			$directory = trim($input->ginputet('directory'));
+			$name = trim($input->input('name'));
 
 			$currentDirectory = new \SplFileInfo($directory);
 			$model = new \SplFileInfo($modelPath);
@@ -601,9 +601,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     
     public function editList($id = null)
     { 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $input = $this->getRequest(); 
 
-        $ids = $input->get('tableCheckAll');
+        $ids = $input->input('tableCheckAll');
 
         if (empty($ids)) 
         {
@@ -743,9 +743,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $basePath = base_path();
         $basePathLength = \Str::length($basePath);
         
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
+        $input = $this->getRequest();
         
-        $id = $basePath . $input->get('id');
+        $id = $basePath . $input->input('id');
         
         $listTree = [];
                 
@@ -761,7 +761,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             );
         }
         
-        if (!$input->get('id'))
+        if (!$input->input('id'))
         {
             $listTree = array(
                 'data' => array(
@@ -778,7 +778,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	
 	public function processExternalEvent($controller)
 	{
-		if ($this->getRequest()->get('backend_external_event') == 'install_package' && ($package = $this->getRequest()->get('package_key')))
+		if ($this->getRequest()->input('backend_external_event') == 'install_package' && ($package = $this->getRequest()->input('package_key')))
 		{
 			$controller->addJsCode('
 				<script>

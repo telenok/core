@@ -10,7 +10,7 @@ class Setting {
     
     public function setInput($param = [])
     {
-        $this->input = \Illuminate\Support\Collection::make($param);
+        $this->input = collect($param);
 
         return $this;
     }

@@ -39,7 +39,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		
 		if (is_array($v))
 		{
-			return \Illuminate\Support\Collection::make($v);
+			return collect($v);
 		}
 		else
 		{
@@ -76,7 +76,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
 			if (in_array($key, ['select_many_data'], true))
 			{ 
-				return \Illuminate\Support\Collection::make(json_decode($value, true));
+				return collect(json_decode($value, true));
 			}
 			else
 			{

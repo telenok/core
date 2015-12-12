@@ -166,7 +166,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             return $this->cacheKey ? $this->cacheKey . $this->getFrontendView() 
                     . "." . config('app.locale', config('app.localeDefault'))
                     . "." . implode('', (array)app('router')->getCurrentRoute()->parameters())
-                    . "." . collect($this->getRequest()->all())->toJson() : false;
+                    . "." . $this->getRequestCollected()->toJson() : false;
 	}
 
 	public function getCachedContent()

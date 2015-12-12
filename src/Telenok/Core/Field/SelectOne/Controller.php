@@ -39,7 +39,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
 			if (in_array($key, ['select_one_data'], true))
 			{ 
-				return \Illuminate\Support\Collection::make(json_decode($value, true));
+				return collect(json_decode($value, true));
 			}
 			else
 			{

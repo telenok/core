@@ -52,7 +52,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	{
         $random = str_random();
         
-        $collection = \Illuminate\Support\Collection::make();
+        $collection = collect();
         
         $collection->put('open', ['order' => 0 , 'content' => 
             '<div class="dropdown">
@@ -99,7 +99,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     public function getListFieldContent($field, $item, $type = null)
 	{
 		$items = [];
-		$rows = \Illuminate\Support\Collection::make($this->getListFieldContentItems($field, $item, $type));
+		$rows = collect($this->getListFieldContentItems($field, $item, $type));
 
 		if ($rows->count())
 		{

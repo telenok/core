@@ -109,12 +109,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getFilterSubQuery($input, $model, $query)
     {
+        $input = collect($input);
         $fieldConfig = app('telenok.config.repository')->getObjectFieldController();
-
-		if (!$input instanceof \Illuminate\Support\Collection)
-		{
-			$input = \Illuminate\Support\Collection::make($input);
-		}
 
         $model->getFieldForm()->each(function($field) use ($input, $query, $fieldConfig, $model)
         {
@@ -133,11 +129,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
         $content = [];
 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $input = $this->getRequest(); 
         
-        $draw = $input->get('draw');
-        $start = $input->get('start', 0); 
-        $length = $input->get('length', $this->pageLength);
+        $draw = $input->input('draw');
+        $start = $input->input('start', 0); 
+        $length = $input->input('length', $this->pageLength);
 
         try
         {
@@ -228,21 +224,21 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $translate = new \App\Telenok\Core\Model\Object\Translation();
         $input = $this->getRequest();
         
-        if ($title = trim($this->getRequest()->input('search.value')))
+        if ($title = trim($input->input('search.value')))
         {
             $this->getFilterQueryLike($title, $query, $model, 'title');
         } 
 
-		if ($this->getRequest()->input('multifield_search', false))
+		if ($input->input('multifield_search', false))
 		{
-			$this->getFilterSubQuery($this->getRequest()->input('filter', []), $model, $query);
+			$this->getFilterSubQuery($input->input('filter', []), $model, $query);
 		}
         else
         {
 			$this->getFilterSubQuery(null, $model, $query);
         }
 
-        if ($input->get('order', 0) 
+        if ($input->input('order', 0) 
                 && ($orderByField = $input->input("columns.{$input->input('order.0.column')}.data"))
                 && $model->getFieldList()->filter(function($item) use ($orderByField)
                     {
@@ -269,13 +265,13 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function create()
     { 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $input = $this->getRequestCollected(); 
 
 		$model = $this->getModelList();
         $type = $this->getTypeList();
         $fields = $model->getFieldForm();
 
-        $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
+        $eventResource = collect(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
         //\Event::fire('workflow.form.create', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));
 
@@ -296,14 +292,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function edit($id = 0)
     { 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
+        $input = $this->getRequestCollected();
 		$id = $id ?: $input->get('id');
 		
         $model = $this->getModelList()->findOrFail($id);
         $type = $this->getTypeList();
         $fields = $model->getFieldForm();
             
-        $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
+        $eventResource = collect(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
         //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));  
 
@@ -327,7 +323,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function store($id = null)
     {
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());  
+        $input = $this->getRequestCollected();  
 
         $type = $this->getTypeList();
 
@@ -335,7 +331,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
 		$fields = $model->getFieldForm();
             
-        $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
+        $eventResource = collect(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
         //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));   
 
@@ -359,7 +355,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function update($id = null)
     {
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $input = $this->getRequestCollected(); 
 
         $type = $this->getTypeList();
 
@@ -367,7 +363,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	
 		$fields = $model->getFieldForm();
             
-        $eventResource = \Illuminate\Support\Collection::make(['model' => $model, 'type' => $type, 'fields' => $fields]);
+        $eventResource = collect(['model' => $model, 'type' => $type, 'fields' => $fields]);
 
         //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));   
 
@@ -391,7 +387,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 	
     public function save($input = [], $type = null)
     {   
-        $input = \Illuminate\Support\Collection::make($input);
+        $input = collect($input);
         $model = $this->getModelList();
         
         if (!($type instanceof \Telenok\Core\Model\Object\Type))
@@ -405,9 +401,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     public function editList()
     {
         $content = [];
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input());
+        $input = $this->getRequest();
         
-        $ids = $input->get('tableCheckAll', []);
+        $ids = $input->input('tableCheckAll', []);
         
         if (empty($ids))
 		{
@@ -420,7 +416,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         foreach ($ids as $id)
         { 
-            $eventResource = \Illuminate\Support\Collection::make(['model' => $model::find($id), 'type' => $type, 'fields' => $fields]);
+            $eventResource = collect(['model' => $model::find($id), 'type' => $type, 'fields' => $fields]);
 
             //\Event::fire('workflow.form.edit', (new \Telenok\Core\Workflow\Event())->setResource($eventResource)->setInput($input));  
             

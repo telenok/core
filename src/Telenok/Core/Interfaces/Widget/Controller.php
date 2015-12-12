@@ -107,7 +107,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         $append = $this->getFrontendView() 
                     . "." . config('app.locale', config('app.localeDefault'))
                     . "." . implode('', (array)app('router')->getCurrentRoute()->parameters())
-                    . "." . collect($this->getRequest()->all())->toJson()
+                    . "." . $this->getRequestCollected()->toJson()
                     . ($additional ? "." . $additional : '');
 
         

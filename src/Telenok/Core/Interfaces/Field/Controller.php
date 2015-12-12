@@ -201,11 +201,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 
 	public function getTableList($id = null, $fieldId = null, $uniqueId = null)
 	{
-		$term = trim($this->getRequest()->input('search.value'));
+        $input = $this->getRequest();
         
-        $draw = $this->getRequest()->input('draw');
-		$start = $this->getRequest()->input('start', 0);
-        $length = $this->getRequest()->get('length', $this->pageLength);
+		$term = trim($input->input('search.value'));
+        
+        $draw = $input->input('draw');
+		$start = $input->input('start', 0);
+        $length = $input->input('length', $this->pageLength);
         
 		$content = [];
 
@@ -221,7 +223,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 			{
 				$query->where(function($query) use ($term)
 				{
-					\Illuminate\Support\Collection::make(explode(' ', $term))
+					collect(explode(' ', $term))
 							->reject(function($i)
 							{
 								return !trim($i);
@@ -325,7 +327,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 		{
 			$query->where(function($query) use ($value, $name, $model)
 			{
-				\Illuminate\Support\Collection::make(explode(' ', $value))
+				collect(explode(' ', $value))
 						->reject(function($i)
 						{
 							return !trim($i);
@@ -581,7 +583,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         {
             if (trim($term))
             {
-                \Illuminate\Support\Collection::make(explode(' ', $term))
+                collect(explode(' ', $term))
                 ->reject(function($i)
                 {
                     return !trim($i);

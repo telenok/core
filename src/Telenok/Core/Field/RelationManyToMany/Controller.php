@@ -128,7 +128,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     {
         if (in_array($key, ['relation_many_to_many_default'], true))
         {
-            return \Illuminate\Support\Collection::make((array)json_decode($value, true));
+            return collect((array)json_decode($value, true));
         }
 
         return parent::getModelSpecialAttribute($model, $key, $value);

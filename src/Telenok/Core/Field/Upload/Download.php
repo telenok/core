@@ -72,8 +72,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 
 		$fileData = $model->{$field->code};
 		
-        $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]);
-        $request = $this->getRequest();
+        $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]); 
 
 		if (!in_array(false, $responses, true) 
             && (($model instanceof \App\Telenok\Core\Model\File\File && app('auth')->can('read', $model))
@@ -123,7 +122,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 				$filePath = $fileData->path();
 			}
             
-            if ($modifySince = $request->header('If-Modified-Since')) 
+            if ($modifySince = $this->getRequest()->header('If-Modified-Since')) 
             {
                $modifiedSince = explode(';', $modifySince);
                $modifiedSince = strtotime($modifiedSince[0]);

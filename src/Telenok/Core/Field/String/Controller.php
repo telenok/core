@@ -28,7 +28,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
                 $query->where(function($query) use ($value, $model, $translate)
                 {
-                    \Illuminate\Support\Collection::make(explode(' ', $value))
+                    collect(explode(' ', $value))
                             ->filter(function($i) { return trim($i); })
                             ->each(function($i) use ($query, $translate)
                     {
@@ -49,7 +49,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
         if ($field->multilanguage)
         {
-            $value = \Illuminate\Support\Collection::make(json_decode($value ?: '[]', true));
+            $value = collect(json_decode($value ?: '[]', true));
         }
 
         return $value;
@@ -100,7 +100,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
 			if (in_array($key, ['string_default'], true) && $model->multilanguage)
 			{ 
-				return \Illuminate\Support\Collection::make(json_decode($value, true));
+				return collect(json_decode($value, true));
 			}
 			else
 			{

@@ -70,7 +70,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
                 if (is_array($v))
                 {
-                    return \Illuminate\Support\Collection::make($v);
+                    return collect($v);
                 }
                 else
                 {

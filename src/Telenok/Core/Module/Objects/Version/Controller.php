@@ -13,9 +13,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
     public function save($input = null, $type = null)
     {   
-        $input = $input instanceof  \Illuminate\Support\Collection ? $input : \Illuminate\Support\Collection::make((array)$input);
+        $input = collect($input);
 		$model = \App\Telenok\Core\Model\Object\Version::findOrFail($input->get('id'));
-		
+
 		try
 		{
 			return \App\Telenok\Core\Model\Object\Version::toRestore($model);

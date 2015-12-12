@@ -14,7 +14,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
     public function topMenuMain()
     {
-        $collection = \Illuminate\Support\Collection::make();
+        $collection = collect();
         
         $collection->put('key', 'user-name');
         $collection->put('parent', false);
@@ -33,7 +33,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
     public function topMenuLogout()
     {         
-        $collection = \Illuminate\Support\Collection::make();
+        $collection = collect();
         
         $collection->put('parent', 'user-name');
         $collection->put('key', 'log-off');
@@ -47,7 +47,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
     public function topMenuProfileEdit()
     {         
-        $collection = \Illuminate\Support\Collection::make();
+        $collection = collect();
         
         $collection->put('parent', 'user-name');
         $collection->put('key', 'log-off');

@@ -128,7 +128,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $input = $this->getRequest();
 
-        $filter = (array)$input->get('filter');
+        $filter = (array)$input->input('filter');
 
         if (($title = trim($input->input('search.value'))) || ($title = trim(array_get($filter, 'name'))))
         {
@@ -143,7 +143,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 ->take($input->input('length', $this->pageLength) + 1);
     }
 
-    public function fillListItem($item = null, \Illuminate\Support\Collection $put)
+    public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null)
     {
         $put->put('tableCheckAll', '<input type="checkbox" class="ace ace-checkbox-2" '
                 . 'name="tableCheckAll[]" value="'.$item->getName().'"><span class="lbl"></span>');
@@ -161,7 +161,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     public function getListButton($item)
     {
         $random = str_random();
-        $collection = \Illuminate\Support\Collection::make();
+        $collection = collect();
         
         $collection->put('open', ['order' => 0 , 'content' => 
             '<div class="dropdown">
@@ -307,9 +307,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function editList($id = null)
     { 
-        $input = \Illuminate\Support\Collection::make($this->getRequest()->input()); 
+        $input = $this->getRequest(); 
 
-        $ids = $input->get('tableCheckAll');
+        $ids = $input->input('tableCheckAll');
 
         if (empty($ids)) 
         {

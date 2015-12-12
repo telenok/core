@@ -21,7 +21,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
         if (in_array($key, ['permission_default'], true))
         {
-            return \Illuminate\Support\Collection::make((array)json_decode($value, true));
+            return collect((array)json_decode($value, true));
         }
 
         return parent::getModelSpecialAttribute($model, $key, $value);
@@ -135,7 +135,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 	public function getListFieldContent($field, $item, $type = null)
 	{
 		$items = [];
-		$rows = \Illuminate\Support\Collection::make(\App\Telenok\Core\Model\Security\Permission::take(8)->get());
+		$rows = collect(\App\Telenok\Core\Model\Security\Permission::take(8)->get());
 
 		if ($rows->count())
 		{

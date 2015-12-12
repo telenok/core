@@ -64,7 +64,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 
 	public function getListPage()
 	{
-		$return = \Illuminate\Support\Collection::make();
+		$return = collect();
 
 		$query = \App\Telenok\Core\Model\Web\Page::query();
 

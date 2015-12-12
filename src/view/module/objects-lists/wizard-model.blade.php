@@ -297,7 +297,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 					
 						$config = app('telenok.config.repository')->getObjectFieldController();
 
-						$put = \Illuminate\Support\Collection::make(); 
+						$put = collect(); 
 
 						if (\Input::get('chooseSequence') && $model->exists())
 						{

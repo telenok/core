@@ -59,7 +59,7 @@ class File {
 
 	public static function convertDefaultStorageName($list = [])
 	{
-		return \Illuminate\Support\Collection::make($list)->transform(function($item)
+		return collect($list)->transform(function($item)
 		{
 			if ($item == 'default_local')
 			{

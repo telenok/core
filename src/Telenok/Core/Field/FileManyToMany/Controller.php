@@ -56,7 +56,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
 						$query->orWhere(function ($query) use ($sequenceTable, $term)
 						{
-							\Illuminate\Support\Collection::make(explode(' ', $term))
+							collect(explode(' ', $term))
 									->reject(function($i) { return !trim($i); })
 									->each(function($i) use ($query, $sequenceTable)
 							{
@@ -66,7 +66,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
 						$query->orWhere(function ($query) use ($typeTable, $term)
 						{
-							\Illuminate\Support\Collection::make(explode(' ', $term))
+							collect(explode(' ', $term))
 									->reject(function($i) { return !trim($i); })
 									->each(function($i) use ($query, $typeTable)
 							{
@@ -150,7 +150,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 					$value = $value ? : json_encode(\Telenok\Core\Field\Upload\File::IMAGE_MIME_TYPE);
 				}
 
-				return \Illuminate\Support\Collection::make((array)json_decode($value, true));
+				return collect((array)json_decode($value, true));
             }
             else
             {
@@ -261,20 +261,20 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
     public function upload()
     {
-        $request = $this->getRequest();
+        $input = $this->getRequestCollected();
 
-        if (!$request->get('title'))
+        if (!$input->get('title'))
         {
-            $request->merge(['title' => ['en' => 'Some file']]);
+            $input->merge(['title' => ['en' => 'Some file']]);
         }
 
-        $request->merge([
+        $input->merge([
             'active' => 1,
         ]);
 
         $file = app('\App\Telenok\Core\Model\File\File');
 
-        $model = $file->storeOrUpdate($request->all(), true); 
+        $model = $file->storeOrUpdate($input->all(), true); 
 
         return $model->id;
     }

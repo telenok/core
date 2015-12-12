@@ -17,7 +17,7 @@
                             <li role="presentation" class="dropdown-header">{{ $controller->LL('title.field.filter') }}</li>
                         
                         <?php
-                            $userConfig = \Illuminate\Support\Collection::make(app('auth')->user()->configuration);
+                            $userConfig = collect(app('auth')->user()->configuration);
                         ?>
                             
                         @foreach($fieldsFilter->all() as $key => $field) 

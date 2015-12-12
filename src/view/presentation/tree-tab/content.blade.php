@@ -42,25 +42,29 @@
             var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
             var columns = [];
 
-            columns.push({ "mData": "tableCheckAll", "sTitle": 
+            columns.push({ 
+                data : "tableCheckAll",
+                title : 
                     '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
                     + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
                     + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
                     + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
                     + '<span class="lbl">' 
                     + '</span></label>',
-                    "mDataProp": null, "sClass": "center", "sWidth": "20px", 
-                    "sDefaultContent": '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
-                    "bSortable": false});
+                className : "center", 
+                width : "20px", 
+                defaultContent : '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
+                orderable : false
+            });
 
-            columns.push({ "mData": "tableManageItem", "sTitle": "", "bSortable": false });
+            columns.push({ data : "tableManageItem", title : "", orderable : false });
 
             @foreach((array)$fields as $key => $field)
                 @if ($key==0)
-                    columns.push({ "mData": "{{ $field->code }}", "sTitle": "№", "sClass": "center", "sWidth": "40px" });
-                    columns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $controller->LL('entity.'.$field->code) }}" });
+                    columns.push({ data : "{{ $field->code }}", title : "№", className : "center", width : "40px" });
+                    columns.push({ data : "{{ $field->code }}", title : "{{ $controller->LL('entity.'.$field->code) }}" });
                 @else
-                    columns.push({ "mData": "{{ $field->code }}", "sTitle": "{{ $controller->LL('entity.'.$field->code) }}" });
+                    columns.push({ data : "{{ $field->code }}", title : "{{ $controller->LL('entity.'.$field->code) }}" });
                 @endif
             @endforeach
 
