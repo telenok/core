@@ -104,5 +104,4 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		return $this->cssCode;
 	}
-	
 }

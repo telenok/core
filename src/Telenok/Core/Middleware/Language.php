@@ -16,8 +16,19 @@ class Language implements Middleware {
 
 	public function handle($request, \Closure $next)
 	{
+        $localeHeader = substr($request->server('HTTP_ACCEPT_LANGUAGE'), 0, 2);
+
         $localeCollection = $this->app->config->get('app.locales');
-        $localeCurrent = $this->app->config->get('app.locale', 'en');
+
+        if (in_array($localeHeader, $localeCollection->all(), true))
+        {
+            $localeCurrent = $localeHeader;
+        }
+        else
+        {
+            $localeCurrent = $this->app->config->get('app.locale', 'en');
+        }
+
         $sessionLocale = $this->app->session->get('app.locale');
 
 		$segmentUrl = $request->segment(1);

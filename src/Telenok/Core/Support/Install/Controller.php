@@ -369,7 +369,7 @@ class Controller {
 				$table->timestamps();
 				$table->softDeletes();
 
-				$table->text('title')->nullable();
+				$table->mediumText('title')->nullable();
 				$table->string('code')->nullable()->default(null)->unique('code');
 				$table->mediumText('value');
 				$table->integer('active')->unsigned()->nullable()->default(null);

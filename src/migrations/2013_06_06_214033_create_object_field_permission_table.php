@@ -13,7 +13,7 @@ class CreateObjectFieldPermissionTable extends Migration {
 			{
 				if (!\Schema::hasColumn('object_field', 'permission_default'))
 				{
-					$table->text('permission_default')->nullable();
+					$table->mediumText('permission_default')->nullable();
 				}
 			});
 		}

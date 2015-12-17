@@ -22,7 +22,6 @@
                         columns.push({ 
                             data : "choose", 
                             title : "{{ $controller->LL('btn.choose') }}", 
-                            className : "center", 
                             orderable : false
                         });
                     @endif

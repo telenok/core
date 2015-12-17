@@ -146,12 +146,15 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         return '
 				<script type="text/javascript">
 					$(document).on("click", "#btnfield' . $uniq . '", function() {
-						var $modal = jQuery(this).closest(".modal"); 
+						var $modal = jQuery(this).closest(".modal");
+                        if ($modal)
+                        {
                             $modal.data("model-data")(' . $put->toJson() . '); 
                             return false;
+                        }
 					});
 				</script>
-				<button id="btnfield' . $uniq . '" type="button" class="btn btn-xs btn-success">'.$this->LL('btn.choose').'</button> 
+				<button id="btnfield' . $uniq . '" type="button" data-model-id="' . $item->id . '" class="btn btn-xs btn-success">'.$this->LL('btn.choose').'</button> 
 		';
     } 
 }

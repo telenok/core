@@ -28,7 +28,7 @@ class CreateObjectFieldTextTable extends Migration {
 
 				if (!\Schema::hasColumn('object_field', 'text_default'))
 				{
-					$table->text('text_default')->nullable();
+					$table->mediumText('text_default')->nullable();
 				}
 			});
 		}

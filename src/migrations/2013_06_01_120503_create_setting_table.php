@@ -15,7 +15,7 @@ class CreateSettingTable extends Migration {
 				$table->nullableTimestamps();
 				$table->softDeletes();
 
-				$table->text('title')->nullable();
+				$table->mediumText('title')->nullable();
 				$table->string('code')->nullable()->unique('code');
 				$table->mediumText('value')->nullable();
 				$table->integer('active')->unsigned()->nullable();

@@ -9,11 +9,6 @@ class File {
 	protected $mimeType;
 	protected $extension;
 
-    const IMAGE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif'];
-    const IMAGE_MIME_TYPE = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'];
-    const TODO_RESIZE = 'resize';
-    const TODO_RESIZE_PROPORTION = 'resize_proportion';
-
     public function downloadStreamLink()
 	{
 		return route('telenok.download.stream.file', ['modelId' => $this->model->id, 'fieldId' => $this->field->id]);
@@ -186,12 +181,12 @@ class File {
 		{
 			if ($ext = $this->extension())
 			{
-				return in_array($ext, static::IMAGE_EXTENSION, true);
+				return in_array($ext, \App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_EXTENSION, true);
 			}
 			else
 			{
 				return in_array($this->mimeType(), static::IMAGE_MIME_TYPE, true);
 			}
 		}
-    } 
+    }
 }

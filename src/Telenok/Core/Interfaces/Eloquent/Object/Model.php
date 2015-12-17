@@ -428,12 +428,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 				{
 					//\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
 				}
-
+                
 				if (($c = $type->classController())
-                        && $controllerProcessing = app($c)
+                        && ($controllerProcessing = app($c))
                         && $controllerProcessing instanceof IEloquentProcessController
                 )
-				{
+                {
 					$controllerProcessing->preProcess($model, $type, $input);
 				}
 

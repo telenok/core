@@ -165,7 +165,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 				$size = $file->getClientSize();
 				$mimeType = $file->getMimeType();
 				$extension = $file->getClientOriginalExtension();
-				$directoryPath = env('UPLOAD_FOLDER') . '/' . date('Y') . '/' . date('m') . '/' . date('d') . '/';
+				$directoryPath = config('filesystems.upload.directory') . '/' . date('Y') . '/' . date('m') . '/' . date('d') . '/';
 				$originalFileName = $file->getClientOriginalName();
 				$fileName = \Str::random(20) . '.' . $extension;
 				$destinationPath = $directoryPath . $fileName;
@@ -331,11 +331,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			{
 				if ($key == 'upload_allow_ext')
 				{
-					$value = $value ? : json_encode(\Telenok\Core\Field\Upload\File::IMAGE_EXTENSION);
+					$value = $value ? : json_encode(\App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_EXTENSION);
 				}
 				else if ($key == 'upload_allow_mime')
 				{
-					$value = $value ? : json_encode(\Telenok\Core\Field\Upload\File::IMAGE_MIME_TYPE);
+					$value = $value ? : json_encode(\App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_MIME_TYPE);
 				}
 				else if ($key == 'upload_storage')
 				{
@@ -365,11 +365,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			}
 			else if ($key == 'upload_allow_ext')
 			{
-				$value = $value ? : \Telenok\Core\Field\Upload\File::IMAGE_EXTENSION;
+				$value = $value ? : \App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_EXTENSION;
 			} 
 			else if ($key == 'upload_allow_mime')
 			{
-				$value = $value ? : \Telenok\Core\Field\Upload\File::IMAGE_MIME_TYPE;
+				$value = $value ? : \App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_MIME_TYPE;
 			} 
 			else if ($key == 'upload_storage')
 			{

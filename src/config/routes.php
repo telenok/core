@@ -1,5 +1,9 @@
 <?php
 
+    get('browser/file', ['as' => 'browse.file', 'uses' => "\App\Telenok\Core\Controller\Frontend\Controller@validateSession"]);
+    get('cache/image/{p}', ['as' => 'image.cache', 'uses' => "\App\Telenok\Core\Controller\Frontend\Controller@cachedImageProcessing"])
+            ->where('p', '.*');
+
 	get('validate/session', array('as' => 'validate.session', 'uses' => "\App\Telenok\Core\Controller\Frontend\Controller@validateSession"));
 
 	get('telenok', array('as' => 'telenok.content', 'uses' => "\App\Telenok\Core\Controller\Backend\Controller@getContent"));
@@ -26,7 +30,7 @@
 	get('download/stream/{modelId}/{fieldId}', array('as' => 'telenok.download.stream.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@stream"));
 	get('download/image/{modelId}/{fieldId}/{toDo}/{width}/{height}/{secureKey}', array('as' => 'telenok.download.image.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@image"));
 
-	
+
 
 	// Module Objects\Lists
 	get('telenok/module/objects-lists/action-param', array('as' => 'telenok.module.objects-lists.action.param', 'uses' => "App\Telenok\Core\Module\Objects\Lists\Controller@getActionParam"));
@@ -81,8 +85,10 @@
 	post('field/file-many-to-many/upload', array('as' => 'telenok.field.file-many-to-many.upload', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@upload"));
  	get('field/file-many-to-many/list/title', array('as' => 'telenok.field.file-many-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@getTitleList"));
 
-	get('field/text/ckeditor.config.js', array('as' => 'telenok.field.text.ckeditor.config', 'uses' => "App\Telenok\Core\Field\Text\Controller@getCKEditorConfig"));	
-	get('packages/telenok/core/js/ckeditor_addons/plugins/widget_inline/plugin.js', array('as' => 'telenok.field.text.plugin.widget_inline.config', 'uses' => "App\Telenok\Core\Field\Text\Controller@getCKEditorPluginWidgetInline"));	
+	get('ckeditor.custom.config.js', array('as' => 'telenok.ckeditor.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@getCKEditorConfig"));	
+	get('ckeditor/browser/file', array('as' => 'telenok.ckeditor.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@browseFile"));	
+	get('ckeditor/browser/image', array('as' => 'telenok.ckeditor.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@browseImage"));	
+	get('packages/telenok/core/js/ckeditor_addons/plugins/widget_inline/plugin.js', array('as' => 'telenok.ckeditor.plugin.inline-widget.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@getCKEditorPluginWidgetInline"));	
 
     
 	// Module Dashboard 

@@ -14,9 +14,8 @@ class CreateObjectTranslationTable extends Migration {
 				$table->integer('translation_object_model_id')->unsigned()->default(0);
 				$table->string('translation_object_field_code')->nullable();
 				$table->string('translation_object_language', 4)->nullable();
-				$table->text('translation_object_string')->nullable();
+				$table->mediumText('translation_object_string')->nullable();
 			});
 		}
 	}
-
 }

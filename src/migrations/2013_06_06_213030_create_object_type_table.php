@@ -15,8 +15,8 @@ class CreateObjectTypeTable extends Migration {
 				$table->nullableTimestamps();
 				$table->softDeletes();
 
-				$table->text('title')->nullable();
-				$table->text('title_list')->nullable();
+				$table->mediumText('title')->nullable();
+				$table->mediumText('title_list')->nullable();
 				$table->string('code')->unique()->nullable();
 				$table->integer('active')->unsigned()->nullable();
 				$table->timestamp('active_at_start')->nullable();

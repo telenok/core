@@ -14,9 +14,9 @@ class CreatePageTable extends Migration {
 				$table->increments('id');
 				$table->nullableTimestamps();
 				$table->softDeletes();
-				$table->text('title')->nullable();
-				$table->text('title_ceo')->nullable();
-				$table->text('description_ceo')->nullable();
+				$table->mediumText('title')->nullable();
+				$table->mediumText('title_ceo')->nullable();
+				$table->mediumText('description_ceo')->nullable();
 				$table->string('keywords_ceo')->nullable();
 				$table->string('template_view')->nullable();
 				$table->string('url_pattern')->nullable();

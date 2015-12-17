@@ -15,7 +15,7 @@ class CreateResourceTable extends Migration {
 				$table->nullableTimestamps();
 				$table->softDeletes();
 
-				$table->text('title')->nullable();
+				$table->mediumText('title')->nullable();
 				$table->string('code')->nullable();
 				$table->integer('active')->unsigned()->nullable();
 				$table->timestamp('active_at_start')->nullable();

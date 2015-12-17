@@ -14,9 +14,9 @@ class CreateWidgetOnPageTable extends Migration {
 				$table->increments('id');
 				$table->nullableTimestamps();
 				$table->softDeletes();
-				$table->text('title')->nullable();
-				$table->text('container')->nullable();
-				$table->text('structure')->nullable();
+				$table->mediumText('title')->nullable();
+				$table->mediumText('container')->nullable();
+				$table->mediumText('structure')->nullable();
 				$table->string('key')->nullable();
 				$table->integer('widget_order')->unsigned()->nullable();
 				$table->integer('active')->unsigned()->nullable();

@@ -127,9 +127,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
         \Event::fire('telenok.backend.controller.content', [$setArray]);
 
-        $this->addJsCode(view('core::layout.helper-js', $setArray)->render());
+        $this->addJsCode(view('core::special.telenok.table', $setArray)->render());
         
         return view('core::controller.backend', $setArray)->render();
     }
-
 }

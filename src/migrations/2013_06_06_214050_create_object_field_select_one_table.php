@@ -13,7 +13,7 @@ class CreateObjectFieldSelectOneTable extends Migration {
 			{
 				if (!\Schema::hasColumn('object_field', 'select_one_data'))
 				{
-					$table->text('select_one_data')->nullable();
+					$table->mediumText('select_one_data')->nullable();
 				}
 			});
 		}

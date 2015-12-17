@@ -293,7 +293,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
                 $table->increments('id');
                 $table->timestamps();
                 $table->softDeletes();
-                $table->text('title')->nullable();
+                $table->mediumText('title')->nullable();
             });
         }
 	}

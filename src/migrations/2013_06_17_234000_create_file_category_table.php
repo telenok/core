@@ -14,7 +14,7 @@ class CreateFileCategoryTable extends Migration {
 				$table->increments('id');
 				$table->nullableTimestamps();
 				$table->softDeletes();
-				$table->text('title')->nullable();
+				$table->mediumText('title')->nullable();
 				$table->string('extension')->nullable();
 				$table->integer('active')->unsigned()->nullable();
 				$table->timestamp('active_at_start')->nullable();

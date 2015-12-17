@@ -15,7 +15,7 @@ class CreateObjectVersionTable extends Migration {
 				$table->nullableTimestamps();
 				$table->softDeletes();
 
-				$table->text('title')->nullable();
+				$table->mediumText('title')->nullable();
 				$table->integer('object_id')->nullable();
 				$table->integer('object_type_id')->nullable();
 				$table->integer('active')->unsigned()->nullable()->default(null);

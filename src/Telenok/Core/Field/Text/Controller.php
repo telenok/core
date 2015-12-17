@@ -7,8 +7,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	protected $key = 'text';
 	protected $specialField = ['text_width', 'text_height', 'text_default', 'text_rte'];
-   
-    protected $ckEditorConfigView = "core::field.text.rte-config";
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
     {
@@ -162,20 +160,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		{
 			\Schema::table($table, function(Blueprint $table) use ($fieldName)
 			{
-				$table->text($fieldName)->nullable();
+				$table->mediumText($fieldName)->nullable();
 			});
 		}
 
         return parent::postProcess($model, $type, $input);
-    }
-
-    public function getCKEditorConfig()
-    {
-        return view($this->ckEditorConfigView);
-    }
-
-    public function getCKEditorPluginWidgetInline()
-    {
-        return view("core::field.text.rte-plugin-widget-inline");
     }
 }

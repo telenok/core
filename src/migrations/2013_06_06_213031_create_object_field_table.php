@@ -15,8 +15,8 @@ class CreateObjectFieldTable extends Migration {
 				$table->nullableTimestamps();
 				$table->softDeletes();
 
-				$table->text('title')->nullable();
-				$table->text('title_list')->nullable();
+				$table->mediumText('title')->nullable();
+				$table->mediumText('title_list')->nullable();
 				$table->string('code')->nullable();
 				$table->integer('created_by_user')->unsigned()->nullable();
 				$table->integer('updated_by_user')->unsigned()->nullable();
@@ -42,7 +42,7 @@ class CreateObjectFieldTable extends Migration {
 				$table->integer('field_order')->unsigned()->nullable()->default(0);
 				$table->string('css_class')->nullable();
 				$table->string('icon_class')->nullable();
-				$table->text('description')->nullable();
+				$table->mediumText('description')->nullable();
 
 				$table->index('field_object_type');
 			});

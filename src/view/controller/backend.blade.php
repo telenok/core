@@ -9,7 +9,7 @@
         </script>
         {!! HTML::script('packages/telenok/core/js/ckeditor/ckeditor.js') !!}
         {!! HTML::script('packages/telenok/core/js/ckeditor_addons/fixes/bootstrap.js') !!}
-        {!! HTML::script('field/text/ckeditor.config.js') !!}
+        {!! HTML::script('ckeditor.custom.config.js') !!}
 
 @stop
 

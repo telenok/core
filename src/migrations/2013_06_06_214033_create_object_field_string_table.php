@@ -13,7 +13,7 @@ class CreateObjectFieldStringTable extends Migration {
 			{
 				if (!\Schema::hasColumn('object_field', 'string_default'))
 				{
-					$table->text('string_default')->nullable();
+					$table->mediumText('string_default')->nullable();
 				}
 
 				if (!\Schema::hasColumn('object_field', 'string_regex'))

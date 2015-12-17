@@ -113,12 +113,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         }
 
         return [
-					'gridId' => $this->getGridId($code),
-					'typeId' => $item->sequences_object_type, 
-					'module' => ($module ? 1 : 0),
-					'moduleKey' => ($module ? $module->getKey() : ""),
-					'moduleRouterActionParam' => ($module ? $module->getRouterActionParam(['typeId' => $item->getKey()]) : ""),
-				];
+                'gridId' => $this->getGridId($code),
+                'typeId' => $item->sequences_object_type, 
+                'module' => ($module ? 1 : 0),
+                'moduleKey' => ($module ? $module->getKey() : ""),
+                'moduleRouterActionParam' => ($module ? $module->getRouterActionParam(['typeId' => $item->getKey()]) : ""),
+            ];
     }
 
     public function getTreeContent()
@@ -705,7 +705,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     {
         try 
         {
-            $input = $this->getRequestCollectedd(); 
+            $input = $this->getRequestCollected(); 
             
             $type = $this->getType($id);            
 

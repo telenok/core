@@ -13,7 +13,7 @@ class CreateObjectFieldSelectManyTable extends Migration {
 			{
 				if (!\Schema::hasColumn('object_field', 'select_many_data'))
 				{
-					$table->text('select_many_data')->nullable();
+					$table->mediumText('select_many_data')->nullable();
 				}
 			});
 		}

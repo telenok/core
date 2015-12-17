@@ -31,7 +31,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 			// Check for request for part of the stream
 			$range = $this->getRequest()->header('Range');
 
-			if($range != null)
+			if ($range != null)
 			{
 				$eqPos = strpos($range, "=");
 				$toPos = strpos($range, "-");
@@ -39,7 +39,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 				$start = intval(substr($range, $eqPos + 1, $toPos));
 				$success = fseek($stream, $start);
 
-				if($success == 0) 
+				if ($success == 0) 
 				{
 					$size = $fullsize - $start;
 					$response_code = 206;
@@ -99,10 +99,10 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 					{
 						$imageContent = $fileData->content();
 						
-						$imageProcess = app('\App\Telenok\Core\Field\Upload\Image');
-						$image = $imageProcess->imagine()->load($imageContent);
+						$imageProcess = app('\App\Telenok\Core\Support\Config\ImageProcessing');
+						$imageProcess->setImage($imageProcess->imagine()->load($imageContent));
 						
-						$newImageContent = $this->process($image, $width, $height, $toDo)->get($fileExtension, config('image.options', 'gd'));
+						$newImageContent = $imageProcess->process($width, $height, $toDo)->get($fileExtension, config('image.options'));
 						
 						foreach(File::storageList($field->upload_storage)->all() as $storage)
 						{
@@ -160,54 +160,5 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		{
 			throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
 		}
-	}
-
-	public function process($image, $width, $height, $toDo)
-	{
-		switch ($toDo)
-		{
-			case File::TODO_RESIZE_PROPORTION:
-    				return $this->resizeProportion($image, $width, $height);
-                break;
-
-			case File::TODO_RESIZE:
-			default:
-				return $this->resize($image, $width, $height);
-
-		}
-	}
-
-	public function resizeProportion($image, $width, $height)
-	{
-		$size = $image->getSize();
-
-		if ($width == 0)
-		{
-			$width = $size->getWidth() * ($height/$size->getHeight());
-		}
-		else if ($height == 0)
-		{
-			$height = $size->getHeight() * ($width/$size->getWidth());
-		}
-		
-		return $image->thumbnail(new \Imagine\Image\Box($width, $height));
-	}
-
-	public function resize($image, $width, $height)
-	{
-		$size = $image->getSize();
-
-		if ($width == 0)
-		{
-			$width = $size->getWidth() * ($height/$size->getHeight());
-		}
-		else if ($height == 0)
-		{
-			$height = $size->getHeight() * ($width/$size->getWidth());
-		}
-		
-		$image->resize(new \Imagine\Image\Box($width, $height));
-		
-		return $image;
 	}
 }

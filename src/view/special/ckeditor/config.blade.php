@@ -11,3 +11,17 @@ CKEDITOR.editorConfig = function(config)
 {
     config.extraPlugins = 'widget_inline';
 };
+
+// update textarea in source mode
+CKEDITOR.on('instanceCreated__________', function(e) 
+{
+    e.editor.on('contentDom', function()
+    {
+        e.editor.document.on('keyup', function(event)
+        {
+            var editor_data = CKEDITOR.instances['content-text'].getData();
+
+            jQuery('#content-text').html(editor_data);
+        });
+    });
+});

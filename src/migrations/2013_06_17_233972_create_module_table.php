@@ -14,7 +14,7 @@ class CreateModuleTable extends Migration {
 				$table->increments('id');
 				$table->nullableTimestamps();
 				$table->softDeletes();
-				$table->text('title')->nullable();
+				$table->mediumText('title')->nullable();
 				$table->string('controller_class')->nullable();
 				$table->integer('active')->unsigned()->nullable();
 				$table->integer('module_order')->unsigned()->nullable();
