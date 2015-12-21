@@ -878,7 +878,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	// ->permission() - can current user read (read - by default)
 	// ->permission('write', null) - can current user read
+	// ->permission(null, $someObject) - can $someObject read 
 	// ->permission(null, 'user_authorized') - can authorized user read 
+	// ->permission('read', 'user_any') - can anybody read
 	// ->permission('read', 'user_authorized', ['object-type', 'own'])
 	public function scopeWithPermission($query, $permissionCode = 'read', $subjectCode = null, $filterCode = null)
 	{
@@ -886,33 +888,45 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		{
 			return $query;
 		}
+        
+        $subjectCollection = collect();
+        
+        try
+        {
+            if (empty($subjectCode))
+            {
+                $subjectCollection->push(\App\Telenok\Core\Model\Security\Resource::where('code', 'user_any')->active()->first());
 
-		if (empty($subjectCode))
-		{
-			if (app('auth')->guest())
-			{
-				$subject = \App\Telenok\Core\Model\Security\Resource::where('code', 'user_unauthorized')->active()->first();
-			}
-			else if (app('auth')->check())
-			{
-				if (app('auth')->hasRole('super_administrator'))
-				{
-					return $query;
-				}
-				else
-				{
-					$subject = app('auth')->user();
-				}
-			}
-		}
-		else
-		{
-			$subject = \App\Telenok\Core\Model\Object\Sequence::where('id', $subjectCode)->active()->first();
-		}
+                if (app('auth')->guest())
+                {
+                    $subjectCollection->push(\App\Telenok\Core\Model\Security\Resource::where('code', 'user_unauthorized')->active()->first());
+                }
+                else if (app('auth')->check())
+                {
+                    if (app('auth')->hasRole('super_administrator'))
+                    {
+                        return $query;
+                    }
+                    else
+                    {
+                        $subjectCollection->push(app('auth')->user());
+                    }
+                }
+            }
+            else if ($subjectCode instanceof \Illuminate\Database\Eloquent\Model)
+            {
+                $subjectCollection->push(\App\Telenok\Core\Model\Object\Sequence::where('id', $subjectCode->getKey())->active()->firstOrFail());
+            }
+            else
+            {
+                $subjectCollection->push(\App\Telenok\Core\Model\Object\Sequence::where('id', $subjectCode)->active()->firstOrFail());
+            }
+        }
+        catch(\Exception $e) {}
 
 		$permission = \App\Telenok\Core\Model\Security\Permission::where('id', $permissionCode)->orWhere('code', $permissionCode)->active()->first();
 
-		if (!$subject || !$permission)
+		if ($subjectCollection->isEmpty() || !$permission)
 		{
 			return $query->where($this->getTable() . '.id', 'Error: permission code');
 		}
@@ -924,7 +938,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 		$query->addSelect($this->getTable() . '.*');
 
-		$query->join($sequence->getTable() . ' as osequence', function($join) use ($spr, $subject, $permission)
+		$query->join($sequence->getTable() . ' as osequence', function($join) use ($spr, $permission)
 		{
 			$join->on($this->getTable() . '.id', '=', 'osequence.id');
 		});
@@ -938,7 +952,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			$join->where('otype.active_at_end', '>=', $now);
 		});
 
-		$query->where(function($queryWhere) use ($query, $filterCode, $permission, $subject)
+		$query->where(function($queryWhere) use ($query, $filterCode, $permission, $subjectCollection)
 		{
 			$queryWhere->where(\DB::raw(1), 0);
 
@@ -952,9 +966,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 				});
 			}
 
-			$filters->each(function($item) use ($query, $queryWhere, $permission, $subject)
+			$filters->each(function($item) use ($query, $queryWhere, $permission, $subjectCollection)
 			{
-				$item->filter($query, $queryWhere, $this, $permission, $subject);
+				$item->filter($query, $queryWhere, $this, $permission, $subjectCollection);
 			});
 		});
 

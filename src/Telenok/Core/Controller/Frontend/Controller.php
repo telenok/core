@@ -26,8 +26,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller
     {
         if (config('image.cache.queue'))
         {
-            $job = new \App\Telenok\Core\Jobs\ImageProcessing($this->getRequest()->input());
-            $job->onQueue(\App\Telenok\Core\Support\Config\ImageProcessing::QUEUES_CATEGORY);
+            $job = new \App\Telenok\Core\Jobs\Image\Processing($this->getRequest()->input());
+            $job->onQueue(\App\Telenok\Core\Support\Image\Processing::QUEUES_CATEGORY);
 
             $this->dispatch($job);
         }
@@ -46,7 +46,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller
                 throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
             }
 
-            $processing = app('\App\Telenok\Core\Support\Config\ImageProcessing');
+            $processing = app('\App\Telenok\Core\Support\Image\Processing');
             $processing->cachingImage($path, $width, $height, $todo);
         }
 

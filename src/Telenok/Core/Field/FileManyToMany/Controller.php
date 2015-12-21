@@ -143,11 +143,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             {
 				if ($key == 'file_many_to_many_allow_ext')
 				{
-					$value = $value ? : json_encode(\App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_EXTENSION);
+					$value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION);
 				}
 				else if ($key == 'file_many_to_many_allow_mime')
 				{
-					$value = $value ? : json_encode(\App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_MIME_TYPE);
+					$value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE);
 				}
 
 				return collect((array)json_decode($value, true));
@@ -173,11 +173,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 			}
 			else if ($key == 'file_many_to_many_allow_ext')
 			{
-				$value = $value ? : \App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_EXTENSION;
+				$value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION;
 			} 
 			else if ($key == 'file_many_to_many_allow_mime')
 			{
-				$value = $value ? : \App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_MIME_TYPE;
+				$value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE;
 			} 
 
 			$model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));

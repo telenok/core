@@ -402,6 +402,12 @@ class SeedLast extends Migration {
 			'code' => 'user_unauthorized',
 			'active' => 1
 		]);
+
+		(new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+			'title' => ['en' => 'Anybody', 'ru' => 'Все'],
+			'code' => 'user_any',
+			'active' => 1
+		]);
         
 		(new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
 			'title' => ['en' => 'Module: Field', 'ru' => 'Модуль: Поле'],

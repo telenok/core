@@ -1,4 +1,4 @@
-<?php namespace Telenok\Core\Jobs;
+<?php namespace Telenok\Core\Jobs\Image;
 
 use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
@@ -6,7 +6,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ImageProcessing extends Job implements SelfHandling, ShouldQueue
+class Processing extends Job implements SelfHandling, ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
@@ -30,7 +30,7 @@ class ImageProcessing extends Job implements SelfHandling, ShouldQueue
                 . (int)array_get($this->collection, 'height') 
                 . array_get($this->collection, 'todo')))
         {   
-            $processing = app('\App\Telenok\Core\Support\Config\ImageProcessing');
+            $processing = app('\App\Telenok\Core\Support\Image\Processing');
             $processing->cachingImage(
                 array_get($this->collection, 'path'), 
                 array_get($this->collection, 'width'),

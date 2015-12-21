@@ -3,12 +3,19 @@
 class Acl
 {
     protected $subject;
+    protected $subjects;
+    protected $subjectCollision = 1;
+    
+    const SUBJECT_COLLISION_ONE = 1;
+    const SUBJECT_COLLISION_ALL = 2;
+    const SUBJECT_COLLISION_ANY = 3;
 
-    public function __construct(\Illuminate\Database\Eloquent\Model $subject = null)
+    public function __construct($subject = null)
     {
         $this->subject = $subject;
+        $this->subjects = collect();
     } 
-
+    
 	/* 
      * Set resource as internal variable for manipulating
      * 
@@ -47,6 +54,7 @@ class Acl
      * 
      * \App\Telenok\Core\Security\Acl::subject(200)
      * \App\Telenok\Core\Security\Acl::subject('user_unauthorized')
+     * \App\Telenok\Core\Security\Acl::subject('user_any')
      * \App\Telenok\Core\Security\Acl::subject(\App\Telenok\Core\Model\User\User $user)
      * 
      */
@@ -75,10 +83,83 @@ class Acl
         return new static($subject);
     }
 
+    /* 
+     * Set subject as internal variable for manipulating
+     * 
+     * Alias for ::subjectAll(). Please, look subjectAll()
+     * 
+     */
+    public static function subjects($subjects = [])
+    {
+        return static::subjectAll($subjects);
+    }
+
+    /* 
+     * Set subject as internal variable for manipulating
+     * 
+     * \App\Telenok\Core\Security\Acl::subjectAll([200, 'user_unauthorized'])
+     * \App\Telenok\Core\Security\Acl::subjectAll([$user, 'user_unauthorized'])
+     * 
+     */
+    public static function subjectAll($subjects = [])
+    {
+        $acl = new static;
+        $acl->setCollision(static::SUBJECT_COLLISION_ALL);
+
+        foreach($subjects as $subject)
+        {
+            $acl->addSubjects($subject);
+        }
+
+        return $this;
+    }
+    
+    /* 
+     * Set subject as internal variable for manipulating
+     * 
+     * \App\Telenok\Core\Security\Acl::subjectAny([200, 'user_unauthorized'])
+     * \App\Telenok\Core\Security\Acl::subjectAny([$user, 'user_unauthorized'])
+     * 
+     */
+    public static function subjectAny($subjects = [])
+    {
+        $acl = new static;
+        $acl->setCollision(static::SUBJECT_COLLISION_ANY);
+
+        foreach($subjects as $subject)
+        {
+            $acl->addSubjects($subject);
+        }
+
+        return $acl;
+    }
+
 	public function getSubject()
 	{
 		return $this->subject;
 	}
+
+	public function addSubjects($subject)
+	{
+		return $this->subjects->push($subject);
+	}
+
+	public function getSubjects()
+	{
+		return $this->subjects;
+	}
+
+    public function setCollision($param)
+    {
+        $this->subjectCollision = $param;
+        
+        return $this;
+    }
+
+    public function getCollision()
+    {
+        return $this->subjectCollision;
+    }
 
     /* 
      * Set user as internal variable for manipulating
@@ -330,6 +411,8 @@ class Acl
      * 
      * \App\Telenok\Core\Security\Acl::role/subject/user(who)->setPermission(what.can, over.resource)
      * 
+     * \App\Telenok\Core\Security\Acl::subjectAny([200, $user])->setPermission('read', 'control_panel')
+     * \App\Telenok\Core\Security\Acl::subjectAll([200, $user])->setPermission('read', 'control_panel')
      * \App\Telenok\Core\Security\Acl::role(316)->setPermission('read', 'control_panel')
      * \App\Telenok\Core\Security\Acl::role(316)->setPermission(['read', 'update'], 2341)
      * \App\Telenok\Core\Security\Acl::user(339)->setPermission('read', 'news')
@@ -339,21 +422,31 @@ class Acl
      */
     public function setPermission($permissionCode = null, $resourceCode = null)
     {
+        if ($this->subjects->count())
+        {
+            foreach($this->subjects->all() as $subject)
+            {
+                static::subject($subject)->setPermission($permissionCode, $resourceCode);
+            }
+            
+            return $this;
+        }
+
         if (!$this->subject)
         {
             return $this;
         }
-        
+
 		if (is_array($permissionCode))
 		{
 			foreach($permissionCode as $pCode)
 			{
 				$this->setPermission($pCode, $resourceCode);
 			}
-			
+
 			return $this;
 		}
-		
+
         if ($permissionCode instanceof \Telenok\Core\Model\Security\Permission)
         {
             $permission = $permissionCode;
@@ -456,6 +549,16 @@ class Acl
      */
     public function unsetPermission($permissionCode = null, $subjectCode = null)
     {
+        if ($this->subjects->count())
+        {
+            foreach($this->subjects->all() as $subject)
+            {
+                static::subject($subject)->unsetPermission($permissionCode, $subjectCode);
+            }
+            
+            return $this;
+        }
+
         if (!$this->subject) 
         {
             return $this;
@@ -520,6 +623,16 @@ class Acl
      */
     public function setGroup($id = null)
     {
+        if ($this->subjects->count())
+        {
+            foreach($this->subjects->all() as $subject)
+            {
+                static::subject($subject)->setGroup($id);
+            }
+            
+            return $this;
+        }
+        
         if (!$this->subject instanceof \Telenok\Core\Model\User\User)
         {
             throw new \Exception('Subject should be instance of \Telenok\Core\Model\User\User');
@@ -554,6 +667,16 @@ class Acl
      */
     public function unsetGroup($id = null)
     {
+        if ($this->subjects->count())
+        {
+            foreach($this->subjects->all() as $subject)
+            {
+                static::subject($subject)->unsetGroup($id);
+            }
+            
+            return $this;
+        }
+
         if (!$this->subject instanceof \Telenok\Core\Model\User\User)
         {
             throw new \Exception('Subject should be instance of \App\Telenok\Core\Model\User\User');
@@ -592,6 +715,16 @@ class Acl
      */
     public function setRole($id = null)
     {
+        if ($this->subjects->count())
+        {
+            foreach($this->subjects->all() as $subject)
+            {
+                static::subject($subject)->setRole($id);
+            }
+            
+            return $this;
+        }
+
         if (!$this->subject instanceof \Telenok\Core\Model\User\Group)
         {
             throw new \Exception('Subject should be instance of \App\Telenok\Core\Model\User\Group');
@@ -626,6 +759,16 @@ class Acl
      */
     public function unsetRole($id = null)
     {
+        if ($this->subjects->count())
+        {
+            foreach($this->subjects->all() as $subject)
+            {
+                static::subject($subject)->unsetRole($id);
+            }
+            
+            return $this;
+        }
+
         if (!$this->subject instanceof \Telenok\Core\Model\User\Group)
         {
             throw new \Exception('Subject should be instance of \Telenok\Core\Model\User\Group');
@@ -662,10 +805,43 @@ class Acl
      * \App\Telenok\Core\Security\Acl::subject(103)->can(\App\Telenok\Core\Model\Security\Permission $read, \User $user)
      * \App\Telenok\Core\Security\Acl::subject(103)->can(12, 'object_type.language')
      * \App\Telenok\Core\Security\Acl::subject(103)->can('read', 148)
+     * \App\Telenok\Core\Security\Acl::subject(103)->can('read', [148, 'user_any'])
      * 
      */
     public function can($permissionCode = null, $resourceCode = null, $filterCode = null)
     {
+        if ($this->subjects->count())
+        {
+            foreach($this->subjects->all() as $subject)
+            {
+                if (is_array($resourceCode))
+                {
+                    foreach($resourceCode as $r)
+                    {
+                        if (!($can = static::subject($subject)->can($permissionCode, $r, $filterCode)))
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    $can = static::subject($subject)->can($permissionCode, $r, $filterCode);
+                }
+                
+                if ($this->getCollision() == static::SUBJECT_COLLISION_ANY && $can)
+                {
+                    return true;
+                }
+                else if ($this->getCollision() == static::SUBJECT_COLLISION_ALL && !$can)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         if (!config('app.acl.enabled') || $this->hasRole('super_administrator'))
         {
             return true;
@@ -771,7 +947,17 @@ class Acl
      * 
      */
     public function hasRole($id = null)
-    { 
+    {
+        if ($this->subjects->count())
+        {
+            foreach($this->subjects->all() as $subject)
+            {
+                static::subject($subject)->hasRole($id);
+            }
+            
+            return $this;
+        }
+
         if (!$this->subject instanceof \Telenok\Core\Model\User\User) 
         {
             return false;
@@ -792,7 +978,7 @@ class Acl
         }
 
 		$now = \Carbon\Carbon::now();
-		
+
         $spr = $this->subject->with(
 		[
             'group' => function($query) use ($now) 
@@ -810,7 +996,7 @@ class Acl
 			}
         ])
         ->whereId($this->subject->getKey())->get();
-        
+
         foreach($spr as $user)
         { 
             foreach($user->group as $group)

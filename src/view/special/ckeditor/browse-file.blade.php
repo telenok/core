@@ -38,7 +38,7 @@
                                         <ul>
                                             <?php
                                             
-                                            $imageProcessing = app('\App\Telenok\Core\Support\Config\ImageProcessing');
+                                            $imageProcessing = app('\App\Telenok\Core\Support\Image\Processing');
                                             
                                             ?>
                                             

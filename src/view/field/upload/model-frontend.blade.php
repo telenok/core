@@ -13,7 +13,7 @@
 	{!! Form::label("{$field->code}", $field->translate('title'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
     <div class="col-sm-5">
 		
-        @if (!empty($model->{$field->code . '_path'}))
+        @if (!empty($model->{$field->code . '_file_name'}))
 			@if ($model->{$field->code}->isImage($field, $model))
 			<img src="{!! $model->{$field->code}->downloadImageLink(140, 140) !!}" title="{{$model->translate('title')}}" />
 			<br>

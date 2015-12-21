@@ -4,11 +4,17 @@ class File {
 
 	protected $model;
 	protected $field;
-	protected $path;
 	protected $disk;
-	protected $mimeType;
-	protected $extension;
+    protected $store;
 
+    public function __construct($model, $field)
+    {
+		$this->field = $field;
+		$this->model = $model;
+        
+        $this->initDisk();
+    }
+    
     public function downloadStreamLink()
 	{
 		return route('telenok.download.stream.file', ['modelId' => $this->model->id, 'fieldId' => $this->field->id]);
@@ -16,6 +22,23 @@ class File {
 
 	public function downloadImageLink($width = 0, $height = 0, $toDo = File::TODO_RESIZE)
 	{
+        
+        
+        return ;
+        
+        
+        
+        // verify if we can store cache file in public directory
+        if (\App\Telenok\Core\Security\Acl::subjectAny(['user_any', 'user_unauthorized'])
+                ->can('read', [
+                    $this->model, 
+                    'object_field.' . $this->model->getTable() . '.' . $this->field->code
+                ]))
+        {
+            return app('\App\Telenok\Core\Support\Image\Processing')
+                ->cachedModelImageUrl($this->model->{$this->field->code}->path(), 300, 300);
+        }
+        
 		return route('telenok.download.image.file', [
 					'modelId' => $this->model->id, 
 					'fieldId' => $this->field->id, 
@@ -32,16 +55,6 @@ class File {
 		return md5(config('app.key').(int)$width.(int)$height);
 	}
 
-	public static function storageList(\Illuminate\Support\Collection $storageList)
-	{
-		if ($storageList->isEmpty())
-		{
-			$storageList->push('default_local');
-		}
-
-		return File::convertDefaultStorageName($storageList);
-	}
-
 	public function originalFileName()
 	{
 		return $this->model->{$this->field->code . '_original_file_name'};
@@ -52,53 +65,28 @@ class File {
 		return $this->disk()->get($path ? : $this->path());
 	}
 
-	public static function convertDefaultStorageName($list = [])
-	{
-		return collect($list)->transform(function($item)
-		{
-			if ($item == 'default_local')
-			{
-				return config('filesystems.default');
-			}
-			else if ($item == 'default_cloud')
-			{
-				return config('filesystems.cloud');
-			}
-			else
-			{
-				return $item;
-			}
-		});
-	}
+    public function initDisk()
+    {
+		$downloadStorages = \Telenok\Core\Support\File\Store::convertDefaultStorageName(array_map("trim", explode(',', env('DOWNLOAD_STORAGES'))))->all();
 
-	public function setModels($model, $field)
-	{
-		$this->field = $field;
-		$this->model = $model;
-		$this->setPath($model->{$field->code . '_path'});
-
-		$downloadStorages = static::convertDefaultStorageName(array_map("trim", explode(',', env('DOWNLOAD_STORAGES'))))->all();
-		
-		$storages = static::convertDefaultStorageName(json_decode($field->upload_storage, TRUE));
+		$storages = \Telenok\Core\Support\File\Store::convertDefaultStorageName(json_decode($this->field->upload_storage, TRUE));
 
 		$storageKey = $storages->shuffle()->first(function($k, $v) use ($downloadStorages)
 		{
-			if (in_array($v, $downloadStorages, true) && (!$this->path() || app('filesystem')->disk($v)->exists($this->path())))
+			if (in_array($v, $downloadStorages, true) && (!$this->filename() || app('filesystem')->disk($v)->exists($this->path())))
 			{
 				return true;
 			}
 		});
-		
+
 		if (!$storageKey)
 		{
 			throw new \Symfony\Component\Translation\Exception\NotFoundResourceException;
 		}
 
 		$this->disk($storageKey);
-
-		return $this;
-	}
-
+    }
+    
 	public function disk($storageKey = '')
 	{
 		if ($storageKey)
@@ -112,18 +100,31 @@ class File {
 			return $this->disk;
 		}
 	}
-	
-	protected function setPath($path = '')
+
+	public function path($path = '')
 	{
-		$this->path = $path;
-		
-		return $this;
+        return implode('/', [
+                trim(config('filesystems.upload.protected'), '\\/'), 
+                substr($path?:$this->filename(), 0, 2), 
+                substr($path?:$this->filename(), 2, 2),
+                $path?:$this->filename()
+            ]);
 	}
 
-	public function path()
+	public function pathCache($path = '')
 	{
-		return $this->path;
+        return implode('/', [
+                trim(config('filesystems.cache.protected'), '\\/'), 
+                substr($path?:$this->filename(), 0, 2), 
+                substr($path?:$this->filename(), 2, 2),
+                $path?:$this->filename()
+            ]);
 	}
+    
+    public function filename()
+    {
+        return $this->model->{$this->field->code . '_file_name'};
+    }
 
 	public function dir()
 	{
@@ -132,27 +133,20 @@ class File {
 
 	public function name()
 	{
-		return pathinfo($this->path(), PATHINFO_FILENAME);
+		return $this->filename();
 	}
 
 	public function extension()
 	{
-		if (!$this->extension)
-		{
-			$this->extension = pathinfo($this->path(), PATHINFO_EXTENSION);
-		}
-
-		return $this->extension;
+		return pathinfo($this->filename(), PATHINFO_EXTENSION);
 	}
 
 	public function mimeType()
 	{
-		if (!$this->mimeType && $this->path() && $this->model->{$this->field->code . '_file_mime_type'})
+		if ($this->filename() && $this->model->{$this->field->code . '_file_mime_type'})
 		{
-			$this->mimeType = $this->model->{$this->field->code . '_file_mime_type'}->mime_type;
+			return $this->model->{$this->field->code . '_file_mime_type'}->mime_type;
 		}
-
-		return $this->mimeType;
 	}
 
 	public function size()
@@ -181,12 +175,31 @@ class File {
 		{
 			if ($ext = $this->extension())
 			{
-				return in_array($ext, \App\Telenok\Core\Support\Config\ImageProcessing::IMAGE_EXTENSION, true);
+				return in_array($ext, \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
 			}
 			else
 			{
-				return in_array($this->mimeType(), static::IMAGE_MIME_TYPE, true);
+				return in_array($this->mimeType(), \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE, true);
 			}
 		}
+    }
+
+    public function removeCachedFile($path)
+    {   
+        $this->removeFile($path?:$this->pathCache());
+
+        return $this;
+    }
+
+    public function removeFile($path = '')
+    {   
+        \Telenok\Core\Support\File\Store::removeFile($path?:$this->path(), json_decode($this->field->upload_storage, TRUE));
+
+        return $this;
+    }
+
+    public function upload(\Symfony\Component\HttpFoundation\File\UploadedFile $file)
+    {
+        \Telenok\Core\Support\File\Store::storeFile($file->getPathname(), $this->path(), json_decode($this->field->upload_storage, TRUE));
     }
 }

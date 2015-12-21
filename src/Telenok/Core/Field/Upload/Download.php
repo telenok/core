@@ -99,7 +99,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 					{
 						$imageContent = $fileData->content();
 						
-						$imageProcess = app('\App\Telenok\Core\Support\Config\ImageProcessing');
+						$imageProcess = app('\App\Telenok\Core\Support\Image\Processing');
 						$imageProcess->setImage($imageProcess->imagine()->load($imageContent));
 						
 						$newImageContent = $imageProcess->process($width, $height, $toDo)->get($fileExtension, config('image.options'));

@@ -1,6 +1,6 @@
-<?php namespace Telenok\Core\Support\Config;
+<?php namespace Telenok\Core\Support\Image;
 
-class ImageProcessing {
+class Processing {
 
     const IMAGE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif'];
     const IMAGE_MIME_TYPE = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'];
@@ -9,8 +9,8 @@ class ImageProcessing {
     
     const QUEUES_CATEGORY = 'image_processing';
     
+    protected $image;
     protected $imagine;
- 
     protected $library;
  
     public function __construct()
@@ -100,16 +100,16 @@ class ImageProcessing {
 
     public static function isImage($path)
     {
-        return in_array(pathinfo($path, PATHINFO_EXTENSION), static::IMAGE_EXTENSION, true);
+        return in_array(pathinfo($path, PATHINFO_EXTENSION), \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
     }
 
-    public static function cachedPublicImageRelativePath($path, $width, $height, $todo)
+    public static function cachedPublicImageRelativePath($path, $width = 0, $height = 0, $todo = '')
     {
         $pathinfo = pathinfo($path);
 
         $p = static::cachedPublicImageRelativeDirectory($path);
-        $p[] = $pathinfo['filename'] 
-                . '_' . $width . 'x' . $height . '_' . $todo
+        $p[] = $pathinfo['filename']
+                . ($width || $height || $todo ? '_' . $width . 'x' . $height . '_' . $todo : '')
                 . '.' . $pathinfo['extension'];
 
         return $p;
@@ -119,10 +119,10 @@ class ImageProcessing {
     {
         $md5FileName = md5($path);
 
-        return [trim(config('image.cache.public'), '\\/'), substr($md5FileName, 0, 2), substr($md5FileName, 2, 2)];
+        return [trim(config('image.cache.directory'), '\\/'), substr($md5FileName, 0, 2), substr($md5FileName, 2, 2)];
     }
 
-    public function cachedPublicImageUrl($path, $width = 0, $height = 0, $todo = \App\Telenok\Core\Support\Config\ImageProcessing::TODO_RESIZE)
+    public function cachedPublicImageUrl($path, $width = 0, $height = 0, $todo = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
     {
         $p = static::cachedPublicImageRelativePath($path, $width, $height, $todo);
 
@@ -137,12 +137,28 @@ class ImageProcessing {
             'key' => md5(config('app.key') . $path . (int)$width . (int)$height . $todo),
         ]);
     }
-
-    public function cachingImage($path, $width = 0, $height = 0, $todo = \App\Telenok\Core\Support\Config\ImageProcessing::TODO_RESIZE)
+    
+    public function cachedProtectedImageUrl($path, $width = 0, $height = 0, $todo = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
     {
-        $originalPath = \App\Telenok\Core\Support\Config\ImageProcessing::cachedImagePath($path, $width, $height, $todo);
+        $p = static::cachedProtectedImageRelativePath($path, $width, $height, $todo);
 
-        if (\App\Telenok\Core\Support\Config\ImageProcessing::isImage($originalPath) 
+        unset($p[0]);
+
+        return route('image.cache', [
+            'p' => implode('/', $p),
+            'path' => $path, 
+            'width' => $width,
+            'height' => $height,
+            'todo' => $todo,
+            'key' => md5(config('app.key') . $path . (int)$width . (int)$height . $todo),
+        ]);
+    }
+
+    public function cachingImage($path, $width = 0, $height = 0, $todo = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
+    {
+        $originalPath = static::cachedImagePath($path, $width, $height, $todo);
+
+        if (static::isImage($originalPath)
                 && !file_exists($originalPath)
                 && $this->createLock($originalPath))
         {
@@ -157,7 +173,7 @@ class ImageProcessing {
 
     public static function cachedImagePath($path, $width, $height, $todo)
     {
-        $dirTarget = public_path(implode('/',static::cachedPublicImageRelativeDirectory($path)));
+        $dirTarget = public_path(implode('/', static::cachedPublicImageRelativeDirectory($path)));
 
         if (!file_exists($dirTarget))
         {
