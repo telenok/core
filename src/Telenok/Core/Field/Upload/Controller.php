@@ -161,7 +161,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			throw new \Exception($file->getErrorMessage());
 		}
         
-        $protectedFileUpload = app('\Telenok\Core\Support\File\Upload\ProtectedFile', [$file]);
+        $protectedFileUpload = app('\Telenok\Core\Field\Upload\UploadedFile', [$file]);
 
         $model->{$field->code}->removeCachedFile();
 

@@ -23,19 +23,19 @@ class Store {
 
     public static function removeFile($filepath, $storages = [])
     {
-        $oldName = pathinfo($filepath, PATHINFO_FILENAME);
+        $name = pathinfo($filepath, PATHINFO_FILENAME);
 
         foreach(static::storageList($storages)->all() as $storage)
         {						
             $disk = app('filesystem')->disk($storage);
 
-            foreach($disk->files(pathinfo($filepath, PATHINFO_DIRNAME)) as $fileName)
+            foreach($disk->files(pathinfo($filepath, PATHINFO_DIRNAME)) as $filename)
             {
-                if (strpos($fileName, $oldName) !== FALSE)
+                if (strpos($filename, $name) !== FALSE)
                 {
                     try
                     {
-                        $disk->delete($fileName);
+                        $disk->delete($filename);
                     }
                     catch (\Exception $e) {}
                 }
@@ -43,9 +43,9 @@ class Store {
         }
     }
 
-	public static function convertDefaultStorageName($list = [])
+	public static function convertDefaultStorageName($storages = [])
 	{
-		return collect($list)->transform(function($item)
+		return collect($storages)->transform(function($item)
 		{
 			if ($item == 'default_local')
 			{
@@ -62,13 +62,15 @@ class Store {
 		});
 	}
 
-	public static function storageList(\Illuminate\Support\Collection $storageList)
+	public static function storageList($storages)
 	{
-		if ($storageList->isEmpty())
+        $storages = collect($storages);
+        
+		if ($storages->isEmpty())
 		{
-			$storageList->push('default_local');
+			$storages->push('default_local');
 		}
 
-		return static::convertDefaultStorageName($storageList);
+		return static::convertDefaultStorageName($storages);
 	}
 }

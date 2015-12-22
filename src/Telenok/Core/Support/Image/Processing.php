@@ -7,8 +7,6 @@ class Processing {
     const TODO_RESIZE = 'resize';
     const TODO_RESIZE_PROPORTION = 'resize_proportion';
     
-    const QUEUES_CATEGORY = 'image_processing';
-    
     protected $image;
     protected $imagine;
     protected $library;
@@ -97,117 +95,9 @@ class Processing {
 
 		return $this->getImage()->resize(new \Imagine\Image\Box($width, $height));
 	}
-
+    
     public static function isImage($path)
     {
-        return in_array(pathinfo($path, PATHINFO_EXTENSION), \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
-    }
-
-    public static function cachedPublicImageRelativePath($path, $width = 0, $height = 0, $todo = '')
-    {
-        $pathinfo = pathinfo($path);
-
-        $p = static::cachedPublicImageRelativeDirectory($path);
-        $p[] = $pathinfo['filename']
-                . ($width || $height || $todo ? '_' . $width . 'x' . $height . '_' . $todo : '')
-                . '.' . $pathinfo['extension'];
-
-        return $p;
-    }
-
-    public static function cachedPublicImageRelativeDirectory($path)
-    {
-        $md5FileName = md5($path);
-
-        return [trim(config('image.cache.directory'), '\\/'), substr($md5FileName, 0, 2), substr($md5FileName, 2, 2)];
-    }
-
-    public function cachedPublicImageUrl($path, $width = 0, $height = 0, $todo = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
-    {
-        $p = static::cachedPublicImageRelativePath($path, $width, $height, $todo);
-
-        unset($p[0]);
-
-        return route('image.cache', [
-            'p' => implode('/', $p),
-            'path' => $path, 
-            'width' => $width,
-            'height' => $height,
-            'todo' => $todo,
-            'key' => md5(config('app.key') . $path . (int)$width . (int)$height . $todo),
-        ]);
-    }
-    
-    public function cachedProtectedImageUrl($path, $width = 0, $height = 0, $todo = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
-    {
-        $p = static::cachedProtectedImageRelativePath($path, $width, $height, $todo);
-
-        unset($p[0]);
-
-        return route('image.cache', [
-            'p' => implode('/', $p),
-            'path' => $path, 
-            'width' => $width,
-            'height' => $height,
-            'todo' => $todo,
-            'key' => md5(config('app.key') . $path . (int)$width . (int)$height . $todo),
-        ]);
-    }
-
-    public function cachingImage($path, $width = 0, $height = 0, $todo = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
-    {
-        $originalPath = static::cachedImagePath($path, $width, $height, $todo);
-
-        if (static::isImage($originalPath)
-                && !file_exists($originalPath)
-                && $this->createLock($originalPath))
-        {
-            $this
-                ->setImage($this->imagine()->open(public_path($path)))
-                ->process($width, $height, $todo)
-                ->save($originalPath, config('image.options'));
-
-            $this->removeLock($originalPath);
-        }
-    }
-
-    public static function cachedImagePath($path, $width, $height, $todo)
-    {
-        $dirTarget = public_path(implode('/', static::cachedPublicImageRelativeDirectory($path)));
-
-        if (!file_exists($dirTarget))
-        {
-            \File::makeDirectory($dirTarget, 0775, true, true);
-        }
-
-        return public_path(implode('/', static::cachedPublicImageRelativePath($path, $width, $height, $todo)));
-    }
-    
-    public function createLock($path)
-    {
-        $lockDir = storage_path('telenok/tmp/image-cache/');
-        $lockFile = md5($path);
-        $lockFilePath = $lockDir . '/' . $lockFile;
-        
-        if (!file_exists($lockDir))
-        {
-            \File::makeDirectory($lockDir, 0775, true, true);
-        }
-        
-        if (file_exists($lockFilePath) && filemtime($lockFilePath) > time() - config('image.cache.lock_delay'))
-        {
-            return false;
-        }
-        else
-        {
-            touch($lockFilePath);
-        }
-        
-        return true;
-    }
-    
-    public function removeLock($path)
-    {
-        @unlink(storage_path('telenok/tmp/image-cache/') . '/' . md5($path));
+        return in_array(pathinfo($path, PATHINFO_EXTENSION), static::IMAGE_EXTENSION, true);
     }
 }

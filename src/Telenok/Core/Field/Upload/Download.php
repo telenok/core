@@ -70,10 +70,58 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		$model = \App\Telenok\Core\Model\Object\Sequence::getModel($modelId);
 		$field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
 
-		$fileData = $model->{$field->code};
-		
+		$fileObject = $model->{$field->code};
+
         $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]); 
 
+        if (in_array(false, $responses, true))
+        {
+            throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException();
+        }
+
+        // verify if we can store cache file in public directory
+        if (\App\Telenok\Core\Security\Acl::subjectAny(['user_any', 'user_unauthorized'])
+                ->can('read', [$model, 'object_field.' . $model->getTable() . '.' . $field->code]))
+        {
+            $cache = new \Telenok\Core\Support\File\Cache();
+            $cache->filename($fileObject->filename());
+            $cache->disk();
+
+            if (!$cache->exists())
+            {
+                copy($source, $destination);
+            }
+
+
+            header('redirect to cache file');
+
+
+
+            if ($fileObject->diskCache())
+            {
+                
+            }
+            
+            
+            return app('\App\Telenok\Core\Support\Image\Processing')
+                ->cachedModelImageUrl($this->model->{$this->field->code}->path(), 300, 300);
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 		if (!in_array(false, $responses, true) 
             && (($model instanceof \App\Telenok\Core\Model\File\File && app('auth')->can('read', $model))
                 || (!($model instanceof \App\Telenok\Core\Model\File\File) && 
@@ -85,19 +133,19 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 			// validate $secureKey only if image not exists (to prevent creating by user many images with random size)
 			if ($width || $height)
 			{
-				if ($secureKey == $fileData->secureKey($width, $height))
+				if ($secureKey == $fileObject->secureKey($width, $height))
 				{
-					$fileName = $fileData->name();
-					$fileExtension = $fileData->extension();
-					$dir = rtrim($fileData->dir(), '/\\');
+					$fileName = $fileObject->name();
+					$fileExtension = $fileObject->extension();
+					$dir = rtrim($fileObject->dir(), '/\\');
 
 					// create new image with new size and new file name aka 100x220_mypic.jpg
 					
 					$filePath = $dir . '/' . $fileName . '_' . $width . 'x' . $height . '_' . ($fileExtension ? '.' . $fileExtension : '');
 										
-					if (!$fileData->exists($filePath))
+					if (!$fileObject->exists($filePath))
 					{
-						$imageContent = $fileData->content();
+						$imageContent = $fileObject->content();
 						
 						$imageProcess = app('\App\Telenok\Core\Support\Image\Processing');
 						$imageProcess->setImage($imageProcess->imagine()->load($imageContent));
@@ -119,7 +167,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 			}
 			else 
 			{
-				$filePath = $fileData->path();
+				$filePath = $fileObject->path();
 			}
             
             if ($modifySince = $this->getRequest()->header('If-Modified-Since')) 
@@ -138,7 +186,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
                 exit();
             }
             
-			$fs = $fileData->disk()->getDriver();
+			$fs = $fileObject->disk()->getDriver();
 			$stream = $fs->readStream($filePath);
 			
 			$response =  \Response::stream(function() use($stream) {

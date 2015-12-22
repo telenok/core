@@ -106,7 +106,7 @@ class Acl
         $acl = new static;
         $acl->setCollision(static::SUBJECT_COLLISION_ALL);
 
-        foreach($subjects as $subject)
+        foreach((array)$subjects as $subject)
         {
             $acl->addSubjects($subject);
         }
@@ -126,7 +126,7 @@ class Acl
         $acl = new static;
         $acl->setCollision(static::SUBJECT_COLLISION_ANY);
 
-        foreach($subjects as $subject)
+        foreach((array)$subjects as $subject)
         {
             $acl->addSubjects($subject);
         }

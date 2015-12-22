@@ -1,6 +1,6 @@
-<?php namespace Telenok\Core\Support\File\Upload;
+<?php namespace Telenok\Core\Field\Upload;
 
-class ProtectedFile {
+class UploadedFile {
 
     protected $file;
 
