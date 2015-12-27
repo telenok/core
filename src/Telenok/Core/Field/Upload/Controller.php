@@ -52,10 +52,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		return parent::processModelDelete($model, $force);
 	}
 
-    
-    // ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-    // обработать удаление файлов через \Telenok\Core\Support\File\ProtectedFile
-    
     public function processFieldDelete($model, $type)
     {
 		/*
@@ -67,28 +63,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		{
 			foreach ($rows as $row) 
 			{
-				$f = pathinfo($row->{$model->code}->path(), PATHINFO_FILENAME);
-				$d = pathinfo($row->{$model->code}->path(), PATHINFO_DIRNAME);
-
-				if ($f)
-				{
-					foreach($storages as $storage)
-					{						
-						$disk = app('filesystem')->disk($storage);
-
-						foreach($disk->files($d) as $file)
-						{
-							if (strpos($file, $f) !== FALSE)
-							{
-								try
-								{
-									$disk->delete($file);
-								}
-                                catch (\Exception $e) {}
-							}
-						}
-					}
-				}
+				$row->{$model->code}->removeCachedFile();
+				$row->{$model->code}->removeFile();
 			}
 		});
 
@@ -160,15 +136,19 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 		{
 			throw new \Exception($file->getErrorMessage());
 		}
-        
+        else if ($file == null)
+        {
+            return $model;
+        }
+
         $protectedFileUpload = app('\Telenok\Core\Field\Upload\UploadedFile', [$file]);
 
         $model->{$field->code}->removeCachedFile();
 
 		if ($file !== null)
 		{
-            while(($fileName = $protectedFileUpload->generateFileName()) 
-                && $model::where($field->code . '_file_name', $fileName)->count() > 0) {}
+            while(($filename = $protectedFileUpload->generateFileName()) 
+                && $model::where($field->code . '_file_name', $filename)->count() > 0) {}
 
             $this->validateUpload($protectedFileUpload, $field);
 
@@ -182,7 +162,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             $model->{camel_case($field->code . '_' . $typeModel->code) . 'FileExtension'}()->associate($modelExtension);
             $model->{camel_case($field->code . '_' . $typeModel->code) . 'FileMimeType'}()->associate($modelMimeType);
             $model->{$field->code . '_original_file_name'} = $protectedFileUpload->getClientOriginalName();
-            $model->{$field->code . '_file_name'} = $fileName;
+            $model->{$field->code . '_file_name'} = $filename;
             $model->{$field->code . '_size'} = $protectedFileUpload->getClientSize();
 
             $model->save();

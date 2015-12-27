@@ -50,6 +50,11 @@ class UploadedFile {
             ]);
         }
     }
+    
+    public function generateFileName()
+    {
+        return str_random(30) . '.' . $this->getClientOriginalExtension();
+    }
 
     public function setFile(\Symfony\Component\HttpFoundation\File\UploadedFile $file)
     {
@@ -70,7 +75,7 @@ class UploadedFile {
            return call_user_func_array(array($this->getFile(), $method), $args);
         }
 
-        throw new Exception("Undefined method {$method} called");
+        throw new \Exception("Undefined method {$method} called");
     }
 
     public static function __callStatic($method, $args)

@@ -29,7 +29,7 @@ class FieldUpload extends Job implements SelfHandling, ShouldQueue
             && array_get($this->collection, 'storage_key') 
             && array_get($this->collection, 'storage_cache_key'))
         {   
-            \App\Telenok\Core\Support\File\StoreCache\StoreCache::storeFile(
+            \App\Telenok\Core\Support\File\StoreCache::storeFile(
                 array_get($this->collection, 'path'), 
                 array_get($this->collection, 'path_cache'),
                 array_get($this->collection, 'storage_key'),

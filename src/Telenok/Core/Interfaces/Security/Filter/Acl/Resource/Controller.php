@@ -2,12 +2,18 @@
 
 class Controller {
 
-    public $key = '';
+    protected $key = '';
+    protected $cacheMinutes = 5;
 
     public function getKey()
     {
         return $this->key;
     } 
+
+    public function getCacheMinutes()
+    {
+        return min(config('cache.query.minutes', 0), $this->cacheMinutes);
+    }
 
     public function filterCan($queryCommon, $queryWhere, $resource, $permission, $subject)
     {

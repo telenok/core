@@ -5,7 +5,9 @@ class Acl
     protected $subject;
     protected $subjects;
     protected $subjectCollision = 1;
-    
+    protected $cacheMinutes = 5;
+
+
     const SUBJECT_COLLISION_ONE = 1;
     const SUBJECT_COLLISION_ALL = 2;
     const SUBJECT_COLLISION_ANY = 3;
@@ -16,6 +18,11 @@ class Acl
         $this->subjects = collect();
     } 
     
+    public function getCacheMinutes()
+    {
+        return min(config('cache.query.minutes', 0), $this->cacheMinutes);
+    }
+
 	/* 
      * Set resource as internal variable for manipulating
      * 
@@ -842,7 +849,7 @@ class Acl
             return true;
         }
 
-        if (!config('app.acl.enabled') || $this->hasRole('super_administrator'))
+        if (!config('app.acl.enabled') || ($this->hasRole('super_administrator')) && $this->subject instanceof \Telenok\Core\Model\User)
         {
             return true;
         }
@@ -890,17 +897,17 @@ class Acl
 
 		$type = new \App\Telenok\Core\Model\Object\Type();
 		$sequence = new \App\Telenok\Core\Model\Object\Sequence();
-		$now = \Carbon\Carbon::now();
+        $r = range_minutes($this->getCacheMinutes());
 
 		$query = $sequence::select($sequence->getTable() . '.id')->where($sequence->getTable() . '.id', $resource->getKey());
 
-		$query->join($type->getTable() . ' as otype', function($join) use ($type, $now, $sequence)
+		$query->join($type->getTable() . ' as otype', function($join) use ($type, $r, $sequence)
 		{
 			$join->on($sequence->getTable() . '.sequences_object_type', '=', 'otype.id');
 			$join->on('otype.' . $type->getDeletedAtColumn(), ' is ', \DB::raw("null"));
 			$join->where('otype.active', '=', 1);
-			$join->where('otype.active_at_start', '<=', $now);
-			$join->where('otype.active_at_end', '>=', $now);
+			$join->where('otype.active_at_start', '<=', $r);
+			$join->where('otype.active_at_end', '>=', $r);
 		}); 
 		
 		$query->where(function($queryWhere) use ($query, $permission, $resource, $filterCode)
@@ -954,7 +961,7 @@ class Acl
             {
                 static::subject($subject)->hasRole($id);
             }
-            
+
             return $this;
         }
 
@@ -977,22 +984,22 @@ class Acl
             return false;
         }
 
-		$now = \Carbon\Carbon::now();
+        $r = range_minutes($this->getCacheMinutes());
 
         $spr = $this->subject->with(
 		[
-            'group' => function($query) use ($now) 
+            'group' => function($query) use ($r) 
 			{ 
 				$query->where('group.active', 1)
-						->where('group.active_at_start', '<=', $now)
-						->where('group.active_at_end', '>=', $now);
+						->where('group.active_at_start', '<=', $r)
+						->where('group.active_at_end', '>=', $r);
 			},
-            'group.role' => function($query) use ($role, $now) 
+            'group.role' => function($query) use ($role, $r) 
 			{ 
 				$query->where('role.id', $role->getKey())
 					->where('role.active', 1)
-					->where('role.active_at_start', '<=', $now)
-					->where('role.active_at_end', '>=', $now);
+					->where('role.active_at_start', '<=', $r)
+					->where('role.active_at_end', '>=', $r);
 			}
         ])
         ->whereId($this->subject->getKey())->get();

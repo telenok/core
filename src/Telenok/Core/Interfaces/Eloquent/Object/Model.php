@@ -5,7 +5,8 @@ use \Telenok\Core\Interfaces\Controller\IEloquentProcessController;
 class Model extends \Illuminate\Database\Eloquent\Model {
 
 	use \Illuminate\Database\Eloquent\SoftDeletes; 
-
+	use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
+    
     public $incrementing = false;
 	public $timestamps = true;
 	protected $hasVersioning = true;
@@ -657,15 +658,15 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 		if (!isset(static::$listField[$class]))
 		{
-			$now = \Carbon\Carbon::now();
+			$r = range_minutes($this->getCacheMinutes());
 
 			$type = \DB::table('object_type')->where('code', $this->getTable())->first();
 
 			$f = \DB::table('object_field')
 					->where('field_object_type', $type->id)
 					->where('active', '=', 1)
-					->where('active_at_start', '<=', $now)
-					->where('active_at_end', '>=', $now)
+					->where('active_at_start', '<=', $r)
+					->where('active_at_end', '>=', $r)
 					->get();
 
 			static::$listField[$class] = new \Illuminate\Support\Collection(array_combine(array_pluck($f, 'code'), $f));
@@ -837,27 +838,27 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	public function scopeActive($query, $table = null)
 	{
 		$table = $table ? : $this->getTable();
-		$now = \Carbon\Carbon::now();
+        $r = range_minutes($this->getCacheMinutes());
 
-		return $query->where(function($query) use ($table, $now)
+		return $query->where(function($query) use ($table, $r)
 				{
 					$query->whereNull($table . '.deleted_at')
 							->where($table . '.active', 1)
-							->where($table . '.active_at_start', '<=', $now)
-							->where($table . '.active_at_end', '>=', $now);
+							->where($table . '.active_at_start', '<=', $r)
+							->where($table . '.active_at_end', '>=', $r);
 				});
 	}
 
 	public function scopeNotActive($query, $table = null)
 	{
 		$table = $table ? : $this->getTable();
-		$now = \Carbon\Carbon::now();
+        $r = range_minutes($this->getCacheMinutes());
 
-		return $query->where(function($query) use ($table, $now)
+		return $query->where(function($query) use ($table, $r)
 				{
 					$query->where($table . '.active', 0)
-							->orWhere($table . '.active_at_start', '>=', $now)
-							->orWhere($table . '.active_at_end', '<=', $now);
+                            ->orWhere($table . '.active_at_start', '>=', $r)
+                            ->orWhere($table . '.active_at_end', '<=', $r);
 				});
 	}
 
@@ -931,7 +932,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			return $query->where($this->getTable() . '.id', 'Error: permission code');
 		}
 
-		$now = \Carbon\Carbon::now();
+        $r = range_minutes($this->getCacheMinutes());
 		$spr = new \App\Telenok\Core\Model\Security\SubjectPermissionResource();
 		$sequence = new \App\Telenok\Core\Model\Object\Sequence();
 		$type = new \App\Telenok\Core\Model\Object\Type();
@@ -943,13 +944,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			$join->on($this->getTable() . '.id', '=', 'osequence.id');
 		});
 
-		$query->join($type->getTable() . ' as otype', function($join) use ($type, $now)
+		$query->join($type->getTable() . ' as otype', function($join) use ($type, $r)
 		{
 			$join->on('osequence.sequences_object_type', '=', 'otype.id');
 			$join->whereNull('otype.' . $type->getDeletedAtColumn());
 			$join->where('otype.active', '=', 1);
-			$join->where('otype.active_at_start', '<=', $now);
-			$join->where('otype.active_at_end', '>=', $now);
+			$join->where('otype.active_at_start', '<=', $r);
+			$join->where('otype.active_at_end', '>=', $r);
 		});
 
 		$query->where(function($queryWhere) use ($query, $filterCode, $permission, $subjectCollection)

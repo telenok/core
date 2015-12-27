@@ -18,7 +18,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     protected $pageMetaKeywords;
 
     public function __construct()
-	{
+	{        
 		$this->languageDirectory = 'controller';
 
 		parent::__construct();
@@ -165,8 +165,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{        
             return $this->cacheKey ? $this->cacheKey . $this->getFrontendView() 
                     . "." . config('app.locale', config('app.localeDefault'))
-                    . "." . implode('', (array)app('router')->getCurrentRoute()->parameters())
-                    . "." . $this->getRequestCollected()->toJson() : false;
+                    . "." . $this->getRequest()->fullUrl()
+                    . ".group:" . (app('auth')->check() ? 
+                        app('auth')->user()->group()->orderBy('code')->lists('code')->implode('.') : 'user_unauthorized')
+                            : false;
 	}
 
 	public function getCachedContent()

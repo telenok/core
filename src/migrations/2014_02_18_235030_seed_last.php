@@ -1231,7 +1231,7 @@ class SeedLast extends Migration {
 			'active' => 1,
 			'value' => 20,
 			'code' => 'auth.logout.period',
-            'description' => ['en' => 'Time in minuts of inactivity to automatic logout user', 'ru' => 'Время в минутах неактиности пользователя для автоматического разлогинивания'],
+            'description' => ['en' => 'Time in minutes of inactivity to automatic logout user', 'ru' => 'Время в минутах неактиности пользователя для автоматического разлогинивания'],
 		]);
         
 		//Setting

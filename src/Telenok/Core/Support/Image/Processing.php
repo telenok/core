@@ -52,16 +52,28 @@ class Processing {
 
 	public function process($width, $height, $toDo)
 	{
-		switch ($toDo)
-		{
-			case static::TODO_RESIZE_PROPORTION:
-                return $this->resizeProportion($width, $height);
+        $str = "w:{$width}h:{$height}todo:{$toDo}";
+        
+        if ($this->createLock($str))
+        {
+            switch ($toDo)
+            {
+                case static::TODO_RESIZE_PROPORTION:
+                    $return = $this->resizeProportion($width, $height);
 
-			case static::TODO_RESIZE:
-			default:
-				return $this->resize($width, $height);
+                case static::TODO_RESIZE:
+                default:
+                    $return = $this->resize($width, $height);
+            }
 
-		}
+            $this->removeLock($str);
+            
+            return $return;
+        }
+        else
+        {
+            throw new \Exception('Image resize still in progress');
+        }
 	}
 
 	public function resizeProportion($width, $height)
@@ -99,5 +111,31 @@ class Processing {
     public static function isImage($path)
     {
         return in_array(pathinfo($path, PATHINFO_EXTENSION), static::IMAGE_EXTENSION, true);
+    }
+
+    public function createLock($str)
+    {
+        $lockDir = storage_path('telenok/tmp/image-cache/');
+        $lockFile = md5($this->getImage() . $str);
+        $lockFilePath = $lockDir . '/' . $lockFile;
+        
+        if (!file_exists($lockDir))
+        {
+            \File::makeDirectory($lockDir, 0775, true, true);
+        }
+        
+        if (file_exists($lockFilePath) && filemtime($lockFilePath) > time() - config('image.cache.lock_delay'))
+        {
+            return false;
+        }
+
+        touch($lockFilePath);
+        
+        return true;
+    }
+
+    public function removeLock($str)
+    {
+        @unlink(storage_path('telenok/tmp/image-cache/') . '/' . md5($this->getImage() . $str));
     }
 }

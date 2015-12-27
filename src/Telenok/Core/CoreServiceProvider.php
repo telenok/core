@@ -28,6 +28,7 @@ class CoreServiceProvider extends ServiceProvider {
 
         $this->publishes([realpath(__DIR__ . '/../../../public') => public_path('packages/telenok/core')], 'public');
 
+        include __DIR__ . '/../../config/helpers.php';
         include __DIR__ . '/../../config/routes.php';
         include __DIR__ . '/../../config/event.php';
 

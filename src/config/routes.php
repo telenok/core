@@ -28,7 +28,7 @@
     
 	// Object Field Upload
 	get('download/stream/{modelId}/{fieldId}', array('as' => 'telenok.download.stream.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@stream"));
-	get('download/image/{modelId}/{fieldId}/{toDo}/{width}/{height}/{secureKey}', array('as' => 'telenok.download.image.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@image"));
+	get('download/image/{modelId}/{fieldId}/{toDo}/{width}/{height}', array('as' => 'telenok.download.image.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@image"));
 
 
 

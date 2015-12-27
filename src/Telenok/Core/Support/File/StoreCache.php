@@ -6,22 +6,26 @@ class StoreCache {
     {
         $storage = app('filesystem')->disk($storageKey);
         $storeageCache = app('filesystem')->disk($storageacheKey);
-        
+
         $content = $storage->get($pathLocal);
 
-        if (\App\Telenok\Core\Support\Image\Processing::isImage($pathLocal) && $width && $height)
+        try
         {
-            $extension = pathinfo($pathLocal, PATHINFO_EXTENSION);
+            if (\App\Telenok\Core\Support\Image\Processing::isImage($pathLocal) && $width && $height)
+            {
+                $extension = pathinfo($pathLocal, PATHINFO_EXTENSION);
 
-            $imageProcess = app('\App\Telenok\Core\Support\Image\Processing');
-            $imageProcess->setImage($imageProcess->imagine()->load($content));
+                $imageProcess = app('\App\Telenok\Core\Support\Image\Processing');
+                $imageProcess->setImage($imageProcess->imagine()->load($content));
 
-            $content = $imageProcess->process($width, $height, $toDo)->get($extension, config('image.options'));
+                $content = $imageProcess->process($width, $height, $toDo)->get($extension, config('image.options'));
+            }
+
+            $storeageCache->put($pathCache, $content, \Illuminate\Contracts\Filesystem\Filesystem::VISIBILITY_PUBLIC);
         }
-
-        $storeageCache->put($pathCache, $content, \Illuminate\Contracts\Filesystem\Filesystem::VISIBILITY_PUBLIC);
+        catch (\Exception $e) {}
     }
-    
+
     public static function removeFile($filepath, $storages = [])
     {
         $name = pathinfo($filepath, PATHINFO_FILENAME);
@@ -30,8 +34,8 @@ class StoreCache {
         {
             $storages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', env('CACHE_STORAGES'))))->all();
         }
-        
-        foreach(static::storageList($storages)->all() as $storage)
+
+        foreach(\App\Telenok\Core\Support\File\Store::storageList($storages)->all() as $storage)
         {						
             $disk = app('filesystem')->disk($storage);
 

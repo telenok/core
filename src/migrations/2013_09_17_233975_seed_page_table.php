@@ -101,7 +101,7 @@ class SeedPageTable extends Migration {
                 [
                     'title' => ['ru' => "Период кэширования", 'en' => "Cache time"],
                     'title_list' => ['ru' => "Период кэширования", 'en' => "Cache time"],
-                    'description' => ['ru' => "Период кэширования задается в минутах от 0 (без кэширования)", 'en' => "Cache time in minuts from 0 (no cache)"],
+                    'description' => ['ru' => "Период кэширования задается в минутах от 0 (без кэширования)", 'en' => "Cache time in minutes from 0 (no cache)"],
                     'key' => 'integer-unsigned',
                     'code' => 'cache_time',
                     'active' => 1,

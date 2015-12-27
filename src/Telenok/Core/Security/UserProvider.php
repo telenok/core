@@ -10,8 +10,6 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
 	 */
 	public function retrieveById($identifier)
 	{
-		$now = \Carbon\Carbon::now();
-		
 		return $this->createModel()->newQuery()
 				->whereId($identifier)
                 ->active()->first();
@@ -27,14 +25,14 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
 	public function retrieveByToken($identifier, $token)
 	{
 		$model = $this->createModel();
-		$now = \Carbon\Carbon::now();
+        $r = range_minutes(config('cache.query.minutes', 0));
 
 		return $model->newQuery()
                         ->where($model->getKeyName(), $identifier)
                         ->where($model->getRememberTokenName(), $token)
 						->where('active', 1)
-						->where('active_at_start', '<=', $now)
-						->where('active_at_end', '>=', $now)->first();
+						->where('active_at_start', '<=', $r)
+						->where('active_at_end', '>=', $r)->first();
 	}
 	
 	/**
@@ -49,7 +47,7 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
 		// Then we can execute the query and, if we found a user, return it in a
 		// Eloquent User "model" that will be utilized by the Guard instances.
 		$query = $this->createModel()->newQuery();
-		$now = \Carbon\Carbon::now();
+        $r = range_minutes(config('cache.query.minutes', 0));
 
 		foreach ($credentials as $key => $value)
 		{
@@ -57,10 +55,9 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
 		}
 		
 		$query->where('active', 1)
-				->where('active_at_start', '<=', $now)
-				->where('active_at_end', '>=', $now);
+				->where('active_at_start', '<=', $r)
+				->where('active_at_end', '>=', $r);
 
 		return $query->first();
 	}
-
 }

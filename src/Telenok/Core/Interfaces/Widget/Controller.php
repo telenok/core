@@ -46,7 +46,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     {
         return $this->parent;
     }
-    
+
     public function setConfig($config = [])
     {
 		$this->config = $config;
@@ -103,13 +103,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	}
 
 	public function getCacheKey($additional = '')
-	{ 
+	{
         $append = $this->getFrontendView() 
-                    . "." . config('app.locale', config('app.localeDefault'))
-                    . "." . implode('', (array)app('router')->getCurrentRoute()->parameters())
-                    . "." . $this->getRequestCollected()->toJson()
-                    . ($additional ? "." . $additional : '');
-
+                . "." . config('app.locale', config('app.localeDefault'))
+                . "." . $this->getRequest()->fullUrl()
+                . ".group:" . (app('auth')->check() ? 
+                        app('auth')->user()->group()->orderBy('code')->lists('code')->implode('.') : 'user_unauthorized');
         
         if ($this->cacheKey)
         {

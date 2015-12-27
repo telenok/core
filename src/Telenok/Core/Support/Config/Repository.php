@@ -203,13 +203,13 @@ class Repository {
                 }, '>=', 0)
                 ->whereHas('pagePageController', function($query)
 				{
-					$now = \Carbon\Carbon::now();
-
-                    $query->where(function($query) use ($now)
+                    $query->where(function($query)
                     {
+                        $r = range_minutes(config('cache.query.minutes', 0));
+
                         $query->where('active', 1)
-							->where('active_at_start', '<=', $now)
-							->where('active_at_end', '>=', $now);
+							->where('active_at_start', '<=', $r)
+							->where('active_at_end', '>=', $r);
                     });
 				})
                 ->active()
