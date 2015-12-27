@@ -62,7 +62,7 @@ class CachableQueryBuilder extends Builder {
             $tags[] = $this->getCachePrefix() . $j->table;
         }
 
-        $tags = array_unique($tags);
+        $tags = array_unique((array)$tags);
 
         // If the query is requested to be cached, we will cache it using a unique key
         // for this database connection and query statement, including the bindings
