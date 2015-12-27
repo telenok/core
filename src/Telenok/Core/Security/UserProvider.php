@@ -25,7 +25,7 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
 	public function retrieveByToken($identifier, $token)
 	{
 		$model = $this->createModel();
-        $r = range_minutes(config('cache.query.minutes', 0));
+        $r = range_minutes(config('cache.db_query.minutes', 0));
 
 		return $model->newQuery()
                         ->where($model->getKeyName(), $identifier)
@@ -47,7 +47,7 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
 		// Then we can execute the query and, if we found a user, return it in a
 		// Eloquent User "model" that will be utilized by the Guard instances.
 		$query = $this->createModel()->newQuery();
-        $r = range_minutes(config('cache.query.minutes', 0));
+        $r = range_minutes(config('cache.db_query.minutes', 0));
 
 		foreach ($credentials as $key => $value)
 		{

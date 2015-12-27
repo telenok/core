@@ -205,7 +205,7 @@ class Repository {
 				{
                     $query->where(function($query)
                     {
-                        $r = range_minutes(config('cache.query.minutes', 0));
+                        $r = range_minutes(config('cache.db_query.minutes', 0));
 
                         $query->where('active', 1)
 							->where('active_at_start', '<=', $r)

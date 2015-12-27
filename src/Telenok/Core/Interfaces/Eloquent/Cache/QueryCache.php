@@ -44,7 +44,7 @@ trait QueryCache {
 
     public function getCacheMinutes()
     {
-        return min(config('cache.query.minutes', 0), $this->cacheMinutes);
+        return min(config('cache.db_query.minutes', 0), $this->cacheMinutes);
     }
 
     public function getCacheTags()

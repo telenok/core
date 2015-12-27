@@ -12,7 +12,7 @@ class Controller {
 
     public function getCacheMinutes()
     {
-        return min(config('cache.query.minutes', 0), $this->cacheMinutes);
+        return min(config('cache.db_query.minutes', 0), $this->cacheMinutes);
     }
 
     public function filterCan($queryCommon, $queryWhere, $resource, $permission, $subject)
