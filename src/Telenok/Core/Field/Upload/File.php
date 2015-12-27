@@ -28,7 +28,7 @@ class File {
 	public function downloadImageLink($width = 0, $height = 0, $toDo = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
 	{
         $filenameCached = $this->filenameCached($width, $height, $toDo);
-        
+
         if (!$this->existsCache($filenameCached))
         {
             $this->createCache($width, $height, $toDo);
@@ -45,8 +45,7 @@ class File {
             }
             else
             {
-                return trim($urlPattern, '\\/')
-                        . '/' . $this->pathCache($filenameCached);
+                return trim($urlPattern, '\\/') . '/' . $this->pathCache($filenameCached);
             }
         }
         else

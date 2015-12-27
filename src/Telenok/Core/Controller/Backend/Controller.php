@@ -13,7 +13,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
 
     public function updateBackendUISetting($key = null, $value = null)
     {
-        $input = $this->getRequest;
+        $input = $this->getRequest();
 
         $key = $key ? : $input->input('key');
 
