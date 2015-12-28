@@ -72,7 +72,7 @@ class CachableQueryBuilder extends Builder {
         $callback = $this->getCacheCallback($columns);
         
         //check if cache driver supports tags
-        if ($minutes && $tags)
+        if ($minutes && $tags && $this->cacheTagEnabled())
         {
             return \Cache::tags($tags)->remember($key, $minutes, $callback);
         }
@@ -156,6 +156,11 @@ class CachableQueryBuilder extends Builder {
         return $this;
     }
 
+    protected function cacheTagEnabled()
+    {
+        return (app('cache')->getDefaultDriver() != 'file' && app('cache')->getDefaultDriver() != 'database');
+    }
+    
     /**
      * Get the cache object with tags assigned, if applicable.
      *
@@ -163,7 +168,7 @@ class CachableQueryBuilder extends Builder {
      */
     protected function getCacheTags()
     {
-        if ((\Cache::getDefaultDriver() != 'file') && (\Cache::getDefaultDriver() != 'database'))
+        if ($this->cacheTagEnabled())
         {
             return $this->cacheTags;
         }
