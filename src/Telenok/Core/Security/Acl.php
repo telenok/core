@@ -906,8 +906,8 @@ class Acl
 			$join->on($sequence->getTable() . '.sequences_object_type', '=', 'otype.id');
 			$join->on('otype.' . $type->getDeletedAtColumn(), ' is ', \DB::raw("null"));
 			$join->where('otype.active', '=', 1);
-			$join->where('otype.active_at_start', '<=', $r);
-			$join->where('otype.active_at_end', '>=', $r);
+			$join->where('otype.active_at_start', '<=', $r[1]);
+			$join->where('otype.active_at_end', '>=', $r[0]);
 		}); 
 		
 		$query->where(function($queryWhere) use ($query, $permission, $resource, $filterCode)
@@ -991,15 +991,15 @@ class Acl
             'group' => function($query) use ($r) 
 			{ 
 				$query->where('group.active', 1)
-						->where('group.active_at_start', '<=', $r)
-						->where('group.active_at_end', '>=', $r);
+						->where('group.active_at_start', '<=', $r[1])
+						->where('group.active_at_end', '>=', $r[0]);
 			},
             'group.role' => function($query) use ($role, $r) 
 			{ 
 				$query->where('role.id', $role->getKey())
 					->where('role.active', 1)
-					->where('role.active_at_start', '<=', $r)
-					->where('role.active_at_end', '>=', $r);
+					->where('role.active_at_start', '<=', $r[1])
+					->where('role.active_at_end', '>=', $r[0]);
 			}
         ])
         ->whereId($this->subject->getKey())->get();

@@ -31,8 +31,8 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
                         ->where($model->getKeyName(), $identifier)
                         ->where($model->getRememberTokenName(), $token)
 						->where('active', 1)
-						->where('active_at_start', '<=', $r)
-						->where('active_at_end', '>=', $r)->first();
+						->where('active_at_start', '<=', $r[1])
+						->where('active_at_end', '>=', $r[0])->first();
 	}
 	
 	/**
@@ -55,8 +55,8 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
 		}
 		
 		$query->where('active', 1)
-				->where('active_at_start', '<=', $r)
-				->where('active_at_end', '>=', $r);
+				->where('active_at_start', '<=', $r[1])
+				->where('active_at_end', '>=', $r[0]);
 
 		return $query->first();
 	}

@@ -106,9 +106,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
         $append = $this->getFrontendView() 
                 . "." . config('app.locale', config('app.localeDefault'))
-                . "." . $this->getRequest()->fullUrl()
-                . ".group:" . (app('auth')->check() ? 
-                        app('auth')->user()->group()->orderBy('code')->lists('code')->implode('.') : 'user_unauthorized');
+                . "." . $this->getRequest()->fullUrl();
         
         if ($this->cacheKey)
         {

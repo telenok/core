@@ -72,7 +72,7 @@ class CachableQueryBuilder extends Builder {
         $callback = $this->getCacheCallback($columns);
         
         //check if cache driver supports tags
-        if ($minutes && $tags && $this->cacheTagEnabled())
+        if ($minutes && $tags)
         {
             return \Cache::tags($tags)->remember($key, $minutes, $callback);
         }
@@ -182,7 +182,7 @@ class CachableQueryBuilder extends Builder {
      */
     public function get($columns = array('*'))
     {
-        if ($this->cacheMinutes)
+        if ($this->cacheMinutes && $this->cacheTagEnabled())
         {
             return $this->getCached($columns);
         }

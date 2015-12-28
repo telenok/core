@@ -208,8 +208,8 @@ class Repository {
                         $r = range_minutes(config('cache.db_query.minutes', 0));
 
                         $query->where('active', 1)
-							->where('active_at_start', '<=', $r)
-							->where('active_at_end', '>=', $r);
+							->where('active_at_start', '<=', $r[1])
+							->where('active_at_end', '>=', $r[0]);
                     });
 				})
                 ->active()

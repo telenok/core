@@ -429,11 +429,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 				{
 					//\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
 				}
-                
+
 				if (($c = $type->classController())
                         && ($controllerProcessing = app($c))
-                        && $controllerProcessing instanceof IEloquentProcessController
-                )
+                        && $controllerProcessing instanceof IEloquentProcessController)
                 {
 					$controllerProcessing->preProcess($model, $type, $input);
 				}
@@ -665,11 +664,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			$f = \DB::table('object_field')
 					->where('field_object_type', $type->id)
 					->where('active', '=', 1)
-					->where('active_at_start', '<=', $r)
-					->where('active_at_end', '>=', $r)
+					->where('active_at_start', '<=', $r[1])
+					->where('active_at_end', '>=', $r[0])
 					->get();
 
-			static::$listField[$class] = new \Illuminate\Support\Collection(array_combine(array_pluck($f, 'code'), $f));
+			static::$listField[$class] = collect(array_combine(array_pluck($f, 'code'), $f));
 		}
 
 		return static::$listField[$class];
@@ -749,6 +748,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 			foreach ($this->getObjectField()->all() as $key => $field)
 			{
+
+                
 				if ($controller = $controllers->get($field->key))
 				{
 					$dateField = (array) $controller->getDateField($this, $field);
@@ -768,6 +769,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			}
 		}
 
+        
 		$this->dates = array_merge($this->getDates(), (array) static::$listFieldDate[$class]);
 
 		return array_keys((array) static::$listFillableFieldController[$class]);
@@ -844,8 +846,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 				{
 					$query->whereNull($table . '.deleted_at')
 							->where($table . '.active', 1)
-							->where($table . '.active_at_start', '<=', $r)
-							->where($table . '.active_at_end', '>=', $r);
+							->where($table . '.active_at_start', '<=', $r[1])
+							->where($table . '.active_at_end', '>=', $r[0]);
 				});
 	}
 
@@ -857,8 +859,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		return $query->where(function($query) use ($table, $r)
 				{
 					$query->where($table . '.active', 0)
-                            ->orWhere($table . '.active_at_start', '>=', $r)
-                            ->orWhere($table . '.active_at_end', '<=', $r);
+                            ->orWhere($table . '.active_at_start', '>=', $r[1])
+                            ->orWhere($table . '.active_at_end', '<=', $r[0]);
 				});
 	}
 
@@ -949,8 +951,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			$join->on('osequence.sequences_object_type', '=', 'otype.id');
 			$join->whereNull('otype.' . $type->getDeletedAtColumn());
 			$join->where('otype.active', '=', 1);
-			$join->where('otype.active_at_start', '<=', $r);
-			$join->where('otype.active_at_end', '>=', $r);
+			$join->where('otype.active_at_start', '<=', $r[1]);
+			$join->where('otype.active_at_end', '>=', $r[0]);
 		});
 
 		$query->where(function($queryWhere) use ($query, $filterCode, $permission, $subjectCollection)

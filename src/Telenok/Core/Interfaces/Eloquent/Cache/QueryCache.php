@@ -39,7 +39,10 @@ trait QueryCache {
 
     public function clearCache()
     {
-        \Cache::tags($this->getCacheTags())->flush();
+        if (app('cache')->getDefaultDriver() != 'file' && app('cache')->getDefaultDriver() != 'database')
+        {
+            app('cache')->tags($this->getCacheTags())->flush();
+        }
     }
 
     public function getCacheMinutes()
