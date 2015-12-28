@@ -78,7 +78,7 @@ class CachableQueryBuilder extends Builder {
         }
         else
         {
-            return $callback;
+            return $callback();
         }
     }
 
