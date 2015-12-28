@@ -20,12 +20,12 @@ if (!function_exists('range_minutes'))
         {
             return [
                 $dt->minute(floor($dt->minute/$minutes) * $minutes),
-                $dt->minute(ceil($dt->minute/$minutes) * $minutes)
+                $dt->copy()->minute((floor($dt->minute/$minutes) + 1) * $minutes)
             ];
         }
         else 
         {
-            return [$dt, $dt];
+            return [$dt, $dt->copy()];
         }
     }
 }

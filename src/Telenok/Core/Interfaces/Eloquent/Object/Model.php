@@ -9,10 +9,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     
     public $incrementing = false;
 	public $timestamps = true;
+
 	protected $hasVersioning = true;
 	protected $ruleList = [];
 	protected $multilanguageList = [];
 	protected $dates = [];
+
 	protected static $listField = [];
 	protected static $listRule = [];
 	protected static $listAllFieldController = [];
@@ -748,8 +750,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 			foreach ($this->getObjectField()->all() as $key => $field)
 			{
-
-                
 				if ($controller = $controllers->get($field->key))
 				{
 					$dateField = (array) $controller->getDateField($this, $field);
@@ -870,7 +870,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         $translateTableAlias = $translateTableAlias ?: $translateModel->getTable();
         
-        $query->leftJoin($translateModel->getTable() . ' AS ' . $translateTableAlias, function($join) 
+        $query->leftJoin($translateModel->getTable() . ' as ' . $translateTableAlias, function($join) 
                 use ($linkedTableAlias, $translateTableAlias, $translateField, $language)
         {
             $join   ->on($linkedTableAlias . '.id', '=', $translateTableAlias . '.translation_object_model_id')
@@ -997,8 +997,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function scopeWithTreeAttr($query)
 	{
-		$query->join('pivot_relation_m2m_tree AS pivot_tree_attr', $this->getTable() . '.id', '=', 'pivot_tree_attr.tree_id')
-				->addSelect(['*', $this->getTable() . '.id AS id']);
+		$query->join('pivot_relation_m2m_tree as pivot_tree_attr', $this->getTable() . '.id', '=', 'pivot_tree_attr.tree_id')
+				->addSelect(['*', $this->getTable() . '.id as id']);
 	}
 
 	public function children($depth = 0)
@@ -1025,10 +1025,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function scopeWithChildren($query, $depth = 0)
 	{
-		$query->join('object_sequence AS o_tc', $this->getTable() . '.id', '=', 'o_tc.id');
-		$query->join('pivot_relation_m2m_tree AS pivot_tree_children', $this->getTable() . '.id', '=', 'pivot_tree_children.tree_id');
+		$query->join('object_sequence as o_tc', $this->getTable() . '.id', '=', 'o_tc.id');
+		$query->join('pivot_relation_m2m_tree as pivot_tree_children', $this->getTable() . '.id', '=', 'pivot_tree_children.tree_id');
 		$query->where('pivot_tree_children.tree_depth', '<=', $depth);
-		$query->addSelect([$this->getTable() . '.*', 'pivot_tree_children.*', $this->getTable() . '.id AS id']);
+		$query->addSelect([$this->getTable() . '.*', 'pivot_tree_children.*', $this->getTable() . '.id as id']);
 
 		return $query;
 	}
@@ -1041,27 +1041,28 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			{
 				// throw Exception if not attr in pivot_relation_m2m_tree
 				$model = $this->treeAttr();
+
 				$childs = \DB::table('pivot_relation_m2m_tree')->where('tree_path', 'LIKE', '%.' . $this->getKey() . '.%')->get();
 
 				foreach ($childs as $item)
 				{
-					\DB::table('pivot_relation_m2m_tree')->where('id', $item->id)->update(
-							[
-								'tree_path' => preg_replace('/.*\.' . $this->getKey() . '\./', '.0.' . $this->getKey() . '.', $item->tree_path),
-								'tree_depth' => \DB::raw('(tree_depth - ' . $model->tree_depth . ')'),
+					\DB::table('pivot_relation_m2m_tree')->where('id', $item->id)->update([
+                        'tree_path' => preg_replace('/.*\.' . $this->getKey() . '\./', '.0.' . $this->getKey() . '.', $item->tree_path),
+                        'tree_depth' => \DB::raw('(tree_depth - ' . $model->tree_depth . ')'),
 					]);
 				}
 
-				\DB::table('pivot_relation_m2m_tree')->where('tree_id', $this->getKey())->update(
-						[
-							'tree_path' => '.0.',
-							'tree_pid' => 0,
-							'tree_depth' => 0,
-							'tree_order' => (\DB::table('pivot_relation_m2m_tree')->where('tree_pid', 0)->max('tree_order') + 1)
+				\DB::table('pivot_relation_m2m_tree')->where('tree_id', $this->getKey())->update([
+                    'tree_path' => '.0.',
+                    'tree_pid' => 0,
+                    'tree_depth' => 0,
+                    'tree_order' => (\DB::table('pivot_relation_m2m_tree')->where('tree_pid', 0)->max('tree_order') + 1)
 				]);
 			}
-			catch (\Exception $e)
+			catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
 			{
+                var_dump('NOT FOUND');
+                
 				$this->insertTree();
 			}
 		});
@@ -1073,13 +1074,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		if ($this->exists && ($el = \App\Telenok\Core\Model\Object\Sequence::findOrFail($this->getKey())) && $el->treeable)
 		{
-			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $this->getKey())->insert(
-					[
-						'tree_id' => $this->getKey(),
-						'tree_path' => '.0.',
-						'tree_pid' => 0,
-						'tree_depth' => 0,
-						'tree_order' => (\DB::table('pivot_relation_m2m_tree')->where('tree_pid', 0)->max('tree_order') + 1)
+			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $this->getKey())->insert([
+                'tree_id' => $this->getKey(),
+                'tree_path' => '.0.',
+                'tree_pid' => 0,
+                'tree_depth' => 0,
+                'tree_order' => (\DB::table('pivot_relation_m2m_tree')->where('tree_pid', 0)->max('tree_order') + 1)
 			]);
 		}
 		else
@@ -1113,19 +1113,17 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 			foreach ($children->all() as $child)
 			{
-				\DB::table('pivot_relation_m2m_tree')->where('tree_id', $child->getKey())->update(
-						[
-							'tree_path' => str_replace($sequence->tree_path, $sequenceParent->tree_path . $sequenceParent->getKey() . '.', $child->tree_path),
-							'tree_depth' => ( $sequenceParent->tree_depth + 1 + ($child->tree_depth - $sequence->tree_depth) ),
+				\DB::table('pivot_relation_m2m_tree')->where('tree_id', $child->getKey())->update([
+                    'tree_path' => str_replace($sequence->tree_path, $sequenceParent->tree_path . $sequenceParent->getKey() . '.', $child->tree_path),
+                    'tree_depth' => ( $sequenceParent->tree_depth + 1 + ($child->tree_depth - $sequence->tree_depth) ),
 				]);
 			}
 
-			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update(
-					[
-						'tree_path' => $sequenceParent->tree_path . $sequenceParent->getKey() . '.',
-						'tree_pid' => $sequenceParent->getKey(),
-						'tree_order' => ($sequenceParent->children(1)->where('tree_id', '<>', $sequence->getKey())->max('tree_order') + 1),
-						'tree_depth' => ($sequenceParent->tree_depth + 1)
+			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update([
+                'tree_path' => $sequenceParent->tree_path . $sequenceParent->getKey() . '.',
+                'tree_pid' => $sequenceParent->getKey(),
+                'tree_order' => ($sequenceParent->children(1)->where('tree_id', '<>', $sequence->getKey())->max('tree_order') + 1),
+                'tree_depth' => ($sequenceParent->tree_depth + 1)
 			]);
 		});
 
@@ -1164,12 +1162,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 				]);
 			}
 
-			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update(
-					[
-						'tree_path' => $sequenceParent->tree_path . $sequenceParent->getKey() . '.',
-						'tree_pid' => $sequenceParent->getKey(),
-						'tree_order' => 0,
-						'tree_depth' => ($sequenceParent->tree_depth + 1)
+			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update([
+                'tree_path' => $sequenceParent->tree_path . $sequenceParent->getKey() . '.',
+                'tree_pid' => $sequenceParent->getKey(),
+                'tree_order' => 0,
+                'tree_depth' => ($sequenceParent->tree_depth + 1)
 			]);
 		});
 
@@ -1307,7 +1304,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		$model = new static;
 
-		$query = \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->leftJoin('pivot_relation_m2m_tree AS tree_leaf', function($join) use ($model)
+		$query = \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->leftJoin('pivot_relation_m2m_tree as tree_leaf', function($join) use ($model)
 				{
 					$join->on($model->getTable() . '.id', '=', 'tree_leaf.tree_pid');
 				})

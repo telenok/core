@@ -45,7 +45,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 		try
 		{
 			$query = \App\Telenok\Core\Model\Object\Sequence::withPermission()
-                    ->select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title AS title_type')
+                    ->select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title as title_type')
 					->join($typeTable, function($join) use ($sequenceTable, $typeTable)
 					{
 						$join->on($sequenceTable . '.sequences_object_type', '=', $typeTable . '.id');

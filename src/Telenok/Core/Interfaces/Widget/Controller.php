@@ -128,7 +128,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
         if (($k = $this->getCacheKey()) !== false)
         {
-            return \Cache::get($k, false);
+            return app('cache')->get($k, false);
         }
 
 		return false;
@@ -140,7 +140,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
                 && ($t = $this->getCacheTime()) 
                 && ($k = $this->getCacheKey()) !== false)
         {
-            \Cache::put($k, $content, $t);
+            app('cache')->put($k, $content, $t);
         }
         
 		return $this;

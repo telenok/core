@@ -1,9 +1,6 @@
-<?php namespace Telenok\Core\Interfaces\Eloquent\Cache;
+<?php namespace Telenok\Core\Interfaces\Database;
 
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\ConnectionInterface;
-use Illuminate\Database\Query\Grammars\Grammar;
-use Illuminate\Database\Query\Processors\Processor;
 
 /**
  * @property array|mixed cacheTags
@@ -57,9 +54,14 @@ class CachableQueryBuilder extends Builder {
 
         $tags = $this->getCacheTags();
 
+        if (empty($tags))
+        {
+            $tags[] = strtok($this->from, " ");
+        }
+        
         foreach ((array)$this->joins as $j)
         {
-            $tags[] = $this->getCachePrefix() . $j->table;
+            $tags[] = $this->getCachePrefix() . strtok($j->table, " ");
         }
 
         $tags = array_unique((array)$tags);
@@ -74,7 +76,7 @@ class CachableQueryBuilder extends Builder {
         //check if cache driver supports tags
         if ($minutes && $tags)
         {
-            return \Cache::tags($tags)->remember($key, $minutes, $callback);
+            return app('cache')->tags($tags)->remember($key, $minutes, $callback);
         }
         else
         {
@@ -188,5 +190,40 @@ class CachableQueryBuilder extends Builder {
         }
 
         return parent::get($columns);
+    }
+    
+    
+    
+    
+    /**
+     * Delete a record from the database.
+     *
+     * @param  mixed  $id
+     * @return int
+     */
+    public function delete($id = NULL)
+    {
+        $tables = [$this->from];
+        
+        $result = parent::delete($id);
+        
+        app('cache')->tags($tables)->flush();
+        
+        return $result;
+    }
+
+    /**
+     * Update a record in the database.
+     *
+     * @param  array  $values
+     * @return int
+     */
+    public function update(array $values)
+    {
+        $result = parent::update($values);
+        
+        app('cache')->tags([$this->from])->flush();
+        
+        return $result;
     }
 }

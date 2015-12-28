@@ -167,15 +167,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
             foreach((array)$value as $permissionId => $ids)
             {
-                $query->join($sequence->getTable() . ' AS sequence_filter_' . $permissionId, function($query) use ($permissionId, $model) 
+                $query->join($sequence->getTable() . ' as sequence_filter_' . $permissionId, function($query) use ($permissionId, $model) 
                 {
                     $query->on($model->getTable() . '.id', '=', 'sequence_filter_' . $permissionId . '.id');
                 })
-                ->join($spr->getTable() . ' AS spr_filter_' . $permissionId, function($query) use ($permissionId) 
+                ->join($spr->getTable() . ' as spr_filter_' . $permissionId, function($query) use ($permissionId) 
                 {
                     $query->on('sequence_filter_' . $permissionId . '.id', '=', 'spr_filter_' . $permissionId . '.acl_resource_object_sequence');
                 })
-                ->join($type->getTable() . ' AS type_filter_' . $permissionId, function($query) use ($permissionId) 
+                ->join($type->getTable() . ' as type_filter_' . $permissionId, function($query) use ($permissionId) 
                 {
                     $query->on('sequence_filter_' . $permissionId . '.sequences_object_type', '=', 'type_filter_' . $permissionId . '.id');
                 })

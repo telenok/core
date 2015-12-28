@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Interfaces\Eloquent\Cache;
 
-use Telenok\Core\Interfaces\Eloquent\Cache\CachableQueryBuilder as QueryBuilder;
+use Telenok\Core\Interfaces\Database\CachableQueryBuilder as QueryBuilder;
 
 trait QueryCache {
 
