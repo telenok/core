@@ -9,7 +9,7 @@ class MySqlConnection extends \Illuminate\Database\MySqlConnection {
      */
     public function query()
     {
-        return new \Telenok\Core\Interfaces\Database\CachableQueryBuilder(
+        return new \App\Telenok\Core\Interfaces\Database\CachableQueryBuilder(
             $this, $this->getQueryGrammar(), $this->getPostProcessor()
         );
     }

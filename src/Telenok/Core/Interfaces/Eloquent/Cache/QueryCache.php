@@ -1,12 +1,11 @@
 <?php namespace Telenok\Core\Interfaces\Eloquent\Cache;
 
-use Telenok\Core\Interfaces\Database\CachableQueryBuilder as QueryBuilder;
+use \App\Telenok\Core\Interfaces\Database\CachableQueryBuilder as QueryBuilder;
 
 trait QueryCache {
 
     protected $cacheMinutes = 20;
 
-    
     public static function bootQueryCache()
     {
         static::addGlobalScope(new QueryCacheScope());

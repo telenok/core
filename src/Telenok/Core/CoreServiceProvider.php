@@ -117,7 +117,7 @@ class CoreServiceProvider extends ServiceProvider {
             {
                 list($connection, $database, $prefix, $config) = $parameters;
 
-                $class = 'Telenok\Core\Interfaces\Database\Connection\\' . $driver . 'Connection';
+                $class = '\App\Telenok\Core\Interfaces\Database\Connection\\' . $driver . 'Connection';
 
                 return new $class($connection, $database, $prefix, $config);
             });

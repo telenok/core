@@ -1,6 +1,4 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Eloquent\Cache;
+<?php namespace Telenok\Core\Interfaces\Eloquent\Cache;
 
 use Illuminate\Database\Eloquent\Builder as Builder;
 use Illuminate\Database\Eloquent\Model as Model;
