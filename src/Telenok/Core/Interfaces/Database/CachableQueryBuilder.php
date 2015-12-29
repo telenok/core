@@ -162,8 +162,6 @@ class CachableQueryBuilder extends Builder {
     {
         $result = parent::insert($values);
 
-        echo "INSERT :: " . $this->getCachePrefix() . $this->from . "\n";
-        
         if ($this->cacheTagEnabled())
         {
             $this->getCacheObject()->tags($this->getCachePrefix() . $this->from)->flush();
@@ -182,9 +180,6 @@ class CachableQueryBuilder extends Builder {
     {
         $result = parent::update($values);
 
-        echo "UPDATE :: " . $this->getCachePrefix() . $this->from . "\n";
-
-        
         if ($this->cacheTagEnabled())
         {
             $this->getCacheObject()->tags($this->getCachePrefix() . $this->from)->flush();
