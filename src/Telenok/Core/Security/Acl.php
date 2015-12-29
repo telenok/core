@@ -486,7 +486,7 @@ class Acl
             throw new \Exception('Can\'t find resource');
 		}
 
-        \DB::transaction(function() use ($permission, $resource)
+        app('db')->transaction(function() use ($permission, $resource)
         {
             try
             {
@@ -904,7 +904,7 @@ class Acl
 		$query->join($type->getTable() . ' as otype', function($join) use ($type, $r, $sequence)
 		{
 			$join->on($sequence->getTable() . '.sequences_object_type', '=', 'otype.id');
-			$join->on('otype.' . $type->getDeletedAtColumn(), ' is ', \DB::raw("null"));
+			$join->on('otype.' . $type->getDeletedAtColumn(), ' is ', app('db')->raw("null"));
 			$join->where('otype.active', '=', 1);
 			$join->where('otype.active_at_start', '<=', $r[1]);
 			$join->where('otype.active_at_end', '>=', $r[0]);
@@ -912,7 +912,7 @@ class Acl
 		
 		$query->where(function($queryWhere) use ($query, $permission, $resource, $filterCode)
 		{
-			$queryWhere->where(\DB::raw(1), 0);
+			$queryWhere->where(app('db')->raw(1), 0);
 			
 			$filters = app('telenok.config.repository')->getAclResourceFilter();
 

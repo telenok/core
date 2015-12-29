@@ -106,7 +106,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
                             $query->whereIn($model->getTable() . '.id', $idsArray);
                         }
                     })
-                    ->orderBy(\DB::raw('FIELD(' . $model->getTable() . '.id, "' . implode('", "', $idsArray) . '")'))
+                    ->orderBy(app('db')->raw('FIELD(' . $model->getTable() . '.id, "' . implode('", "', $idsArray) . '")'))
                     ->orderBy('pivot_tree_children.tree_depth')
                     ->orderBy('pivot_tree_children.tree_depth')
                     ->get();

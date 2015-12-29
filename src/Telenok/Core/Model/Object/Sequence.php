@@ -34,7 +34,7 @@ class Sequence extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	public function delete()
 	{
-		\DB::transaction(function()
+		app('db')->transaction(function()
 		{
 			if ($this->model && $this->model->exists)
 			{

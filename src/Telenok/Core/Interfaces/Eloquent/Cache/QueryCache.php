@@ -39,9 +39,9 @@ trait QueryCache {
 
     public function clearCache()
     {
-        if (app('cache')->getDefaultDriver() != 'file' && app('cache')->getDefaultDriver() != 'database')
+        if ($this->newBaseQueryBuilder()->cacheTagEnabled())
         {
-            app('cache')->tags($this->getCacheTags())->flush();
+            $this->getCacheObject()->tags($this->getCacheTags())->flush();
         }
     }
 
@@ -50,14 +50,14 @@ trait QueryCache {
         return min(config('cache.db_query.minutes', 0), $this->cacheMinutes);
     }
 
-    public function getCacheTags()
+    public function getCacheObject()
     {
-        return $this->getCachePrefix() . $this->getTable();
+        return $this->newBaseQueryBuilder()->getCacheObject();
     }
 
-    public function getCachePrefix()
+    public function getCacheTags()
     {
-        return 'table_';
+        return $this->newBaseQueryBuilder()->getCachePrefix() . strtok($this->getTable(), " ");
     }
 
     /**

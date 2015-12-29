@@ -14,14 +14,14 @@ class CachableQueryBuilder extends Builder {
      */
     protected $cacheKey;
     protected $cacheTags = [];
-    protected $cachePrefix;
+    protected $cachePrefix = 'table_';
 
     /**
      * The number of minutes to cache the query.
      *
      * @var int
      */
-    protected $cacheMinutes;
+    protected $cacheMinutes = 20;
 
 
     /**
@@ -37,51 +37,6 @@ class CachableQueryBuilder extends Builder {
         $this->cacheMinutes = $minutes;
 
         return $this;
-    }
-
-    /**
-     * Execute the query as a cached "select" statement.
-     *
-     * @param  array $columns
-     * @return array
-     */
-    public function getCached($columns = array('*'))
-    {
-        if (is_null($this->columns))
-        {
-            $this->columns = $columns;
-        }
-
-        $tags = $this->getCacheTags();
-
-        if (empty($tags))
-        {
-            $tags[] = strtok($this->from, " ");
-        }
-        
-        foreach ((array)$this->joins as $j)
-        {
-            $tags[] = $this->getCachePrefix() . strtok($j->table, " ");
-        }
-
-        $tags = array_unique((array)$tags);
-
-        // If the query is requested to be cached, we will cache it using a unique key
-        // for this database connection and query statement, including the bindings
-        // that are used on this query, providing great convenience when caching.
-        list($key, $minutes) = $this->getCacheInfo();
-
-        $callback = $this->getCacheCallback($columns);
-        
-        //check if cache driver supports tags
-        if ($minutes && $tags)
-        {
-            return app('cache')->tags($tags)->remember($key, $minutes, $callback);
-        }
-        else
-        {
-            return $callback();
-        }
     }
 
     /**
@@ -111,6 +66,13 @@ class CachableQueryBuilder extends Builder {
     public function cachePrefix($prefix)
     {
         $this->cachePrefix = $prefix;
+        
+        return $this;
+    }
+    
+    public function getCacheObject()
+    {
+        return app('cache')->driver(config('cache.db_query.driver'));
     }
 
     /**
@@ -120,9 +82,7 @@ class CachableQueryBuilder extends Builder {
      */
     public function generateCacheKey()
     {
-        $name = $this->connection->getName();
-
-        return md5($name . $this->toSql() . serialize($this->getBindings()));
+        return md5($this->connection->getName() . $this->toSql() . serialize($this->getBindings()));
     }
 
     /**
@@ -149,18 +109,18 @@ class CachableQueryBuilder extends Builder {
             {
                 $this->cacheTags[] = $tag;
             }
-
-            return $this;
         }
-
-        $this->cacheTags[] = $cacheTags;
+        else
+        {
+            $this->cacheTags[] = $cacheTags;
+        }
 
         return $this;
     }
 
-    protected function cacheTagEnabled()
+    public function cacheTagEnabled()
     {
-        return (app('cache')->getDefaultDriver() != 'file' && app('cache')->getDefaultDriver() != 'database');
+        return (config('cache.db_query.driver') != 'file' && config('cache.db_query.driver') != 'database');
     }
     
     /**
@@ -192,23 +152,23 @@ class CachableQueryBuilder extends Builder {
         return parent::get($columns);
     }
     
-    
-    
-    
     /**
-     * Delete a record from the database.
+     * Insert a new record into the database.
      *
-     * @param  mixed  $id
-     * @return int
+     * @param  array  $values
+     * @return bool
      */
-    public function delete($id = NULL)
+    public function insert(array $values)
     {
-        $tables = [$this->from];
+        $result = parent::insert($values);
+
+        echo "INSERT :: " . $this->getCachePrefix() . $this->from . "\n";
         
-        $result = parent::delete($id);
-        
-        app('cache')->tags($tables)->flush();
-        
+        if ($this->cacheTagEnabled())
+        {
+            $this->getCacheObject()->tags($this->getCachePrefix() . $this->from)->flush();
+        }
+
         return $result;
     }
 
@@ -221,9 +181,80 @@ class CachableQueryBuilder extends Builder {
     public function update(array $values)
     {
         $result = parent::update($values);
+
+        echo "UPDATE :: " . $this->getCachePrefix() . $this->from . "\n";
+
         
-        app('cache')->tags([$this->from])->flush();
+        if ($this->cacheTagEnabled())
+        {
+            $this->getCacheObject()->tags($this->getCachePrefix() . $this->from)->flush();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Delete a record from the database.
+     *
+     * @param  mixed  $id
+     * @return int
+     */
+    public function delete($id = NULL)
+    {
+        $result = parent::delete($id);
+        
+        if ($this->cacheTagEnabled())
+        {
+            $this->getCacheObject()->tags($this->getCachePrefix() . $this->from)->flush();
+        }
         
         return $result;
+    }
+    
+   /**
+     * Execute the query as a cached "select" statement.
+     *
+     * @param  array $columns
+     * @return array
+     */
+    public function getCached($columns = array('*'))
+    {
+        if (is_null($this->columns))
+        {
+            $this->columns = $columns;
+        }
+
+        $tags = $this->getCacheTags();
+
+        if (empty($tags))
+        {
+            $tags[] = $this->getCachePrefix() . strtok($this->from, " ");
+        }
+
+        foreach ((array)$this->joins as $j)
+        {
+            $tags[] = $this->getCachePrefix() . strtok($j->table, " ");
+        }
+
+        $tags = array_unique((array)$tags);
+
+        sort($tags);
+
+        // If the query is requested to be cached, we will cache it using a unique key
+        // for this database connection and query statement, including the bindings
+        // that are used on this query, providing great convenience when caching.
+        list($key, $minutes) = $this->getCacheInfo();
+
+        $callback = $this->getCacheCallback($columns);
+
+        //check if cache driver supports tags
+        if ($minutes && $tags)
+        {
+            return $this->getCacheObject()->tags($tags)->remember($key, $minutes, $callback);
+        }
+        else
+        {
+            return $callback();
+        }
     }
 }

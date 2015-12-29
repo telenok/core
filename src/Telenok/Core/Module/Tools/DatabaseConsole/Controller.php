@@ -10,11 +10,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
 
     public function processSelect()
     {
-        return \DB::select(\DB::Raw( $this->getRequest()->input('content') ));
+        return app('db')->select(app('db')->Raw( $this->getRequest()->input('content') ));
     }
 
     public function processStatement()
     {
-        return \DB::affectingStatement(\DB::Raw( $this->getRequest()->input('content') ));
+        return app('db')->affectingStatement(app('db')->Raw( $this->getRequest()->input('content') ));
     }
 }

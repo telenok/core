@@ -22,8 +22,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 $query->leftJoin($translate->getTable(), function($join) use ($model, $translate, $fieldCode)
                 {
                     $join   ->on($model->getTable().'.id', '=', $translate->getTable().'.translation_object_model_id')
-                            ->on($translate->getTable().'.translation_object_field_code', '=', \DB::raw("'" . $fieldCode . "'"))
-                            ->on($translate->getTable().'.translation_object_language', '=', \DB::raw("'".config('app.locale')."'"));
+                            ->on($translate->getTable().'.translation_object_field_code', '=', app('db')->raw("'" . $fieldCode . "'"))
+                            ->on($translate->getTable().'.translation_object_language', '=', app('db')->raw("'".config('app.locale')."'"));
                 });
 
                 $query->where(function($query) use ($value, $model, $translate)

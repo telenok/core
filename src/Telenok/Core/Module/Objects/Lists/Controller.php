@@ -539,7 +539,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 		
         try
         {
-			\DB::transaction(function() use ($model, $type, $force)
+			app('db')->transaction(function() use ($model, $type, $force)
 			{
 				//\Event::fire('workflow.delete.before', (new \Telenok\Core\Workflow\Event())->setResourceCode("object_type.{$type->code}"));
 
@@ -634,7 +634,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $error = false;
 
-		\DB::transaction(function() use ($ids, &$error)
+		app('db')->transaction(function() use ($ids, &$error)
 		{ 
 			try
 			{

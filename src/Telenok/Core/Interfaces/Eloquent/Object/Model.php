@@ -204,7 +204,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		if (app('auth')->can('delete', $this->getKey()))
 		{
-			\DB::transaction(function()
+			app('db')->transaction(function()
 			{
 				parent::restore();
 			});
@@ -219,7 +219,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 	{
 		if (app('auth')->can('delete', $this->getKey()))
 		{
-			\DB::transaction(function()
+			app('db')->transaction(function()
 			{
                 if (app('auth')->check())
                 {
@@ -421,7 +421,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 		try
 		{
-			\DB::transaction(function() use ($type, $input, $model, $withEvent)
+			app('db')->transaction(function() use ($type, $input, $model, $withEvent)
 			{
 				$controllerProcessing = null;
 
@@ -661,9 +661,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		{
 			$r = range_minutes($this->getCacheMinutes());
 
-			$type = \DB::table('object_type')->where('code', $this->getTable())->first();
+			$type = app('db')->table('object_type')->where('code', $this->getTable())->first();
 
-			$f = \DB::table('object_field')
+			$f = app('db')->table('object_field')
 					->where('field_object_type', $type->id)
 					->where('active', '=', 1)
 					->where('active_at_start', '<=', $r[1])
@@ -874,8 +874,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                 use ($linkedTableAlias, $translateTableAlias, $translateField, $language)
         {
             $join   ->on($linkedTableAlias . '.id', '=', $translateTableAlias . '.translation_object_model_id')
-                    ->on($translateTableAlias . '.translation_object_field_code', '=', \DB::raw("'" . $translateField . "'"))
-                    ->on($translateTableAlias . '.translation_object_language', '=', \DB::raw("'" . ($language ? : config('app.locale')) . "'"));
+                    ->on($translateTableAlias . '.translation_object_field_code', '=', app('db')->raw("'" . $translateField . "'"))
+                    ->on($translateTableAlias . '.translation_object_language', '=', app('db')->raw("'" . ($language ? : config('app.locale')) . "'"));
         });
 	}
 
@@ -957,7 +957,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 		$query->where(function($queryWhere) use ($query, $filterCode, $permission, $subjectCollection)
 		{
-			$queryWhere->where(\DB::raw(1), 0);
+			$queryWhere->where(app('db')->raw(1), 0);
 
 			$filters = app('telenok.config.repository')->getAclResourceFilter();
 
@@ -1035,34 +1035,32 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function makeRoot()
 	{
-		\DB::transaction(function()
+		app('db')->transaction(function()
 		{
 			try
 			{
 				// throw Exception if not attr in pivot_relation_m2m_tree
 				$model = $this->treeAttr();
 
-				$childs = \DB::table('pivot_relation_m2m_tree')->where('tree_path', 'LIKE', '%.' . $this->getKey() . '.%')->get();
+				$childs = app('db')->table('pivot_relation_m2m_tree')->where('tree_path', 'LIKE', '%.' . $this->getKey() . '.%')->get();
 
 				foreach ($childs as $item)
 				{
-					\DB::table('pivot_relation_m2m_tree')->where('id', $item->id)->update([
+					app('db')->table('pivot_relation_m2m_tree')->where('id', $item->id)->update([
                         'tree_path' => preg_replace('/.*\.' . $this->getKey() . '\./', '.0.' . $this->getKey() . '.', $item->tree_path),
-                        'tree_depth' => \DB::raw('(tree_depth - ' . $model->tree_depth . ')'),
+                        'tree_depth' => app('db')->raw('(tree_depth - ' . $model->tree_depth . ')'),
 					]);
 				}
 
-				\DB::table('pivot_relation_m2m_tree')->where('tree_id', $this->getKey())->update([
+				app('db')->table('pivot_relation_m2m_tree')->where('tree_id', $this->getKey())->update([
                     'tree_path' => '.0.',
                     'tree_pid' => 0,
                     'tree_depth' => 0,
-                    'tree_order' => (\DB::table('pivot_relation_m2m_tree')->where('tree_pid', 0)->max('tree_order') + 1)
+                    'tree_order' => (app('db')->table('pivot_relation_m2m_tree')->where('tree_pid', 0)->max('tree_order') + 1)
 				]);
 			}
 			catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
 			{
-                var_dump('NOT FOUND');
-                
 				$this->insertTree();
 			}
 		});
@@ -1070,21 +1068,21 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 		return $this;
 	}
 
-	protected function insertTree()
+	public function insertTree()
 	{
-		if ($this->exists && ($el = \App\Telenok\Core\Model\Object\Sequence::findOrFail($this->getKey())) && $el->treeable)
+		if ($this->exists && \App\Telenok\Core\Model\Object\Sequence::findOrFail($this->getKey())->treeable)
 		{
-			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $this->getKey())->insert([
+			app('db')->table('pivot_relation_m2m_tree')->insert([
                 'tree_id' => $this->getKey(),
                 'tree_path' => '.0.',
                 'tree_pid' => 0,
                 'tree_depth' => 0,
-                'tree_order' => (\DB::table('pivot_relation_m2m_tree')->where('tree_pid', 0)->max('tree_order') + 1)
+                'tree_order' => (app('db')->table('pivot_relation_m2m_tree')->where('tree_pid', 0)->max('tree_order') + 1)
 			]);
 		}
 		else
 		{
-			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Not exists or not treeable');
+			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Model not exists or not treeable');
 		}
 
 		return $this;
@@ -1107,19 +1105,19 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
 		}
 
-		\DB::transaction(function() use ($sequence, $sequenceParent)
+		app('db')->transaction(function() use ($sequence, $sequenceParent)
 		{
 			$children = $sequence->children()->get();
 
 			foreach ($children->all() as $child)
 			{
-				\DB::table('pivot_relation_m2m_tree')->where('tree_id', $child->getKey())->update([
+				app('db')->table('pivot_relation_m2m_tree')->where('tree_id', $child->getKey())->update([
                     'tree_path' => str_replace($sequence->tree_path, $sequenceParent->tree_path . $sequenceParent->getKey() . '.', $child->tree_path),
                     'tree_depth' => ( $sequenceParent->tree_depth + 1 + ($child->tree_depth - $sequence->tree_depth) ),
 				]);
 			}
 
-			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update([
+			app('db')->table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update([
                 'tree_path' => $sequenceParent->tree_path . $sequenceParent->getKey() . '.',
                 'tree_pid' => $sequenceParent->getKey(),
                 'tree_order' => ($sequenceParent->children(1)->where('tree_id', '<>', $sequence->getKey())->max('tree_order') + 1),
@@ -1147,7 +1145,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
 		}
 
-		\DB::transaction(function() use ($sequence, $sequenceParent)
+		app('db')->transaction(function() use ($sequence, $sequenceParent)
 		{
 			$sequenceParent->children(1)->increment('tree_order');
 
@@ -1155,14 +1153,14 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 			foreach ($children->all() as $child)
 			{
-				\DB::table('pivot_relation_m2m_tree')->where('tree_id', $child->getKey())->update(
+				app('db')->table('pivot_relation_m2m_tree')->where('tree_id', $child->getKey())->update(
 						[
 							'tree_path' => str_replace($sequence->tree_path, $sequenceParent->tree_path . $sequenceParent->getKey() . '.', $child->tree_path),
 							'tree_depth' => ( $sequenceParent->tree_depth + 1 + ($child->tree_depth - $sequence->tree_depth) ),
 				]);
 			}
 
-			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update([
+			app('db')->table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update([
                 'tree_path' => $sequenceParent->tree_path . $sequenceParent->getKey() . '.',
                 'tree_pid' => $sequenceParent->getKey(),
                 'tree_order' => 0,
@@ -1216,7 +1214,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Cant move Ancestor to Descendant');
 		}
 
-		\DB::transaction(function() use ($sequence, $sequenceSibling, $op)
+		app('db')->transaction(function() use ($sequence, $sequenceSibling, $op)
 		{
 			$sequenceSibling->sibling()->where('tree_order', $op, $sequenceSibling->tree_order)->increment('tree_order');
 
@@ -1230,7 +1228,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 				]);
 			}
 
-			\DB::table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update(
+			app('db')->table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update(
 					[
 						'tree_path' => $sequenceSibling->tree_path,
 						'tree_pid' => $sequenceSibling->tree_pid,
@@ -1317,7 +1315,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function lock($period = 300)
 	{
-		\DB::transaction(function() use ($period)
+		app('db')->transaction(function() use ($period)
 		{
 			$user = app('auth')->user();
 
@@ -1332,7 +1330,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
 	public function unLock()
 	{
-		\DB::transaction(function()
+		app('db')->transaction(function()
 		{
 			$this->locked_by_user = 0;
 			$this->save();

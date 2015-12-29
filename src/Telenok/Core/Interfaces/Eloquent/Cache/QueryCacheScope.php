@@ -18,7 +18,6 @@ class QueryCacheScope implements ScopeInterface {
     public function apply(Builder $builder, Model $model)
     {
         $builder->remember($model->getCacheMinutes())
-                ->cachePrefix($model->getCachePrefix())
                 ->cacheTags($model->getCacheTags());
     }
 

@@ -52,7 +52,12 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
     {
         while (true)
         {
-            $password = $this->secret('What is password for superuser in backend: ');
+            $question = new \Symfony\Component\Console\Question\Question('What is password for superuser in backend:', 'random');
+
+            $question->setHidden(true);
+            $question->setValidator(null);
+
+            $password = $this->output->askQuestion($question);            
 
             try
             {
@@ -65,15 +70,24 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
                 continue;
             }
 
-            $confirmPassword = $this->secret('Please, type password again to confirm it: ');
-
-            if ($password === $confirmPassword)
+            if ($password !== 'random')
             {
-                break;
+                $confirmPassword = $this->secret('Please, type password again to confirm it: ');
+
+                if ($password === $confirmPassword)
+                {
+                    break;
+                }
+                else
+                {
+                    $this->error('Wrong confirmed password. Try again, please.');
+                }
             }
             else
             {
-                $this->error('Wrong confirmed password. Try again, please.');
+                $this->info('Your password: ' . $this->processingController->getSuperuserPassword());
+
+                break;
             }
         }
     }

@@ -5,7 +5,7 @@ class MySqlConnection extends \Illuminate\Database\MySqlConnection {
     /**
      * Get a new query builder instance.
      *
-     * @return \Telenok\Core\Interfaces\Database\CachableQueryBuilder
+     * @return \App\Telenok\Core\Interfaces\Database\CachableQueryBuilder
      */
     public function query()
     {

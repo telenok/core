@@ -76,7 +76,11 @@ class Controller {
 
 	public function setSuperuserPassword($param = '')
 	{
-		if (mb_strlen($param) < ($length = config('auth.password.length-min', 8)))
+        if ($param == 'random')
+        {
+			$this->superuserPassword = str_random(8);
+        }
+		else if (mb_strlen($param) < ($length = config('auth.password.length-min', 8)))
 		{
 			throw new \Exception('Wrong superuser password, it should be at least ' . $length . ' symbols.');
 		}

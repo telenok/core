@@ -97,12 +97,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			{
                 if ($v = trim(array_get($value, 'start')))
                 {
-                    $query->where(\DB::raw('TIME(' . $model->getTable() . '.' . $name . '_end)'), '>=', $v);
+                    $query->where(app('db')->raw('TIME(' . $model->getTable() . '.' . $name . '_end)'), '>=', $v);
                 }
 
                 if ($v = trim(array_get($value, 'end')))
                 {
-                    $query->where(\DB::raw('TIME(' . $model->getTable() . '.' . $name . '_start)'), '<=', $v);
+                    $query->where(app('db')->raw('TIME(' . $model->getTable() . '.' . $name . '_start)'), '<=', $v);
                 }
 			});
 		}

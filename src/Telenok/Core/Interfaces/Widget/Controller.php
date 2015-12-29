@@ -294,7 +294,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		$widgetOnPage = null;
 		
-		\DB::transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage, $bufferId)
+		app('db')->transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage, $bufferId)
 		{
 			$widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
 			$buffer = \App\Telenok\Core\Model\System\Buffer::findOrFail($bufferId);
@@ -362,7 +362,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		
 		try
 		{
-			\DB::transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage)
+			app('db')->transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage)
 			{
 				$widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id)
 						->storeOrUpdate([
@@ -385,7 +385,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 		catch (\Exception $e)
 		{
-			\DB::transaction(function() use ($languageId, $pageId, $key, $container, $order, &$widgetOnPage)
+			app('db')->transaction(function() use ($languageId, $pageId, $key, $container, $order, &$widgetOnPage)
 			{
 				$widgetOnPage = (new \App\Telenok\Core\Model\Web\WidgetOnPage())
 						->storeOrUpdate([

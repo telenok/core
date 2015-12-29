@@ -926,7 +926,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 				throw new \LogicException($this->LL('error.access'));
 			}
 			
-			\DB::transaction(function() use ($model, $force)
+			app('db')->transaction(function() use ($model, $force)
 			{
 				if ($force || $model->trashed())
 				{
@@ -957,7 +957,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
          
 		$error = false;
 		
-		\DB::transaction(function() use ($ids, &$error)
+		app('db')->transaction(function() use ($ids, &$error)
 		{ 
 			try
 			{
@@ -1061,7 +1061,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         $model = null;
 
-        \DB::transaction(function() use (&$model, $input)
+        app('db')->transaction(function() use (&$model, $input)
         { 
             $model = $this->save($input); 
         });
@@ -1086,7 +1086,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         $model = null;
 
-        \DB::transaction(function() use (&$model, $input)
+        app('db')->transaction(function() use (&$model, $input)
         { 
             $model = $this->save($input); 
         });

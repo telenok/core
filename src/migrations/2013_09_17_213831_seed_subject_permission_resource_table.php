@@ -23,7 +23,7 @@ class SeedSubjectPermissionResourceTable extends Migration {
 
         foreach(['object_type', 'object_field', 'object_tab', 'setting', 'object_sequence'] as $table)
         {
-            \DB::table($table)->update([
+            app('db')->table($table)->update([
                 'active_at_start' => $now, 
                 'active_at_end' => $plus15Year,
                 'created_at' => $now,

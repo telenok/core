@@ -61,7 +61,7 @@ class Controller {
             {
                 $join->on('spr.acl_subject_object_sequence', '=', 'role.id');
                 $join->on('role.active', '=', 1);
-                $join->on('role.' . $spr->getDeletedAtColumn(), ' is ', \DB::raw('null'));
+                $join->on('role.' . $spr->getDeletedAtColumn(), ' is ', app('db')->raw('null'));
             });
 
             $query->join('pivot_relation_m2m_role_group', function($join) use ($spr, $group, $role)
@@ -73,7 +73,7 @@ class Controller {
             {
                 $join->on('pivot_relation_m2m_role_group.role_group', '=', 'group.id');
                 $join->on('group.active', '=', 1);
-                $join->on('group.' . $spr->getDeletedAtColumn(), ' is ', \DB::raw('null'));
+                $join->on('group.' . $spr->getDeletedAtColumn(), ' is ', app('db')->raw('null'));
             });
 
             $query->join('pivot_relation_m2m_group_user', function($join) use ($spr, $group, $role)
@@ -85,7 +85,7 @@ class Controller {
             {
                 $join->on('pivot_relation_m2m_group_user.group_user', '=', 'user.id');
                 $join->on('user.active', '=', 1);
-                $join->on('user.' . $spr->getDeletedAtColumn(), ' is ', \DB::raw('null'));
+                $join->on('user.' . $spr->getDeletedAtColumn(), ' is ', app('db')->raw('null'));
             });
 
             if ($query->get()->first())

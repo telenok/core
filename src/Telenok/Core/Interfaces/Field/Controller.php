@@ -574,8 +574,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 			$query->join('object_translation', function($join) use ($model)
 			{
 				$join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id')
-                    ->on('object_translation.translation_object_field_code', '=', \DB::raw("'title'"))
-                    ->on('object_translation.translation_object_language', '=', \DB::raw("'".config('app.locale')."'"));
+                    ->on('object_translation.translation_object_field_code', '=', app('db')->raw("'title'"))
+                    ->on('object_translation.translation_object_language', '=', app('db')->raw("'".config('app.locale')."'"));
 			});
         }
 

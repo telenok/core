@@ -43,7 +43,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 		$input->put('multilanguage', 0);
 		$input->put('allow_create', 0);
 		$input->put('allow_update', 0); 
-		$input->put('relation_one_to_many_belong_to', \DB::table('object_type')->where('code', 'user')->pluck('id'));
+		$input->put('relation_one_to_many_belong_to', app('db')->table('object_type')->where('code', 'user')->pluck('id'));
 		$input->put('multilanguage', 0);
 		$input->put('allow_sort', 0);
 		$input->put('allow_search', $input->get('allow_search', 1));

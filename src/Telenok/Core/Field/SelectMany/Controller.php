@@ -12,14 +12,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function saveModelField($field, $model, $input)
     { 
-        \DB::table('pivot_relation_o2m_field_select_many')
+        app('db')->table('pivot_relation_o2m_field_select_many')
                 ->where('field_id', $field->id)
                 ->where('sequence_id', $model->id)
                 ->delete();
 
         foreach($input->get($field->code) as $key)
         {
-            \DB::table('pivot_relation_o2m_field_select_many')->insert(
+            app('db')->table('pivot_relation_o2m_field_select_many')->insert(
                 [
                     'field_id' => $field->id,
                     'sequence_id' => $model->id,

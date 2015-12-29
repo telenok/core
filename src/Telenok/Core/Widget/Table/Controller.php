@@ -168,7 +168,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 		$widgetOnPage = null;
 		
 		
-		\DB::transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage, $bufferId)
+		app('db')->transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage, $bufferId)
 		{
 			$widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
 			$buffer = \App\Telenok\Core\Model\System\Buffer::findOrFail($bufferId);

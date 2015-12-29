@@ -250,8 +250,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 $query->leftJoin($translate->getTable(), function($join) use ($model, $translate, $orderByField)
                 {
                     $join   ->on($model->getTable().'.id', '=', $translate->getTable().'.translation_object_model_id')
-                            ->on($translate->getTable().'.translation_object_field_code', '=', \DB::raw("'{$orderByField}'"))
-                            ->on($translate->getTable().'.translation_object_language', '=', \DB::raw("'".config('app.locale')."'"));
+                            ->on($translate->getTable().'.translation_object_field_code', '=', app('db')->raw("'{$orderByField}'"))
+                            ->on($translate->getTable().'.translation_object_language', '=', app('db')->raw("'".config('app.locale')."'"));
                 });
 
                 $query->orderBy($translate->getTable().'.translation_object_string', $input->input('order.0.dir') == 'asc' ? 'asc' : 'desc');

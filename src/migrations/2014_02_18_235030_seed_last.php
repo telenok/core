@@ -110,7 +110,7 @@ class SeedLast extends Migration {
             $now = \Carbon\Carbon::now()->toDateTimeString();
             $plus15Year = \Carbon\Carbon::now()->addYears(15)->toDateTimeString();
 
-			\DB::table($table)->update([
+			app('db')->table($table)->update([
 				'created_at' => $now,
 				'updated_at' => $now,
 				'active_at_start' => $now,

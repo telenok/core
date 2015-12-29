@@ -263,7 +263,7 @@ class Repository {
 
 	public function compileSetting()
 	{
-		if (\DB::table('setting')->where('active', 1)->count())
+		if (app('db')->table('setting')->where('active', 1)->count())
 		{
 			foreach (\App\Telenok\Core\Model\System\Setting::all() as $setting)
 			{

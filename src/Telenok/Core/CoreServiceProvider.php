@@ -83,23 +83,6 @@ class CoreServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        foreach([
-                'mysql' => 'MySql',
-                'pgsql' => 'Postgres',
-                'sqlite' => 'SQLite',
-                'sqlsrv' => 'SqlServer',
-            ] as $driver)
-        {
-            $this->app->singleton('db.connection.' . $driver, function ($app, $parameters) use ($driver)
-            {
-                list($connection, $database, $prefix, $config) = $parameters;
-
-                $class = 'Telenok\Core\Interfaces\Database\Connection\\' . $driver . 'Connection';
-                
-                return new $class($connection, $database, $prefix, $config);
-            });
-        }
-
         $this->app->singleton('telenok.config.repository', '\App\Telenok\Core\Support\Config\Repository');
 
         $this->app['command.telenok.install'] = $this->app->share(function($app)
@@ -117,7 +100,28 @@ class CoreServiceProvider extends ServiceProvider {
             return new \App\Telenok\Core\Command\Package($app['composer']);
         });
 
+        $this->registerDBConnection();
         $this->registerMemcache();
+    }
+
+    public function registerDBConnection()
+    {
+        foreach([
+                'mysql' => 'MySql',
+                'pgsql' => 'Postgres',
+                'sqlite' => 'SQLite',
+                'sqlsrv' => 'SqlServer',
+            ] as $key => $driver)
+        {           
+            $this->app->singleton('db.connection.' . $key, function ($app, $parameters) use ($driver)
+            {
+                list($connection, $database, $prefix, $config) = $parameters;
+
+                $class = 'Telenok\Core\Interfaces\Database\Connection\\' . $driver . 'Connection';
+
+                return new $class($connection, $database, $prefix, $config);
+            });
+        }
     }
 
     /**
