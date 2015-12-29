@@ -12,7 +12,7 @@ if (!function_exists('range_minutes'))
      */
     function range_minutes($minutes = 'config')
     {
-        $dt = \Carbon\Carbon::now();
+        $dt = \Carbon\Carbon::now()->second(0);
 
         $minutes = $minutes == 'config' ? config('cache.db_query.minutes', 0) : $minutes;
 
