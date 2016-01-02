@@ -11,6 +11,9 @@
         {!! HTML::script('packages/telenok/core/js/ckeditor_addons/fixes/bootstrap.js') !!}
         {!! HTML::script('ckeditor.custom.config.js') !!}
 
+        {!! HTML::style('packages/telenok/core/js/jquery.cropper/cropper.css') !!}
+        {!! HTML::script('packages/telenok/core/js/jquery.cropper/cropper.js') !!}
+
 @stop
 
 @section('body')

@@ -107,7 +107,7 @@ class Processing {
 
 		return $this->getImage()->resize(new \Imagine\Image\Box($width, $height));
 	}
-    
+
     public static function isImage($path)
     {
         return in_array(pathinfo($path, PATHINFO_EXTENSION), static::IMAGE_EXTENSION, true);
@@ -115,27 +115,20 @@ class Processing {
 
     public function createLock($str)
     {
-        $lockDir = storage_path('telenok/tmp/image-cache/');
-        $lockFile = md5($this->getImage() . $str);
-        $lockFilePath = $lockDir . '/' . $lockFile;
-        
-        if (!file_exists($lockDir))
-        {
-            \File::makeDirectory($lockDir, 0775, true, true);
-        }
-        
-        if (file_exists($lockFilePath) && filemtime($lockFilePath) > time() - config('image.cache.lock_delay'))
+        if (app('cache')->has('image.process.lock.' . $str))
         {
             return false;
         }
+        else
+        {
+            app('cache')->put('image.process.lock.' . $str, 1, config('image.cache.lock_delay'));
+        }
 
-        touch($lockFilePath);
-        
         return true;
     }
 
     public function removeLock($str)
     {
-        @unlink(storage_path('telenok/tmp/image-cache/') . '/' . md5($this->getImage() . $str));
+        app('cache')->forget('image.process.lock.' . $str);
     }
 }

@@ -85,6 +85,8 @@
 	post('field/file-many-to-many/upload', array('as' => 'telenok.field.file-many-to-many.upload', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@upload"));
  	get('field/file-many-to-many/list/title', array('as' => 'telenok.field.file-many-to-many.list.title', 'uses' => "\App\Telenok\Core\Field\FileManyToMany\Controller@getTitleList"));
 
+ 	get('field/upload/modal-cropper', array('as' => 'telenok.field.upload.modal-cropper', 'uses' => "\App\Telenok\Core\Field\Upload\Controller@modalCropperContent"));
+
 	get('ckeditor.custom.config.js', array('as' => 'telenok.ckeditor.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@getCKEditorConfig"));	
 	get('ckeditor/browser/file', array('as' => 'telenok.ckeditor.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@browseFile"));	
 	get('ckeditor/browser/image', array('as' => 'telenok.ckeditor.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@browseImage"));	

@@ -17,7 +17,14 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
                     app('auth')->can('read', 'object_field.' . $model->getTable() . '.' . $field->code))))
 		{
 			$fileObject = $model->{$field->code};
-            
+
+            $filenameCached = $fileObject->filenameCached();
+
+            if (!$fileObject->existsCache($filenameCached))
+            {
+                $fileObject->createCache();
+            }
+
 			$fs = $fileObject->diskCache()->getDriver();
 			$stream = $fs->readStream($fileObject->pathCache());
 			$fullsize = $fileObject->size();

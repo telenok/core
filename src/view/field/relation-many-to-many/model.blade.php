@@ -256,7 +256,7 @@
 
             $modal.modal('show').on('hidden', function() 
             { 
-                jQuery(this).html(""); 
+                jQuery(this).empty(); 
             });
         });
     }
@@ -290,7 +290,7 @@
 
             $modal.modal('show').on('hidden', function() 
             { 
-                jQuery(this).html(""); 
+                jQuery(this).empty(); 
             });
         });
     }
@@ -346,7 +346,7 @@
 
             $modal.modal('show').on('hidden', function() 
             { 
-                jQuery(this).html(""); 
+                jQuery(this).empty(); 
             });
         });
     }

@@ -458,7 +458,7 @@
 			},
 			removePageHeader: function()
 			{
-				jQuery('div.page-header', '#' + this.presentationDomId).html("").hide();
+				jQuery('div.page-header', '#' + this.presentationDomId).empty().hide();
 			},
 			removeBreadcrumbs: function()
 			{

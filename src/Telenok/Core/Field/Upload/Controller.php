@@ -10,6 +10,27 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     protected $maxSiteDefault = 200000;
 	protected $defaultStorage = 'default_local';
 
+    public function modalCropperContent()
+    {
+        if ($this->getRequest()->input('model_id'))
+        {
+    		$model = \App\Telenok\Core\Model\Object\Sequence::getModel($this->getRequest()->input('model_id'));
+        	$field = \App\Telenok\Core\Model\Object\Sequence::getModel($this->getRequest()->input('field_id'));
+        }
+        else
+        {
+    		$model = null;
+        	$field = null;
+        }
+
+        return view('core::field.upload.modal-cropper', [
+            'controller' => $this,
+            'model' => $model,
+            'field' => $field,
+            'jsUnique' => $this->getRequest()->input('js_unique'),
+        ])->render();
+    }
+    
 	public function getModelField($model, $field)
 	{
 		return [$field->code];
@@ -103,26 +124,45 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function saveModelField($field, $model, $input)
 	{
+        $fileTmp = null;
+
 		/*
 		 * if file uploaded
 		 */
 		$file = $this->getRequest()->file($field->code); 
 
 		/*
+		 * if file uploaded as BLOB via hidden field
+		 */
+		$fileBlob = $this->getRequest()->input($field->code . '_blob'); 
+
+		/*
 		 * if not post file - think it can be sent by string - full path from local disk
 		 */        
 		if ($file === null)
         {
-			$file = $input->get($field->code);
+            if ($file = $input->get($field->code))
+            {
+            }
+            else if ($fileBlob) 
+            {
+                if (strpos($fileBlob, 'data:') === 0)
+                {
+                    $fileBlob = explode(',', $fileBlob)[1];
+                }
+                
+                $fileTmp = tmpfile();
+                fwrite($fileTmp, base64_decode($fileBlob));
+
+                $file = stream_get_meta_data($fileTmp)["uri"];
+            }
 
             if ($file && file_exists($file))
             {
                 $basename = pathinfo($file, PATHINFO_BASENAME);
                 $size = filesize($file);
 
-                $finfo = finfo_open(FILEINFO_MIME_TYPE); 
-                $mime = finfo_file($finfo, $file);
-                finfo_close($finfo); 
+                $mime = file_mime_type($file);
 
                 $file = app('\Symfony\Component\HttpFoundation\File\UploadedFile', [$file, $basename, $mime, $size, null, true]);
             }
@@ -169,6 +209,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
             $model->{$field->code}->upload($protectedFileUpload);
 
+            if (is_resource($fileTmp))
+            {
+                fclose($fileTmp);
+            }
+            
 			/*
 			 * remove old file unlinked from current $model
 			 */
@@ -184,7 +229,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     public function validateUpload($protectedFile, $field)
     {
         $mimeType = $protectedFile->getMimeType();
-        $extension = $protectedFile->getClientOriginalExtension();
+        $extension = $protectedFile->getExtensionExpected();
         
         if ($field->upload_allow_mime->count() && !in_array($mimeType, $field->upload_allow_mime->all(), true))
         {

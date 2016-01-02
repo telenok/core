@@ -32,7 +32,7 @@ class UploadedFile {
     
     public function getModelExtension()
     {
-        $extension = $this->getClientOriginalExtension();
+        $extension = $this->getExtensionExpected();
         
         try
         {
@@ -53,7 +53,7 @@ class UploadedFile {
     
     public function generateFileName()
     {
-        return str_random(30) . '.' . $this->getClientOriginalExtension();
+        return str_random(30) . '.' . $this->getExtensionExpected();
     }
 
     public function setFile(\Symfony\Component\HttpFoundation\File\UploadedFile $file)
@@ -68,6 +68,11 @@ class UploadedFile {
         return $this->file;
     }
 
+    public function getExtensionExpected()
+    {
+        return $this->getClientOriginalExtension() ?: $this->guessExtension();
+    }
+    
     public function __call($method, $args)
     {
         if (method_exists($this->getFile(), $method)) 

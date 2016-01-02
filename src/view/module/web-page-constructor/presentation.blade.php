@@ -391,7 +391,7 @@
                             .modal('show')
                             .on('hidden', function() 
                             { 
-                                jQuery(this).html(""); 
+                                jQuery(this).empty(); 
                             });
 					})
                     .fail(function(jqXHR, textStatus, errorThrown)
