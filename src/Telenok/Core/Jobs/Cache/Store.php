@@ -6,11 +6,13 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class FieldUpload extends Job implements SelfHandling, ShouldQueue
+class Store extends Job implements SelfHandling, ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
     protected $collection;
+
+    const QUEUES_CACHE = 'cache_image_processing';
 
     public function __construct($data = [])
     {
@@ -36,7 +38,7 @@ class FieldUpload extends Job implements SelfHandling, ShouldQueue
                 array_get($this->collection, 'storage_cache_key'),
                 array_get($this->collection, 'width'),
                 array_get($this->collection, 'height'),
-                array_get($this->collection, 'to_do')
+                array_get($this->collection, 'action')
             );
         }
     }

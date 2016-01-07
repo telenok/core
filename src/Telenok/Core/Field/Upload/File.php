@@ -2,14 +2,16 @@
 
 class File {
 
+    use \Illuminate\Queue\InteractsWithQueue, 
+        \Illuminate\Queue\SerializesModels, 
+        \Illuminate\Foundation\Bus\DispatchesJobs;
+    
 	protected $model;
 	protected $field;
 	protected $disk;
 	protected $diskCache;
     protected $storageKey;
     protected $storageCacheKey;
-
-    const QUEUES_CACHE = 'field_upload_cache';
 
     public function __construct($model, $field)
     {
@@ -25,13 +27,11 @@ class File {
 		return route('telenok.download.stream.file', ['modelId' => $this->model->id, 'fieldId' => $this->field->id]);
 	}
 
-	public function downloadImageLink($width = 0, $height = 0, $toDo = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
+	public function downloadImageLink($width = 0, $height = 0, $action = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
 	{
-        $filenameCached = $this->filenameCached($width, $height, $toDo);
-
-        if (!$this->existsCache($filenameCached))
+        if (!$this->existsCache($width, $height, $action))
         {
-            $this->createCache($width, $height, $toDo);
+            $this->createCache($width, $height, $action);
         }
 
         if (\App\Telenok\Core\Security\Acl::subjectAny(['user_any', 'user_unauthorized'])
@@ -41,11 +41,12 @@ class File {
 
             if ($urlPattern instanceof \Closure)
             {
-                return $urlPattern($this, $width, $height, $toDo);
+                
+                return $urlPattern($this->filename(), $width, $height, $action);
             }
             else
             {
-                return trim($urlPattern, '\\/') . '/' . $this->pathCache($filenameCached);
+                return trim($urlPattern, '\\/') . '/' . $this->pathCache($width, $height, $action);
             }
         }
         else
@@ -53,7 +54,7 @@ class File {
             return route('telenok.download.image.file', [
                     'modelId' => $this->model->id, 
                     'fieldId' => $this->field->id, 
-                    'toDo' => $toDo, 
+                    'toDo' => $action, 
                     'width' => (int)$width,
                     'height' => (int)$height,
                 ]);
@@ -155,31 +156,26 @@ class File {
             ]);
 	}
 
-	public function pathCache($filename = '', $width = 0, $height = 0, $toDo = '')
+	public function pathCache($width = 0, $height = 0, $action = '')
 	{
-        return implode('/', [
-                trim(config('filesystems.cache.protected'), '\\/'), 
-                substr($filename?:$this->filenameCached($width, $height, $toDo), 0, 2), 
-                substr($filename?:$this->filenameCached($width, $height, $toDo), 2, 2),
-                $filename?:$this->filenameCached($width, $height, $toDo)
-            ]);
+        return \App\Telenok\Core\Support\File\StoreCache::pathCache($this->filename(), $width, $height, $action);
 	}
 
-	public function createCache($width = 0, $height = 0, $toDo = '')
+	public function createCache($width = 0, $height = 0, $action = '')
     {
-        $job = new \App\Telenok\Core\Jobs\Cache\FieldUpload([
+        $job = new \App\Telenok\Core\Jobs\Cache\Store([
             'path' => $this->path(),
-            'path_cache' => $this->pathCache(null, $width, $height, $toDo),
+            'path_cache' => $this->pathCache($width, $height, $action),
             'storage_key' => $this->getStorageKey(),
             'storage_cache_key' => $this->getStorageCacheKey(),
             'width' => $width,
             'height' => $height,
-            'to_do' => $toDo,
+            'action' => $action,
         ]);
         
         if (config('image.cache.queue'))
         {
-            $job->onQueue(static::QUEUES_CACHE);
+            $job->onQueue(\App\Telenok\Core\Jobs\Cache\Store::QUEUES_CACHE);
 
             $this->dispatch($job);
         }
@@ -194,18 +190,9 @@ class File {
         return $this->model->{$this->field->code . '_file_name'};
     }
 
-    public function filenameCached($width = 0, $height = 0, $toDo = '')
+    public function filenameCache($width = 0, $height = 0, $action = '')
     {
-        if (!$width && !$height)
-        {
-            return $this->filename();
-        }
-        else
-        {
-            return pathinfo($this->filename(), PATHINFO_FILENAME) 
-                . "_{$width}_{$height}_{$toDo}" 
-                . (($ext = pathinfo($this->filename(),  PATHINFO_EXTENSION)) ? ".{$ext}" : '');
-        }
+        return \App\Telenok\Core\Support\File\StoreCache::filenameCache($this->filename(), $width, $height, $action);
     }
 
 	public function dir()
@@ -239,9 +226,11 @@ class File {
 		}
 	}
 
-	public function sizeCache($filename)
+	public function sizeCache($width = 0, $height = 0, $action = '')
 	{
-		if ($this->existsCache($filename))
+        $filename = $this->filenameCache($width, $height, $action);
+
+		if ($this->existsCache($width, $height, $action))
 		{
 			return $this->diskCache()->size($filename);
 		}
@@ -259,31 +248,16 @@ class File {
 		}
 	}
 
-	public function existsCache($filename)
+	public function existsCache($width = 0, $height = 0, $action = '')
 	{
-		try
-		{
-			return $this->diskCache()->exists($filename);
-		} 
-		catch (\Exception $ex) 
-		{
-			return FALSE;
-		}
+        $filename = $this->filenameCache($width, $height, $action);
+
+        return \App\Telenok\Core\Support\File\StoreCache::existsCache($this->getStorageCacheKey(), $filename);
 	}
 
 	public function isImage()
     {
-		if ($this->exists())
-		{
-			if ($ext = $this->extension())
-			{
-				return in_array($ext, \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
-			}
-			else
-			{
-				return in_array($this->mimeType(), \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE, true);
-			}
-		}
+        return in_array($this->extension(), \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
     }
 
     public function removeCachedFile($path = '')

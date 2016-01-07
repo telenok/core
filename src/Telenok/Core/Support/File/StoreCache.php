@@ -2,7 +2,7 @@
 
 class StoreCache {
 
-    public static function storeFile($pathLocal, $pathCache, $storageKey = '', $storageacheKey = '', $width = 0, $height = 0, $toDo = '')
+    public static function storeFile($pathLocal, $pathCache, $storageKey = '', $storageacheKey = '', $width = 0, $height = 0, $action = '')
     {
         $storage = app('filesystem')->disk($storageKey);
         $storeageCache = app('filesystem')->disk($storageacheKey);
@@ -11,14 +11,14 @@ class StoreCache {
 
         try
         {
-            if (\App\Telenok\Core\Support\Image\Processing::isImage($pathLocal) && $width && $height)
+            if (\App\Telenok\Core\Support\Image\Processing::isImage($pathLocal) && ($width || $height))
             {
                 $extension = pathinfo($pathLocal, PATHINFO_EXTENSION);
 
                 $imageProcess = app('\App\Telenok\Core\Support\Image\Processing');
                 $imageProcess->setImage($imageProcess->imagine()->load($content));
 
-                $content = $imageProcess->process($width, $height, $toDo)->get($extension, config('image.options'));
+                $content = $imageProcess->process($width, $height, $action)->get($extension, config('image.options'));
             }
 
             $storeageCache->put($pathCache, $content, \Illuminate\Contracts\Filesystem\Filesystem::VISIBILITY_PUBLIC);
@@ -50,6 +50,37 @@ class StoreCache {
                     catch (\Exception $e) {}
                 }
             }
+        }
+    }
+    
+	public static function existsCache($storageKey = '', $filename = '')
+	{
+        return app('filesystem')->disk($storageKey)->exists($filename);
+	}
+    
+	public static function pathCache($filename = '', $width = 0, $height = 0, $action = '')
+	{
+        $filename = static::filenameCache($filename, $width, $height, $action);
+
+        return implode('/', [
+                trim(config('filesystems.cache.directory'), '\\/'), 
+                substr($filename, 0, 2), 
+                substr($filename, 2, 2),
+                $filename
+            ]);
+	}
+    
+    public static function filenameCache($filename = '', $width = 0, $height = 0, $action = '')
+    {
+        if (!$width && !$height)
+        {
+            return md5($filename);
+        }
+        else
+        {
+            return md5(pathinfo($filename, PATHINFO_FILENAME)
+                . "_{$width}_{$height}_{$action}" 
+                . (($ext = pathinfo($filename,  PATHINFO_EXTENSION)) ? ".{$ext}" : ''));
         }
     }
 }

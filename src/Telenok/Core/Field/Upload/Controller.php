@@ -12,23 +12,21 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     public function modalCropperContent()
     {
+        $cropper = new \Telenok\Core\Support\Image\Cropper();
+
         if ($this->getRequest()->input('model_id'))
         {
     		$model = \App\Telenok\Core\Model\Object\Sequence::getModel($this->getRequest()->input('model_id'));
         	$field = \App\Telenok\Core\Model\Object\Sequence::getModel($this->getRequest()->input('field_id'));
+            
+            $cropper->setPath($model->{$field->code}->exists() ? $model->{$field->code}->downloadImageLink() : '');
         }
-        else
-        {
-    		$model = null;
-        	$field = null;
-        }
+        
+        $cropper->setAllowNew((int)$this->getRequest()->input('allow_new'));
+        $cropper->setAllowBlob((int)$this->getRequest()->input('allow_blob'));
+        $cropper->setJsUnique($this->getRequest()->input('js_unique'));
 
-        return view('core::field.upload.modal-cropper', [
-            'controller' => $this,
-            'model' => $model,
-            'field' => $field,
-            'jsUnique' => $this->getRequest()->input('js_unique'),
-        ])->render();
+        return $cropper->getContent();
     }
     
 	public function getModelField($model, $field)
@@ -275,11 +273,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 			{
 				if ($key == 'upload_allow_ext')
 				{
-					$value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION);
+					$value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::SAFE_EXTENSION);
 				}
 				else if ($key == 'upload_allow_mime')
 				{
-					$value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE);
+					$value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::SAFE_MIME_TYPE);
 				}
 				else if ($key == 'upload_storage')
 				{

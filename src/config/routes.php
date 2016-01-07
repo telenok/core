@@ -1,8 +1,6 @@
 <?php
 
     get('browser/file', ['as' => 'browse.file', 'uses' => "\App\Telenok\Core\Controller\Frontend\Controller@validateSession"]);
-    get('cache/image/{p}', ['as' => 'image.cache', 'uses' => "\App\Telenok\Core\Controller\Frontend\Controller@cachedImageProcessing"])
-            ->where('p', '.*');
 
 	get('validate/session', array('as' => 'validate.session', 'uses' => "\App\Telenok\Core\Controller\Frontend\Controller@validateSession"));
 
@@ -28,8 +26,7 @@
     
 	// Object Field Upload
 	get('download/stream/{modelId}/{fieldId}', array('as' => 'telenok.download.stream.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@stream"));
-	get('download/image/{modelId}/{fieldId}/{toDo}/{width}/{height}', array('as' => 'telenok.download.image.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@image"));
-
+	get('download/image/{modelId}/{fieldId}/{width}/{height}/{action}', array('as' => 'telenok.download.image.file', 'uses' => "\App\Telenok\Core\Field\Upload\Download@image"));
 
 
 	// Module Objects\Lists
@@ -88,9 +85,15 @@
  	get('field/upload/modal-cropper', array('as' => 'telenok.field.upload.modal-cropper', 'uses' => "\App\Telenok\Core\Field\Upload\Controller@modalCropperContent"));
 
 	get('ckeditor.custom.config.js', array('as' => 'telenok.ckeditor.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@getCKEditorConfig"));	
-	get('ckeditor/browser/file', array('as' => 'telenok.ckeditor.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@browseFile"));	
+	get('ckeditor/browser/file', array('as' => 'telenok.ckeditor.file', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@browseFile"));	
+	get('ckeditor/browser/file/list', array('as' => 'telenok.ckeditor.storage.list', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@storageFileList"));	
 	get('ckeditor/browser/image', array('as' => 'telenok.ckeditor.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@browseImage"));	
+	get('ckeditor/browser/model/list', array('as' => 'telenok.ckeditor.model.list', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@modelFileList"));	
 	get('packages/telenok/core/js/ckeditor_addons/plugins/widget_inline/plugin.js', array('as' => 'telenok.ckeditor.plugin.inline-widget.config', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@getCKEditorPluginWidgetInline"));	
+ 	get('ckeditor/modal-cropper', array('as' => 'telenok.ckeditor.modal-cropper', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@modalCropperContent"));
+ 	post('ckeditor/image/create', array('as' => 'telenok.ckeditor.image.create', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@imageCreate"));
+ 	post('ckeditor/directory/create', array('as' => 'telenok.ckeditor.image.create', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@directoryCreate"));
+ 	post('ckeditor/file/upload', array('as' => 'telenok.ckeditor.file.upload', 'uses' => "App\Telenok\Core\Support\Config\CKEditor@uploadFile"));
 
     
 	// Module Dashboard 

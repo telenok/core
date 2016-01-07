@@ -12,13 +12,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-9">
-                        <!-- <h3 class="page-header">Demo:</h3> -->
                         <div class="cropping-img-container">
-                            @if ($model)
-                            <img id="image{{$jsUnique}}" src="{!! $model->{$field->code}->downloadImageLink() !!}" alt="">
-                            @else
-                            <img id="image{{$jsUnique}}" src="clear.gif" alt="">
-                            @endif
+                            <img id="image{{$jsUnique}}" src="{!! $path !!}" alt="">
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -205,7 +200,7 @@
                         </div>
 
                         <!-- Show the cropped image in modal -->
-                        <div class="modal fade cropping-docs-cropped" id="getCroppedCanvasModal{{$jsUnique}}" aria-hidden="true" 
+                        <div class="modal cropping-docs-cropped" id="getCroppedCanvasModal{{$jsUnique}}" aria-hidden="true" 
                              aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -215,12 +210,32 @@
                                     </div>
                                     <div class="modal-body"></div>
                                     <div class="modal-footer">
+
+                                        @if ($allowNew)
+                                        <span class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" type="button" 
+                                                    id="new-blob-{{$jsUnique}}" data-toggle="dropdown" 
+                                                    aria-haspopup="true" aria-expanded="true">
+                                                <span class="fa fa-upload"></span>
+                                                New as ...
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="new-blob-{{$jsUnique}}" 
+                                                id="new-select-{{$jsUnique}}">
+                                                <li><a href="#" data-mime='image/jpeg'>New as JPEG</a></li>
+                                                <li><a href="#" data-mime='image/gif'>New as GIF</a></li>
+                                                <li><a href="#" data-mime='image/png'>New as PNG</a></li>
+                                            </ul>
+                                        </span>
+                                        @endif
+
+                                        @if ($allowBlob || true)
                                         <span class="dropdown">
                                             <button class="btn btn-default dropdown-toggle" type="button" 
                                                     id="upload-blob-{{$jsUnique}}" data-toggle="dropdown" 
                                                     aria-haspopup="true" aria-expanded="true">
                                                 <span class="fa fa-upload"></span>
-                                                Set to upload
+                                                Set as ...
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="upload-blob-{{$jsUnique}}" 
@@ -230,6 +245,8 @@
                                                 <li><a href="#" data-mime='image/png'>Set as PNG</a></li>
                                             </ul>
                                         </span>
+                                        @endif
+
                                         <a class="btn btn-primary" id="download{{$jsUnique}}" href="javascript:void(0);" download="cropped.png">Download</a>
                                         <button class="btn" data-dismiss="modal"> Закрыть </button>
                                     </div>
@@ -502,7 +519,8 @@
         var $image = jQuery('#image{{$jsUnique}}');
         var $modal = $image.closest('.modal');
         var $download = jQuery('#download{{$jsUnique}}');
-        var $upload = jQuery('#upload-select-{{$jsUnique}}');
+        var $blob = jQuery('#upload-select-{{$jsUnique}}');
+        var $new = jQuery('#new-select-{{$jsUnique}}');
         var $dataX = jQuery('#dataX{{$jsUnique}}');
         var $dataY = jQuery('#dataY{{$jsUnique}}');
         var $dataHeight = jQuery('#dataHeight{{$jsUnique}}');
@@ -521,13 +539,24 @@
             $croppedCanvasModal.remove();
         });
 
-        $upload.on('click', 'a', function (event)
+        $blob.on('click', 'a', function (event)
         {
             event.preventDefault();
 
             $modal.data('setImageBlob')($image.cropper('getCroppedCanvas').toDataURL(jQuery(this).data('mime'), 1));
-            
+
             $croppedCanvasModal.modal('hide');
+            $modal.modal('hide');
+        });
+
+        $new.on('click', 'a', function (event)
+        {
+            event.preventDefault();
+
+            $modal.data('newImageCreate')({'mime': jQuery(this).data('mime'), blob: $image.cropper('getCroppedCanvas').toDataURL(jQuery(this).data('mime'), 1)});
+
+            $croppedCanvasModal.modal('hide');
+            $modal.modal('hide');
         });
 
         $image.one("load", function() 
@@ -657,7 +686,18 @@
                             if (result) {
 
                                 // Bootstrap's Modal
-                                $croppedCanvasModal.modal().find('.modal-body').html(result);
+                                $croppedCanvasModal.modal('show').find('.modal-body').html(result);
+
+                                jQuery('canvas', $croppedCanvasModal).addClass('img-responsive');
+
+                                var maxZ = 0;
+
+                                jQuery('*').each(function()
+                                {
+                                    if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
+                                });
+
+                                $croppedCanvasModal.css('zIndex', maxZ);
 
                                 if (!$download.hasClass('disabled')) {
                                     $download.attr('href', result.toDataURL());

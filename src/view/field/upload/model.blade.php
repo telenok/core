@@ -20,11 +20,15 @@
             @if ($model->{$field->code}->exists())
 
                 @if ($model->{$field->code}->isImage())
-                <img src="{!! $model->{$field->code}->downloadImageLink(140, 140) !!}" title="{{$model->translate('title')}}" />
+                <img src="{!! $model->{$field->code}->downloadImageLink(140, 140) !!}" title="{{$model->translate('title')}}" 
+                    id="image-preview-{{$uniqueId}}" style="width: 140px; height: 140px;"/>
                 <br>
                 @endif
             @elseif ($model->{$field->code}->path())
                 <i class="fa fa-exclamation-triangle"></i> Empty
+                <br>
+            @else
+                <img src="clear.gif" id="image-preview-{{$uniqueId}}" style="display: none; width: 140px; height: 140px;"/>
                 <br>
             @endif
 
@@ -49,10 +53,6 @@
                         <li><a href="#" 
                                onclick="showEditForm{{$jsUnique}}(0, 0); return false;">
                             <i class="fa fa-file-image-o"></i> Select image upload</a>
-                        </li>
-                        
-                        <li><a href="#" onclick="return false;"> 
-                            <i class="fa fa-upload"></i> Select file upload</a>
                         </li>
                         
                         @if ($model->{$field->code}->exists())
@@ -114,6 +114,8 @@ function showEditForm{{$jsUnique}}(model_id, field_id)
     $modal.data('setImageBlob', function(data)
     {
         jQuery('#{{$field->code}}-{{$uniqueId}}-blob').val(data);
+        
+        jQuery('#image-preview-{{$uniqueId}}').attr('src', data).show();
     });
 
     $modal.on('hidden.bs.modal', function ()

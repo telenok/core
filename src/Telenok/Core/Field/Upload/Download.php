@@ -18,9 +18,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		{
 			$fileObject = $model->{$field->code};
 
-            $filenameCached = $fileObject->filenameCached();
-
-            if (!$fileObject->existsCache($filenameCached))
+            if (!$fileObject->existsCache())
             {
                 $fileObject->createCache();
             }
@@ -69,7 +67,7 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 	}
 
-	public function image($modelId, $fieldId, $toDo, $width, $height)
+	public function image($modelId, $fieldId, $width, $height, $action)
 	{
 		$model = \App\Telenok\Core\Model\Object\Sequence::getModel($modelId);
 		$field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
@@ -108,14 +106,14 @@ class Download extends \Telenok\Core\Interfaces\Controller\Controller {
 			$height = intval($height);
 
 			$fs = $fileObject->diskCache()->getDriver();
-			$stream = $fs->readStream($pathCache = $fileObject->pathCache(null, $width, $height, $toDo));
+			$stream = $fs->readStream($pathCache = $fileObject->pathCache($width, $height, $action));
 
 			return \Response::stream(function() use($stream) {
 								fpassthru($stream);
 							}, 200, [
 								"Content-Type" => $fileObject->mimeType(),
 								"Content-Length" => $fileObject->mimeType(),
-								"Etag" => ($m5 = md5($pathCache . $width . $height . $toDo)),
+								"Etag" => ($m5 = md5($pathCache . $width . $height . $action)),
 								"Last-Modified" => $model->updated_at->toRfc2822String(),
 								"Cache-Control" => 'private, must-revalidate',
 								"Expires" => date(\DateTime::RFC822, strtotime("20 day")),

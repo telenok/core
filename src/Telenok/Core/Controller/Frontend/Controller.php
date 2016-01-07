@@ -22,36 +22,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller
         });
     }
     
-    public function cachedImageProcessing()
-    {
-        if (config('image.cache.queue'))
-        {
-            $job = new \App\Telenok\Core\Jobs\Image\Processing($this->getRequest()->input());
-            $job->onQueue(\App\Telenok\Core\Support\Image\Processing::QUEUES_CATEGORY);
-
-            $this->dispatch($job);
-        }
-        else
-        {
-            $request = $this->getRequest();
-
-            $path = $request->input('path');
-            $width = $request->input('width');
-            $height = $request->input('height');
-            $key = $request->input('key'); 
-            $todo = $request->input('todo'); 
-
-            if ($key !== md5(config('app.key') . $path . (int)$width . (int)$height . $todo))
-            {
-                throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
-            }
-
-            $processing = app('\App\Telenok\Core\Support\Image\Processing');
-            $processing->cachingImage($path, $width, $height, $todo);
-        }
-
-        sleep(10);
-
-        header('Location: ' . \Request::url(), true, 303);
+	public function getContent()
+	{
+		return view('page.home');
     }
 }

@@ -4,6 +4,11 @@ class Processing {
 
     const IMAGE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif'];
     const IMAGE_MIME_TYPE = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'];
+    const SAFE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif', 'doc', 'txt', 'pdf', 'docx', 'xls', 'ppt'];
+    const SAFE_MIME_TYPE = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 
+                            'application/msword', 'text/plain', 'application/pdf',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/vnd.ms-excel', 'application/vnd.ms-powerpoint'];
     const TODO_RESIZE = 'resize';
     const TODO_RESIZE_PROPORTION = 'resize_proportion';
     
@@ -50,13 +55,13 @@ class Processing {
 		return $this->image;
 	}
 
-	public function process($width, $height, $toDo)
+	public function process($width, $height, $action)
 	{
-        $str = "w:{$width}h:{$height}todo:{$toDo}";
+        $str = "w:{$width}h:{$height}todo:{$action}";
         
         if ($this->createLock($str))
         {
-            switch ($toDo)
+            switch ($action)
             {
                 case static::TODO_RESIZE_PROPORTION:
                     $return = $this->resizeProportion($width, $height);

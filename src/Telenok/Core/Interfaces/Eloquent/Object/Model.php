@@ -543,7 +543,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 			}
 			else
 			{
-				if ($this instanceof \Telenok\Core\Model\Object\Field && ($fieldController = $f_->get($this->key)) && (in_array($key, $fieldController->getSpecialField($this), true) || in_array($key, $fieldController->getSpecialDateField($this), true)) &&
+				if ($this instanceof \Telenok\Core\Model\Object\Field 
+                        && ($fieldController = $f_->get($this->key)) 
+                            && (in_array($key, $fieldController->getSpecialField($this), true) 
+                                || in_array($key, $fieldController->getSpecialDateField($this), true)) 
+                    &&
 					(
 						(!$this->exists && !app('auth')->can('create', 'object_type.object_field')) ||
 						($this->exists && !app('auth')->can('update', $this->getKey()))

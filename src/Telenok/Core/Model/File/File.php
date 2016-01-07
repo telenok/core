@@ -7,13 +7,8 @@ class File extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	public function isImage()
 	{
-		return $this->exists && in_array($this->uploadFileFileMimeType->mime_type, [
-			'image/gif',
-			'image/jpeg',
-			'image/pjpeg',
-			'image/png',
-			'image/tiff',
-		], true);
+		return $this->exists && in_array($this->uploadFileFileMimeType->mime_type, 
+            \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE, true);
 	}
 
     public function category()
