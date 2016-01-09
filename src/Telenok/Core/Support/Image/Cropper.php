@@ -2,10 +2,12 @@
 
 class Cropper extends \App\Telenok\Core\Controller\Backend\Controller {
 
+    protected $key = 'cropper';
     protected $path;
     protected $allowNew = true;
     protected $allowBlob = true;
     protected $view = 'core::special.cropper.modal';
+	protected $languageDirectory = 'support';
     protected $jsUnique;
 
     public function setView($param)

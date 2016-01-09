@@ -8,6 +8,7 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
     protected $key = 'backend-password-reset'; 
     protected $emailView = 'core::email.password-reset';
     protected $resetView = 'core::controller.backend-password-reset';
+    protected $languageDirectory = 'controller';
 
     use \Illuminate\Foundation\Auth\ResetsPasswords;
     use \Illuminate\Foundation\Validation\ValidatesRequests;
@@ -27,8 +28,6 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
         );
         
         $this->auth = $auth; 
-        
-        $this->languageDirectory = 'controller';
     }
 
     /**

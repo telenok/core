@@ -15,11 +15,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
 	protected $routeWizardCreate;
 	protected $routeWizardEdit;
 	protected $routeWizardChoose;
-
-	public function __construct()
-	{
-		$this->languageDirectory = 'field';
-	}
+    protected $languageDirectory = 'field';
 
 	public function getViewModel()
 	{

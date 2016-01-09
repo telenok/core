@@ -19,7 +19,6 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Backend\Control
     {
         $this->auth = $auth;
         $this->registrar = $registrar;
-        $this->languageDirectory = 'controller';
     }
 
     /**

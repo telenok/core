@@ -13,26 +13,86 @@
                     <div class="tabbable">
                         <ul class="nav nav-tabs" id="myTab">
                             <li class="active">
-                                <a data-toggle="tab" href="#public-file-list">
+                                <a data-toggle="tab" href="#tab-storage-list-{{$jsUnique}}">
                                     <i class="green ace-icon fa fa-home bigger-120"></i>
-                                    Public file list
+                                    {{$controller->LL('tab.title.file-list')}}
                                 </a>
                             </li>
 
                             <li>
-                                <a data-toggle="tab" href="#database-file-list">
+                                <a data-toggle="tab" href="#tab-model-list-{{$jsUnique}}">
                                     <i class="green ace-icon fa fa-home bigger-120"></i>
-                                    Database file list
+                                    {{$controller->LL('tab.title.model-list')}}
                                 </a>
                             </li>
                         </ul>
 
                         <div class="tab-content">
-                            <div id="public-file-list-{{$jsUnique}}" class="tab-pane fade in active">
+                            <div id="tab-storage-list-{{$jsUnique}}" class="tab-pane fade in active">
+
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="control-label" for="select-directory-{{$jsUnique}}">{{$controller->LL('select.directory')}}</label>
+                                            <select class="form-control" id="select-directory-{{$jsUnique}}">
+
+                                                <?php
+
+                                                    $collection = collect($controller->storageDirectoryList())->transform(function($item) use ($controller)
+                                                    {
+                                                        return trim(str_replace($controller->getRootDirectory(), '', $item), '\\/');
+                                                    });
+
+                                                ?>
+
+                                                <option value="" selected="selected">/</option>
+
+                                                @foreach($collection as $c)
+                                                <option value="{{$c}}">{{$c}}</option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label" for="storage-search-file-{{$jsUnique}}">{{$controller->LL('search.filename')}}</label>
+                                            <input type="text" value="" id="storage-search-file-{{$jsUnique}}" class="form-control" placeholder="{{$controller->LL('btn.search')}}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="control-label" for="actions-storage-{{$jsUnique}}" role='group'>{{$controller->LL('actions')}}</label>
+                                        <div class="btn-group">
+                                            <button type="button" id="actions-storage-{{$jsUnique}}" class="btn btn-default dropdown-toggle"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Choose action <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#create-directory-{{$jsUnique}}">{{$controller->LL('create.directory')}}</a></li>
+                                                <li><a href="javascript:void(0);" id="dropdown-upload-directory-{{$jsUnique}}">{{$controller->LL('upload.files')}}</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ul class="row" id='storage-list-{{$jsUnique}}' style="padding: 0 0 0 0; margin: 15px 0 0 0;">
+                                </ul>
 
                             </div>
 
-                            <div id="database-file-list-{{$jsUnique}}" class="tab-pane fade">
+                            <div id="tab-model-list-{{$jsUnique}}" class="tab-pane fade">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label" for="model-search-file-{{$jsUnique}}">{{$controller->LL('search.filename')}}</label>
+                                            <input type="text" value="" id="model-search-file-{{$jsUnique}}" class="form-control" placeholder="{{$controller->LL('btn.search')}}"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ul class="row" id='model-list-{{$jsUnique}}' style="padding: 0 0 0 0; margin: 15px 0 0 0;">
+                                </ul>
 
                             </div>
                         </div>
@@ -63,10 +123,30 @@ function getStorageList{{$jsUnique}}()
     })
     .done(function(data)
     {
-        jQuery("#public-file-list-{{$jsUnique}}").html(data);
+        jQuery("#storage-list-{{$jsUnique}}").html(data);
+    });
+}
+ 
+
+function getModelList{{$jsUnique}}(name)
+{
+    jQuery.ajax({
+        url: "{!! route('telenok.ckeditor.model.list') !!}",
+        dataType: 'html',
+        data: {
+            allow_new: 1,
+            allow_blob: 0,
+            name: name ? name : '',
+            jsUnique: "{{$jsUnique}}"
+        }
+    })
+    .done(function(data)
+    {
+        jQuery("#model-list-{{$jsUnique}}").html(data);
     });
 }
 
 getStorageList{{$jsUnique}}();
+getModelList{{$jsUnique}}();
 
 </script>

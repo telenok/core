@@ -1,144 +1,154 @@
-@extends('core::layout.backend')
 
-@section('head')
-    <title>File browse</title>
-    @parent
-@stop
+<div class="modal-dialog" id="modal-dialog-{{$jsUnique}}" style="width: 1210px;" role="document">
+    <div class="modal-content">
 
-@section('body')
-    <body class="no-skin telenok-backend">
-        <div class="main-container">
-            <div class="main-content clearfix">
+        <div class="modal-header table-header">
+            <button data-dismiss="modal" class="close" type="button">×</button>
+            <h4>{{ $controller->LL('wizard.file.header') }}</h4>
+        </div>
+        <div class="modal-body" style="padding: 15px; position: relative;">
 
-                
-                
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="tabbable">
-                            <ul class="nav nav-tabs" id="myTab">
-                                <li class="active">
-                                    <a data-toggle="tab" href="#public-file-list">
-                                        <i class="green ace-icon fa fa-home bigger-120"></i>
-                                        Public file list
-                                    </a>
-                                </li>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active">
+                                <a data-toggle="tab" href="#tab-storage-list-{{$jsUnique}}">
+                                    <i class="green ace-icon fa fa-home bigger-120"></i>
+                                    {{$controller->LL('tab.title.file-list')}}
+                                </a>
+                            </li>
 
-                                <li>
-                                    <a data-toggle="tab" href="#database-file-list">
-                                        <i class="green ace-icon fa fa-home bigger-120"></i>
-                                        Database file list
-                                    </a>
-                                </li>
-                            </ul>
+                            <li>
+                                <a data-toggle="tab" href="#tab-model-list-{{$jsUnique}}">
+                                    <i class="green ace-icon fa fa-home bigger-120"></i>
+                                    {{$controller->LL('tab.title.model-list')}}
+                                </a>
+                            </li>
+                        </ul>
 
-                            <div class="tab-content">
-                                <div id="public-file-list" class="tab-pane fade in active">
-                                
-                                    <ul class="row">
-                                        @foreach(app('\App\Telenok\Core\Model\Object\Field')->get() as $k => $image)
+                        <div class="tab-content">
+                            <div id="tab-storage-list-{{$jsUnique}}" class="tab-pane fade in active">
 
-                                        <li class="col-lg-3 col-sm-6 col-xs-12">
-                                            <div class="thumbnail search-thumbnail">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label class="control-label" for="select-directory-{{$jsUnique}}">{{$controller->LL('select.directory')}}</label>
+                                            <select class="form-control" id="select-directory-{{$jsUnique}}">
 
-                                                <img data-src="holder.js/100px200?theme=gray" class="media-object" alt="100%x200" style="height: 200px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22284%22%20height%3D%22200%22%20viewBox%3D%220%200%20284%20200%22%20preserveAspectRatio%3D%22none%22%3E%3C!--%0ASource%20URL%3A%20holder.js%2F100px200%3Ftheme%3Dgray%0ACreated%20with%20Holder.js%202.8.0.%0ALearn%20more%20at%20http%3A%2F%2Fholderjs.com%0A(c)%202012-2015%20Ivan%20Malopinsky%20-%20http%3A%2F%2Fimsky.co%0A--%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%3C!%5BCDATA%5B%23holder_1519d6f04ac%20text%20%7B%20fill%3A%23AAAAAA%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%5D%5D%3E%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1519d6f04ac%22%3E%3Crect%20width%3D%22284%22%20height%3D%22200%22%20fill%3D%22%23EEEEEE%22%2F%3E%3Cg%3E%3Ctext%20x%3D%22102%22%20y%3D%22106.6%22%3E284x200%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
-                                                <div class="caption">
-                                                    <div class="clearfix">
-                                                        <span class="pull-right label label-grey info-label">London</span>
+                                                <?php
 
-                                                    </div>
-
-                                                    <h3 class="search-title">
-                                                        <a class="blue" href="#">{{ $image->translate('title') }}</a>
-                                                    </h3>
-                                                    <p>{{ $image->translate('dedscription') }}</p>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        @if ($k%3 == 0)
-                                        <li class="clearfix visible-lg-block"></li>
-                                        @endif
-
-                                        @endforeach
-                                    </ul>
-
-                                    <script type="text/javascript">
-                                        (function()
-                                        {
-                                            var columns = []; 
-
-                                            <?php
-                                            
-                                                $model = app('\App\Telenok\Core\Model\Object\Field');
-                                                $fields = $model->getFieldList(); 
-
-                                            ?>
-
-                                            @foreach($fields as $key => $field)
-
-                                                @if ($key==0)
-                                                    columns.push({ 
-                                                        data : "choose", 
-                                                        title : "{{ $controller->LL('btn.choose') }}", 
-                                                        orderable : false
+                                                    $collection = collect($controller->storageDirectoryList())->transform(function($item) use ($controller)
+                                                    {
+                                                        return trim(str_replace($controller->getRootDirectory(), '', $item), '\\/');
                                                     });
-                                                @endif
 
-                                                columns.push({
-                                                    data : "{{ $field->code }}",
-                                                    title : "{{ $field->translate('title_list') }}", 
-                                                    orderable : {{ (int)$field->allow_sort ? "true" : "false" }}
-                                                });
+                                                ?>
 
-                                            @endforeach
-                                            /*
-                                            telenok.addDataTable({
-                                                domId : 'table-file-list',
-                                                ajax : '{!! URL::route("telenok.module.objects-lists.wizard.list",
-                                                            ['typeId' => \App\Telenok\Core\Model\Object\Type::where('code', 'object_field')
-                                                                ->withPermission()->active()->pluck('id')]) !!}',
-                                                dom : "<'row'<'col-md-6'B><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
-                                                columns : columns,
-                                                pageLength : 10,
-                                                order : []
-                                            });*/
-                                        })();
-                                    </script>
+                                                <option value="" selected="selected">/</option>
 
-                                    
-                                    
+                                                @foreach($collection as $c)
+                                                <option value="{{$c}}">{{$c}}</option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label class="control-label" for="storage-search-file-{{$jsUnique}}">{{$controller->LL('search.filename')}}</label>
+                                            <input type="text" value="" id="storage-search-file-{{$jsUnique}}" class="form-control" placeholder="{{$controller->LL('btn.search')}}"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="control-label" for="actions-storage-{{$jsUnique}}" role='group'>{{$controller->LL('actions')}}</label>
+                                        <div class="btn-group">
+                                            <button type="button" id="actions-storage-{{$jsUnique}}" class="btn btn-default dropdown-toggle"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Choose action <i class="ace-icon fa fa-angle-down icon-on-right"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#create-directory-{{$jsUnique}}">{{$controller->LL('create.directory')}}</a></li>
+                                                <li><a href="javascript:void(0);" id="dropdown-upload-directory-{{$jsUnique}}">{{$controller->LL('upload.files')}}</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div id="database-file-list" class="tab-pane fade">
-                                    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+                                <ul class="row" id='storage-list-{{$jsUnique}}' style="padding: 0 0 0 0; margin: 15px 0 0 0;">
+                                </ul>
+
+                            </div>
+
+                            <div id="tab-model-list-{{$jsUnique}}" class="tab-pane fade">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label" for="model-search-file-{{$jsUnique}}">{{$controller->LL('search.filename')}}</label>
+                                            <input type="text" value="" id="model-search-file-{{$jsUnique}}" class="form-control" placeholder="{{$controller->LL('btn.search')}}"/>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <ul class="row" id='model-list-{{$jsUnique}}' style="padding: 0 0 0 0; margin: 15px 0 0 0;">
+                                </ul>
+
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                
-                <script>
-/*
-                    jQuery(function()
-                    {
-                        jQuery.ajax("{!! 
-                            route(
-                                'telenok.module.objects-lists.wizard.choose', 
-                                [
-                                    'typeId' => \App\Telenok\Core\Model\Object\Type::where('code', 'file')
-                                        ->withPermission()->active()->pluck('id')
-                                ])
-                            !!}")
-                        .done(function(data)
-                        {
-                            jQuery("#public-file-list").html(data.tabContent);
-                        });
-                    });
-*/
-                </script>
+            </div>
 
-            </div>            
         </div>
-	</body>
-@stop
+        <div class="modal-footer">
+            <a class="btn" data-dismiss="modal">{{ $controller->LL('btn.close') }}</a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+function getStorageList{{$jsUnique}}()
+{
+    jQuery.ajax({
+        url: "{!! route('telenok.ckeditor.storage.list') !!}",
+        dataType: 'html',
+        data: {
+            directory: jQuery('#select-directory-{{$jsUnique}}').val(),
+            allow_new: 1,
+            allow_blob: 1,
+            file_type: 'image',
+            jsUnique: "{{$jsUnique}}"
+        }
+    })
+    .done(function(data)
+    {
+        jQuery("#storage-list-{{$jsUnique}}").html(data);
+    });
+}
+ 
+
+function getModelList{{$jsUnique}}(name)
+{
+    jQuery.ajax({
+        url: "{!! route('telenok.ckeditor.model.list') !!}",
+        dataType: 'html',
+        data: {
+            allow_new: 1,
+            allow_blob: 1,
+            name: name ? name : '',
+            file_type: 'image',
+            jsUnique: "{{$jsUnique}}"
+        }
+    })
+    .done(function(data)
+    {
+        jQuery("#model-list-{{$jsUnique}}").html(data);
+    });
+}
+
+getStorageList{{$jsUnique}}();
+getModelList{{$jsUnique}}();
+
+</script>

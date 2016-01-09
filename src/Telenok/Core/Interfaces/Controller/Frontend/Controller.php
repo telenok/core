@@ -11,19 +11,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $cacheTime = 3600;
 	protected $frontendView = 'core::controller.frontend';
 	protected $backendView = 'core::controller.frontend-container';
+    protected $languageDirectory = 'controller';
 
     protected $cacheKey = 'frontend-controller';
     protected $pageMetaTitle;
     protected $pageMetaDescription;
     protected $pageMetaKeywords;
 
-    public function __construct()
-	{        
-		$this->languageDirectory = 'controller';
-
-		parent::__construct();
-	}
-    
 	public function setCacheTime($param = 0)
 	{
 		$this->cacheTime = min($this->getCacheTime(), $param);

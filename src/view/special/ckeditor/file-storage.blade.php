@@ -1,56 +1,11 @@
-<div class="row">
-    <div class="col-md-8">
-        <div class="form-group">
-            <label class="control-label" for="select-directory-{{$jsUnique}}">Select directory</label>
-            <select class="form-control" id="select-directory-{{$jsUnique}}">
 
-                <?php
-                
-                    $collection = collect($controller->storageDirectoryList())->transform(function($item) use ($controller)
-                    {
-                        return trim(str_replace($controller->getRootDirectory(), '', $item), '\\/');
-                    });
-
-                ?>
-                
-                <option value="">/</option>
-
-                @foreach($collection as $c)
-                    <option value="{{$c}}" @if ($currentDirectory == $c) selected @endif>{{$c}}</option>
-                @endforeach
-
-            </select>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="form-group">
-            <label class="control-label" for="search-file-{{$jsUnique}}">Search file by name</label>
-            <input type="text" value="" id="search-file-{{$jsUnique}}" class="form-control" placeholder="Search file"/>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="btn-group">
-            <label class="control-label" for="actions-{{$jsUnique}}">Actions</label>
-            <button type="button" id="actions-{{$jsUnique}}" class="btn btn-default dropdown-toggle"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Choose action <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a href="javascript:void(0);" data-toggle="modal" data-target="#create-directory-{{$jsUnique}}">Create directory</a></li>
-                <li><a href="javascript:void(0);" id="dropdown-upload-directory-{{$jsUnique}}">Upload files</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<ul class="row" style="padding: 0 0 0 0; margin: 15px 0 0 0;">
 
 <?php 
 
     $i = 0; 
 ?>
     
-    @foreach($files as $file)
+    @foreach($files->all() as $file)
 
 <?php
 
@@ -86,16 +41,14 @@
                         @if ($controller->isImage($file))
                         <button class="btn-file-edit btn btn-info btn-xs"
                             data-filename='{{ pathinfo($file, PATHINFO_BASENAME) }}'
-                            data-src='{!! $controller->urlCache($file, 300, 300, 
-                                \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE) !!}'
-                            >Edit</button>
+                            data-src='{{$file}}'
+                            >{{$controller->LL('btn.edit')}}</button>
                         @endif
 
                         <button class="btn-file-choose btn btn-success btn-xs"
-                            data-filename='{{ $file }}'
-                            data-src='{!! $controller->urlCache($file, 300, 300, 
-                                \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE) !!}'
-                            >Choose</button>
+                            data-filename='{{ pathinfo($file, PATHINFO_BASENAME) }}'
+                            data-src='{{$file}}'
+                            >{{$controller->LL('btn.choose')}}</button>
                     </div>
                 </div>
 
@@ -125,14 +78,14 @@
      aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header table-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="getCroppedCanvasTitle">Create directory</h4>
+                <h4 class="modal-title" id="getCroppedCanvasTitle">{{$controller->LL('create.directory')}}</h4>
             </div>
             <div class="modal-body">
                 
                 <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Name</span>
+                    <span class="input-group-addon" id="basic-addon1">{{$controller->LL('name')}}</span>
                     <input type="text" class="form-control" 
                         id="input-create-directory-{{$jsUnique}}"
                         placeholder="Name" aria-describedby="basic-addon1">
@@ -141,7 +94,7 @@
             </div>
             <div class="modal-footer">
                 <a class="btn btn-success" id="btn-create-directory-{{$jsUnique}}" href="javascript:void(0);">Create</a>
-                <button class="btn" data-dismiss="modal"> Закрыть </button>
+                <button class="btn" data-dismiss="modal"> {{$controller->LL('btn.close')}} </button>
             </div>
         </div>
     </div>
@@ -158,7 +111,7 @@
 
     jQuery('body').append($modalCreateDirectory);
 
-    jQuery('#create-directory-{{$jsUnique}}').on('shown.bs.modal', function ()
+    $modalCreateDirectory.off('shown.bs.modal').on('shown.bs.modal', function ()
     {
         var maxZ = 0;
 
@@ -170,12 +123,12 @@
         jQuery(this).css('zIndex', maxZ);
     });
 
-    jQuery('#select-directory-{{$jsUnique}}').on('change', function()
+    jQuery('#select-directory-{{$jsUnique}}').off('change').on('change', function()
     {
         getStorageList{{$jsUnique}}();
     });
 
-    jQuery('.btn-file-edit', $modal).on('click', function()
+    jQuery('.btn-file-edit', $modal).off('click').on('click', function()
     {
         if (!jQuery('#modal-cropper-{{$jsUnique}}').size())
         {
@@ -184,7 +137,7 @@
 
         var $modalCropper = jQuery('#modal-cropper-{{$jsUnique}}');
 
-        $modalCropper.on('hidden.bs.modal', function ()
+        $modalCropper.off('hidden.bs.modal').on('hidden.bs.modal', function ()
         {
             jQuery(this).empty();
             jQuery('#image{{$jsUnique}}').cropper('destroy');
@@ -216,6 +169,13 @@
             $modalCropper.css('zIndex', maxZ);
         });
 
+        $modalCropper.data('setImageBlob', function(data)
+        {
+            $modal.data('setFileSrc')({src: data});
+
+            $modal.modal('hide');
+        });
+
         $modalCropper.data('newImageCreate', function(data)
         {
             var formData = new FormData();
@@ -225,7 +185,7 @@
             formData.append('directory', jQuery('#select-directory-{{$jsUnique}}').val());
 
             jQuery.ajax({
-                url: "ckeditor/image/create",
+                url: "{{route('telenok.ckeditor.image.create')}}",
                 method: "POST",
                 data: formData,
                 processData: false,
@@ -243,7 +203,7 @@
         });
     });
 
-    jQuery('.btn-file-choose', $modal).on('click', function(event)
+    jQuery('.btn-file-choose', $modal).off('click').on('click', function(event)
     {
         event.preventDefault();
 
@@ -253,14 +213,16 @@
             src: $this.data('src'),
             filename: $this.data('filename')
         });
+        
+        $modal.modal('hide');
     });
 
-    jQuery('#btn-create-directory-{{$jsUnique}}').click(function(event)
+    jQuery('#btn-create-directory-{{$jsUnique}}').off('click').click(function(event)
     {
         event.preventDefault();
-        console.log('asdasasd');
+
         jQuery.ajax({
-            url: "ckeditor/directory/create",
+            url: "{{ route('telenok.ckeditor.directory.create') }}",
             method: "POST",
             data: {
                 directory: jQuery('#select-directory-{{$jsUnique}}').val(),
@@ -269,18 +231,42 @@
         })
         .done(function(data) 
         {
-            jQuery('#select-directory-{{$jsUnique}}').prepend("<option value='" 
-                + data.directory + "' selected='selected'>" 
-                + data.directory + "</option>");
-
             $modalCreateDirectory.modal('hide');
             jQuery('#input-create-directory-{{$jsUnique}}').val("");
+
+            var $select = jQuery('#select-directory-{{$jsUnique}}');
+            
+            $select.prepend("<option value='" 
+                + data.directory + "'>" 
+                + data.directory + "</option>");
+            
+            var $selectList = jQuery('option', $select);
+
+            $selectList.detach().sort(function(a, b)
+            {
+                a = a.value;
+                b = b.value;
+ 
+                return a > b ? 1 : (b > a ? -1 : 0);
+            });
+
+            $select.append($selectList);
+
+            $select.val(data.directory);
+            
+            getStorageList{{$jsUnique}}();
         })
         .fail(function(data) 
         {
             alert("Sorry, cant create directory. Name should contains only alphanumeric symbols.");
         });
     });
+    
+    try
+    {
+        Dropzone.forElement("#dropdown-upload-directory-{{$jsUnique}}").destroy();
+    }
+    catch(e){}
     
     jQuery("#dropdown-upload-directory-{{$jsUnique}}").dropzone({ 
         url: "{{route('telenok.ckeditor.file.upload')}}",
@@ -301,6 +287,16 @@
         }
     });
 
+    jQuery('#storage-search-file-{{$jsUnique}}').off('input').on('input', function()
+    {
+        var str = this.value;
+        jQuery('#storage-list-{{$jsUnique}} li .search-title').each(function()
+        {
+            var text = jQuery(this).text().toLowerCase();
+            (text.indexOf(str) >= 0) ? jQuery(this).closest('li').show() : jQuery(this).closest('li').hide();
+        });
+    });
+    
 })();
 </script>
  

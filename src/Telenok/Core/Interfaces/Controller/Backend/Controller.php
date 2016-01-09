@@ -2,10 +2,11 @@
 
 class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
+	protected $jsCode = [];
+	protected $cssCode = [];
 	protected $jsFilePath = [];
 	protected $cssFilePath = [];
-	protected $cssCode = [];
-	protected $jsCode = [];
+    protected $languageDirectory = 'controller';
 
 	public function hasAddedCssFile($filePath = '', $key = '')
 	{

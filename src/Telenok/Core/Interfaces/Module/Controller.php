@@ -8,12 +8,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
     protected $icon = 'fa fa-desktop';  
     protected $modelModule; 
     protected $modelRepository; 
+    protected $languageDirectory = 'module';
 
     public function __construct()
     {
         $this->middleware('auth.backend.module:' . $this->getPermissionKey()); 
-		
-		$this->languageDirectory = 'module';
     }
 
     public function getHeader()

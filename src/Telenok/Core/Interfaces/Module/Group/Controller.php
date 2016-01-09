@@ -5,12 +5,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     protected $icon = 'fa fa-desktop'; 
     protected $btn = 'btn-info'; 
     protected $modelGroupModule;  
- 
-	public function __construct()
-	{
-		$this->languageDirectory = 'module-group';
-	}
-	
+    protected $languageDirectory = 'module-group';
+
     public function getButton()
     {
         return $this->btn;

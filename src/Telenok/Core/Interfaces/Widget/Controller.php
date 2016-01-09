@@ -16,14 +16,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	protected $cacheEnabled = true;
     protected $config = [];
     protected $widgetTemplateDirectory = 'resources/views/widget/';
-
-
-    public function __construct()
-	{
-		$this->languageDirectory = 'widget';
-
-		parent::__construct();
-	}
+    protected $languageDirectory = 'widget';
 
     public function setCacheEnabled($param)
     {

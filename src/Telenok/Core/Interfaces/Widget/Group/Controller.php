@@ -4,14 +4,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
  
     protected $icon = 'fa fa-desktop'; 
     protected $widgetGroupModel;
+    protected $languageDirectory = 'widget-group';
 
-	public function __construct()
-	{
-		$this->languageDirectory = 'widget-group';
-
-		parent::__construct();
-	}
-	
     public function getIcon()
     {
         return $this->icon;

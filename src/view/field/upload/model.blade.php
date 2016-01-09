@@ -17,24 +17,22 @@
 
         <div class="row">
             <div class="col-sm-6">
+                
             @if ($model->{$field->code}->exists())
 
                 @if ($model->{$field->code}->isImage())
-                <img src="{!! $model->{$field->code}->downloadImageLink(140, 140) !!}" title="{{$model->translate('title')}}" 
-                    id="image-preview-{{$uniqueId}}" style="width: 140px; height: 140px;"/>
-                <br>
+                <p><img src="{!! $model->{$field->code}->downloadImageLink(140, 140) !!}" title="{{$model->translate('title')}}" 
+                        id="image-preview-{{$uniqueId}}" style="width: 140px; height: 140px;"/></p>
+                @else
+                <p><i class="ace-icon fa fa-circle green"></i> {{ $model->{$field->code}->filename() }}</p>
                 @endif
-            @elseif ($model->{$field->code}->path())
-                <i class="fa fa-exclamation-triangle"></i> Empty
-                <br>
-            @else
-                <img src="clear.gif" id="image-preview-{{$uniqueId}}" style="display: none; width: 140px; height: 140px;"/>
-                <br>
+
+            @else 
+                <p><i class="ace-icon fa fa-exclamation-triangle orange"></i> Empty or wrong path</p>
             @endif
 
             @if ($field->upload_allow_ext->count())
-                Allowed extension [{{ $field->upload_allow_ext->implode(', ') }}]
-            <br>
+                <p>Allowed extension [{{ $field->upload_allow_ext->implode(', ') }}]</p>
             @endif
 
             {!! Form::file($field->code, $domAttr) !!}
@@ -43,7 +41,7 @@
             
             <div class="col-sm-6">
                 <div class="dropdown">
-                    <a class="btn btn-default no-hover btn-transparent btn-xs dropdown-toggle" href="#" role="button" style="border:none;"
+                    <a class="btn btn-default no-hover btn-transparent btn-sm dropdown-toggle" href="#" role="button" style="border:none;"
                             type="button" id="' . $random . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         <span class="glyphicon glyphicon-menu-hamburger text-muted"></span>
                         Action
@@ -129,7 +127,7 @@ function showEditForm{{$jsUnique}}(model_id, field_id)
         url: "{!! route('telenok.field.upload.modal-cropper') !!}",
         method: 'get',
         dataType: 'html',
-        data: { model_id : model_id, field_id: field_id, js_unique: "{{$jsUnique}}" }
+        data: { model_id : model_id, field_id: field_id, js_unique: "{{$jsUnique}}", allow_blob: 1 }
     })
     .done(function(data) 
     {
