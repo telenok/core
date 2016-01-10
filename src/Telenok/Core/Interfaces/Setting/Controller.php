@@ -2,6 +2,7 @@
 
 class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
  
+    protected $defaultValue = [];
     protected $ruleList = [];
     protected $formSettingContentView = '';
     protected $languageDirectory = 'setting';
@@ -44,14 +45,30 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     {
         return new \Telenok\Core\Support\Exception\Validator;
     }
-    
+
     public function fillSettingValue($model, $value)
     {
         app('config')->set($model->code, $value);
     }
-    
+
     public function save($model, $input)
     {
+        if ($this->defaultValue)
+        {
+            $inputCollect = collect($input->get('value', []));
+            $defaultCollect = collect($this->defaultValue);
+
+            $defaultCollect->each(function($item, $key) use ($inputCollect)
+            {
+                if ($inputCollect->get($key) === '' || $inputCollect->get($key) === null)
+                {
+                    $inputCollect->put($key, $item);
+                }
+            });
+
+            $input->put('value', $inputCollect->all());
+        }
+
 		return $model->storeOrUpdate($input, true);
     }
 }

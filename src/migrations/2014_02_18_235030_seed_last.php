@@ -1178,75 +1178,36 @@ class SeedLast extends Migration {
 		});
  
 		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'Minimum password length', 'ru' => 'Минимальная длина пароля'],
+			'title' => ['en' => 'Base settings', 'ru' => 'Основные настройки'],
 			'active' => 1,
-			'value' => 8,
-			'code' => 'auth.password.length-min',
+            'code' => 'telenok.basic',
+			'value' => [
+                'app.backend.brand' => 'My Company',
+                'app.localeDefault' => 'en',
+                'app.locales' => ['en'],
+                'app.timezone' => 'UTC'
+            ]
 		]);
 
 		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'Backend brand', 'ru' => 'Backend brand'],
+			'title' => ['en' => 'Secure settings', 'ru' => 'Настройки безопасности'],
 			'active' => 1,
-			'value' => 'Company Co.',
-			'code' => 'app.backend.brand',
+			'code' => 'telenok.secure',
+			'value' => [
+                'auth.password.length-min' => 8,
+                'auth.logout.period' => 20,
+                'app.acl.enabled' => 1,
+                'app.version.enabled' => 1
+            ],
 		]);
 
 		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'Twitter page', 'ru' => 'Страница в Twitter'],
+			'title' => ['en' => 'License settings', 'ru' => 'Настройки лицензии'],
 			'active' => 1,
-			'value' => 'https://twitter.com/',
-			'code' => 'app.social.twitter.url',
-		]);
-
-		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'Facebook page', 'ru' => 'Страница в Facebook'],
-			'active' => 1,
-			'value' => 'https://facebook.com/',
-			'code' => 'app.social.facebook.url',
-		]);
-
-		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'VK page', 'ru' => 'Страница в VK'],
-			'active' => 1,
-			'value' => 'https://vk.com/',
-			'code' => 'app.social.vk.url',
-		]);
-
-		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'Google+ page', 'ru' => 'Страница в Google+'],
-			'active' => 1,
-			'value' => 'https://plus.google.com/',
-			'code' => 'app.social.google-plus.url',
-		]);
-
-		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'Youtube page', 'ru' => 'Страница в Youtube'],
-			'active' => 1,
-			'value' => 'https://youtube.com/',
-			'code' => 'app.social.youtube.url',
-		]);
-        
-		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'User autologout period', 'ru' => 'Время автоматического разлогинивания пользователя'],
-			'active' => 1,
-			'value' => 20,
-			'code' => 'auth.logout.period',
-            'description' => ['en' => 'Time in minutes of inactivity to automatic logout user', 'ru' => 'Время в минутах неактиности пользователя для автоматического разлогинивания'],
-		]);
-        
-		//Setting
-		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'ACL enabled', 'ru' => 'ACL разрешено'],
-			'active' => 1,
-			'value' => 1,
-			'code' => 'app.acl.enabled',
-		]);
-
-		(new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
-			'title' => ['en' => 'Version enabled', 'ru' => 'Version разрешено'],
-			'active' => 1,
-			'value' => 1,
-			'code' => 'app.version.enabled',
+			'code' => 'telenok.license',
+			'value' => [
+                'license.key' => 'demo',
+            ],
 		]);
 	}
 }

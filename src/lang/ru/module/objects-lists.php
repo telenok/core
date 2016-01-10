@@ -12,8 +12,8 @@ return array(
     'list.names' => 'Поля объектов',
     'list.create' => 'Создание поля',
     'list.edit' => 'Редактирование поля',
-    'list.btn.edit' => 'Редактирование поля',
-    'list.btn.delete' => 'Удаление поля',
+    'list.btn.edit' => 'Редактирование',
+    'list.btn.delete' => 'Удаление',
 
     'btn.continue' => 'Continue',
 );
