@@ -267,9 +267,17 @@ class Repository {
 		{
 			foreach (\App\Telenok\Core\Model\System\Setting::all() as $setting)
 			{
-				\Config::set($setting->code, $setting->value);
+                try
+                {
+                    $w = app('telenok.config.repository')->getSetting(strtolower($setting->code));
+                    
+                    $w->fillSettingValue($setting, $setting->value);
+                }
+                catch (\Exception $e)
+                {
+                    app('config')->set($setting->code, $setting->value);
+                }
 			}
 		}
 	}
-
 }

@@ -4,13 +4,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
  
     protected $ruleList = [];
     protected $formSettingContentView = '';
-
-	public function __construct()
-	{
-		$this->languageDirectory = 'setting';
-        
-        parent::__construct();
-	}
+    protected $languageDirectory = 'setting';
 	
 	public function getFormSettingContent($field, $model, $uniqueId)
 	{
@@ -49,5 +43,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     public function validateException()
     {
         return new \Telenok\Core\Support\Exception\Validator;
+    }
+    
+    public function fillSettingValue($model, $value)
+    {
+        app('config')->set($model->code, $value);
+    }
+    
+    public function save($model, $input)
+    {
+		return $model->storeOrUpdate($input, true);
     }
 }

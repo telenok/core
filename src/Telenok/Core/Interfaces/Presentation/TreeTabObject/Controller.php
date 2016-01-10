@@ -390,11 +390,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $input = collect($input);
         $model = $this->getModelList();
         
-        if (!($type instanceof \Telenok\Core\Model\Object\Type))
-        {
-            $type = $this->getTypeList();
-        }
-
 		return $model->storeOrUpdate($input, true);
     }
 

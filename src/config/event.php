@@ -17,8 +17,9 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
 
 \Event::listen('telenok.repository.setting', function($list)
 {
-    $list->push('App\Telenok\Core\Setting\AppLocaleDefault\Controller');
-    $list->push('App\Telenok\Core\Setting\AppLocales\Controller');
+    $list->push('Telenok\Core\Setting\Basic\Controller');
+    $list->push('Telenok\Core\Setting\Secure\Controller');
+    $list->push('Telenok\Core\Setting\CompanyLicense\Controller');
 });
 
 \Event::listen('telenok.acl.filter.resource', function($list)
