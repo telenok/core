@@ -2,22 +2,68 @@
 
 use Illuminate\Console\Command;
 
+/**
+ * Command to seed misration data
+ * 
+ * @class Telenok.Core.Command.Seed
+ * @extends Illuminate.Console.Command
+ * @interface Illuminate.Contracts.Bus.SelfHandling
+ */
 class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 
+    /**
+     * @protected
+     * @property {String} $name
+     * Command name. Calling without parameters.
+     * @member Telenok.Core.Command.Seed
+     */
     protected $name = 'telenok:seed';
+
+    /**
+     * @protected
+     * @property {String} $description
+     * Command description.
+     * @member Telenok.Core.Command.Seed
+     */
     protected $description = 'Seeding Telenok CMS';
+
+    /**
+     * @protected
+     * @property {App.Telenok.Core.Support.Install.Controller} $processingController 
+     * Object which processed command data.
+     * @member Telenok.Core.Command.Seed
+     */
     protected $processingController;
 
+    /**
+     * @method setProcessingController
+     * Set processing controller
+     * @member Telenok.Core.Command.Seed
+     * @param {App.Telenok.Core.Support.Install.Controller}
+     * @return {void}
+     */
     public function setProcessingController($param = null)
     {
         $this->processingController = $param;
     }
 
+    /**
+     * @method getProcessingController
+     * Get processing controller
+     * @member Telenok.Core.Command.Seed
+     * @return {App.Telenok.Core.Support.Install.Controller}
+     */
     public function getProcessingController()
     {
         return $this->processingController;
     }
 
+    /**
+     * @method fire
+     * Fire command processing
+     * @member Telenok.Core.Command.Seed
+     * @return {void}
+     */
     public function fire()
     {
         $this->setProcessingController(app('\App\Telenok\Core\Support\Install\Controller'));
@@ -48,6 +94,12 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
         }
     }
 
+    /**
+     * @method inputSuperuserPassword
+     * Fill password for superuser in administration panel
+     * @member Telenok.Core.Command.Seed
+     * @return {void}
+     */
     public function inputSuperuserPassword()
     {
         while (true)
@@ -92,6 +144,12 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
         }
     }
 
+    /**
+     * @method inputSuperuserLogin
+     * Fill login for superuser in administration panel
+     * @member Telenok.Core.Command.Seed
+     * @return {void}
+     */
     public function inputSuperuserLogin()
     {
         while (true)
@@ -110,6 +168,13 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
         }
     }
 
+
+    /**
+     * @method inputSuperuserEmail
+     * Fill email for superuser in administration panel
+     * @member Telenok.Core.Command.Seed
+     * @return {void}
+     */
     public function inputSuperuserEmail()
     {
         while (true)

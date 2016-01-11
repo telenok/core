@@ -1,9 +1,26 @@
 <?php namespace Telenok\Core\Support\Traits;
 
+/**
+ * Trait to define path for specific packages
+ * 
+ * @class Telenok.Core.Support.Traits.Package
+ */
 trait Package
 {
+    /**
+     * @protected
+     * @property {String} $package
+     * Key defined package. It can be "core" or "news" etc.
+     * @member Telenok.Core.Support.Traits.Package
+     */
 	protected $package;
 
+    /**
+     * @method getPackage
+     * Cache and return package key for called class.
+     * @member Telenok.Core.Support.Traits.Package
+     * @return {String}
+     */
     public function getPackage()
     {
         static $ns = [];
@@ -35,6 +52,12 @@ trait Package
         return $ns[$class];
     }
 
+    /**
+     * @method setPackage
+     * Set package key.
+     * @member Telenok.Core.Support.Traits.Package
+     * @return {void}
+     */
     public function setPackage($param)
     {
         $this->package = $param;

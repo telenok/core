@@ -6,6 +6,8 @@
 		div#module-web-page-widget-list {
 			position: absolute;
 			background: white;
+            min-width: 350px;
+            display: table;
 			padding: 10px;
 			z-index: 10000;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);

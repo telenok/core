@@ -1,15 +1,49 @@
 <?php namespace Telenok\Core\Controller\Backend;
 
+/**
+ * Class to process initial backend http request
+ * 
+ * @class Telenok.Core.Controller.Backend.Controller
+ * @extends Telenok.Core.Interfaces.Controller.Backend.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller {
 
+    /**
+     * @protected
+     * @property {String} $key
+     * Controller string key.
+     * @member Telenok.Core.Controller.Backend.Controller
+     */
     protected $key = 'backend';
+
+    /**
+     * @protected
+     * @property {String} $languageDirectory
+     * Language directory for {@link Telenok.Core.Support.Traits.Language#LL Telenok.Core.Support.Traits.Language->LL()} method.
+     * @member Telenok.Core.Controller.Backend.Controller
+     */
     protected $languageDirectory = 'controller';
             
+    /**
+     * @constructor
+     * Use middleware 'auth.backend' to limit access to Control Panel
+     * @member Telenok.Core.Controller.Backend.Controller
+     */
     public function __construct()
     {
         $this->middleware('auth.backend', ['except' => ['errorAccessDenied']]);
     }
 
+    /**
+     * @method updateBackendUISetting
+     * Use middleware 'auth.backend' to limit access to Control Panel
+     * @param {String} $key
+     * Key of UI setting
+     * @param {String/Number/Boolean}$ value
+     * Mixed data linked to key
+     * @return {void}
+     * @member Telenok.Core.Controller.Backend.Controller
+     */
     public function updateBackendUISetting($key = null, $value = null)
     {
         $input = $this->getRequest();
@@ -30,19 +64,38 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller 
         }
     }
 
+    /**
+     * @method errorAccessDenied
+     * Show page with "Access denied" message
+     * @return {string}
+     * @member Telenok.Core.Controller.Backend.Controller
+     */
     public function errorAccessDenied()
     {
         return view('core::controller.backend-denied', ['controller' => $this])->render();
     }
 
+    /**
+     * @method validateSession
+     * Validate user logined and CSRF token
+     * @return {Array}
+     * @member Telenok.Core.Controller.Backend.Controller
+     */
     public function validateSession()
     {
         return ['logined' => (int)app('auth')->check(), 'csrf_token' => csrf_token()];
     }
 
+    /**
+     * @method getContent
+     * Process initial request and return HTML of Control Panel
+     * @return {String}
+     * @member Telenok.Core.Controller.Backend.Controller
+     */
     public function getContent()
     {
         $listModuleMenuLeft = collect();
+
         \Event::fire('telenok.module.menu.left', [$listModuleMenuLeft]);
 
         $config = app('telenok.config.repository');

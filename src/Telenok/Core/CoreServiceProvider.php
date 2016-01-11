@@ -4,7 +4,8 @@ use Illuminate\Support\ServiceProvider;
 
 /**
  * @class Telenok.Core.CoreServiceProvider
- * Core service provider
+ * Core service provider.
+ * @extends Illuminate.Support.ServiceProvider
  */
 class CoreServiceProvider extends ServiceProvider {
 
@@ -12,9 +13,9 @@ class CoreServiceProvider extends ServiceProvider {
 
     /**
      * @method boot
-     * @public
-     * Load config, routers, create singletons and others
-     * @return void
+     * Load config, routers, create singletons and others.
+     * @return {void}
+     * @member Telenok.Core.CoreServiceProvider
      */
     public function boot()
     {
@@ -77,9 +78,9 @@ class CoreServiceProvider extends ServiceProvider {
 
     /**
      * @method register
-     * @public
      * Register the service provider.
-     * @return void
+     * @return {void}
+     * @member Telenok.Core.CoreServiceProvider
      */
     public function register()
     {
@@ -104,6 +105,13 @@ class CoreServiceProvider extends ServiceProvider {
         $this->registerMemcache();
     }
 
+    /**
+     * @method registerDBConnection
+     * Create singletones for all registered types of DB connections. 
+     * Use those custom connections to cache databse queries.
+     * @return {void}
+     * @member Telenok.Core.CoreServiceProvider
+     */
     public function registerDBConnection()
     {
         foreach([
@@ -126,9 +134,9 @@ class CoreServiceProvider extends ServiceProvider {
 
     /**
      * @method registerMemcache
-     * @public
      * Configure memcache
-     * @return void
+     * @return {void}
+     * @member Telenok.Core.CoreServiceProvider
      */
     public function registerMemcache()
     {
@@ -174,9 +182,9 @@ class CoreServiceProvider extends ServiceProvider {
 
     /**
      * @method provides
-     * @public
      * Get the services provided by the provider.
-     * @return array
+     * @return {Array}
+     * @member Telenok.Core.CoreServiceProvider
      */
     public function provides()
     {

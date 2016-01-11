@@ -2,8 +2,9 @@
 
 /**
  * @class Telenok.Core.Interfaces.Support.PackageInfo
+ * Class describe package's data like title, key, base class, description, image
+ * @mixins Telenok.Core.Support.Traits.Language
  * @abstract
- * Class describe data about package like title, key, base class, dedscription, image
  */
 abstract class PackageInfo {
 

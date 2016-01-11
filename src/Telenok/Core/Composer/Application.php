@@ -1,13 +1,32 @@
 <?php
 namespace Telenok\Core\Composer;
 
+/**
+ * Class extends Composer as embedded
+ * 
+ * @class Telenok.Core.Composer.Application
+ * @extends Composer.Console.Application
+ */
 class Application extends \Composer\Console\Application {
     
+    /**
+     * @method setIO
+     * Set IO object
+     * @member Telenok.Core.Composer.Application
+     * @param {Composer.IO.IOInterface}
+     * @return {void}
+     */
     public function setIO(\Composer\IO\IOInterface $io)
     {
         $this->io = $io;
     }
     
+    /**
+     * @method getEmbeddedComposer
+     * Return embedded composer
+     * @member Telenok.Core.Composer.Application
+     * @return {Composer.Composer}
+     */
     public function getEmbeddedComposer()
     {
         $input = new \Symfony\Component\Console\Input\ArrayInput([]);

@@ -1,16 +1,48 @@
 <?php namespace Telenok\Core\Command;
 
 use Illuminate\Console\Command;
-use Illuminate\Foundation\Composer;
 
+/**
+ * Command to add licensed Telenok Packages
+ * 
+ * @class Telenok.Core.Command.Package
+ * @extends Illuminate.Console.Command
+ * @interface Illuminate.Contracts.Bus.SelfHandling
+ */
 class Package extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 
+    /**
+     * @protected
+     * @property {String} $name
+     * Command name. Calling without parameters.
+     * @member Telenok.Core.Command.Package
+     */
     protected $name = 'telenok:package {action=refresh} {--provider=null}';
+
+    /**
+     * @protected
+     * @property {String} $description
+     * Command description.
+     * @member Telenok.Core.Command.Package
+     */
     protected $description = 'Updating Telenok CMS packages';
+
+    /**
+     * @protected
+     * @property {String} $signature
+     * Command signature.
+     * @member Telenok.Core.Command.Package
+     */
     protected $signature = 'telenok:package
                         {action : Can be "refresh" or "add-provider"}
                         {--provider= : For action="add-provider". The service provider should be added to app.php. Example: "Telenok\News\NewsServiceProvider"}';
 
+    /**
+     * @method fire
+     * Fire command processing
+     * @member Telenok.Core.Command.Package
+     * @return {void}
+     */
     public function fire()
     {
         if ($this->argument('action') == 'refresh')

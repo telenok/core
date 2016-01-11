@@ -2,22 +2,68 @@
 
 use Illuminate\Console\Command;
 
+/**
+ * Command to install core package
+ * 
+ * @class Telenok.Core.Command.Install
+ * @extends Illuminate.Console.Command
+ * @interface Illuminate.Contracts.Bus.SelfHandling
+ */
 class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 
+    /**
+     * @protected
+     * @property {String} $name
+     * Command name. Calling without parameters.
+     * @member Telenok.Core.Command.Install
+     */
     protected $name = 'telenok:install';
+
+    /**
+     * @protected
+     * @property {String} $description
+     * Command description.
+     * @member Telenok.Core.Command.Install
+     */
     protected $description = 'Installing Telenok CMS';
+
+    /**
+     * @protected
+     * @property {App.Telenok.Core.Support.Install.Controller} $processingController 
+     * Object which processed command data.
+     * @member Telenok.Core.Command.Install
+     */
     protected $processingController;
 
+    /**
+     * @method setProcessingController
+     * Set processing controller
+     * @member Telenok.Core.Command.Install
+     * @param {App.Telenok.Core.Support.Install.Controller}
+     * @return {void}
+     */
     public function setProcessingController($param = null)
     {
         $this->processingController = $param;
     }
 
+    /**
+     * @method getProcessingController
+     * Get processing controller
+     * @member Telenok.Core.Command.Install
+     * @return {App.Telenok.Core.Support.Install.Controller}
+     */
     public function getProcessingController()
     {
         return $this->processingController;
     }
 
+    /**
+     * @method fire
+     * Fire command processing
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function fire()
     {
         $this->setProcessingController(app('\App\Telenok\Core\Support\Install\Controller'));
@@ -74,6 +120,12 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
         $this->processingController->createBaseTable($this);
     }
 
+    /**
+     * @method inputDomain
+     * Fill domain from console
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function inputDomain()
     {
         while (true)
@@ -94,11 +146,23 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
         }
     }
 
+    /**
+     * @method inputDomainSecure
+     * Fill domain secure param (yes/no https) from console
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function inputDomainSecure()
     {
         $this->processingController->setDomainSecure($this->confirm('Is domain secure (aka site uses https) [yes/no]: '));
     }
 
+    /**
+     * @method inputLocale
+     * Fill site locale from console
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function inputLocale()
     {
         while (true)
@@ -117,6 +181,12 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
         }
     }
 
+    /**
+     * @method inputDbDriver
+     * Fill default database driver from console
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function inputDbDriver()
     {
         while (true)
@@ -135,6 +205,12 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
         }
     }
 
+    /**
+     * @method inputDbHost
+     * Fill host for default database driver from console
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function inputDbHost()
     {
         while (true)
@@ -155,6 +231,12 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
         }
     }
 
+    /**
+     * @method inputDbUsername
+     * Fill username for default database driver from console
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function inputDbUsername()
     {
         while (true)
@@ -173,6 +255,12 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
         }
     }
 
+    /**
+     * @method inputDbPassword
+     * Fill password for default database driver from console
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function inputDbPassword()
     {
         while (true)
@@ -191,6 +279,12 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
         }
     }
 
+    /**
+     * @method inputDbDatabase
+     * Fill name of database for default database driver from console
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function inputDbDatabase()
     {
         while (true)
@@ -209,6 +303,12 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
         }
     }
 
+    /**
+     * @method inputDbPrefix
+     * Fill prefix of database for default database driver from console. Can be empty.
+     * @member Telenok.Core.Command.Install
+     * @return {void}
+     */
     public function inputDbPrefix()
     {
         while (true)

@@ -1185,7 +1185,8 @@ class SeedLast extends Migration {
                 'app.backend.brand' => 'My Company',
                 'app.localeDefault' => 'en',
                 'app.locales' => ['en'],
-                'app.timezone' => 'UTC'
+                'app.timezone' => 'UTC',
+                'telenok.theme' => 'default'
             ]
 		]);
 

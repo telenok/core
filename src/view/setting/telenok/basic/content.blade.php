@@ -35,6 +35,15 @@
     </div>
 </div> 
 
+<div class="form-group">
+    {!!  Form::label('value[telenok.view.theme]', $controller->LL('view.theme.title'), ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+    <div class="col-sm-9">
+        {!!  Form::select('value[telenok.view.theme]', app('telenok.config.repository')->getViewTheme()->all(), config('telenok.view.theme')) !!}
+        <span title="" data-content="{{ $controller->LL('view.theme.description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 
+              class="help-button" data-original-title="{{ $controller->LL('core::default.tooltip.description') }}">?</span>
+    </div>
+</div> 
+
 <?php
 
 $listViews = collect();

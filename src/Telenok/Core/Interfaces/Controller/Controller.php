@@ -1,5 +1,12 @@
 <?php namespace Telenok\Core\Interfaces\Controller;
 
+/**
+ * Base class for CMS controllers
+ * 
+ * @mixins Telenok.Core.Support.Traits.Language
+ * @mixins Illuminate.Foundation.Bus.DispatchesCommands
+ * @class Telenok.Core.Interfaces.Controller.Controller
+ */
 class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\Support\IRequest {
 
     use \Telenok\Core\Support\Traits\Language;
@@ -9,8 +16,6 @@ class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core
     protected $request;
     protected $vendorName = 'telenok';
 
-    public function __construct() {}
-	
     public function getVendorName()
     {
         return $this->vendorName;

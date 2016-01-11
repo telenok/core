@@ -14,6 +14,9 @@ return [
     'basic.timezone.title' => 'Default timezone', 
     'basic.timezone.description' => 'Please set default timezone to show time for anonymous users',
     
+    'basic.view.theme.title' => 'Theme of templates', 
+    'basic.view.theme.description' => 'Please set template theme to show original design',
+
     'secure.auth.password.length-min.title' => 'Minimum password length',
     'secure.auth.password.length-min.description' => 'Please, for security reason set value more than 7',
 

@@ -60,6 +60,15 @@ class Repository {
 		return $this->getValue('telenok.repository.setting', $key);
 	}
 
+	public function getViewTheme($key = '')
+	{
+        $list = collect();
+
+        \Event::fire('telenok.view.theme', $list);
+
+		return $list;
+	}
+
 	public function getObjectFieldController($key = '')
 	{
 		return $this->getValue('telenok.repository.objects-field', $key);
