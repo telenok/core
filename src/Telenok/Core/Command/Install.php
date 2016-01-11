@@ -39,7 +39,7 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
      * @method setProcessingController
      * Set processing controller
      * @member Telenok.Core.Command.Install
-     * @param {App.Telenok.Core.Support.Install.Controller}
+     * @param {App.Telenok.Core.Support.Install.Controller} $param
      * @return {void}
      */
     public function setProcessingController($param = null)

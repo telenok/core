@@ -13,7 +13,8 @@ class Application extends \Composer\Console\Application {
      * @method setIO
      * Set IO object
      * @member Telenok.Core.Composer.Application
-     * @param {Composer.IO.IOInterface}
+     * @param {Composer.IO.IOInterface} $io
+     * For example it can be Composer.IO.ConsoleIO
      * @return {void}
      */
     public function setIO(\Composer\IO\IOInterface $io)

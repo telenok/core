@@ -1,4 +1,4 @@
-<?php
+<?php namespace Telenok\Core\Field\Decimal;
 
 /*
  * Copyright (c)
@@ -9,16 +9,18 @@
  * with this package in the file LICENSE.
  * 
  * https://github.com/v3labs/math
- */
-
-namespace Telenok\Core\Field\Decimal;
-
-/**
+ * 
+ * 
  * Immutable Arbitrary Precision decimal number.
  * Wrapper for BC Math
  *
+ * 
  * @author Kirill chEbba Chebunin <iam@chebba.org>
  * @author Vladislav Veselinov <vladislav@v3labs.com>
+ * 
+ * 
+ * @class Telenok.Core.Field.Decimal.BigDecimal
+ * Class to manipulate big numbers.
  */
 class BigDecimal {
 
@@ -34,6 +36,12 @@ class BigDecimal {
     const ROUND_UNNECESSARY = 9;
     const STRING_FORMAT_REGEX = '/^([-+])?([0-9]+)(\.([0-9]+))?(E([+-]?[0-9]+))?$/';
 
+    /**
+     * @protected
+     * @property {String} $key
+     * Field key.
+     * @member Telenok.Core.Field.DateTime.Controller
+     */
     private $value;
     private $scale;
 
@@ -99,7 +107,7 @@ class BigDecimal {
 
     /**
      * @param $value
-     * @param null $scale
+     * @param {null} $scale
      * @return static
      */
     public static function create($value, $scale = null)

@@ -34,7 +34,8 @@ trait Language
      * @method setLanguageDirectory
      * Return language directory
      * @member Telenok.Core.Support.Traits.Language
-     * @param {String} Name of language directory
+     * @param {String} $param
+     * Name of language directory
      * @return {Telenok.Core.Support.Traits.Language}
      */
     public function setLanguageDirectory($param)
@@ -48,9 +49,12 @@ trait Language
      * @method LL
      * Return word by key from language file
      * @member Telenok.Core.Support.Traits.Language
-     * @param {String} Key of word
-     * @param {Array} Array of attributes to replace attribute marker in word
-     * @param {String} Default value
+     * @param {String} $key 
+     * Key of word
+     * @param {Array} $param
+     * Array of attributes to replace attribute marker in word
+     * @param {String} $default
+     * Default value
      * @return {String}
      */
     public function LL($key = '', $param = [], $default = '')

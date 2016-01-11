@@ -3,9 +3,9 @@
 use Illuminate\Console\Command;
 
 /**
- * Command to seed misration data
- * 
  * @class Telenok.Core.Command.Seed
+ * Command to seed database
+ * 
  * @extends Illuminate.Console.Command
  * @interface Illuminate.Contracts.Bus.SelfHandling
  */
@@ -39,7 +39,7 @@ class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
      * @method setProcessingController
      * Set processing controller
      * @member Telenok.Core.Command.Seed
-     * @param {App.Telenok.Core.Support.Install.Controller}
+     * @param {App.Telenok.Core.Support.Install.Controller} $param
      * @return {void}
      */
     public function setProcessingController($param = null)
