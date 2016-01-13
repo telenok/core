@@ -37,14 +37,31 @@ class BigDecimal {
     const STRING_FORMAT_REGEX = '/^([-+])?([0-9]+)(\.([0-9]+))?(E([+-]?[0-9]+))?$/';
 
     /**
-     * @protected
-     * @property {String} $key
-     * Field key.
-     * @member Telenok.Core.Field.DateTime.Controller
+     * @private
+     * @property {scalar} $value
+     * Value of number.
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     private $value;
+
+    /**
+     * @private
+     * @property {scalar} $scale
+     * Value of dimension.
+     * @member Telenok.Core.Field.Decimal.BigDecimal
+     */
     private $scale;
 
+    /**
+     * @constructor
+     * Filling internal variables and validate dimension.
+     * 
+     * @property {scalar} $value
+     * Value of number.
+     * @property {scalar} $scale
+     * Value of dimension.
+     * @member Telenok.Core.Field.Decimal.BigDecimal
+     */
     public function __construct($value, $scale = null)
     {
         if ($scale !== null)
@@ -106,9 +123,15 @@ class BigDecimal {
     }
 
     /**
-     * @param $value
-     * @param {null} $scale
-     * @return static
+     * @method create
+     * Create new instance of Telenok.Core.Field.Decimal.BigDecimal.
+     * @static
+     * @property {scalar} $value
+     * Value of number.
+     * @property {scalar} $scale
+     * Value of dimension.
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public static function create($value, $scale = null)
     {
@@ -116,9 +139,12 @@ class BigDecimal {
     }
 
     /**
-     * zero
-     *
-     * @return static
+     * @method zero
+     * Create new instance of Telenok.Core.Field.Decimal.BigDecimal.
+     * @static
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * Return instance with zero value and zero scale
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public static function zero()
     {
@@ -126,22 +152,34 @@ class BigDecimal {
     }
 
     /**
-     * one
-     *
-     * @return static
+     * @method one
+     * Create new instance of Telenok.Core.Field.Decimal.BigDecimal.
+     * @static
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * Return instance with value equal one and zero scale
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
-    public function one()
+    public static function one()
     {
         return new static(1, 0);
     }
 
+    /**
+     * @method value
+     * Return value of instance.
+     * @return {Number}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
+     */
     public function value()
     {
         return $this->value;
     }
 
     /**
-     * @return int
+     * @method scale
+     * Return scale of instance.
+     * @return {Integer}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function scale()
     {
@@ -149,14 +187,24 @@ class BigDecimal {
     }
 
     /**
-     * @param $scale
-     * @return static
+     * @method setScale
+     * Create new instance with the same value and new scale.
+     * @property {scalar} $scale
+     * Value of dimension.
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function setScale($scale)
     {
         return new static($this->value(), $scale);
     }
 
+    /**
+     * @method precision
+     * Return amount of digits in value.
+     * @return {Integer}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
+     */
     public function precision()
     {
         $parts = explode('.', $this->value);
@@ -164,15 +212,25 @@ class BigDecimal {
         return strlen(ltrim($parts[0], '-'));
     }
 
+    /**
+     * @method __toString
+     * Convert value to string.
+     * @return {String}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
+     */
     public function __toString()
     {
         return $this->value();
     }
 
     /**
-     * @param BigDecimal $addend
-     *
-     * @return static
+     * @method add
+     * Calculate sum of two Telenok.Core.Field.Decimal.BigDecimal and return new 
+     * instance.
+     * @property {Telenok.Core.Field.Decimal.BigDecimal} $addend
+     * Summable number.
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function add(BigDecimal $addend)
     {
@@ -182,9 +240,13 @@ class BigDecimal {
     }
 
     /**
-     * @param BigDecimal $subtrahend
-     *
-     * @return static
+     * @method subtract
+     * Calculate subtract of two Telenok.Core.Field.Decimal.BigDecimal and return new 
+     * instance.
+     * @property {Telenok.Core.Field.Decimal.BigDecimal} $subtrahend
+     * Subtract number.
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function subtract(BigDecimal $subtrahend)
     {

@@ -1,5 +1,10 @@
 <?php namespace Telenok\Core\Model\Object;
 
+/**
+ * Eloquent model Type to configure objects
+ * 
+ * @class Telenok.Core.Model.Object.Type
+ */
 class Type extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
 	protected $ruleList = ['title' => ['required', 'min:1'], 'code' => ['required', 'unique:object_type,code,:id:,id', 'regex:/^[a-z][\w]*$/i'], 'title_list' => ['required', 'min:1']];
