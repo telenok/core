@@ -1,21 +1,85 @@
 <?php namespace Telenok\Core\Field\FileManyToMany;
 
+/**
+ * @class Telenok.Core.Field.FileManyToMany.Controller
+ * Class of field "file-many-to-many". Field allow to manipulate list of files.
+ * 
+ * @extends Telenok.Core.Interfaces.Field.Controller
+ */
 class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
-    protected $key = 'file-many-to-many'; 
+    /**
+     * @protected
+     * @property {String} $key
+     * Field key.
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
+    protected $key = 'file-many-to-many';
+    
+    /**
+     * @protected
+     * @property {Array} $specialDateField
+     * Define list of field's names to process saving and filling {@link Telenok.Core.Model.Object.Field Telenok.Core.Model.Object.Field}.
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     protected $specialField = ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'];
 
+    /**
+     * @protected
+     * @property {String} $viewModel
+     * View to show field form's element when creating or updating object
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     protected $viewModel = "core::field.file-many-to-many.model";
+
+    /**
+     * @protected
+     * @property {String} $viewField
+     * View to show special field's form-element when creating or updating {Telenok.Core.Model.Object.Field}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     protected $viewField = "core::field.file-many-to-many.field";
 
+    /**
+     * @protected
+     * @property {String} $routeListTable
+     * Router name to return list with json data in $viewModel view
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     protected $routeListTable = "telenok.field.relation-many-to-many.list.table";
+
+    /**
+     * @protected
+     * @property {String} $routeUpload
+     * Router name to upload new file
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     protected $routeUpload = 'telenok.field.file-many-to-many.upload';
 
+    /**
+     * @method getRouteUpload
+     * Return name of upload router.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function getRouteUpload()
     {
         return $this->routeUpload;
     }
 
+    /**
+     * @method getModelFieldViewVariable
+     * Return array with URL for variables in $viewModel view.
+     * 
+     * @param {Telenok.Core.Field.FileManyToMany.Controller} $controller
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {String} $uniqueId
+     * 
+     * @return {Array}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         $linkedField = $this->getLinkedField($field);
@@ -30,7 +94,19 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         ];
     }
 
-	public function getTitleList($id = null, $closure = null)
+    /**
+     * @method getTitleList
+     * Return array with titles of model's records
+     * 
+     * @param {Integer} $id
+     * ID of Telenok.Core.Model.Object.Type 
+     * @param {Function} $closure
+     * Closure to adding eloquent builder's query filter
+     * 
+     * @return {Array}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
+    public function getTitleList($id = null, $closure = null)
 	{
 		$term = trim($this->getRequest()->input('term'));
 		$return = [];
@@ -90,11 +166,35 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 		return $return;
 	}
 
+    /**
+     * @method getFormModelContent
+     * Return HTML content of form element for the field
+     * 
+     * @param {Telenok.Core.Field.FileManyToMany.Controller} $controller
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {String} $uniqueId
+     * @return {String}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         return parent::getFormModelContent($controller, $model, $field, $uniqueId);
     } 
 
+    /**
+     * @method getListFieldContent
+     * Return value of field for show in list cell like Javascript Datatables().
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @param {Object} $item
+     * Eloquent object with data of list's row.
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * Type of eloquent object $item.
+     * @return {String}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function getListFieldContent($field, $item, $type = null)
     {
         $linkedObject = $item->{camel_case($field->code)}()->first();
@@ -135,6 +235,19 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         return $content;
     }
 
+    /**
+     * @method getModelSpecialAttribute
+     * Return processed value of special fields.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Field's name.
+     * @param {mixed} $value
+     * Value of field from database for processing in this method.
+     * @return {mixed}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function getModelSpecialAttribute($model, $key, $value)
     {
         try
@@ -163,6 +276,19 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         }
     }
 
+    /**
+     * @method setModelSpecialAttribute
+     * Set processed value of special fields.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Field's name.
+     * @param {mixed} $value
+     * Value of field from database for processing in this method.
+     * @return {Telenok.Core.Field.FileManyToMany.Controller}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function setModelSpecialAttribute($model, $key, $value)
     {
         if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
@@ -190,6 +316,19 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         return $this;
     }
 
+    /**
+     * @method setModelSpecialAttribute
+     * Set processed value of special fields.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Eloquent object Field.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {Illuminate.Support.Collection} $input
+     * Values of request.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function saveModelField($field, $model, $input)
     {
 		// if created field
@@ -247,6 +386,19 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         return $model;
     }
     
+    /**
+     * @method preProcess
+     * Preprocess save {@link Telenok.Core.Model.Object.Field $model}.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Object to save.
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * Object with data of field's configuration.
+     * @param {Illuminate.Http.Request} $input
+     * Laravel request object.
+     * @return {Telenok.Core.Field.FileManyToMany.Controller}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function preProcess($model, $type, $input)
     {
         $input->put('relation_many_to_many_has', \App\Telenok\Core\Model\Object\Type::whereCode('file')->pluck('id'));
@@ -254,11 +406,32 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         return parent::preProcess($model, $type, $input);
     } 
 
+    /**
+     * @method schemeCreateExtraField
+     * Create special fields in database table.
+     * 
+     * @param {String} $table
+     * Name of table.
+     * @param {Mixed} $p1
+     * @param {Mixed} $p2
+     * @param {Mixed} $p3
+     * @param {Mixed} $p4
+     * @param {Mixed} $p5
+     * @return {void}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function schemeCreateExtraField($table, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null)
     {
         $table->integer('sort')->unsigned()->nullable();
     }
 
+    /**
+     * @method upload
+     * File uploading and storing in storages.
+     * 
+     * @return {Integer}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function upload()
     {
         $input = $this->getRequestCollected();
@@ -279,6 +452,13 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         return $model->id;
     }
 
+    /**
+     * @method getStubFileDirectory
+     * Path to directory of stub (class template) files
+     * 
+     * @return {String}
+     * @member Telenok.Core.Field.FileManyToMany.Controller
+     */
     public function getStubFileDirectory()
     {
         return __DIR__;

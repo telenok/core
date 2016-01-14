@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
  * Command to seed database
  * 
  * @extends Illuminate.Console.Command
- * @interface Illuminate.Contracts.Bus.SelfHandling
+ * @mixin Illuminate.Contracts.Bus.SelfHandling
  */
 class Seed extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 

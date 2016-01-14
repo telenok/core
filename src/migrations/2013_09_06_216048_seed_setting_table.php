@@ -56,40 +56,10 @@ class SeedSettingTable extends Migration {
 				]
 		);
 
-
-
-
-		DB::table('setting')->insertGetId(
-				[
-					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\System\Setting']),
-					'title' => json_encode(['en' => 'Default language'], JSON_UNESCAPED_UNICODE),
-					'code' => 'app.localeDefault',
-					'value' => json_encode('en', JSON_UNESCAPED_UNICODE),
-					'active' => 1,
-				]
-		);
-
-		DB::table('setting')->insertGetId(
-				[
-					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\System\Setting']),
-					'title' => json_encode(['en' => 'Languages'], JSON_UNESCAPED_UNICODE),
-					'code' => 'app.locales',
-					'value' => json_encode(['en', 'ru'], JSON_UNESCAPED_UNICODE),
-					'active' => 1,
-				]
-		);
-
-		DB::table('setting')->insertGetId(
-				[
-					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\System\Setting']),
-					'title' => json_encode(['en' => 'Default timezone'], JSON_UNESCAPED_UNICODE),
-					'code' => 'app.timezone',
-					'value' => json_encode("UTC"),
-					'active' => 1,
-				]
-		);
+        app('config')->set('app.localeDefault', 'en');
+        app('config')->set('app.locales', ['en', 'ru']);
+        app('config')->set('app.timezone', 'UTC');
 	}
-
 }
 
 class SeedSettingTableTranslation extends \Telenok\Core\Interfaces\Translation\Controller {
@@ -106,5 +76,4 @@ class SeedSettingTableTranslation extends \Telenok\Core\Interfaces\Translation\C
             ]
         ],
     ];
-
 }

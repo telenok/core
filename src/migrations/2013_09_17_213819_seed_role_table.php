@@ -21,8 +21,8 @@ class SeedRoleTable extends Migration {
 		DB::table('object_field')->insert(
 				[
 					'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
-					'title' => json_encode(SeedRoleTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
-					'title_list' => json_encode(SeedRoleTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
+					'title' => json_encode(['en' => 'Permission', 'ru' => 'Разрешение'], JSON_UNESCAPED_UNICODE),
+					'title_list' => json_encode(['en' => 'Permissions', 'ru' => 'Разрешения'], JSON_UNESCAPED_UNICODE),
 					'key' => 'string',
 					'code' => 'code',
 					'active' => 1,
@@ -38,21 +38,4 @@ class SeedRoleTable extends Migration {
 				]
 		);
 	}
-}
-
-class SeedRoleTableTranslation extends \Telenok\Core\Interfaces\Translation\Controller {
-
-	public static $keys = [
-        'field' => [
-            'code' => [
-                'ru' => "Код",
-                'en' => "Code",
-            ],
-            'permission' => [
-                'ru' => "Разрешение",
-                'en' => "Permission",
-            ],
-        ],
-	];
-
 }

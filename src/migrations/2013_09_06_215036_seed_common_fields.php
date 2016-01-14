@@ -137,8 +137,8 @@ class SeedCommonFields extends Migration {
         DB::table('object_field')->insert(
                 [
                     'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
-                    'title' => json_encode(['en' => 'Active'], JSON_UNESCAPED_UNICODE),
-                    'title_list' => json_encode(['en' => 'Active'], JSON_UNESCAPED_UNICODE),
+                    'title' => json_encode(['en' => 'Active', 'ru' => 'Активность'], JSON_UNESCAPED_UNICODE),
+                    'title_list' => json_encode(['en' => 'Active', 'ru' => 'Активность'], JSON_UNESCAPED_UNICODE),
                     'key' => 'select-one',
                     'code' => 'active',
                     'select_one_data' => json_encode([
@@ -163,8 +163,8 @@ class SeedCommonFields extends Migration {
         DB::table('object_field')->insert(
                 [
                     'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
-                    'title' => json_encode(['en' => 'Active time'], JSON_UNESCAPED_UNICODE),
-                    'title_list' => json_encode(['en' => 'Active time'], JSON_UNESCAPED_UNICODE),
+                    'title' => json_encode(['en' => 'Active time', 'ru' => 'Время активности'], JSON_UNESCAPED_UNICODE),
+                    'title_list' => json_encode(['en' => 'Active time', 'ru' => 'Время активности'], JSON_UNESCAPED_UNICODE),
                     'key' => 'datetime-range',
                     'code' => 'active_at',
                     'datetime_range_default_start' => $now,
@@ -188,8 +188,8 @@ class SeedCommonFields extends Migration {
         DB::table('object_field')->insert(
                 [
                     'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
-                    'title' => json_encode(['en' => 'Created by'], JSON_UNESCAPED_UNICODE),
-                    'title_list' => json_encode(['en' => 'Created by'], JSON_UNESCAPED_UNICODE),
+                    'title' => json_encode(['en' => 'Created by', 'ru' => 'Кем создано'], JSON_UNESCAPED_UNICODE),
+                    'title_list' => json_encode(['en' => 'Created by', 'ru' => 'Кем создано'], JSON_UNESCAPED_UNICODE),
                     'key' => 'created-by',
                     'code' => 'created_by_user',
                     'active' => 1,
@@ -207,8 +207,8 @@ class SeedCommonFields extends Migration {
         DB::table('object_field')->insert(
                 [
                     'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
-                    'title' => json_encode(['en' => 'Updated by'], JSON_UNESCAPED_UNICODE),
-                    'title_list' => json_encode(['en' => 'Updated by'], JSON_UNESCAPED_UNICODE),
+                    'title' => json_encode(['en' => 'Updated by', 'ru' => 'Кем обновлено'], JSON_UNESCAPED_UNICODE),
+                    'title_list' => json_encode(['en' => 'Updated by', 'ru' => 'Кем обновлено'], JSON_UNESCAPED_UNICODE),
                     'key' => 'updated-by',
                     'code' => 'updated_by_user',
                     'active' => 1,

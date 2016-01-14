@@ -48,8 +48,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
 	public function preProcess($model, $type, $input)
 	{  
-		$input->put('title', ['en' => 'Permission']);
-		$input->put('title_list', ['en' => 'Permission']);
+		$input->put('title', ['en' => 'Permission', 'ru' => 'Разрешение']);
+		$input->put('title_list', ['en' => 'Permissions', 'ru' => 'Разрешения']);
 		$input->put('code', 'permission');
 		$input->put('active', 1);
 		$input->put('multilanguage', 0);

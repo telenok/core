@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
  * 
  * @class Telenok.Core.Command.Package
  * @extends Illuminate.Console.Command
- * @interface Illuminate.Contracts.Bus.SelfHandling
+ * @mixin Illuminate.Contracts.Bus.SelfHandling
  */
 class Package extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
 

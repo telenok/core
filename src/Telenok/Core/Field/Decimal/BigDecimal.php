@@ -256,9 +256,13 @@ class BigDecimal {
     }
 
     /**
-     * @param BigDecimal $multiplier
-     *
-     * @return static
+     * @method multiply
+     * Calculate multiply of two Telenok.Core.Field.Decimal.BigDecimal and return new 
+     * instance.
+     * @property {Telenok.Core.Field.Decimal.BigDecimal} $multiplier
+     * To multiply.
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function multiply(BigDecimal $multiplier)
     {
@@ -268,10 +272,13 @@ class BigDecimal {
     }
 
     /**
-     * @param BigDecimal $divisor
-     *
-     * @return static
-     * @throws \InvalidArgumentException
+     * @method divide
+     * Calculate divide of two Telenok.Core.Field.Decimal.BigDecimal and return new 
+     * instance.
+     * @property {Telenok.Core.Field.Decimal.BigDecimal} $divisor
+     * To divide.
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function divide(BigDecimal $divisor)
     {
@@ -286,10 +293,12 @@ class BigDecimal {
     }
 
     /**
-     * @param $n
-     *
-     * @return static
-     * @throws \InvalidArgumentException
+     * @method pow
+     * Calculate pow return new instance.
+     * @property {Integer} $divisor
+     * To pow.
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function pow($n)
     {
@@ -309,7 +318,12 @@ class BigDecimal {
     }
 
     /**
-     * @return int
+     * @method signum
+     * Returns the number sign.
+     * 
+     * @return {Integer}
+     * Return [-1, 0, 1].
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function signum()
     {
@@ -317,7 +331,11 @@ class BigDecimal {
     }
 
     /**
-     * @return static
+     * @method negate
+     * Returns negative.
+     * 
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function negate()
     {
@@ -338,7 +356,11 @@ class BigDecimal {
     }
 
     /**
-     * @return static
+     * @method abs
+     * Returns absolute value.
+     * 
+     * @return {Telenok.Core.Field.Decimal.BigDecimal}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function abs()
     {
@@ -346,11 +368,16 @@ class BigDecimal {
     }
 
     /**
-     * @param int $scale
-     * @param int $roundMode
+     * @method round
+     * Returns round value.
+     * 
+     * @param {Integer} $scale
+     * @param {Integer} $roundMode
      *
      * @return static
-     * @throws \RuntimeException If round mode is UNNECESSARY and digit truncation is required
+     * @throws \RuntimeException 
+     * If round mode is UNNECESSARY and digit truncation is required
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function round($scale = 0, $roundMode = self::ROUND_HALF_UP)
     {
@@ -397,11 +424,17 @@ class BigDecimal {
     }
 
     /**
-     * @param $roundMode
-     * @param $sign
-     * @param $value
-     * @param $truncated
-     * @return bool
+     * @private
+     * @method isRoundAdditionRequired
+     * Validate requiring addditional round value.
+     * 
+     * @param {Integer} $roundMode
+     * @param {Integer} $sign
+     * @param {String} $value
+     * @param {Boolean} $truncated
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     private static function isRoundAdditionRequired($roundMode, $sign, $value, $truncated)
     {
@@ -436,8 +469,13 @@ class BigDecimal {
     }
 
     /**
-     * @param BigDecimal $number
-     * @return int
+     * @method compareTo
+     * Compare with other BigDecimal number.
+     * 
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
+     *
+     * @return {Integer}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function compareTo(BigDecimal $number)
     {
@@ -447,8 +485,13 @@ class BigDecimal {
     }
 
     /**
-     * @param BigDecimal $number
-     * @return bool
+     * @method isEqualTo
+     * Compare with other BigDecimal number and return TRUE if equal.
+     * 
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function isEqualTo(BigDecimal $number)
     {
@@ -456,8 +499,13 @@ class BigDecimal {
     }
 
     /**
-     * @param BigDecimal $number
-     * @return bool
+     * @method isGreaterThan
+     * Compare with other BigDecimal number and return TRUE if greater.
+     * 
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function isGreaterThan(BigDecimal $number)
     {
@@ -465,8 +513,13 @@ class BigDecimal {
     }
 
     /**
-     * @param BigDecimal $number
-     * @return bool
+     * @method isGreaterThanOrEqualTo
+     * Compare with other BigDecimal number and return TRUE if greater or equal.
+     * 
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function isGreaterThanOrEqualTo(BigDecimal $number)
     {
@@ -474,8 +527,13 @@ class BigDecimal {
     }
 
     /**
-     * @param BigDecimal $number
-     * @return bool
+     * @method isLessThan
+     * Compare with other BigDecimal number and return TRUE if less.
+     * 
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function isLessThan(BigDecimal $number)
     {
@@ -483,8 +541,13 @@ class BigDecimal {
     }
 
     /**
-     * @param BigDecimal $number
-     * @return bool
+     * @method isLessThanOrEqualTo
+     * Compare with other BigDecimal number and return TRUE if less or equal.
+     * 
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function isLessThanOrEqualTo(BigDecimal $number)
     {
@@ -492,7 +555,13 @@ class BigDecimal {
     }
 
     /**
-     * @return bool
+     * @method isNegative
+     * Compare with zero and return TRUE if less.
+     * 
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function isNegative()
     {
@@ -500,7 +569,13 @@ class BigDecimal {
     }
 
     /**
-     * @return bool
+     * @method isPositive
+     * Compare with zero and return TRUE if more.
+     * 
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function isPositive()
     {
