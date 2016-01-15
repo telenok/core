@@ -1,30 +1,26 @@
 <?php
-
 ob_start();
-
 ?>
 
-    @yield('body')
-	
-<?php
+@yield('body')
 
+<?php
 $htmlCode = ob_get_contents();
 
 ob_end_clean();
-	
 ?>
 <!doctype html>
 <html> 
     <head>
-    @section('head')
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<meta name="csrf-token" content="{{csrf_token()}}" /> 
-		
-		<base href="/" />
+        @section('head')
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="csrf-token" content="{{csrf_token()}}" /> 
 
-		<!--[if lt IE 9]> 
-		<script src="packages/telenok/core/js/html5shiv/html5shiv.js">
-		<![endif]-->
+        <base href="/" />
+
+        <!--[if lt IE 9]> 
+        <script src="packages/telenok/core/js/html5shiv/html5shiv.js">
+        <![endif]-->
         {!! HTML::style('packages/telenok/core/css/jquery-ui.css') !!}
         {!! HTML::style('packages/telenok/core/css/jquery.gritter.css') !!}
         {!! HTML::style('packages/telenok/core/js/bootstrap/css/bootstrap.min.css') !!}
@@ -33,9 +29,10 @@ ob_end_clean();
         {!! HTML::style('packages/telenok/core/js/bootstrap/css/ace.css') !!}
         {!! HTML::style('packages/telenok/core/js/bootstrap/css/ace-skins.min.css') !!}
         {!! HTML::style('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.css') !!}
+        {!! HTML::style('packages/telenok/core/js/codemirror/codemirror.css') !!}
 
         {!! HTML::style('packages/telenok/core/js/dropzone/dropzone.css') !!}
-		
+
         {!! HTML::style('packages/telenok/core/css/style.css') !!} 
 
         {!! HTML::script('packages/telenok/core/js/jquery.js') !!}
@@ -44,15 +41,16 @@ ob_end_clean();
         {!! HTML::script('packages/telenok/core/js/jquery.punch.js') !!}
         {!! HTML::script('packages/telenok/core/js/jquery.datatables/jquery.datatables.js') !!}
         {!! HTML::script('packages/telenok/core/js/jquery.jstree/jstree.js') !!}
-        
+
         {!! HTML::style('packages/telenok/core/js/jquery.chosen/chosen.css') !!}
         {!! HTML::script('packages/telenok/core/js/jquery.chosen/chosen.js') !!}
-		
+
         {!! HTML::style('packages/telenok/core/js/highlight/styles/vs.css') !!}
         {!! HTML::script('packages/telenok/core/js/highlight/highlight.js') !!}
 
         <script type="text/javascript">
-            if("ontouchend" in document) document.write("<script src='packages/telenok/core/js/jquery.mobile.custom.min.js' type='text/javascript'>"+"<"+"/script>");
+            if ("ontouchend" in document)
+                document.write("<script src='packages/telenok/core/js/jquery.mobile.custom.min.js' type='text/javascript'>" + "<" + "/script>");
         </script>
 
         {!! HTML::script('packages/telenok/core/js/fuelux/fuelux.wizard.min.js') !!}
@@ -62,41 +60,42 @@ ob_end_clean();
         {!! HTML::script('packages/telenok/core/js/bootstrap/js/ace.js') !!}
         {!! HTML::script('packages/telenok/core/js/bootstrap/lib/moment.js') !!}
         {!! HTML::script('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.js') !!}
- 
+
         {!! HTML::script('packages/telenok/core/js/dropzone/dropzone.js') !!}
+        {!! HTML::script('packages/telenok/core/js/codemirror/codemirror.js') !!}
         {!! HTML::script('packages/telenok/core/js/script.js') !!}
-    @show
-	
-		@foreach($controller->getCssFile() as $file)
+        @show
 
-		<link href="{!! $file['file'] !!}" rel="stylesheet" />
+        @foreach($controller->getCssFile() as $file)
 
-		@endforeach
-		
-		@foreach($controller->getCssCode() as $code)
+        <link href="{!! $file['file'] !!}" rel="stylesheet" />
 
-		<style>
+        @endforeach
 
-			{!! $code !!}
+        @foreach($controller->getCssCode() as $code)
 
-		</style>
+        <style>
 
-		@endforeach
-	
-		@foreach($controller->getJsFile() as $file)
+            {!! $code !!}
 
-		<script src="{!! $file['file'] !!}"></script>
+        </style>
 
-		@endforeach
-		
-		@foreach($controller->getJsCode() as $code)
+        @endforeach
 
-			{!! $code !!}
+        @foreach($controller->getJsFile() as $file)
 
-		@endforeach
-	
+        <script src="{!! $file['file'] !!}"></script>
+
+        @endforeach
+
+        @foreach($controller->getJsCode() as $code)
+
+        {!! $code !!}
+
+        @endforeach
+
     </head>
 
-	{!! $htmlCode !!} 
+    {!! $htmlCode !!} 
 
 </html>

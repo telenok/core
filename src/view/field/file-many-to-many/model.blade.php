@@ -557,6 +557,8 @@
                                     <i class="upload-icon fa fa-cloud-upload blue fa fa-3x"></i>',
                                 dictResponseError: 'Error while uploading file!',
                                 autoProcessQueue: false,
+                                parallelUploads: 4,
+                                uploadMultiple: true,
                                 headers: {
                                     'X-CSRF-Token': jQuery('meta[name="csrf-token"]').attr('content')
                                 },

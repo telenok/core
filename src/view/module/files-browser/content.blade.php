@@ -4,7 +4,6 @@
 
 ?>
 
-
 <div class="container-table">
 
     <div class="table-header">{{ $controller->LL("list.name") }}</div>
@@ -129,18 +128,19 @@
             var columns = [];
 
             columns.push({ 
-                data: "tableCheckAll", 
-                title : '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
-                    + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').DataTable();' 
-                    + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.table().body());' 
-                    + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb.table().body()).prop(\'checked\'));">'
+                data : "tableCheckAll", 
+                title : 
+                    '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
+                    + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
+                    + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
+                    + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
                     + '<span class="lbl">' 
                     + '</span></label>',
                 className : "center", 
                 width : "20px", 
                 defaultContent : '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
                 orderable : false
-            });
+            }); 
 
             columns.push({ 
                 data : "tableManageItem", 
@@ -191,6 +191,41 @@
                                     }
                                 }); 
                             }
+                        },
+                        {
+                            text : "<i class='fa fa-upload'></i> {{ $controller->LL('btn.upload.file') }}",
+                            action : function (e, dt, button, config)
+                            {
+                                if (!button.data('dropzone-exists'))
+                                {
+                                    button.data('dropzone-exists', 1);
+                                    
+                                    button.dropzone({ 
+                                        url: '{!! $controller->getRouterUpload() !!}', 
+                                        autoDiscover: false,
+                                        uploadMultiple: false,
+                                        parallelUploads: 1,
+                                        maxFilesize: 2500,
+                                        createImageThumbnails: false,
+                                        clickable: '#btn-upload-{{$jsContentUnique}} a',
+                                        previewTemplate : '<div style="display:none"></div>',
+                                        params: 
+                                        {
+                                            directory: currentDirectory{{$jsContentUnique}}
+                                        },
+                                        headers: {
+                                            'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                                        },
+                                        init: function () 
+                                        {
+                                            this.on("queuecomplete", function (file) 
+                                            {
+                                                dt.ajax.reload();
+                                            });
+                                        }
+                                    });
+                                }
+                            }
                         }
                     ]
                 },
@@ -225,7 +260,7 @@
                                 {
                                     if (data.success) 
                                     {
-                                        jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).closest("tr").remove();
+                                        dt.ajax.reload();
                                     }
                                 }); 
                             }

@@ -17,7 +17,7 @@
 	@yield('ajaxLock')  
 
     jQuery('#model-ajax-{{$uniqueId}}').on('submit', function(e) 
-	{
+    {
         e.preventDefault();
 
         var $container = jQuery(this).closest('div.container-model');

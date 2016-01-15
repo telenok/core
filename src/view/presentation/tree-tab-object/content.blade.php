@@ -90,13 +90,15 @@
             var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
             var columns = [];
 
-            columns.push({ "data": "tableCheckAll", "sTitle": 
-                '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
-                + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
-                + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
-                + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
-                + '<span class="lbl">' 
-                + '</span></label>',
+            columns.push({ 
+                data : "tableCheckAll", 
+                title : 
+                    '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
+                    + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
+                    + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
+                    + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
+                    + '<span class="lbl">' 
+                    + '</span></label>',
                 className : "center", 
                 width : "20px", 
                 defaultContent : '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>', 
