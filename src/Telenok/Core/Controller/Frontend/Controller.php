@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Controller\Frontend;
+<?php
+
+namespace Telenok\Core\Controller\Frontend;
 
 /**
  * Class to process initial backend http request
@@ -10,7 +12,7 @@
 class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller {
 
     use \Illuminate\Foundation\Validation\ValidatesRequests;
-    
+
     /**
      * @protected
      * @property {String} $key
@@ -50,7 +52,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller
      * Inject $controllerRequest linked to $this in all frontend's views
      * @member Telenok.Core.Controller.Frontend.Controller
      */
-    public function __construct() 
+    public function __construct()
     {
         app('view')->composer('*', function($view)
         {
@@ -61,16 +63,5 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller
         {
             return $this;
         });
-    }
-    
-    /**
-     * @method getContent
-     * Return content of default view 
-     * @return {String}
-     * @member Telenok.Core.Controller.Frontend.Controller
-     */
-	public function getContent()
-	{
-		return theme_view('page.home');
     }
 }

@@ -1,99 +1,104 @@
-<?php namespace Telenok\Core\Interfaces\Controller\Frontend;
+<?php
+
+namespace Telenok\Core\Interfaces\Controller\Frontend;
 
 class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
-	protected $controllerModel;
-	protected $container = [];
-	protected $jsFilePath = [];
-	protected $cssFilePath = [];
-	protected $cssCode = [];
-	protected $jsCode = [];
-	protected $cacheTime = 3600;
-	protected $frontendView = 'core::controller.frontend';
-	protected $backendView = 'core::controller.frontend-container';
+    protected $controllerModel;
+    protected $container = [];
+    protected $jsFilePath = [];
+    protected $cssFilePath = [];
+    protected $cssCode = [];
+    protected $jsCode = [];
+    protected $cacheTime = 3600;
+    protected $frontendView = 'core::controller.frontend';
+    protected $backendView = 'core::controller.frontend-container';
     protected $languageDirectory = 'controller';
-
     protected $cacheKey = 'frontend-controller';
     protected $pageMetaTitle;
     protected $pageMetaDescription;
     protected $pageMetaKeywords;
 
-	public function setCacheTime($param = 0)
-	{
-		$this->cacheTime = min($this->getCacheTime(), $param);
+    public function setCacheTime($param = 0)
+    {
+        $this->cacheTime = min($this->getCacheTime(), $param);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getCacheTime()
-	{
-		return $this->cacheTime;
-	}
+    public function getCacheTime()
+    {
+        return $this->cacheTime;
+    }
 
-	public function getContainerContent($pageId = 0, $languageId = 0)
-	{
-		$content = ['controller' => $this];
+    public function getContainerContent($pageId = 0, $languageId = 0)
+    {
+        $content = ['controller' => $this];
 
-		$wop = \App\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
-						{
-							$query->where('id', $languageId);
-						})
-						->orderBy('widget_order')->get();
+        $wop = \App\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
+                        {
+                            $query->where('id', $languageId);
+                        })
+                        ->orderBy('widget_order')->get();
 
-		$widgetRepository = app('telenok.config.repository')->getWidget();
+        $widgetRepository = app('telenok.config.repository')->getWidget();
 
-		$wop->each(function($w) use (&$content, $widgetRepository)
-		{
-			$content[$w->container][] = $widgetRepository->get($w->key)->getInsertContent($w->getKey());
-		});
+        $wop->each(function($w) use (&$content, $widgetRepository)
+        {
+            $content[$w->container][] = $widgetRepository->get($w->key)->getInsertContent($w->getKey());
+        });
 
-		return view($this->backendView, $content)->render();
-	}
+        return view($this->backendView, $content)->render();
+    }
 
-	public function getContiner()
-	{
-		return $this->container;
-	}
+    public function getContiner()
+    {
+        return $this->container;
+    }
 
-	public function getBackendView()
-	{
-		return $this->backendView;
-	}
+    public function getBackendView()
+    {
+        return $this->backendView;
+    }
 
-	public function setBackendView($param = '')
-	{
-		$this->backendView = $param;
+    public function setBackendView($param = '')
+    {
+        $this->backendView = $param;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getFrontendView()
-	{
-		return $this->frontendView;
-	}
+    public function getFrontendView()
+    {
+        return $this->frontendView;
+    }
 
-	public function setFrontendView($param = '')
-	{
-		$this->frontendView = $param;
+    public function setFrontendView($param = '')
+    {
+        $this->frontendView = $param;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getContent()
-	{
-		$content = [];
-        
-		$pageId = intval(str_replace('page_', '', \Route::currentRouteName()));
+    /**
+     * @method getContent
+     * Return content of default view 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
+    public function getContent()
+    {
+        $content = [];
+
+        $pageId = intval(str_replace('page_', '', \Route::currentRouteName()));
 
         try
         {
             $page = app('cache')->remember(
-                $this->getCacheKey(), 
-                $this->getCacheTime(),
-                function() use ($pageId)
-                {
-                    return \App\Telenok\Core\Model\Web\Page::active()->withPermission()->findOrFail($pageId);
-                });
+                    $this->getCacheKey(), $this->getCacheTime(), function() use ($pageId)
+            {
+                return \App\Telenok\Core\Model\Web\Page::active()->withPermission()->findOrFail($pageId);
+            });
         }
         catch (\Exception $e)
         {
@@ -115,208 +120,212 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         {
             return $this->processContent($content);
         }
-        
+
         $content = $this->getNotCachedContent($page);
 
         $this->setCachedContent($content);
 
         return $this->processContent($content);
-	}
-    
-	public function getNotCachedContent($page)
-	{
-		$listWidget = app('telenok.config.repository')->getWidget();
-        
+    }
+
+    public function getNotCachedContent($page)
+    {
+        $listWidget = app('telenok.config.repository')->getWidget();
+
         foreach ($this->container as $containerId)
         {
             $page->widget()->active()->get()->filter(function($item) use ($containerId)
-            {
-                return $item->container === $containerId;
-            })
-            ->each(function($item) use (&$content, $containerId, $listWidget)
-            {
-                $content[$containerId][] = $listWidget->get($item->key)
-                                            ->setWidgetModel($item)
-                                            ->setConfig($item->structure)
-                                            ->setFrontendController($this)
-                                            ->getContent();
-            });
+                    {
+                        return $item->container === $containerId;
+                    })
+                    ->each(function($item) use (&$content, $containerId, $listWidget)
+                    {
+                        $content[$containerId][] = $listWidget->get($item->key)
+                                ->setWidgetModel($item)
+                                ->setConfig($item->structure)
+                                ->setFrontendController($this)
+                                ->getContent();
+                    });
         }
 
-		return view($this->getFrontendView(), [
+        return theme_view($this->getFrontendView(), [
                     'page' => $page,
                     'controller' => $this,
                     'content' => $content,
                 ])->render();
     }
-    
+
     public function processContent($content = '')
     {
         return $content;
     }
 
-	public function getCacheKey()
-	{        
-            return $this->cacheKey ? $this->cacheKey . $this->getFrontendView() 
-                    . "." . config('app.locale', config('app.localeDefault'))
-                    . "." . $this->getRequest()->fullUrl()
-                            : false;
-	}
+    public function getCacheKey()
+    {
+        return $this->cacheKey ? $this->cacheKey . $this->getFrontendView()
+                . "." . config('app.locale', config('app.localeDefault'))
+                . "." . $this->getRequest()->fullUrl() : false;
+    }
 
-	public function getCachedContent()
-	{
+    public function getCachedContent()
+    {
         if (($k = $this->getCacheKey()) !== false)
         {
             return app('cache')->get($k, false);
         }
 
-		return false;
-	}
+        return false;
+    }
 
-	public function setCachedContent($param = '')
-	{
+    public function setCachedContent($param = '')
+    {
         if (($t = $this->getCacheTime()) && ($k = $this->getCacheKey()) !== false)
         {
             app('cache')->put($k, $param, $t);
         }
-        
-		return $this;
-	}
+
+        return $this;
+    }
 
     public function validateSession()
     {
-        return ['logined' => (int)app('auth')->check(), 'csrf_token' => csrf_token()];
+        return ['logined' => (int) app('auth')->check(), 'csrf_token' => csrf_token()];
     }
 
-	public function hasAddedCssFile($filePath = '', $key = '')
-	{
-		foreach($this->cssFilePath as $k => $p)
-		{
-			if ($p['file'] == $filePath)
-			{
-				return true;
-			}
-			else if (!is_array($key) && strpos(".$k.", ".$key.") !== FALSE)
-			{
-				return true;
-			}
-		}
-	}
+    public function hasAddedCssFile($filePath = '', $key = '')
+    {
+        foreach ($this->cssFilePath as $k => $p)
+        {
+            if ($p['file'] == $filePath)
+            {
+                return true;
+            }
+            else if (!is_array($key) && strpos(".$k.", ".$key.") !== FALSE)
+            {
+                return true;
+            }
+        }
+    }
 
-	public function addCssFile($filePath, $key = '', $order = 1000000)
-	{
-		if (!$this->hasAddedCssFile($filePath, $key))
-		{
-			if (is_array($key))
-			{
-				$key = implode(".", $key);
-			}
-			
-			$this->cssFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
-		}
+    public function addCssFile($filePath, $key = '', $order = 1000000)
+    {
+        if (!$this->hasAddedCssFile($filePath, $key))
+        {
+            if (is_array($key))
+            {
+                $key = implode(".", $key);
+            }
 
-		return $this;
-	}
+            $this->cssFilePath[($key ? : $filePath)] = ['file' => $filePath, 'order' => $order];
+        }
 
-	public function addCssCode($code)
-	{
-		$this->cssCode[] = $code;
+        return $this;
+    }
 
-		return $this;
-	}
+    public function addCssCode($code)
+    {
+        $this->cssCode[] = $code;
 
-	public function hasAddedJsFile($filePath = '', $key = '')
-	{
-		foreach($this->jsFilePath as $k => $p)
-		{
-			if ($p['file'] == $filePath)
-			{
-				return true;
-			}
-			else if (!is_array($key) && strpos(".$k.", ".$key.") !== FALSE)
-			{
-				return true;
-			}
-		}
-	}
+        return $this;
+    }
 
-	public function addJsFile($filePath, $key = '', $order = 100000)
-	{
-		if (!$this->hasAddedJsFile($filePath, $key))
-		{
-			if (is_array($key))
-			{
-				$key = implode(".", $key);
-			}
-			
-			$this->jsFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
-		}
+    public function hasAddedJsFile($filePath = '', $key = '')
+    {
+        foreach ($this->jsFilePath as $k => $p)
+        {
+            if ($p['file'] == $filePath)
+            {
+                return true;
+            }
+            else if (!is_array($key) && strpos(".$k.", ".$key.") !== FALSE)
+            {
+                return true;
+            }
+        }
+    }
 
-		return $this;
-	}
+    public function addJsFile($filePath, $key = '', $order = 100000)
+    {
+        if (!$this->hasAddedJsFile($filePath, $key))
+        {
+            if (is_array($key))
+            {
+                $key = implode(".", $key);
+            }
 
-	public function addJsCode($code)
-	{
-		$this->jsCode[] = $code;
+            $this->jsFilePath[($key ? : $filePath)] = ['file' => $filePath, 'order' => $order];
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getJsFile()
-	{
-		usort($this->jsFilePath, function($a, $b) { return $a['order'] < $b['order'] ? -1 : 1; });
-		
-		return $this->jsFilePath;
-	}
+    public function addJsCode($code)
+    {
+        $this->jsCode[] = $code;
 
-	public function getJsCode()
-	{
-		return $this->jsCode;
-	}
+        return $this;
+    }
 
-	public function getCssFile()
-	{
-		usort($this->cssFilePath, function($a, $b) { return $a['order'] < $b['order'] ? -1 : 1; });
-		
-		return $this->cssFilePath;
-	}
+    public function getJsFile()
+    {
+        usort($this->jsFilePath, function($a, $b)
+        {
+            return $a['order'] < $b['order'] ? -1 : 1;
+        });
 
-	public function getCssCode()
-	{
-		return $this->cssCode;
-	}
-	
+        return $this->jsFilePath;
+    }
 
-	public function getName()
-	{
-		return $this->LL('name');
-	}
+    public function getJsCode()
+    {
+        return $this->jsCode;
+    }
 
-	public function setControllerModel($model)
-	{
-		$this->controllerModel = $model;
+    public function getCssFile()
+    {
+        usort($this->cssFilePath, function($a, $b)
+        {
+            return $a['order'] < $b['order'] ? -1 : 1;
+        });
 
-		return $this;
-	}
+        return $this->cssFilePath;
+    }
 
-	public function getControllerModel()
-	{
-		return $this->controllerModel;
-	}
+    public function getCssCode()
+    {
+        return $this->cssCode;
+    }
 
-	public function getKey()
-	{
-		return '';
-	}
+    public function getName()
+    {
+        return $this->LL('name');
+    }
+
+    public function setControllerModel($model)
+    {
+        $this->controllerModel = $model;
+
+        return $this;
+    }
+
+    public function getControllerModel()
+    {
+        return $this->controllerModel;
+    }
+
+    public function getKey()
+    {
+        return '';
+    }
 
     // page meta title
     public function setPageMetaTitle($param)
     {
         $this->pageMetaTitle = $param;
-        
+
         return $this;
     }
-    
+
     public function getPageMetaTitle()
     {
         return $this->pageMetaTitle;
@@ -326,10 +335,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     public function setPageMetaDescription($param)
     {
         $this->pageMetaDescription = $param;
-        
+
         return $this;
     }
-    
+
     public function getPageMetaDescription()
     {
         return $this->pageMetaDescription;
@@ -339,12 +348,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     public function setPageMetaKeywords($param)
     {
         $this->pageMetaKeywords = $param;
-        
+
         return $this;
     }
-    
+
     public function getPageMetaKeywords()
     {
         return $this->pageMetaKeywords;
     }
+
 }
