@@ -8,10 +8,10 @@
 
 	jQuery(".datetime-picker").not('.datetime-picker-added').addClass('datetime-picker-added').datetimepicker(
 	{
-		pick12HourFormat: true,
-		autoclose: true,
-		todayBtn: true,
-		minuteStep: 1
+            pick12HourFormat: true,
+            autoclose: true,
+            todayBtn: true,
+            minuteStep: 1
 	});
 
 	@yield('ajaxLock')  
@@ -25,9 +25,9 @@
 
         var button_type = jQuery(this).data('btn-clicked');
         
-		@yield('buttonType')
-		
-		@yield('beforeAjax')
+        @yield('buttonType')
+
+        @yield('beforeAjax')
 
         jQuery.ajax({
             url: $el.attr('action'),
@@ -35,35 +35,34 @@
             data: (new FormData(this)),
             dataType: 'json',
             cache: false,
-			processData: false,
-			contentType: false,
-		})
-		.done(function(data, textStatus, jqXHR) {
-			
-		@section('ajaxDone')
-				
-			if (button_type == 'save.close' || button_type == 'delete.close')
-			{
-				var divId = $el.closest('div.tab-pane').attr('id');
+            processData: false,
+            contentType: false,
+        })
+        .done(function(data, textStatus, jqXHR) {
 
-				jQuery('li a[href=#' + divId + '] i.fa.fa-times').click();
-			}
-			else if (button_type=='save')
-			{
-				jQuery.gritter.add({
-					title: '{{$controller->LL('notice.saved')}}! {{$controller->LL('notice.saved.description')}}',
-					text: '{{$controller->LL('notice.saved.thank.you')}}!',
-					class_name: 'gritter-success gritter-light',
-					time: 3000,
-				});
-				
-				$el.closest('div.container-model-{{$uniqueId}}').html(data.tabContent); 
-			}
-				
-		@show
+            @section('ajaxDone')
 
-		})
-		.fail(function(jqXHR, textStatus, errorThrown) {
+                if (button_type == 'save.close' || button_type == 'delete.close')
+                {
+                    var divId = $el.closest('div.tab-pane').attr('id');
+
+                    jQuery('li a[href=#' + divId + '] i.fa.fa-times').click();
+                }
+                else if (button_type=='save')
+                {
+                    jQuery.gritter.add({
+                        title: '{{$controller->LL('notice.saved')}}! {{$controller->LL('notice.saved.description')}}',
+                        text: '{{$controller->LL('notice.saved.thank.you')}}!',
+                        class_name: 'gritter-success gritter-light',
+                        time: 3000,
+                    });
+
+                    $el.closest('div.container-model-{{$uniqueId}}').html(data.tabContent); 
+                }
+
+            @show
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
 
 		@section('ajaxFail')
 
@@ -185,4 +184,51 @@
 @show
  
 </div>
- 
+
+<script>
+
+
+    var $el = jQuery('#model-ajax-{{$uniqueId}} div.form-actions');
+    var offset_left = $el.offset().left;
+    
+(function()
+{
+    var $el = jQuery('#model-ajax-{{$uniqueId}} div.form-actions');
+    var background = $el.css('background');
+    
+    jQuery('#model-ajax-{{$uniqueId}} div.form-actions').affix({
+        offset: {
+            top: jQuery(window).height() - 200
+        }
+    })
+    .on('affixed.bs.affix', function () 
+    {
+        jQuery(this).css({
+            'opacity': 1, 
+            'background': background, 
+            'border-top-width': '1px',
+            'left': offset_left
+        });
+    })
+    .on('affixed-top.bs.affix', function () 
+    {
+        jQuery(this).css({
+            'opacity': 0.6, 
+            'background': 'transparent',
+            'border-top-width': 0,
+            'left': $el.css('left', $el.parent().offset().left + $el.parent().width()/2 - $el.width()/2 - 20)
+        });
+    });
+    
+    var maxZ = 0;
+
+    jQuery('#model-ajax-{{$uniqueId}} *').each(function(i, el)
+    {
+        if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
+    });    
+    
+    $el.css('zIndex', maxZ + 1);
+})();
+
+
+</script>

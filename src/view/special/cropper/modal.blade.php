@@ -544,7 +544,7 @@
                                     if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
                                 });
 
-                                $croppedCanvasModal.css('zIndex', maxZ);
+                                $croppedCanvasModal.css('zIndex', maxZ + 1);
 
                                 if (!$download.hasClass('disabled')) {
                                     $download.attr('href', result.toDataURL());

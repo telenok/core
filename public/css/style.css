@@ -312,3 +312,13 @@ div.DTTT_collection_background {
 div.dataTables_wrapper {
 	overflow: auto;
 }
+
+
+div.form-actions.affix {
+    position: relative;
+}
+
+div.form-actions.affix-top {
+    position: fixed;
+    bottom: 0;
+}

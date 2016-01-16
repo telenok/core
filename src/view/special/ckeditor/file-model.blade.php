@@ -111,7 +111,7 @@
                 if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
             });
 
-            $modalCropper.css('zIndex', maxZ);
+            $modalCropper.css('zIndex', maxZ + 1);
         });
 
         $modalCropper.data('setImageBlob', function(data)

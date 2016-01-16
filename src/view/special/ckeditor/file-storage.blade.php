@@ -120,7 +120,7 @@
             if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
         });
 
-        jQuery(this).css('zIndex', maxZ);
+        jQuery(this).css('zIndex', maxZ + 1);
     });
 
     jQuery('#select-directory-{{$jsUnique}}').off('change').on('change', function()
@@ -166,7 +166,7 @@
                 if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
             });
 
-            $modalCropper.css('zIndex', maxZ);
+            $modalCropper.css('zIndex', maxZ + 1);
         });
 
         $modalCropper.data('setImageBlob', function(data)
