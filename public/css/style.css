@@ -322,3 +322,8 @@ div.form-actions.affix-top {
     position: fixed;
     bottom: 0;
 }
+
+div.CodeMirror span.CodeMirror-matchingbracket {
+    color: red;
+    font-weight: bold;
+}

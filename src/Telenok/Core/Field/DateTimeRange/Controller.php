@@ -29,7 +29,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     /**
      * @protected
      * @property {Array} $specialDateField
-     * Define list of field's names to process saving and filling {@link Telenok.Core.Model.Object.Field Telenok.Core.Model.Object.Field}.
+     * Define list of date field's names to process saving and filling {@link Telenok.Core.Model.Object.Field Telenok.Core.Model.Object.Field}.
      * @member Telenok.Core.Field.DateTimeRange.Controller
      */
     protected $specialDateField = ['datetime_range_default_start', 'datetime_range_default_end'];
@@ -279,17 +279,17 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      */
     public function preProcess($model, $type, $input)
     {
-		if ($input->get('required'))
-		{
-			$input->put('rule', ['required']);
-		}
+        if ($input->get('required'))
+        {
+            $input->put('rule', ['required']);
+        }
         else
         {
-			$input->put('rule', []);
+            $input->put('rule', []);
         }
-		
+
         return parent::preProcess($model, $type, $input);
-    } 
+    }
 
     /**
      * @method postProcess

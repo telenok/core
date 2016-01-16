@@ -41,7 +41,7 @@
 			return;
         }
 		else if (button_type == 'delete.close')
-		{ console.log('list');
+		{ 
 			if (confirm('{{ $controller->LL('notice.sure.delete') }}'))
 			{
 				$el.attr('action', "{!! $controller->getRouterDelete(['id' => $model->getKey()]) !!}");

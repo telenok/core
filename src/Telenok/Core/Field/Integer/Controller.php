@@ -20,7 +20,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     
     /**
      * @protected
-     * @property {Array} $specialDateField
+     * @property {Array} $specialField
      * Define list of field's names to process saving and filling {@link Telenok.Core.Model.Object.Field Telenok.Core.Model.Object.Field}.
      * @member Telenok.Core.Field.Integer.Controller
      */
@@ -32,7 +32,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * Define list of rules for special fields.
      * @member Telenok.Core.Field.Integer.Controller
      */
-    protected $ruleList = ['integer_default' => ['integer', 'between:-2147483648,2147483647'], 'integer_min' => ['integer', 'between:-2147483648,2147483647'], 'integer_max' => ['integer', 'between:-2147483648,2147483647']];
+    protected $ruleList = [
+                'integer_default' => ['integer', 'between:-2147483648,2147483647'], 
+                'integer_min' => ['integer', 'between:-2147483648,2147483647'], 
+                'integer_max' => ['integer', 'between:-2147483648,2147483647']];
     
     /**
      * @protected

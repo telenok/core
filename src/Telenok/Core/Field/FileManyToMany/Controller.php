@@ -4,7 +4,7 @@
  * @class Telenok.Core.Field.FileManyToMany.Controller
  * Class of field "file-many-to-many". Field allow to manipulate list of files.
  * 
- * @extends Telenok.Core.Interfaces.Field.Controller
+ * @extends Telenok.Core.Field.RelationManyToMany.Controller
  */
 class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
@@ -18,7 +18,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     
     /**
      * @protected
-     * @property {Array} $specialDateField
+     * @property {Array} $specialField
      * Define list of field's names to process saving and filling {@link Telenok.Core.Model.Object.Field Telenok.Core.Model.Object.Field}.
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
@@ -107,64 +107,72 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
     public function getTitleList($id = null, $closure = null)
-	{
-		$term = trim($this->getRequest()->input('term'));
-		$return = [];
+    {
+        $term = trim($this->getRequest()->input('term'));
+        $return = [];
 
-		$sequence = new \App\Telenok\Core\Model\Object\Sequence();
+        $sequence = new \App\Telenok\Core\Model\Object\Sequence();
 
-		$sequenceTable = $sequence->getTable();
-		$typeTable = (new \App\Telenok\Core\Model\Object\Type())->getTable();
+        $sequenceTable = $sequence->getTable();
+        $typeTable = (new \App\Telenok\Core\Model\Object\Type())->getTable();
 
-		$sequence->addMultilanguage('title_type');
+        $sequence->addMultilanguage('title_type');
 
-		try
-		{
-			$query = \App\Telenok\Core\Model\Object\Sequence::withPermission()
-                    ->select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title as title_type')
-					->join($typeTable, function($join) use ($sequenceTable, $typeTable)
-					{
-						$join->on($sequenceTable . '.sequences_object_type', '=', $typeTable . '.id');
-					})
-					->where(function ($query) use ($sequenceTable, $typeTable, $term)
-					{
-						$query->where($sequenceTable . '.id', $term);
+        try
+        {
+            $query = \App\Telenok\Core\Model\Object\Sequence::withPermission()
+                ->select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title as title_type')
+                ->join($typeTable, function($join) use ($sequenceTable, $typeTable)
+                {
+                    $join->on($sequenceTable . '.sequences_object_type', '=', $typeTable . '.id');
+                })
+                ->where(function ($query) use ($sequenceTable, $typeTable, $term)
+                {
+                    $query->where($sequenceTable . '.id', $term);
 
-						$query->orWhere(function ($query) use ($sequenceTable, $term)
-						{
-							collect(explode(' ', $term))
-									->reject(function($i) { return !trim($i); })
-									->each(function($i) use ($query, $sequenceTable)
-							{
-								$query->where($sequenceTable . '.title', 'like', "%{$i}%");
-							});
-						});
+                    $query->orWhere(function ($query) use ($sequenceTable, $term)
+                    {
+                        collect(explode(' ', $term))
+                        ->reject(function($i)
+                        {
+                            return !trim($i);
+                        })
+                        ->each(function($i) use ($query, $sequenceTable)
+                        {
+                            $query->where($sequenceTable . '.title', 'like', "%{$i}%");
+                        });
+                    });
 
-						$query->orWhere(function ($query) use ($typeTable, $term)
-						{
-							collect(explode(' ', $term))
-									->reject(function($i) { return !trim($i); })
-									->each(function($i) use ($query, $typeTable)
-							{
-								$query->where($typeTable . '.title', 'like', "%{$i}%");
-							});
-						});
-					});
-			
-			if ($closure instanceof \Closure)
-			{
-				$closure($query);
-			}
-			
-			$query->take(20)->get()->each(function($item) use (&$return)
-			{
-				$return[] = ['value' => $item->id, 'text' => "[{$item->translate('title_type')}#{$item->id}] " . $item->translate('title')];
-			});
-		}
-        catch (\Exception $e) {}
+                    $query->orWhere(function ($query) use ($typeTable, $term)
+                    {
+                        collect(explode(' ', $term))
+                        ->reject(function($i)
+                        {
+                            return !trim($i);
+                        })
+                        ->each(function($i) use ($query, $typeTable)
+                        {
+                            $query->where($typeTable . '.title', 'like', "%{$i}%");
+                        });
+                    });
+                });
 
-		return $return;
-	}
+            if ($closure instanceof \Closure)
+            {
+                $closure($query);
+            }
+
+            $query->take(20)->get()->each(function($item) use (&$return)
+            {
+                $return[] = ['value' => $item->id, 'text' => "[{$item->translate('title_type')}#{$item->id}] " . $item->translate('title')];
+            });
+        }
+        catch (\Exception $e)
+        {
+        }
+
+        return $return;
+    }
 
     /**
      * @method getFormModelContent
@@ -204,25 +212,25 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         if ($linkedObject instanceof \Telenok\Core\Model\File\File)
         {
             $item->{camel_case($field->code)}()->orderBy('sort')->get()->take(5)->each(function($item) use (&$content)
+            {
+                if ($item->upload->exists())
                 {
-                    if ($item->upload->exists())
+                    if ($item->upload->isImage())
                     {
-                        if ($item->upload->isImage())
-                        {
-                            $content .= " <img src='" . $item->upload->downloadImageLink(70, 70) . "' title='" . e($item->translate('title')) . "' />";
-                        }
-                        else
-                        {
-                            $content .= " <a href='" . $item->upload->downloadStreamLink() . "' 
-                                target='_blank' title='" . e($item->translate('title')) . "'>"
-                                    . e(\Str::limit($item->translate('title'), 20)) . "</a>";
-                        }
+                        $content .= " <img src='" . $item->upload->downloadImageLink(70, 70) . "' title='" . e($item->translate('title')) . "' />";
                     }
-                    else 
+                    else
                     {
-                        $content .= ' ' . e($item->translate('title'));
+                        $content .= " <a href='" . $item->upload->downloadStreamLink() . "' 
+                            target='_blank' title='" . e($item->translate('title')) . "'>"
+                                . e(\Str::limit($item->translate('title'), 20)) . "</a>";
                     }
-                });
+                }
+                else 
+                {
+                    $content .= ' ' . e($item->translate('title'));
+                }
+            });
         }
         else
         {
@@ -254,16 +262,16 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         {
             if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
             {
-				if ($key == 'file_many_to_many_allow_ext')
-				{
-					$value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION);
-				}
-				else if ($key == 'file_many_to_many_allow_mime')
-				{
-					$value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE);
-				}
+                if ($key == 'file_many_to_many_allow_ext')
+                {
+                    $value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION);
+                }
+                else if ($key == 'file_many_to_many_allow_mime')
+                {
+                    $value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE);
+                }
 
-				return collect((array)json_decode($value, true));
+                return collect((array)json_decode($value, true));
             }
             else
             {
@@ -293,20 +301,20 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     {
         if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
         {
-			if ($value instanceof \Illuminate\Support\Collection) 
-			{
-				$value = $value->toArray();
-			}
-			else if ($key == 'file_many_to_many_allow_ext')
-			{
-				$value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION;
-			} 
-			else if ($key == 'file_many_to_many_allow_mime')
-			{
-				$value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE;
-			} 
+            if ($value instanceof \Illuminate\Support\Collection) 
+            {
+                $value = $value->toArray();
+            }
+            else if ($key == 'file_many_to_many_allow_ext')
+            {
+                $value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION;
+            } 
+            else if ($key == 'file_many_to_many_allow_mime')
+            {
+                $value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE;
+            } 
 
-			$model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
+            $model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
         }
         else
         {
@@ -317,8 +325,8 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     }
 
     /**
-     * @method setModelSpecialAttribute
-     * Set processed value of special fields.
+     * @method saveModelField
+     * Save eloquent model with field's data.
      * 
      * @param {Telenok.Core.Model.Object.Field} $field
      * Eloquent object Field.
@@ -331,35 +339,35 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function saveModelField($field, $model, $input)
     {
-		// if created field
-		if ($model instanceof \Telenok\Core\Model\Object\Field && !$input->get('id'))
-		{
-			return $model;
-		}
+        // if created field
+        if ($model instanceof \Telenok\Core\Model\Object\Field && !$input->get('id'))
+        {
+            return $model;
+        }
 
-		$idsAdd = array_unique((array)$input->get("{$field->code}_add", []));
-        $idsDelete = array_unique((array)$input->get("{$field->code}_delete", []));
-        $idsSort = array_unique((array)$input->get("{$field->code}_sort", []));
+        $idsAdd = array_unique((array) $input->get("{$field->code}_add", []));
+        $idsDelete = array_unique((array) $input->get("{$field->code}_delete", []));
+        $idsSort = array_unique((array) $input->get("{$field->code}_sort", []));
 
-		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
-		{
-			if ( !empty($idsAdd) || !empty($idsDelete) || !empty($idsSort) )
-			{ 
-				$method = camel_case($field->code);
+        if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code))
+        {
+            if (!empty($idsAdd) || !empty($idsDelete) || !empty($idsSort))
+            {
+                $method = camel_case($field->code);
 
-				if (in_array('*', $idsDelete, true))
-				{
+                if (in_array('*', $idsDelete, true))
+                {
                     $model->{$method}()->detach();
-				}
-				else if (!empty($idsDelete))
-				{
+                }
+                else if (!empty($idsDelete))
+                {
                     $model->{$method}()->detach($idsDelete);
-				}
+                }
 
                 // attach new ids
-                $maxSort = (int)$model->{$method}()->max('sort');
+                $maxSort = (int) $model->{$method}()->max('sort');
 
-                foreach($idsAdd as $id)
+                foreach ($idsAdd as $id)
                 {
                     try
                     {
@@ -368,21 +376,26 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
                             $model->{$method}()->attach($id, ['sort' => ++$maxSort]);
                         }
                     }
-                    catch (\Exception $e) {}
+                    catch (\Exception $e)
+                    {
+                        
+                    }
                 }
 
                 //update sort
-                foreach($idsSort as $id => $sort)
+                foreach ($idsSort as $id => $sort)
                 {
                     try
                     {
                         $model->{$method}()->updateExistingPivot($id, ['sort' => $sort]);
                     }
-                    catch (\Exception $e) {}
+                    catch (\Exception $e)
+                    {
+                    }
                 }
-			}
-		}
-	
+            }
+        }
+
         return $model;
     }
     

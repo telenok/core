@@ -20,7 +20,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     
     /**
      * @protected
-     * @property {Array} $specialDateField
+     * @property {Array} $specialField
      * Define list of field's names to process saving and filling {@link Telenok.Core.Model.Object.Field Telenok.Core.Model.Object.Field}.
      * @member Telenok.Core.Field.Decimal.Controller
      */
@@ -243,14 +243,14 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @throws Telenok.Core.Support.Exception.Validator
      */
     public function validate($model = null, $input = [], $messages = [])
-	{
-		if ($input->get('decimal_precision') < $input->get('decimal_scale'))
+    {
+        if ($input->get('decimal_precision') < $input->get('decimal_scale'))
         {
-			throw $this->validateException()->setMessageError($this->LL('error.precision_scale'));
+            throw $this->validateException()->setMessageError($this->LL('error.precision_scale'));
         }
 
-		return parent::validate($model, $input, $messages);
-	}
+        return parent::validate($model, $input, $messages);
+    }
 
     /**
      * @method preProcess

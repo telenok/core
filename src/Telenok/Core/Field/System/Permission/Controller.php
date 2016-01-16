@@ -1,42 +1,103 @@
 <?php namespace Telenok\Core\Field\System\Permission;
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
+/**
+ * @class Telenok.Core.Field.System.Permission.Controller
+ * Class of field "permission". Field allow to store data about date
+ * and locker.
+ *  
+ * @extends Telenok.Core.Interfaces.Field.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
-	protected $key = 'permission';
-    protected $allowMultilanguage = false; 
-	protected $specialField = ['permission_default'];
+    /**
+     * @protected
+     * @property {String} $key
+     * Field key.
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    protected $key = 'permission';
+    
+    /**
+     * @protected
+     * @property {Boolean} $allowMultilanguage
+     * Field doesn't support multilanguage
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    protected $allowMultilanguage = false;
+    
+    /**
+     * @protected
+     * @property {Array} $specialField
+     * Define list of field's names to process saving and filling {@link Telenok.Core.Model.Object.Field Telenok.Core.Model.Object.Field}.
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */    
+    protected $specialField = ['permission_default'];
 
-	public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
-	{
-		return
-		[
-			'urlListTitle' => route("telenok.field.permission.list.title"),
-		];
-	}
+    /**
+     * @method getModelFieldViewVariable
+     * Return array with URL for variables in $viewModel view.
+     * 
+     * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {String} $uniqueId
+     * 
+     * @return {Array}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    {
+        return [
+            'urlListTitle' => route("telenok.field.permission.list.title"),
+        ];
+    }
 
+    /**
+     * @method getModelSpecialAttribute
+     * Return processed value of special fields.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Field's name.
+     * @param {mixed} $value
+     * Value of field from database for processing in this method.
+     * @return {mixed}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
     public function getModelSpecialAttribute($model, $key, $value)
     {
         if (in_array($key, ['permission_default'], true))
         {
-            return collect((array)json_decode($value, true));
+            return collect((array) json_decode($value, true));
         }
 
         return parent::getModelSpecialAttribute($model, $key, $value);
     }
 
+    /**
+     * @method setModelSpecialAttribute
+     * Set processed value of special fields.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Field's name.
+     * @param {mixed} $value
+     * Value of field from database for processing in this method.
+     * @return {Telenok.Core.Field.System.Permission.Controller}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
     public function setModelSpecialAttribute($model, $key, $value)
     {
         if (in_array($key, ['permission_default'], true))
         {
-			if ($value instanceof \Illuminate\Support\Collection) 
-			{
-				$value = $value->toArray();
-			}
+            if ($value instanceof \Illuminate\Support\Collection)
+            {
+                $value = $value->toArray();
+            }
 
-			$model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
+            $model->setAttribute($key, json_encode((array) $value, JSON_UNESCAPED_UNICODE));
         }
         else
         {
@@ -46,30 +107,19 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         return $this;
     }
 
-	public function preProcess($model, $type, $input)
-	{  
-		$input->put('title', ['en' => 'Permission', 'ru' => 'Разрешение']);
-		$input->put('title_list', ['en' => 'Permissions', 'ru' => 'Разрешения']);
-		$input->put('code', 'permission');
-		$input->put('active', 1);
-		$input->put('multilanguage', 0);
-		$input->put('field_order', $input->get('field_order', 4)); 
-		$input->put('allow_search', $input->get('allow_search', 1));
-
-		if (!$input->get('field_object_tab'))
-		{
-			$input->put('field_object_tab', 'additionally');
-		}
-
-		$tab = $this->getFieldTab($input->get('field_object_type'), $input->get('field_object_tab'));
-
-		$input->put('field_object_tab', $tab->getKey());  
-
-		return parent::preProcess($model, $type, $input);
-	}
-
-	public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
-	{
+    /**
+     * @method getFormModelContent
+     * Return HTML content of form element for the field
+     * 
+     * @param {Telenok.Core.Field.FileManyToMany.Controller} $controller
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {String} $uniqueId
+     * @return {String}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
+    {
         $permissions = $model->type()->permissionType()->get();
 
         if (!$permissions->count())
@@ -77,42 +127,184 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             $permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
         }
 
-		$this->setViewModel($field, $controller->getModelFieldView($field), $controller->getModelFieldViewKey($field));
+        $this->setViewModel($field, $controller->getModelFieldView($field), $controller->getModelFieldViewKey($field));
 
-		return view($this->getViewModel(), array_merge([
-						'controllerParent' => $controller,
-						'controller' => $this,
-						'model' => $model,
-						'field' => $field,
-						'uniqueId' => $uniqueId,
-						'permissions' => $permissions,
-						'permissionCreate' => app('auth')->can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
-						'permissionUpdate' => app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
-					],
-					(array)$this->getModelFieldViewVariable($controller, $model, $field, $uniqueId),
-					(array)$controller->getModelFieldViewVariable($this, $model, $field, $uniqueId)
-				))->render();
-	}
+        return view($this->getViewModel(), array_merge([
+                    'controllerParent' => $controller,
+                    'controller' => $this,
+                    'model' => $model,
+                    'field' => $field,
+                    'uniqueId' => $uniqueId,
+                    'permissions' => $permissions,
+                    'permissionCreate' => app('auth')->can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
+                    'permissionUpdate' => app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
+                ], 
+                (array) $this->getModelFieldViewVariable($controller, $model, $field, $uniqueId), 
+                (array) $controller->getModelFieldViewVariable($this, $model, $field, $uniqueId)
+            ))->render();
+    }
 
-    public function setModelAttribute($model, $key, $value, $field) {}
-	public function getModelAttribute($model, $key, $value, $field) {}
-	
-	public function saveModelField($field, $model, $input)
-	{ 
-		if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.permission'))
-		{
+    /**
+     * @method setModelAttribute
+     * Return processed value of field.
+     * 
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Field's name.
+     * @param {mixed} $value
+     * Value of field from php code for processing in this method.
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {void}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    public function setModelAttribute($model, $key, $value, $field)
+    {
+    }
+
+    /**
+     * @method getModelAttribute
+     * Return processed value of field.
+     * 
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Field's name.
+     * @param {mixed} $value
+     * Value of field from database for processing in this method.
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    public function getModelAttribute($model, $key, $value, $field)
+    {
+    }
+
+    /**
+     * @method getListFieldContent
+     * Return value of field for show in list cell like Javascript Datatables().
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @param {Object} $item
+     * Eloquent object with data of list's row.
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * Type of eloquent object $item.
+     * @return {String}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    public function getListFieldContent($field, $item, $type = null)
+    {
+        $items = [];
+        $rows = collect(\App\Telenok\Core\Model\Security\Permission::take(8)->get());
+
+        if ($rows->count())
+        {
+            foreach ($rows->slice(0, 7, TRUE) as $row)
+            {
+                $items[] = $row->translate('title');
+            }
+
+            return e('"' . implode('", "', $items) . '"' . (count($rows) > 7 ? ', ...' : ''));
+        }
+    }
+
+    /**
+     * @method getFilterContent
+     * Return HTML of filter field in search form.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    public function getFilterContent($field = null)
+    {
+        return view($this->getViewFilter(), [
+                    'controller' => $this,
+                    'field' => $field,
+                    'permissions' => \App\Telenok\Core\Model\Security\Permission::active()->get(),
+                ])->render();
+    }
+
+    /**
+     * @method getFilterQuery
+     * Add restrictions to search query.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @param {Object} $model
+     * Eloquent object.
+     * @param {Illuminate.Database.Query.Builder} $query
+     * Laravel query builder object.
+     * @param {String} $name
+     * Name of field to search for.
+     * @param {String} $value
+     * Value to search for.
+     * @return {void}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null)
+    {
+        if ($value !== null)
+        {
+            $sequence = new \App\Telenok\Core\Model\Object\Sequence();
+            $spr = new \App\Telenok\Core\Model\Security\SubjectPermissionResource();
+            $type = new \App\Telenok\Core\Model\Object\Type();
+
+            foreach ((array) $value as $permissionId => $ids)
+            {
+                $query->join($sequence->getTable() . ' as sequence_filter_' . $permissionId, function($query) use ($permissionId, $model)
+                {
+                    $query->on($model->getTable() . '.id', '=', 'sequence_filter_' . $permissionId . '.id');
+                })
+                ->join($spr->getTable() . ' as spr_filter_' . $permissionId, function($query) use ($permissionId)
+                {
+                    $query->on('sequence_filter_' . $permissionId . '.id', '=', 'spr_filter_' . $permissionId . '.acl_resource_object_sequence');
+                })
+                ->join($type->getTable() . ' as type_filter_' . $permissionId, function($query) use ($permissionId)
+                {
+                    $query->on('sequence_filter_' . $permissionId . '.sequences_object_type', '=', 'type_filter_' . $permissionId . '.id');
+                })
+                ->active('spr_filter_' . $permissionId)
+                ->active('type_filter_' . $permissionId)
+                ->whereIn('spr_filter_' . $permissionId . '.acl_subject_object_sequence', (array) $ids)
+                ->where('spr_filter_' . $permissionId . '.acl_permission_object_sequence', $permissionId);
+            }
+        }
+    }
+    
+    /**
+     * @method saveModelField
+     * Save eloquent model with field's data.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Eloquent object Field.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {Illuminate.Support.Collection} $input
+     * Values of request.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    public function saveModelField($field, $model, $input)
+    {
+        if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.permission'))
+        {
             $permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
 
-			$permissionList = (array)$input->get('permission', []);
+            $permissionList = (array) $input->get('permission', []);
 
             $permissionListDefault = $field->permission_default;
-            
-			\App\Telenok\Core\Security\Acl::resource($model)->unsetPermission();
 
-            foreach($permissions->all() as $permission)
+            \App\Telenok\Core\Security\Acl::resource($model)->unsetPermission();
+
+            foreach ($permissions->all() as $permission)
             {
                 $persmissionIds = [];
-                
+
                 if (isset($permissionList[$permission->code]))
                 {
                     $persmissionIds = $permissionList[$permission->code];
@@ -122,68 +314,48 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                     $persmissionIds = $permissionListDefault->get($permission->code);
                 }
 
-                foreach($persmissionIds as $id)
+                foreach ($persmissionIds as $id)
                 {
                     \App\Telenok\Core\Security\Acl::subject($id)->setPermission($permission->code, $model);
                 }
             }
-		}
+        }
 
-		return $model;
-	}
-
-	public function getListFieldContent($field, $item, $type = null)
-	{
-		$items = [];
-		$rows = collect(\App\Telenok\Core\Model\Security\Permission::take(8)->get());
-
-		if ($rows->count())
-		{
-			foreach ($rows->slice(0, 7, TRUE) as $row)
-			{
-				$items[] = $row->translate('title');
-			}
-
-			return e('"' . implode('", "', $items) . '"' . (count($rows) > 7 ? ', ...' : ''));
-		}
-	}
-    
-    public function getFilterContent($field = null)
-    {
-        return view($this->getViewFilter(), [
-            'controller' => $this,
-            'field' => $field,
-            'permissions' => \App\Telenok\Core\Model\Security\Permission::active()->get(),
-        ])->render();
+        return $model;
     }
-
-    public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
+    
+    /**
+     * @method preProcess
+     * Preprocess save {@link Telenok.Core.Model.Object.Field $model}.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Object to save.
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * Object with data of field's configuration.
+     * @param {Illuminate.Http.Request} $input
+     * Laravel request object.
+     * @return {Telenok.Core.Field.System.Permission.Controller}
+     * @member Telenok.Core.Field.System.Permission.Controller
+     */
+    public function preProcess($model, $type, $input)
     {
-		if ($value !== null)
-		{
-            $sequence = new \App\Telenok\Core\Model\Object\Sequence();
-            $spr = new \App\Telenok\Core\Model\Security\SubjectPermissionResource();
-            $type = new \App\Telenok\Core\Model\Object\Type();
+        $input->put('title', ['en' => 'Permission', 'ru' => 'Разрешение']);
+        $input->put('title_list', ['en' => 'Permissions', 'ru' => 'Разрешения']);
+        $input->put('code', 'permission');
+        $input->put('active', 1);
+        $input->put('multilanguage', 0);
+        $input->put('field_order', $input->get('field_order', 4));
+        $input->put('allow_search', $input->get('allow_search', 1));
 
-            foreach((array)$value as $permissionId => $ids)
-            {
-                $query->join($sequence->getTable() . ' as sequence_filter_' . $permissionId, function($query) use ($permissionId, $model) 
-                {
-                    $query->on($model->getTable() . '.id', '=', 'sequence_filter_' . $permissionId . '.id');
-                })
-                ->join($spr->getTable() . ' as spr_filter_' . $permissionId, function($query) use ($permissionId) 
-                {
-                    $query->on('sequence_filter_' . $permissionId . '.id', '=', 'spr_filter_' . $permissionId . '.acl_resource_object_sequence');
-                })
-                ->join($type->getTable() . ' as type_filter_' . $permissionId, function($query) use ($permissionId) 
-                {
-                    $query->on('sequence_filter_' . $permissionId . '.sequences_object_type', '=', 'type_filter_' . $permissionId . '.id');
-                })
-                ->active('spr_filter_' . $permissionId)
-                ->active('type_filter_' . $permissionId)
-                ->whereIn('spr_filter_' . $permissionId . '.acl_subject_object_sequence', (array)$ids)
-                ->where('spr_filter_' . $permissionId . '.acl_permission_object_sequence', $permissionId);
-            }
-		}
+        if (!$input->get('field_object_tab'))
+        {
+            $input->put('field_object_tab', 'additionally');
+        }
+
+        $tab = $this->getFieldTab($input->get('field_object_type'), $input->get('field_object_tab'));
+
+        $input->put('field_object_tab', $tab->getKey());
+
+        return parent::preProcess($model, $type, $input);
     }
 }
