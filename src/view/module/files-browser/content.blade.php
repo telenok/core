@@ -194,13 +194,19 @@
                         },
                         {
                             text : "<i class='fa fa-upload'></i> {{ $controller->LL('btn.upload.file') }}",
+                            init : function (dt, node, config)
+                            {
+                                node.attr('id', 'btn-upload-{{$jsContentUnique}}');
+                            },
                             action : function (e, dt, button, config)
                             {
-                                if (!button.data('dropzone-exists'))
+                                var $btn = jQuery('#btn-upload-{{$jsContentUnique}}');
+                                
+                                if (!$btn.data('dropzone-exists'))
                                 {
-                                    button.data('dropzone-exists', 1);
+                                    $btn.data('dropzone-exists', 1);
                                     
-                                    button.dropzone({ 
+                                    $btn.dropzone({ 
                                         url: '{!! $controller->getRouterUpload() !!}', 
                                         autoDiscover: false,
                                         uploadMultiple: false,

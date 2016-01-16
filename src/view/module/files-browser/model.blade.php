@@ -6,7 +6,10 @@
     
     @section('beforeAjax')
     
+    if (typeof mirror_code_{{$uniqueId}} !== "undefined")
+    {    
         jQuery('#codemirrortextarea{{$uniqueId}}').val(mirror_code_{{$uniqueId}}.getValue());
+    }
     
     @stop
 

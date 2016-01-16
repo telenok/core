@@ -24,7 +24,7 @@
         var $el = jQuery(this);
 
         var button_type = jQuery(this).data('btn-clicked');
-        
+
         @yield('buttonType')
 
         @yield('beforeAjax')
@@ -57,23 +57,25 @@
                         time: 3000,
                     });
 
-                    $el.closest('div.container-model-{{$uniqueId}}').html(data.tabContent); 
+                    $el.closest('div.container-model-{{$uniqueId}}').html(data.tabContent);
+                    
+                    jQuery('div.container-model-{{$uniqueId}} div.form-actions').trigger('affixed-top.bs.affix');
                 }
 
             @show
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
 
-		@section('ajaxFail')
+            @section('ajaxFail')
 
-			var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
+            var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
 
-			try
-			{
-				var jsonError = jQuery.parseJSON(jsonResponse.error.message);
-			}
-			catch(e)
-			{
+            try
+            {
+                var jsonError = jQuery.parseJSON(jsonResponse.error.message);
+            }
+            catch(e)
+            {
                 if (jsonResponse.error.message)
                 {
                     var jsonError = jsonResponse.error.message;
@@ -82,38 +84,38 @@
                 {
                     var jsonError = jsonResponse.error;
                 }
-			}
+            }
 
-			var $errorContainer = jQuery('div.error-container', $el);
+            var $errorContainer = jQuery('div.error-container', $el);
 
-			var errorGritterText = [];
+            var errorGritterText = [];
 
-			jQuery('div.alert-danger, div.alert-success, div.alert-warning', $container).remove();
+            jQuery('div.alert-danger, div.alert-success, div.alert-warning', $container).remove();
 
-			if (jsonError instanceof Array && jsonError.length) 
-			{
-				jQuery.each(jsonError.reverse(), function(i,v) {
-					$errorContainer.prepend('<div class="alert alert-danger">' + v + '<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
-					errorGritterText.unshift("- " + v);
-				});
-			}
-			else if (typeof jsonError === "string")
-			{
-				errorGritterText.push(jsonError);
-				$errorContainer.prepend('<div class="alert alert-danger">' + jsonError + '<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
-			}
+            if (jsonError instanceof Array && jsonError.length) 
+            {
+                    jQuery.each(jsonError.reverse(), function(i,v) {
+                            $errorContainer.prepend('<div class="alert alert-danger">' + v + '<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
+                            errorGritterText.unshift("- " + v);
+                    });
+            }
+            else if (typeof jsonError === "string")
+            {
+                    errorGritterText.push(jsonError);
+                    $errorContainer.prepend('<div class="alert alert-danger">' + jsonError + '<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
+            }
 
-			jQuery.gritter.add({
-				title: '{{$controller->LL('notice.error')}}! {{$controller->LL('notice.error.undefined')}}',
-				text: errorGritterText.join("<br>"),
-				class_name: 'gritter-error gritter-light',
-				time: 5000,
-			});
+            jQuery.gritter.add({
+                    title: '{{$controller->LL('notice.error')}}! {{$controller->LL('notice.error.undefined')}}',
+                    text: errorGritterText.join("<br>"),
+                    class_name: 'gritter-error gritter-light',
+                    time: 5000,
+            });
 
-		@show
+            @show
 
-		});
-	});
+        });
+    });
 
 @show
 
@@ -186,48 +188,63 @@
 </div>
 
 <script>
-
-
-    var $el = jQuery('#model-ajax-{{$uniqueId}} div.form-actions');
-    var offset_left = $el.offset().left;
     
 (function()
 {
     var $el = jQuery('#model-ajax-{{$uniqueId}} div.form-actions');
-    var background = $el.css('background');
+    
+    var maxZ = function()
+    {
+        var maxZ = 0;
+
+        jQuery('#model-ajax-{{$uniqueId}} *').each(function(i, el)
+        {
+            if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
+        });    
+
+        $el.css('zIndex', maxZ + 1);
+    }
+    
+    var windowInnerHeight = jQuery(window).innerHeight();
     
     jQuery('#model-ajax-{{$uniqueId}} div.form-actions').affix({
-        offset: {
-            top: jQuery(window).height() - 200
+        offset : {
+            top : function($el) 
+                {
+                    if (windowInnerHeight + jQuery(window).scrollTop() >= jQuery(document.body).height())
+                    {
+                        return 0;
+                    }
+                    else 
+                    {
+                        return 10000000;
+                    }
+                }
         }
     })
     .on('affixed.bs.affix', function () 
     {
-        jQuery(this).css({
-            'opacity': 1, 
-            'background': background, 
-            'border-top-width': '1px',
-            'left': offset_left
-        });
+        $el.css($el.data('beforeAffixed'));
+        maxZ();
     })
     .on('affixed-top.bs.affix', function () 
     {
-        jQuery(this).css({
+        $el.data('beforeAffixed', {
+            'opacity': 1, 
+            'background': $el.css('background'),
+            'border-top-width': '1px',
+            'left': 0
+        });
+        
+        $el.css({
             'opacity': 0.6, 
             'background': 'transparent',
             'border-top-width': 0,
-            'left': $el.css('left', $el.parent().offset().left + $el.parent().width()/2 - $el.width()/2 - 20)
+            'left': $el.css('left', $el.parent().offset().left + $el.parent().outerWidth(true)/2 - $el.outerWidth(true)/2)
         });
-    });
-    
-    var maxZ = 0;
-
-    jQuery('#model-ajax-{{$uniqueId}} *').each(function(i, el)
-    {
-        if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
-    });    
-    
-    $el.css('zIndex', maxZ + 1);
+        
+        maxZ();
+    }); 
 })();
 
 

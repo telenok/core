@@ -35,5 +35,5 @@ return array(
     'error.create.unknown-file-type' => 'Cant create non directory or file',
     'error.file.exists' => 'Cant create. Already exists',
     'error.access-denied-over-base-directory' => 'Access denied outside /app directory',
-    'error.file-too-big' => 'Sorry, file to big for viewing'
+    'error.file-too-big' => 'Sorry, file to big'
 );

@@ -25,7 +25,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         return $this;
     }
 
-    public function getTreeContent() {}
+    public function getTreeContent()
+    {
+        
+    }
 
     public function getContent()
     {
@@ -227,7 +230,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 })->implode('content');
     }
 
-    public function getModelList() {}
+    public function getModelList()
+    {
+        
+    }
 
     public function create()
     {
@@ -255,7 +261,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'modelCurrentDirectory' => new \SplFileInfo($currentDirectory),
                     'routerParam' => $this->getRouterParam('create'),
                     'uniqueId' => str_random(),
-                ), $this->getAdditionalViewParam()))->render()
+                                ), $this->getAdditionalViewParam()))->render()
             ];
         }
         catch (\Exception $ex)
@@ -302,7 +308,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'modelCurrentDirectory' => new \SplFileInfo($model->getPath()),
                     'routerParam' => $this->getRouterParam('edit'),
                     'uniqueId' => str_random(),
-                ), $this->getAdditionalViewParam()))->render()
+                                ), $this->getAdditionalViewParam()))->render()
             ];
         }
         catch (\Exception $ex)
@@ -399,6 +405,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             $currentDirectory = new \SplFileInfo($directory);
             $model = new \SplFileInfo($modelPath);
 
+            if ($model->getSize() >= $this->getMaxSizeToView())
+            {
+                throw new \Exception($this->LL('error.file-too-big'));
+            }
+            
             if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE || strstr($model->getPath(), base_path()) === FALSE)
             {
                 throw new \Exception($this->LL('error.access-denied-over-base-directory'));
@@ -452,7 +463,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'modelCurrentDirectory' => $currentDirectory,
                     'routerParam' => $this->getRouterParam('update'),
                     'uniqueId' => str_random(),
-                ), $this->getAdditionalViewParam()))->render()
+                                ), $this->getAdditionalViewParam()))->render()
             ];
         }
         catch (\Telenok\Core\Support\Exception\Validator $e)
@@ -551,7 +562,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'modelCurrentDirectory' => new \SplFileInfo($model->getPath()),
                     'routerParam' => $this->getRouterParam('edit'),
                     'uniqueId' => str_random(),
-                ), $this->getAdditionalViewParam()))->render();
+                                ), $this->getAdditionalViewParam()))->render();
             }
             catch (\Exception $ex)
             {
@@ -690,7 +701,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         {
             throw new \Exception($this->LL('error.access-denied-over-base-directory'));
         }
-        
+
         if (strpos('..', $directory) !== FALSE)
         {
             throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException('"wrong directory"');
@@ -699,8 +710,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         if ($file->isValid())
         {
             $file->move(
-                $directory, 
-                pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '.' . $file->getClientOriginalExtension()
+                    $directory, pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . '.' . $file->getClientOriginalExtension()
             );
         }
 
