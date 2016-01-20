@@ -91,7 +91,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
             ' . implode('', $option) . ' 
             </select>
             <script type="text/javascript">
-                jQuery("#input'.$uniqueId.'").ajaxChosen({ 
+                jQuery("#input'.$uniqueId.'").on("chosen:showing_dropdown", function()
+                {
+                    telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+                })
+                .ajaxChosen({ 
                     keepTypingMsg: "'.$this->LL('notice.typing').'",
                     lookingForMsg: "'.$this->LL('notice.looking-for').'",
                     type: "GET",

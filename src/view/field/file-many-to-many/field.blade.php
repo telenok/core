@@ -51,7 +51,11 @@
 	</div>
 </div>
 <script type="text/javascript">
-    jQuery("#file_many_to_many_allow_ext{{$uniqueId}}").chosen({ 
+    jQuery("#file_many_to_many_allow_ext{{$uniqueId}}").on("chosen:showing_dropdown", function()
+    {
+        telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+    })
+    .chosen({ 
         keepTypingMsg: "{{$controller->LL('notice.typing')}}",
         lookingForMsg: "{{$controller->LL('notice.looking-for')}}", 
         minTermLength: 1,
@@ -62,7 +66,11 @@
         search_contains: true
     });
     
-    jQuery("#file_many_to_many_allow_mime{{$uniqueId}}").chosen({ 
+    jQuery("#file_many_to_many_allow_mime{{$uniqueId}}").on("chosen:showing_dropdown", function()
+    {
+        telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+    })
+    .chosen({ 
         keepTypingMsg: "{{$controller->LL('notice.typing')}}",
         lookingForMsg: "{{$controller->LL('notice.looking-for')}}", 
         minTermLength: 1,

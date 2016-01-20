@@ -190,7 +190,7 @@ get('telenok/module/packages/installer-manager', array('as' => 'telenok.module.i
 get('telenok/module/packages/installer-manager/list', array('as' => 'telenok.module.installer-manager.list', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@getList"));
 get('telenok/module/packages/installer-manager/view/{id}', array('as' => 'telenok.module.installer-manager.view', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@view"));
 
-\Route::any('telenok/module/packages/installer-manager/install-package/{packageId}/{versionId}', array('as' => 'telenok.module.installer-manager.install-package', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@installPackage"));
+app('router')->any('telenok/module/packages/installer-manager/install-package/{packageId}/{versionId}', array('as' => 'telenok.module.installer-manager.install-package', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@installPackage"));
 get('telenok/module/packages/installer-manager/install-package/{packageId}/{versionId}/status', array('as' => 'telenok.module.installer-manager.install-package.status', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@installPackageStatus"));
 
 post('telenok/module/packages/installer-manager/update', array('as' => 'telenok.module.installer-manager.update', 'uses' => "App\Telenok\Core\Module\Packages\InstallerManager\Controller@update"));

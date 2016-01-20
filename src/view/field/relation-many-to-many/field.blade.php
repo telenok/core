@@ -73,7 +73,11 @@
             ?>
             </select>
             <script type="text/javascript">
-                jQuery("#relation_many_to_many_default-{{$jsUnique}}").ajaxChosen({
+                jQuery("#relation_many_to_many_default-{{$jsUnique}}").on("chosen:showing_dropdown", function()
+                {
+                    telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+                })
+                .ajaxChosen({
                     keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
                     lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
                     type: "GET",

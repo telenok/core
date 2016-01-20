@@ -506,7 +506,11 @@
 			jQuery('span#menu-buffer-fa-{{$uniqueId}}').text(parseInt(size, 10));
 		}
 
-		jQuery("#module-web-page-widget-list-page-list").ajaxChosen(
+		jQuery("#module-web-page-widget-list-page-list").on("chosen:showing_dropdown", function()
+                {
+                    telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+                })
+                .ajaxChosen(
 			{
 				keepTypingMsg: "{{$controller->LL('notice.typing')}}",
 				lookingForMsg: "{{$controller->LL('notice.looking-for')}}",
@@ -530,7 +534,11 @@
 				allow_single_deselect: true
 			});
 
-			jQuery("#module-web-page-widget-list-language-list").chosen({disable_search_threshold: 10, width: "200px"});
+			jQuery("#module-web-page-widget-list-language-list").on("chosen:showing_dropdown", function()
+                        {
+                            telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+                        })
+                        .chosen({disable_search_threshold: 10, width: "200px"});
 
 		updateContainer();
 		

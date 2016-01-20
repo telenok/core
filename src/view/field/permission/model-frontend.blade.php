@@ -88,7 +88,11 @@
 					{
 						jQuery('ul#field-tabs-{{$jsUnique}}-permission a:first').tab('show'); 
 
-						jQuery("#permission-{{$permission->code . $jsUnique}}").ajaxChosen({ 
+						jQuery("#permission-{{$permission->code . $jsUnique}}").on("chosen:showing_dropdown", function()
+                                                {
+                                                    telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+                                                })
+                                                .ajaxChosen({ 
 							keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
 							lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
 							type: "GET",

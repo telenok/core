@@ -252,7 +252,7 @@ class Repository {
 		{
 			if (!empty($routeDomain[$domain->getKey()]) && !empty($routeDomain[$domain->getKey()]))
 			{
-				$content[] = '\Route::group(array("domain" => "' . $domain->domain . '"), function() {';
+				$content[] = 'app("router")->group(array("domain" => "' . $domain->domain . '"), function() {';
 
 				foreach ($routeDomain[$domain->getKey()] as $dC)
 				{

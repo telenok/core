@@ -63,16 +63,10 @@ CKEDITOR.on('dialogDefinition', function (event) {
                     })
                     .done(function(data) 
                     {
-                        $modal.css('z-index', maxZ).html(data).modal('show');
+                        $modal.html(data).modal('show');
 
-                        var maxZ = 0;
+                        telenok.maxZ('*', $modal);
 
-                        jQuery('*').each(function()
-                        {
-                            if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
-                        });
-
-                        $modal.css('zIndex', maxZ + 1);
                     });
                 }
             }

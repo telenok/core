@@ -222,6 +222,20 @@ var telenokJS = Clazzzz.extend(
                 value: value
             } 
         });
+    },
+    maxZ: function(where_search, what_change)
+    {
+        var maxZ = 0;
+
+        var $where_search = where_search instanceof jQuery ? where_search : jQuery(where_search);
+        var $what_change = what_change instanceof jQuery ? what_change : jQuery(what_change);
+
+        $where_search.each(function(i, el)
+        {
+            if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
+        });    
+
+        $what_change.css('zIndex', maxZ + 1);
     }
 });
 

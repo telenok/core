@@ -56,15 +56,18 @@
 
 
 <script type="text/javascript">
-	jQuery("#input{{$jsChooseUnique}}").chosen({ 
-		keepTypingMsg: "{{$controller->LL('notice.typing')}}",
-		lookingForMsg: "{{$controller->LL('notice.looking-for')}}",
-		type: "GET",
-		dataType: "json",
-		inherit_select_classes: 1,
-		minTermLength: 1,
-		width: "200px",
-		no_results_text: "{{$controller->LL('notice.not-found')}}" 
+	jQuery("#input{{$jsChooseUnique}}").on("chosen:showing_dropdown", function()
+        {
+            telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+        }).chosen({ 
+            keepTypingMsg: "{{$controller->LL('notice.typing')}}",
+            lookingForMsg: "{{$controller->LL('notice.looking-for')}}",
+            type: "GET",
+            dataType: "json",
+            inherit_select_classes: 1,
+            minTermLength: 1,
+            width: "200px",
+            no_results_text: "{{$controller->LL('notice.not-found')}}" 
 	});
 	
 	

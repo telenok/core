@@ -128,7 +128,10 @@
                                                         ]) !!}
                                                 </div>
                                                 <script type="text/javascript">
-                                                    jQuery("#select-file-category-{{ $jsUnique }}").chosen({
+                                                    jQuery("#select-file-category-{{ $jsUnique }}").on("chosen:showing_dropdown", function()
+                                                    {
+                                                        telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+                                                    }).chosen({
                                                         create_option: false,
                                                         keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
                                                         lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",

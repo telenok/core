@@ -537,14 +537,7 @@
 
                                 jQuery('canvas', $croppedCanvasModal).addClass('img-responsive');
 
-                                var maxZ = 0;
-
-                                jQuery('*').each(function()
-                                {
-                                    if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
-                                });
-
-                                $croppedCanvasModal.css('zIndex', maxZ + 1);
+                                telenok.maxZ('*', $croppedCanvasModal);
 
                                 if (!$download.hasClass('disabled')) {
                                     $download.attr('href', result.toDataURL());

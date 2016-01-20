@@ -29,6 +29,8 @@
 
         @yield('beforeAjax')
 
+        jQuery('div.form-actions button', this).attr('disabled', 'disabled');
+
         jQuery.ajax({
             url: $el.attr('action'),
             type: 'post',
@@ -114,6 +116,10 @@
 
             @show
 
+        })
+        .always(function(data)
+        {
+            jQuery('div.form-actions button', this).removeAttr('disabled');
         });
     });
 
@@ -192,19 +198,7 @@
 (function()
 {
     var $el = jQuery('#model-ajax-{{$uniqueId}} div.form-actions');
-    
-    var maxZ = function()
-    {
-        var maxZ = 0;
-
-        jQuery('#model-ajax-{{$uniqueId}} *').each(function(i, el)
-        {
-            if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
-        });    
-
-        $el.css('zIndex', maxZ + 1);
-    }
-    
+     
     var windowInnerHeight = jQuery(window).innerHeight();
     
     jQuery('#model-ajax-{{$uniqueId}} div.form-actions').affix({
@@ -225,13 +219,14 @@
     .on('affixed.bs.affix', function () 
     {
         $el.css($el.data('beforeAffixed'));
-        maxZ();
+        telenok.maxZ('#model-ajax-{{$uniqueId}} *', $el);
     })
     .on('affixed-top.bs.affix', function () 
     {
         $el.data('beforeAffixed', {
             'opacity': 1, 
             'background': $el.css('background'),
+            'zIndex': $el.css('zIndex'),
             'border-top-width': '1px',
             'left': 0
         });
@@ -243,7 +238,8 @@
             'left': $el.css('left', $el.parent().offset().left + $el.parent().outerWidth(true)/2 - $el.outerWidth(true)/2)
         });
         
-        maxZ();
+        telenok.maxZ('#model-ajax-{{$uniqueId}} *', $el);
+        
     }); 
 })();
 

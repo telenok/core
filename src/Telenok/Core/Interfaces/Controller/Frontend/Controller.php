@@ -90,15 +90,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     {
         $content = [];
 
-        $pageId = intval(str_replace('page_', '', \Route::currentRouteName()));
+        $pageId = intval(str_replace('page_', '', app('router')->currentRouteName()));
 
         try
         {
-            $page = app('cache')->remember(
-                    $this->getCacheKey(), $this->getCacheTime(), function() use ($pageId)
-            {
-                return \App\Telenok\Core\Model\Web\Page::active()->withPermission()->findOrFail($pageId);
-            });
+            $page = \App\Telenok\Core\Model\Web\Page::active()->withPermission()->findOrFail($pageId);
         }
         catch (\Exception $e)
         {

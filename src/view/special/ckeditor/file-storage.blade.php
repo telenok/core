@@ -113,14 +113,7 @@
 
     $modalCreateDirectory.off('shown.bs.modal').on('shown.bs.modal', function ()
     {
-        var maxZ = 0;
-
-        jQuery('*').each(function()
-        {
-            if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
-        });
-
-        jQuery(this).css('zIndex', maxZ + 1);
+        telenok.maxZ('*', this);
     });
 
     jQuery('#select-directory-{{$jsUnique}}').off('change').on('change', function()
@@ -159,14 +152,7 @@
         {
             $modalCropper.html(data).modal('show')
 
-            var maxZ = 0;
-
-            jQuery('*').each(function()
-            {
-                if (parseInt(jQuery(this).css('zIndex')) > maxZ) maxZ = parseInt(jQuery(this).css('zIndex'));
-            });
-
-            $modalCropper.css('zIndex', maxZ + 1);
+            telenok.maxZ('*', $modalCropper);
         });
 
         $modalCropper.data('setImageBlob', function(data)

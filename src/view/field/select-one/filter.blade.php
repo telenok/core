@@ -33,7 +33,10 @@ $jsUnique = str_random();
     ?>
 </select>
 <script type="text/javascript">
-    jQuery("#input{{$jsUnique}}").chosen({
+    jQuery("#input{{$jsUnique}}").on("chosen:showing_dropdown", function()
+    {
+        telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+    }).chosen({
         keepTypingMsg: "{{$controller->LL('notice.typing')}}",
         lookingForMsg: "{{$controller->LL('notice.looking-for')}}",
         minTermLength: 1,

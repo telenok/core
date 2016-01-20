@@ -20,7 +20,7 @@ return array(
     'error.class_controller.name' => 'Wrong model class controller name. Class name should start from A-Z and only [a-z1-9_\] allowed',
     'error.class_controller.store' => 'Dont know how to store php file for controller\'s class :class. Not standart class name. Create file first or class should begin with \\App\\Http\\Controllers',
 
-    'error.namespace.search' => 'There are no such namespace, wich contain part of ":path"',
+    'error.namespace.search' => 'There are no such namespace, which contain part of ":path"',
     'error.table.create' => 'Impossible create table ":table"',
     'error.file.create' => 'Impossible create file by path ":path"',
     'error.class_controller.define' => 'Class not defined or directory not choosed where place file of form class',

@@ -37,6 +37,7 @@
 
 <div class="form-group">
     {!! Form::label('text_rte', $controller->LL('property.rte'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+    {!! Form::hidden('text_rte', 0) !!}
     <div class="col-sm-9">
         {!! Form::checkbox('text_rte', 1, $model->text_rte) !!}
     </div>

@@ -80,14 +80,18 @@
 
 				jQuery(function()
 				{
-					jQuery("#relation-one-to-many-{{ $jsUnique }}").ajaxChosen({ 
-						keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
-						lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
-						type: "GET",
-						url: "{!! $urlListTitle !!}", 
-						dataType: "json",
-						minTermLength: 1
-					}, 
+                                    jQuery("#relation-one-to-many-{{ $jsUnique }}").on("chosen:showing_dropdown", function()
+                                    {
+                                        telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
+                                    })
+                                    .ajaxChosen({ 
+                                        keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
+                                        lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
+                                        type: "GET",
+                                        url: "{!! $urlListTitle !!}", 
+                                        dataType: "json",
+                                        minTermLength: 1
+                                    }, 
 					function (data) 
 					{
 						var results = [];
