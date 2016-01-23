@@ -1,24 +1,126 @@
-<?php
+<?php namespace Telenok\Core\Interfaces\Controller\Frontend;
 
-namespace Telenok\Core\Interfaces\Controller\Frontend;
-
+/**
+ * @class Telenok.Core.Interfaces.Controller.Frontend.Controller
+ * Class to display and process frontend data.
+ * 
+ * @extends Telenok.Core.Interfaces.Controller.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
-
-    protected $controllerModel;
+    
+    /**
+     * @protected
+     * @property {Array} $container
+     * List with DOM IDs of containers from HTML container's template.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     protected $container = [];
+    
+    /**
+     * @protected
+     * @property {Array} $jsFilePath
+     * List with DOM IDs of containers from HTML container's template.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     protected $jsFilePath = [];
+    
+    /**
+     * @protected
+     * @property {Array} $cssFilePath
+     * Accumulate CSS files.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     protected $cssFilePath = [];
+    
+    /**
+     * @protected
+     * @property {Array} $cssCode
+     * Accumulate CSS code.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     protected $cssCode = [];
+    
+    /**
+     * @protected
+     * @property {Array} $jsCode
+     * Accumulate JS code.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     protected $jsCode = [];
-    protected $cacheTime = 3600;
-    protected $frontendView = 'core::controller.frontend';
-    protected $backendView = 'core::controller.frontend-container';
-    protected $languageDirectory = 'controller';
+    
+    /**
+     * @protected
+     * @property {Number} $cacheTime
+     * Cache time in minuts for page. Can be float to set as part's of minute.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
+    protected $cacheTime = 60;
+    
+    /**
+     * @protected
+     * @property {String} $cacheKey
+     * Cache key for caching page.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     protected $cacheKey = 'frontend-controller';
+
+    /**
+     * @protected
+     * @property {String} $frontendView
+     * Default view for frontend.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
+    protected $frontendView = 'core::controller.frontend';
+
+    /**
+     * @protected
+     * @property {String} $frontendView
+     * Default view for backend to show containers with widgets.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
+    protected $backendView = 'core::controller.frontend-container';
+    
+    /**
+     * @protected
+     * @property {Array} $languageDirectory
+     * Define directory with translated files.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
+    protected $languageDirectory = 'controller';
+    
+    /**
+     * @protected
+     * @property {String} $pageMetaTitle
+     * Title in meta tag of page.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     protected $pageMetaTitle;
+    
+    /**
+     * @protected
+     * @property {String} $pageMetaDescription
+     * Description in meta tag of page.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     protected $pageMetaDescription;
+    
+    /**
+     * @protected
+     * @property {String} $pageMetaKeywords
+     * Key words in meta tag of page.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     protected $pageMetaKeywords;
 
+    /**
+     * @method setCacheTime
+     * Set cache time in minuts for page. Can be float to set as part's of minute.
+     * 
+     * @property {Number} $param
+     * Time in minuts or float as part of minute.
+     * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function setCacheTime($param = 0)
     {
         $this->cacheTime = min($this->getCacheTime(), $param);
@@ -26,11 +128,29 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method getCacheTime
+     * Return $cacheTime.
+     * 
+     * @return {Number}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getCacheTime()
     {
         return $this->cacheTime;
     }
-
+    
+    /**
+     * @method getContainerContent
+     * Return HTML content of container.
+     * 
+     * @property {Integer} $pageId
+     * ID of eloquent model of page.
+     * @property {Integer} $languageId
+     * ID of eloquent model of language.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getContainerContent($pageId = 0, $languageId = 0)
     {
         $content = ['controller' => $this];
@@ -51,16 +171,37 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return view($this->backendView, $content)->render();
     }
 
+    /**
+     * @method getContiner
+     * Return IDs of DOM container's elements in $backendView.
+     * 
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getContiner()
     {
         return $this->container;
     }
 
+    /**
+     * @method getBackendView
+     * Return value of $backendView.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getBackendView()
     {
         return $this->backendView;
     }
 
+    /**
+     * @method setBackendView
+     * Set value of $backendView.
+     * 
+     * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function setBackendView($param = '')
     {
         $this->backendView = $param;
@@ -68,21 +209,38 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method getFrontendView
+     * Return value of $frontendView.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getFrontendView()
     {
         return $this->frontendView;
     }
 
-    public function setFrontendView($param = '')
+    /**
+     * @method setFrontendView
+     * Set value of $frontendView.
+     * 
+     * @property {String} $frontendView
+     * View of fronend.
+     * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
+    public function setFrontendView($frontendView = '')
     {
-        $this->frontendView = $param;
+        $this->frontendView = $frontendView;
 
         return $this;
     }
 
     /**
      * @method getContent
-     * Return content of default view 
+     * Return HTML for current request.
+     * 
      * @return {String}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -124,6 +282,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this->processContent($content);
     }
 
+    /**
+     * @method getNotCachedContent
+     * Return not cached HTML for page.
+     * 
+     * @property {Telenok.Core.Model.Web.Page} $page
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getNotCachedContent($page)
     {
         $listWidget = app('telenok.config.repository')->getWidget();
@@ -151,11 +317,26 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
                 ])->render();
     }
 
+    /**
+     * @method processContent
+     * Additionally process content. Here we can process tags like "script" and move them
+     * 
+     * @property {String} $content
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function processContent($content = '')
     {
         return $content;
     }
 
+    /**
+     * @method getCacheKey
+     * Return cache key for page.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getCacheKey()
     {
         return $this->cacheKey ? $this->cacheKey . $this->getFrontendView()
@@ -163,6 +344,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
                 . "." . $this->getRequest()->fullUrl() : false;
     }
 
+    /**
+     * @method getCachedContent
+     * Return cached content.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getCachedContent()
     {
         if (($k = $this->getCacheKey()) !== false)
@@ -173,21 +361,46 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return false;
     }
 
-    public function setCachedContent($param = '')
+    /**
+     * @method setCachedContent
+     * Set cached content.
+     * 
+     * @property {String} $content
+     * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
+    public function setCachedContent($content = '')
     {
         if (($t = $this->getCacheTime()) && ($k = $this->getCacheKey()) !== false)
         {
-            app('cache')->put($k, $param, $t);
+            app('cache')->put($k, $content, $t);
         }
 
         return $this;
     }
 
+    /**
+     * @method validateSession
+     * Validate session.
+     * 
+     * @return {void)
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function validateSession()
     {
         return ['logined' => (int) app('auth')->check(), 'csrf_token' => csrf_token()];
     }
 
+    /**
+     * @method hasAddedCssFile
+     * Search CSS file added already to $cssFilePath.
+     * 
+     * @property {String} $filePath
+     * File path.
+     * @property {mixed} $key
+     * Key for the file.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function hasAddedCssFile($filePath = '', $key = '')
     {
         foreach ($this->cssFilePath as $k => $p)
@@ -203,6 +416,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         }
     }
 
+    /**
+     * @method addCssFile
+     * Add CSS file to $cssFilePath.
+     * 
+     * @property {String} $filePath
+     * File path.
+     * @property {mixed} $key
+     * Key for the file.
+     * @property {Integer} $order
+     * Order of file in array.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function addCssFile($filePath, $key = '', $order = 1000000)
     {
         if (!$this->hasAddedCssFile($filePath, $key))
@@ -218,6 +443,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method addCssCode
+     * Add CSS code to $cssCode.
+     * 
+     * @property {String} $code
+     * CSS code.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function addCssCode($code)
     {
         $this->cssCode[] = $code;
@@ -225,6 +458,16 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method hasAddedJsFile
+     * Search JS file added already to $jsFilePath.
+     * 
+     * @property {String} $filePath
+     * File path.
+     * @property {mixed} $key
+     * Key for the file.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function hasAddedJsFile($filePath = '', $key = '')
     {
         foreach ($this->jsFilePath as $k => $p)
@@ -240,6 +483,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         }
     }
 
+    /**
+     * @method addJsFile
+     * Add JS file to $jsFilePath.
+     * 
+     * @property {String} $filePath
+     * File path.
+     * @property {mixed} $key
+     * Key for the file.
+     * @property {Integer} $order
+     * Order of file in array.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function addJsFile($filePath, $key = '', $order = 100000)
     {
         if (!$this->hasAddedJsFile($filePath, $key))
@@ -255,6 +510,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method addJsCode
+     * Add JS code to $jsCode.
+     * 
+     * @property {String} $code
+     * CSS code.
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function addJsCode($code)
     {
         $this->jsCode[] = $code;
@@ -262,6 +525,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method getJsFile
+     * List of JS files.
+     * 
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getJsFile()
     {
         usort($this->jsFilePath, function($a, $b)
@@ -272,11 +542,25 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this->jsFilePath;
     }
 
+    /**
+     * @method getJsCode
+     * List of JS codes.
+     * 
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getJsCode()
     {
         return $this->jsCode;
     }
 
+    /**
+     * @method getCssFile
+     * List of CSS files.
+     * 
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getCssFile()
     {
         usort($this->cssFilePath, function($a, $b)
@@ -287,47 +571,85 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this->cssFilePath;
     }
 
+    /**
+     * @method getCssCode
+     * List of CSS codes.
+     * 
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getCssCode()
     {
         return $this->cssCode;
     }
 
+    /**
+     * @method getName
+     * Get name of controller.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getName()
     {
         return $this->LL('name');
     }
 
-    public function setControllerModel($model)
-    {
-        $this->controllerModel = $model;
-
-        return $this;
-    }
-
-    public function getControllerModel()
-    {
-        return $this->controllerModel;
-    }
-
+    /**
+     * @method getKey
+     * Return key of controller.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getKey()
     {
         return '';
     }
 
-    // page meta title
-    public function setPageMetaTitle($param)
+    /**
+     * @method setPageMetaTitle
+     * Set page meta title from any place of code.
+     * 
+     * If any view you can set page title in next way:
+     * 
+     *     @example
+     *     $controllerRequest->setPageMetaTitle($news->translate('title'))
+     * 
+     * @property {String} $title
+     * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
+    public function setPageMetaTitle($title)
     {
-        $this->pageMetaTitle = $param;
+        $this->pageMetaTitle = $title;
 
         return $this;
     }
 
+    /**
+     * @method getPageMetaTitle
+     * Return meta title of page.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getPageMetaTitle()
     {
         return $this->pageMetaTitle;
     }
 
-    // page meta description
+    /**
+     * @method setPageMetaDescription
+     * Set page meta description from any place of code.
+     * 
+     * If any view you can set page description in next way:
+     * 
+     *     @example
+     *     $controllerRequest->setPageMetaDescription($news->translate('content'))
+     * 
+     * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function setPageMetaDescription($param)
     {
         $this->pageMetaDescription = $param;
@@ -335,12 +657,30 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method getPageMetaDescription
+     * Return meta description of page.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getPageMetaDescription()
     {
         return $this->pageMetaDescription;
     }
 
-    // page meta keywords
+    /**
+     * @method setPageMetaKeywords
+     * Set page meta keywords from any place of code.
+     * 
+     * If any view you can set page keywords in next way:
+     * 
+     *     @example
+     *     $controllerRequest->setPageMetaKeywords($news->translate('content'))
+     * 
+     * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function setPageMetaKeywords($param)
     {
         $this->pageMetaKeywords = $param;
@@ -348,9 +688,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method getPageMetaKeywords
+     * Return meta keywords of page.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
+     */
     public function getPageMetaKeywords()
     {
         return $this->pageMetaKeywords;
     }
-
 }

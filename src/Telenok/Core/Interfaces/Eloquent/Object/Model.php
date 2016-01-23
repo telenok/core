@@ -661,10 +661,11 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         {
             $r = range_minutes($this->getCacheMinutes());
 
-            $type = app('db')->table('object_type')->where('code', $this->getTable())->first();
+            $type = app('db')->table('object_type')->whereNull('deleted_at')->where('code', $this->getTable())->first();
 
             $f = app('db')->table('object_field')
                     ->where('field_object_type', $type->id)
+                    ->whereNull('deleted_at')
                     ->where('active', '=', 1)
                     ->where('active_at_start', '<=', $r[1])
                     ->where('active_at_end', '>=', $r[0])

@@ -272,7 +272,7 @@ class Repository {
 
 	public function compileSetting()
 	{
-		if (app('db')->table('setting')->where('active', 1)->count())
+		if (app('db')->table('setting')->where('active', 1)->whereNull('deleted_at')->count())
 		{
 			foreach (\App\Telenok\Core\Model\System\Setting::all() as $setting)
 			{
