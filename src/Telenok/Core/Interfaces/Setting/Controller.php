@@ -1,44 +1,46 @@
-<?php namespace Telenok\Core\Interfaces\Setting;
+<?php
 
-class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
- 
+namespace Telenok\Core\Interfaces\Setting;
+
+class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
+
     protected $defaultValue = [];
     protected $ruleList = [];
     protected $formSettingContentView = '';
     protected $languageDirectory = 'setting';
-	
-	public function getFormSettingContent($field, $model, $uniqueId)
-	{
-		return view($this->getFormSettingContentView(), [
-				'controller' => $this,
-				'field' => $field,
-				'model' => $model,
-				'uniqueId' => $uniqueId,
-			])->render();
-	}
 
-	public function getFormSettingContentView()
-	{
-		return $this->formSettingContentView ?: "{$this->getPackage()}::setting/{$this->getKey()}.content";
-	}
+    public function getFormSettingContent($field, $model, $uniqueId)
+    {
+        return view($this->getFormSettingContentView(), [
+                    'controller' => $this,
+                    'field' => $field,
+                    'model' => $model,
+                    'uniqueId' => $uniqueId,
+                ])->render();
+    }
+
+    public function getFormSettingContentView()
+    {
+        return $this->formSettingContentView ? : "{$this->getPackage()}::setting/{$this->getKey()}.content";
+    }
 
     public function validate($input = [])
     {
         $validator = $this->validator($this->ruleList, $input);
-         
-        if ($validator->fails()) 
+
+        if ($validator->fails())
         {
             throw $this->validateException()->setMessageError($validator->messages());
         }
-    } 
+    }
 
     public function validator($rule = [], $input = [], $message = [], $customAttribute = [])
     {
         return app('\Telenok\Core\Interfaces\Validator\Setting')
-                    ->setRuleList($rule)
-                    ->setInput($input)
-                    ->setMessage($message)
-                    ->setCustomAttribute($customAttribute);
+                        ->setRuleList($rule)
+                        ->setInput($input)
+                        ->setMessage($message)
+                        ->setCustomAttribute($customAttribute);
     }
 
     public function validateException()
@@ -48,7 +50,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     public function fillSettingValue($model, $value)
     {
-        app('config')->set($model->code, $value);
+        collect($value)->each(function($item, $key)
+        {
+            if ($key == 'app.locales')
+            {
+                $item = collect($item);
+            }
+            
+            app('config')->set($key, $item);
+        });
     }
 
     public function save($model, $input)
@@ -69,6 +79,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             $input->put('value', $inputCollect->all());
         }
 
-		return $model->storeOrUpdate($input, true);
+        return $model->storeOrUpdate($input, true);
     }
+
 }

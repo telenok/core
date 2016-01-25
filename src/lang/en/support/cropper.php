@@ -2,7 +2,6 @@
 
 return array(
     'wizard.file.header' => 'Edit image',
-    
     'preview' => 'Preview',
     'height' => 'Height',
     'width' => 'Width',

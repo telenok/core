@@ -910,28 +910,33 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
         ];
     }
 
+    public function deleteProcess($id = null, $force = false)
+    {
+        $model = $this->getModelTrashed($id);
+
+        if (!app('auth')->can('delete', $id))
+        {
+            throw new \LogicException($this->LL('error.access'));
+        }
+
+        app('db')->transaction(function() use ($model, $force)
+        {
+            if ($force || $model->trashed())
+            {
+                $model->forceDelete();
+            }
+            else
+            {
+                $model->delete();
+            }
+        });
+    }
+    
     public function delete($id = null, $force = false)
     {
         try
         {
-            $model = $this->getModelTrashed($id);
-
-            if (!app('auth')->can('delete', $id))
-            {
-                throw new \LogicException($this->LL('error.access'));
-            }
-
-            app('db')->transaction(function() use ($model, $force)
-            {
-                if ($force || $model->trashed())
-                {
-                    $model->forceDelete();
-                }
-                else
-                {
-                    $model->delete();
-                }
-            });
+            $this->deleteProcess($id, $force);
 
             return ['success' => 1];
         }
@@ -1183,5 +1188,4 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     {
         return $this->displayType == static::$DISPLAY_TYPE_WIZARD;
     }
-
 }

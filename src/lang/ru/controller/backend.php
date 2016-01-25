@@ -14,9 +14,6 @@ return array(
     'title-email-password' => 'Введите Email и получите инструкции',
     'send-me' => 'Отправить!',
     'back-login' => 'Назад для Авторизации',
-
     'forbidden' => 'Ограничение',
     'forbidden-description' => 'Извините, доступ к Рабочему столу ограничен',
-    
-    
 );

@@ -176,7 +176,7 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
 
     protected function deleteSequence()
     {
-        $sequence = \App\Telenok\Core\Model\Object\Sequence::find($this->getKey());
+        $sequence = \App\Telenok\Core\Model\Object\Sequence::withTrashed()->find($this->getKey());
 
         if ($this->forceDeleting)
         {
@@ -222,7 +222,11 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         {
             app('db')->transaction(function()
             {
-                if (app('auth')->check())
+                if ($this->trashed())
+                {
+                    parent::delete();
+                }
+                else if (app('auth')->check())
                 {
                     $this->deleted_by_user = app('auth')->user()->id;
                     $this->save();
@@ -593,7 +597,7 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         {
             $config->get($field->key)->saveModelField($field, $this, $input);
         }
-
+        
         if ($this->hasVersioning())
         {
             \App\Telenok\Core\Model\Object\Version::add($this);

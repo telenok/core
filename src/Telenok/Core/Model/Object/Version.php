@@ -91,5 +91,4 @@ class Version extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
             $this_->save();
         }
     }
-
 }

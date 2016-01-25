@@ -2,11 +2,9 @@
 
 return array(
     'name' => 'Thread',
-
     'header.title' => 'List of threads',
     'header.description' => 'creating and editing',
     'header.wizard' => 'Management thread',
-
     'list.name' => 'Thread',
     'list.names' => 'Threads',
     'list.create' => 'Thread creating',

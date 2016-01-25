@@ -1,8 +1,7 @@
 <?php
 
 return array(
-    'name' => 'Text string', 
-    
+    'name' => 'Text string',
     'property.string_list_size' => 'Width text in list rows',
     'property.string_min' => 'Minimum symbols',
     'property.string_max' => 'Maximum symbols',

@@ -8,6 +8,11 @@
         <button type="submit" class="btn btn-success" onclick="jQuery(this).closest('form').data('btn-clicked', 'save');" autofocus="autofocus">
             {{ $controller->LL('btn.restore') }}
         </button>
+        
+        <button type="submit" class="btn btn-danger" onclick="jQuery(this).closest('form').data('btn-clicked', 'delete.close');">
+            {{ $controller->LL('btn.delete') }}
+        </button>
+        
         <button type="submit" class="btn" onclick="jQuery(this).closest('form').data('btn-clicked', 'close');">
             {{ $controller->LL('btn.close') }}
         </button>

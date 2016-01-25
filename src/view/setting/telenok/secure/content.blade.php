@@ -26,7 +26,7 @@
                     {{ $controller->LL('btn.no') }}
                 </label>
                 <label class="btn btn-white btn-sm btn-primary @if ($model->value->get('app.acl.enabled') == 1) active @endif">
-                    {!! Form::radio('value[app.acl.enabled]', 0, $model->value->get('app.acl.enabled') == 1) !!} 
+                    {!! Form::radio('value[app.acl.enabled]', 1, $model->value->get('app.acl.enabled') == 1) !!} 
                     {{ $controller->LL('btn.yes') }}
                 </label>
             </div>
@@ -46,7 +46,7 @@
                     {{ $controller->LL('btn.no') }}
                 </label>
                 <label class="btn btn-white btn-sm btn-primary @if ($model->value->get('app.version.enabled') == 1) active @endif">
-                    {!! Form::radio('value[app.version.enabled]', 0, $model->value->get('app.version.enabled') == 1) !!} 
+                    {!! Form::radio('value[app.version.enabled]', 1, $model->value->get('app.version.enabled') == 1) !!} 
                     {{ $controller->LL('btn.yes') }}
                 </label>
             </div>
