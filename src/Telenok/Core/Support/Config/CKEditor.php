@@ -1,10 +1,12 @@
-<?php namespace Telenok\Core\Support\Config;
+<?php
+
+namespace Telenok\Core\Support\Config;
 
 class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
 
-	protected $key = 'ckeditor';
+    protected $key = 'ckeditor';
     protected $configView = "core::special.ckeditor.config";
-	protected $languageDirectory = 'support';
+    protected $languageDirectory = 'support';
     protected $configPluginWidgetInlineView = "core::special.ckeditor.plugin-widget-inline";
 
     public function getCKEditorConfig()
@@ -16,7 +18,7 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
     {
         return view($this->configPluginWidgetInlineView);
     }
-    
+
     public function browseFile()
     {
         $this->addJsCode(view('core::special.telenok.table')->render());
@@ -36,8 +38,8 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
             'jsUnique' => str_random(),
         ]);
     }
-    
-	public function createCache($path, $width = 0, $height = 0, $action = '')
+
+    public function createCache($path, $width = 0, $height = 0, $action = '')
     {
         $job = new \App\Telenok\Core\Jobs\Cache\Store([
             'path' => $path,
@@ -61,22 +63,22 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
         }
     }
 
-	public function isImage($file)
+    public function isImage($file)
     {
         return in_array(pathinfo($file, PATHINFO_EXTENSION), \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
     }
 
     public function existsCache($filename = '', $width = 0, $height = 0, $action = '')
-	{
+    {
         $filename = $this->filenameCache($filename, $width, $height, $action);
 
         return \App\Telenok\Core\Support\File\StoreCache::existsCache(app('filesystem')->getDefaultDriver(), $filename);
-	}
+    }
 
-	public function pathCache($filename = '', $width = 0, $height = 0, $action = '')
-	{
+    public function pathCache($filename = '', $width = 0, $height = 0, $action = '')
+    {
         return \App\Telenok\Core\Support\File\StoreCache::pathCache($filename, $width, $height, $action);
-	}
+    }
 
     public function filenameCache($filename = '', $width = 0, $height = 0, $action = '')
     {
@@ -93,7 +95,7 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
         }
         else
         {
-            return trim($urlPattern, '\\/') . '/' . 
+            return trim($urlPattern, '\\/') . '/' .
                     \App\Telenok\Core\Support\File\StoreCache::pathCache($path, $width, $height, $action);
         }
     }
@@ -101,8 +103,8 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
     public function storageDirectoryList()
     {
         return app('filesystem')->allDirectories($this->getRootDirectory());
-    }    
-    
+    }
+
     public function storageFileList()
     {
         $path = $this->getRequest()->input('directory', '');
@@ -121,7 +123,7 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
                 return in_array(pathinfo($item, PATHINFO_EXTENSION), \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
             });
         }
-        
+
         return view('core::special.ckeditor.file-storage', [
             'controller' => $this,
             'files' => $files,
@@ -130,25 +132,25 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
             'jsUnique' => $this->getRequest()->input('jsUnique'),
         ]);
     }
-    
+
     public function modelFileList()
     {
         $name = $this->getRequest()->input('name');
 
         $files = \App\Telenok\Core\Model\File\File::active()
-                    ->withPermission()
-                    ->where(function($query)
-                    {
-                        if ($this->getRequest()->input('file_type'))
+                        ->withPermission()
+                        ->where(function($query)
                         {
-                            foreach(\App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION as $ext)
+                            if ($this->getRequest()->input('file_type'))
                             {
-                                $query->orWhere('upload_file_name', 'LIKE', '%.' . $ext . '%');
+                                foreach (\App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION as $ext)
+                                {
+                                    $query->orWhere('upload_file_name', 'LIKE', '%.' . $ext . '%');
+                                }
                             }
-                        }
-                    })
-                    ->where('title', 'LIKE', '%' . $name . '%')
-                    ->take(51)->get();
+                        })
+                        ->where('title', 'LIKE', '%' . $name . '%')
+                        ->take(51)->get();
 
         return view('core::special.ckeditor.file-model', [
             'controller' => $this,
@@ -164,8 +166,8 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
         $cropper = new \Telenok\Core\Support\Image\Cropper();
 
         $cropper->setPath($this->getRequest()->input('file_url'));
-        $cropper->setAllowNew((int)$this->getRequest()->input('allow_new'));
-        $cropper->setAllowBlob((int)$this->getRequest()->input('allow_blob'));
+        $cropper->setAllowNew((int) $this->getRequest()->input('allow_new'));
+        $cropper->setAllowBlob((int) $this->getRequest()->input('allow_blob'));
         $cropper->setJsUnique($this->getRequest()->input('js_unique'));
 
         return $cropper->getContent();
@@ -175,23 +177,23 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
     {
         $base64 = $this->getRequest()->input('blob');
         $mime = $this->getRequest()->input('mime');
-        $directory = $this->getRootDirectory() . '/' . $this->getRequest()->input('directory', date('Y/m/') . ceil(date('d')/7));
-        
+        $directory = $this->getRootDirectory() . '/' . $this->getRequest()->input('directory', date('Y/m/') . ceil(date('d') / 7));
+
         if (strpos('..', $directory) !== FALSE)
         {
             throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException('"wrong directory"');
         }
-        
+
         switch ($mime)
         {
             case 'image/jpeg':
-                    $extension = 'jpg';
+                $extension = 'jpg';
                 break;
             case 'image/gif':
-                    $extension = 'gif';
+                $extension = 'gif';
                 break;
             case 'image/png':
-                    $extension = 'png';
+                $extension = 'png';
                 break;
 
             default:
@@ -213,12 +215,12 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
     {
         $directory = $this->getRootDirectory() . '/' . $this->getRequest()->input('directory');
         $name = $this->getRequest()->input('name');
-        
+
         if (strpos('..', $directory) !== FALSE || preg_match("/\W/", $name))
         {
             throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException('"wrong directory"');
         }
-        
+
         app('filesystem')->makeDirectory($directory . '/' . $name);
 
         return [
@@ -231,25 +233,24 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
         $file = $this->getRequest()->file('file');
         $directory = $this->getRootDirectory() . '/' . $this->getRequest()->input('directory');
 
-        $extension = $file->getClientOriginalExtension() ?: $file->guessExtension();
+        $extension = $file->getClientOriginalExtension() ? : $file->guessExtension();
 
         if (!in_array($extension, \App\Telenok\Core\Support\Image\Processing::SAFE_EXTENSION, true))
         {
             throw new \Exception($this->LL('error.extension', ['attribute' => $extension]));
         }
-        
+
         if (strpos('..', $directory) !== FALSE)
         {
             throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException('"wrong directory"');
         }
-        
+
         if ($file->isValid())
         {
-            $file->move(public_path($directory), 
-                pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) 
-                . '_' . str_random(3) . '.' . $file->getClientOriginalExtension());
+            $file->move(public_path($directory), pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)
+                    . '_' . str_random(3) . '.' . $file->getClientOriginalExtension());
         }
-        
+
         return ['success' => 1];
     }
 
@@ -257,4 +258,5 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
     {
         return config('filesystems.upload.public');
     }
+
 }

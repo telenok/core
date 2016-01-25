@@ -254,7 +254,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     {
         return [
             'model' => [
-                'deleted_by' => ['en' => 'Deleted by', 'ru' => 'Создано'],
+                'deleted_by' => ['en' => 'Deleted by', 'ru' => 'Удалено'],
             ],
         ];
     }

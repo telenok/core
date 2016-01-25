@@ -30,18 +30,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
     public function delete($id = null, $force = false)
     {
-        try
-        {
-            $objectId = \App\Telenok\Core\Model\Object\Version::findOrFail($id)->object_id;
-
-            parent::deleteProcess($objectId, $force);
-            parent::deleteProcess($id, $force);
-
-            return ['success' => 1];
-        }
-        catch (\Exception $e)
-        {
-            return ['exception' => 1];
-        }
+        return parent::delete($id, true);
     }
 }
