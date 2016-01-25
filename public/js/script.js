@@ -149,7 +149,7 @@ var telenokJS = Clazzzz.extend(
     hasPresentation: function(presentationModuleKey) { if (this.presentation[presentationModuleKey]) { return true; } else { return false; } },
     getPresentationDomId: function(presentation) { return 'telenok-' + presentation + '-presentation'; },
     addModule: function(moduleKey, url, callback) 
-    { 
+    {
         if (!this.module[moduleKey])
         {
             var _this = this;
