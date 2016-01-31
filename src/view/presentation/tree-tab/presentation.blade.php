@@ -259,7 +259,7 @@
                                             jQuery.ajax({
                                                 url: param.btnListLockUrl, 
                                                 data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize(),
-                                                method: 'get',
+                                                method: 'post',
                                                 dataType: 'json',
                                             }).done(function(data) 
                                             {
@@ -285,7 +285,7 @@
                                             jQuery.ajax({
                                                 url: param.btnListUnlockUrl, 
                                                 data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize(),
-                                                method: 'get',
+                                                method: 'post',
                                                 dataType: 'json'
                                             }).done(function(data) 
                                             {

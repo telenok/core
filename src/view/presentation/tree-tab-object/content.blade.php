@@ -121,33 +121,32 @@
                 @if (isset($search))
                 search: {search : "{{$search}}"},
                 @endif
-				ajax : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
-				domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
-				btnCreateUrl : '{!! $controller->getRouterCreate(['id' => $type->getKey()]) !!}',
-				btnListEditUrl : '{!! $controller->getRouterListEdit(['id' => $type->getKey()]) !!}',
-				btnListDeleteUrl : '{!! $controller->getRouterListDelete(['id' => $type->getKey()]) !!}',
-				btnListLockUrl : '{!! $controller->getRouterListLock(['id' => $type->getKey()]) !!}',
-				btnListUnlockUrl : '{!! $controller->getRouterListUnlock(['id' => $type->getKey()]) !!}',
-				btnCreateDisabled : '{{ !app('auth')->can('create', "object_type.{$type->code}") }}',
-				btnListDeleteDisabled : '{!!  !app('auth')->can('delete', "object_type.{$type->code}") !!}'
-			});
+                    ajax : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
+                    domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
+                    btnCreateUrl : '{!! $controller->getRouterCreate(['id' => $type->getKey()]) !!}',
+                    btnListEditUrl : '{!! $controller->getRouterListEdit(['id' => $type->getKey()]) !!}',
+                    btnListDeleteUrl : '{!! $controller->getRouterListDelete(['id' => $type->getKey()]) !!}',
+                    btnListLockUrl : '{!! $controller->getRouterListLock(['id' => $type->getKey()]) !!}',
+                    btnListUnlockUrl : '{!! $controller->getRouterListUnlock(['id' => $type->getKey()]) !!}',
+                    btnCreateDisabled : '{{ !app('auth')->can('create', "object_type.{$type->code}") }}',
+                    btnListDeleteDisabled : '{!!  !app('auth')->can('delete', "object_type.{$type->code}") !!}'
+            });
         })();
 
         function presentationTableFilter{{$uniqueId}}(dom_obj, erase)
         {
-			var $form = jQuery(dom_obj).closest('form');
-			
+            var $form = jQuery(dom_obj).closest('form');
+
             if (erase)
             {
-				jQuery('select option:selected', $form).removeAttr('selected');
+                jQuery('select option:selected', $form).removeAttr('selected');
                 jQuery('.chosen, .chosen-select', $form).trigger('chosen:updated');
                 jQuery('input[name="multifield_search"]', $form).val(0);
             }
             else
-			{
+            {
                 jQuery('input[name="multifield_search"]', $form).val(1);
-			}
-
+            }
             
             jQuery('#telenok-{{$controller->getPresentation()}}-presentation-grid-{{$gridId}}')
                 .DataTable().ajax.url('{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}&' + (erase ? '' : jQuery.param($form.serializeArray()))).load();

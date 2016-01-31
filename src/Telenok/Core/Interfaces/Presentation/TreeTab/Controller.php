@@ -990,9 +990,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         try
         {
-            $model = \App\Telenok\Core\Model\Object\Sequence::find($id)->model;
+            $model = \App\Telenok\Core\Model\Object\Sequence::find($id);
 
-            if (!$model->locked())
+            if ($model && ($model = $model->model) && !$model->locked())
             {
                 $model->lock($this->getLockInFormPeriod());
             }
@@ -1015,7 +1015,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
             {
                 $model = \App\Telenok\Core\Model\Object\Sequence::find($id)->model;
 
-                if (!$model->locked())
+                if ($model && !$model->locked())
                 {
                     $model->lock($this->getLockInListPeriod());
                 }
@@ -1039,7 +1039,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
             foreach ($tableCheckAll as $id)
             {
-                $model = \App\Telenok\Core\Model\Object\Sequence::find($id)->model;
+                $model = \App\Telenok\Core\Model\Object\Sequence::withTrashed()->find($id)->model;
 
                 if ($model && $model->locked_by_user == $userId)
                 {

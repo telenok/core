@@ -303,7 +303,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $input = $this->getRequestCollected();
         $id = $id ? : $input->get('id');
 
-        $model = $this->getModelList()->findOrFail($id);
+        $model = $this->getModelList()->withTrashed()->findOrFail($id);
+        
         $type = $this->getTypeList();
         $fields = $model->getFieldForm();
 
@@ -315,7 +316,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         return [
             'tabKey' => $this->getTabKey() . '-edit-' . $id,
-            'tabLabel' => $type->translate('title'),
+            'tabLabel' => $type->translate('title') . ' '. str_limit($eventResource->get('model')->translate('title'), 10),
             'tabContent' => view($this->getPresentationModelView(), array_merge(array(
                 'controller' => $this,
                 'model' => $eventResource->get('model'),

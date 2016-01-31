@@ -1,36 +1,53 @@
 <?php namespace Telenok\Core\Interfaces\Database;
 
-use Illuminate\Database\Query\Builder;
-
 /**
- * @property array|mixed cacheTags
+ * @class Telenok.Core.Interfaces.Database.CachableQueryBuilder
+ * Query builder which can cache results by tags for every db-query.
+ * 
+ * @extends Illuminate.Database.Query.Builder
  */
-class CachableQueryBuilder extends Builder {
+class CachableQueryBuilder extends \Illuminate\Database\Query\Builder {
 
     /**
+     * @protected
+     * @property {String} $cacheKey
      * The key that should be used when caching the query.
-     *
-     * @var string
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     protected $cacheKey;
+    
+    /**
+     * @protected
+     * @property {Array} $cacheTags
+     * The cache tags that should be used when caching the query.
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
+     */
     protected $cacheTags = [];
+    
+    /**
+     * @protected
+     * @property {String} $cachePrefix
+     * The cache prefix for every key.
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
+     */    
     protected $cachePrefix = 'table_';
 
     /**
-     * The number of minutes to cache the query.
-     *
-     * @var int
-     */
+     * @protected
+     * @property {Number} $cacheMinutes
+     * The number of minutes to cache the query. Can be float as part of minute.
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
+     */    
     protected $cacheMinutes = 20;
 
 
     /**
-     * Create a new cachable query builder instance.
-     *
-     * @param $minutes
-     * @param null $key
-     * @return $this
-     * @internal param Cache $cache
+     * @method remember
+     * Set minutes of cache. Can set float value as part of minute.
+     * @param {Number} $minutes
+     * The number of minutes to cache the query. Can be float as part of minute.
+     * @return {Telenok.Core.Interfaces.Database.CachableQueryBuilder}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     public function remember($minutes)
     {
@@ -38,12 +55,14 @@ class CachableQueryBuilder extends Builder {
 
         return $this;
     }
-
+    
     /**
-     * Get the Closure callback used when caching queries.
-     *
-     * @param  array $columns
-     * @return \Closure
+     * @method getCacheCallback
+     * Return cached callback.
+     * @param {Array} $columns
+     * Array of column's names.
+     * @return {Closure}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     protected function getCacheCallback($columns)
     {
@@ -53,16 +72,35 @@ class CachableQueryBuilder extends Builder {
         };
     }
 
+    /**
+     * @method getCacheKey
+     * Return key of cache.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
+     */
     public function getCacheKey()
     {
         return $this->generateCacheKey();
     }
 
+    /**
+     * @method getCachePrefix
+     * Return cache key's prefix.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
+     */
     public function getCachePrefix()
     {
         return $this->cachePrefix;
     }
     
+    /**
+     * @method cachePrefix
+     * Set cache key's prefix.
+     * @param {String} $prefix
+     * @return {Telenok.Core.Interfaces.Database.CachableQueryBuilder}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
+     */
     public function cachePrefix($prefix)
     {
         $this->cachePrefix = $prefix;
@@ -70,15 +108,22 @@ class CachableQueryBuilder extends Builder {
         return $this;
     }
     
+    /**
+     * @method getCacheObject
+     * Return cache object.
+     * @return {Illuminate.Contracts.Cache.Repository}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
+     */
     public function getCacheObject()
     {
         return app('cache')->driver(config('cache.db_query.driver'));
     }
 
     /**
-     * Generate the unique cache key for the query.
-     *
-     * @return string
+     * @method generateCacheKey
+     * Create and return eturn unique cache key.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     public function generateCacheKey()
     {
@@ -86,9 +131,10 @@ class CachableQueryBuilder extends Builder {
     }
 
     /**
-     * Get the cache key and cache minutes as an array.
-     *
-     * @return array
+     * @method getCacheInfo
+     * Return array with cache key and cache time.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     protected function getCacheInfo()
     {
@@ -96,10 +142,11 @@ class CachableQueryBuilder extends Builder {
     }
 
     /**
+     * @method cacheTags
      * Indicate that the results, if cached, should use the given cache tags.
-     *
-     * @param  array|mixed $cacheTags
-     * @return $this
+     * @param  {mixed} $cacheTags
+     * @return {Telenok.Core.Interfaces.Database.CachableQueryBuilder}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     public function cacheTags($cacheTags)
     {
@@ -118,15 +165,22 @@ class CachableQueryBuilder extends Builder {
         return $this;
     }
 
+    /**
+     * @method cacheTagEnabled
+     * Checks whether current cache-driver supports tags.
+     * @return {Boolean}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
+     */
     public function cacheTagEnabled()
     {
         return (config('cache.db_query.driver') != 'file' && config('cache.db_query.driver') != 'database');
     }
     
     /**
-     * Get the cache object with tags assigned, if applicable.
+     * Return cache's tags.
      *
-     * @return \Illuminate\Cache\CacheManager
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     protected function getCacheTags()
     {
@@ -139,8 +193,10 @@ class CachableQueryBuilder extends Builder {
     /**
      * Execute the query as a "select" statement.
      *
-     * @param  array $columns
-     * @return array|static[]
+     * @param  {Array} $columns
+     * List of columns to select from tables.
+     * @return {Illuminate.Database.Eloquent.Collection}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     public function get($columns = array('*'))
     {
@@ -155,8 +211,9 @@ class CachableQueryBuilder extends Builder {
     /**
      * Insert a new record into the database.
      *
-     * @param  array  $values
-     * @return bool
+     * @param  {Array}  $values
+     * @return {Boolean}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     public function insert(array $values)
     {
@@ -173,8 +230,10 @@ class CachableQueryBuilder extends Builder {
     /**
      * Update a record in the database.
      *
-     * @param  array  $values
-     * @return int
+     * @param  {Array}  $values
+     * @return {Integer}
+     * Amount of updated rows
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     public function update(array $values)
     {
@@ -191,8 +250,9 @@ class CachableQueryBuilder extends Builder {
     /**
      * Delete a record from the database.
      *
-     * @param  mixed  $id
-     * @return int
+     * @param {mixed} $id
+     * @return {Integer}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     public function delete($id = NULL)
     {
@@ -209,8 +269,10 @@ class CachableQueryBuilder extends Builder {
    /**
      * Execute the query as a cached "select" statement.
      *
-     * @param  array $columns
-     * @return array
+     * @param  {array} $columns
+     * List of columns to select from tables.
+     * @return {Illuminate.Database.Eloquent.Collection}
+     * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     public function getCached($columns = array('*'))
     {

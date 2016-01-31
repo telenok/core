@@ -298,7 +298,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
             return [
                 'tabKey' => $this->getTabKey() . '-edit-' . $tabKey,
-                'tabLabel' => $this->LL('list.edit.' . $modelType),
+                'tabLabel' => $this->LL('list.edit.' . $modelType) . ' ' . str_limit($model->getFilename(), 10),
                 'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
                     'controller' => $this,
                     'currentDirectory' => addslashes($model->getPath()),
@@ -409,7 +409,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             {
                 throw new \Exception($this->LL('error.file-too-big'));
             }
-            
+
             if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE || strstr($model->getPath(), base_path()) === FALSE)
             {
                 throw new \Exception($this->LL('error.access-denied-over-base-directory'));
@@ -463,7 +463,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'modelCurrentDirectory' => $currentDirectory,
                     'routerParam' => $this->getRouterParam('update'),
                     'uniqueId' => str_random(),
-                                ), $this->getAdditionalViewParam()))->render()
+                ), $this->getAdditionalViewParam()))->render()
             ];
         }
         catch (\Telenok\Core\Support\Exception\Validator $e)

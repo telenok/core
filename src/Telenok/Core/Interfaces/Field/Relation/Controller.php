@@ -1,7 +1,14 @@
-<?php
+<?php namespace Telenok\Core\Interfaces\Field\Relation;
 
-namespace Telenok\Core\Interfaces\Field\Relation;
-
+/**
+ * @class Telenok.Core.Interfaces.Controller.Controller
+ * Base class for CMS controllers
+ * 
+ * @mixins Telenok.Core.Support.Traits.Language
+ * @mixins Illuminate.Foundation.Bus.DispatchesCommands
+ * @uses Telenok.Core.Interfaces.Support.IRequest
+ * @extends Illuminate.Routing.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
     protected static $macroFile = 'Model/macro.php';

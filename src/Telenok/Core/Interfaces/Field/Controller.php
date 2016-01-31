@@ -1,7 +1,14 @@
-<?php
+<?php namespace Telenok\Core\Interfaces\Field;
 
-namespace Telenok\Core\Interfaces\Field;
-
+/**
+ * @class Telenok.Core.Interfaces.Controller.Controller
+ * Base class for CMS controllers
+ * 
+ * @mixins Telenok.Core.Support.Traits.Language
+ * @mixins Illuminate.Foundation.Bus.DispatchesCommands
+ * @uses Telenok.Core.Interfaces.Support.IRequest
+ * @extends Illuminate.Routing.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Field\IField {
 
     protected $ruleList = [];

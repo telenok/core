@@ -100,7 +100,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                                         jQuery.ajax({
                                             url: param.btnListLockUrl, 
                                             data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize(),
-                                            method: 'get',
+                                            method: 'post',
                                             dataType: 'json'
                                         }).done(function(data) 
                                         {
@@ -126,7 +126,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                                         jQuery.ajax({
                                             url: param.btnListUnlockUrl, 
                                             data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize(),
-                                            method: 'get',
+                                            method: 'post',
                                             dataType: 'json'
                                         }).done(function(data) 
                                         {

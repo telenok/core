@@ -156,10 +156,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         $content = ['controller' => $this];
 
         $wop = \App\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
-                        {
-                            $query->where('id', $languageId);
-                        })
-                        ->orderBy('widget_order')->get();
+                {
+                    $query->where('id', $languageId);
+                })
+                ->orderBy('widget_order')->get();
 
         $widgetRepository = app('telenok.config.repository')->getWidget();
 
@@ -252,7 +252,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
         try
         {
-            $page = \App\Telenok\Core\Model\Web\Page::active()->withPermission()->findOrFail($pageId);
+            $page = \App\Telenok\Core\Model\Web\Page::active()->withPermission()->cacheTags('page_' . $pageId)->findOrFail($pageId);
         }
         catch (\Exception $e)
         {

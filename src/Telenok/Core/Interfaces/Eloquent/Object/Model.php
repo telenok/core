@@ -1,35 +1,135 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Eloquent\Object;
+<?php namespace Telenok\Core\Interfaces\Eloquent\Object;
 
 use \Telenok\Core\Interfaces\Controller\IEloquentProcessController;
 
-class Model extends \Illuminate\Database\Eloquent\Model {
+/**
+ * @class Telenok.Core.Interfaces.Eloquent.Object.Model
+ * Base class for all Telenok's object eloquent models.
+ * 
+ * @uses Telenok.Core.Interfaces.Controller.IEloquentProcessController
+ * @extends Telenok.Core.Interfaces.Eloquent.BaseModel
+ */
+class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
 
-    use \Illuminate\Database\Eloquent\SoftDeletes;
-
-use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
-
+    /**
+     * @public
+     * @property {Boolean} $incrementing
+     * Allow primary key to be autoincremental.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public $incrementing = false;
+
+    /**
+     * @public
+     * @property {Boolean} $timestamps
+     * Allow set time when create and update.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public $timestamps = true;
+    
+    /**
+     * @protected
+     * @property {Boolean} $timestamps
+     * Allow create version for every call storeOrUpdate.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected $hasVersioning = true;
+
+    /**
+     * @protected
+     * @property {Array} $ruleList
+     * List of rules for validation data before storing.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected $ruleList = [];
+    
+    /**
+     * @protected
+     * @property {Array} $multilanguageList
+     * List of multilanguages fields.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected $multilanguageList = [];
+    
+    /**
+     * @protected
+     * @property {Array} $dates
+     * List of date fields.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected $dates = [];
+    
+    /**
+     * @protected
+     * @static
+     * @property {Array} $listField
+     * List of cached model fields.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected static $listField = [];
+    
+    /**
+     * @protected
+     * @static
+     * @property {Array} $listRule
+     * List of cached field's rules.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected static $listRule = [];
+    
+    /**
+     * @protected
+     * @static
+     * @property {Array} $listAllFieldController
+     * List of cached links to field's controllers.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected static $listAllFieldController = [];
+    
+    /**
+     * @protected
+     * @static
+     * @property {Array} $listFillableFieldController
+     * List of cached links to field's controllers.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected static $listFillableFieldController = [];
+    
+    /**
+     * @protected
+     * @static
+     * @property {Array} $listMultilanguage
+     * List of cached mltilanguage fields.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected static $listMultilanguage = [];
+
+    /**
+     * @protected
+     * @static
+     * @property {Array} $listFieldDate
+     * List of cached date fields.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected static $listFieldDate = [];
+    
+    /**
+     * @protected
+     * @static
+     * @property {Array} $macros
+     * List of cached macros aka callabled closures.
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected static $macros = [];
 
     /**
+     * @method macro
      * Register a custom macro.
      *
-     * @param  string    $name
-     * @param  callable  $macro
-     * @return void
+     * @param {String} $name
+     * @param {Closure} $macro
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public static function macro($name, callable $macro)
     {
@@ -37,10 +137,13 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
     }
 
     /**
+     * @method hasMacro
      * Checks if macro is registered.
      *
-     * @param  string  $name
-     * @return bool
+     * @param {String} $name
+     * @param {Closure} $macro
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public static function hasMacro($name)
     {
@@ -48,13 +151,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
     }
 
     /**
+     * @method __callStatic
      * Dynamically handle calls to the class.
      *
-     * @param  string  $method
-     * @param  array   $parameters
-     * @return mixed
-     *
+     * @param {String} $method
+     * @param {Array} $parameters
+     * @return {mixed}
      * @throws \BadMethodCallException
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public static function __callStatic($method, $parameters)
     {
@@ -74,13 +178,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
     }
 
     /**
+     * @method __call
      * Dynamically handle calls to the class.
      *
-     * @param  string  $method
-     * @param  array   $parameters
-     * @return mixed
-     *
+     * @param {String} $method
+     * @param {Array} $parameters
+     * @return {mixed}
      * @throws \BadMethodCallException
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function __call($method, $parameters)
     {
@@ -99,6 +204,13 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return parent::__call($method, $parameters);
     }
 
+    /**
+     * @method boot
+     * Booting events.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public static function boot()
     {
         parent::boot();
@@ -146,6 +258,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         });
     }
 
+    /**
+     * @protected
+     * @method generateKeyId
+     * Create new model ID.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected function generateKeyId()
     {
         if (!($this instanceof \Telenok\Core\Model\Object\Sequence))
@@ -166,6 +286,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @protected
+     * @method restoreSequence
+     * Restore linked sequence when restore model.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected function restoreSequence()
     {
         if (!($this instanceof \Telenok\Core\Model\Object\Sequence))
@@ -174,6 +302,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @protected
+     * @method deleteSequence
+     * Delete linked sequence when restore model.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected function deleteSequence()
     {
         $sequence = \App\Telenok\Core\Model\Object\Sequence::withTrashed()->find($this->getKey());
@@ -188,6 +324,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @protected
+     * @method deleteModelFieldController
+     * Delete data via linked controllers to model.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected function deleteModelFieldController()
     {
         $controllers = app('telenok.config.repository')->getObjectFieldController();
@@ -201,13 +345,20 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @method restore
+     * Restore model.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function restore()
     {
         if (app('auth')->can('delete', $this->getKey()))
         {
             app('db')->transaction(function()
             {
-                parent::restore();
+                return parent::restore();
             });
         }
         else
@@ -216,6 +367,13 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @method delete
+     * Delete model.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function delete()
     {
         if (app('auth')->can('delete', $this->getKey()))
@@ -224,15 +382,17 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
             {
                 if ($this->trashed())
                 {
-                    parent::delete();
+                    $this->forceDeleting = true;
+
+                    return parent::delete();
                 }
                 else if (app('auth')->check())
                 {
                     $this->deleted_by_user = app('auth')->user()->id;
                     $this->save();
-                }
 
-                parent::delete();
+                    return parent::delete();
+                }
             });
         }
         else
@@ -241,6 +401,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @protected
+     * @method translateSync
+     * Save multilanguage data via Telenok.Core.Model.Object.Translation class.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected function translateSync()
     {
         if (!($this instanceof \Telenok\Core\Model\Object\Sequence))
@@ -264,7 +432,7 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
 
             $type = $this->type();
 
-            $this->sequence()->first()->fill([
+            $this->sequence()->withTrashed()->first()->fill([
                 'title' => ($this->title instanceof \Illuminate\Support\Collection ? $this->title->all() : $this->title),
                 'created_at' => $this->created_at,
                 'updated_at' => $this->updated_at,
@@ -280,31 +448,67 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @method sequence
+     * Return sequense Eloquent model linked to model.
+     *
+     * @return {Telenok.Core.Model.Object.Sequence}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * 
+     *     @example
+     *     \App\Model\Article::find(104)->sequence()->translate('title');
+     */
     public function sequence()
     {
         return $this->hasOne('\App\Telenok\Core\Model\Object\Sequence', 'id');
     }
 
+    /**
+     * @method type
+     * Return Object Type Eloquent model linked to model.
+     *
+     * @return {Telenok.Core.Model.Object.Type}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * 
+     *     @example
+     *     \App\Model\Article::find(104)->type()->code;
+     */
     public function type()
     {
         return \App\Telenok\Core\Model\Object\Type::whereCode($this->getTable())->first();
     }
 
+    /**
+     * @method hasVersioning
+     * Checks if version allowed.
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function hasVersioning()
     {
         return $this->hasVersioning;
     }
 
-    public function classController()
-    {
-        return $this->class_controller;
-    }
-
+    /**
+     * @method treeForming
+     * Checks if model support tree.
+     *
+     * @return {Boolean}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function treeForming()
     {
         return $this->type()->treeable;
     }
 
+    /**
+     * @method eraseStatic
+     * Erase all static cached variables.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public static function eraseStatic($model)
     {
         $class = get_class($model);
@@ -321,7 +525,16 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         $model->getDates();
         $model->getRule();
     }
-
+    
+    /**
+     * @method fill
+     * Fill the model with an array of attributes.
+     *
+     * @param {Array} $attributes
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * @throws \Illuminate\Database\Eloquent\MassAssignmentException
+     */
     public function fill(array $attributes)
     {
         foreach ($this->fillableFromArray($attributes) as $key => $value)
@@ -337,6 +550,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @method addFillable
+     * Add additional attributes.
+     *
+     * @param {Array} $attributes
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function addFillable($attributes)
     {
         $this->fillable = array_unique(array_merge($this->fillable, (array) $attributes));
@@ -344,6 +565,15 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @protected
+     * @method fillableFromArray
+     * Get the fillable attributes of a given array.
+     *
+     * @param {Array} $attributes
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected function fillableFromArray(array $attributes)
     {
         $this->fillable = array_unique(array_merge($this->fillable, $this->getFillable()));
@@ -351,6 +581,18 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return parent::fillableFromArray($attributes);
     }
 
+    /**
+     * @method storeOrUpdate
+     * Create or update model.
+     *
+     * @param {Array} $input
+     * @param {Boolean} $withPermission
+     * Check permissions for model and model's fields.
+     * @param {Boolean} $withEvent
+     * Call events for external processing.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function storeOrUpdate($input = [], $withPermission = false, $withEvent = true)
     {
         if ($this instanceof \App\Telenok\Core\Model\Object\Sequence)
@@ -493,6 +735,15 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $model;
     }
 
+    /**
+     * @protected
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected function validatorCustomAttributes()
     {
         static $attr = null;
@@ -512,6 +763,15 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $attr;
     }
 
+    /**
+     * @protected
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected function validateStoreOrUpdatePermission($type = null, $input = null)
     {
         if (!$type)
@@ -577,6 +837,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function preProcess($type, $input)
     {
         $config = app('telenok.config.repository')->getObjectFieldController();
@@ -589,6 +857,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function postProcess($type, $input)
     {
         $config = app('telenok.config.repository')->getObjectFieldController();
@@ -606,6 +882,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function __get($key)
     {
         try
@@ -620,6 +904,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this->getModelAttributeController($key, $value);
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function __set($key, $value)
     {
         $class = get_class($this);
@@ -634,6 +926,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function getModelAttributeController($key, $value)
     {
         $class = get_class($this);
@@ -648,6 +948,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function setModelAttributeController($key, $value)
     {
         $class = get_class($this);
@@ -657,6 +965,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         $f->setModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function getObjectField()
     {
         $class = get_class($this);
@@ -681,6 +997,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return static::$listField[$class];
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function getFieldList()
     {
         $type = $this->type();
@@ -691,6 +1015,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
                 });
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function getFieldForm()
     {
         $type = $this->type();
@@ -701,6 +1033,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
                 });
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function getMultilanguage()
     {
         $class = get_class($this);
@@ -725,6 +1065,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return static::$listMultilanguage[$class];
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function addMultilanguage($fieldCode)
     {
         $class = get_class($this);
@@ -736,11 +1084,27 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function getDates()
     {
         return array_merge(parent::getDates(), $this->dates);
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function getFillable()
     {
         $class = get_class($this);
@@ -780,6 +1144,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return array_keys((array) static::$listFillableFieldController[$class]);
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function getRule()
     {
         $class = get_class($this);
@@ -811,6 +1183,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return static::$listRule[$class];
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function translate($field, $locale = '')
     {
         $locale = $locale ? : config('app.locale');
@@ -842,6 +1222,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         }
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function scopeActive($query, $table = null)
     {
         $table = $table ? : $this->getTable();
@@ -856,6 +1244,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
                 });
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function scopeNotActive($query, $table = null)
     {
         $table = $table ? : $this->getTable();
@@ -869,6 +1265,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
                 });
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function scopeTranslateField($query, $linkedTableAlias = '', $translateTableAlias = '', $translateField = '', $language = '')
     {
         $translateModel = app('\App\Telenok\Core\Model\Object\Translation');
@@ -884,6 +1288,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         });
     }
 
+    /** 
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     // ->permission() - can current user read (read - by default)
     // ->permission('write', null) - can current user read
     // ->permission(null, $someObject) - can $someObject read 
@@ -986,11 +1398,27 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $query;
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function treeParent()
     {
         return $this->belongsToMany('\App\Telenok\Core\Model\Object\Sequence', 'pivot_relation_m2m_tree', 'tree_id', 'tree_pid');
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function treeChild()
     {
         return $this->belongsToMany('\App\Telenok\Core\Model\Object\Sequence', 'pivot_relation_m2m_tree', 'tree_pid', 'tree_id');
@@ -998,17 +1426,41 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
 
     /* Treeable section */
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function treeAttr()
     {
         return $this->withTreeAttr()->where($this->getTable() . '.id', $this->getKey())->firstOrFail();
     }
 
+    /** 
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function scopeWithTreeAttr($query)
     {
         $query->join('pivot_relation_m2m_tree as pivot_tree_attr', $this->getTable() . '.id', '=', 'pivot_tree_attr.tree_id')
                 ->addSelect(['*', $this->getTable() . '.id as id']);
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function children($depth = 0)
     {
         if ($depth == 1)
@@ -1031,6 +1483,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $query;
     }
 
+    /**
+     * @method validatorCustomAttributes
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function scopeWithChildren($query, $depth = 0)
     {
         $query->join('object_sequence as o_tc', $this->getTable() . '.id', '=', 'o_tc.id');
@@ -1041,6 +1501,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $query;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function makeRoot()
     {
         app('db')->transaction(function()
@@ -1076,6 +1544,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function insertTree()
     {
         if ($this->exists && \App\Telenok\Core\Model\Object\Sequence::findOrFail($this->getKey())->treeable)
@@ -1096,6 +1572,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function makeLastChildOf($parent)
     {
         if (!$parent instanceof \Illuminate\Database\Eloquent\Model)
@@ -1136,6 +1620,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function makeFirstChildOf($parent)
     {
         if (!$parent instanceof \Illuminate\Database\Eloquent\Model)
@@ -1179,6 +1671,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function isAncestor($descendant)
     {
         if (!$descendant instanceof \Illuminate\Database\Eloquent\Model)
@@ -1192,6 +1692,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return strpos($sequenceDescendant->tree_path, $sequence->tree_path . $sequence->getKey() . '.') !== false && $sequenceDescendant->tree_path !== $sequence->tree_path;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function isDescendant($ancestor)
     {
         if (!$ancestor instanceof \Illuminate\Database\Eloquent\Model)
@@ -1205,6 +1713,15 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return strpos($sequence->tree_path, $sequenceAncestor->tree_path . $sequenceAncestor->getKey() . '.') !== false && $sequenceAncestor->tree_path !== $sequence->tree_path;
     }
 
+    /**
+     * @protected
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     protected function processSiblingOf($sibling, $op)
     {
         if (!$sibling instanceof \Illuminate\Database\Eloquent\Model)
@@ -1248,16 +1765,40 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $this;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function makePreviousSiblingOf($sibling)
     {
         return $this->processSiblingOf($sibling, '>=');
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function makeNextSiblingOf($sibling)
     {
         return $this->processSiblingOf($sibling, '>');
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function sibling()
     {
         $sequence = $this->treeAttr();
@@ -1265,6 +1806,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->where('tree_pid', '=', $sequence->tree_pid);
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function parents()
     {
         $sequence = $this->treeAttr();
@@ -1272,6 +1821,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return \App\Telenok\Core\Model\Object\Sequence::whereIn($this->getTable() . '.id', array_filter(explode('.', $sequence->tree_path), 'strlen'));
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function isLeaf()
     {
         $sequence = $this->treeAttr();
@@ -1279,6 +1836,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return !$sequence->children(1)->count();
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function calculateRelativeDepth($object)
     {
         if (!$object instanceof \Illuminate\Database\Eloquent\Model)
@@ -1292,6 +1857,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return abs($sequence->tree_depth - $sequenceObject->tree_depth);
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public static function allRoot()
     {
         $query = \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->where('tree_pid', 0);
@@ -1299,6 +1872,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $query;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public static function allDepth($depth = 0)
     {
         $query = \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->whereIn('tree_depth', (array) $depth);
@@ -1306,6 +1887,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         return $query;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public static function allLeaf()
     {
         $model = new static;
@@ -1321,6 +1910,14 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
 
     /* ~Treeable section */
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function lock($period = 300)
     {
         app('db')->transaction(function() use ($period)
@@ -1336,50 +1933,125 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
         });
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function unLock()
     {
-        app('db')->transaction(function()
+        if ($this->exists)
         {
-            $this->locked_by_user = 0;
-            $this->save();
-        });
+            app('db')->transaction(function()
+            {
+                $this->locked_by_user = 0;
+                $this->save();
+            });
+        }
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function locked()
     {
         return $this->exists && $this->locked_by_user && $this->locked_at->diffInSeconds(null, false) <= 0;
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function LL($key = '', $param = [])
     {
         return trans("core::default.$key", $param);
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function createdByUser()
     {
         return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'created_by_user');
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function updatedByUser()
     {
         return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'updated_by_user');
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function deletedByUser()
     {
         return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'deleted_by_user');
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function lockedByUser()
     {
         return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'locked_by_user');
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function aclSubject()
     {
         return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_subject_object_sequence');
     }
 
+    /**
+     * @method makeRoot
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
     public function __wakeup()
     {
         parent::__wakeup();
@@ -1392,5 +2064,4 @@ use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
             }
         }
     }
-
 }

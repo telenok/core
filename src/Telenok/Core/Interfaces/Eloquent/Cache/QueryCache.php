@@ -2,10 +2,28 @@
 
 use \App\Telenok\Core\Interfaces\Database\CachableQueryBuilder as QueryBuilder;
 
+/**
+ * @class Telenok.Core.Interfaces.Eloquent.Cache.QueryCache
+ * Trait support query caching.
+ * 
+ * @uses Telenok.Core.Interfaces.Database.CachableQueryBuilder
+ */
 trait QueryCache {
 
+    /**
+     * @protected
+     * @property {Number} $cacheMinutes
+     * The number of minutes to cache the query. Can be float as part of minute.
+     * @member Telenok.Core.Interfaces.Eloquent.Cache.QueryCache
+     */
     protected $cacheMinutes = 20;
 
+    /**
+     * @method bootQueryCache
+     * Booting methods to pre- and post- steps.
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Cache.QueryCache
+     */
     public static function bootQueryCache()
     {
         static::addGlobalScope(new QueryCacheScope());
@@ -27,15 +45,22 @@ trait QueryCache {
     }
 
     /**
-     * Get a new query builder without cache.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder|static
+     * @method uncached
+     * Return Query Builder without cache's features.
+     * @return {Telenok.Core.Interfaces.Database.CachableQueryBuilder}
+     * @member Telenok.Core.Interfaces.Eloquent.Cache.QueryCache
      */
     public static function uncached()
     {
         return (new static)->newQueryWithoutScope(new QueryCacheScope(null));
     }
 
+    /**
+     * @method clearCache
+     * Clear cache for current query.
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Eloquent.Cache.QueryCache
+     */
     public function clearCache()
     {
         if ($this->newBaseQueryBuilder()->cacheTagEnabled())
@@ -44,25 +69,44 @@ trait QueryCache {
         }
     }
 
+    /**
+     * @method getCacheMinutes
+     * Return cache time.
+     * @return {Number}
+     * @member Telenok.Core.Interfaces.Eloquent.Cache.QueryCache
+     */
     public function getCacheMinutes()
     {
         return min(config('cache.db_query.minutes', 0), $this->cacheMinutes);
     }
 
+    /**
+     * @method bootQueryCache
+     * Return cache object.
+     * @return {Illuminate.Contracts.Cache.Repository}
+     * @member Telenok.Core.Interfaces.Eloquent.Cache.QueryCache
+     */
     public function getCacheObject()
     {
         return $this->newBaseQueryBuilder()->getCacheObject();
     }
 
+    /**
+     * @method getCacheTags
+     * Return list of tags for current query.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Eloquent.Cache.QueryCache
+     */
     public function getCacheTags()
     {
         return $this->newBaseQueryBuilder()->getCachePrefix() . strtok($this->getTable(), " ");
     }
 
     /**
-     * Get a new cachable query builder instance for the connection.
-     *
-     * @return \Illuminate\Database\Query\Builder
+     * @method newBaseQueryBuilder
+     * Return new query buider with cache support.
+     * @return {Telenok.Core.Interfaces.Database.CachableQueryBuilder}
+     * @member Telenok.Core.Interfaces.Eloquent.Cache.QueryCache
      */
     protected function newBaseQueryBuilder()
     {

@@ -1,29 +1,60 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Controller;
+<?php namespace Telenok\Core\Interfaces\Controller;
 
 /**
+ * @class Telenok.Core.Interfaces.Controller.Controller
  * Base class for CMS controllers
  * 
  * @mixins Telenok.Core.Support.Traits.Language
  * @mixins Illuminate.Foundation.Bus.DispatchesCommands
- * @class Telenok.Core.Interfaces.Controller.Controller
+ * @uses Telenok.Core.Interfaces.Support.IRequest
+ * @extends Illuminate.Routing.Controller
  */
 class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\Support\IRequest {
 
-    use \Telenok\Core\Support\Traits\Language;
+    use \Telenok\Core\Support\Traits\Language, \Illuminate\Foundation\Bus\DispatchesCommands;
 
-use \Illuminate\Foundation\Bus\DispatchesCommands;
-
+    /**
+     * @protected
+     * @property {String} $key
+     * Controller's key.
+     * @member Telenok.Core.Interfaces.Controller.Controller
+     */
     protected $key = '';
+    
+    /**
+     * @protected
+     * @property {Illuminate.Http.Request} $request
+     * Request object.
+     * @member Telenok.Core.Interfaces.Controller.Controller
+     */
     protected $request;
+    
+    /**
+     * @protected
+     * @property {Illuminate.Http.Request} $request
+     * Request object.
+     * @member Telenok.Core.Interfaces.Controller.Controller
+     */
     protected $vendorName = 'telenok';
 
+    /**
+     * @method getVendorName
+     * Return $vendorName.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Controller
+     */
     public function getVendorName()
     {
         return $this->vendorName;
     }
 
+    /**
+     * @method setVendorName
+     * Set vendor name of controller's.
+     * @param {String} $key
+     * @return {Telenok.Core.Interfaces.Controller.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Controller
+     */
     public function setVendorName($key)
     {
         $this->vendorName = $key;
@@ -31,16 +62,37 @@ use \Illuminate\Foundation\Bus\DispatchesCommands;
         return $this;
     }
 
+    /**
+     * @method getName
+     * Return translated name of controller.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Controller
+     */
     public function getName()
     {
         return $this->LL('name');
     }
 
+    /**
+     * @method getKey
+     * Return key of contoller.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Controller.Controller
+     */
     public function getKey()
     {
         return $this->key;
     }
 
+    /**
+     * @method setKey
+     * Set key of contoller.
+     * @param {String} $key
+     * @return {Telenok.Core.Interfaces.Controller.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Controller
+     */
     public function setKey($key)
     {
         $this->key = $key;
@@ -49,10 +101,12 @@ use \Illuminate\Foundation\Bus\DispatchesCommands;
     }
 
     /**
-     * Set http request
+     * @method setRequest
+     * Set http request object.
      * 
-     * @param \Illuminate\Http\Request  $request
-     * @return $this
+     * @param {Illuminate.Http.Request}  $request
+     * @return {Telenok.Core.Interfaces.Controller.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Controller
      */
     public function setRequest($request = null)
     {
@@ -62,9 +116,11 @@ use \Illuminate\Foundation\Bus\DispatchesCommands;
     }
 
     /**
-     * Get http request
+     * @method getRequest
+     * Return http request object.
      * 
-     * @return \Illuminate\Http\Request
+     * @return {Illuminate.Http.Request}
+     * @member Telenok.Core.Interfaces.Controller.Controller
      */
     public function getRequest()
     {
@@ -72,9 +128,11 @@ use \Illuminate\Foundation\Bus\DispatchesCommands;
     }
 
     /**
+     * @method getRequestCollected
      * Get collected http request
      * 
-     * @return \Illuminate\Support\Collection
+     * @return {Illuminate.Support.Collection}
+     * @member Telenok.Core.Interfaces.Controller.Controller
      */
     public function getRequestCollected()
     {
@@ -82,9 +140,11 @@ use \Illuminate\Foundation\Bus\DispatchesCommands;
     }
 
     /**
+     * @method make
      * Get new instance
      * 
-     * @return $this
+     * @return {Telenok.Core.Interfaces.Controller.Controller}
+     * @member Telenok.Core.Interfaces.Controller.Controller
      */
     public static function make()
     {
