@@ -738,7 +738,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     /**
      * @protected
      * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
+     * Before valiating field's value try to add field's name to array and pass it
      * to validator.
      *
      * @return {Array}
@@ -765,11 +765,12 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
 
     /**
      * @protected
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method validateStoreOrUpdatePermission
+     * Before storing model try to validate rights on fields in $input.
      *
-     * @return {Array}
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @param {Illuminate.Support.Collection} $input
+     * @return {void}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     protected function validateStoreOrUpdatePermission($type = null, $input = null)
@@ -838,11 +839,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method preProcess
+     * Before storing model called this hook.
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @param {Illuminate.Support.Collection} $input
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function preProcess($type, $input)
@@ -858,11 +859,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method postProcess
+     * After storing model called this hook.
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @param {Illuminate.Support.Collection} $input
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function postProcess($type, $input)
@@ -883,11 +884,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method __get
+     * Magic method
+     * @param {String} $key
+     * @return {mixed}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function __get($key)
@@ -905,11 +905,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method __set
+     * Magic method
+     * @param {String} $key
+     * @param {mixed} $value
+     * @return {mixed}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function __set($key, $value)
@@ -927,11 +927,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method getModelAttributeController
+     * Return value of field processed by field's controller for specific attribute.
+     * @param {String} $key
+     * @param {mixed} $value
+     * @return {mixed}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function getModelAttributeController($key, $value)
@@ -949,11 +949,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method setModelAttributeController
+     * Set value of field processed by field's controller for specific attribute.
+     * @param {String} $key
+     * @param {mixed} $value
+     * @return {void}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function setModelAttributeController($key, $value)
@@ -966,10 +966,8 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
+     * @method getObjectField
+     * Return list with Object Field values for current model's class.
      * @return {Array}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
@@ -998,10 +996,8 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
+     * @method getFieldList
+     * Return list of fields which can be showed in tables.
      * @return {Array}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
@@ -1010,16 +1006,14 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
         $type = $this->type();
 
         return $type->field()->active()->get()->filter(function($item) use ($type)
-                {
-                    return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
-                });
+        {
+            return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
+        });
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
+     * @method getFieldForm
+     * Return list of fields which can be showed in form.
      * @return {Array}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
@@ -1034,10 +1028,8 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
+     * @method getMultilanguage
+     * Return list of multilanguage fields.
      * @return {Array}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
@@ -1066,11 +1058,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method addMultilanguage
+     * Add multilanguage field's code.
+     * @param {String} $fieldCode
+     * Code of multilanguage field.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function addMultilanguage($fieldCode)
@@ -1085,9 +1077,8 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method getDates
+     * Return dates fields.
      *
      * @return {Array}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
@@ -1098,9 +1089,8 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method getFillable
+     * Return fillabled fields.
      *
      * @return {Array}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
@@ -1145,9 +1135,8 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method getRule
+     * Return field's rules for model.
      *
      * @return {Array}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
@@ -1184,11 +1173,14 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method translate
+     * Return translated value of field.
      *
-     * @return {Array}
+     * @param {String} $field
+     * Field's code.
+     * @param {String} $locale
+     * Locale. Can be null then used default site locale.
+     * @return {mixed}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function translate($field, $locale = '')
@@ -1223,12 +1215,17 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method scopeActive
+     * Apply additional filter to query to select only active rows.
      *
-     * @return {Array}
+     * @param {Illuminate.Database.Query.Builder} $query
+     * @param {String} $table
+     * Name of field.
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * 
+     *     @example
+     *     \App\Model\Article::active()->take(10)->get();
      */
     public function scopeActive($query, $table = null)
     {
@@ -1245,12 +1242,17 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method scopeNotActive
+     * Apply additional filter to query to select only not active rows.
      *
-     * @return {Array}
+     * @param {Illuminate.Database.Query.Builder} $query
+     * @param {String} $table
+     * Name of field.
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * 
+     *     @example
+     *     \App\Model\Article::notActive()->take(10)->get();
      */
     public function scopeNotActive($query, $table = null)
     {
@@ -1266,42 +1268,59 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method scopeTranslateField
+     * Add translated field to query.
+     * 
+     * @param {Illuminate.Database.Query.Builder} $query
+     * @param {String} $linkedTableAlias
+     * @param {String} $translateTableAlias
+     * @param {String} $translateField
+     * @param {String} $locale
+     * @return {void}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * 
+     *      @example
+     *      $query = \App\Model\Article::notActive()->take(10);
+     *      $query->translateField($query, $productModel->getTable(), 'translate_table', 'title', config('app.locale'));
+     *      $query->orderBy('translate_table.title')->get();
      */
-    public function scopeTranslateField($query, $linkedTableAlias = '', $translateTableAlias = '', $translateField = '', $language = '')
+    public function scopeTranslateField($query, $linkedTableAlias = '', $translateTableAlias = '', $translateField = '', $locale = '')
     {
         $translateModel = app('\App\Telenok\Core\Model\Object\Translation');
 
         $translateTableAlias = $translateTableAlias ? : $translateModel->getTable();
 
         $query->leftJoin($translateModel->getTable() . ' as ' . $translateTableAlias, function($join)
-                use ($linkedTableAlias, $translateTableAlias, $translateField, $language)
+                use ($linkedTableAlias, $translateTableAlias, $translateField, $locale)
         {
             $join->on($linkedTableAlias . '.id', '=', $translateTableAlias . '.translation_object_model_id')
                     ->on($translateTableAlias . '.translation_object_field_code', '=', app('db')->raw("'" . $translateField . "'"))
-                    ->on($translateTableAlias . '.translation_object_language', '=', app('db')->raw("'" . ($language ? : config('app.locale')) . "'"));
+                    ->on($translateTableAlias . '.translation_object_language', '=', app('db')->raw("'" . ($locale ? : config('app.locale')) . "'"));
         });
     }
 
     /** 
-     * @method validatorCustomAttributes
+     * @method scopeWithPermission
      * Before valiating rights of fields add field's name to array and pass it
      * to validator.
      *
      * @return {Array}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * 
+     *      @example
+     *      // can current user read (read - by default)
+     *      \Telenok\Core\Model\Object\Sequence::withPermission()->take(10)->get();
+     *      // can current user write
+     *      \Telenok\Core\Model\Object\Sequence::withPermission('write', null)->take(10)->get();
+     *      // can $someObject read 
+     *      \Telenok\Core\Model\Object\Sequence::withPermission(null, $someObject)->take(10)->get();
+     *      // can authorized user read 
+     *      \Telenok\Core\Model\Object\Sequence::withPermission(null, 'user_authorized')->take(10)->get();
+     *      // can anybody read
+     *      \Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_any')->take(10)->get();
+     *      // can user_authorized read with AND condition ['object-type', 'own']
+     *      \Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_authorized', ['object-type', 'own'])->take(10)->get();
      */
-    // ->permission() - can current user read (read - by default)
-    // ->permission('write', null) - can current user read
-    // ->permission(null, $someObject) - can $someObject read 
-    // ->permission(null, 'user_authorized') - can authorized user read 
-    // ->permission('read', 'user_any') - can anybody read
-    // ->permission('read', 'user_authorized', ['object-type', 'own'])
     public function scopeWithPermission($query, $permissionCode = 'read', $subjectCode = null, $filterCode = null)
     {
         if (!config('app.acl.enabled'))
@@ -1399,11 +1418,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method treeParent
+     * Return tree's parent of model.
      *
-     * @return {Array}
+     * @return {Telenok.Core.Model.Object.Sequence}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function treeParent()
@@ -1412,11 +1430,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method treeChild
+     * Return tree's children of model.
      *
-     * @return {Array}
+     * @return {Telenok.Core.Model.Object.Sequence}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function treeChild()
@@ -1427,11 +1444,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     /* Treeable section */
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method treeAttr
+     * Return model with tree attributes.
      *
-     * @return {Array}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function treeAttr()
@@ -1440,11 +1456,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /** 
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method scopeWithTreeAttr
+     * Add additional filter to query.
      *
-     * @return {Array}
+     * @param {Illuminate.Database.Query.Builder} $query
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function scopeWithTreeAttr($query)
@@ -1454,11 +1470,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method children
+     * Add filter to query for getting children for model with depth.
+     * @param {Integer} $depth
+     * How many level of children select.
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function children($depth = 0)
@@ -1484,11 +1500,12 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method validatorCustomAttributes
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method scopeWithChildren
+     * Add filter to query to choose children.
+     * @param {Illuminate.Database.Query.Builder} $query
+     * @param {Integer} $depth
+     * How many level of children select.
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function scopeWithChildren($query, $depth = 0)
@@ -1503,10 +1520,9 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
 
     /**
      * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * Move model in top of tree.
      *
-     * @return {Array}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function makeRoot()
@@ -1545,11 +1561,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method insertTree
+     * Insert model to tree for first time.
      *
-     * @return {Array}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function insertTree()
@@ -1573,11 +1588,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method makeLastChildOf
+     * Move model in the end of children's list.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $parent
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function makeLastChildOf($parent)
@@ -1621,11 +1635,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method makeFirstChildOf
+     * Move model in the top of children's list.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $parent
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function makeFirstChildOf($parent)
@@ -1672,11 +1685,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method isAncestor
+     * Whether model is ancestor of $descendant.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $descendant
+     * @return {Boolean}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function isAncestor($descendant)
@@ -1693,11 +1705,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method isDescendant
+     * Whether model is descendant of $ancestor.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $ancestor
+     * @return {Boolean}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function isDescendant($ancestor)
@@ -1715,11 +1726,12 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
 
     /**
      * @protected
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @method processSiblingOf
+     * Move model up or down on the same depth.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $sibling
+     * @param {String} $op
+     * Can be "<" or ">"
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     protected function processSiblingOf($sibling, $op)
@@ -1766,11 +1778,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method makePreviousSiblingOf
+     * Move model to before of $sibling.
      *
-     * @return {Array}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function makePreviousSiblingOf($sibling)
@@ -1779,11 +1790,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method makeNextSiblingOf
+     * Move model to next of $sibling.
      *
-     * @return {Array}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function makeNextSiblingOf($sibling)
@@ -1792,11 +1802,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method sibling
+     * Return initial query to select sibling models.
      *
-     * @return {Array}
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function sibling()
@@ -1807,11 +1816,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method parents
+     * Return initial query to select parents models.
      *
-     * @return {Array}
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function parents()
@@ -1822,11 +1830,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method isLeaf
+     * Whether model is leaf of tree's branch.
      *
-     * @return {Array}
+     * @return {Boolean}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function isLeaf()
@@ -1837,11 +1844,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method calculateRelativeDepth
+     * Calculate relative depth between two models.
      *
-     * @return {Array}
+     * @return {Integer}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function calculateRelativeDepth($object)
@@ -1858,11 +1864,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method allRoot
+     * Return initial query to select all root's models.
      *
-     * @return {Array}
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public static function allRoot()
@@ -1873,11 +1878,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method allDepth
+     * Return initial query to select all models in tree in $depth.
      *
-     * @return {Array}
+     * @param {Integer} $depth
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public static function allDepth($depth = 0)
@@ -1888,11 +1893,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method allLeaf
+     * Return initial query to select all models in tree which hasnt children.
      *
-     * @return {Array}
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public static function allLeaf()
@@ -1911,11 +1915,12 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     /* ~Treeable section */
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method lock
+     * Lock model to notify that it is eg. editing.
      *
-     * @return {Array}
+     * @param {Integer} $period
+     * Lock time in seconds.
+     * @return {void}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function lock($period = 300)
@@ -1934,11 +1939,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method unLock
+     * UnLock model to notify that it is free to eg. edit.
      *
-     * @return {Array}
+     * @return {void}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function unLock()
@@ -1954,11 +1958,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method locked
+     * Whether model is locked.
      *
-     * @return {Array}
+     * @return {Boolean}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function locked()
@@ -1967,24 +1970,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method createdByUser
+     * Define an inverse one-to-many relationship.
      *
-     * @return {Array}
-     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
-     */
-    public function LL($key = '', $param = [])
-    {
-        return trans("core::default.$key", $param);
-    }
-
-    /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
-     *
-     * @return {Array}
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function createdByUser()
@@ -1993,11 +1982,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method updatedByUser
+     * Define an inverse one-to-many relationship.
      *
-     * @return {Array}
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function updatedByUser()
@@ -2006,11 +1994,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method deletedByUser
+     * Define an inverse one-to-many relationship.
      *
-     * @return {Array}
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function deletedByUser()
@@ -2019,11 +2006,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method lockedByUser
+     * Define an inverse one-to-many relationship.
      *
-     * @return {Array}
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function lockedByUser()
@@ -2032,11 +2018,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method aclSubject
+     * Define a one-to-many relationship to select permission's query.
      *
-     * @return {Array}
+     * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function aclSubject()
@@ -2045,11 +2030,10 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     }
 
     /**
-     * @method makeRoot
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * @method __wakeup
+     * Magick method called when model deserialized.
      *
-     * @return {Array}
+     * @return {void}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
     public function __wakeup()

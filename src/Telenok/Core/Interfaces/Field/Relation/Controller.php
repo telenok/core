@@ -1,18 +1,30 @@
 <?php namespace Telenok\Core\Interfaces\Field\Relation;
 
 /**
- * @class Telenok.Core.Interfaces.Controller.Controller
- * Base class for CMS controllers
+ * @class Telenok.Core.Interfaces.Field.Relation.Controller
+ * Base class for fields which represent relations between models.
  * 
- * @mixins Telenok.Core.Support.Traits.Language
- * @mixins Illuminate.Foundation.Bus.DispatchesCommands
- * @uses Telenok.Core.Interfaces.Support.IRequest
- * @extends Illuminate.Routing.Controller
+ * @extends Telenok.Core.Interfaces.Field.Controller
  */
 class Controller extends \Telenok\Core\Interfaces\Field\Controller {
 
+    /**
+     * @protected
+     * @static
+     * @property {String} $macroFile
+     * Relative path to file where storing relations.
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     protected static $macroFile = 'Model/macro.php';
 
+    /**
+     * @static
+     * @method readMacroFile
+     * Create and include macro file.
+     *
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public static function readMacroFile()
     {
         $path = app_path(static::$macroFile);
@@ -25,21 +37,67 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         require $path;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getLinkedField($field)
     {
         
     }
 
+    /**
+     * @method getChooseTypeId
+     * Return ID of linked Type Object.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {Integer}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getChooseTypeId($field)
     {
         return $field->{$this->getLinkedField($field)};
     }
 
+    /**
+     * @method getModelAttribute
+     * Return processed value of field.
+     * 
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Field's name.
+     * @param {mixed} $value
+     * Value of field from database for processing in this method.
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getModelAttribute($model, $key, $value, $field)
     {
         return $value;
     }
 
+    /**
+     * @method validateExistsInputField
+     * Whether one of values from $param exists in $input.
+     *
+     * @param {Illuminate.Support.Collection} $input
+     * @param {Array} $param
+     * @return {void}
+     * @throws \Exception
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     * 
+     *      @example
+     *      $this->validateExistsInputField($input, ['field_has', 'morph_one_to_many_has']);
+     */
     public function validateExistsInputField($input, $param = [])
     {
         foreach ((array) $param as $p)
@@ -51,11 +109,21 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         }
 
         throw new \Exception('Please, define one or more keys "' . implode('", "', (array) $param)
-        . '" for object_field "' . $input->get('code') . '"'
-        . ' and object_type "' . $input->get('field_object_type')
-        . '"');
+                        . '" for object_field "' . $input->get('code') . '"'
+                        . ' and object_type "' . $input->get('field_object_type')
+                        . '"');
     }
 
+    /**
+     * @method __callStatic
+     * Dynamically handle calls to the class.
+     *
+     * @param {String} $method
+     * @param {Array} $parameters
+     * @return {mixed}
+     * @throws \BadMethodCallException
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getListButton($item, $field = null, $type = null, $uniqueId = null, $canUpdate = null)
     {
         $random = str_random();
@@ -94,16 +162,46 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
                 })->implode('content');
     }
 
+    /**
+     * @method __callStatic
+     * Dynamically handle calls to the class.
+     *
+     * @param {String} $method
+     * @param {Array} $parameters
+     * @return {mixed}
+     * @throws \BadMethodCallException
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getListButtonEventKey($param = null)
     {
         return 'telenok.field.' . $this->getKey();
     }
 
+    /**
+     * @method __callStatic
+     * Dynamically handle calls to the class.
+     *
+     * @param {String} $method
+     * @param {Array} $parameters
+     * @return {mixed}
+     * @throws \BadMethodCallException
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getAdditionalListButton($item, $collection)
     {
         return $collection;
     }
 
+    /**
+     * @method __callStatic
+     * Dynamically handle calls to the class.
+     *
+     * @param {String} $method
+     * @param {Array} $parameters
+     * @return {mixed}
+     * @throws \BadMethodCallException
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getListFieldContent($field, $item, $type = null)
     {
         $items = [];
@@ -120,14 +218,32 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         }
     }
 
+    /**
+     * @method __callStatic
+     * Dynamically handle calls to the class.
+     *
+     * @param {String} $method
+     * @param {Array} $parameters
+     * @return {mixed}
+     * @throws \BadMethodCallException
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getListFieldContentItems($field, $item, $type = null)
     {
         return $item->{camel_case($field->code)}()->take(8)->get();
     }
 
+    /**
+     * @method __callStatic
+     * Dynamically handle calls to the class.
+     *
+     * @param {String} $method
+     * @param {Array} $parameters
+     * @return {mixed}
+     * @throws \BadMethodCallException
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function schemeCreateExtraField($table, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null)
     {
-        
     }
-
 }

@@ -19,7 +19,7 @@ class CachableQueryBuilder extends \Illuminate\Database\Query\Builder {
     /**
      * @protected
      * @property {Array} $cacheTags
-     * The cache tags that should be used when caching the query.
+     * Cache tags that should be used when caching the query.
      * @member Telenok.Core.Interfaces.Database.CachableQueryBuilder
      */
     protected $cacheTags = [];

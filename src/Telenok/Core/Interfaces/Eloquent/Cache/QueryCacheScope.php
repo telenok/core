@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\ScopeInterface;
 class QueryCacheScope implements ScopeInterface {
 
     /**
+     * @method apply
      * Apply the scope to a given Eloquent query builder.
      *
      * @param {Illuminate.Database.Eloquent.Builder} $builder
@@ -31,16 +32,16 @@ class QueryCacheScope implements ScopeInterface {
     }
 
     /**
+     * @method remove
      * Remove the scope from the given Eloquent query builder.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $builder
-     * @param  \Illuminate\Database\Eloquent\Model $model
+     * @param {Illuminate.Database.Eloquent.Builder} $builder
+     * @param {Illuminate.Database.Eloquent.Model} $model
      *
-     * @return void
+     * @return {void}
      */
     public function remove(Builder $builder, Model $model)
     {
         $builder->remember(null);
     }
-
 }
