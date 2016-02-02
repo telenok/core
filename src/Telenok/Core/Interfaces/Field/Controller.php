@@ -1,36 +1,152 @@
 <?php namespace Telenok\Core\Interfaces\Field;
 
 /**
- * @class Telenok.Core.Interfaces.Controller.Controller
- * Base class for CMS controllers
+ * @class Telenok.Core.Interfaces.Field.Controller
+ * Base class for fields.
  * 
- * @mixins Telenok.Core.Support.Traits.Language
- * @mixins Illuminate.Foundation.Bus.DispatchesCommands
- * @uses Telenok.Core.Interfaces.Support.IRequest
- * @extends Illuminate.Routing.Controller
+ * @uses Telenok.Core.Interfaces.IField
+ * @extends Telenok.Core.Interfaces.Controller.Controller
  */
 class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Field\IField {
 
+    /**
+     * @protected
+     * @property {Array} $ruleList
+     * List of rules for special field's attributes.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $ruleList = [];
+    
+    /**
+     * @protected
+     * @property {Array} $specialField
+     * List of names for special field's attributes.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $specialField = [];
+    
+    /**
+     * @protected
+     * @property {Array} $specialDateField
+     * List of names for special date field's attributes.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $specialDateField = [];
+    
+    /**
+     * @protected
+     * @property {Boolean} $allowMultilanguage
+     * Can be field multilanguage.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $allowMultilanguage = true;
+    
+    /**
+     * @protected
+     * @static
+     * @property {Integer} $pageLength
+     * Amount of rows to show in table for relation's fields.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $pageLength = 5;
+    
+    /**
+     * @protected
+     * @property {String} $viewModel
+     * View name for show model's form.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $viewModel;
+    
+    /**
+     * @protected
+     * @property {String} $viewField
+     * View name for show field's form.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $viewField;
+    
+    /**
+     * @protected
+     * @property {String} $viewField
+     * View name for show field's filter.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $viewFilter;
+    
+    /**
+     * @protected
+     * @property {String} $routeListTable
+     * Name of router to list data.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $routeListTable;
+    
+    /**
+     * @protected
+     * @property {String} $routeListTitle
+     * Name of router to list title.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $routeListTitle;
+    
+    /**
+     * @protected
+     * @property {String} $routeWizardCreate
+     * Name of router to creating wizard (modal window).
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $routeWizardCreate;
+    
+    /**
+     * @protected
+     * @property {String} $routeWizardEdit
+     * Name of router to editing wizard (modal window).
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $routeWizardEdit;
+    
+    /**
+     * @protected
+     * @property {String} $routeWizardChoose
+     * Name of router to choosing wizard (modal window).
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $routeWizardChoose;
+    
+    /**
+     * @protected
+     * @property {String} $languageDirectory
+     * Default language directory for fields.
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
     protected $languageDirectory = 'field';
 
+    /**
+     * @method getViewModel
+     * Return view name for model's form.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getViewModel()
     {
         return $this->viewModel ? : "{$this->getPackage()}::field.{$this->getKey()}.model";
     }
 
+    /**
+     * @method setViewModel
+     * Set view name for model's form.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @param {String} $templateView
+     * Optional view.
+     * @param {String} $templateKey
+     * Optional view key. Used for fields like select box etc, which can be presents in many ways.
+     * @return {Telenok.Core.Interfaces.Field.Relation.Controller}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function setViewModel($field = null, $templateView = null, $templateKey = null)
     {
         $viewObj = app('view');
@@ -71,71 +187,194 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return $this;
     }
 
+    /**
+     * @method getViewField
+     * Return view name for field's form.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getViewField()
     {
         return $this->viewField ? : $this->getPackage() . "::field.{$this->getKey()}.field";
     }
 
+    /**
+     * @method getViewFilter
+     * Return view name for filter's form.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getViewFilter()
     {
         return $this->viewFilter ? : $this->getPackage() . "::field.{$this->getKey()}.filter";
     }
 
+    /**
+     * @method getRouteListTable
+     * Return router's name for list in table.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getRouteListTable()
     {
         return $this->routeListTable ? : $this->getVendorName() . ".field.{$this->getKey()}.list.table";
     }
 
+    /**
+     * @method getRouteListTitle
+     * Return router's name for title's list.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getRouteListTitle()
     {
         return $this->routeListTitle ? : $this->getVendorName() . ".field.{$this->getKey()}.list.title";
     }
 
+    /**
+     * @method getRouteWizardCreate
+     * Return router's name for modal's creating wizard.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getRouteWizardCreate()
     {
         return $this->routeWizardCreate ? : 'telenok.module.objects-lists.wizard.create';
     }
 
+    /**
+     * @method getRouteWizardEdit
+     * Return router's name for modal's editing wizard.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getRouteWizardEdit()
     {
         return $this->routeWizardEdit ? : 'telenok.module.objects-lists.wizard.edit';
     }
 
+    /**
+     * @method getRouteWizardChoose
+     * Return router's name for modal's choosing wizard.
+     * 
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getRouteWizardChoose()
     {
         return $this->routeWizardChoose ? : 'telenok.module.objects-lists.wizard.choose';
     }
 
+    /**
+     * @method getSpecialField
+     * Return list with names of special fields.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Object with data of field's configuration.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getSpecialField($model)
     {
         return $this->specialField;
     }
 
+    /**
+     * @method getModelField
+     * Return names of field for $model.
+     * 
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getModelField($model, $field)
     {
         return $this->getModelFillableField($model, $field);
     }
 
+    /**
+     * @method getModelFillableField
+     * Return fillable names of field for $model.
+     * 
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getModelFillableField($model, $field)
     {
         return [$field->code];
     }
 
+    /**
+     * @method getDateField
+     * Return list names of date field for $model.
+     * 
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getDateField($model, $field)
     {
         return [];
     }
 
+    /**
+     * @method getSpecialDateField
+     * Return list names of date field for special field's attributes.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Object with data of field's configuration.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getSpecialDateField($model)
     {
         return $this->specialDateField;
     }
 
+    /**
+     * @method getRule
+     * Return list of rules for field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getRule($field = null)
     {
         return $this->ruleList;
     }
 
+    /**
+     * @method getModelAttribute
+     * Return value of field's attributes.
+     * 
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Code of field in $model.
+     * @param {mixed} $value
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {mixed}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getModelAttribute($model, $key, $value, $field)
     {
         try
@@ -148,6 +387,20 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         }
     }
 
+    /**
+     * @method setModelAttribute
+     * Set value for field.
+     * 
+     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Code of field in $model.
+     * @param {mixed} $value
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {Telenok.Core.Interfaces.Field.Relation.Controller}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function setModelAttribute($model, $key, $value, $field)
     {
         $model->setAttribute($key, $value);
@@ -155,6 +408,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return $this;
     }
 
+    /**
+     * @method getModelSpecialAttribute
+     * Return value of field's attributes.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Object with data of field's configuration.
+     * @param {String} $key
+     * Code of field in $model.
+     * @param {mixed} $value
+     * @return {mixed}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getModelSpecialAttribute($model, $key, $value)
     {
         try
@@ -167,6 +432,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         }
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function setModelSpecialAttribute($model, $key, $value)
     {
         $model->setAttribute($key, $value);
@@ -174,6 +448,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return $this;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         $this->setViewModel($field, $controller->getModelFieldView($field), $controller->getModelFieldViewKey($field));
@@ -199,16 +482,44 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
      * @return \App\Telenok\Core\Model\Object\Type
      * 
      */
+    
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getLinkedModelType($field)
     {
         
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getTableList($id = null, $fieldId = null, $uniqueId = null)
     {
         $input = $this->getRequest();
@@ -291,6 +602,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         }
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getFormModelTableColumn($field, $model, $jsUnique)
     {
         $fields = [];
@@ -322,6 +642,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return $fields;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getFormFieldContent($model = null, $uniqueId = null)
     {
         return view($this->getViewField(), array(
@@ -331,6 +660,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
                 ))->render();
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null)
     {
         if ($value !== null && trim($value))
@@ -352,16 +690,43 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         }
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getFilterContent($field = null)
     {
         return '<input type="text" name="filter[' . $field->code . ']" value="" />';
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getListFieldContent($field, $item, $type = null)
     {
         return e(\Str::limit($item->translate((string) $field->code), 20));
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function validate($model = null, $input = [], $messages = [])
     {
         $validator = $this->validator($this, $input, array_merge($messages, $this->LL('error')));
@@ -374,6 +739,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return $this;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function validateMethodExists($object, $method)
     {
         $reflector = new \ReflectionClass($object);
@@ -392,16 +766,43 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         }
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function fill($field, $model, $input)
     {
         return $this;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function saveModelField($field, $model, $input)
     {
         return $model;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function updateModelFile($model, $param, $stubFile)
     {
         $reflector = new \ReflectionClass($model);
@@ -446,6 +847,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         }
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function validator($model = null, $input = [], $message = [], $customAttribute = [])
     {
         return app('\Telenok\Core\Interfaces\Validator\Model')
@@ -455,11 +865,29 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
                         ->setCustomAttribute($customAttribute);
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function validateException()
     {
         return new \Telenok\Core\Support\Exception\Validator;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function preProcess($model, $type, $input)
     {
         $tab = $this->getFieldTab($input->get('field_object_type'), $input->get('field_object_tab', 'main'));
@@ -469,11 +897,29 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return $this;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function postProcess($model, $type, $input)
     {
         return $this;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function processFieldDelete($model, $type)
     {
         try
@@ -491,16 +937,43 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return true;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function processModelDelete($model, $force)
     {
         return true;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function allowMultilanguage()
     {
         return $this->allowMultilanguage;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getMultilanguage($model, $field)
     {
         if ($field->multilanguage)
@@ -509,6 +982,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         }
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getFieldTab($typeId, $tabCode)
     {
         try
@@ -536,6 +1018,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return $tabTo;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getFieldTabBelongTo($typeId, $tabBelongCode, $tabHasId)
     {
         try
@@ -566,6 +1057,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return $tabTo;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getTitleList($id = null, $closure = null)
     {
         $term = trim($this->getRequest()->input('term'));
@@ -630,9 +1130,17 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
         return $return;
     }
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Field.Relation.Controller
+     */
     public function getStubFileDirectory()
     {
         return __DIR__;
     }
-
 }

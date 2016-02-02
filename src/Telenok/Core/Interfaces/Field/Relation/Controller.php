@@ -115,13 +115,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     }
 
     /**
-     * @method __callStatic
-     * Dynamically handle calls to the class.
+     * @method getListButton
+     * Return collection with buttons which showed in tables for linked data.
      *
-     * @param {String} $method
-     * @param {Array} $parameters
-     * @return {mixed}
-     * @throws \BadMethodCallException
+     * @param {mixed} $item
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @param {String} $uniqueId
+     * Unique string received from ajax.
+     * @param {Boolean} $canUpdate
+     * @return {Illuminate.Support.Collection}
      * @member Telenok.Core.Interfaces.Field.Relation.Controller
      */
     public function getListButton($item, $field = null, $type = null, $uniqueId = null, $canUpdate = null)
@@ -163,13 +166,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     }
 
     /**
-     * @method __callStatic
-     * Dynamically handle calls to the class.
+     * @method getListButtonEventKey
+     * Return key for event hook allowed add new buttons.
      *
-     * @param {String} $method
-     * @param {Array} $parameters
-     * @return {mixed}
-     * @throws \BadMethodCallException
+     * @param {Illuminate.Support.Collection} $param
+     * Collection with buttons.
+     * @return {String}
      * @member Telenok.Core.Interfaces.Field.Relation.Controller
      */
     public function getListButtonEventKey($param = null)
@@ -178,13 +180,12 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     }
 
     /**
-     * @method __callStatic
-     * Dynamically handle calls to the class.
+     * @method getAdditionalListButton
+     * Additional buttons.
      *
-     * @param {String} $method
-     * @param {Array} $parameters
-     * @return {mixed}
-     * @throws \BadMethodCallException
+     * @param {mixed} $item
+     * @param {Illuminate.Support.Collection} $collection
+     * @return {Illuminate.Support.Collection}
      * @member Telenok.Core.Interfaces.Field.Relation.Controller
      */
     public function getAdditionalListButton($item, $collection)
@@ -193,13 +194,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     }
 
     /**
-     * @method __callStatic
-     * Dynamically handle calls to the class.
-     *
-     * @param {String} $method
-     * @param {Array} $parameters
-     * @return {mixed}
-     * @throws \BadMethodCallException
+     * @method getListFieldContent
+     * Return value of field for show in list cell like Javascript Datatables().
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @param {Object} $item
+     * Eloquent object with data of list's row.
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * Type of eloquent object $item.
+     * @return {String}
      * @member Telenok.Core.Interfaces.Field.Relation.Controller
      */
     public function getListFieldContent($field, $item, $type = null)
@@ -219,13 +223,13 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     }
 
     /**
-     * @method __callStatic
-     * Dynamically handle calls to the class.
+     * @method getListFieldContentItems
+     * Return initial list of linked field values.
      *
-     * @param {String} $method
-     * @param {Array} $parameters
-     * @return {mixed}
-     * @throws \BadMethodCallException
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {mixed} $item
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @return {Illuminate.Support.Collection}
      * @member Telenok.Core.Interfaces.Field.Relation.Controller
      */
     public function getListFieldContentItems($field, $item, $type = null)
@@ -234,13 +238,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     }
 
     /**
-     * @method __callStatic
-     * Dynamically handle calls to the class.
+     * @method schemeCreateExtraField
+     * Alter field's table.
      *
-     * @param {String} $method
-     * @param {Array} $parameters
-     * @return {mixed}
-     * @throws \BadMethodCallException
+     * @param {String} $table
+     * @param {mixed} $p1
+     * @param {mixed} $p2
+     * @param {mixed} $p3
+     * @param {mixed} $p4
+     * @param {mixed} $p5
+     * @return {void}
      * @member Telenok.Core.Interfaces.Field.Relation.Controller
      */
     public function schemeCreateExtraField($table, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null)
