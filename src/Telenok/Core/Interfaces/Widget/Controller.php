@@ -480,6 +480,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
     
+    /**
+     * @method getFrontendController
+     * Return frontend controller.
+     * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function getFrontendController()
     {   
         try
@@ -488,7 +494,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         }
         catch (\Exception $e) {}
     }
-    
+
+    /**
+     * @method getTemplateContent
+     * Return content of content's view. Allow user edit template via backend.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getTemplateContent()
 	{
         if (($p = $this->getFileTemplatePath()) && ($content = file_get_contents($p)))
@@ -505,6 +517,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         }
 	}
     
+    /**
+     * @method getFileTemplatePath
+     * Return path to widget's frontend view.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function getFileTemplatePath()
     {
         try
