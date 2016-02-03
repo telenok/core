@@ -56,8 +56,8 @@ class Model {
      * @method setModel
      * Set validation model.
      * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Widget.Controller}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Validator.Model}
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function setModel($param = null)
     {
@@ -70,7 +70,7 @@ class Model {
      * @method getModel
      * Return model.
      * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function getModel()
     {
@@ -81,8 +81,8 @@ class Model {
      * @method setInput
      * Set input.
      * @param {Array} $param
-     * @return {Telenok.Core.Interfaces.Widget.Controller}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Validator.Model}
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function setInput($param = [])
     {
@@ -95,7 +95,7 @@ class Model {
      * @method getInput
      * Return input collection.
      * @return {Illuminate.Support.Collection}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function getInput()
     {
@@ -106,8 +106,8 @@ class Model {
      * @method setMessage
      * Set messages.
      * @param {Array} $param
-     * @return {Telenok.Core.Interfaces.Widget.Controller}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Validator.Model}
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function setMessage($param = [])
     {
@@ -120,7 +120,7 @@ class Model {
      * @method getMessage
      * Return messages.
      * @return {Array}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function getMessage()
     {
@@ -131,8 +131,8 @@ class Model {
      * @method setRuleList
      * Set rule's list.
      * @param {Array} $param
-     * @return {Telenok.Core.Interfaces.Widget.Controller}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Validator.Model}
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function setRuleList($param = [])
     {
@@ -145,7 +145,7 @@ class Model {
      * @method getRuleList
      * Return rule's list.
      * @return {Array}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function getRuleList()
     {
@@ -161,8 +161,8 @@ class Model {
      * @method setCustomAttribute
      * Set list of custom attributes for better notificate user about error.
      * @param {Array} $param
-     * @return {Telenok.Core.Interfaces.Widget.Controller}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Validator.Model}
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function setCustomAttribute($param = [])
     {
@@ -175,7 +175,7 @@ class Model {
      * @method getCustomAttribute
      * Return custom attribute list.
      * @return {Array}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function getCustomAttribute()
     {
@@ -187,7 +187,7 @@ class Model {
      * Process rule for converting them to one-level array.
      * @param {Array} $rule
      * @return {Array}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     protected function processRule($rule)
     {
@@ -206,7 +206,7 @@ class Model {
      * @method passes
      * Start validation process.
      * @return {Boolean}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function passes()
     {
@@ -240,7 +240,7 @@ class Model {
      * @method fails
      * Start validation process.
      * @return {Boolean}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function fails()
     {
@@ -251,7 +251,7 @@ class Model {
      * @method messages
      * Return message's list with error descriptions.
      * @return {Array}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function messages()
     {
@@ -264,7 +264,7 @@ class Model {
      * @method validator
      * Return validator.
      * @return {Telenok.Core.Interfaces.Validator.Validator}
-     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @member Telenok.Core.Interfaces.Validator.Model
      */
     public function validator()
     {
