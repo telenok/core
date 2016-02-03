@@ -2,6 +2,8 @@
 
 /**
  * @class Telenok.Core.Widget.Table.Controller
+ * Class present table widget.
+ * 
  * @extends Telenok.Core.Interfaces.Widget.Controller
  */
 class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
