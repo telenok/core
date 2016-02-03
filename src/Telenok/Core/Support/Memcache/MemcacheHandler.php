@@ -6,8 +6,7 @@ use Illuminate\Cache\Repository;
  *  Create a new cache driven handler instance.
  * 
  * @class Telenok.Core.Support.Memcache.MemcacheHandler
- * @uses Illuminate.Cache.Repository
- * @uses SessionHandlerInterface
+ * @extends SessionHandlerInterface
  */
 class MemcacheHandler implements \SessionHandlerInterface {
 
