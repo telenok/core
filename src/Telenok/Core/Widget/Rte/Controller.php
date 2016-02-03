@@ -1,10 +1,33 @@
 <?php namespace Telenok\Core\Widget\Rte;
 
+/**
+ * @class Telenok.Core.Widget.Rte.Controller
+ * @extends Telenok.Core.Interfaces.Widget.Controller
+ */
 class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 
+    /**
+     * @protected
+     * @property {String} $key
+     * Key of widget.
+     * @member Telenok.Core.Widget.Rte.Controller
+     */
     protected $key = 'rte';
+    
+    /**
+     * @protected
+     * @property {String} $parent
+     * Parent's widget key.
+     * @member Telenok.Core.Widget.Rte.Controller
+     */
     protected $parent = 'standart';
 
+    /**
+     * @method getNotCachedContent
+     * Return not cached content of widget.
+     * @member Telenok.Core.Widget.Rte.Controller
+     * @return {String}
+     */
 	public function getNotCachedContent()
 	{
         if ($t = $this->getFileTemplatePath())
