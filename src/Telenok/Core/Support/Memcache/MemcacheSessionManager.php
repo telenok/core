@@ -20,6 +20,8 @@ class MemcacheSessionManager extends \Illuminate\Support\Manager {
      * Create a new manager instance.
      *
      * @param  {Telenok.Core.Support.Memcache.MemcacheHandler} $handler
+     * @return {void}
+     * @member Telenok.Core.Support.Memcache.MemcacheSessionManager
      */
     public function __construct(MemcacheHandler $handler)
     {
@@ -31,6 +33,7 @@ class MemcacheSessionManager extends \Illuminate\Support\Manager {
      * Return manager instance.
      *
      * @return {Telenok.Core.Support.Memcache.MemcacheHandler}
+     * @member Telenok.Core.Support.Memcache.MemcacheSessionManager
      */
     protected function createMemcacheDriver()
     {
@@ -42,6 +45,7 @@ class MemcacheSessionManager extends \Illuminate\Support\Manager {
      * Get the default driver name.
      *
      * @return {String}
+     * @member Telenok.Core.Support.Memcache.MemcacheSessionManager
      */
     public function getDefaultDriver()
     {
