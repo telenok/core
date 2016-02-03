@@ -2,7 +2,7 @@
 
 /**
  * @class Telenok.Core.Widget.Table.Controller
- * Class present table widget.
+ * Class presents table widget.
  * 
  * @extends Telenok.Core.Interfaces.Widget.Controller
  */
