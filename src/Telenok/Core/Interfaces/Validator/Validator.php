@@ -2,9 +2,23 @@
 
 use Symfony\Component\Translation\TranslatorInterface;
 
+/**
+ * @class Telenok.Core.Interfaces.Validator.Validator
+ * Validator for eloquent models.
+ * 
+ * @uses Symfony.Component.Translation.TranslatorInterface
+ * @extends Illuminate.Validation.Validator
+ */
 class Validator extends \Illuminate\Validation\Validator {
 
+    /**
+     * @protected
+     * @property {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * Model to validate.
+     * @member Telenok.Core.Interfaces.Validator.Validator
+     */
     protected $model = null;
+    
     
     protected function doReplacements($message, $attribute, $rule, $parameters)
     {
