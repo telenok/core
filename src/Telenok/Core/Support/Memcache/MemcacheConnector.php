@@ -1,13 +1,17 @@
 <?php namespace Telenok\Core\Support\Memcache;
 
+/**
+ * @class Telenok.Core.Support.Memcache.MemcacheConnector
+ * Create a new Memcache connection.
+ */
 class MemcacheConnector {
 
     /**
+     * @method connect
      * Create a new Memcache connection.
-     *
-     * @param array  $servers
-     * @return \Memcache
-     *
+     * @param {Array} $servers
+     * @return {Memcache}
+     * @member Telenok.Core.Support.Memcache.MemcacheConnector
      * @throws \RuntimeException
      */
     public function connect($servers = [])
@@ -31,9 +35,10 @@ class MemcacheConnector {
     }
 
     /**
-     * Get a new Memcached instance.
-     *
-     * @return \Memcached
+     * @method getMemcache
+     * Return new instanse of Memcache.
+     * @return {Memcache}
+     * @member Telenok.Core.Support.Memcache.MemcacheConnector
      */
     protected function getMemcache()
     {
