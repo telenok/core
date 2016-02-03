@@ -2,6 +2,8 @@
 
 /**
  * @class Telenok.Core.Widget.Rte.Controller
+ * Class present widget "rte".
+ * 
  * @extends Telenok.Core.Interfaces.Widget.Controller
  */
 class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
