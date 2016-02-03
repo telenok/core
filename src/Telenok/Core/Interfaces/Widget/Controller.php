@@ -113,18 +113,27 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      protected $config = [];
 
     /**
-     * @public
-     * @property {Boolean} $timestamps
-     * Allow set time when create and update.
+     * @protected
+     * @property {String} $widgetTemplateDirectory
+     * Where store template's changes which user make in backend.
      * @member Telenok.Core.Interfaces.Widget.Controller
-     */    protected $widgetTemplateDirectory = 'resources/views/widget/';
+     */    
+     protected $widgetTemplateDirectory = 'resources/views/widget/';
+     
     /**
      * @protected
-     * @property {Boolean} $timestamps
-     * Allow set time when create and update.
+     * @property {String} $languageDirectory
+     * Language directory for widgets.
      * @member Telenok.Core.Interfaces.Widget.Controller
-     */    protected $languageDirectory = 'widget';
+     */
+     protected $languageDirectory = 'widget';
      
+    /**
+     * @method setCacheEnabled
+     * Enable or disable cache.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     */
     public function setCacheEnabled($param)
     {
         $this->cacheEnabled = $param;
@@ -132,21 +141,46 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method setCacheEnabled
+     * Return whether cache enabled.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Boolean}
+     */
     public function getCacheEnabled()
     {
         return $this->cacheEnabled;
     }
     
-	public function getIcon()
+    /**
+     * @method getIcon
+     * Return icon class.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {String}
+     */
+     public function getIcon()
 	{
 		return $this->icon;
 	}
 
+    /**
+     * @method getParent
+     * Return parent widget key.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {String}
+     */
     public function getParent()
     {
         return $this->parent;
     }
 
+    /**
+     * @method setConfig
+     * Set config for widget.
+     * @param {Array} $config
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     */
     public function setConfig($config = [])
     {
 		$this->config = $config;
@@ -163,6 +197,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method getConfig
+     * Return config of widget or value by key from config.
+     * @param {String} $key
+     * @param {mixed} $default
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {mixed}
+     */
 	public function getConfig($key = null, $default = null)
 	{
 		if (empty($key))
@@ -175,6 +217,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 	}
 
+    /**
+     * @method setWidgetModel
+     * Set widget's model.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     */
     public function setWidgetModel($param)
 	{
 		$this->widgetModel = $param;
@@ -183,11 +232,24 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
 	}
 
+    /**
+     * @method getWidgetModel
+     * Return widget's model.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     */
 	public function getWidgetModel()
 	{
 		return $this->widgetModel;
 	}
 
+    /**
+     * @method setCacheTime
+     * Set cache time of widgetOnPage in minuts. Can be float as part of minute.
+     * @param {Number} $param
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function setCacheTime($param = 0)
 	{
 		$this->cacheTime = $param;
@@ -197,11 +259,25 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
 	}
 
+    /**
+     * @method getCacheTime
+     * Return cache time of widgetOnPage.
+     * @return {Number}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getCacheTime()
 	{
 		return $this->cacheTime;
 	}
 
+    /**
+     * @method getCacheKey
+     * Return cache key and add to it new part of key.
+     * @param {String} $additional
+     * Additional part of key.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getCacheKey($additional = '')
 	{
         $append = $this->getFrontendView() 
@@ -224,6 +300,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return false;
 	}
 
+    /**
+     * @method getCachedContent
+     * Return cached content.
+     * @return {mixed}
+     * Can return false if cache not exitst.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getCachedContent()
 	{
         if (($k = $this->getCacheKey()) !== false)
@@ -234,6 +317,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return false;
 	}
 
+    /**
+     * @method setCachedContent
+     * Set cached content.
+     * @param {String} $content
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function setCachedContent($content = '')
 	{
         if ($this->getCacheEnabled() 
@@ -246,6 +336,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $this;
 	}
 
+    /**
+     * @method getContent
+     * Return content.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getContent()
 	{
         $this->setCacheTime($this->getCacheTime());
@@ -262,11 +358,24 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this->processContent($content);
 	}
     
+    /**
+     * @method getNotCachedContent
+     * Return not cached content.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getNotCachedContent()
 	{
         return view($this->getFrontendView(), ['controller' => $this])->render();
 	}
     
+    /**
+     * @method processContent
+     * Process content before return to frontend controller.
+     * @param {String} $content
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function processContent($content = '')
     {
         $content = $this->processContentJsCode($content);
@@ -274,6 +383,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $content;
     }
 
+    /**
+     * @method processContentJsCode
+     * Move all javascript tags to end of <body> content.
+     * Process javascript content of widget.
+     * @param {String} $content
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function processContentJsCode($content = '')
     {
         $jsCode = '';
@@ -305,11 +422,23 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return mb_substr($doc->saveHTML($doc->getElementsByTagName('body')->item(0)), 6, -7);
     }
 
+    /**
+     * @method getBackendView
+     * Return name of backend view.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getBackendView()
 	{
 		return $this->backendView ? : "core::module.web-page-constructor.widget-backend";
 	}
 
+    /**
+     * @method getFrontendView
+     * Return name of frontend view.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getFrontendView()
 	{
         if ($m = $this->getWidgetModel())
@@ -326,11 +455,24 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         }
 	}
 
+    /**
+     * @method getStructureView
+     * Return name of structure view. This view show widget's features and settings.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getStructureView()
 	{
         return $this->structureView ? : "{$this->getPackage()}::widget.{$this->getKey()}.structure";
 	}
     
+    /**
+     * @method setFrontendController
+     * Set frontend controller.
+     * @param {Telenok.Core.Interfaces.Controller.Frontend.Controller} $param
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function setFrontendController($param = null)
     {
         $this->frontendController = $param;
