@@ -1,12 +1,55 @@
 <?php namespace Telenok\Core\Interfaces\Validator;
 
+/**
+ * @class Telenok.Core.Interfaces.Validator.Model
+ * Validator for eloquent models.
+ */
 class Model {
 
+    /**
+     * @protected
+     * @property {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * Model to validate.
+     * @member Telenok.Core.Interfaces.Validator.Model
+     */
     protected $model;
-    protected $ruleList = [];
-    protected $input = [];
+    /**
+     * @protected
+     * @property {Array} $ruleList
+     * List of validation's rules.
+     * @member Telenok.Core.Interfaces.Validator.Model
+     */
+     protected $ruleList = [];
+    /**
+     * @protected
+     * @property {Array} $input
+     * Array to validate.
+     * @member Telenok.Core.Interfaces.Validator.Model
+     */
+     protected $input = [];
+     
+    /**
+     * @protected
+     * @property {String} $parent
+     * Parent's widget key.
+     * @member Telenok.Core.Interfaces.Validator.Model
+     */
     protected $validator;
+    
+    /**
+     * @protected
+     * @property {String} $parent
+     * Parent's widget key.
+     * @member Telenok.Core.Interfaces.Validator.Model
+     */
     protected $message = [];
+    
+    /**
+     * @protected
+     * @property {String} $parent
+     * Parent's widget key.
+     * @member Telenok.Core.Interfaces.Validator.Model
+     */
     protected $customAttribute = [];
     
     public function setModel($param = null)
