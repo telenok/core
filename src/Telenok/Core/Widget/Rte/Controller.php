@@ -2,7 +2,7 @@
 
 /**
  * @class Telenok.Core.Widget.Rte.Controller
- * Class present widget "rte".
+ * Class presents widget "rte".
  * 
  * @extends Telenok.Core.Interfaces.Widget.Controller
  */
