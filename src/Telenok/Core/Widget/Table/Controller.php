@@ -153,7 +153,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 
     /**
      * @method getInsertContent
-     * Return content of widget to show it in modal window.
+     * Return content of widgetOnPage to show it in modal window in backend.
      * @param {Integer} $id
      * Id of WidgetOnPage model.
      * @return {String}
@@ -222,7 +222,15 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
                         ])->render();
 	}
 
-	public function getContainerInsertContent($container_id = "")
+    /**
+     * @method getContainerInsertContent
+     * Return content of one container by its dom id in backend.
+     * @param {String} $container_id
+     * Container name.
+     * @return {String}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+     public function getContainerInsertContent($container_id = "")
 	{
 		$content = [];
 
@@ -238,14 +246,40 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 		return $content;
 	}
     
-	public function setCacheTime($param = 0)
+    /**
+     * @method setCacheTime
+     * Set cache time of widgetOnPage in minuts. Can be float as part of minute.
+     * @param {Number} $param
+     * @return {Telenok.Core.Widget.Table.Controller}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+     public function setCacheTime($param = 0)
 	{
 		$this->cacheTime = min($this->getCacheTime(), $param);
         
 		return $this;
 	}
 	
-    public function insertFromBufferOnPage($languageId = 0, $pageId = 0, $key = '', $id = 0, $container = '', $order = 0, $bufferId = 0)
+    /**
+     * @method insertFromBufferOnPage
+     * Cut from page and insert widgetOnPage in other place of containers.
+     * @param {Integer} $languageId
+     * Language Id of page where insert widgetOnPage.
+     * @param {Integer} $pageId
+     * Page id where inserted widgetOnPage.
+     * @param {String} $key
+     * @param {Integer} $id
+     * Id of moved widgetOnPage.
+     * @param {String} $container
+     * Container dom id.
+     * @param {Integer} $order
+     * Order of moved widgetOnPage.
+     * @param {Integer} $bufferId
+     * Id of moved widgetOnPage on buffer.
+     * @return {Telenok.Core.Model.Web.WidgetOnPage}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+     public function insertFromBufferOnPage($languageId = 0, $pageId = 0, $key = '', $id = 0, $container = '', $order = 0, $bufferId = 0)
 	{
 		$widgetOnPage = null;
 		
@@ -324,7 +358,15 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 		return $widgetOnPage;
 	}
 
-	public function copyAndInsertChild($widgetOnPage, $buffer)
+    /**
+     * @method copyAndInsertChild
+     * Copy widgetOnPage in other place of containers via buffer.
+     * @param {Telenok.Core.Model.Web.WidgetOnPage} $widgetOnPage
+     * @param {Telenok.Core.Model.System.Buffer} $buffer
+     * @return {void}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+     public function copyAndInsertChild($widgetOnPage, $buffer)
 	{  
 		$structure = $widgetOnPage->structure; 
 
@@ -356,6 +398,20 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 		$widgetOnPage->save();
 	}
 
+    /**
+     * @method insertOnPage
+     * Insert widgetOnPage in page.
+     * @param {Integer} $languageId
+     * Id of language.
+     * @param {Integer} $pageId
+     * Id of web page.
+     * @param {String} $key
+     * @param {String} $id
+     * @param {String} $container
+     * @param {Integer} $order
+     * @return {void}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
 	public function insertOnPage($languageId = 0, $pageId = 0, $key = '', $id = 0, $container = '', $order = 0)
 	{
 		$w = parent::insertOnPage($languageId, $pageId, $key, $id, $container, $order);
