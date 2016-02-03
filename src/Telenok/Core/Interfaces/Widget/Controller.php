@@ -537,6 +537,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return false;
     }
 
+    /**
+     * @method getInsertContent
+     * Return content of WidgetOnPage for modal window.
+     * @param {Integer} $id
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getInsertContent($id = 0)
 	{
 		$widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
@@ -549,7 +556,26 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
                         'widgetOnPage' => $widgetOnPage,
                     ])->render();
 	}   
-	
+
+    /**
+     * @method insertFromBufferOnPage
+     * Cut from page and insert widgetOnPage in other place of containers.
+     * @param {Integer} $languageId
+     * Language Id of page where insert widgetOnPage.
+     * @param {Integer} $pageId
+     * Page id where inserted widgetOnPage.
+     * @param {String} $key
+     * @param {Integer} $id
+     * Id of moved widgetOnPage.
+     * @param {String} $container
+     * Container dom id.
+     * @param {Integer} $order
+     * Order of moved widgetOnPage.
+     * @param {Integer} $bufferId
+     * Id of moved widgetOnPage on buffer.
+     * @return {Telenok.Core.Model.Web.WidgetOnPage}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function insertFromBufferOnPage($languageId = 0, $pageId = 0, $key = '', $id = 0, $container = '', $order = 0, $bufferId = 0)
 	{
 		$widgetOnPage = null;
@@ -616,6 +642,20 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $widgetOnPage;
 	}
 
+    /**
+     * @method insertOnPage
+     * Insert widgetOnPage in page.
+     * @param {Integer} $languageId
+     * Id of language.
+     * @param {Integer} $pageId
+     * Id of web page.
+     * @param {String} $key
+     * @param {String} $id
+     * @param {String} $container
+     * @param {Integer} $order
+     * @return {Telenok.Core.Model.Web.WidgetOnPage}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function insertOnPage($languageId = 0, $pageId = 0, $key = '', $id = 0, $container = '', $order = 0)
 	{
 		$widgetOnPage = null;
@@ -670,11 +710,28 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		return $widgetOnPage;
 	}
 
+    /**
+     * @method removeFromPage
+     * Remove widgetOnPage by id.
+     * @param {Integer} $id
+     * Id of widgetOnPage.
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function removeFromPage($id = 0)
 	{
 		\App\Telenok\Core\Model\Web\WidgetOnPage::destroy($id);
 	}
-
+	
+    /**
+     * @method getStructureContent
+     * Return content of widget's structure. Eg return view of settings etc.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {String} $uniqueId
+     * Unique id from html code.
+     * @return {void}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function getStructureContent($model = null, $uniqueId = null)
 	{
         $this->setWidgetModel($model);
@@ -686,6 +743,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 				])->render();
 	}
 
+    /**
+     * @method findOriginalWidget
+     * Search original widget if current has type "widget-link".
+     * @param {Integer} $id
+     * Id of current widget.
+     * @return {Telenok.Core.Model.Web.WidgetOnPage}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function findOriginalWidget($id = 0)
 	{
 		$widget = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
@@ -702,6 +767,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 		}
 	}
 
+    /**
+     * @method delete
+     * Remove widgetOnPage.
+     * @param {Telenok.Core.Model.Web.WidgetOnPage} $model
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function delete($model)
     {
         if ($p = $this->getFileTemplatePath())
@@ -712,16 +784,42 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         return $this;
     }
 
+    /**
+     * @method validate
+     * validate structure data before saving.
+     * @param {Telenok.Core.Model.Web.WidgetOnPage} $model
+     * @param {Illuminate.Support.Collection} $input
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
 	public function validate($model = null, $input = [])
 	{
         return $this;
 	}
 
+    /**
+     * @method preProcess
+     * Hook called before saving widget.
+     * @param {Telenok.Core.Model.Web.WidgetOnPage} $model
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @param {Illuminate.Support.Collection} $input
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function preProcess($model, $type, $input)
     { 
         return $this;
     }
 
+    /**
+     * @method postProcess
+     * Hook called after saving widget.
+     * @param {Telenok.Core.Model.Web.WidgetOnPage} $model
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @param {Illuminate.Support.Collection} $input
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function postProcess($model, $type, $input)
     {
         $templateFile = $this->getFileTemplatePath();
