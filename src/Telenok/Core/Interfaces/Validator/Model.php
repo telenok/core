@@ -22,36 +22,43 @@ class Model {
      protected $ruleList = [];
     /**
      * @protected
-     * @property {Array} $input
-     * Array to validate.
+     * @property {Illuminate.Support.Collection} $input
+     * Input collection to validate.
      * @member Telenok.Core.Interfaces.Validator.Model
      */
-     protected $input = [];
+     protected $input;
      
     /**
      * @protected
-     * @property {String} $parent
-     * Parent's widget key.
+     * @property {Telenok.Core.Interfaces.Validator.Validator} $validator
+     * Validator which make validation.
      * @member Telenok.Core.Interfaces.Validator.Model
      */
     protected $validator;
     
     /**
      * @protected
-     * @property {String} $parent
-     * Parent's widget key.
+     * @property {Array} $message
+     * List of custom messages.
      * @member Telenok.Core.Interfaces.Validator.Model
      */
     protected $message = [];
     
     /**
      * @protected
-     * @property {String} $parent
-     * Parent's widget key.
+     * @property {Array} $customAttribute
+     * Custom notification attributes.
      * @member Telenok.Core.Interfaces.Validator.Model
      */
     protected $customAttribute = [];
     
+    /**
+     * @method setModel
+     * Set validation model.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function setModel($param = null)
     {
         $this->model = $param;
@@ -59,11 +66,24 @@ class Model {
         return $this;
     }
     
+    /**
+     * @method getModel
+     * Return model.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function getModel()
     {
         return $this->model;
     }
-    
+
+    /**
+     * @method setInput
+     * Set input.
+     * @param {Array} $param
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function setInput($param = [])
     {
         $this->input = collect($param);
@@ -71,11 +91,24 @@ class Model {
         return $this;
     }
     
+    /**
+     * @method getInput
+     * Return input collection.
+     * @return {Illuminate.Support.Collection}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function getInput()
     {
         return $this->input;
     }
     
+    /**
+     * @method setMessage
+     * Set messages.
+     * @param {Array} $param
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function setMessage($param = [])
     {
         $this->message = array_merge(trans('core::default.error'), (array)$param);
@@ -83,11 +116,24 @@ class Model {
         return $this;
     }
     
+    /**
+     * @method getMessage
+     * Return messages.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function getMessage()
     {
         return $this->message;
     }
     
+    /**
+     * @method setRuleList
+     * Set rule's list.
+     * @param {Array} $param
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function setRuleList($param = [])
     {
         $this->ruleList = $param;
@@ -95,6 +141,12 @@ class Model {
         return $this;
     }
     
+    /**
+     * @method getRuleList
+     * Return rule's list.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function getRuleList()
     {
         if (empty($this->ruleList))
@@ -105,6 +157,13 @@ class Model {
         return $this->ruleList;
     } 
     
+    /**
+     * @method setCustomAttribute
+     * Set list of custom attributes for better notificate user about error.
+     * @param {Array} $param
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function setCustomAttribute($param = [])
     {
         $this->customAttribute = $param;
@@ -112,11 +171,24 @@ class Model {
         return $this;
     }
     
+    /**
+     * @method getCustomAttribute
+     * Return custom attribute list.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function getCustomAttribute()
     {
         return $this->customAttribute;
     }
 
+    /**
+     * @method processRule
+     * Process rule for converting them to one-level array.
+     * @param {Array} $rule
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     protected function processRule($rule)
     {
         array_walk_recursive($rule, function(&$el, $key, $this_) 
@@ -130,6 +202,12 @@ class Model {
         return $rule;
     }
 
+    /**
+     * @method passes
+     * Start validation process.
+     * @return {Boolean}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function passes()
     {
         if ($this->model instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model && $this->model->exists)
@@ -158,11 +236,23 @@ class Model {
         return false;
     }
 
+    /**
+     * @method fails
+     * Start validation process.
+     * @return {Boolean}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function fails()
     {
         return !$this->passes();
     }
 
+    /**
+     * @method messages
+     * Return message's list with error descriptions.
+     * @return {Array}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function messages()
     {
         $messages = $this->validator()->messages()->all();
@@ -170,9 +260,14 @@ class Model {
         return empty($messages) ? ['undefined' => $this->message['undefined']] : $messages;
     }
 
+    /**
+     * @method validator
+     * Return validator.
+     * @return {Telenok.Core.Interfaces.Validator.Validator}
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
     public function validator()
     {
         return $this->validator;
     }
 }
-
