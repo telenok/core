@@ -97,8 +97,8 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
     /**
      * @method getNotCachedContent
      * Return not cached content of widget.
-     * @member Telenok.Core.Widget.Table.Controller
      * @return {String}
+     * @member Telenok.Core.Widget.Table.Controller
      */
 	public function getNotCachedContent()
 	{ 
