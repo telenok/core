@@ -448,6 +448,15 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 		return $w;
 	}
 
+    /**
+     * @method removeFromPage
+     * Remove widgetOnPage by id.
+     * @param {Integer} $id
+     * Id of widgetOnPage.
+     * @return {void}
+     * @throws Exception
+     * @member Telenok.Core.Widget.Table.Controller
+     */
 	public function removeFromPage($id = 0)
 	{
 		$w = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
@@ -462,11 +471,19 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 		}
 	}
 
+    /**
+     * @method validate
+     * validate structure data before saving.
+     * @param {Telenok.Core.Model.Web.WidgetOnPage} $model
+     * @param {Illuminate.Support.Collection} $input
+     * @return {Telenok.Core.Widget.Table.Controller}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
 	public function validate($model = null, $input = [])
 	{
         if (!$model->exists)
         {
-            return;
+            return $this;
         }
 
         $row = intval($model->structure->get('row'));
@@ -501,8 +518,18 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
                 }               
             }
         }
+            return $this;
 	}
     
+    /**
+     * @method postProcess
+     * Hook called after saving widget.
+     * @param {Telenok.Core.Model.Web.WidgetOnPage} $model
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @param {Illuminate.Support.Collection} $input
+     * @return {Telenok.Core.Widget.Table.Controller}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
     public function postProcess($model, $type, $input)
     { 
         $ids = [];
