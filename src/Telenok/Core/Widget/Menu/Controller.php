@@ -1,15 +1,70 @@
 <?php namespace Telenok\Core\Widget\Menu;
 
+/**
+ * @class Telenok.Core.Widget.Menu.Controller
+ * Class presents menu widget.
+ * 
+ * @extends Telenok.Core.Interfaces.Widget.Controller
+ */
 class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 
+    /**
+     * @protected
+     * @property {String} $key
+     * Key of widget.
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
     protected $key = 'menu';
+    
+    /**
+     * @protected
+     * @property {String} $parent
+     * Parent's widget key.
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
     protected $parent = 'standart';
-	protected $defaultFrontendView = "core::widget.menu.widget-frontend";
+    
+    /**
+     * @protected
+     * @property {String} $defaultFrontendView
+     * Name of view for fronend if user dont want to create own view.
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
+    protected $defaultFrontendView = "core::widget.menu.widget-frontend";
 
-    protected $menuType = 'root';
-    protected $nodeIds = [];
+    /**
+     * @protected
+     * @property {String} $menuType
+     * Menu type code.
+     * 1 - tree from defined $nodeIds just one number like page Id
+     * 2 - multilevel tree from defined $nodeIds {1,2{3,4,5{33}, 41},99}
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
+    protected $menuType = 1;
+    
+    /**
+     * @protected
+     * @property {String} $nodeIds
+     * One Id or list Ids. Depend on $menuType.
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
+    protected $nodeIds;
+    
+    /**
+     * @protected
+     * @property {mixed} $objectType
+     * Id or Code of Object Type for which we create tree.
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
     protected $objectType = null;
 
+    /**
+     * @method setConfig
+     * Set config of widget
+     * @param {Array} $config
+     * @member Telenok.Core.Widget.Menu.Controller
+     * @return {Telenok.Core.Widget.Menu.Controller}
+     */
     public function setConfig($config = [])
     {
         parent::setConfig($config);
@@ -32,21 +87,48 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
         return $this;
     }
 
+    /**
+     * @method getMenuType
+     * Set config of widget.
+     * @param {Array} $config
+     * @return {Integer}
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
     public function getMenuType()
     {
         return $this->menuType;
     }
 
+    /**
+     * @method getNodeIds
+     * Return value of ids to show.
+     * @member Telenok.Core.Widget.Menu.Controller
+     * @return {String}
+     */
     public function getNodeIds()
     {
         return $this->nodeIds;
     }
 
+    /**
+     * @method getObjectType
+     * Return object type Id or Code.
+     * @return {mixed}
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
     public function getObjectType()
     {
         return $this->objectType;
     }
 
+    /**
+     * @method getCacheKey
+     * Return cache key and add to it new part of key.
+     * @param {String} $additional
+     * Additional part of key.
+     * @return {String}
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
 	public function getCacheKey($additional = '')
 	{
         if ($key = parent::getCacheKey($additional))
@@ -58,7 +140,13 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
             return false;
         }
 	}
-
+	
+    /**
+     * @method getNotCachedContent
+     * Return not cached content of widget.
+     * @return {String}
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
 	public function getNotCachedContent()
 	{
         $ids = [];
@@ -119,6 +207,12 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
                     ])->render();
 	}
 
+    /**
+     * @method getTreeList
+     * Return array of items ordered by depth and order tree's values.
+     * @return {Array}
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
     public function getTreeList()
     {
         $typeId = $this->getRequest()->input('typeId');
@@ -171,6 +265,15 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 		return $return;
     }
 
+    /**
+     * @method preProcess
+     * Hook called before saving widget.
+     * @param {Telenok.Core.Model.Web.WidgetOnPage} $model
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @param {Illuminate.Support.Collection} $input
+     * @return {Telenok.Core.Widget.Menu.Controller}
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
     public function preProcess($model, $type, $input)
     { 
         $structure = $input->get('structure');
@@ -189,6 +292,14 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
         return parent::preProcess($model, $type, $input);
     }
 
+    /**
+     * @method validate
+     * validate structure data before saving.
+     * @param {Telenok.Core.Model.Web.WidgetOnPage} $model
+     * @param {Illuminate.Support.Collection} $input
+     * @return {Telenok.Core.Widget.Menu.Controller}
+     * @member Telenok.Core.Widget.Menu.Controller
+     */
 	public function validate($model = null, $input = [])
 	{
         if (!$model->exists)
