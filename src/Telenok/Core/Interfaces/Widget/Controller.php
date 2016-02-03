@@ -1,23 +1,130 @@
 <?php namespace Telenok\Core\Interfaces\Widget;
 
+/**
+ * @class Telenok.Core.Interfaces.Widget.Controller
+ * Base controller for widgets.
+ * 
+ * @extends Telenok.Core.Interfaces.Controller.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
-	
-	protected $parent = '';
-	protected $group = '';
-	protected $icon = 'fa fa-desktop';
-	protected $widgetModel;
-	protected $backendView = '';
-	protected $frontendView = '';
-	protected $defaultFrontendView = 'core::module.web-page-constructor.widget-frontend';
-	protected $structureView = '';
-	protected $frontendController;
-	protected $cacheTime = 3600;
-	protected $cacheKey;
-	protected $cacheEnabled = true;
-    protected $config = [];
-    protected $widgetTemplateDirectory = 'resources/views/widget/';
-    protected $languageDirectory = 'widget';
 
+    /**
+     * @protected
+     * @property {String} $parent
+     * Parent's widget key.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+	protected $parent = '';
+
+    /**
+     * @protected
+     * @property {String} $group
+     * Key of parent widget group.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+     protected $group = '';
+
+    /**
+     * @protected
+     * @property {String} $icon
+     * Class of widget's icon.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */	
+     protected $icon = 'fa fa-desktop';
+
+    /**
+     * @protected
+     * @property {Telenok.Core.Interfaces.Eloquent.Object.Model} $widgetModel
+     * Model present widget in database.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+     protected $widgetModel;
+
+    /**
+     * @protected
+     * @property {String} $backendView
+     * Name of view for show properties in backend.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+     protected $backendView = '';
+
+    /**
+     * @public
+     * @property {String} $frontendView
+     * Name of view for show properties in frontend.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+     protected $frontendView = '';
+
+    /**
+     * @protected
+     * @property {String} $defaultFrontendView
+     * Name of view for fronend if user dont want to create own view.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+     protected $defaultFrontendView = 'core::module.web-page-constructor.widget-frontend';
+
+    /**
+     * @protected
+     * @property {String} $structureView
+     * Name of view for show widget's feature and settings.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+     protected $structureView = '';
+
+    /**
+     * @protected
+     * @property {Telenok.Core.Interfaces.Controller.Frontend.Controller} $frontendController
+     * Frontend controller object.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */	
+     protected $frontendController;
+
+    /**
+     * @protected
+     * @property {Number} $cacheTime
+     * Amount of minuts to cache. Can be float to define part of minute.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */	
+     protected $cacheTime = 60;
+
+    /**
+     * @protected
+     * @property {String} $cacheKey
+     * Cache key of widget.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+     protected $cacheKey;
+
+    /**
+     * @protected
+     * @property {Boolean} $cacheEnabled
+     * Enable caching.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+     protected $cacheEnabled = true;
+
+    /**
+     * @protected
+     * @property {Array} $config
+     * Widget's config.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */
+     protected $config = [];
+
+    /**
+     * @public
+     * @property {Boolean} $timestamps
+     * Allow set time when create and update.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */    protected $widgetTemplateDirectory = 'resources/views/widget/';
+    /**
+     * @protected
+     * @property {Boolean} $timestamps
+     * Allow set time when create and update.
+     * @member Telenok.Core.Interfaces.Widget.Controller
+     */    protected $languageDirectory = 'widget';
+     
     public function setCacheEnabled($param)
     {
         $this->cacheEnabled = $param;
