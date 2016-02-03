@@ -22,6 +22,4 @@ class Controller extends \Telenok\Core\Interfaces\Widget\Group\Controller {
      * @member Telenok.Core.WidgetGroup.Standart.Controller
      */
     protected $icon = 'fa fa-signal'; 
-
 }
-
