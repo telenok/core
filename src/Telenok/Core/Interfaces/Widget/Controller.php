@@ -131,8 +131,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     /**
      * @method setCacheEnabled
      * Enable or disable cache.
-     * @member Telenok.Core.Interfaces.Widget.Controller
      * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
      */
     public function setCacheEnabled($param)
     {
@@ -144,8 +144,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     /**
      * @method setCacheEnabled
      * Return whether cache enabled.
-     * @member Telenok.Core.Interfaces.Widget.Controller
      * @return {Boolean}
+     * @member Telenok.Core.Interfaces.Widget.Controller
      */
     public function getCacheEnabled()
     {
@@ -155,8 +155,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     /**
      * @method getIcon
      * Return icon class.
-     * @member Telenok.Core.Interfaces.Widget.Controller
      * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
      */
      public function getIcon()
 	{
@@ -166,8 +166,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     /**
      * @method getParent
      * Return parent widget key.
-     * @member Telenok.Core.Interfaces.Widget.Controller
      * @return {String}
+     * @member Telenok.Core.Interfaces.Widget.Controller
      */
     public function getParent()
     {
@@ -178,8 +178,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method setConfig
      * Set config for widget.
      * @param {Array} $config
-     * @member Telenok.Core.Interfaces.Widget.Controller
      * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
      */
     public function setConfig($config = [])
     {
@@ -202,8 +202,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Return config of widget or value by key from config.
      * @param {String} $key
      * @param {mixed} $default
-     * @member Telenok.Core.Interfaces.Widget.Controller
      * @return {mixed}
+     * @member Telenok.Core.Interfaces.Widget.Controller
      */
 	public function getConfig($key = null, $default = null)
 	{
@@ -221,8 +221,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method setWidgetModel
      * Set widget's model.
      * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @member Telenok.Core.Interfaces.Widget.Controller
      * @return {Telenok.Core.Interfaces.Widget.Controller}
+     * @member Telenok.Core.Interfaces.Widget.Controller
      */
     public function setWidgetModel($param)
 	{
@@ -235,8 +235,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     /**
      * @method getWidgetModel
      * Return widget's model.
-     * @member Telenok.Core.Interfaces.Widget.Controller
      * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @member Telenok.Core.Interfaces.Widget.Controller
      */
 	public function getWidgetModel()
 	{
@@ -247,8 +247,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method setCacheTime
      * Set cache time of widgetOnPage in minuts. Can be float as part of minute.
      * @param {Number} $param
-     * @return {Telenok.Core.Interfaces.Widget.Controller}
      * @member Telenok.Core.Interfaces.Widget.Controller
+     * @return {Telenok.Core.Interfaces.Widget.Controller}
      */
 	public function setCacheTime($param = 0)
 	{
