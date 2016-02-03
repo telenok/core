@@ -1,7 +1,7 @@
 <?php namespace Telenok\Core\Support\Memcache;
 
 /**
- *  Create a new session manager instance.
+ * Create a new session manager instance.
  * 
  * @class Telenok.Core.Support.Memcache.MemcacheSessionManager
  * @extends Illuminate.Support.Manager
