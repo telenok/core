@@ -1,15 +1,75 @@
 <?php namespace Telenok\Core\Widget\Table;
 
+/**
+ * @class Telenok.Core.Widget.Table.Controller
+ * @extends Telenok.Core.Interfaces.Widget.Controller
+ */
 class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 
-	protected $key = 'table';
-	protected $parent = 'standart';
-	protected $backendView = "core::widget.table.widget-backend";
-	protected $defaultFrontendView = "core::widget.table.widget-frontend";
-	protected $row = 2;
-	protected $col = 2;
+    /**
+     * @protected
+     * @property {String} $key
+     * Key of widget.
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+    protected $key = 'table';
+
+    /**
+     * @protected
+     * @property {String} $parent
+     * Parent's widget key.
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+    protected $parent = 'standart';
+    
+    /**
+     * @protected
+     * @property {String} $backendView
+     * Name of view for show properties in backend.
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+    protected $backendView = "core::widget.table.widget-backend";
+    
+    /**
+     * @protected
+     * @property {String} $defaultFrontendView
+     * Name of view for fronend if user dont want to create own view.
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+    protected $defaultFrontendView = "core::widget.table.widget-frontend";
+    
+    /**
+     * @protected
+     * @property {Integer} $row
+     * Amount of rows in table.
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+    protected $row = 2;
+    
+    /**
+     * @protected
+     * @property {Integer} $col
+     * Amount of columns in table.
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+    protected $col = 2;
+    
+    /**
+     * @protected
+     * @property {Array} $containerIds
+     * List of containers dom's id. Container can be <div> with custom id attribute.
+     * @member Telenok.Core.Widget.Table.Controller
+     */
     protected $containerIds = [];
 
+    /**
+     * @method setConfig
+     * Set config for widget.
+     * @param {Array} $config
+     * Config array.
+     * @return {Telenok.Core.Widget.Table.Controller}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
     public function setConfig($config = [])
     {
         parent::setConfig($config);
@@ -32,6 +92,12 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
         return $this;
     }
     
+    /**
+     * @method getNotCachedContent
+     * Return not cached content of widget.
+     * @member Telenok.Core.Widget.Table.Controller
+     * @return {String}
+     */
 	public function getNotCachedContent()
 	{ 
         $containerIds = $this->containerIds;
@@ -57,6 +123,14 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
                         ])->render();
 	}
 
+    /**
+     * @method getContainerContent
+     * Return content of one container by its dom id.
+     * @param {String} $container_id
+     * Container name.
+     * @return {String}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
 	public function getContainerContent($container_id = "")
 	{
 		$content = [];
@@ -77,7 +151,15 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 		return $content;
 	}
 
-	public function getInsertContent($id = 0)
+    /**
+     * @method getInsertContent
+     * Return content of widget to show it in modal window.
+     * @param {Integer} $id
+     * Id of WidgetOnPage model.
+     * @return {String}
+     * @member Telenok.Core.Widget.Table.Controller
+     */
+     public function getInsertContent($id = 0)
 	{
 		$widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
 
