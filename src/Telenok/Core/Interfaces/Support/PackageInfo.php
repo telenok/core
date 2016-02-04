@@ -67,10 +67,11 @@ abstract class PackageInfo {
 	protected $image;
 	
     /**
-     * @protected
-     * @property {String} $languageDirectory
-     * Language directory for widgets.
-     * @member Telenok.Core.Interfaces.Widget.Group.Controller
+     * @method setKey
+     * Set key of package.
+     * @param {String} $param
+     * @return {Telenok.Core.Interfaces.Support.PackageInfo}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
      */
 	public function setKey($param = '')
 	{
@@ -80,16 +81,23 @@ abstract class PackageInfo {
 	}
 
     /**
-     * @protected
-     * @property {String} $languageDirectory
-     * Language directory for widgets.
-     * @member Telenok.Core.Interfaces.Widget.Group.Controller
+     * @method getKey
+     * Return key of package.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
      */
 	public function getKey()
 	{
 		return $this->key;
 	}
 
+    /**
+     * @method setTitle
+     * Set title of package.
+     * @param {String} $param
+     * @return {Telenok.Core.Interfaces.Support.PackageInfo}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
+     */
 	public function setTitle($param = '')
 	{
 		$this->title = $param;
@@ -98,10 +106,10 @@ abstract class PackageInfo {
 	}
 
     /**
-     * @protected
-     * @property {String} $languageDirectory
-     * Language directory for widgets.
-     * @member Telenok.Core.Interfaces.Widget.Group.Controller
+     * @method getTitle
+     * Return title of package.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
      */
 	public function getTitle()
 	{
@@ -109,10 +117,11 @@ abstract class PackageInfo {
 	}
 
     /**
-     * @protected
-     * @property {String} $languageDirectory
-     * Language directory for widgets.
-     * @member Telenok.Core.Interfaces.Widget.Group.Controller
+     * @method setDescription
+     * Set description of package.
+     * @param {String} $param
+     * @return {Telenok.Core.Interfaces.Support.PackageInfo}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
      */
 	public function setDescription($param = '')
 	{
@@ -122,10 +131,10 @@ abstract class PackageInfo {
 	}
 
     /**
-     * @protected
-     * @property {String} $languageDirectory
-     * Language directory for widgets.
-     * @member Telenok.Core.Interfaces.Widget.Group.Controller
+     * @method getDescription
+     * Return description of package.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
      */
 	public function getDescription()
 	{
@@ -133,10 +142,11 @@ abstract class PackageInfo {
 	}
 
     /**
-     * @protected
-     * @property {String} $languageDirectory
-     * Language directory for widgets.
-     * @member Telenok.Core.Interfaces.Widget.Group.Controller
+     * @method setImage
+     * Set class of package's image.
+     * @param {String} $param
+     * @return {Telenok.Core.Interfaces.Support.PackageInfo}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
      */
 	public function setImage($param = '')
 	{
@@ -146,10 +156,10 @@ abstract class PackageInfo {
 	}
 
     /**
-     * @protected
-     * @property {String} $languageDirectory
-     * Language directory for widgets.
-     * @member Telenok.Core.Interfaces.Widget.Group.Controller
+     * @method getImage
+     * Return package's image class.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
      */
 	public function getImage()
 	{
@@ -157,10 +167,10 @@ abstract class PackageInfo {
 	}
 
     /**
-     * @protected
-     * @property {String} $languageDirectory
-     * Language directory for widgets.
-     * @member Telenok.Core.Interfaces.Widget.Group.Controller
+     * @method getBaseClass
+     * Return base class of package.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
      */
 	public function getBaseClass()
 	{
@@ -168,10 +178,11 @@ abstract class PackageInfo {
 	}
 
     /**
-     * @protected
-     * @property {String} $languageDirectory
-     * Language directory for widgets.
-     * @member Telenok.Core.Interfaces.Widget.Group.Controller
+     * @method setBaseClass
+     * Set base class of package.
+     * @param {String} $param
+     * @return {Telenok.Core.Interfaces.Support.PackageInfo}
+     * @member Telenok.Core.Interfaces.Support.PackageInfo
      */
 	public function setBaseClass($param)
 	{
