@@ -208,7 +208,7 @@
         event.preventDefault();
 
         jQuery.ajax({
-            url: "{{ route('telenok.ckeditor.directory.create') }}",
+            url: "{!! route('telenok.ckeditor.directory.create') !!}",
             method: "POST",
             data: {
                 directory: jQuery('#select-directory-{{$jsUnique}}').val(),

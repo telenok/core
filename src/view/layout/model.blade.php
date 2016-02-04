@@ -38,7 +38,7 @@
             dataType: 'json',
             cache: false,
             processData: false,
-            contentType: false,
+            contentType: false
         })
         .done(function(data, textStatus, jqXHR) {
 
@@ -117,9 +117,9 @@
             @show
 
         })
-        .always(function(data)
+        .always(function(jqXHR, textStatus, errorThrown)
         {
-            jQuery('div.form-actions button', this).removeAttr('disabled');
+            jQuery('div.form-actions button').removeAttr('disabled');
         });
     });
 

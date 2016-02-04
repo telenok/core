@@ -1173,7 +1173,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
     /**
      * @method getFilterQueryLike
-     * Return filtered query.
+     * Return filtered "LIKE" query.
      * @param {mixed} $value
      * @param {Illuminate.Database.Query.Builder} $query
      * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
@@ -1201,10 +1201,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getFilterQuery
+     * Return filtered query.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Illuminate.Database.Query.Builder} $query
+     * @return {void}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getFilterQuery($model, $query)
@@ -1238,10 +1239,13 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getFilterSubQuery
+     * Hook for returning filtered query in 
+     * {@link Telenok.Core.Interfaces.Presentation.TreeTab.Controller#getFilterQuery getFilterQuery}
+     * @param {Illuminate.Support.Collection} $input
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Illuminate.Database.Query.Builder} $query
+     * @return {void}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getFilterSubQuery($input, $model, $query)
@@ -1264,10 +1268,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getListItem
+     * Return items of $model's rows.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @return {Illuminate.Database.Eloquent.Collection}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getListItem($model = null)
@@ -1306,9 +1310,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @method fillListItem
+     * Add items for list.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $item
+     * @param {Illuminate.Support.Collection} $put
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
@@ -1328,9 +1334,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @method getListItemProcessed
+     * Additionally processing item for list.
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $item
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
@@ -1340,10 +1348,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getTreeList
+     * Return items for tree.
+     * @param {Integer} $id
+     * Branch start Id from.
+     * @return {Illuminate.Database.Eloquent.Collection}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getTreeList($id = null)
@@ -1397,10 +1406,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getTreeListTypes
+     * Return Ids of Object Types which linked models will selected.
+     * @return {Array}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getTreeListTypes()
@@ -1418,10 +1426,12 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getTreeListModel
+     * Return list items of tree.
+     * @param {Integer} $treeId
+     * @param {String} $str
+     * Search in row's title. 
+     * @return {Illuminate.Database.Eloquent.Collection}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getTreeListModel($treeId = 0, $str = '')
@@ -1458,10 +1468,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getTreeListItemProcessed
+     * Additionally process item for tree list.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $item
+     * @return {Array}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getTreeListItemProcessed($item)
@@ -1470,10 +1480,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
+     * @method getListButton
      * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $item
+     * @return {Array}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getListButton($item)
@@ -1516,10 +1526,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getListButtonEventKey
+     * Return name of event when adding button to list.
+     * @param {mixed} $param
+     * @return {String}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getListButtonEventKey($param = null)
@@ -1528,10 +1538,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
+     * @method getAdditionalListButton
+     * Add buttons in list.
      * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @param {Illuminate.Support.Collection} $collection
+     * @return {Illuminate.Support.Collection}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getAdditionalListButton($item, $collection)
@@ -1540,10 +1551,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getAdditionalViewParam
+     * Return additional view parameters.
+     * @return {Array}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getAdditionalViewParam()

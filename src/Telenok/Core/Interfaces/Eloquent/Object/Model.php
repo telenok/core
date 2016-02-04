@@ -2048,4 +2048,17 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
             }
         }
     }
+    
+    /**
+     * @method LL
+     * Before valiating rights of fields add field's name to array and pass it
+     * to validator.
+     *
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     */
+    public function LL($key = '', $param = [])
+    {
+        return trans("core::default.$key", $param);
+    }
 }
