@@ -642,10 +642,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterCreate
+     * Return router create.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterCreate($param = [])
@@ -654,7 +654,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
+     * @method setRouterEdit
      * Set router edit.
      * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
@@ -668,10 +668,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterEdit
+     * Return router edit.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterEdit($param = [])
@@ -680,8 +680,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
-     * Set router create.
+     * @method setRouterDelete
+     * Set router delete.
      * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
@@ -694,10 +694,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterDelete
+     * Return router delete.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterDelete($param = [])
@@ -706,8 +706,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
-     * Set router create.
+     * @method setRouterStore
+     * Set router store.
      * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
@@ -720,10 +720,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterStore
+     * Return router store.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterStore($param = [])
@@ -732,8 +732,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
-     * Set router create.
+     * @method setRouterUpdate
+     * Set router update.
      * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
@@ -746,10 +746,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterUpdate
+     * Return router update.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterUpdate($param = [])
@@ -758,8 +758,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
-     * Set router create.
+     * @method setRouterListEdit
+     * Set router list edit.
      * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
@@ -772,10 +772,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterListEdit
+     * Return router list edit.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterListEdit($param = [])
@@ -784,8 +784,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
-     * Set router create.
+     * @method setRouterListDelete
+     * Set router list delete.
      * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
@@ -798,10 +798,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterListDelete
+     * Return router list delete.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterListDelete($param = [])
@@ -810,8 +810,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
-     * Set router create.
+     * @method setRouterListLock
+     * Set router list lock.
      * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
@@ -824,10 +824,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterLock
+     * Return router lock.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterLock($param = [])
@@ -836,10 +836,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterListLock
+     * Return router list lock.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterListLock($param = [])
@@ -848,8 +848,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
-     * Set router create.
+     * @method setRouterListUnlock
+     * Set router list unlock.
      * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
@@ -862,10 +862,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterListUnlock
+     * Return router list unlock.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterListUnlock($param = [])
@@ -874,8 +874,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
-     * Set router create.
+     * @method setRouterListTree
+     * Set router list tree.
      * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
@@ -888,10 +888,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterListTree
+     * Return router list tree.
+     * @param {String} $param
+     * @return {Illuminate.Routing.Router}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterListTree($param = [])
@@ -900,9 +900,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setRouterCreate
-     * Set router create.
+     * @method setModelListClass
+     * Set class of list's model.
      * @param {String} $param
+     * Class name.
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
@@ -914,10 +915,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModelListClass
+     * Return class of list's model.
+     * @return {String}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModelListClass()
@@ -926,9 +926,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @method setModelTreeClass
+     * Set class of tree's model.
+     * @param {String} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
@@ -940,10 +940,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModelTreeClass
+     * Return model's tree class name.
+     * @return {String}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModelTreeClass()
@@ -952,10 +951,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModelList
+     * Return model's list class object.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModelList()
@@ -964,10 +962,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModelTree
+     * Return model's tree class object.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModelTree()
@@ -976,10 +973,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getTypeList
+     * Return Object Type of model's list class object.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getTypeList()
@@ -988,10 +984,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getTypeTree
+     * Return Object Type of model's tree class object.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getTypeTree()
@@ -1000,10 +995,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModel
+     * Return Eloquent object by id.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModel($id)
@@ -1012,10 +1006,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModelTrashed
+     * Return Eloquent object by id. Object can be trashed.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModelTrashed($id)
@@ -1024,10 +1017,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getType
+     * Return Object Type by id or its code.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getType($id)
@@ -1036,10 +1028,10 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getTypeByModelId
+     * Return Object Type by related model via its id.
+     * @param {Integer} $param
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getTypeByModelId($id)
@@ -1048,9 +1040,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @method getModelByTypeId
+     * Return new Eloquent object by related Object Type via its id.
+     * @param {Integer} $param
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
@@ -1060,9 +1052,11 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @method validate
+     * Validate input before saving.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Illuminate.Support.Collection} $param
+     * @param {Array} $message
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
@@ -1072,9 +1066,12 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @method validator
+     * Return new validator.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Illuminate.Support.Collection} $param
+     * @param {Array} $message
+     * @param {Array} $customAttribute
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
@@ -1088,9 +1085,8 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @method validateException
+     * Return new exception.
      * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
@@ -1100,10 +1096,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getActionParam
+     * Return json presentation's content.
+     * @return {String}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getActionParam()
@@ -1122,10 +1117,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getPresentationContent
+     * Return presentation's content.
+     * @return {String}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getPresentationContent()
@@ -1140,10 +1134,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getContent
+     * Return content of content view.
+     * @return {String}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getContent()
@@ -1164,10 +1157,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getTreeContent
+     * Return content of tree view.
+     * @return {String}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getTreeContent()
@@ -1180,10 +1172,14 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getFilterQueryLike
+     * Return filtered query.
+     * @param {mixed} $value
+     * @param {Illuminate.Database.Query.Builder} $query
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {void}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getFilterQueryLike($value, $query, $model, $field)
