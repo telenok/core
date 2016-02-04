@@ -1,43 +1,274 @@
-<?php
-
-namespace Telenok\Core\Interfaces\Presentation\TreeTab;
+<?php namespace Telenok\Core\Interfaces\Presentation\TreeTab;
 
 use \Telenok\Core\Interfaces\Presentation\IPresentation;
 use \Telenok\Core\Interfaces\Controller\IEloquentProcessController;
 
+/**
+ * @class Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+ * Base controller for presentation "tree-tab".
+ * 
+ * @uses Telenok.Core.Interfaces.Presentation.IPresentation
+ * @uses Telenok.Core.Interfaces.Controller.IEloquentProcessController
+ * @extends Telenok.Core.Interfaces.Module.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Module\Controller implements IPresentation, IEloquentProcessController {
 
+    /**
+     * @protected
+     * @property {String} $tabKey
+     * Key of presentation's tabs.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $tabKey = '';
+
+    /**
+     * @protected
+     * @property {String} $presentation
+     * Key of presentation.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $presentation = 'tree-tab';
+    
+    /**
+     * @protected
+     * @property {String} $presentationModuleKey
+     * Key of presentation's module.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $presentationModuleKey = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $presentationView = 'core::presentation.tree-tab.presentation';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $presentationTreeView = 'core::presentation.tree-tab.tree';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $presentationContentView = 'core::presentation.tree-tab.content';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $presentationModelView = 'core::presentation.tree-tab.model';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $presentationFormModelView = 'core::presentation.tree-tab.form';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $presentationFormFieldListView = 'core::presentation.tree-tab.form-field-list';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerActionParam = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerList = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerContent = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerCreate = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerEdit = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerDelete = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerStore = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerUpdate = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerListEdit = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerListDelete = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerLock = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerListLock = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerListUnlock = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $routerListTree = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $modelListClass = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $modelTreeClass = '';
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $pageLength = 15;
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $additionalViewParam = [];
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $lockInListPeriod = 3600;
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $lockInFormPeriod = 300;
+    
+    /**
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     protected $displayType = 1;
+    
+    /**
+     * @static
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     public static $DISPLAY_TYPE_STANDART = 1;
+    
+    /**
+     * @static
+     * @protected
+     * @property {String} $presentationView
+     * Presentation's initial view.
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */	
     public static $DISPLAY_TYPE_WIZARD = 2;
 
     public function getLockInListPeriod()
