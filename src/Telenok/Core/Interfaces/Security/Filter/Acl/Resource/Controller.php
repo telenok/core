@@ -1,20 +1,53 @@
 <?php namespace Telenok\Core\Interfaces\Security\Filter\Acl\Resource;
 
+/**
+ * @class Telenok.Core.Interfaces.Security.Filter.Acl.Resource.Controller
+ * Base controller ACL resource.
+ */
 class Controller {
 
+    /**
+     * @protected
+     * @property {String} $icon
+     * Class of widget's icon.
+     * @member Telenok.Core.Interfaces.Security.Filter.Acl.Resource.Controller
+     */	
     protected $key = '';
+    
+    /**
+     * @protected
+     * @property {Number} $cacheMinutes
+     * Amount of minuts for caching. Can be float to cache less then one minute.
+     * @member Telenok.Core.Interfaces.Security.Filter.Acl.Resource.Controller
+     */	
     protected $cacheMinutes = 5;
 
+    /**
+     * @method getKey
+     * Return key.
+     * @return {String}
+     * @member Telenok.Core.Interfaces.Security.Filter.Acl.Resource.Controller
+     */
     public function getKey()
     {
         return $this->key;
     } 
 
+    /**
+     * @method getCacheMinutes
+     * Return cache time.
+     * @return {number}
+     * @member Telenok.Core.Interfaces.Security.Filter.Acl.Resource.Controller
+     */
     public function getCacheMinutes()
     {
         return min(config('cache.db_query.minutes', 0), $this->cacheMinutes);
     }
 
+    /**
+     * @method filterCan
+
+     */
     public function filterCan($queryCommon, $queryWhere, $resource, $permission, $subject)
     {
     }
