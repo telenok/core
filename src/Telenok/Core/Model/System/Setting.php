@@ -1,28 +1,33 @@
-<?php namespace Telenok\Core\Model\System;
+<?php
 
+namespace Telenok\Core\Model\System;
+
+/**
+ * @class Telenok.Core.Model.System.Setting
+ * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ */
 class Setting extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
-	protected $table = 'setting';
-	
-	public static function boot()
-	{
-		parent::boot();
+    protected $table = 'setting';
 
-		static::creating(function($model)
-		{
-			\Event::fire('telenok.compile.setting');
-		});
+    public static function boot()
+    {
+        parent::boot();
 
-		static::saved(function($model)
-		{
-			\Event::fire('telenok.compile.setting');
-		});
+        static::creating(function($model)
+        {
+            \Event::fire('telenok.compile.setting');
+        });
 
-		static::deleting(function($model)
-		{
-			\Event::fire('telenok.compile.setting');
-		});
-	}
-	
+        static::saved(function($model)
+        {
+            \Event::fire('telenok.compile.setting');
+        });
+
+        static::deleting(function($model)
+        {
+            \Event::fire('telenok.compile.setting');
+        });
+    }
+
 }
-

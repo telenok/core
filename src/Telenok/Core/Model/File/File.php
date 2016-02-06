@@ -1,15 +1,20 @@
-<?php namespace Telenok\Core\Model\File;
+<?php
 
+namespace Telenok\Core\Model\File;
+
+/**
+ * @class Telenok.Core.Model.File.File
+ * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ */
 class File extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
-	protected $table = 'file';
-	protected $ruleList = ['title' => ['required', 'min:1']];
+    protected $table = 'file';
+    protected $ruleList = ['title' => ['required', 'min:1']];
 
-	public function isImage()
-	{
-		return $this->exists && in_array($this->uploadFileFileMimeType->mime_type, 
-            \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE, true);
-	}
+    public function isImage()
+    {
+        return $this->exists && in_array($this->uploadFileFileMimeType->mime_type, \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE, true);
+    }
 
     public function category()
     {
@@ -25,5 +30,5 @@ class File extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
     {
         return $this->belongsTo('\App\Telenok\Core\Model\File\FileMimeType', 'upload_file_file_mime_type');
     }
-    
+
 }

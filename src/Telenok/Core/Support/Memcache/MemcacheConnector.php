@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Support\Memcache;
+<?php
+
+namespace Telenok\Core\Support\Memcache;
 
 /**
  * @class Telenok.Core.Support.Memcache.MemcacheConnector

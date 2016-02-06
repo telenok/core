@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Support\Traits;
+<?php
+
+namespace Telenok\Core\Support\Traits;
 
 /**
  * Trait get easy access to Laravel's localization.
@@ -7,17 +9,17 @@
  * @mixins Telenok.Core.Support.Traits.Package
  * @class Telenok.Core.Support.Traits.Language
  */
-trait Language
-{
-	use Package;
-	
+trait Language {
+
+    use Package;
+
     /**
      * @protected
      * @property {String} $languageDirectory
      * Language directory for {@link Telenok.Core.Support.Traits.Language#LL Telenok.Core.Support.Traits.Language->LL()} method.
      * @member Telenok.Core.Support.Traits.Language
      */
-	protected $languageDirectory = '';
+    protected $languageDirectory = '';
 
     /**
      * @method getLanguageDirectory
@@ -25,7 +27,7 @@ trait Language
      * @member Telenok.Core.Support.Traits.Language
      * @return {String}
      */
-	public function getLanguageDirectory()
+    public function getLanguageDirectory()
     {
         return $this->languageDirectory;
     }
@@ -59,12 +61,12 @@ trait Language
      */
     public function LL($key = '', $param = [], $default = '')
     {
-		if ( ($v = trans($key, $param)) && $v != $key )
-		{
-			return $v;
-		}
-		
-		$package = $this->getPackage();
+        if (($v = trans($key, $param)) && $v != $key)
+        {
+            return $v;
+        }
+
+        $package = $this->getPackage();
 
         $k = "{$package}::{$this->getLanguageDirectory()}/{$this->getKey()}.$key";
         $kNoPackage = "{$this->getLanguageDirectory()}/{$this->getKey()}.$key";
@@ -82,23 +84,23 @@ trait Language
         // not found in current wordspace
         else if ($k === $word)
         {
-			$word = trans($kNoPackage, $param);
+            $word = trans($kNoPackage, $param);
 
-			if ($kNoPackage === $word)
-			{
-				$word = trans($kDefault, $param);
+            if ($kNoPackage === $word)
+            {
+                $word = trans($kDefault, $param);
 
-				// not found in default wordspace
-				if ($kDefault === $word)
-				{
-					$word = trans($kDefaultCore, $param);
+                // not found in default wordspace
+                if ($kDefault === $word)
+                {
+                    $word = trans($kDefaultCore, $param);
 
-					if ($kDefaultCore === $word)
-					{
-						return trans($kStandart, $param);
-					}
-				}
-			}
+                    if ($kDefaultCore === $word)
+                    {
+                        return trans($kStandart, $param);
+                    }
+                }
+            }
         }
 
         return $word;

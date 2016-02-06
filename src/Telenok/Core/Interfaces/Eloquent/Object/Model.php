@@ -687,7 +687,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
 
                 $model->preProcess($type, $input);
 
-                $validator = app('\App\Telenok\Core\Interfaces\Validator\Model')
+                $validator = app('\App\Telenok\Core\Support\Validator\Model')
                         ->setModel($model)
                         ->setInput($input)
                         ->setMessage($this->LL('error'))
@@ -1309,17 +1309,17 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
      * 
      *      @example
      *      // can current user read (read - by default)
-     *      \Telenok\Core\Model\Object\Sequence::withPermission()->take(10)->get();
+     *      \App\Telenok\Core\Model\Object\Sequence::withPermission()->take(10)->get();
      *      // can current user write
-     *      \Telenok\Core\Model\Object\Sequence::withPermission('write', null)->take(10)->get();
+     *      \App\Telenok\Core\Model\Object\Sequence::withPermission('write', null)->take(10)->get();
      *      // can $someObject read 
-     *      \Telenok\Core\Model\Object\Sequence::withPermission(null, $someObject)->take(10)->get();
+     *      \App\Telenok\Core\Model\Object\Sequence::withPermission(null, $someObject)->take(10)->get();
      *      // can authorized user read 
-     *      \Telenok\Core\Model\Object\Sequence::withPermission(null, 'user_authorized')->take(10)->get();
+     *      \App\Telenok\Core\Model\Object\Sequence::withPermission(null, 'user_authorized')->take(10)->get();
      *      // can anybody read
-     *      \Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_any')->take(10)->get();
+     *      \App\Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_any')->take(10)->get();
      *      // can user_authorized read with AND condition ['object-type', 'own']
-     *      \Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_authorized', ['object-type', 'own'])->take(10)->get();
+     *      \App\Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_authorized', ['object-type', 'own'])->take(10)->get();
      */
     public function scopeWithPermission($query, $permissionCode = 'read', $subjectCode = null, $filterCode = null)
     {

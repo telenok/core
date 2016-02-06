@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Model\Object;
 
+/**
+ * @class Telenok.Core.Model.Object.Version
+ * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ */
 class Version extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
     protected $table = 'object_version';
@@ -91,4 +95,5 @@ class Version extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
             $this_->save();
         }
     }
+
 }

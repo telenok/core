@@ -419,11 +419,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             {
                 if ($key == 'upload_allow_ext')
                 {
-                    $value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::SAFE_EXTENSION);
+                    $value = $value ? : json_encode(\App\Telenok\Core\Support\File\Processing::SAFE_EXTENSION);
                 }
                 else if ($key == 'upload_allow_mime')
                 {
-                    $value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::SAFE_MIME_TYPE);
+                    $value = $value ? : json_encode(\App\Telenok\Core\Support\File\Processing::SAFE_MIME_TYPE);
                 }
                 else if ($key == 'upload_storage')
                 {

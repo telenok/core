@@ -4,6 +4,10 @@ namespace Telenok\Core\Module\Objects\Lists;
 
 use \Telenok\Core\Interfaces\Presentation\IPresentation;
 
+/**
+ * @class Telenok.Core.Module.Objects.Lists.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {
 
     protected $key = 'objects-lists';
@@ -512,7 +516,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         {
             return [
                 'tabKey' => $this->getTabKey() . '-edit-' . $id,
-                'tabLabel' => $type->translate('title') . ' '. str_limit($eventResource->get('model')->translate('title'), 10),
+                'tabLabel' => $type->translate('title') . ' ' . str_limit($eventResource->get('model')->translate('title'), 10),
                 'tabContent' => view($this->getPresentationModelView(), array_merge(array(
                     'controller' => $this,
                     'model' => $eventResource->get('model'),
@@ -634,12 +638,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $ids = empty($ids) ? (array) $this->getRequest()->input('tableCheckAll') : $ids;
 
         if (empty($id) || empty($ids))
-        {            
+        {
             return \Response::json(['message' => 'Expectation Failed'], 417 /* Expectation Failed */);
         }
 
         $type = $this->getTypeByModelId($id);
-        
+
         if (!app('auth')->can('delete', "object_type.{$type->code}"))
         {
             throw new \LogicException($this->LL('error.access'));

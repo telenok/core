@@ -1,5 +1,11 @@
-<?php namespace Telenok\Core\Support\File;
+<?php
 
+namespace Telenok\Core\Support\File;
+
+/**
+ * @class Telenok.Core.Support.File.StoreCache
+ * Class for storing files in cache.
+ */
 class StoreCache {
 
     public static function storeFile($pathLocal, $pathCache, $storageKey = '', $storageacheKey = '', $width = 0, $height = 0, $action = '')
@@ -23,7 +29,10 @@ class StoreCache {
 
             $storeageCache->put($pathCache, $content, \Illuminate\Contracts\Filesystem\Filesystem::VISIBILITY_PUBLIC);
         }
-        catch (\Exception $e) {}
+        catch (\Exception $e)
+        {
+            
+        }
     }
 
     public static function removeFile($filepath, $storages = [])
@@ -35,11 +44,11 @@ class StoreCache {
             $storages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', env('CACHE_STORAGES'))))->all();
         }
 
-        foreach(\App\Telenok\Core\Support\File\Store::storageList($storages)->all() as $storage)
-        {						
+        foreach (\App\Telenok\Core\Support\File\Store::storageList($storages)->all() as $storage)
+        {
             $disk = app('filesystem')->disk($storage);
 
-            foreach($disk->files(pathinfo($filepath, PATHINFO_DIRNAME)) as $filename)
+            foreach ($disk->files(pathinfo($filepath, PATHINFO_DIRNAME)) as $filename)
             {
                 if (strpos($filename, $name) !== FALSE)
                 {
@@ -47,29 +56,32 @@ class StoreCache {
                     {
                         $disk->delete($filename);
                     }
-                    catch (\Exception $e) {}
+                    catch (\Exception $e)
+                    {
+                        
+                    }
                 }
             }
         }
     }
-    
-	public static function existsCache($storageKey = '', $filename = '')
-	{
+
+    public static function existsCache($storageKey = '', $filename = '')
+    {
         return app('filesystem')->disk($storageKey)->exists($filename);
-	}
-    
-	public static function pathCache($filename = '', $width = 0, $height = 0, $action = '')
-	{
+    }
+
+    public static function pathCache($filename = '', $width = 0, $height = 0, $action = '')
+    {
         $filename = static::filenameCache($filename, $width, $height, $action);
 
         return implode('/', [
-                trim(config('filesystems.cache.directory'), '\\/'), 
-                substr($filename, 0, 2), 
-                substr($filename, 2, 2),
-                $filename
-            ]);
-	}
-    
+            trim(config('filesystems.cache.directory'), '\\/'),
+            substr($filename, 0, 2),
+            substr($filename, 2, 2),
+            $filename
+        ]);
+    }
+
     public static function filenameCache($filename = '', $width = 0, $height = 0, $action = '')
     {
         if (!$width && !$height)
@@ -79,8 +91,9 @@ class StoreCache {
         else
         {
             return md5(pathinfo($filename, PATHINFO_FILENAME)
-                . "_{$width}_{$height}_{$action}" 
-                . (($ext = pathinfo($filename,  PATHINFO_EXTENSION)) ? ".{$ext}" : ''));
+                    . "_{$width}_{$height}_{$action}"
+                    . (($ext = pathinfo($filename, PATHINFO_EXTENSION)) ? ".{$ext}" : ''));
         }
     }
+
 }

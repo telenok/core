@@ -1,5 +1,9 @@
 <?php namespace Telenok\Core\Support\Exception;
 
+/**
+ * @class Telenok.Core.Support.Exception.Validator
+ * Exception for validation process.
+ */
 class Validator extends \Exception {
 
     protected $messageError = [];

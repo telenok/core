@@ -1,10 +1,16 @@
-<?php namespace Telenok\Core\Module\System\Setting;
+<?php
 
+namespace Telenok\Core\Module\System\Setting;
+
+/**
+ * @class Telenok.Core.Module.System.Setting.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
 
-	protected $key = 'system-setting';
+    protected $key = 'system-setting';
     protected $presentation = 'tree-tab-object';
-    protected $presentationFormFieldListView = 'core::module.setting.form-field-list'; 
+    protected $presentationFormFieldListView = 'core::module.setting.form-field-list';
     protected $modelListClass = '\App\Telenok\Core\Model\System\Setting';
 
     public function save($input = [], $type = null)
@@ -12,15 +18,16 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
         $input = collect($input);
         $model = $this->getModelList();
 
-		try
-		{
-			$w = app('telenok.config.repository')->getSetting(strtolower($input->get('code')));
+        try
+        {
+            $w = app('telenok.config.repository')->getSetting(strtolower($input->get('code')));
 
             return $w->save($model, $input);
-		}
-		catch (\Exception $e)
-		{
+        }
+        catch (\Exception $e)
+        {
             return parent::save($input, $type);
-		}
+        }
     }
+
 }

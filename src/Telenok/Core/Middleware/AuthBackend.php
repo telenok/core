@@ -1,17 +1,22 @@
-<?php namespace Telenok\Core\Middleware;
+<?php
 
+namespace Telenok\Core\Middleware;
+
+/**
+ * @class Telenok.Core.Middleware.AuthBackend
+ */
 class AuthBackend {
 
     public function getSpecialRoutes()
     {
         return [
-				'error.access-denied', 
-				'telenok.login.process',
-                'telenok.validate.session',
-				'telenok.password.reset.email.process', 
-				'telenok.password.reset.token',
-				'telenok.password.reset.token.process'
-			];
+            'error.access-denied',
+            'telenok.login.process',
+            'telenok.validate.session',
+            'telenok.password.reset.email.process',
+            'telenok.password.reset.token',
+            'telenok.password.reset.token.process'
+        ];
     }
 
     /**
@@ -25,8 +30,8 @@ class AuthBackend {
     {
         $routeName = $request->route()->getName();
 
-		if (!in_array($routeName, $this->getSpecialRoutes(), true))
-		{
+        if (!in_array($routeName, $this->getSpecialRoutes(), true))
+        {
             if (config('app.acl.enabled'))
             {
                 $accessControlPanel = app('auth')->can('read', 'control_panel');
@@ -63,4 +68,5 @@ class AuthBackend {
 
         return $next($request);
     }
+
 }

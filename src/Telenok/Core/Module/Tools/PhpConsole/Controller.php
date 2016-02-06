@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Module\Tools\PhpConsole;
 
+/**
+ * @class Telenok.Core.Module.Tools.PhpConsole.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.Simple.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller {
 
     protected $key = 'php-console';
@@ -11,24 +15,27 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
     public function processCode()
     {
         $dir = storage_path('telenok/tmp/php-console');
-        $file = $dir . '/' . str_random(6) . '.php'; 
-        
+        $file = $dir . '/' . str_random(6) . '.php';
+
         try
         {
             \File::makeDirectory($dir, 0775, true, true);
-        } 
-        catch (\Exception $e) {}
-        
-        
+        }
+        catch (\Exception $e)
+        {
+            
+        }
+
+
         $finder = \Symfony\Component\Finder\Finder::create()
-                ->in($dir)->date('2 days ago')->files();
-        
-        foreach ($finder as $file) 
+                        ->in($dir)->date('2 days ago')->files();
+
+        foreach ($finder as $file)
         {
             @unlink($file->getRealpath());
         }
 
-        
+
         file_put_contents($file, $this->getRequest()->input('content'), LOCK_EX);
 
         if (file_exists($file))
@@ -42,14 +49,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
                 $result = ob_get_contents();
 
                 ob_end_clean();
-            } 
+            }
             catch (\Exception $exc)
             {
                 return ['result' => ($exc->getTraceAsString())];
             }
-            
+
             @unlink($file);
-            
+
             return ['result' => ($result)];
         }
         else
@@ -57,4 +64,5 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
             return ['result' => 'Error! Cant create file "' . $file . '" to process code. Sorry'];
         }
     }
+
 }

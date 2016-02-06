@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Interfaces\Presentation\TreeTabObject;
 
+/**
+ * @class Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {
 
     protected $key = '';
@@ -304,7 +308,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $id = $id ? : $input->get('id');
 
         $model = $this->getModelList()->withTrashed()->findOrFail($id);
-        
+
         $type = $this->getTypeList();
         $fields = $model->getFieldForm();
 
@@ -316,7 +320,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         return [
             'tabKey' => $this->getTabKey() . '-edit-' . $id,
-            'tabLabel' => $type->translate('title') . ' '. str_limit($eventResource->get('model')->translate('title'), 10),
+            'tabLabel' => $type->translate('title') . ' ' . str_limit($eventResource->get('model')->translate('title'), 10),
             'tabContent' => view($this->getPresentationModelView(), array_merge(array(
                 'controller' => $this,
                 'model' => $eventResource->get('model'),

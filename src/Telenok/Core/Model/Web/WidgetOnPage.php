@@ -1,14 +1,20 @@
-<?php namespace Telenok\Core\Model\Web;
+<?php
 
-class WidgetOnPage extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+namespace Telenok\Core\Model\Web;
 
-	protected $ruleList = ['title' => ['required', 'min:1']];
-	protected $table = 'widget_on_page';
+/**
+ * @class Telenok.Core.Model.Web.WidgetOnPage
+ * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ */
+class WidgetOnPage extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
-	public function isWidgetLink()
-	{
-		return !!$this->widget_link_widget_on_page;
-	}
+    protected $ruleList = ['title' => ['required', 'min:1']];
+    protected $table = 'widget_on_page';
+
+    public function isWidgetLink()
+    {
+        return !!$this->widget_link_widget_on_page;
+    }
 
     public function widgetPage()
     {
@@ -29,23 +35,24 @@ class WidgetOnPage extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
     {
         return $this->belongsTo('\App\Telenok\Core\Model\System\Language', 'widget_language_language');
     }
-     
+
     public function preProcess($type, $input)
     {
         app('telenok.config.repository')->getWidget()->get($input->get('key'))->validate($this, $input);
-        
+
         return parent::preProcess($type, $input);
     }
-    
+
     public function delete()
     {
         $key = $this->key;
-        
+
         parent::delete();
-        
+
         if ($this->forceDeleting)
         {
             app('telenok.config.repository')->getWidget()->get($key)->delete($this);
         }
     }
+
 }

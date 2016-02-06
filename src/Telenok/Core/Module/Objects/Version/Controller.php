@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Module\Objects\Version;
 
+/**
+ * @class Telenok.Core.Module.Objects.Version.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
 
     protected $key = 'objects-version';
@@ -32,4 +36,5 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     {
         return parent::delete($id, true);
     }
+
 }

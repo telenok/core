@@ -1,21 +1,26 @@
-<?php namespace Telenok\Core\Middleware;
+<?php
+
+namespace Telenok\Core\Middleware;
 
 use Illuminate\Routing\Redirector;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
 use Illuminate\Contracts\Routing\Middleware;
 
+/**
+ * @class Telenok.Core.Middleware.Language
+ */
 class Language implements Middleware {
 
-	public function __construct(Application $app, Redirector $redirector, Request $request)
-	{
-		$this->app = $app;
-		$this->redirector = $redirector;
-		$this->request = $request;
-	}
+    public function __construct(Application $app, Redirector $redirector, Request $request)
+    {
+        $this->app = $app;
+        $this->redirector = $redirector;
+        $this->request = $request;
+    }
 
-	public function handle($request, \Closure $next)
-	{
+    public function handle($request, \Closure $next)
+    {
         $localeHeader = substr($request->server('HTTP_ACCEPT_LANGUAGE'), 0, 2);
 
         $localeCollection = $this->app->config->get('app.locales');
@@ -31,7 +36,7 @@ class Language implements Middleware {
 
         $sessionLocale = $this->app->session->get('app.locale');
 
-		$segmentUrl = $request->segment(1);
+        $segmentUrl = $request->segment(1);
 
         if ($segmentUrl == 'telenok')
         {
@@ -49,7 +54,10 @@ class Language implements Middleware {
             $locale = $segmentUrl;
         }
 
-        $localeHost = $localeCollection->first(function($item) use ($request) { return strpos('.' . $request->getHost(), ".{$item}.") !== FALSE; });            
+        $localeHost = $localeCollection->first(function($item) use ($request)
+        {
+            return strpos('.' . $request->getHost(), ".{$item}.") !== FALSE;
+        });
 
         if (($locale !== $sessionLocale && in_array($locale, $localeCollection->all(), true)))
         {
@@ -59,11 +67,11 @@ class Language implements Middleware {
         else if ($localeHost !== $sessionLocale && in_array($localeHost, $localeCollection->all(), true))
         {
             $this->app->session->set('app.locale', $localeHost);
-            $this->app->setLocale($localeHost); 
+            $this->app->setLocale($localeHost);
         }
         else if ($sessionLocale)
         {
-            $this->app->setLocale($sessionLocale);    
+            $this->app->setLocale($sessionLocale);
         }
         else if (!$sessionLocale)
         {
@@ -71,6 +79,7 @@ class Language implements Middleware {
             $this->app->setLocale($localeCurrent);
         }
 
-		return $next($request);
-	}
+        return $next($request);
+    }
+
 }

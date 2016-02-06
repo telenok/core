@@ -99,7 +99,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      */
     public function validator($rule = [], $input = [], $message = [], $customAttribute = [])
     {
-        return app('\Telenok\Core\Interfaces\Validator\Setting')
+        return app('\Telenok\Core\Support\Validator\Setting')
                         ->setRuleList($rule)
                         ->setInput($input)
                         ->setMessage($message)
@@ -166,5 +166,4 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
         return $model->storeOrUpdate($input, true);
     }
-
 }

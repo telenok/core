@@ -1,9 +1,10 @@
-<?php namespace Telenok\Core\Model\Object;
+<?php
+
+namespace Telenok\Core\Model\Object;
 
 /**
- * Eloquent model Type to configure objects
- * 
  * @class Telenok.Core.Model.Object.Type
+ * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
  */
 class Type extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 

@@ -1,8 +1,6 @@
 <?php namespace Telenok\Core\Interfaces\Module\Group;
 
 /**
- * 
- * 
  * @class Telenok.Core.Interfaces.Module.Group.Controller
  * @aside guide guide_user_module_group 
  */

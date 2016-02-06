@@ -2,22 +2,74 @@
 
 namespace Telenok\Core\Support\Image;
 
+/**
+ * @class Telenok.Core.Support.Image.Processing
+ * Class for processing image. Resize, crop.
+ */
 class Processing {
 
+    /**
+     * @protected
+     * @static
+     * @property {Array} IMAGE_EXTENSION
+     * Image's extensions.
+     * @member Telenok.Core.Support.Image.Processing
+     */
     const IMAGE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif'];
+    
+    /**
+     * @protected
+     * @static
+     * @property {Array} IMAGE_MIME_TYPE
+     * Image's mime types.
+     * @member Telenok.Core.Support.Image.Processing
+     */
     const IMAGE_MIME_TYPE = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'];
-    const SAFE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif', 'doc', 'txt', 'pdf', 'docx', 'xls', 'ppt'];
-    const SAFE_MIME_TYPE = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png',
-        'application/msword', 'text/plain', 'application/pdf',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'application/vnd.ms-excel', 'application/vnd.ms-powerpoint'];
+
+    /**
+     * @protected
+     * @static
+     * @property {String} TODO_RESIZE
+     * Alias for resize command.
+     * @member Telenok.Core.Support.Image.Processing
+     */
     const TODO_RESIZE = 'resize';
+
+    /**
+     * @protected
+     * @static
+     * @property {Array} TODO_RESIZE_PROPORTION
+     * Alias for resize with the same proportions command.
+     * @member Telenok.Core.Support.Image.Processing
+     */
     const TODO_RESIZE_PROPORTION = 'resize_proportion';
 
+    /**
+     * @protected
+     * @property {Imagine.Image.AbstractImage} $image
+     * @member Telenok.Core.Support.Image.Processing
+     */
     protected $image;
+
+    /**
+     * @protected
+     * @property {Imagine.Image.AbstractImagine} $image
+     * @member Telenok.Core.Support.Image.Processing
+     */
     protected $imagine;
+
+    /**
+     * @protected
+     * @property {String} $library
+     * Library name from config.
+     * @member Telenok.Core.Support.Image.Processing
+     */
     protected $library;
 
+    /**
+     * @constructor
+     * @member Telenok.Core.Support.Image.Processing
+     */
     public function __construct()
     {
         if (!$this->imagine)
@@ -40,11 +92,24 @@ class Processing {
         }
     }
 
+    /**
+     * @method imagine
+     * Return imagine object.
+     * @return {Imagine.Image.AbstractImagine}
+     * @member Telenok.Core.Support.Image.Processing
+     */
     public function imagine()
     {
         return $this->imagine;
     }
 
+    /**
+     * @method setImage
+     * Set image object.
+     * @param {Imagine.Image.AbstractImage} $image
+     * @return {Telenok.Core.Support.Image.Processing}
+     * @member Telenok.Core.Support.Image.Processing
+     */
     public function setImage($image)
     {
         $this->image = $image;
@@ -52,14 +117,30 @@ class Processing {
         return $this;
     }
 
+    /**
+     * @method getImage
+     * Return image object.
+     * @return {Imagine.Image.AbstractImage}
+     * @member Telenok.Core.Support.Image.Processing
+     */
     public function getImage()
     {
         return $this->image;
     }
 
+    /**
+     * @method process
+     * Process image object.
+     * @param {Integer} $width
+     * @param {Integer} $height
+     * @param {String} $action
+     * @return {Imagine.Image.AbstractImage}
+     * @member Telenok.Core.Support.Image.Processing
+     * @throws \Exception
+     */
     public function process($width, $height, $action)
     {
-        $str = "w:{$width}h:{$height}todo:{$action}";
+        $str = "w:{$width}:h:{$height}:todo:{$action}:blob:" . $this->getImage()->get('png');
 
         if ($this->createLock($str))
         {
@@ -83,6 +164,14 @@ class Processing {
         }
     }
 
+    /**
+     * @method resizeProportion
+     * Resize image with the same proportions.
+     * @param {Integer} $width
+     * @param {Integer} $height
+     * @return {Imagine.Image.ManipulatorInterface}
+     * @member Telenok.Core.Support.Image.Processing
+     */
     public function resizeProportion($width, $height)
     {
         $size = $this->getImage()->getSize();
@@ -99,6 +188,14 @@ class Processing {
         return $this->getImage()->thumbnail(new \Imagine\Image\Box($width, $height));
     }
 
+    /**
+     * @method resizeProportion
+     * Resize image with new proportions.
+     * @param {Integer} $width
+     * @param {Integer} $height
+     * @return {Imagine.Image.ManipulatorInterface}
+     * @member Telenok.Core.Support.Image.Processing
+     */
     public function resize($width, $height)
     {
         $size = $this->getImage()->getSize();
@@ -115,28 +212,49 @@ class Processing {
         return $this->getImage()->resize(new \Imagine\Image\Box($width, $height));
     }
 
+    /**
+     * @method isImage
+     * Whether file in $path is image.
+     * @param {String} $path
+     * @return {Boolean}
+     * @member Telenok.Core.Support.Image.Processing
+     */
     public static function isImage($path)
     {
         return in_array(pathinfo($path, PATHINFO_EXTENSION), static::IMAGE_EXTENSION, true);
     }
 
+    /**
+     * @method createLock
+     * Create lock before start image transformation.
+     * @param {String} $str
+     * Part of cache key.
+     * @return {boolean}
+     * @member Telenok.Core.Support.Image.Processing
+     * @throws \RuntimeException
+     */
     public function createLock($str)
     {
         if (app('cache')->has('image.process.lock.' . $str))
         {
             return false;
         }
-        else
-        {
-            app('cache')->put('image.process.lock.' . $str, 1, config('image.cache.lock_delay'));
-        }
+
+        app('cache')->put('image.process.lock.' . $str, 1, config('image.cache.lock_delay'));
 
         return true;
     }
 
+    /**
+     * @method removeLock
+     * Remove lock.
+     * @param {String} $str
+     * Part of cache key.
+     * @return {void}
+     * @member Telenok.Core.Support.Image.Processing
+     */
     public function removeLock($str)
     {
         app('cache')->forget('image.process.lock.' . $str);
     }
-
 }

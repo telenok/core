@@ -1,12 +1,17 @@
-<?php namespace Telenok\Core\Middleware;
+<?php
 
+namespace Telenok\Core\Middleware;
+
+/**
+ * @class Telenok.Core.Middleware.SessionTimeout
+ */
 class SessionTimeout {
 
     protected $timeout = 20;
 
     public function __construct()
     {
-        $this->timeout = ($t = (int)config('auth.logout.period')) ? $t : $this->timeout;
+        $this->timeout = ($t = (int) config('auth.logout.period')) ? $t : $this->timeout;
     }
 
     /**
@@ -25,14 +30,14 @@ class SessionTimeout {
         elseif (time() - session('lastActivityTime') > $this->timeout * 60)
         {
             session()->forget('lastActivityTime');
-            
+
             app('auth')->logout();
         }
         else
         {
             session(['lastActivityTime' => time()]);
         }
-    
+
         return $next($request);
     }
 

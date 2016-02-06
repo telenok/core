@@ -1,5 +1,10 @@
-<?php namespace Telenok\Core\Interfaces\Module;
+<?php
 
+namespace Telenok\Core\Interfaces\Module;
+
+/**
+ * @class Telenok.Core.Interfaces.Module.IModule
+ */
 interface IModule extends \Telenok\Core\Interfaces\Support\IRequest {
 
     public function getName();
@@ -12,7 +17,7 @@ interface IModule extends \Telenok\Core\Interfaces\Support\IRequest {
 
     public function getKey();
 
-    public function setPermissionKey($key = ''); 
+    public function setPermissionKey($key = '');
 
     public function getPermissionKey();
 

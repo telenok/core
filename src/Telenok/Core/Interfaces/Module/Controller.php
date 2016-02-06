@@ -1,5 +1,9 @@
 <?php namespace Telenok\Core\Interfaces\Module;
 
+/**
+ * @class Telenok.Core.Interfaces.Module.Controller
+ * @extends Telenok.Core.Interfaces.Controller.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Controller\Controller implements \Telenok\Core\Interfaces\Module\IModule {
 
     protected $permissionKey = '';

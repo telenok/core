@@ -1,5 +1,10 @@
-<?php namespace Telenok\Core\Middleware;
+<?php
 
+namespace Telenok\Core\Middleware;
+
+/**
+ * @class Telenok.Core.Middleware.AuthBackendModule
+ */
 class AuthBackendModule {
 
     /**
@@ -36,7 +41,8 @@ class AuthBackendModule {
                 }
             }
         }
-        
+
         return $next($request);
     }
+
 }

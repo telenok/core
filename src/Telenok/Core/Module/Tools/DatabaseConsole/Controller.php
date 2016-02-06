@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Module\Tools\DatabaseConsole;
 
+/**
+ * @class Telenok.Core.Module.Tools.DatabaseConsole.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.Simple.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller {
 
     protected $key = 'database-console';
@@ -10,11 +14,12 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
 
     public function processSelect()
     {
-        return app('db')->select(app('db')->Raw( $this->getRequest()->input('content') ));
+        return app('db')->select(app('db')->Raw($this->getRequest()->input('content')));
     }
 
     public function processStatement()
     {
-        return app('db')->affectingStatement(app('db')->Raw( $this->getRequest()->input('content') ));
+        return app('db')->affectingStatement(app('db')->Raw($this->getRequest()->input('content')));
     }
+
 }

@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Jobs\Cache;
+<?php
+
+namespace Telenok\Core\Jobs\Cache;
 
 use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
@@ -6,9 +8,14 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class Store extends Job implements SelfHandling, ShouldQueue
-{
-    use InteractsWithQueue, SerializesModels;
+/**
+ * @class Telenok.Core.Jobs.Cache.Store
+ * @extends App.Jobs.Job
+ */
+class Store extends Job implements SelfHandling, ShouldQueue {
+
+    use InteractsWithQueue,
+        SerializesModels;
 
     protected $collection;
 
@@ -26,20 +33,12 @@ class Store extends Job implements SelfHandling, ShouldQueue
             $this->delete();
         }
 
-        if (array_get($this->collection, 'path') 
-            && array_get($this->collection, 'path_cache') 
-            && array_get($this->collection, 'storage_key') 
-            && array_get($this->collection, 'storage_cache_key'))
-        {   
+        if (array_get($this->collection, 'path') && array_get($this->collection, 'path_cache') && array_get($this->collection, 'storage_key') && array_get($this->collection, 'storage_cache_key'))
+        {
             \App\Telenok\Core\Support\File\StoreCache::storeFile(
-                array_get($this->collection, 'path'), 
-                array_get($this->collection, 'path_cache'),
-                array_get($this->collection, 'storage_key'),
-                array_get($this->collection, 'storage_cache_key'),
-                array_get($this->collection, 'width'),
-                array_get($this->collection, 'height'),
-                array_get($this->collection, 'action')
+                    array_get($this->collection, 'path'), array_get($this->collection, 'path_cache'), array_get($this->collection, 'storage_key'), array_get($this->collection, 'storage_cache_key'), array_get($this->collection, 'width'), array_get($this->collection, 'height'), array_get($this->collection, 'action')
             );
         }
     }
+
 }

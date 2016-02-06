@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Module\Objects\Type;
 
+/**
+ * @class Telenok.Core.Module.Objects.Type.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
 
     protected $key = 'objects-type';
@@ -434,7 +438,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
                 'show_in_form' => 1,
             ]);
         }
-        
+
         if (!\App\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'deleted-by')->count())
         {
             (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([

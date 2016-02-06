@@ -1,9 +1,14 @@
-<?php namespace Telenok\Core\Model\Web;
+<?php
 
-class ModuleGroup extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+namespace Telenok\Core\Model\Web;
 
-	protected $ruleList = ['title' => ['required', 'min:1']];
-	protected $table = 'module_group';
+/**
+ * @class Telenok.Core.Model.Web.ModuleGroup
+ * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ */
+class ModuleGroup extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
+
+    protected $ruleList = ['title' => ['required', 'min:1']];
+    protected $table = 'module_group';
 
 }
-

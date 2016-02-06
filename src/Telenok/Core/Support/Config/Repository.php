@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Support\Config;
 
+/**
+ * @class Telenok.Core.Support.Config.Repository
+ * Repository stored configuration data for widgets, eloquent fields, modules, packages, etc.
+ */
 class Repository {
 
     public function getValue($event, $key = '')

@@ -1,6 +1,12 @@
-<?php namespace Telenok\Core\Module\Objects\Sequence;
+<?php
 
-class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller { 
+namespace Telenok\Core\Module\Objects\Sequence;
+
+/**
+ * @class Telenok.Core.Module.Objects.Sequence.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ */
+class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
 
     protected $key = 'objects-sequence';
     protected $parent = 'objects';
@@ -8,11 +14,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     protected $presentation = 'tree-tab-object';
     protected $presentationView = 'core::module.objects-sequence.presentation';
 
-    
     public function getAdditionalViewParam()
     {
         $this->additionalViewParam['search'] = $this->getRequest()->input('search.value');
-        
+
         return $this->additionalViewParam;
-    }   
+    }
+
 }

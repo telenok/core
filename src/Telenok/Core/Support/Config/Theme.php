@@ -1,5 +1,9 @@
 <?php namespace Telenok\Core\Support\Config;
 
+/**
+ * @class Telenok.Core.Support.Config.Theme
+ * Add support themes for view.
+ */
 class Theme {
 
     public static function view($view = null, $data = [], $mergeData = [])

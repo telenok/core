@@ -1,7 +1,11 @@
 <?php
 
-namespace Telenok\Core\Module\Files\Browser;
+namespace Telenok\Core\Module\Files\Objects;
 
+/**
+ * @class Telenok.Core.Module.Files.Objects.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {
 
     protected $key = 'files-browser';
@@ -463,7 +467,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     'modelCurrentDirectory' => $currentDirectory,
                     'routerParam' => $this->getRouterParam('update'),
                     'uniqueId' => str_random(),
-                ), $this->getAdditionalViewParam()))->render()
+                                ), $this->getAdditionalViewParam()))->render()
             ];
         }
         catch (\Telenok\Core\Support\Exception\Validator $e)

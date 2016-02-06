@@ -1,10 +1,15 @@
-<?php namespace Telenok\Core\ModuleGroup\Setting;
+<?php
 
+namespace Telenok\Core\ModuleGroup\Setting;
+
+/**
+ * @class Telenok.Core.ModuleGroup.Setting.Controller
+ * @extends Telenok.Core.Interfaces.Module.Group.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Module\Group\Controller {
 
     protected $key = 'setting';
-    protected $icon = 'fa fa-cogs'; 
-    protected $btn = 'btn-danger'; 
-    
-}
+    protected $icon = 'fa fa-cogs';
+    protected $btn = 'btn-danger';
 
+}

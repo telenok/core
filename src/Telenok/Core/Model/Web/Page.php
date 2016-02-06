@@ -2,7 +2,11 @@
 
 namespace Telenok\Core\Model\Web;
 
-class Page extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+/**
+ * @class Telenok.Core.Model.Web.Page
+ * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ */
+class Page extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
 
     protected $ruleList = ['title' => ['required', 'min:1']];
     protected $table = 'page';
@@ -21,4 +25,5 @@ class Page extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
     {
         return $this->belongsToMany('\App\Telenok\Core\Model\Web\Domain', 'pivot_relation_m2m_page_domain', 'page', 'page_domain')->withTimestamps();
     }
+
 }

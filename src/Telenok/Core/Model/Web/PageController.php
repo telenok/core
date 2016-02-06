@@ -1,9 +1,15 @@
-<?php namespace Telenok\Core\Model\Web;
+<?php
 
-class PageController extends \Telenok\Core\Interfaces\Eloquent\Object\Model {
+namespace Telenok\Core\Model\Web;
 
-	protected $ruleList = ['title' => ['required', 'min:1']];
-	protected $table = 'page_controller';
+/**
+ * @class Telenok.Core.Model.Web.PageController
+ * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ */
+class PageController extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
+
+    protected $ruleList = ['title' => ['required', 'min:1']];
+    protected $table = 'page_controller';
 
     public function page()
     {

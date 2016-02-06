@@ -858,7 +858,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
      */
     public function validator($model = null, $input = [], $message = [], $customAttribute = [])
     {
-        return app('\Telenok\Core\Interfaces\Validator\Model')
+        return app('\Telenok\Core\Support\Validator\Model')
                         ->setModel($model)
                         ->setInput($input)
                         ->setMessage($message)

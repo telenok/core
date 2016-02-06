@@ -1,8 +1,14 @@
-<?php namespace Telenok\Core\Module\Users\Message;
-  
+<?php
+
+namespace Telenok\Core\Module\Users\Message;
+
 use \Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 
-class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller { 
+/**
+ * @class Telenok.Core.Module.Users.Message.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.Simple.Controller
+ */
+class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller {
 
     public function getParent()
     {
@@ -28,12 +34,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
     {
         return "";
     }
-    
+
     public function getAdditionalViewParam()
     {
         return [];
     }
-    
-    
-}
 
+}

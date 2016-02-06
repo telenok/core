@@ -1,12 +1,18 @@
-<?php namespace Telenok\Core\Module\Users\ProfileEdit; 
+<?php
 
+namespace Telenok\Core\Module\Users\ProfileEdit;
+
+/**
+ * @class Telenok.Core.Module.Users.ProfileEdit.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
-    
+
     protected $key = 'users-profile-edit';
     protected $parent = 'users';
     protected $modelListClass = '\App\Telenok\Core\Model\User\User';
     protected $presentation = 'tree-tab-users-profile-edit';
-    protected $presentationContentView = 'core::module.users-profile-edit.content'; 
+    protected $presentationContentView = 'core::module.users-profile-edit.content';
     protected $presentationView = 'core::module.users-profile-edit.presentation';
     protected $presentationModelView = 'core::module.users-profile-edit.model';
     protected $presentationFormModelView = 'core::module.users-profile-edit.form';
@@ -15,13 +21,13 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     public function topMenuMain()
     {
         $collection = collect();
-        
+
         $collection->put('key', 'user-name');
         $collection->put('parent', false);
         $collection->put('order', 100000);
         $collection->put('li', '<li class="light-blue user-profile">');
         $collection->put('content', '<a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
-                <img class="nav-user-photo" src="' . (app('auth')->user()->avatar_path ?: 'packages/telenok/core/image/anonym.png') . '" title="Anonym">
+                <img class="nav-user-photo" src="' . (app('auth')->user()->avatar_path ? : 'packages/telenok/core/image/anonym.png') . '" title="Anonym">
                 <span id="user_info">
                      ' . $this->LL('welcome', ['username' => app('auth')->user()->username]) . '
                 </span>
@@ -32,9 +38,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     }
 
     public function topMenuLogout()
-    {         
+    {
         $collection = collect();
-        
+
         $collection->put('parent', 'user-name');
         $collection->put('key', 'log-off');
         $collection->put('order', 100000);
@@ -46,9 +52,9 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
     }
 
     public function topMenuProfileEdit()
-    {         
+    {
         $collection = collect();
-        
+
         $collection->put('parent', 'user-name');
         $collection->put('key', 'log-off');
         $collection->put('order', 1000);
@@ -67,4 +73,5 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Con
 
         return $collection;
     }
+
 }

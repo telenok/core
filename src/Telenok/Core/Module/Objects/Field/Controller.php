@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Module\Objects\Field;
 
+/**
+ * @class Telenok.Core.Module.Objects.Field.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
 
     protected $key = 'objects-field';

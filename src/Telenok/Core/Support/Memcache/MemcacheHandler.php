@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Support\Memcache;
+<?php
+
+namespace Telenok\Core\Support\Memcache;
 
 use Illuminate\Cache\Repository;
 
@@ -102,6 +104,7 @@ class MemcacheHandler implements \SessionHandlerInterface {
     {
         return $this->cache->forget($sessionId);
     }
+
     /**
      * Garbage collection for storage.
      *
@@ -113,7 +116,7 @@ class MemcacheHandler implements \SessionHandlerInterface {
      *
      * @return boolean
      */
-     
+
     /**
      * @method gc
      * Garbage collection for storage.

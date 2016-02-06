@@ -1077,7 +1077,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
      */
     public function validator($model = null, $input = [], $message = [], $customAttribute = [])
     {
-        return app('\Telenok\Core\Interfaces\Validator\Model')
+        return app('\Telenok\Core\Support\Validator\Model')
                         ->setModel($model ? : $this->getModelList())
                         ->setInput($input)
                         ->setMessage($message)

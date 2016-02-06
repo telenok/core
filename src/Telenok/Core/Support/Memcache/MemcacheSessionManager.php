@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Support\Memcache;
+<?php
+
+namespace Telenok\Core\Support\Memcache;
 
 /**
  * Create a new session manager instance.
@@ -25,7 +27,7 @@ class MemcacheSessionManager extends \Illuminate\Support\Manager {
      */
     public function __construct(MemcacheHandler $handler)
     {
-     	$this->handler = $handler;
+        $this->handler = $handler;
     }
 
     /**
@@ -37,7 +39,7 @@ class MemcacheSessionManager extends \Illuminate\Support\Manager {
      */
     protected function createMemcacheDriver()
     {
-     	return $this->handler;
+        return $this->handler;
     }
 
     /**
@@ -49,6 +51,7 @@ class MemcacheSessionManager extends \Illuminate\Support\Manager {
      */
     public function getDefaultDriver()
     {
-     	return 'memcache';
+        return 'memcache';
     }
+
 }

@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Module\Web\Page;
 
+/**
+ * @class Telenok.Core.Module.Web.Page.Controller
+ * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
 
     protected $key = 'web-page';

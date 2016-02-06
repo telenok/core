@@ -1,61 +1,67 @@
-<?php namespace Telenok\Core\Model\User;
+<?php
+
+namespace Telenok\Core\Model\User;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
+/**
+ * @class Telenok.Core.Model.User.User
+ * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ */
 class User extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model implements AuthenticatableContract, CanResetPasswordContract {
 
-	use Authenticatable, CanResetPassword;
+    use Authenticatable,
+        CanResetPassword;
 
-	protected $ruleList = ['title' => ['required', 'min:1'], 'email' => ['unique:user,email,:id:,id'], 'usernick' => ['unique:user,usernick,:id:,id']];
-	protected $table = 'user';
-	protected $hidden = ['password', 'remember_token'];
-	protected $fillable = ['remember_token'];
+    protected $ruleList = ['title' => ['required', 'min:1'], 'email' => ['unique:user,email,:id:,id'], 'usernick' => ['unique:user,usernick,:id:,id']];
+    protected $table = 'user';
+    protected $hidden = ['password', 'remember_token'];
+    protected $fillable = ['remember_token'];
 
+    public function setPasswordAttribute($value)
+    {
+        if ($value = trim($value))
+        {
+            $this->attributes['password'] = password_hash($value, PASSWORD_BCRYPT);
+        }
+        else if (!$this->exists && !$value)
+        {
+            $this->attributes['password'] = password_hash(str_random(), PASSWORD_BCRYPT);
+        }
+    }
 
-	public function setPasswordAttribute($value)
-	{
-		if ($value = trim($value))
-		{
-			$this->attributes['password'] = password_hash($value,  PASSWORD_BCRYPT);
-		}
-		else if (!$this->exists && !$value)
-		{
-			$this->attributes['password'] = password_hash(str_random(), PASSWORD_BCRYPT);
-		}
-	}
+    public function setUsernickAttribute($value)
+    {
+        $this->attributes['usernick'] = trim($value) ? : $this->username;
+    }
 
-	public function setUsernickAttribute($value)
-	{
-		$this->attributes['usernick'] = trim($value) ?: $this->username;
-	}
+    public function createdBy()
+    {
+        return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'created_by_user');
+    }
 
-	public function createdBy()
-	{
-		return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'created_by_user');
-	}
+    public function updatedBy()
+    {
+        return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'updated_by_user');
+    }
 
-	public function updatedBy()
-	{
-		return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'updated_by_user');
-	}
+    public function deletedBy()
+    {
+        return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'deleted_by_user');
+    }
 
-	public function deletedBy()
-	{
-		return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'deleted_by_user');
-	}
+    public function lockedBy()
+    {
+        return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'locked_by_user');
+    }
 
-	public function lockedBy()
-	{
-		return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'locked_by_user');
-	}
-
-	public function group()
-	{
-		return $this->belongsToMany('\App\Telenok\Core\Model\User\Group', 'pivot_relation_m2m_group_user', 'group_user', 'group')->withTimestamps();
-	}
+    public function group()
+    {
+        return $this->belongsToMany('\App\Telenok\Core\Model\User\Group', 'pivot_relation_m2m_group_user', 'group_user', 'group')->withTimestamps();
+    }
 
     public function avatarUserFileExtension()
     {
@@ -66,4 +72,5 @@ class User extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model implements
     {
         return $this->belongsTo('\App\Telenok\Core\Model\File\FileMimeType', 'avatar_user_file_mime_type');
     }
+
 }

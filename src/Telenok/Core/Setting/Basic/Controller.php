@@ -1,14 +1,41 @@
 <?php namespace Telenok\Core\Setting\Basic;
 
-class Controller extends \Telenok\Core\Interfaces\Setting\Controller {
+/**
+ * @class Telenok.Core.Setting.Basic.Controller
+ * Controller base setting.
+ * 
+ * @extends Telenok.Core.Interfaces.Setting.Controller
+ */
+class Controller extends \App\Telenok\Core\Interfaces\Setting\Controller {
 
+    /**
+     * @protected
+     * @property {String} $key
+     * Controller's key.
+     * @member Telenok.Core.Setting.Basic.Controller
+     */
     protected $key = 'telenok.basic';
+    
+    /**
+     * @protected
+     * @property {Array} $defaultValue
+     * Default values for current settings.
+     * @member Telenok.Core.Setting.Basic.Controller
+     */
     protected $defaultValue = [
         'app.localeDefault' => 'en',
         'app.locales' => ['en'],
         'app.timezone' => 'UTC'
     ];
 
+    /**
+     * @method fillSettingValue
+     * Set setting's values in global app('config').
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {mixed} $value
+     * @return {void}
+     * @member Telenok.Core.Setting.Basic.Controller
+     */
     public function fillSettingValue($model, $value)
     {
         collect($value)->each(function($item, $key)

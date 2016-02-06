@@ -2,6 +2,10 @@
 
 namespace Telenok\Core\Support\Config;
 
+/**
+ * @class Telenok.Core.Support.Config.CKEditor
+ * Support rich text editor caller CKEditor.
+ */
 class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
 
     protected $key = 'ckeditor';
@@ -235,7 +239,7 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
 
         $extension = $file->getClientOriginalExtension() ? : $file->guessExtension();
 
-        if (!in_array($extension, \App\Telenok\Core\Support\Image\Processing::SAFE_EXTENSION, true))
+        if (!in_array($extension, \App\Telenok\Core\Support\File\Processing::SAFE_EXTENSION, true))
         {
             throw new \Exception($this->LL('error.extension', ['attribute' => $extension]));
         }
