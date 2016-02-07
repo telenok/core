@@ -94,7 +94,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method getModelAttribute
      * Return processed value of field.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {String} $key
      * Field's name.
@@ -119,7 +119,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method setModelAttribute
      * Return processed value of field.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {String} $key
      * Field's name.

@@ -73,7 +73,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * Return array with URL for variables in $viewModel view.
      * 
      * @param {Telenok.Core.Field.FileManyToMany.Controller} $controller
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @param {String} $uniqueId
      * 
@@ -179,7 +179,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * Return HTML content of form element for the field
      * 
      * @param {Telenok.Core.Field.FileManyToMany.Controller} $controller
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @param {String} $uniqueId
      * @return {String}
@@ -330,11 +330,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * 
      * @param {Telenok.Core.Model.Object.Field} $field
      * Eloquent object Field.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Illuminate.Support.Collection} $input
      * Values of request.
-     * @return {Telenok.Core.Interfaces.Eloquent.Object}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
     public function saveModelField($field, $model, $input)

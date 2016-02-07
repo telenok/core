@@ -74,7 +74,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     /**
      * @protected
-     * @property {String} $frontendView
+     * @property {String} $backendView
      * Default view for backend to show containers with widgets.
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -116,7 +116,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method setCacheTime
      * Set cache time in minuts for page. Can be float to set as part's of minute.
      * 
-     * @property {Number} $param
+     * @param {Number} $param
      * Time in minuts or float as part of minute.
      * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
@@ -144,9 +144,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method getContainerContent
      * Return HTML content of container.
      * 
-     * @property {Integer} $pageId
+     * @param {Integer} $pageId
      * ID of eloquent model of page.
-     * @property {Integer} $languageId
+     * @param {Integer} $languageId
      * ID of eloquent model of language.
      * @return {String}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
@@ -211,7 +211,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     /**
      * @method getFrontendView
-     * Return value of $frontendView.
+     * Return value of frontendView.
      * 
      * @return {String}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
@@ -223,9 +223,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     /**
      * @method setFrontendView
-     * Set value of $frontendView.
+     * Set value of frontendView.
      * 
-     * @property {String} $frontendView
+     * @param {String} $frontendView
      * View of fronend.
      * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
@@ -286,7 +286,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method getNotCachedContent
      * Return not cached HTML for page.
      * 
-     * @property {Telenok.Core.Model.Web.Page} $page
+     * @param {Telenok.Core.Model.Web.Page} $page
      * @return {String}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -321,7 +321,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method processContent
      * Additionally process content. Here we can process tags like "script" and move them
      * 
-     * @property {String} $content
+     * @param {String} $content
      * @return {String}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -365,7 +365,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method setCachedContent
      * Set cached content.
      * 
-     * @property {String} $content
+     * @param {String} $content
      * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -383,7 +383,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method validateSession
      * Validate session.
      * 
-     * @return {void)
+     * @return {void}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
     public function validateSession()
@@ -395,9 +395,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method hasAddedCssFile
      * Search CSS file added already to $cssFilePath.
      * 
-     * @property {String} $filePath
+     * @param {String} $filePath
      * File path.
-     * @property {mixed} $key
+     * @param {mixed} $key
      * Key for the file.
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -420,11 +420,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method addCssFile
      * Add CSS file to $cssFilePath.
      * 
-     * @property {String} $filePath
+     * @param {String} $filePath
      * File path.
-     * @property {mixed} $key
+     * @param {mixed} $key
      * Key for the file.
-     * @property {Integer} $order
+     * @param {Integer} $order
      * Order of file in array.
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -447,7 +447,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method addCssCode
      * Add CSS code to $cssCode.
      * 
-     * @property {String} $code
+     * @param {String} $code
      * CSS code.
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -462,9 +462,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method hasAddedJsFile
      * Search JS file added already to $jsFilePath.
      * 
-     * @property {String} $filePath
+     * @param {String} $filePath
      * File path.
-     * @property {mixed} $key
+     * @param {mixed} $key
      * Key for the file.
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -487,11 +487,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method addJsFile
      * Add JS file to $jsFilePath.
      * 
-     * @property {String} $filePath
+     * @param {String} $filePath
      * File path.
-     * @property {mixed} $key
+     * @param {mixed} $key
      * Key for the file.
-     * @property {Integer} $order
+     * @param {Integer} $order
      * Order of file in array.
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -514,7 +514,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method addJsCode
      * Add JS code to $jsCode.
      * 
-     * @property {String} $code
+     * @param {String} $code
      * CSS code.
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */
@@ -615,7 +615,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      *     @example
      *     $controllerRequest->setPageMetaTitle($news->translate('title'))
      * 
-     * @property {String} $title
+     * @param {String} $title
      * @return {Telenok.Core.Interfaces.Controller.Frontend.Controller}
      * @member Telenok.Core.Interfaces.Controller.Frontend.Controller
      */

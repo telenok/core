@@ -1,9 +1,9 @@
 <?php
 
-namespace Telenok\Core\Module\Files\Objects;
+namespace Telenok\Core\Module\Files\Browser;
 
 /**
- * @class Telenok.Core.Module.Files.Objects.Controller
+ * @class Telenok.Core.Module.Files.Controller
  * @extends Telenok.Core.Interfaces.Presentation.TreeTab.Controller
  */
 class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {

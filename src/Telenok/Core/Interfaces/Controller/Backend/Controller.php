@@ -26,7 +26,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     
     /**
      * @protected
-     * @property {Array} $cssCode
+     * @property {Array} $jsFilePath
      * Accumulate JS files.
      * @member Telenok.Core.Interfaces.Controller.Backend.Controller
      */
@@ -42,7 +42,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     
     /**
      * @protected
-     * @property {Array} $languageDirectory
+     * @property {String} $languageDirectory
      * Define directory with translated files.
      * @member Telenok.Core.Interfaces.Controller.Backend.Controller
      */
@@ -52,9 +52,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method hasAddedCssFile
      * Search CSS file added already to $cssFilePath.
      * 
-     * @property {String} $filePath
+     * @param {String} $filePath
      * File path.
-     * @property {mixed} $key
+     * @param {mixed} $key
      * Key for the file.
      * @member Telenok.Core.Interfaces.Controller.Backend.Controller
      */
@@ -77,11 +77,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method addCssFile
      * Add CSS file to $cssFilePath.
      * 
-     * @property {String} $filePath
+     * @param {String} $filePath
      * File path.
-     * @property {mixed} $key
+     * @param {mixed} $key
      * Key for the file.
-     * @property {Integer} $order
+     * @param {Integer} $order
      * Order of file in array.
      * @member Telenok.Core.Interfaces.Controller.Backend.Controller
      */
@@ -104,7 +104,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method addCssCode
      * Add CSS code to $cssCode.
      * 
-     * @property {String} $code
+     * @param {String} $code
      * CSS code.
      * @member Telenok.Core.Interfaces.Controller.Backend.Controller
      */
@@ -119,9 +119,9 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method hasAddedJsFile
      * Search JS file added already to $jsFilePath.
      * 
-     * @property {String} $filePath
+     * @param {String} $filePath
      * File path.
-     * @property {mixed} $key
+     * @param {mixed} $key
      * Key for the file.
      * @member Telenok.Core.Interfaces.Controller.Backend.Controller
      */
@@ -144,11 +144,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method addJsFile
      * Add JS file to $jsFilePath.
      * 
-     * @property {String} $filePath
+     * @param {String} $filePath
      * File path.
-     * @property {mixed} $key
+     * @param {mixed} $key
      * Key for the file.
-     * @property {Integer} $order
+     * @param {Integer} $order
      * Order of file in array.
      * @member Telenok.Core.Interfaces.Controller.Backend.Controller
      */
@@ -171,7 +171,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method addJsCode
      * Add JS code to $jsCode.
      * 
-     * @property {String} $code
+     * @param {String} $code
      * CSS code.
      * @member Telenok.Core.Interfaces.Controller.Backend.Controller
      */

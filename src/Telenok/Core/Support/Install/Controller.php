@@ -2,6 +2,9 @@
 
 namespace Telenok\Core\Support\Install;
 
+/**
+ * @class Telenok.Core.Support.Install.Controller
+ */
 class Controller {
 
     protected $domain = '';

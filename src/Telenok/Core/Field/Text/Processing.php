@@ -17,7 +17,7 @@ class Processing {
     /**
      * @method getProcessed
      * Return processed value of field Telenok.Core.Field.Text.Controller.
-     * Text can contain special tags like <widget_inline>
+     * Text can contain special tags like &lt;widget_inline/&gt;
      * 
      * @return {String}
      * @member Telenok.Core.Field.Text.Processing

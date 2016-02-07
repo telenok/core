@@ -31,7 +31,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Setting\Controller {
      * @method save
      * Save setting's values in database.
      * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
-     * @param {Illuminte.Support.Collection} $input
+     * @param {Illuminate.Support.Collection} $input
      * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Setting.Secure.Controller
      */

@@ -1,5 +1,12 @@
-<?php namespace Telenok\Core\Contract\Auth;
+<?php
 
+namespace Telenok\Core\Contract\Auth;
+
+
+/**
+ * @class Telenok.Core.Contract.Auth.PasswordBroker
+ * @extends Illuminate.Auth.Passwords.PasswordBroker
+ */
 class PasswordBroker extends \Illuminate\Auth\Passwords\PasswordBroker {
 
     public function setView($view = '')
@@ -13,4 +20,5 @@ class PasswordBroker extends \Illuminate\Auth\Passwords\PasswordBroker {
     {
         return $this->emailView;
     }
+
 }

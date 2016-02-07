@@ -81,7 +81,7 @@ trait QueryCache {
     }
 
     /**
-     * @method bootQueryCache
+     * @method getCacheObject
      * Return cache object.
      * @return {Illuminate.Contracts.Cache.Repository}
      * @member Telenok.Core.Interfaces.Eloquent.Cache.QueryCache

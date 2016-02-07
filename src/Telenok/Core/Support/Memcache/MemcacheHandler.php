@@ -106,18 +106,6 @@ class MemcacheHandler implements \SessionHandlerInterface {
     }
 
     /**
-     * Garbage collection for storage.
-     *
-     * @see http://php.net/sessionhandlerinterface.gc
-     *
-     * @param integer $lifetime Max lifetime in seconds to keep sessions stored.
-     *
-     * @throws \RuntimeException On fatal error.
-     *
-     * @return boolean
-     */
-
-    /**
      * @method gc
      * Garbage collection for storage.
      * See [php.net][1] for more.

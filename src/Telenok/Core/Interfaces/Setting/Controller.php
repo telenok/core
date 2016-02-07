@@ -94,7 +94,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @param {Array} $input
      * @param {Array} $message
      * @param {Array} $customAttribute
-     * @return {Telenok.Core.Interfaces.Validator\Setting}
+     * @return {Telenok.Core.Support.Validator.Setting}
      * @member Telenok.Core.Interfaces.Setting.Controller
      */
     public function validator($rule = [], $input = [], $message = [], $customAttribute = [])
@@ -142,7 +142,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @method save
      * Save setting's values in database.
      * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
-     * @param {Illuminte.Support.Collection} $input
+     * @param {Illuminate.Support.Collection} $input
      * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Setting.Controller
      */

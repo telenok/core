@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Interfaces\Presentation\TreeTab;
+<?php
+
+namespace Telenok\Core\Interfaces\Presentation\TreeTab;
 
 use \Telenok\Core\Interfaces\Presentation\IPresentation;
 use \Telenok\Core\Interfaces\Controller\IEloquentProcessController;
@@ -18,7 +20,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
      * @property {String} $tabKey
      * Key of presentation's tabs.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $tabKey = '';
 
     /**
@@ -26,249 +28,249 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
      * @property {String} $presentation
      * Key of presentation.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $presentation = 'tree-tab';
-    
+
     /**
      * @protected
      * @property {String} $presentationModuleKey
      * Key of presentation's module.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $presentationModuleKey = '';
-    
+
     /**
      * @protected
      * @property {String} $presentationView
      * Presentation's initial view.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $presentationView = 'core::presentation.tree-tab.presentation';
-    
+
     /**
      * @protected
      * @property {String} $presentationTreeView
      * Presentation's initial tree's view.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $presentationTreeView = 'core::presentation.tree-tab.tree';
-    
+
     /**
      * @protected
      * @property {String} $presentationContentView
      * Presentation's initial content's 'view.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $presentationContentView = 'core::presentation.tree-tab.content';
-    
+
     /**
      * @protected
      * @property {String} $presentationModelView
      * Presentation's initial model's view.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $presentationModelView = 'core::presentation.tree-tab.model';
-    
+
     /**
      * @protected
      * @property {String} $presentationFormModelView
      * Presentation's initial model's form view.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $presentationFormModelView = 'core::presentation.tree-tab.form';
-    
+
     /**
      * @protected
      * @property {String} $presentationFormFieldListView
      * Presentation's initial models' fields view.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $presentationFormFieldListView = 'core::presentation.tree-tab.form-field-list';
-    
+
     /**
      * @protected
      * @property {String} $routerActionParam
      * Name of custom action-param router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerActionParam = '';
-    
+
     /**
      * @protected
      * @property {String} $routerList
      * Name of custom list router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerList = '';
-    
+
     /**
      * @protected
      * @property {String} $routerContent
      * Name of custom content router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerContent = '';
-    
+
     /**
      * @protected
      * @property {String} $routerCreate
      * Name of custom create router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerCreate = '';
-    
+
     /**
      * @protected
      * @property {String} $routerEdit
      * Name of custom edit router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerEdit = '';
-    
+
     /**
      * @protected
      * @property {String} $routerDelete
      * Name of custom delete router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerDelete = '';
-    
+
     /**
      * @protected
      * @property {String} $routerStore
      * Name of custom store router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerStore = '';
-    
+
     /**
      * @protected
      * @property {String} $routerUpdate
      * Name of custom update router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerUpdate = '';
-    
+
     /**
      * @protected
      * @property {String} $routerListEdit
      * Name of custom edit list router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerListEdit = '';
-    
+
     /**
      * @protected
      * @property {String} $routerListDelete
      * Name of custom delete list router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerListDelete = '';
-    
+
     /**
      * @protected
      * @property {String} $routerLock
      * Name of custom lock router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerLock = '';
-    
+
     /**
      * @protected
      * @property {String} $routerListLock
      * Name of custom list lock router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerListLock = '';
-    
+
     /**
      * @protected
      * @property {String} $routerListUnlock
      * Name of custom list unlock router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerListUnlock = '';
-    
+
     /**
      * @protected
      * @property {String} $routerListTree
      * Name of custom tree router.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $routerListTree = '';
-    
+
     /**
      * @protected
      * @property {String} $modelListClass
      * Class name of model in list view.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $modelListClass = '';
-    
+
     /**
      * @protected
      * @property {String} $modelTreeClass
      * Class name of model in tree view.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $modelTreeClass = '';
-    
+
     /**
      * @protected
      * @property {String} $pageLength
      * Amount of rows to show in list.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $pageLength = 15;
-    
+
     /**
      * @protected
      * @property {String} $additionalViewParam
      * Additional view parameters.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $additionalViewParam = [];
-    
+
     /**
      * @protected
      * @property {String} $lockInListPeriod
      * Amount of minutes to lock model's record after it locked in list.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $lockInListPeriod = 10;
-    
+
     /**
      * @protected
      * @property {String} $lockInFormPeriod
      * Amount of minutes to lock model's record after it opened in form.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $lockInFormPeriod = 20;
-    
+
     /**
      * @protected
      * @property {String} $displayType
      * Presentation's initial view.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     protected $displayType = 1;
-    
+
     /**
      * @static
      * @protected
      * @property {Integer} $DISPLAY_TYPE_STANDART
      * Whether model showed in form in tab.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     public static $DISPLAY_TYPE_STANDART = 1;
-    
+
     /**
      * @static
      * @protected
      * @property {Integer} $DISPLAY_TYPE_WIZARD
      * Whether model showed in form in modal window.
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
-     */	
+     */
     public static $DISPLAY_TYPE_WIZARD = 2;
 
     /**
@@ -295,7 +297,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         return $this;
     }
-    
+
     /**
      * @method getLockInFormPeriod
      * Return amount of minuts to lock record in form.
@@ -352,7 +354,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
      * @return {String}
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
-    public function getTelenok.Core.Interfaces.Presentation.TreeTab.Controller()
+    public function getPresentationModuleKey()
     {
         return $this->presentationModuleKey ? : $this->presentation . '-' . $this->getKey();
     }
@@ -586,7 +588,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         return $this;
     }
-    
+
     /**
      * @method getRouterList
      * Return router list.
@@ -1494,28 +1496,28 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
 
         $collection->put('open', ['order' => 0, 'content' =>
             '<div class="dropdown">
-                <a class="btn btn-white no-hover btn-transparent btn-xs dropdown-toggle" href="#" role="button" style="border:none;"
-                        type="button" id="' . $random . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <span class="glyphicon glyphicon-menu-hamburger text-muted"></span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="' . $random . '">
-            ']);
+                    <a class="btn btn-white no-hover btn-transparent btn-xs dropdown-toggle" href="#" role="button" style="border:none;"
+                            type="button" id="' . $random . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <span class="glyphicon glyphicon-menu-hamburger text-muted"></span>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="' . $random . '">
+                ']);
 
         $collection->put('close', ['order' => PHP_INT_MAX, 'content' =>
             '</ul>
-            </div>']);
+                </div>']);
 
         $collection->put('edit', ['order' => 1000, 'content' =>
             '<li><a href="#" onclick="telenok.getPresentation(\''
             . $this->getPresentationModuleKey() . '\').addTabByURL({url : \'' . $this->getRouterEdit(['id' => $item->getKey()]) . '\'}); return false;">'
             . ' <i class="fa fa-pencil"></i> ' . $this->LL('list.btn.edit') . '</a>
-                </li>']);
+                    </li>']);
 
         $collection->put('delete', ['order' => 2000, 'content' =>
             '<li><a href="#" onclick="if (confirm(\'' . $this->LL('notice.sure.delete') . '\')) telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').deleteByURL(this, \''
             . $this->getRouterDelete(['id' => $item->getKey()]) . '\'); return false;">'
             . ' <i class="fa fa-trash-o"></i> ' . $this->LL('list.btn.delete') . '</a>
-                </li>']);
+                    </li>']);
 
         app('events')->fire($this->getListButtonEventKey(), $collection);
 
@@ -1562,10 +1564,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method setAdditionalViewParam
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function setAdditionalViewParam($param = [])
@@ -1576,10 +1575,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getGridId
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getGridId($key = 'gridId')
@@ -1588,10 +1584,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModelFieldFilter
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModelFieldFilter($model = null)
@@ -1600,10 +1593,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getList
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getList()
@@ -1638,10 +1628,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getRouterParam
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getRouterParam($action = '', $model = null)
@@ -1698,10 +1685,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method create
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function create()
@@ -1719,10 +1703,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method edit
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function edit($id = 0)
@@ -1742,10 +1723,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method editList
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function editList()
@@ -1777,10 +1755,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method deleteProcess
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function deleteProcess($id = null, $force = false)
@@ -1804,12 +1779,9 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
             }
         });
     }
-    
+
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method delete
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function delete($id = null, $force = false)
@@ -1827,10 +1799,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method deleteList
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function deleteList($id = null, $ids = [])
@@ -1872,10 +1841,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method lock
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function lock()
@@ -1900,10 +1866,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method lockList
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function lockList()
@@ -1931,10 +1894,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method unlockList
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function unlockList()
@@ -1964,10 +1924,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method store
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function store($id = null)
@@ -1996,10 +1953,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method update
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function update($id = null)
@@ -2028,10 +1982,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method save
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function save($input = [], $type = null)
@@ -2077,10 +2028,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method preProcess
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function preProcess($model, $type, $input)
@@ -2089,10 +2037,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method postProcess
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function postProcess($model, $type, $input)
@@ -2101,46 +2046,34 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModelFieldViewKey
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModelFieldViewKey($field)
     {
-        
+
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModelFieldView
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModelFieldView($field)
     {
-        
+
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getModelFieldViewVariable
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null)
     {
-        
+
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method getDisplayType
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function getDisplayType()
@@ -2149,10 +2082,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method setDisplayType
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function setDisplayType($type)
@@ -2163,14 +2093,12 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
-     * @method setWidgetGroupModel
-     * Set group widget's model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
-     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @method isDisplayTypeWizard
      * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
      */
     public function isDisplayTypeWizard()
     {
         return $this->displayType == static::$DISPLAY_TYPE_WIZARD;
     }
+
 }

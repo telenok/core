@@ -38,7 +38,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * @method getModelFillableField
      * Define list of fields in Eloquent object which can be filled by user.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Telenok.Core.Model.Object.Field} $field
      * Object with data of field's configuration.
@@ -69,7 +69,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * Return array with URL for variables in $viewModel view.
      * 
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @param {String} $uniqueId
      * 
@@ -94,7 +94,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * Return HTML content of form element for the field
      * 
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @param {String} $uniqueId
      * @return {String}
@@ -284,11 +284,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * 
      * @param {Telenok.Core.Model.Object.Field} $field
      * Eloquent object Field.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Illuminate.Support.Collection} $input
      * Values of request.
-     * @return {Telenok.Core.Interfaces.Eloquent.Object}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Field.RelationManyToMany.Controller
      */
     public function saveModelField($field, $model, $input)

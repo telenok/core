@@ -1,13 +1,8 @@
 <?php namespace Telenok\Core\Interfaces\Field;
 
 /**
- * @class Telenok.Core.Interfaces.Controller.Controller
- * Base class for CMS controllers
- * 
- * @mixins Telenok.Core.Support.Traits.Language
- * @mixins Illuminate.Foundation.Bus.DispatchesCommands
- * @uses Telenok.Core.Interfaces.Support.IRequest
- * @extends Illuminate.Routing.Controller
+ * @class Telenok.Core.Interfaces.Field.IField
+ * @extends Telenok.Core.Interfaces.Support.IRequest
  */
 interface IField extends \Telenok\Core\Interfaces\Support\IRequest {
 
@@ -55,13 +50,13 @@ interface IField extends \Telenok\Core\Interfaces\Support\IRequest {
 
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null);
 
-	/**
-	 * Return Object Type linked to the field
-	 * 
-	 * @param \App\Telenok\Core\Model\Object\Field $field
-	 * @return \App\Telenok\Core\Model\Object\Type
-	 * 
-	 */
+    /**
+     * @method getLinkedModelType
+     * Return Object Type linked to the field
+     * 
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @return {Telenok.Core.Model.Object.Type}
+     */
     public function getLinkedModelType($field);
 
     public function getTableList($id = null, $fieldId = null, $uniqueId = null);

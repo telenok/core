@@ -177,6 +177,7 @@ class CachableQueryBuilder extends \Illuminate\Database\Query\Builder {
     }
     
     /**
+     * @method getCacheTags
      * Return cache's tags.
      *
      * @return {Array}
@@ -191,6 +192,7 @@ class CachableQueryBuilder extends \Illuminate\Database\Query\Builder {
     }
 
     /**
+     * @method get
      * Execute the query as a "select" statement.
      *
      * @param  {Array} $columns
@@ -209,6 +211,7 @@ class CachableQueryBuilder extends \Illuminate\Database\Query\Builder {
     }
     
     /**
+     * @method insert
      * Insert a new record into the database.
      *
      * @param  {Array}  $values
@@ -228,6 +231,7 @@ class CachableQueryBuilder extends \Illuminate\Database\Query\Builder {
     }
 
     /**
+     * @method update
      * Update a record in the database.
      *
      * @param  {Array}  $values
@@ -248,6 +252,7 @@ class CachableQueryBuilder extends \Illuminate\Database\Query\Builder {
     }
 
     /**
+     * @method delete
      * Delete a record from the database.
      *
      * @param {mixed} $id
@@ -267,6 +272,7 @@ class CachableQueryBuilder extends \Illuminate\Database\Query\Builder {
     }
     
    /**
+     * @method getCached
      * Execute the query as a cached "select" statement.
      *
      * @param  {array} $columns

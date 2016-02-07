@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Interfaces\Widget;
+<?php
+
+namespace Telenok\Core\Interfaces\Widget;
 
 /**
  * @class Telenok.Core.Interfaces.Widget.Controller
@@ -6,7 +8,7 @@
  * 
  * @extends Telenok.Core.Interfaces.Controller.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Controller\Controller { 
+class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
     /**
      * @protected
@@ -14,7 +16,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Parent's widget key.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	protected $parent = '';
+    protected $parent = '';
 
     /**
      * @protected
@@ -22,15 +24,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Key of parent widget group.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $group = '';
+    protected $group = '';
 
     /**
      * @protected
      * @property {String} $icon
      * Class of widget's icon.
      * @member Telenok.Core.Interfaces.Widget.Controller
-     */	
-     protected $icon = 'fa fa-desktop';
+     */
+    protected $icon = 'fa fa-desktop';
 
     /**
      * @protected
@@ -38,7 +40,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Model present widget in database.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $widgetModel;
+    protected $widgetModel;
 
     /**
      * @protected
@@ -46,15 +48,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Name of view for show properties in backend.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $backendView = '';
+    protected $backendView = '';
 
     /**
-     * @public
      * @property {String} $frontendView
      * Name of view for show properties in frontend.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $frontendView = '';
+    protected $frontendView = '';
 
     /**
      * @protected
@@ -62,7 +63,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Name of view for fronend if user dont want to create own view.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $defaultFrontendView = 'core::module.web-page-constructor.widget-frontend';
+    protected $defaultFrontendView = 'core::module.web-page-constructor.widget-frontend';
 
     /**
      * @protected
@@ -70,23 +71,23 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Name of view for show widget's feature and settings.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $structureView = '';
+    protected $structureView = '';
 
     /**
      * @protected
      * @property {Telenok.Core.Interfaces.Controller.Frontend.Controller} $frontendController
      * Frontend controller object.
      * @member Telenok.Core.Interfaces.Widget.Controller
-     */	
-     protected $frontendController;
+     */
+    protected $frontendController;
 
     /**
      * @protected
      * @property {Number} $cacheTime
      * Amount of minuts to cache. Can be float to define part of minute.
      * @member Telenok.Core.Interfaces.Widget.Controller
-     */	
-     protected $cacheTime = 60;
+     */
+    protected $cacheTime = 60;
 
     /**
      * @protected
@@ -94,7 +95,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Cache key of widget.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $cacheKey;
+    protected $cacheKey;
 
     /**
      * @protected
@@ -102,7 +103,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Enable caching.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $cacheEnabled = true;
+    protected $cacheEnabled = true;
 
     /**
      * @protected
@@ -110,24 +111,24 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Widget's config.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $config = [];
+    protected $config = [];
 
     /**
      * @protected
      * @property {String} $widgetTemplateDirectory
      * Where store template's changes which user make in backend.
      * @member Telenok.Core.Interfaces.Widget.Controller
-     */    
-     protected $widgetTemplateDirectory = 'resources/views/widget/';
-     
+     */
+    protected $widgetTemplateDirectory = 'resources/views/widget/';
+
     /**
      * @protected
      * @property {String} $languageDirectory
      * Language directory for widgets.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     protected $languageDirectory = 'widget';
-     
+    protected $languageDirectory = 'widget';
+
     /**
      * @method setCacheEnabled
      * Enable or disable cache.
@@ -137,12 +138,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     public function setCacheEnabled($param)
     {
         $this->cacheEnabled = $param;
-        
+
         return $this;
     }
 
     /**
-     * @method setCacheEnabled
+     * @method getCacheEnabled
      * Return whether cache enabled.
      * @return {Boolean}
      * @member Telenok.Core.Interfaces.Widget.Controller
@@ -151,17 +152,17 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     {
         return $this->cacheEnabled;
     }
-    
+
     /**
      * @method getIcon
      * Return icon class.
      * @return {String}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-     public function getIcon()
-	{
-		return $this->icon;
-	}
+    public function getIcon()
+    {
+        return $this->icon;
+    }
 
     /**
      * @method getParent
@@ -183,15 +184,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      */
     public function setConfig($config = [])
     {
-		$this->config = $config;
+        $this->config = $config;
 
         if ($m = $this->getWidgetModel())
         {
-            $this->cacheTime = array_get($m->structure, 'cache_time',$this->cacheTime);
+            $this->cacheTime = array_get($m->structure, 'cache_time', $this->cacheTime);
         }
 
-		$this->frontendView = $this->getConfig('frontend_view', $this->getFrontendView());
-		$this->cacheKey = $this->getConfig('cache_key', $this->cacheKey);
+        $this->frontendView = $this->getConfig('frontend_view', $this->getFrontendView());
+        $this->cacheKey = $this->getConfig('cache_key', $this->cacheKey);
         $this->cacheTime = $this->getConfig('cache_time', $this->cacheTime);
 
         return $this;
@@ -205,17 +206,17 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {mixed}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getConfig($key = null, $default = null)
-	{
-		if (empty($key))
-		{
-			return $this->config;
-		}
-		else
-		{
-			return array_get($this->config, $key, $default);
-		}
-	}
+    public function getConfig($key = null, $default = null)
+    {
+        if (empty($key))
+        {
+            return $this->config;
+        }
+        else
+        {
+            return array_get($this->config, $key, $default);
+        }
+    }
 
     /**
      * @method setWidgetModel
@@ -225,12 +226,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
     public function setWidgetModel($param)
-	{
-		$this->widgetModel = $param;
-		$this->setCacheTime($param->cache_time);
+    {
+        $this->widgetModel = $param;
+        $this->setCacheTime($param->cache_time);
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * @method getWidgetModel
@@ -238,10 +239,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getWidgetModel()
-	{
-		return $this->widgetModel;
-	}
+    public function getWidgetModel()
+    {
+        return $this->widgetModel;
+    }
 
     /**
      * @method setCacheTime
@@ -250,14 +251,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @member Telenok.Core.Interfaces.Widget.Controller
      * @return {Telenok.Core.Interfaces.Widget.Controller}
      */
-	public function setCacheTime($param = 0)
-	{
-		$this->cacheTime = $param;
+    public function setCacheTime($param = 0)
+    {
+        $this->cacheTime = $param;
 
         ($c = $this->getFrontendController()) ? $c->setCacheTime($param) : '';
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * @method getCacheTime
@@ -265,10 +266,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {Number}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getCacheTime()
-	{
-		return $this->cacheTime;
-	}
+    public function getCacheTime()
+    {
+        return $this->cacheTime;
+    }
 
     /**
      * @method getCacheKey
@@ -278,12 +279,12 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {String}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getCacheKey($additional = '')
-	{
-        $append = $this->getFrontendView() 
+    public function getCacheKey($additional = '')
+    {
+        $append = $this->getFrontendView()
                 . "." . config('app.locale', config('app.localeDefault'))
                 . "." . $this->getRequest()->fullUrl();
-        
+
         if ($this->cacheKey)
         {
             return $this->cacheKey . $append;
@@ -297,8 +298,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             throw new \Exception($this->LL('Setup cache-key for widget ' . $this->getKey()));
         }
 
-		return false;
-	}
+        return false;
+    }
 
     /**
      * @method getCachedContent
@@ -307,15 +308,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * Can return false if cache not exitst.
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getCachedContent()
-	{
+    public function getCachedContent()
+    {
         if (($k = $this->getCacheKey()) !== false)
         {
             return app('cache')->get($k, false);
         }
 
-		return false;
-	}
+        return false;
+    }
 
     /**
      * @method setCachedContent
@@ -324,17 +325,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {Telenok.Core.Interfaces.Widget.Controller}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function setCachedContent($content = '')
-	{
-        if ($this->getCacheEnabled() 
-                && ($t = $this->getCacheTime()) 
-                && ($k = $this->getCacheKey()) !== false)
+    public function setCachedContent($content = '')
+    {
+        if ($this->getCacheEnabled() && ($t = $this->getCacheTime()) && ($k = $this->getCacheKey()) !== false)
         {
             app('cache')->put($k, $content, $t);
         }
-        
-		return $this;
-	}
+
+        return $this;
+    }
 
     /**
      * @method getContent
@@ -342,8 +341,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {String}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getContent()
-	{
+    public function getContent()
+    {
         $this->setCacheTime($this->getCacheTime());
 
         if (($content = $this->getCachedContent()) !== false)
@@ -352,23 +351,23 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         }
 
         $content = $this->getNotCachedContent();
-        
+
         $this->setCachedContent($content);
 
         return $this->processContent($content);
-	}
-    
+    }
+
     /**
      * @method getNotCachedContent
      * Return not cached content.
      * @return {String}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getNotCachedContent()
-	{
+    public function getNotCachedContent()
+    {
         return view($this->getFrontendView(), ['controller' => $this])->render();
-	}
-    
+    }
+
     /**
      * @method processContent
      * Process content before return to frontend controller.
@@ -379,13 +378,13 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     public function processContent($content = '')
     {
         $content = $this->processContentJsCode($content);
-        
+
         return $content;
     }
 
     /**
      * @method processContentJsCode
-     * Move all javascript tags to end of <body> content.
+     * Move all javascript tags to end of &lt;body&gt; content.
      * Process javascript content of widget.
      * @param {String} $content
      * @return {String}
@@ -411,7 +410,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             }
         }
 
-        while($scriptNodes->length)
+        while ($scriptNodes->length)
         {
             $scriptNode = $scriptNodes->item(0);
             $scriptNode->parentNode->removeChild($scriptNode);
@@ -428,10 +427,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {String}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getBackendView()
-	{
-		return $this->backendView ? : "core::module.web-page-constructor.widget-backend";
-	}
+    public function getBackendView()
+    {
+        return $this->backendView ? : "core::module.web-page-constructor.widget-backend";
+    }
 
     /**
      * @method getFrontendView
@@ -439,8 +438,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {String}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getFrontendView()
-	{
+    public function getFrontendView()
+    {
         if ($m = $this->getWidgetModel())
         {
             return 'widget.' . $m->getKey();
@@ -453,7 +452,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
         {
             return $this->defaultFrontendView;
         }
-	}
+    }
 
     /**
      * @method getStructureView
@@ -461,11 +460,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {String}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getStructureView()
-	{
+    public function getStructureView()
+    {
         return $this->structureView ? : "{$this->getPackage()}::widget.{$this->getKey()}.structure";
-	}
-    
+    }
+
     /**
      * @method setFrontendController
      * Set frontend controller.
@@ -476,10 +475,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
     public function setFrontendController($param = null)
     {
         $this->frontendController = $param;
-        
+
         return $this;
     }
-    
+
     /**
      * @method getFrontendController
      * Return frontend controller.
@@ -487,12 +486,15 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
     public function getFrontendController()
-    {   
+    {
         try
         {
-            return $this->frontendController ?: app('controllerRequest');
+            return $this->frontendController ? : app('controllerRequest');
         }
-        catch (\Exception $e) {}
+        catch (\Exception $e)
+        {
+            
+        }
     }
 
     /**
@@ -501,8 +503,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {String}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getTemplateContent()
-	{
+    public function getTemplateContent()
+    {
         if (($p = $this->getFileTemplatePath()) && ($content = file_get_contents($p)))
         {
             return $content;
@@ -512,11 +514,14 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             try
             {
                 return file_get_contents(app('view')->getFinder()->find("{$this->getPackage()}::widget.{$this->getKey()}.widget-frontend"));
-            } 
-            catch (\Exception $e) {}
+            }
+            catch (\Exception $e)
+            {
+                
+            }
         }
-	}
-    
+    }
+
     /**
      * @method getFileTemplatePath
      * Return path to widget's frontend view.
@@ -531,8 +536,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
             {
                 return app('view')->getFinder()->find($this->getFrontendView());
             }
-        } 
-        catch (\Exception $e) {}
+        }
+        catch (\Exception $e)
+        {
+            
+        }
 
         return false;
     }
@@ -544,18 +552,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {String}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getInsertContent($id = 0)
-	{
-		$widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
+    public function getInsertContent($id = 0)
+    {
+        $widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
 
-		return view($this->getBackendView(), [
-                        'header' => $this->LL('header'),
-                        'title' => $widgetOnPage->title,
-                        'id' => $widgetOnPage->getKey(),
-                        'key' => $this->getKey(),
-                        'widgetOnPage' => $widgetOnPage,
-                    ])->render();
-	}   
+        return view($this->getBackendView(), [
+                    'header' => $this->LL('header'),
+                    'title' => $widgetOnPage->title,
+                    'id' => $widgetOnPage->getKey(),
+                    'key' => $this->getKey(),
+                    'widgetOnPage' => $widgetOnPage,
+                ])->render();
+    }
 
     /**
      * @method insertFromBufferOnPage
@@ -576,71 +584,71 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {Telenok.Core.Model.Web.WidgetOnPage}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function insertFromBufferOnPage($languageId = 0, $pageId = 0, $key = '', $id = 0, $container = '', $order = 0, $bufferId = 0)
-	{
-		$widgetOnPage = null;
-		
-		app('db')->transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage, $bufferId)
-		{
-			$widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
-			$buffer = \App\Telenok\Core\Model\System\Buffer::findOrFail($bufferId);
+    public function insertFromBufferOnPage($languageId = 0, $pageId = 0, $key = '', $id = 0, $container = '', $order = 0, $bufferId = 0)
+    {
+        $widgetOnPage = null;
 
-			if ($buffer->key == 'cut')
-			{
-				$widgetOnPage->storeOrUpdate([
-					"container" => $container,
-					"order" => $order,
-					"key" => $key,
-				]);
-				
-				$bufferWidget = \App\Telenok\Core\Model\System\Buffer::find($bufferId);
-				
-				if ($bufferWidget)
-				{
-					$bufferWidget->forceDelete();
-				}
-			}
-			else if ($buffer->key == 'copy')
-			{
-				$widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id)->replicate();
-				$widgetOnPage->push();
-				$widgetOnPage->storeOrUpdate([
-						"container" => $container,
-						"order" => $order,
-					]);
-			}
-			else if ($buffer->key == 'copy-link')
-			{
-				$originalWidget = $this->findOriginalWidget($id);
+        app('db')->transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage, $bufferId)
+        {
+            $widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
+            $buffer = \App\Telenok\Core\Model\System\Buffer::findOrFail($bufferId);
 
-				if ($originalWidget->isWidgetLink())
-				{
-					throw new \Exception($this->LL('error.widget.link.nonexistent'));
-				}
+            if ($buffer->key == 'cut')
+            {
+                $widgetOnPage->storeOrUpdate([
+                    "container" => $container,
+                    "order" => $order,
+                    "key" => $key,
+                ]);
 
-				$widgetOnPage = $originalWidget->replicate();
-				$widgetOnPage->push();
-				$widgetOnPage->storeOrUpdate([
-						"container" => $container,
-						"order" => $order,
-					]);
+                $bufferWidget = \App\Telenok\Core\Model\System\Buffer::find($bufferId);
 
-				$originalWidget->widgetLink()->save($widgetOnPage);
-			}
+                if ($bufferWidget)
+                {
+                    $bufferWidget->forceDelete();
+                }
+            }
+            else if ($buffer->key == 'copy')
+            {
+                $widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id)->replicate();
+                $widgetOnPage->push();
+                $widgetOnPage->storeOrUpdate([
+                    "container" => $container,
+                    "order" => $order,
+                ]);
+            }
+            else if ($buffer->key == 'copy-link')
+            {
+                $originalWidget = $this->findOriginalWidget($id);
 
-			\App\Telenok\Core\Model\Web\WidgetOnPage::where("widget_order", ">=", $order)
-					->where("container", $container)->get()->each(function($item)
-			{
-				$item->storeOrUpdate(["widget_order" => $item->order + 1]);
-			});
+                if ($originalWidget->isWidgetLink())
+                {
+                    throw new \Exception($this->LL('error.widget.link.nonexistent'));
+                }
 
-			$widgetOnPage->widgetLanguageLanguage()->associate(\App\Telenok\Core\Model\System\Language::findOrFail($languageId));
-			$widgetOnPage->widgetPage()->associate(\App\Telenok\Core\Model\Web\Page::findOrFail($pageId));
-			$widgetOnPage->save(); 
-		});
+                $widgetOnPage = $originalWidget->replicate();
+                $widgetOnPage->push();
+                $widgetOnPage->storeOrUpdate([
+                    "container" => $container,
+                    "order" => $order,
+                ]);
 
-		return $widgetOnPage;
-	}
+                $originalWidget->widgetLink()->save($widgetOnPage);
+            }
+
+            \App\Telenok\Core\Model\Web\WidgetOnPage::where("widget_order", ">=", $order)
+                    ->where("container", $container)->get()->each(function($item)
+            {
+                $item->storeOrUpdate(["widget_order" => $item->order + 1]);
+            });
+
+            $widgetOnPage->widgetLanguageLanguage()->associate(\App\Telenok\Core\Model\System\Language::findOrFail($languageId));
+            $widgetOnPage->widgetPage()->associate(\App\Telenok\Core\Model\Web\Page::findOrFail($pageId));
+            $widgetOnPage->save();
+        });
+
+        return $widgetOnPage;
+    }
 
     /**
      * @method insertOnPage
@@ -656,59 +664,59 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {Telenok.Core.Model.Web.WidgetOnPage}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function insertOnPage($languageId = 0, $pageId = 0, $key = '', $id = 0, $container = '', $order = 0)
-	{
-		$widgetOnPage = null;
-		
-		try
-		{
-			app('db')->transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage)
-			{
-				$widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id)
-						->storeOrUpdate([
-					"title" => $this->LL('header'),
-					"container" => $container,
-					"widget_order" => $order,
-					"key" => $key,
-				]);
+    public function insertOnPage($languageId = 0, $pageId = 0, $key = '', $id = 0, $container = '', $order = 0)
+    {
+        $widgetOnPage = null;
 
-				\App\Telenok\Core\Model\Web\WidgetOnPage::where("widget_order", ">=", $order)
-						->where("container", $container)->get()->each(function($item)
-				{
-					$item->storeOrUpdate(["widget_order" => $item->order + 1]);
-				});
+        try
+        {
+            app('db')->transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage)
+            {
+                $widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id)
+                        ->storeOrUpdate([
+                    "title" => $this->LL('header'),
+                    "container" => $container,
+                    "widget_order" => $order,
+                    "key" => $key,
+                ]);
 
-				$widgetOnPage->widgetLanguageLanguage()->associate(\App\Telenok\Core\Model\System\Language::findOrFail($languageId));
-				$widgetOnPage->widgetPage()->associate(\App\Telenok\Core\Model\Web\Page::findOrFail($pageId));
-				$widgetOnPage->save();
-			});
-		}
-		catch (\Exception $e)
-		{
-			app('db')->transaction(function() use ($languageId, $pageId, $key, $container, $order, &$widgetOnPage)
-			{
-				$widgetOnPage = (new \App\Telenok\Core\Model\Web\WidgetOnPage())
-						->storeOrUpdate([
-					"title" => $this->LL('header'),
-					"container" => $container,
-					"widget_order" => $order,
-					"key" => $key,
-				]); 
+                \App\Telenok\Core\Model\Web\WidgetOnPage::where("widget_order", ">=", $order)
+                        ->where("container", $container)->get()->each(function($item)
+                {
+                    $item->storeOrUpdate(["widget_order" => $item->order + 1]);
+                });
 
-				\App\Telenok\Core\Model\Web\WidgetOnPage::where("widget_order", ">=", $order)
-						->where("container", $container)->get()->each(function($item)
-				{
-					$item->storeOrUpdate(["widget_order" => $item->order + 1]);
-				});
+                $widgetOnPage->widgetLanguageLanguage()->associate(\App\Telenok\Core\Model\System\Language::findOrFail($languageId));
+                $widgetOnPage->widgetPage()->associate(\App\Telenok\Core\Model\Web\Page::findOrFail($pageId));
+                $widgetOnPage->save();
+            });
+        }
+        catch (\Exception $e)
+        {
+            app('db')->transaction(function() use ($languageId, $pageId, $key, $container, $order, &$widgetOnPage)
+            {
+                $widgetOnPage = (new \App\Telenok\Core\Model\Web\WidgetOnPage())
+                        ->storeOrUpdate([
+                    "title" => $this->LL('header'),
+                    "container" => $container,
+                    "widget_order" => $order,
+                    "key" => $key,
+                ]);
 
-				$widgetOnPage->widgetLanguageLanguage()->associate(\App\Telenok\Core\Model\System\Language::findOrFail($languageId));
-				$widgetOnPage->widgetPage()->associate(\App\Telenok\Core\Model\Web\Page::findOrFail($pageId));
-				$widgetOnPage->save();
-			});
-		}
+                \App\Telenok\Core\Model\Web\WidgetOnPage::where("widget_order", ">=", $order)
+                        ->where("container", $container)->get()->each(function($item)
+                {
+                    $item->storeOrUpdate(["widget_order" => $item->order + 1]);
+                });
 
-		return $widgetOnPage;
-	}
+                $widgetOnPage->widgetLanguageLanguage()->associate(\App\Telenok\Core\Model\System\Language::findOrFail($languageId));
+                $widgetOnPage->widgetPage()->associate(\App\Telenok\Core\Model\Web\Page::findOrFail($pageId));
+                $widgetOnPage->save();
+            });
+        }
+
+        return $widgetOnPage;
+    }
 
     /**
      * @method removeFromPage
@@ -718,11 +726,11 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {void}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function removeFromPage($id = 0)
-	{
-		\App\Telenok\Core\Model\Web\WidgetOnPage::destroy($id);
-	}
-	
+    public function removeFromPage($id = 0)
+    {
+        \App\Telenok\Core\Model\Web\WidgetOnPage::destroy($id);
+    }
+
     /**
      * @method getStructureContent
      * Return content of widget's structure. Eg return view of settings etc.
@@ -732,16 +740,16 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {void}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function getStructureContent($model = null, $uniqueId = null)
-	{
+    public function getStructureContent($model = null, $uniqueId = null)
+    {
         $this->setWidgetModel($model);
 
-		return view($this->getStructureView(), [
-					'controller' => $this,
-					'model' => $model,
-					'uniqueId' => $uniqueId,
-				])->render();
-	}
+        return view($this->getStructureView(), [
+                    'controller' => $this,
+                    'model' => $model,
+                    'uniqueId' => $uniqueId,
+                ])->render();
+    }
 
     /**
      * @method findOriginalWidget
@@ -751,21 +759,21 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {Telenok.Core.Model.Web.WidgetOnPage}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function findOriginalWidget($id = 0)
-	{
-		$widget = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
-		
-		$widgetLink = $widget->widgetLinkWidgetOnPage()->first();
-		
-		if ($widgetLink)
-		{
-			return $this->findOriginalWidget($widgetLink->getKey());
-		}
-		else
-		{
-			return $widget;
-		}
-	}
+    public function findOriginalWidget($id = 0)
+    {
+        $widget = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
+
+        $widgetLink = $widget->widgetLinkWidgetOnPage()->first();
+
+        if ($widgetLink)
+        {
+            return $this->findOriginalWidget($widgetLink->getKey());
+        }
+        else
+        {
+            return $widget;
+        }
+    }
 
     /**
      * @method delete
@@ -792,10 +800,10 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @return {Telenok.Core.Interfaces.Widget.Controller}
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
-	public function validate($model = null, $input = [])
-	{
+    public function validate($model = null, $input = [])
+    {
         return $this;
-	}
+    }
 
     /**
      * @method preProcess
@@ -807,7 +815,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      * @member Telenok.Core.Interfaces.Widget.Controller
      */
     public function preProcess($model, $type, $input)
-    { 
+    {
         return $this;
     }
 
@@ -835,4 +843,5 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 
         return $this;
     }
+
 }

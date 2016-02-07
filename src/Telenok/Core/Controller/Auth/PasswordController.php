@@ -1,22 +1,31 @@
-<?php namespace Telenok\Core\Controller\Auth;
+<?php
+
+namespace Telenok\Core\Controller\Auth;
 
 use Illuminate\Contracts\Auth\Guard;
 use Telenok\Core\Contract\Auth\PasswordBroker;
 
+/**
+ * @class Telenok.Core.Controller.Auth.PasswordController
+ * @extends Telenok.Core.Interfaces.Controller.Controller
+ */
 class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller {
 
-    protected $key = 'backend-password-reset'; 
+    protected $key = 'backend-password-reset';
     protected $emailView = 'core::email.password-reset';
     protected $resetView = 'core::controller.backend-password-reset';
     protected $languageDirectory = 'controller';
 
-    use \Illuminate\Foundation\Auth\ResetsPasswords;
-    use \Illuminate\Foundation\Validation\ValidatesRequests;
-    
+    use \Illuminate\Foundation\Auth\ResetsPasswords,
+        \Illuminate\Foundation\Validation\ValidatesRequests;
+
+    /**
+     * @constructor
+     */
     public function __construct(Guard $auth)
     {
         //$this->middleware('guest');
-        
+
         $tokens = app('auth.password.tokens');
 
         $users = app('auth')->driver()->getProvider();
@@ -24,17 +33,18 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
         $view = app('config')->get('auth.password.email');
 
         $this->passwords = new \App\Telenok\Core\Contract\Auth\PasswordBroker(
-            $tokens, $users, app('mailer'), $view
+                $tokens, $users, app('mailer'), $view
         );
-        
-        $this->auth = $auth; 
+
+        $this->auth = $auth;
     }
 
     /**
+     * @method getReset
      * Display the password reset view for the given token.
      *
-     * @param  string  $token
-     * @return Response
+     * @param {String} $token
+     * @return {String}
      */
     public function getReset($token = null)
     {
@@ -46,6 +56,12 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
         return view('core::controller.backend-password-reset', ['token' => $token, 'controller' => $this])->render();
     }
 
+    /**
+     * @method postReset
+     *
+     * @param {Illuminate.Http.Request} $request
+     * @return {String}
+     */
     public function postReset(\Illuminate\Http\Request $request)
     {
         try
@@ -87,6 +103,12 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
         }
     }
 
+    /**
+     * @method postEmail
+     *
+     * @param {Illuminate.Http.Request} $request
+     * @return {String}
+     */
     public function postEmail(\Illuminate\Http\Request $request)
     {
         $v = app('validator')->make($request->all(), ['email' => 'required|email']);
@@ -114,17 +136,18 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 
             //case \Illuminate\Contracts\Auth\PasswordBroker::INVALID_USER:
             default:
-                return json_encode(['error' => 1]); 
+                return json_encode(['error' => 1]);
         }
     }
 
     /**
+     * @method getEmailSubject
      * Get the e-mail subject line to be used for the reset link email.
-     *
-     * @return string
+     * @return {String}
      */
     protected function getEmailSubject()
     {
         return $this->LL('email.subject');
     }
+
 }

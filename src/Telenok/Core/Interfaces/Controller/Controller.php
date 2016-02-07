@@ -31,7 +31,7 @@ class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core
     
     /**
      * @protected
-     * @property {Illuminate.Http.Request} $request
+     * @property {Illuminate.Http.Request} $vendorName
      * Request object.
      * @member Telenok.Core.Interfaces.Controller.Controller
      */

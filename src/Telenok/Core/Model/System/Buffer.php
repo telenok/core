@@ -3,7 +3,7 @@
 namespace Telenok\Core\Model\System;
 
 /**
- * @class Telenok.Core.Model.System.Folder
+ * @class Telenok.Core.Model.System.Buffer
  * @extends Illuminate.Database.Eloquent.Model
  */
 class Buffer extends \Illuminate\Database\Eloquent\Model {

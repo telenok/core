@@ -48,11 +48,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * 
      * @param {Telenok.Core.Model.Object.Field} $field
      * Eloquent object Field.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Illuminate.Support.Collection} $input
      * Values of request.
-     * @return {Telenok.Core.Interfaces.Eloquent.Object}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Field.SelectMany.Controller
      */
     public function saveModelField($field, $model, $input)
@@ -80,7 +80,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method getModelAttribute
      * Return processed value of field.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {String} $key
      * Field's name.
@@ -111,7 +111,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method setModelAttribute
      * Return processed value of field.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {String} $key
      * Field's name.

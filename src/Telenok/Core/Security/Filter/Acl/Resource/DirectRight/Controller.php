@@ -10,18 +10,16 @@ namespace Telenok\Core\Security\Filter\Acl\Resource\DirectRight;
 class Controller extends \Telenok\Core\Interfaces\Security\Filter\Acl\Resource\Controller {
 
     /**
-     * @property
-     * @member Telenok.Core.Security.Filter.Acl.Resource.DirectRight.Controller
      * @protected
+     * @property $key
      * Key of filter
+     * @member Telenok.Core.Security.Filter.Acl.Resource.DirectRight.Controller
      */
     protected $key = 'direct-right';
 
     /**
-     * @method
+     * @method filterCan
      * @member Telenok.Core.Security.Filter.Acl.Resource.DirectRight.Controller
-     * @public
-     * Key of filter
      */
     public function filterCan($queryCommon, $queryWhere, $resource, $permission, $subject)
     {

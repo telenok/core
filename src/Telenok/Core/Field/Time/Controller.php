@@ -38,7 +38,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method getDateField
      * Define list of date fields in Eloquent object to process it saving and filling.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Telenok.Core.Model.Object.Field} $field
      * Object with data of field's configuration.
@@ -74,7 +74,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method setModelAttribute
      * Return processed value of field.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {String} $key
      * Field's name.

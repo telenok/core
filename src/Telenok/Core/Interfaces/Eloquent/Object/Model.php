@@ -12,7 +12,6 @@ use \Telenok\Core\Interfaces\Controller\IEloquentProcessController;
 class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
 
     /**
-     * @public
      * @property {Boolean} $incrementing
      * Allow primary key to be autoincremental.
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
@@ -20,7 +19,6 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     public $incrementing = false;
 
     /**
-     * @public
      * @property {Boolean} $timestamps
      * Allow set time when create and update.
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
@@ -29,7 +27,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     
     /**
      * @protected
-     * @property {Boolean} $timestamps
+     * @property {Boolean} $hasVersioning
      * Allow create version for every call storeOrUpdate.
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
      */
@@ -1301,8 +1299,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
 
     /** 
      * @method scopeWithPermission
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * Validate right on query.
      *
      * @return {Array}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
@@ -2019,7 +2016,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
 
     /**
      * @method aclSubject
-     * Define a one-to-many relationship to select permission's query.
+     * Define a one-to-many relationship to select query permissions.
      *
      * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
@@ -2051,8 +2048,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
     
     /**
      * @method LL
-     * Before valiating rights of fields add field's name to array and pass it
-     * to validator.
+     * Translate by key.
      *
      * @return {String}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model

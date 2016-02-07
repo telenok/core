@@ -19,7 +19,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @protected
      * @property {String} $viewModel
-     * View to show field form-element when creating or updating {Telenok.Core.Interfaces.Eloquent.Object}
+     * View to show field form-element when creating or updating {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Field.System.Tree.Controller
      */
     protected $viewModel = "core::field.relation-many-to-many.model";
@@ -109,11 +109,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * 
      * @param {Telenok.Core.Model.Object.Field} $field
      * Eloquent object Field.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Illuminate.Support.Collection} $input
      * Values of request.
-     * @return {Telenok.Core.Interfaces.Eloquent.Object}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Field.System.Tree.Controller
      */
     public function saveModelField($field, $model, $input)

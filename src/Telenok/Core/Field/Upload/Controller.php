@@ -84,7 +84,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method getModelFillableField
      * Define list of fields in Eloquent object which can be filled by user.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Telenok.Core.Model.Object.Field} $field
      * Object with data of field's configuration.
@@ -140,7 +140,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method processModelDelete
      * Delete field's data from model which deleted.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Boolean} $force
      * Flag define if model deleted force.
@@ -220,11 +220,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * 
      * @param {Telenok.Core.Model.Object.Field} $field
      * Eloquent object Field.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Illuminate.Support.Collection} $input
      * Values of request.
-     * @return {Telenok.Core.Interfaces.Eloquent.Object}
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Field.Upload.Controller
      */
     public function saveModelField($field, $model, $input)
@@ -337,8 +337,8 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method validateUpload
      * Validate temporary uploaded file before moving.
      * 
-     * @param {App.Telenok.Core.Field.Upload.UploadedFile} $protectedFile
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Field.Upload.UploadedFile} $protectedFile
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Field config.
      * @throws \Exception 
      * @member Telenok.Core.Field.Upload.Controller
@@ -382,7 +382,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method getModelAttribute
      * Return processed value of field.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {String} $key
      * Field's name.
@@ -390,7 +390,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * Value of field from database for processing in this method.
      * @param {Telenok.Core.Model.Object.Field} $field
      * Object with data of field's configuration.
-     * @return {App.Telenok.Core.Field.Upload.File}
+     * @return {Telenok.Core.Field.Upload.File}
      * @member Telenok.Core.Field.Upload.Controller
      */
     public function getModelAttribute($model, $key, $value, $field)

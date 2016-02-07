@@ -38,7 +38,7 @@ class BigDecimal {
 
     /**
      * @private
-     * @property {scalar} $value
+     * @property {mixed} $value
      * Value of number.
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -56,9 +56,9 @@ class BigDecimal {
      * @constructor
      * Filling internal variables and validate dimension.
      * 
-     * @property {scalar} $value
+     * @param {mixed} $value
      * Value of number.
-     * @property {scalar} $scale
+     * @param {scalar} $scale
      * Value of dimension.
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -126,9 +126,9 @@ class BigDecimal {
      * @method create
      * Create new instance of Telenok.Core.Field.Decimal.BigDecimal.
      * @static
-     * @property {scalar} $value
+     * @param {scalar} $value
      * Value of number.
-     * @property {scalar} $scale
+     * @param {scalar} $scale
      * Value of dimension.
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
@@ -189,7 +189,7 @@ class BigDecimal {
     /**
      * @method setScale
      * Create new instance with the same value and new scale.
-     * @property {scalar} $scale
+     * @param {scalar} $scale
      * Value of dimension.
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
@@ -227,7 +227,7 @@ class BigDecimal {
      * @method add
      * Calculate sum of two Telenok.Core.Field.Decimal.BigDecimal and return new 
      * instance.
-     * @property {Telenok.Core.Field.Decimal.BigDecimal} $addend
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $addend
      * Summable number.
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
@@ -243,7 +243,7 @@ class BigDecimal {
      * @method subtract
      * Calculate subtract of two Telenok.Core.Field.Decimal.BigDecimal and return new 
      * instance.
-     * @property {Telenok.Core.Field.Decimal.BigDecimal} $subtrahend
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $subtrahend
      * Subtract number.
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
@@ -259,7 +259,7 @@ class BigDecimal {
      * @method multiply
      * Calculate multiply of two Telenok.Core.Field.Decimal.BigDecimal and return new 
      * instance.
-     * @property {Telenok.Core.Field.Decimal.BigDecimal} $multiplier
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $multiplier
      * To multiply.
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
@@ -275,7 +275,7 @@ class BigDecimal {
      * @method divide
      * Calculate divide of two Telenok.Core.Field.Decimal.BigDecimal and return new 
      * instance.
-     * @property {Telenok.Core.Field.Decimal.BigDecimal} $divisor
+     * @param {Telenok.Core.Field.Decimal.BigDecimal} $divisor
      * To divide.
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
@@ -295,7 +295,7 @@ class BigDecimal {
     /**
      * @method pow
      * Calculate pow return new instance.
-     * @property {Integer} $divisor
+     * @param {Integer} $divisor
      * To pow.
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal

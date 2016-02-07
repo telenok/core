@@ -53,7 +53,7 @@ class Processing {
 
     /**
      * @protected
-     * @property {Imagine.Image.AbstractImagine} $image
+     * @property {Imagine.Image.AbstractImagine} $imagine
      * @member Telenok.Core.Support.Image.Processing
      */
     protected $imagine;
@@ -189,7 +189,7 @@ class Processing {
     }
 
     /**
-     * @method resizeProportion
+     * @method resize
      * Resize image with new proportions.
      * @param {Integer} $width
      * @param {Integer} $height

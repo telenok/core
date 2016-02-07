@@ -34,7 +34,7 @@ class Model {
 
     /**
      * @protected
-     * @property {Telenok.Core.Interfaces.Validator.Validator} $validator
+     * @property {Telenok.Core.Support.Validator.Validator} $validator
      * Validator which make validation.
      * @member Telenok.Core.Support.Validator.Model
      */
@@ -264,7 +264,7 @@ class Model {
     /**
      * @method validator
      * Return validator.
-     * @return {Telenok.Core.Interfaces.Validator.Validator}
+     * @return {Telenok.Core.Support.Validator.Validator}
      * @member Telenok.Core.Support.Validator.Model
      */
     public function validator()

@@ -59,7 +59,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
     /**
      * @protected
      * @property {Array} $containerIds
-     * List of containers dom's id. Container can be <div> with custom id attribute.
+     * List of containers dom's id. Container can be &lt;div&gt; with custom id attribute.
      * @member Telenok.Core.Widget.Table.Controller
      */
     protected $containerIds = [];

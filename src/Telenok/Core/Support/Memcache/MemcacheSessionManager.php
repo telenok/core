@@ -22,7 +22,6 @@ class MemcacheSessionManager extends \Illuminate\Support\Manager {
      * Create a new manager instance.
      *
      * @param  {Telenok.Core.Support.Memcache.MemcacheHandler} $handler
-     * @return {void}
      * @member Telenok.Core.Support.Memcache.MemcacheSessionManager
      */
     public function __construct(MemcacheHandler $handler)

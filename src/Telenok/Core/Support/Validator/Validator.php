@@ -41,12 +41,13 @@ class Validator extends \Illuminate\Validation\Validator {
     }
     
     /**
+     * @method validate
      * Special validation for fields with array-values
      * Validate a given attribute against a rule.
      *
-     * @param  string  $attribute
-     * @param  string  $rule
-     * @return void
+     * @param {String} $attribute
+     * @param {String} $rule
+     * @return {void}
      */
     protected function validate($attribute, $rule)
     {

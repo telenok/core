@@ -24,7 +24,7 @@ class Setting {
     
     /**
      * @protected
-     * @property {Telenok.Core.Interfaces.Validator.Validator} $validator
+     * @property {Telenok.Core.Support.Validator.Validator} $validator
      * Validator which make validation.
      * @member Telenok.Core.Support.Validator.Setting
      */

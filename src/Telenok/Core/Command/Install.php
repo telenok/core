@@ -29,7 +29,7 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
 
     /**
      * @protected
-     * @property {App.Telenok.Core.Support.Install.Controller} $processingController 
+     * @property {Telenok.Core.Support.Install.Controller} $processingController 
      * Object which processed command data.
      * @member Telenok.Core.Command.Install
      */
@@ -39,7 +39,7 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
      * @method setProcessingController
      * Set processing controller
      * @member Telenok.Core.Command.Install
-     * @param {App.Telenok.Core.Support.Install.Controller} $param
+     * @param {Telenok.Core.Support.Install.Controller} $param
      * @return {void}
      */
     public function setProcessingController($param = null)
@@ -51,7 +51,7 @@ class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling 
      * @method getProcessingController
      * Get processing controller
      * @member Telenok.Core.Command.Install
-     * @return {App.Telenok.Core.Support.Install.Controller}
+     * @return {Telenok.Core.Support.Install.Controller}
      */
     public function getProcessingController()
     {

@@ -71,6 +71,6 @@ if (!function_exists('theme_view'))
 {
     function theme_view($view = null, $data = [], $mergeData = [])
     {
-        return \Telenok\Core\Support\Config\Theme::view($view, $data, $mergeData);
+        return \App\Telenok\Core\Support\Config\Theme::view($view, $data, $mergeData);
     }
 }

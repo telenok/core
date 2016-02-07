@@ -12,7 +12,7 @@ interface IEloquentProcessController {
      * @method preProcess
      * Called before saving Eloquent model.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Telenok.Core.Model.Object.Type} $type
      * Eloquent object Type $type.
@@ -28,7 +28,7 @@ interface IEloquentProcessController {
      * @method postProcess
      * Called after saving Eloquent model.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Telenok.Core.Model.Object.Type} $type
      * Eloquent object Type $type.
@@ -44,7 +44,7 @@ interface IEloquentProcessController {
      * @method validate
      * Called during saving Eloquent model to validate filled data.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object} $model
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Illuminate.Http.Request} $input
      * Laravel request object.

@@ -7,3 +7,10 @@
         '--provider' => 'Telenok\Core\CoreServiceProvider',
         '--force' => true
     ]);
+    
+    $this->line('Package new classes copy');
+
+    $this->call('vendor:publish', [
+        '--tag' => ['resourcesapp'], 
+        '--provider' => 'Telenok\News\CoreServiceProvider',
+    ]);
