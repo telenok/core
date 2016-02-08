@@ -40,13 +40,13 @@
                                                 <div class="space-6"></div>
 
                                                 {!! Form::open(['route' => 'telenok.login.process', 'method' => 'post', 'id' => 'login']) !!}
-												
-													<div class="login-notice alert alert-danger display-none" id='login-error'>
-														{!! $controller->LL('error.login.title') !!}<br><br>
-														<ul>
-															<li>{{ $controller->LL('error.login') }}</li>
-														</ul>
-													</div>
+					
+                                                    <div class="login-notice alert alert-danger display-none" id='login-error'>
+                                                        {!! $controller->LL('error.login.title') !!}<br><br>
+                                                        <ul>
+                                                                <li>{{ $controller->LL('error.login') }}</li>
+                                                        </ul>
+                                                    </div>
 
                                                     <fieldset>
 

@@ -12,5 +12,5 @@
 
     $this->call('vendor:publish', [
         '--tag' => ['resourcesapp'], 
-        '--provider' => 'Telenok\News\CoreServiceProvider',
+        '--provider' => 'Telenok\Core\CoreServiceProvider',
     ]);
