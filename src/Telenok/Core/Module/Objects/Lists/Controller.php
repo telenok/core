@@ -305,23 +305,32 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             {
                 throw new \Exception();
             }
-
+            
             if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
             {
-                $items = $controllerProcessing->getListItem();
+                $items = $controllerProcessing->getListItem($model);
+                
+                foreach ($items->slice(0, $length, true) as $item)
+                {
+                    $put = collect();
+
+                    $controllerProcessing->fillListItem($item, $put, $model, $type);
+
+                    $content[] = $put->all();
+                }    
             }
             else
             {
                 $items = $this->getListItem($model);
-            }
 
-            foreach ($items->slice(0, $length, true) as $item)
-            {
-                $put = collect();
+                foreach ($items->slice(0, $length, true) as $item)
+                {
+                    $put = collect();
 
-                $this->fillListItem($item, $put, $model, $type);
+                    $this->fillListItem($item, $put, $model, $type);
 
-                $content[] = $put->all();
+                    $content[] = $put->all();
+                }    
             }
         }
         catch (\Exception $e)

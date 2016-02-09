@@ -83,7 +83,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 'fieldsFilter' => $this->getModelFieldFilter(),
                 'gridId' => $this->getGridId(),
                 'uniqueId' => str_random(),
-                            ], $this->getAdditionalViewParam()))->render()
+            ], $this->getAdditionalViewParam()))->render()
         ];
     }
 
