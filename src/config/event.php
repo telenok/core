@@ -29,11 +29,6 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
     $list->push('App\Telenok\Core\Security\Filter\Acl\Resource\DirectRight\Controller');
 });
 
-\Event::listen('telenok.view.theme', function($list)
-{
-    $list->push('default');
-});
-
 \Event::listen('telenok.module.menu.left', function($list)
 {
     $list->put('web', 1);

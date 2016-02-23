@@ -17,15 +17,10 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller
         $dir = storage_path('telenok/tmp/php-console');
         $file = $dir . '/' . str_random(6) . '.php';
 
-        try
+        if (!is_dir($dir))
         {
             \File::makeDirectory($dir, 0775, true, true);
         }
-        catch (\Exception $e)
-        {
-            
-        }
-
 
         $finder = \Symfony\Component\Finder\Finder::create()
                         ->in($dir)->date('2 days ago')->files();

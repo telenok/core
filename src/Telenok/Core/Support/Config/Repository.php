@@ -66,11 +66,16 @@ class Repository {
         return $this->getValue('telenok.repository.setting', $key);
     }
 
-    public function getViewTheme($key = '')
+    public function getViewTheme()
     {
         $list = collect();
 
-        \Event::fire('telenok.view.theme', $list);
+        $directory = base_path(config('app.path_theme'));
+
+        foreach(app('files')->directories($directory) as $dir)
+        {
+            $list->push(pathinfo($dir, PATHINFO_BASENAME));
+        }
 
         return $list;
     }
