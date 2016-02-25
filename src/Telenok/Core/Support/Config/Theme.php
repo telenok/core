@@ -8,15 +8,13 @@ namespace Telenok\Core\Support\Config;
  */
 class Theme {
 
-    public static function selectActiveTheme()
-    {
-        static $activeTheme = null;
+    protected static $theme = null;
 
-        if ($activeTheme === null)
+    public static function activeTheme()
+    {
+        if (static::$theme === null)
         {
             $themeConfig = collect(config('telenok.view.theme'));
-
-            var_dump($themeConfig->all());
 
             foreach($themeConfig->get('key') as $k => $val)
             {
@@ -32,42 +30,46 @@ class Theme {
 
                 if ($key && $case)
                 {
-                    dd( static::processDefault($key, $case, $value1, $value2) );
-                    
                     if ($case == 'url-regex' && static::processUrlRegexp($key, $case, $value1, $value2))
                     {
-                        $activeTheme = $key;
+                        static::$theme = $key;
+                        break;
                     }
                     elseif ($case == 'time-range' && static::processTimeRange($key, $case, $value1, $value2))
                     {
-                        $activeTheme = $key;
+                        static::$theme = $key;
+                        break;
                     }
                     elseif ($case == 'date-range' && static::processDateRange($key, $case, $value1, $value2))
                     {
-                        $activeTheme = $key;
+                        static::$theme = $key;
+                        break;
                     }
                     elseif ($case == 'php' && static::processPhp($key, $case, $value1, $value2))
                     {
-                        $activeTheme = $key;
+                        static::$theme = $key;
+                        break;
                     }                    
                     elseif ($case == 'default' && static::processDefault($key, $case, $value1, $value2))
                     {
-                        $activeTheme = $key;
+                        static::$theme = $key;
+                        break;
                     }                    
                 }
             }
 
-            if ($activeTheme === null)
+            if (static::$theme === null)
             {
-                return $activeTheme = '';
-            }
-            else
-            {
-                app('translator')->addNamespace(base_path('resources/views/template/' . $activeTheme . '/lang'));
-                
-                return $activeTheme;
+                static::$theme = '';
             }
         }
+
+        if (strlen(static::$theme))
+        {
+            app('translator')->addNamespace('theme', base_path('resources/views/template/' . static::$theme . '/lang'));
+        }
+
+        return static::$theme;
     }
 
     public static function processUrlRegexp($key, $case, $value1, $value2)
@@ -124,15 +126,15 @@ class Theme {
 
     public static function view($view = null, $data = [], $mergeData = [])
     {
-        $activeTheme = static::selectActiveTheme();
-                
+        $theme = static::activeTheme();
+
         if ($view)
         {
-            if (strpos($view, '::') !== FALSE && view()->exists($v = str_replace('::', '::' . $activeTheme . '/views', $view)))
+            if ($theme && strpos($view, '::') !== false && view()->exists($v = str_replace('::', '::' . $theme . '/views/', $view)))
             {
                 return view($v, $data, $mergeData);
             }
-            else if (view()->exists($v = 'template/' . $activeTheme . '/views/' . $view))
+            else if ($theme && view()->exists($v = 'template/' . $theme . '.views.' . $view))
             {
                 return view($v, $data, $mergeData);
             }

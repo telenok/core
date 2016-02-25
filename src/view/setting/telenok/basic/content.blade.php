@@ -102,10 +102,10 @@
 
                 @endif
 
-                <button type="button" class="btn btn-success btn-sm btn-add"><i class="fa fa-plus"></i></button>
+                <button type="button" class="btn btn-success btn-minier btn-add"><i class="fa fa-plus"></i></button>
 
                 @if ($iterSetting)
-                <button type="button" class="btn btn-danger btn-remove btn-sm"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-danger btn-remove btn-minier"><i class="fa fa-minus"></i></button>
                 @endif
             </div>
 
@@ -138,7 +138,7 @@
                 {!! Form::hidden('value[telenok.view.theme][value1][]', '') !!}
                 {!! Form::hidden('value[telenok.view.theme][value2][]', '', ['class' => 'template-value2']) !!}
 
-                <button type="button" class="btn btn-success btn-sm btn-add"><i class="fa fa-plus"></i></button>
+                <button type="button" class="btn btn-success btn-minier btn-add"><i class="fa fa-plus"></i></button>
             </div>
 
         @endif
@@ -160,8 +160,8 @@
                 {!! Form::hidden('value[telenok.view.theme][value1][]', '') !!}
                 {!! Form::hidden('value[telenok.view.theme][value2][]', '', ['class' => 'template-value2']) !!}
 
-                <button type="button" class="btn btn-success btn-add btn-sm"><i class="fa fa-plus"></i></button>
-                <button type="button" class="btn btn-danger btn-remove btn-sm"><i class="fa fa-minus"></i></button>
+                <button type="button" class="btn btn-success btn-add btn-minier"><i class="fa fa-plus"></i></button>
+                <button type="button" class="btn btn-danger btn-remove btn-minier"><i class="fa fa-minus"></i></button>
             </div>
         </template>
 
