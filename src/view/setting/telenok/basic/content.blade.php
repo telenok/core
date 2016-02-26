@@ -41,11 +41,11 @@
 
         <?php
         
-            $settingCollect = collect($model->value->get("telenok.view.theme"));
+            $settingCollect = collect($model->value->get("telenok.view.theme", "standart"));
         
         ?>
         
-        @if ($cnt = count($settingCollect->get('key')))
+        @if ($cnt = count((array)$settingCollect->get('key')))
 
         <?php
 
@@ -133,7 +133,7 @@
                         'default' => 'default',
                         'url-regex' => 'url-regex', 
                         'time-range' => 'time-range', 
-                        'date-range' => 'date-range', 
+                 z       'date-range' => 'date-range', 
                         'php' => 'php'
                     ], 
                     '', 
