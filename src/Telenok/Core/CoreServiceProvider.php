@@ -62,7 +62,7 @@ class CoreServiceProvider extends ServiceProvider {
         
         \Event::fire('telenok.compile.setting');
 
-        if (!\Request::is('telenok', 'telenok/*'))
+        if (!app('request')->is('telenok', 'telenok/*') && !app()->routesAreCached())
         {
             $routersPath = storage_path('telenok/route/route.php');
 
