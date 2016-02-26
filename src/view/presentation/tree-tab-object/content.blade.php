@@ -108,7 +108,7 @@
                 columns.push({
                 data : "{{ $field->code }}",
                         title : "{{ $field->translate('title_list') }}",
-                        orderable : @if ($field -> allow_sort) true @else false @endif
+                        orderable : @if ($field->allow_sort) true @else false @endif
                 });
         @endforeach
 
