@@ -39,13 +39,17 @@
     {!!  Form::label('value[telenok.view.theme][]', $controller->LL('view.theme.title'), ['class' => 'col-sm-3 control-label no-padding-right']) !!}
     <div class="col-sm-9">
 
-        @if ($model->value->count())
+        <?php
+        
+            $settingCollect = collect($model->value->get("telenok.view.theme"));
+        
+        ?>
+        
+        @if ($cnt = count($settingCollect->get('key')))
 
         <?php
 
-            $settingCollect = collect($model->value->get("telenok.view.theme"));
-
-            for ($iterSetting = 0; $iterSetting < count($settingCollect->get('key')); $iterSetting++)
+            for ($iterSetting = 0; $iterSetting < $cnt; $iterSetting++)
             {
                 $selectedCase = array_get($settingCollect->get('case'), $iterSetting);
 
