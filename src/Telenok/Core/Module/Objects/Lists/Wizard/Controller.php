@@ -77,7 +77,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     {
         return [
             'tabContent' => view(
-                    'core::module.objects-lists.wizard-choose-type', [
+                'core::module.objects-lists.wizard-choose-type', [
                 'controller' => $this,
                 'typeId' => (array) $id,
                 'uniqueId' => str_random(),
@@ -128,6 +128,26 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         );
     }
 
+    /**
+     * @method getFilterQuery
+     * Return filtered query.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Illuminate.Database.Query.Builder} $query
+     * @return {void}
+     * @member Telenok.Core.Module.Objects.Lists.Wizard.Controller
+     */
+    public function getFilterQuery($model, $query)
+    {
+        $typeId = $this->getRequest()->input('typeId', 0);
+        
+        if (is_array($typeId))
+        {
+            $query->whereIn($model->getTable() . '.sequences_object_type', $typeId);
+        }
+
+        return parent::getFilterQuery($model, $query);
+    }
+    
     public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null, $type = null)
     {
         $config = app('telenok.config.repository')->getObjectFieldController();
@@ -147,18 +167,17 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         $uniq = str_random();
 
         return '
-				<script type="text/javascript">
-					$(document).on("click", "#btnfield' . $uniq . '", function() {
-						var $modal = jQuery(this).closest(".modal");
-                        if ($modal)
-                        {
-                            $modal.data("model-data")(' . $put->toJson() . '); 
-                            return false;
-                        }
-					});
-				</script>
-				<button id="btnfield' . $uniq . '" type="button" data-model-id="' . $item->id . '" class="btn btn-xs btn-success">' . $this->LL('btn.choose') . '</button> 
-		';
+            <script type="text/javascript">
+                jQuery(document).on("click", "#btnfield' . $uniq . '", function() {
+                    var $modal = jQuery(this).closest(".modal");
+                    if ($modal)
+                    {
+                        $modal.data("model-data")(' . $put->toJson() . '); 
+                        return false;
+                    }
+                });
+            </script>
+            <button id="btnfield' . $uniq . '" type="button" data-model-id="' . $item->id . '" class="btn btn-xs btn-success">' . $this->LL('btn.choose') . '</button> 
+        ';
     }
-
 }

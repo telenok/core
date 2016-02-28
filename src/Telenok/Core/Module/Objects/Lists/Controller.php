@@ -244,7 +244,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getListItem($model = null)
     {
-        $query = $model::withPermission()->withTrashed();
+        $query = $model->withPermission()->withTrashed();
 
         $this->getFilterQuery($model, $query);
 
@@ -286,27 +286,38 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
     }
 
     public function getList()
-    {
+    {        
         $model = null;
         $content = [];
         $input = $this->getRequest();
         $draw = $input->input('draw');
         $start = $input->input('start', 0);
         $length = $input->input('length', $this->pageLength);
+        $typeId = $input->input('typeId', 0);
 
         try
         {
-            if ($typeId = $input->input('typeId', 0))
+            if (empty($typeId))
+            {
+                throw new \Exception('Please, define typeId');
+            }
+            
+            if (is_array($typeId))
+            {
+                $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id');
+
+                $type = $this->getType($id);
+                $model = $this->getModelByTypeId($id);
+            }
+            else
             {
                 $type = $this->getType($typeId);
                 $model = $this->getModelByTypeId($typeId);
             }
-            else
-            {
-                throw new \Exception();
-            }
-            
-            if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
+
+            if (!is_array($typeId) 
+                    && $type->classController() 
+                    && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation)
             {
                 $items = $controllerProcessing->getListItem($model);
                 
