@@ -76,7 +76,7 @@ class Repository {
         {
             $list->push(pathinfo($dir, PATHINFO_BASENAME));
         }
-
+        
         return $list;
     }
 

@@ -8,13 +8,13 @@
 
 		try
 		{
-			$w = app('telenok.config.repository')->getSetting(strtolower($model->code));
+                    $w = app('telenok.config.repository')->getSetting(strtolower($model->code));
 			
-			echo $w->getFormSettingContent($field, $model, $uniqueId);
+                    echo $w->getFormSettingContent($field, $model, $uniqueId);
 		}
 		catch (\Exception $e)
 		{
-			echo app('telenok.config.repository')->getObjectFieldController($field->key)->getFormModelContent($controller, $model, $field, $uniqueId);
+                    echo app('telenok.config.repository')->getObjectFieldController($field->key)->getFormModelContent($controller, $model, $field, $uniqueId);
 		}
 		
 		?>

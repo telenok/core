@@ -310,7 +310,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
                     });
         }
 
-        return theme_view($this->getFrontendView(), [
+        return view($this->getFrontendView(), [
                     'page' => $page,
                     'controller' => $this,
                     'content' => $content,

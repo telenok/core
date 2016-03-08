@@ -63,7 +63,5 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller
         {
             return $this;
         });
-
-        \App\Telenok\Core\Support\Config\Theme::activeTheme();
     }
 }

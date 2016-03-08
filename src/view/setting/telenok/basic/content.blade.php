@@ -41,8 +41,8 @@
 
         <?php
         
-            $settingCollect = collect($model->value->get("telenok.view.theme", "standart"));
-        
+            $settingCollect = collect($model->value->get("telenok.view.theme", "default"));
+
         ?>
         
         @if ($cnt = count((array)$settingCollect->get('key')))
@@ -62,7 +62,7 @@
                     {
                         return [$v, $v];
                     }), array_get($settingCollect->get('key'), $iterSetting)) !!}
-                    
+
                 {!! Form::select('value[telenok.view.theme][case][]', [
                         'default' => 'default',
                         'url-regex' => 'url-regex', 
@@ -133,7 +133,7 @@
                         'default' => 'default',
                         'url-regex' => 'url-regex', 
                         'time-range' => 'time-range', 
-                 z       'date-range' => 'date-range', 
+                        'date-range' => 'date-range', 
                         'php' => 'php'
                     ], 
                     '', 

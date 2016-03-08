@@ -14,7 +14,7 @@ class Theme {
     {
         if (static::$theme === null)
         {
-            $themeConfig = collect(config('telenok.view.theme'));
+            $themeConfig = collect(config('telenok.view.theme', []));
 
             foreach($themeConfig->get('key') as $k => $val)
             {
@@ -22,7 +22,7 @@ class Theme {
                 $cases = (array)$themeConfig->get('case');
                 $values1 = (array)$themeConfig->get('value1');
                 $values2 = (array)$themeConfig->get('value2');
-                
+
                 $key = array_get($keys, $k, null);
                 $case = array_get($cases, $k, null);
                 $value1 = array_get($values1, $k, null);
@@ -62,11 +62,6 @@ class Theme {
             {
                 static::$theme = '';
             }
-        }
-
-        if (strlen(static::$theme))
-        {
-            app('translator')->addNamespace('theme', base_path('resources/views/template/' . static::$theme . '/lang'));
         }
 
         return static::$theme;
@@ -122,24 +117,5 @@ class Theme {
     public static function processDefault($key, $case, $value1, $value2)
     {
         return true;
-    }
-
-    public static function view($view = null, $data = [], $mergeData = [])
-    {
-        $theme = static::activeTheme();
-
-        if ($view)
-        {
-            if ($theme && strpos($view, '::') !== false && view()->exists($v = str_replace('::', '::' . $theme . '/views/', $view)))
-            {
-                return view($v, $data, $mergeData);
-            }
-            else if ($theme && view()->exists($v = 'template/' . $theme . '.views.' . $view))
-            {
-                return view($v, $data, $mergeData);
-            }
-        }
-
-        return view($view, $data, $mergeData);
     }
 }
