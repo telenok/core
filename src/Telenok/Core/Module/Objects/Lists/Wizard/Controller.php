@@ -89,15 +89,12 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     {
         $typeList = [];
         $input = $this->getRequest();
-        $id = $input->input('typeId', 0);
+        $id = (array)$input->input('typeId', 0);
 
         try
         {
-            if (is_array($id))
-            {
-                $typeList = $id;
-                $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id');
-            }
+            $typeList = $id;
+            $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id');
 
             $model = $this->getModelByTypeId($id);
             $type = $this->getType($id);
