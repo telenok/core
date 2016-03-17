@@ -39,7 +39,7 @@ class CoreServiceProvider extends ServiceProvider {
         $this->commands('command.telenok.seed');
         $this->commands('command.telenok.package');
 
-        app('auth')->extend('custom', function()
+        app('auth')->provider('custom', function()
         {
             return new \App\Telenok\Core\Security\Guard(
                 app(

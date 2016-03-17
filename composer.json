@@ -14,12 +14,16 @@
             "email": "support@telenok.com"
         }
     ],
+    "require-dev": {
+        "symfony/dom-crawler": "~3.0",
+        "symfony/css-selector": "~3.0"
+    },
     "require": {
         "php": ">=5.6.0",
         "ext-bcmath": "*",
         "ext-exif": "*",
         "ext-mbstring": "*",
-        "laravel/framework": "5.1.*",
+        "laravel/framework": "5.2.*",
         "illuminate/html": "5.*",
         "composer/composer": "1.0.0-alpha10",
         "imagine/imagine": "~0.5",

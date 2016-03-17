@@ -76,7 +76,7 @@
 
                 @foreach($controller->getFormModelTableColumn($field, $model, $jsUnique) as $row)
                 columns.push({!! json_encode($row) !!});
-                @endforeach 
+                @endforeach
 
                 if (columns.length)
                 {
@@ -109,7 +109,7 @@
                         ajax : '{!! $urlListTable !!}', 
                         buttons : buttons
                     });
-                    
+
                     jQuery("#telenok-{{$controller->getKey()}}-{{$jsUnique}}")
                         .on('xhr.dt', function ( e, settings, json, xhr )
                         {
@@ -121,7 +121,7 @@
 
                 if (columns.length)
                 {
-                    @if ( 
+                    @if (
                             ((!$model->exists && $field->allow_create && $permissionCreate) 
                                 || 
                             ($model->exists && $field->allow_update && $permissionUpdate)) && !$disabledCreateLinkedType
@@ -270,7 +270,6 @@
         })
         .done(function(data) 
         {
-
             if (!jQuery('#modal-{{$jsUnique}}').size())
             {
                 jQuery('body').append('<div id="modal-{{$jsUnique}}" class="modal fade" role="dialog" aria-labelledby="label"></div>');

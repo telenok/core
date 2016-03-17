@@ -71,5 +71,4 @@ class Type extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
     {
         return $this->belongsToMany('\App\Telenok\Core\Model\Security\Permission', 'pivot_relation_m2m_permission_type_object_type', 'permission_type_object_type', 'permission_type')->withTimestamps();
     }
-
 }

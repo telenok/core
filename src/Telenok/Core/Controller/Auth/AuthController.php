@@ -8,7 +8,8 @@ namespace Telenok\Core\Controller\Auth;
  */
 class AuthController extends \Telenok\Core\Interfaces\Controller\Backend\Controller {
 
-    use \Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+    use \Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers,
+        \Illuminate\Foundation\Auth\ThrottlesLogins;
 
     protected $key = 'auth';
 
