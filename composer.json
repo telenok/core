@@ -26,8 +26,7 @@
         "laravel/framework": "5.2.*",
         "illuminate/html": "5.*",
         "composer/composer": "1.0.0-alpha10",
-        "imagine/imagine": "~0.5",
-        "ezyang/htmlpurifier": "^4.7"
+        "imagine/imagine": "~0.5"
     },
     "autoload": {
         "classmap": [
