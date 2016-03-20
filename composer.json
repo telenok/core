@@ -24,7 +24,7 @@
         "ext-exif": "*",
         "ext-mbstring": "*",
         "laravel/framework": "5.2.*",
-        "illuminate/html": "5.*",
+        "laravelcollective/html": "5.2.*",
         "composer/composer": "1.0.0-alpha10",
         "imagine/imagine": "~0.5"
     },
