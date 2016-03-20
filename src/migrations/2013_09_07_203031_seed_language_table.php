@@ -7,7 +7,7 @@ class SeedLanguageTable extends Migration {
 
 	public function up()
 	{
-		$modelTypeId = DB::table('object_type')->where('code', 'language')->pluck('id');
+		$modelTypeId = DB::table('object_type')->where('code', 'language')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);

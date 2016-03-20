@@ -120,7 +120,7 @@
                                                         \App\Telenok\Core\Model\File\FileCategory::active()->get(['title', 'id'])
                                                             ->transform(function($item) { 
                                                                 return ['title' => $item->translate('title'), 'id' => $item->id]; 
-                                                            })->sortBy('title')->lists('title', 'id'), 
+                                                            })->sortBy('title')->pluck('title', 'id'), 
                                                         [], 
                                                         [
                                                             'id' => 'select-file-category-' . $jsUnique, 

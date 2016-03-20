@@ -64,7 +64,7 @@
                                                     ->transform(function($item) 
                                                         {
                                                             return ['title' => $item->translate('title'), 'id' => $item->id]; 
-                                                        })->sortBy('title')->lists('title', 'id');
+                                                        })->sortBy('title')->pluck('title', 'id');
                                     ?>
                                     {!!  Form::select("structure[object_type]", $list, $model->structure->get('object_type'), [
                                         'class' => 'form-control',

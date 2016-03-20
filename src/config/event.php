@@ -10,26 +10,26 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
     return (@preg_match($value, NULL) !== FALSE);
 });
 
-\Event::listen('telenok.repository.package', function($list)
+app('events')->listen('telenok.repository.package', function($list)
 {
     $list->push('Telenok\Core\PackageInfo');
 });
 
-\Event::listen('telenok.repository.setting', function($list)
+app('events')->listen('telenok.repository.setting', function($list)
 {
     $list->push('App\Telenok\Core\Setting\Basic\Controller');
     $list->push('App\Telenok\Core\Setting\Secure\Controller');
     $list->push('App\Telenok\Core\Setting\License\Controller');
 });
 
-\Event::listen('telenok.acl.filter.resource', function($list)
+app('events')->listen('telenok.acl.filter.resource', function($list)
 {
     $list->push('App\Telenok\Core\Security\Filter\Acl\Resource\ObjectType\Controller');
     $list->push('App\Telenok\Core\Security\Filter\Acl\Resource\ObjectTypeOwn\Controller');
     $list->push('App\Telenok\Core\Security\Filter\Acl\Resource\DirectRight\Controller');
 });
 
-\Event::listen('telenok.module.menu.left', function($list)
+app('events')->listen('telenok.module.menu.left', function($list)
 {
     $list->put('web', 1);
     $list->put('objects', 2);
@@ -61,14 +61,14 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
     $list->put('users-profile-edit', 2);
 });
 
-\Event::listen('telenok.module.menu.top', function($list)
+app('events')->listen('telenok.module.menu.top', function($list)
 {
     $list->push('users-profile-edit@topMenuMain');
     $list->push('users-profile-edit@topMenuProfileEdit');
     $list->push('users-profile-edit@topMenuLogout');
 });
 
-\Event::listen('telenok.repository.objects-field', function($list)
+app('events')->listen('telenok.repository.objects-field', function($list)
 {
     $list->push('App\Telenok\Core\Field\Integer\Controller');
     $list->push('App\Telenok\Core\Field\IntegerUnsigned\Controller');
@@ -98,7 +98,7 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
     $list->push('App\Telenok\Core\Field\DateTimeRange\Controller');
 });
 
-\Event::listen('telenok.repository.objects-field.view.model', function($list)
+app('events')->listen('telenok.repository.objects-field.view.model', function($list)
 {
     $list->push('select-one#core::field.select-one.model-radio-button');
     $list->push('select-one#core::field.select-one.model-toggle-button');
@@ -109,26 +109,26 @@ app('validator')->extend('valid_regex', function($attribute, $value, $parameters
     $list->push('select-many#core::field.select-many.model-toggle-button');
 });
 
-\Event::listen('telenok.compile.route', function()
+app('events')->listen('telenok.compile.route', function()
 {
     app('telenok.config.repository')->compileRouter();
 });
 
-\Event::listen('telenok.compile.setting', function()
+app('events')->listen('telenok.compile.setting', function()
 {
     app('telenok.config.repository')->compileSetting();
 });
 
-\Event::listen('telenok.backend.external', function($controller)
+app('events')->listen('telenok.backend.external', function($controller)
 {
     app('\App\Telenok\Core\Module\Packages\InstallerManager\Controller')->processExternalEvent($controller);
 });
 
-\Event::listen('illuminate.query', function($sql, $bindings, $time)
+app('db')->listen(function ($event)
 {
     if (config('querylog'))
     {
-        $sql = vsprintf(str_replace(array('%', '?'), array('%%', '"%s"'), $sql), $bindings);
+        $sql = vsprintf(str_replace(array('%', '?'), array('%%', '"%s"'), $event->sql), $event->bindings);
 
         echo $sql . PHP_EOL;
     }

@@ -154,7 +154,7 @@ class File {
      */
     public function initDisk()
     {
-        $uploadStorages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', env('UPLOAD_STORAGES'))))->all();
+        $uploadStorages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('filesystems.upload_storages'))))->all();
 
         $storages = \App\Telenok\Core\Support\File\Store::storageList(json_decode($this->field->upload_storage, TRUE));
 
@@ -187,7 +187,7 @@ class File {
         $logic = config('filesystems.cache.logic_storage');
 
         $cacheStorages = \App\Telenok\Core\Support\File\Store::storageList($logic($this->filename()));
-        $storages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', env('CACHE_STORAGES'))));
+        $storages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('cache.cache_storages'))));
 
         $storageKey = $cacheStorages->first(function($k, $v)
         {

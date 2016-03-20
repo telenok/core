@@ -7,7 +7,7 @@ class SeedWidgetGroupTable extends Migration {
 
     public function up()
     {
-        $modelTypeId = DB::table('object_type')->where('code', 'widget_group')->pluck('id');
+        $modelTypeId = DB::table('object_type')->where('code', 'widget_group')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);

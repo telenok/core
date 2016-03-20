@@ -7,7 +7,7 @@ class SeedPageControllerTable extends Migration {
 
     public function up()
     {
-        $modelTypeId = DB::table('object_type')->where('code', 'page_controller')->pluck('id');
+        $modelTypeId = DB::table('object_type')->where('code', 'page_controller')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);
@@ -107,7 +107,7 @@ class SeedPageControllerTable extends Migration {
                     'active' => 1,
                     'field_object_type' => $modelTypeId,
                     'field_object_tab' => $tabMainId,
-                    'relation_one_to_many_has' => DB::table('object_type')->where('code', 'page')->pluck('id'),
+                    'relation_one_to_many_has' => DB::table('object_type')->where('code', 'page')->value('id'),
                     'show_in_form' => 1,
                     'show_in_list' => 0,
                     'allow_search' => 1,

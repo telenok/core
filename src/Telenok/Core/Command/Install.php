@@ -7,9 +7,8 @@ use Illuminate\Console\Command;
  * 
  * @class Telenok.Core.Command.Install
  * @extends Illuminate.Console.Command
- * @mixin Illuminate.Contracts.Bus.SelfHandling
  */
-class Install extends Command implements \Illuminate\Contracts\Bus\SelfHandling {
+class Install extends Command {
 
     /**
      * @protected

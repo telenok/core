@@ -376,7 +376,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         if ($input->get('relation_many_to_many_has'))
         {
             $input->put('relation_many_to_many_belong_to', 0);
-            $input->put('relation_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('relation_many_to_many_has'))->orWhere('id', $input->get('relation_many_to_many_has'))->pluck('id')));
+            $input->put('relation_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('relation_many_to_many_has'))->orWhere('id', $input->get('relation_many_to_many_has'))->value('id')));
         }
         else
         {

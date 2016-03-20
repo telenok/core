@@ -5,14 +5,13 @@ namespace Telenok\Core\Jobs\Cache;
 use App\Jobs\Job;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
  * @class Telenok.Core.Jobs.Cache.Store
  * @extends App.Jobs.Job
  */
-class Store extends Job implements SelfHandling, ShouldQueue {
+class Store extends Job implements ShouldQueue {
 
     use InteractsWithQueue,
         SerializesModels;

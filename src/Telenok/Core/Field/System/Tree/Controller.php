@@ -43,7 +43,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function getChooseTypeId($field)
     {
-        return \App\Telenok\Core\Model\Object\Type::withPermission()->where('treeable', 1)->get(['id'])->fetch('id')->all();
+        return \App\Telenok\Core\Model\Object\Type::withPermission()->where('treeable', 1)->get(['id'])->pluck('id')->all();
     }
 
     /**
@@ -202,7 +202,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function preProcess($model, $type, $input)
     {
-        $sequenceTypeId = app('db')->table('object_type')->where('code', 'object_sequence')->pluck('id');
+        $sequenceTypeId = app('db')->table('object_type')->where('code', 'object_sequence')->value('id');
 
         $translationSeed = $this->translationSeed();
 

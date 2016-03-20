@@ -41,7 +41,7 @@ class StoreCache {
 
         if (empty($storages))
         {
-            $storages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', env('CACHE_STORAGES'))))->all();
+            $storages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('cache.cache_storages'))))->all();
         }
 
         foreach (\App\Telenok\Core\Support\File\Store::storageList($storages)->all() as $storage)

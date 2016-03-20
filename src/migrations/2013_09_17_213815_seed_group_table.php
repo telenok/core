@@ -7,7 +7,7 @@ class SeedGroupTable extends Migration {
 
 	public function up()
 	{
-		$modelTypeId = DB::table('object_type')->where('code', 'group')->pluck('id');
+		$modelTypeId = DB::table('object_type')->where('code', 'group')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);
@@ -28,7 +28,7 @@ class SeedGroupTable extends Migration {
 					'active' => 1,
 					'field_object_type' => $modelTypeId,
 					'field_object_tab' => $tabAdditionallyId,
-					'relation_many_to_many_belong_to' => DB::table('object_type')->where('code', 'user')->pluck('id'),
+					'relation_many_to_many_belong_to' => DB::table('object_type')->where('code', 'user')->value('id'),
 					'multilanguage' => 0,
 					'show_in_form' => 1,
 					'show_in_list' => 0,

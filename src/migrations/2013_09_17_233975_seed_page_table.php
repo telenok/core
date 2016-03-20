@@ -7,7 +7,7 @@ class SeedPageTable extends Migration {
 
     public function up()
     {
-        $modelTypeId = DB::table('object_type')->where('code', 'page')->pluck('id');
+        $modelTypeId = DB::table('object_type')->where('code', 'page')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);

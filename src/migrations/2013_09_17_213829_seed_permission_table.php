@@ -7,7 +7,7 @@ class SeedPermissionTable extends Migration {
 
 	public function up()
 	{
-		$modelTypeId = DB::table('object_type')->where('code', 'permission')->pluck('id');
+		$modelTypeId = DB::table('object_type')->where('code', 'permission')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);

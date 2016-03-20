@@ -385,8 +385,8 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 				$widget = app('telenok.config.repository')->getWidget()->get($item->key);
 				
 				$widget->insertFromBufferOnPage(
-						$widgetOnPage->widgetLanguageLanguage()->first()->pluck('id'), 
-						$widgetOnPage->widgetPage()->first()->pluck('id'), 
+						$widgetOnPage->widgetLanguageLanguage()->first()->value('id'), 
+						$widgetOnPage->widgetPage()->first()->value('id'), 
 						$item->key, 
 						$item->getKey(), 
 						$newContainres[$key], 

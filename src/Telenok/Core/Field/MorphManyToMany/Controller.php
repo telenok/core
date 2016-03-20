@@ -185,7 +185,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		if ($input->get('morph_many_to_many_has'))
 		{
 			$input->put('morph_many_to_many_belong_to', 0);
-            $input->put('morph_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_many_to_many_has'))->orWhere('id', $input->get('morph_many_to_many_has'))->pluck('id')));
+            $input->put('morph_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_many_to_many_has'))->orWhere('id', $input->get('morph_many_to_many_has'))->value('id')));
         }
         else
         {

@@ -9,7 +9,7 @@ class SeedObjectTabTable extends Migration {
 	{
 		if (Schema::hasTable('object_type') && Schema::hasTable('object_field'))
 		{  
-			$modelTypeId = DB::table('object_type')->where('code', 'object_tab')->pluck('id');
+			$modelTypeId = DB::table('object_type')->where('code', 'object_tab')->value('id');
 
 			$tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
 			$tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);
@@ -90,7 +90,7 @@ class SeedObjectTabTable extends Migration {
 						'active' => 1,
 						'field_object_type' => $modelTypeId,
 						'field_object_tab' => $tabMainId,
-						'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_field')->pluck('id'),
+						'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_field')->value('id'),
 						'multilanguage' => 0,
 						'show_in_form' => 1,
 						'show_in_list' => 0,
@@ -111,7 +111,7 @@ class SeedObjectTabTable extends Migration {
 						'active' => 1,
 						'field_object_type' => $modelTypeId,
 						'field_object_tab' => $tabMainId,
-						'relation_one_to_many_belong_to' => DB::table('object_type')->where('code', 'object_type')->pluck('id'),
+						'relation_one_to_many_belong_to' => DB::table('object_type')->where('code', 'object_type')->value('id'),
 						'multilanguage' => 0,
 						'show_in_form' => 1,
 						'show_in_list' => 1,

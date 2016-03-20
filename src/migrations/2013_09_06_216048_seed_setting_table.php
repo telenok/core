@@ -7,7 +7,7 @@ class SeedSettingTable extends Migration {
 
 	public function up()
 	{
-		$modelTypeId = DB::table('object_type')->where('code', 'setting')->pluck('id');
+		$modelTypeId = DB::table('object_type')->where('code', 'setting')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);

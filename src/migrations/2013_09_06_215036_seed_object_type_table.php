@@ -9,8 +9,8 @@ class SeedObjectTypeTable extends Migration {
 	{
 		if (Schema::hasTable('object_type') && Schema::hasTable('object_field'))
 		{
-			$modelTypeId = DB::table('object_type')->where('code', 'object_type')->pluck('id');
-			$modelFieldId = DB::table('object_type')->where('code', 'object_field')->pluck('id');
+			$modelTypeId = DB::table('object_type')->where('code', 'object_type')->value('id');
+			$modelFieldId = DB::table('object_type')->where('code', 'object_field')->value('id');
 
 			$tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
 			$tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);
@@ -138,7 +138,7 @@ class SeedObjectTypeTable extends Migration {
 						'active' => 1,
 						'field_object_type' => $modelTypeId,
 						'field_object_tab' => $tabAdditionallyId,
-						'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_tab')->pluck('id'),
+						'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_tab')->value('id'),
 						'multilanguage' => 0,
 						'show_in_form' => 1,
 						'show_in_list' => 0,
@@ -159,7 +159,7 @@ class SeedObjectTypeTable extends Migration {
 						'active' => 1,
 						'field_object_type' => $modelTypeId,
 						'field_object_tab' => $tabAdditionallyId,
-						'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->pluck('id'),
+						'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->value('id'),
 						'multilanguage' => 0,
 						'show_in_form' => 1,
 						'show_in_list' => 0,

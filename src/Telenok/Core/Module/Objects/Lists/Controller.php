@@ -83,7 +83,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getTreeListTypes()
     {
-        $types = \App\Telenok\Core\Model\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->fetch('id')->toArray();
+        $types = \App\Telenok\Core\Model\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->pluck('id')->toArray();
 
         return $types;
     }
@@ -110,7 +110,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
     public function getTreeListItemProcessed($item)
     {
-        $typeObjectId = \App\Telenok\Core\Model\Object\Type::where('code', 'object_type')->pluck('id');
+        $typeObjectId = \App\Telenok\Core\Model\Object\Type::where('code', 'object_type')->value('id');
 
         $code = '';
         $module = null;
@@ -304,7 +304,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
             
             if (is_array($typeId))
             {
-                $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id');
+                $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
 
                 $type = $this->getType($id);
                 $model = $this->getModelByTypeId($id);

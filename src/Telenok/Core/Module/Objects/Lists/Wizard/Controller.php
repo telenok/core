@@ -94,7 +94,7 @@ dd($id);
         try
         {
             $typeList = $id;
-            $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id');
+            $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
 
             $model = $this->getModelByTypeId($id);
             $type = $this->getType($id);

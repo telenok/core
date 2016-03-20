@@ -26,6 +26,6 @@
 
         ?>
         {!! Form::hidden($linkedField, $model->{$linkedField}) !!}
-        {!! Form::select($linkedField, \App\Telenok\Core\Model\Object\Type::get(['title', 'id'])->transform(function($item) { return ['title' => $item->translate('title'), 'id' => $item->id]; })->sortBy('title')->lists('title', 'id'), $model->{$linkedField}, $domAttr) !!}
+        {!! Form::select($linkedField, \App\Telenok\Core\Model\Object\Type::get(['title', 'id'])->transform(function($item) { return ['title' => $item->translate('title'), 'id' => $item->id]; })->sortBy('title')->pluck('title', 'id'), $model->{$linkedField}, $domAttr) !!}
     </div>
 </div> 

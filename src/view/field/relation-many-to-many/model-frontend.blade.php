@@ -24,7 +24,7 @@
 		$values = $v->transform(function($item)
 		{
 			return ['id' => $item->id, 'value' => $item->translate('title')];
-		})->lists('value', 'id');
+		})->pluck('value', 'id');
 	}
 	
 	$values = ['&nbsp;'] + (array)$values;

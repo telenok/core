@@ -9,7 +9,7 @@ class SeedObjectVersionTable extends Migration {
 	{
 		if (Schema::hasTable('object_version'))
 		{
-			$modelTypeId = DB::table('object_type')->where('code', 'object_version')->pluck('id');
+			$modelTypeId = DB::table('object_type')->where('code', 'object_version')->value('id');
 
 			$tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
 			$tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);

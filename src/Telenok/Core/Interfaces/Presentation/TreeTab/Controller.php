@@ -1417,7 +1417,7 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     {
         $types = [];
 
-        $types[] = \App\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->pluck('id');
+        $types[] = \App\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->value('id');
 
         if ($this->getModelTreeClass())
         {

@@ -314,7 +314,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 		if ($input->get('morph_one_to_many_has'))
 		{
 			$input->put('morph_one_to_many_belong_to', 0);
-            $input->put('morph_one_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_one_to_many_has'))->orWhere('id', $input->get('morph_one_to_many_has'))->pluck('id')));
+            $input->put('morph_one_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_one_to_many_has'))->orWhere('id', $input->get('morph_one_to_many_has'))->value('id')));
         }
         else
         {
@@ -418,7 +418,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                 'code' => $relatedSQLField,
                 'field_object_type' => $typeBelongTo->getKey(),
                 'field_object_tab' => $tabTo->getKey(),
-                'morph_one_to_many_belong_to' => \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->pluck('id'),
+                'morph_one_to_many_belong_to' => \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id'),
                 'morph_one_to_many_belong_to_type_list' => [$relatedTypeOfModelField->getKey()],
                 'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
                 'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),

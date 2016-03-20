@@ -223,7 +223,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 
 		$model = app('\App\Telenok\Core\Model\Object\Sequence');
 
-        $objectFolderId = \App\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->pluck('id');
+        $objectFolderId = \App\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->value('id');
 
         $query = $model::whereIn('sequences_object_type', [$objectFolderId, $typeId])
             ->withPermission()

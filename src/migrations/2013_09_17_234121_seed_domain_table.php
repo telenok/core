@@ -7,7 +7,7 @@ class SeedDomainTable extends Migration {
 
     public function up()
     {
-        $modelTypeId = DB::table('object_type')->where('code', 'domain')->pluck('id');
+        $modelTypeId = DB::table('object_type')->where('code', 'domain')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);

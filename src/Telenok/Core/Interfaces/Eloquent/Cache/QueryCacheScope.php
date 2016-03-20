@@ -30,18 +30,4 @@ class QueryCacheScope implements ScopeInterface {
         $builder->remember($model->getCacheMinutes())
                 ->cacheTags($model->getCacheTags());
     }
-
-    /**
-     * @method remove
-     * Remove the scope from the given Eloquent query builder.
-     *
-     * @param {Illuminate.Database.Eloquent.Builder} $builder
-     * @param {Illuminate.Database.Eloquent.Model} $model
-     *
-     * @return {void}
-     */
-    public function remove(Builder $builder, Model $model)
-    {
-        $builder->remember(null);
-    }
 }

@@ -7,7 +7,7 @@ class SeedFileMimeTypeTable extends Migration {
 
     public function up()
     {
-        $modelTypeId = DB::table('object_type')->where('code', 'file_mime_type')->pluck('id');
+        $modelTypeId = DB::table('object_type')->where('code', 'file_mime_type')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);

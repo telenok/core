@@ -7,7 +7,7 @@ class SeedUserTable extends Migration {
 
 	public function up()
 	{
-		$modelTypeId = DB::table('object_type')->where('code', 'user')->pluck('id');
+		$modelTypeId = DB::table('object_type')->where('code', 'user')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);
@@ -131,7 +131,7 @@ class SeedUserTable extends Migration {
 					'active' => 1,
 					'field_object_type' => $modelTypeId,
 					'field_object_tab' => $tabAdditionallyId,
-					'relation_one_to_one_belong_to' => DB::table('object_type')->where('code', 'user_message')->pluck('id'),
+					'relation_one_to_one_belong_to' => DB::table('object_type')->where('code', 'user_message')->value('id'),
 					'show_in_form' => 1,
 					'show_in_list' => 0,
 					'allow_search' => 1,
@@ -152,7 +152,7 @@ class SeedUserTable extends Migration {
 					'active' => 1,
 					'field_object_type' => $modelTypeId,
 					'field_object_tab' => $tabAdditionallyId,
-					'relation_many_to_many_belong_to' => DB::table('object_type')->where('code', 'user_message')->pluck('id'),
+					'relation_many_to_many_belong_to' => DB::table('object_type')->where('code', 'user_message')->value('id'),
 					'show_in_form' => 1,
 					'show_in_list' => 0,
 					'allow_search' => 1,
@@ -173,7 +173,7 @@ class SeedUserTable extends Migration {
 					'active' => 1,
 					'field_object_type' => $modelTypeId,
 					'field_object_tab' => $tabAdditionallyId,
-					'relation_many_to_many_has' => DB::table('object_type')->where('code', 'group')->pluck('id'),
+					'relation_many_to_many_has' => DB::table('object_type')->where('code', 'group')->value('id'),
 					'multilanguage' => 0,
 					'show_in_form' => 1,
 					'show_in_list' => 0,
@@ -192,7 +192,7 @@ class SeedUserTable extends Migration {
 					'key' => 'relation-one-to-many',
 					'code' => 'created_by',
 					'field_object_type' => $modelTypeId,
-					'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->pluck('id'),
+					'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->value('id'),
 					'field_object_tab' => $tabAdditionallyId,
 					'active' => 1,
 					'multilanguage' => 0,
@@ -210,7 +210,7 @@ class SeedUserTable extends Migration {
 					'key' => 'relation-one-to-many',
 					'code' => 'updated_by',
 					'field_object_type' => $modelTypeId,
-					'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->pluck('id'),
+					'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->value('id'),
 					'field_object_tab' => $tabAdditionallyId,
 					'active' => 1,
 					'multilanguage' => 0,
@@ -228,7 +228,7 @@ class SeedUserTable extends Migration {
 					'key' => 'relation-one-to-many',
 					'code' => 'locked_by',
 					'field_object_type' => $modelTypeId,
-					'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->pluck('id'),
+					'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->value('id'),
 					'field_object_tab' => $tabAdditionallyId,
 					'active' => 1,
 					'multilanguage' => 0,
@@ -245,8 +245,8 @@ class SeedUserTable extends Migration {
 					'title_list' => json_encode(['en' => 'Deleted by'], JSON_UNESCAPED_UNICODE),
 					'key' => 'relation-one-to-many',
 					'code' => 'deleted_by',
-					'field_object_type' => DB::table('object_type')->where('code', 'user')->pluck('id'),
-					'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->pluck('id'),
+					'field_object_type' => DB::table('object_type')->where('code', 'user')->value('id'),
+					'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->value('id'),
 					'field_object_tab' => $tabAdditionallyId,
 					'active' => 1,
 					'multilanguage' => 0,
