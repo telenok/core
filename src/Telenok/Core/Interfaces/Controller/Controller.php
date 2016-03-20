@@ -5,13 +5,13 @@
  * Base class for CMS controllers
  * 
  * @mixins Telenok.Core.Support.Traits.Language
- * @mixins Illuminate.Foundation.Bus.DispatchesCommands
+ * @mixins Illuminate.Foundation.Bus.DispatchesJobs
  * @uses Telenok.Core.Interfaces.Support.IRequest
  * @extends Illuminate.Routing.Controller
  */
 class Controller extends \Illuminate\Routing\Controller implements \Telenok\Core\Interfaces\Support\IRequest {
 
-    use \Telenok\Core\Support\Traits\Language, \Illuminate\Foundation\Bus\DispatchesCommands;
+    use \Telenok\Core\Support\Traits\Language, \Illuminate\Foundation\Bus\DispatchesJobs;
 
     /**
      * @protected
