@@ -6,7 +6,7 @@ namespace Telenok\Core\Security;
  * @class Telenok.Core.Security.Guard
  * Class for validation user's rights.
  */
-class Guard extends \Illuminate\Auth\Guard {
+class Guard extends \Illuminate\Auth\RequestGuard {
 
     public function check()
     {
