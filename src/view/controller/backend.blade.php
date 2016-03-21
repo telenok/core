@@ -7,12 +7,12 @@
         <script>
             var CKEDITOR_BASEPATH = '/packages/telenok/core/js/ckeditor/';
         </script>
-        {!! HTML::script('packages/telenok/core/js/ckeditor/ckeditor.js') !!}
-        {!! HTML::script('packages/telenok/core/js/ckeditor_addons/fixes/bootstrap.js') !!}
-        {!! HTML::script('telenok/ckeditor.custom.config.js') !!}
+        {!! Html::script('packages/telenok/core/js/ckeditor/ckeditor.js') !!}
+        {!! Html::script('packages/telenok/core/js/ckeditor_addons/fixes/bootstrap.js') !!}
+        {!! Html::script('telenok/ckeditor.custom.config.js') !!}
 
-        {!! HTML::style('packages/telenok/core/js/jquery.cropper/cropper.css') !!}
-        {!! HTML::script('packages/telenok/core/js/jquery.cropper/cropper.js') !!}
+        {!! Html::style('packages/telenok/core/js/jquery.cropper/cropper.css') !!}
+        {!! Html::script('packages/telenok/core/js/jquery.cropper/cropper.js') !!}
 
 @stop
 
