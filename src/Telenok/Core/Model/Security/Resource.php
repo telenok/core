@@ -15,5 +15,4 @@ class Resource extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
     {
         $this->attributes['code'] = str_replace(' ', '', strtolower($value));
     }
-
 }

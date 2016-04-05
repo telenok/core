@@ -290,6 +290,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * Values of request.
      * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Field.RelationManyToMany.Controller
+     * @throws {Exception}
      */
     public function saveModelField($field, $model, $input)
     {

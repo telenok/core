@@ -344,7 +344,6 @@
                     var nTr = oSettings.aoData[ a[0] ].nTr;
 
                     addO2MHasAdditional{{$jsUnique}}(data.id);
-
                 });
 				
 				$modal.html(data.tabContent);

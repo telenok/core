@@ -605,7 +605,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller implemen
             ];
         }
 
-        //dd(get_class( $q = $this->getLinkedModelType($field) ), $q, array_keys($fields));
         return $fields;
     }
 

@@ -347,8 +347,9 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
      * @method restore
      * Restore model.
      *
-     * @return {void}
+     * @return {Boolean}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * @throws {Telenok.Cor.Support.Exception.ModelProcessAccessDenied}
      */
     public function restore()
     {
@@ -369,8 +370,9 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
      * @method delete
      * Delete model.
      *
-     * @return {void}
+     * @return {Boolean}
      * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * @throws {Telenok.Core.Support.Exception.ModelProcessAccessDenied}
      */
     public function delete()
     {
@@ -589,7 +591,8 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
      * @param {Boolean} $withEvent
      * Call events for external processing.
      * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
-     * @member Telenok.Core.Interfaces.Eloquent.Object.Model
+     * @member {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @throws {Telenok.Core.Support.Exception.ModelProcessAccessDenied}
      */
     public function storeOrUpdate($input = [], $withPermission = false, $withEvent = true)
     {
@@ -604,7 +607,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
         }
         catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
         {
-            throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied("Telenok\Core\Interfaces\Eloquent\Object\Model::storeOrUpdate() - Error: 'type of object not found, please, define it'");
+            throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Telenok\Core\Interfaces\Eloquent\Object\Model::storeOrUpdate() - Error: "type of object not found, please, define it"');
         }
 
         // merge attributes if model filled via $model->fill() and plus ->storeOrUpdate([some attributes])
@@ -701,7 +704,23 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
                     $controllerProcessing->validate($model, $input);
                 }
 
-                $model->fill($input->all())->push();
+                try
+                {
+                    var_dump(get_class($model), $input->all());
+
+                    $model->fill($input->all());
+                }
+                catch(\Error $e)
+                {
+                    dd('ppppppppppppppppppppppppppppppppppppppppp');
+                }
+
+                if (get_class($model) == 'App\Telenok\Core\Model\Security\Resource')
+                {
+                    dd('ssssssssssssssssssssssssssssssssss');
+                }
+
+                //->push();
 
                 if (!$exists && $type->treeable)
                 {
@@ -1083,6 +1102,17 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
      */
     public function getDates()
     {
+        static $q = 0;
+
+        var_dump($q . ' - ' . get_class($this), debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 4));
+        var_dump('-------------------------------------------------------------------------------------');
+        var_dump('-------------------------------------------------------------------------------------');
+
+        if ($q++ > 100)
+        {
+            dd('recursive ' . get_class($this));
+        }
+
         return array_merge(parent::getDates(), $this->dates);
     }
 

@@ -44,7 +44,7 @@ class CoreServiceProvider extends ServiceProvider {
         {
             return new \App\Telenok\Core\Security\UserProvider(
                     $app['hash'], 
-                    $this->app['config']['auth.providers.telenok']['model']);
+                    $app['config']['auth.providers.users']['model']);
         });
 
         // using custom guard

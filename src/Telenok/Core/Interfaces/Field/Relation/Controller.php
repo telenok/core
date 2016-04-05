@@ -48,7 +48,6 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      */
     public function getLinkedField($field)
     {
-        
     }
 
     /**
@@ -92,7 +91,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @param {Illuminate.Support.Collection} $input
      * @param {Array} $param
      * @return {void}
-     * @throws \Exception
+     * @throws {Exception}
      * @member Telenok.Core.Interfaces.Field.Relation.Controller
      * 
      *      @example

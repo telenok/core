@@ -3,22 +3,78 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+/**
+ * @class Telenok.Core.Field.MorphOneToOne.Controller
+ * Class of field "morph-one-to-one". Field allow to link objects.
+ *
+ * @extends Telenok.Core.Interfaces.Field.Relation.Controller
+ */
 class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
-    protected $key = 'morph-one-to-one'; 
+    /**
+     * @protected
+     * @property {String} $key
+     * Field key.
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
+    protected $key = 'morph-one-to-one';
+
+    /**
+     * @protected
+     * @property {Array} $specialField
+     * Define list of field's names to process saving and filling {@link Telenok.Core.Model.Object.Field Telenok.Core.Model.Object.Field}.
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     protected $specialField = ['morph_one_to_one_has', 'morph_one_to_one_belong_to', 'morph_one_to_one_belong_to_type_list'];
+
+    /**
+     * @protected
+     * @property {Boolean} $allowMultilanguageMorphOneToOne
+     * Field doesn't support multilanguage
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     protected $allowMultilanguage = false;
 
+    /**
+     * @method getLinkedField
+     * Define name of special field.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getLinkedField($field)
     {
         return $field->morph_one_to_one_has ? 'morph_one_to_one_has' : 'morph_one_to_one_belong_to';
     }
-    
+
+    /**
+     * @method getChooseTypeId
+     * Return ID of linked Type Object.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {Integer}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getChooseTypeId($field)
     {
         return $field->morph_one_to_one_has ? $field->{$this->getLinkedField()} : $field->morph_one_to_one_belong_to_type_list->all();
     }
 
+    /**
+     * @method getModelFieldViewVariable
+     * Return array with URL for variables in $viewModel view.
+     *
+     * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {String} $uniqueId
+     *
+     * @return {Array}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         $linkedField = $this->getLinkedField($field);
@@ -34,30 +90,66 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     }
 
     /**
-     * Return Object Type linked to the field
-     * 
-     * @param \App\Telenok\Core\Model\Object\Field $field
-     * @return \App\Telenok\Core\Model\Object\Type
-     * 
+     * @method getLinkedModelType
+     * Return Object Type of field
+     *
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @return {Telenok.Core.Model.Object.Type}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
      */
     public function getLinkedModelType($field)
     {
         return \App\Telenok\Core\Model\Object\Type::whereIn('id', [$field->morph_one_to_one_has, $field->morph_one_to_one_belong_to])->first();
     }
-    
+
+    /**
+     * @method getFormModelContent
+     * Return HTML content of form element for the field
+     *
+     * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {String} $uniqueId
+     * @return {String}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     {         
         if ($field->morph_one_to_one_has || $field->morph_one_to_one_belong_to)
         {
             return parent::getFormModelContent($controller, $model, $field, $uniqueId);
         }
-    } 
-    
+    }
+
+    /**
+     * @method getModelFillableField
+     * Define list of fields in Eloquent object which can be filled by user.
+     *
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * Eloquent object.
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {Array}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getModelFillableField($model, $field)
     {
         return $field->morph_one_to_one_belong_to ? [$field->code . '_type', $field->code . '_id'] : [];
     }
-    
+
+    /**
+     * @method getModelSpecialAttribute
+     * Return processed value of special fields.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Field's name.
+     * @param {mixed} $value
+     * Value of field from database for processing in this method.
+     * @return {mixed}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getModelSpecialAttribute($model, $key, $value)
     {
         try
@@ -88,6 +180,19 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         }
     }
 
+    /**
+     * @method setModelSpecialAttribute
+     * Set processed value of special fields.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Field's name.
+     * @param {mixed} $value
+     * Value of field from database for processing in this method.
+     * @return {Telenok.Core.Field.MorphOneToOne.Controller}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function setModelSpecialAttribute($model, $key, $value)
     {
         if (in_array($key, ['morph_one_to_one_belong_to_type_list'], true))
@@ -120,6 +225,16 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         return $this;
     }
 
+    /**
+     * @method getListFieldContentItems
+     * Return initial list of linked field values.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {mixed} $item
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * @return {Illuminate.Support.Collection}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getListFieldContentItems($field, $item, $type = null)
     {
         $method = camel_case($field->code);
@@ -127,6 +242,23 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         return $item->{$method} ? $item->{$method}()->take(8)->get() : [];
     }
 
+    /**
+     * @method getFilterQuery
+     * Add restrictions to search query.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @param {Object} $model
+     * Eloquent object.
+     * @param {Illuminate.Database.Query.Builder} $query
+     * Laravel query builder object.
+     * @param {String} $name
+     * Name of field to search for.
+     * @param {String} $value
+     * Value to search for.
+     * @return {void}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null) 
     {
         if (!empty($value))
@@ -165,6 +297,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         }
     }
 
+    /**
+     * @method getFilterContent
+     * Return HTML of filter field in search form.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     * @return {String}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getFilterContent($field = null)
     {
         $uniqueId = str_random();
@@ -222,8 +363,22 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
                     no_results_text: "'.$this->LL('notice.not-found').'" 
                 });
             </script>';
-    } 
+    }
 
+    /**
+     * @method saveModelField
+     * Save eloquent model with field's data.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Eloquent object Field.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * Eloquent object.
+     * @param {Illuminate.Support.Collection} $input
+     * Values of request.
+     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     * @throws {Exception}
+     */
     public function saveModelField($field, $model, $input)
     { 
         // if created field
@@ -279,6 +434,10 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         return $model;
     }
 
+    /**
+     * @method processFieldDelete
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function processFieldDelete($model, $type)
     {  
         if ($model->morph_one_to_one_has)
@@ -306,7 +465,20 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
 
         return true;
     }
-    
+
+    /**
+     * @method preProcess
+     * Preprocess save {@link Telenok.Core.Model.Object.Field $model}.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Object to save.
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * Object with data of field's configuration.
+     * @param {Illuminate.Http.Request} $input
+     * Laravel request object.
+     * @return {Telenok.Core.Field.MorphOneToOne.Controller}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function preProcess($model, $type, $input)
     {
         if (!$input->get('morph_one_to_one_belong_to'))
@@ -334,8 +506,21 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         $input->put('allow_sort', 0);
 
         return parent::preProcess($model, $type, $input);
-    } 
+    }
 
+    /**
+     * @method postProcess
+     * postProcess save {@link Telenok.Core.Model.Object.Field $model}.
+     *
+     * @param {Telenok.Core.Model.Object.Field} $model
+     * Object to save.
+     * @param {Telenok.Core.Model.Object.Type} $type
+     * Object with data of field's configuration.
+     * @param {Illuminate.Http.Request} $input
+     * Laravel request object.
+     * @return {Telenok.Core.Field.MorphOneToOne.Controller}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function postProcess($model, $type, $input)
     {
         if (!$input->get('morph_one_to_one_has'))
@@ -475,8 +660,15 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
         }
 
         return parent::postProcess($model, $type, $input);
-    } 
+    }
 
+    /**
+     * @method getStubFileDirectory
+     * Path to directory of stub (class template) files
+     *
+     * @return {String}
+     * @member Telenok.Core.Field.MorphOneToOne.Controller
+     */
     public function getStubFileDirectory()
     {
         return __DIR__;

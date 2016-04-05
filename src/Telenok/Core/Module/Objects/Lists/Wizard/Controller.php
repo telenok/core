@@ -87,10 +87,9 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 
     public function choose()
     {        
-        $typeList = [];
         $input = $this->getRequest();
         $id = (array)$input->input('typeId', 0);
-dd($id);
+
         try
         {
             $typeList = $id;

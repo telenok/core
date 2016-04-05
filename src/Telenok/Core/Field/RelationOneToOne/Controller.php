@@ -50,7 +50,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
     /**
      * @method getLinkedField
      * Define name of special field.
-     * 
+     *
      * @param {Telenok.Core.Model.Object.Field} $field
      * Object with data of field's configuration.
      * @return {String}

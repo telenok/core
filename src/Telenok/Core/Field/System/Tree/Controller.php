@@ -115,6 +115,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * Values of request.
      * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
      * @member Telenok.Core.Field.System.Tree.Controller
+     * @throws {Exception}
      */
     public function saveModelField($field, $model, $input)
     {
