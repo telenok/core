@@ -16,7 +16,7 @@ class Theme {
         {
             $themeConfig = collect(config('telenok.view.theme', []));
 
-            foreach($themeConfig->get('key') as $k => $val)
+            foreach($themeConfig->get('key', []) as $k => $val)
             {
                 $keys = (array)$themeConfig->get('key');
                 $cases = (array)$themeConfig->get('case');

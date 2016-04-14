@@ -704,23 +704,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
                     $controllerProcessing->validate($model, $input);
                 }
 
-                try
-                {
-                    var_dump(get_class($model), $input->all());
-
-                    $model->fill($input->all());
-                }
-                catch(\Error $e)
-                {
-                    dd('ppppppppppppppppppppppppppppppppppppppppp');
-                }
-
-                if (get_class($model) == 'App\Telenok\Core\Model\Security\Resource')
-                {
-                    dd('ssssssssssssssssssssssssssssssssss');
-                }
-
-                //->push();
+                $model->fill($input->all())->push();
 
                 if (!$exists && $type->treeable)
                 {
@@ -1102,18 +1086,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
      */
     public function getDates()
     {
-        static $q = 0;
-
-        var_dump($q . ' - ' . get_class($this), debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 4));
-        var_dump('-------------------------------------------------------------------------------------');
-        var_dump('-------------------------------------------------------------------------------------');
-
-        if ($q++ > 100)
-        {
-            dd('recursive ' . get_class($this));
-        }
-
-        return array_merge(parent::getDates(), $this->dates);
+        return array_unique(array_merge(parent::getDates(), $this->dates));
     }
 
     /**

@@ -60,7 +60,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      */
     public function getChooseTypeId($field)
     {
-        return $field->morph_one_to_one_has ? $field->{$this->getLinkedField()} : $field->morph_one_to_one_belong_to_type_list->all();
+        return $field->morph_one_to_one_has ? $field->{$this->getLinkedField($field)} : $field->morph_one_to_one_belong_to_type_list->all();
     }
 
     /**

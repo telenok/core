@@ -290,7 +290,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 		<div class="modal-footer">
 
 			<div class="center no-margin">
-				@if (\Input::get('chooseBtn') && $model->exists)
+				@if (app('request')->get('chooseBtn') && $model->exists)
 				
 				<script type="text/javascript">
 					<?php
@@ -299,7 +299,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 
 						$put = collect(); 
 
-						if (\Input::get('chooseSequence') && $model->exists())
+						if (app('request')->get('chooseSequence') && $model->exists())
 						{
 							$listModelField = $model->sequence;
 						}

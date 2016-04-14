@@ -33,6 +33,25 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     protected $viewField = "core::field.tree.field";
 
     /**
+     * @method getModelFieldViewVariable
+     * Return array with URL for variables in $viewModel view.
+     *
+     * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {String} $uniqueId
+     * @return {Array}
+     * @member Telenok.Core.Field.System.Tree.Controller
+     */
+    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    {
+        $typeIds = parent::getModelFieldViewVariable($controller, $model, $field, $uniqueId);
+        $typeIds['urlWizardCreate'] = route($this->getRouteWizardCreate(), ['id' => $this->getChooseTypeId($field), 'saveBtn' => 1, 'chooseBtn' => 1]);
+
+        return $typeIds;
+    }
+
+    /**
      * @method getChooseTypeId
      * Return ID of linked Type Object.
      * 
@@ -43,7 +62,23 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function getChooseTypeId($field)
     {
-        return \App\Telenok\Core\Model\Object\Type::withPermission()->where('treeable', 1)->get(['id'])->pluck('id')->all();
+        return \App\Telenok\Core\Model\Object\Type::withPermission()->active()->where('treeable', 1)->get(['id'])->pluck('id')->all();
+    }
+
+    /**
+     * @method getFormModelContent
+     * Return HTML content of form element for the field
+     *
+     * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * @param {String} $uniqueId
+     * @return {String}
+     * @member Telenok.Core.Field.System.Tree.Controller
+     */
+    public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
+    {
+        return \Telenok\Core\Interfaces\Field\Controller::getFormModelContent($controller, $model, $field, $uniqueId);
     }
 
     /**

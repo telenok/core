@@ -278,7 +278,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
             throw new \Exception($this->LL('error.file.upload.require', ['attribute' => $field->translate('title')]));
         }
-        else if ($file !== null && !$file->isValid())
+        else if ($file instanceof \SplFileInfo && !$file->isValid())
         {
             throw new \Exception($file->getErrorMessage());
         }

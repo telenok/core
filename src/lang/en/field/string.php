@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     'name' => 'Text string',
     'property.string_list_size' => 'Width text in list rows',
     'property.string_min' => 'Minimum symbols',
@@ -9,4 +9,4 @@ return array(
     'property.string_regex' => 'Regular expression',
     'property.string_password' => 'Element with type="password"',
     'property.string_unique' => 'Unique',
-);
+];

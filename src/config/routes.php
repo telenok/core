@@ -76,6 +76,7 @@ app('router')->get('field/morph-one-to-many/list/title/type/{id}', array('as' =>
 app('router')->get('field/morph-one-to-many/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'telenok.field.morph-one-to-many.list.table', 'uses' => '\App\Telenok\Core\Field\MorphOneToMany\Controller@getTableList'));
 
 app('router')->get('field/morph-one-to-one/list/title/type/{id}', array('as' => 'telenok.field.morph-one-to-one.list.title', 'uses' => '\App\Telenok\Core\Field\MorphOneToOne\Controller@getTitleList'));
+app('router')->get('field/morph-one-to-one/list/table/model/{id}/field/{fieldId}/uniqueId/{uniqueId}', array('as' => 'telenok.field.morph-one-to-one.list.table', 'uses' => '\App\Telenok\Core\Field\MorphOneToOne\Controller@getTableList'));
 
 app('router')->get('field/permission/list/title', array('as' => 'telenok.field.permission.list.title', 'uses' => '\App\Telenok\Core\Field\System\Permission\Controller@getTitleList'));
 

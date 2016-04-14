@@ -1,4 +1,3 @@
-
 @include('core::field.common-view.field-view')
 
 <div class="form-group">
@@ -16,9 +15,7 @@
 </div> 
 
 
-<div id="div_string_default">
-
-</div>
+<div id="div_string_default"></div>
 
 <script>
 
@@ -27,19 +24,19 @@
 
 	var string_default_multilanguage{{$uniqueId}} = '';
 	var string_default{{$uniqueId}} = '';
-			 
+
 	@foreach(config('app.locales')->all() as $locale)
 		string_default_multilanguage{{$uniqueId}} += '<div class="form-group">';
-		string_default_multilanguage{{$uniqueId}} += {!! json_encode(Form::label("string_default[{$locale}]", $controller->LL("property.string_default") . " [{$locale}]", array("class" => "col-sm-3 control-label no-padding-right"))) !!};
+		string_default_multilanguage{{$uniqueId}} += {!! json_encode((string)Form::label("string_default[{$locale}]", $controller->LL("property.string_default") . " [{$locale}]", array("class" => "col-sm-3 control-label no-padding-right")), JSON_UNESCAPED_UNICODE) !!};
 		string_default_multilanguage{{$uniqueId}} += '<div class="col-sm-9">';
-		string_default_multilanguage{{$uniqueId}} += {!! json_encode(Form::text("string_default[{$locale}]", $model->translate("string_default", $locale))) !!};
+		string_default_multilanguage{{$uniqueId}} += {!! json_encode((string)Form::text("string_default[{$locale}]", $model->translate("string_default", $locale)), JSON_UNESCAPED_UNICODE) !!};
 		string_default_multilanguage{{$uniqueId}} += '</div></div>';
 	@endforeach
-	
+
 	string_default{{$uniqueId}} += '<div class="form-group">';
-	string_default{{$uniqueId}} += {!! json_encode(Form::label("string_default", $controller->LL("property.string_default"), array("class" => "col-sm-3 control-label no-padding-right"))) !!};
+	string_default{{$uniqueId}} += {!! json_encode((string)Form::label("string_default", $controller->LL("property.string_default"), array("class" => "col-sm-3 control-label no-padding-right")), JSON_UNESCAPED_UNICODE) !!};
 	string_default{{$uniqueId}} += '<div class="col-sm-9">';
-	string_default{{$uniqueId}} += {!! json_encode(Form::text("string_default", $model->string_default)) !!};
+	string_default{{$uniqueId}} += {!! json_encode((string)Form::text("string_default", $model->string_default), JSON_UNESCAPED_UNICODE) !!};
 	string_default{{$uniqueId}} += '</div></div>';
 
 	var closure{{$uniqueId}} = function()

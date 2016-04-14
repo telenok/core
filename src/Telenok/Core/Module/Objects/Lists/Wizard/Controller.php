@@ -88,11 +88,10 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     public function choose()
     {        
         $input = $this->getRequest();
-        $id = (array)$input->input('typeId', 0);
+        $typeId = (array)$input->input('typeId', 0);
 
         try
         {
-            $typeList = $id;
             $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
 
             $model = $this->getModelByTypeId($id);
@@ -112,7 +111,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
                 'presentation' => $this->getPresentation(),
                 'model' => $model,
                 'type' => $type,
-                'typeList' => $typeList,
+                'typeList' => $typeId,
                 'fields' => $fields,
                 'uniqueId' => ($uniqueId = str_random()),
                 'gridId' => str_random(),
