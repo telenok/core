@@ -255,36 +255,6 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                         ->get();
     }
 
-    public function getListJson()
-    {
-        $content = [];
-
-        $fields = $this->getRequest()->input('fields', ['id', 'title']);
-        $type = $this->getType($this->getRequest()->input('treeId', 0));
-        $model = $this->getModelByTypeId($this->getRequest()->input('treeId', 0));
-
-        $items = $this->getListItem($model);
-
-        $config = app('telenok.config.repository')->getObjectFieldController();
-
-        $fieldsIterate = $type->field()->active()->get()->filter(function($item) use ($fields)
-        {
-            return in_array($item->code, $fields, true);
-        });
-
-        foreach ($items as $item)
-        {
-            foreach ($fieldsIterate as $field)
-            {
-                $put[$field->code] = $config->get($field->key)->getListFieldContent($field, $item, $type);
-            }
-
-            $content[] = $put;
-        }
-
-        return json_encode($content);
-    }
-
     public function getList()
     {        
         $model = null;
@@ -295,13 +265,14 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $length = $input->input('length', $this->pageLength);
         $typeId = $input->input('typeId', 0);
 
+
         try
         {
             if (empty($typeId))
             {
                 throw new \Exception('Please, define typeId');
             }
-            
+
             if (is_array($typeId))
             {
                 $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
@@ -325,6 +296,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 {
                     $put = collect();
 
+                    $this->fillListItem($item, $put, $model, $type);
                     $controllerProcessing->fillListItem($item, $put, $model, $type);
 
                     $content[] = $put->all();

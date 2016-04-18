@@ -88,14 +88,12 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     public function choose()
     {        
         $input = $this->getRequest();
-        $typeId = (array)$input->input('typeId', 0);
+        $typeId = $input->input('typeId', 0);
 
         try
         {
-            $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
-
-            $model = $this->getModelByTypeId($id);
-            $type = $this->getType($id);
+            $model = $this->getModelByTypeId($typeId);
+            $type = $this->getType($typeId);
             $fields = $model->getFieldList();
         }
         catch (\Exception $exc)
@@ -143,7 +141,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 
         return parent::getFilterQuery($model, $query);
     }
-    
+
     public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null, $type = null)
     {
         $config = app('telenok.config.repository')->getObjectFieldController();
