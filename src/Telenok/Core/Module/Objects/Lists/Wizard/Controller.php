@@ -142,15 +142,8 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         return parent::getFilterQuery($model, $query);
     }
 
-    public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null, $type = null)
+    public function fillListItemProcessed($item = null, \Illuminate\Support\Collection $put = null, $model = null, $type = null)
     {
-        $config = app('telenok.config.repository')->getObjectFieldController();
-
-        foreach ($model->getFieldList() as $field)
-        {
-            $put->put($field->code, $config->get($field->key)->getListFieldContent($field, $item, $type));
-        }
-
         $put->put('choose', $this->getChooseButton($item, $type, $put));
 
         return $this;

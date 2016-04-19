@@ -296,8 +296,8 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                 {
                     $put = collect();
 
-                    $this->fillListItem($item, $put, $model, $type);
                     $controllerProcessing->fillListItem($item, $put, $model, $type);
+                    $this->fillListItemProcessed($item, $put, $model, $type);
 
                     $content[] = $put->all();
                 }    
@@ -311,6 +311,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
                     $put = collect();
 
                     $this->fillListItem($item, $put, $model, $type);
+                    $this->fillListItemProcessed($item, $put, $model, $type);
 
                     $content[] = $put->all();
                 }    
@@ -342,7 +343,7 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
         $config = app('telenok.config.repository')->getObjectFieldController();
 
         $put->put('tableCheckAll', '<input type="checkbox" class="ace ace-checkbox-2" '
-                . 'name="tableCheckAll[]" value="' . $item->getKey() . '"><span class="lbl"></span>');
+            . 'name="tableCheckAll[]" value="' . $item->getKey() . '"><span class="lbl"></span>');
 
         foreach ($model->getFieldList() as $field)
         {
@@ -353,6 +354,11 @@ class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controlle
 
         $put->put('tableManageItem', $this->getListButton($item, $type, $canDelete));
 
+        return $this;
+    }
+
+    public function fillListItemProcessed($item = null, \Illuminate\Support\Collection $put = null, $model = null, $type = null)
+    {
         return $this;
     }
 

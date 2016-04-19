@@ -1336,6 +1336,20 @@ class Controller extends \Telenok\Core\Interfaces\Module\Controller implements I
     }
 
     /**
+     * @method fillListItemProcessed
+     * Process item for list.
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $item
+     * @param {Illuminate.Support.Collection} $put
+     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @return {Telenok.Core.Interfaces.Presentation.TreeTab.Controller}
+     * @member Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+     */
+    public function fillListItemProcessed($item = null, \Illuminate\Support\Collection $put = null, $model = null)
+    {
+        return $this;
+    }
+
+    /**
      * @method getListItemProcessed
      * Additionally processing item for list.
      * @param {Telenok.Core.Model.Object.Field} $field
