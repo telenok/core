@@ -17,9 +17,9 @@ class CreateFileMimeTypeTable extends Migration {
 				$table->mediumText('title')->nullable();
 				$table->string('mime_type')->nullable();
 				$table->integer('active')->unsigned()->nullable();
-				$table->timestamp('active_at_start')->nullable();
-				$table->timestamp('active_at_end')->nullable();
-				$table->timestamp('locked_at')->nullable();
+				$table->dateTime('active_at_start')->nullable();
+				$table->dateTime('active_at_end')->nullable();
+				$table->dateTime('locked_at')->nullable();
 				$table->integer('created_by_user')->unsigned()->nullable();
 				$table->integer('updated_by_user')->unsigned()->nullable();
 				$table->integer('deleted_by_user')->unsigned()->nullable()->default(null);

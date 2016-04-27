@@ -60,8 +60,6 @@
                     });
 
                     $el.closest('div.container-model-{{$uniqueId}}').html(data.tabContent);
-                    
-                    jQuery('div.container-model-{{$uniqueId}} div.form-actions').trigger('affixed-top.bs.affix');
                 }
 
             @show
@@ -111,7 +109,7 @@
                     title: '{{$controller->LL('notice.error')}}! {{$controller->LL('notice.error.undefined')}}',
                     text: errorGritterText.join("<br>"),
                     class_name: 'gritter-error gritter-light',
-                    time: 5000,
+                    time: 5000
             });
 
             @show

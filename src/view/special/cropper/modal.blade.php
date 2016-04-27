@@ -531,7 +531,6 @@
                         case 'getCroppedCanvas':
                             if (result) 
                             {
-
                                 // Bootstrap's Modal
                                 $croppedCanvasModal.modal('show').find('.modal-body').html(result);
 

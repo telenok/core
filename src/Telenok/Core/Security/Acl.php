@@ -875,7 +875,7 @@ class Acl {
             return true;
         }
 
-        if (!config('app.acl.enabled') || ($this->hasRole('super_administrator')) && $this->subject instanceof \Telenok\Core\Model\User)
+        if (!config('app.acl.enabled') || $this->hasRole('super_administrator'))
         {
             return true;
         }
@@ -1018,22 +1018,22 @@ class Acl {
         $r = range_minutes($this->getCacheMinutes());
 
         $spr = $this->subject->with(
-                                [
-                                    'group' => function($query) use ($r)
-                                    {
-                                        $query->where('group.active', 1)
-                                        ->where('group.active_at_start', '<=', $r[1])
-                                        ->where('group.active_at_end', '>=', $r[0]);
-                                    },
-                                    'group.role' => function($query) use ($role, $r)
-                                    {
-                                        $query->where('role.id', $role->getKey())
-                                        ->where('role.active', 1)
-                                        ->where('role.active_at_start', '<=', $r[1])
-                                        ->where('role.active_at_end', '>=', $r[0]);
-                                    }
-                        ])
-                        ->whereId($this->subject->getKey())->get();
+                    [
+                        'group' => function($query) use ($r)
+                        {
+                            $query->where('group.active', 1)
+                            ->where('group.active_at_start', '<=', $r[1])
+                            ->where('group.active_at_end', '>=', $r[0]);
+                        },
+                        'group.role' => function($query) use ($role, $r)
+                        {
+                            $query->where('role.id', $role->getKey())
+                            ->where('role.active', 1)
+                            ->where('role.active_at_start', '<=', $r[1])
+                            ->where('role.active_at_end', '>=', $r[0]);
+                        }
+                    ])
+                    ->whereId($this->subject->getKey())->get();
 
         foreach ($spr as $user)
         {

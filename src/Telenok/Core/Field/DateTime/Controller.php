@@ -66,7 +66,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     public function getListFieldContent($field, $item, $type = null)
     {  
         return e((string)$item->{$field->code});
-    } 
+    }
 
     /**
      * @method setModelAttribute
@@ -84,7 +84,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @member Telenok.Core.Field.DateTime.Controller
      */
     public function setModelAttribute($model, $key, $value, $field)
-    {  
+    {
         if ($value === null)
         {
             $value = $field->datetime_default ?: null;
@@ -253,7 +253,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
         {
             \Schema::table($table, function(Blueprint $table) use ($fieldName)
             {
-                $table->timestamp($fieldName)->nullable();
+                $table->dateTime($fieldName)->nullable();
             });
         }
         

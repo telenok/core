@@ -16,9 +16,9 @@ class CreateUserTable extends Migration {
 				$table->softDeletes();
 				$table->mediumText('title')->nullable();
 				$table->integer('active')->unsigned()->nullable();
-				$table->timestamp('active_at_start')->nullable();
-				$table->timestamp('active_at_end')->nullable();
-				$table->timestamp('locked_at')->nullable();
+				$table->dateTime('active_at_start')->nullable();
+				$table->dateTime('active_at_end')->nullable();
+				$table->dateTime('locked_at')->nullable();
 				$table->string('username')->nullable();
 				$table->string('usernick')->nullable();
 				$table->string('email')->nullable();

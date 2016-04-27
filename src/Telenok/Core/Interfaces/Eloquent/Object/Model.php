@@ -1186,32 +1186,32 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
      */
     public function translate($field, $locale = '')
     {
+        $val = $this->{$field};
+        $localeDefault = config('app.localeDefault');
         $locale = $locale ? : config('app.locale');
 
-        if ($this->{$field} instanceof \Illuminate\Support\Collection)
+        if ($val instanceof \Illuminate\Support\Collection)
         {
-            $translated = $this->{$field}->get($locale);
-
-            return $translated ? : $this->{$field}->get(app('config')->get('app.localeDefault'));
+            return $val->get($locale) ? : ($val->get($localeDefault) ? : $val->get('en'));
         }
-        else if (($this->{$field} instanceof \ArrayAccess && ($v = $this->{$field})) || (($v = json_decode($this->{$field}, true)) && json_last_error() === JSON_ERROR_NONE))
+        else if ((($v = $val) instanceof \ArrayAccess && $val) || (($v = json_decode($val, true)) && json_last_error() === JSON_ERROR_NONE))
         {
             if (isset($v[$locale]))
             {
                 return $v[$locale];
             }
-            else if (isset($v[config('app.localeDefault')]))
+            else if (isset($v[$localeDefault]))
             {
-                return $v[config('app.localeDefault')];
+                return $v[$localeDefault];
             }
             else
             {
-                return $this->{$field};
+                return $v;
             }
         }
         else
         {
-            return $this->{$field};
+            return $val;
         }
     }
 

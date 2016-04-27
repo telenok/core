@@ -23,9 +23,9 @@ class CreateObjectFieldTable extends Migration {
 				$table->integer('deleted_by_user')->unsigned()->nullable()->default(null);
 				$table->integer('locked_by_user')->unsigned()->nullable()->default(null); 
 				$table->integer('active')->unsigned()->nullable();
-				$table->timestamp('active_at_start')->nullable();
-				$table->timestamp('active_at_end')->nullable();
-				$table->timestamp('locked_at')->nullable();
+				$table->dateTime('active_at_start')->nullable();
+				$table->dateTime('active_at_end')->nullable();
+				$table->dateTime('locked_at')->nullable();
 				$table->string('key')->nullable();
 				$table->string('rule')->nullable();
 				$table->string('field_view')->nullable();

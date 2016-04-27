@@ -1,4 +1,5 @@
-<?php 
+<?php
+
     $disabled = false;
     
     $domAttr = ['id' => $field->code . '-' . $uniqueId, 'class' => $field->css_class?: 'col-sm-4'];

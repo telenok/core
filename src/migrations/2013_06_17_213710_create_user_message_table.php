@@ -16,9 +16,9 @@ class CreateUserMessageTable extends Migration {
 				$table->softDeletes();
 				$table->mediumText('title')->nullable();
 				$table->integer('active')->unsigned()->nullable();
-				$table->timestamp('active_at_start')->nullable();
-				$table->timestamp('active_at_end')->nullable();
-				$table->timestamp('locked_at')->nullable();
+				$table->dateTime('active_at_start')->nullable();
+				$table->dateTime('active_at_end')->nullable();
+				$table->dateTime('locked_at')->nullable();
 				$table->integer('author_user_message')->unsigned()->nullable();
 				$table->mediumText('content')->nullable();
 				$table->integer('created_by_user')->unsigned()->nullable();

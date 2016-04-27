@@ -19,9 +19,9 @@ class CreateObjectTypeTable extends Migration {
 				$table->mediumText('title_list')->nullable();
 				$table->string('code')->unique()->nullable();
 				$table->integer('active')->unsigned()->nullable();
-				$table->timestamp('active_at_start')->nullable();
-				$table->timestamp('active_at_end')->nullable();
-				$table->timestamp('locked_at')->nullable();
+				$table->dateTime('active_at_start')->nullable();
+				$table->dateTime('active_at_end')->nullable();
+				$table->dateTime('locked_at')->nullable();
 				$table->string('class_model')->nullable();
 				$table->string('class_controller')->nullable();
 				$table->integer('treeable')->unsigned()->nullable()->default(0);

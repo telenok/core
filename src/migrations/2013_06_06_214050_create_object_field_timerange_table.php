@@ -13,12 +13,12 @@ class CreateObjectFieldTimerangeTable extends Migration {
 			{
 				if (!\Schema::hasColumn('object_field', 'time_range_default_start'))
 				{
-					$table->timestamp('time_range_default_start')->nullable();
+					$table->dateTime('time_range_default_start')->nullable();
 				}
 
 				if (!\Schema::hasColumn('object_field', 'time_range_default_end'))
 				{
-					$table->timestamp('time_range_default_end')->nullable();
+					$table->dateTime('time_range_default_end')->nullable();
 				}
 			});
 		}

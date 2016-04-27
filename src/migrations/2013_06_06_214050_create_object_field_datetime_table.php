@@ -13,7 +13,7 @@ class CreateObjectFieldDatetimeTable extends Migration {
 			{
 				if (!\Schema::hasColumn('object_field', 'datetime_default'))
 				{
-					$table->timestamp('datetime_default')->nullable();
+					$table->dateTime('datetime_default')->nullable();
 				}
 			});
 		}

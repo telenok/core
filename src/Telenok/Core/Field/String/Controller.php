@@ -133,29 +133,32 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
     {
         if ($field->multilanguage)
         {
-            if ($value === null)
-            {
-                $value = [];
-            }
-
+            $current = $model->{$key};
             $defaultLanguage = config('app.localeDefault', "en");
 
             if (is_string($value))
             {
-                $value = [$defaultLanguage => $value];
+                $current[$defaultLanguage] = $value;
+            }
+            else
+            {
+                foreach ($value as $language => $v)
+                {
+                    $current[$language] = $v;
+                }
             }
 
             $default = (array) json_decode($field->string_default ? : "[]", true);
 
             foreach ($default as $language => $v)
             {
-                if (!isset($value[$language]) || !strlen($value[$language]))
+                if (!isset($value[$language]) && !$current->get($language))
                 {
-                    $value[$language] = $v;
+                    $current->put($language, $v);
                 }
             }
 
-            $value = json_encode($value, JSON_UNESCAPED_UNICODE);
+            $value = json_encode($current->all(), JSON_UNESCAPED_UNICODE);
         }
         else
         {
