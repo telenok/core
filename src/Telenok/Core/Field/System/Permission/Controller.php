@@ -275,7 +275,77 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             }
         }
     }
-    
+
+    /**
+     * @method getTitleList
+     * @member Telenok.Core.Interfaces.Field.Controller
+     */
+    public function getTitleList($id = null, $closure = null)
+    {
+        $return = [];
+
+        if (!($term = trim($this->getRequest()->input('term'))))
+        {
+            return $return;
+        }
+
+        if ($id) {
+            $model = app(\App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model);
+        } else {
+            $model = app('\App\Telenok\Core\Model\Object\Sequence');
+        }
+
+        $query = $model::select([$model->getTable() . '.*', 'resource.code as resource_code'])
+                    ->withPermission()->with('sequencesObjectType');
+
+        if (in_array('title', $model->getMultilanguage(), true)) {
+            $query->join('object_translation', function ($join) use ($model) {
+                $join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id')
+                    ->on('object_translation.translation_object_field_code', '=', app('db')->raw("'title'"))
+                    ->on('object_translation.translation_object_language', '=', app('db')->raw("'" . config('app.locale') . "'"));
+            });
+        }
+
+        $query->leftJoin('resource', function ($join) use ($model, $term)
+        {
+            $join->on($model->getTable() . '.id', '=', 'resource.id');
+        });
+
+        $query->where(function ($query) use ($term, $model) {
+            if (trim($term)) {
+                collect(explode(' ', $term))
+                    ->reject(function ($i) {
+                        return !trim($i);
+                    })
+                    ->each(function ($i) use ($query, $model) {
+                        if (in_array('title', $model->getMultilanguage(), true)) {
+                            $query->where('object_translation.translation_object_string', 'like', "%{$i}%");
+                        } else {
+                            $query->where($model->getTable() . '.title', 'like', "%{$i}%");
+                        }
+                    });
+
+                $query->orWhere($model->getTable() . '.id', (int)$term);
+                $query->orWhere('resource.code', 'like', "%{$term}%");
+            }
+        });
+
+        if ($closure instanceof \Closure) {
+            $closure($query);
+        }
+
+        $query->take(20)->groupBy($model->getTable() . '.id')->get()->each(function ($item) use (&$return) {
+            $return[] = [
+                'class' => 'searched',
+                'value' => $item->id,
+                'text' => "[{$item->sequencesObjectType->translate('title')} #{$item->id}] "
+                    . $item->translate('title') . (($vv = $item->resource_code)? ' ' . $vv :'')
+            ];
+        });
+
+        return $return;
+    }
+
     /**
      * @method saveModelField
      * Save eloquent model with field's data.

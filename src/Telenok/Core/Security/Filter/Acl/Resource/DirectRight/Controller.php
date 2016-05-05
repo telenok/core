@@ -137,7 +137,7 @@ class Controller extends \Telenok\Core\Interfaces\Security\Filter\Acl\Resource\C
                     $join->on('role_permission_user_filter_direct_right.id', '=', 'pivot_relation_m2m_role_group_filter_direct_right.role');
                 });
 
-                $queryCommon->leftJoin($group->getTable() . ' as group_permission_user_filter_direct_right', function($join) use ($group, $now)
+                $queryCommon->leftJoin($group->getTable() . ' as group_permission_user_filter_direct_right', function($join) use ($group, $r)
                 {
                     $join->on('pivot_relation_m2m_role_group_filter_direct_right.role_group', '=', 'group_permission_user_filter_direct_right.id');
                     $join->on('group_permission_user_filter_direct_right.' . $group->getDeletedAtColumn(), ' is ', app('db')->raw("null"));

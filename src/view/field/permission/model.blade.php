@@ -41,6 +41,7 @@ $jsUnique = str_random();
                 @foreach($permissions as $permission) 
                 <div class="tab-pane active" id="{{$permission->code . $jsUnique}}">
                     <div class="controls" style="margin-left: 0;">
+
                         <select class="chosen" multiple data-placeholder="{{$controller->LL('notice.choose')}}" id="permission-{{$permission->code . $jsUnique}}" name="permission[{{$permission->code}}][]">
                             <?php
                             $sequence = new \App\Telenok\Core\Model\Object\Sequence();
@@ -66,39 +67,38 @@ $jsUnique = str_random();
                             }
                             ?>
                         </select>
+
                     </div>
                 </div>
 
                 <script type="text/javascript">
                     jQuery('ul#field-tabs-{{$jsUnique}}-permission a:first').tab('show');
 
-                    jQuery("#permission-{{$permission->code . $jsUnique}}").on("chosen:showing_dropdown", function()
-                    {
+                    jQuery("#permission-{{$permission->code . $jsUnique}}").on("chosen:showing_dropdown", function() {
                         telenok.maxZ("*", jQuery(this).parent().find("div.chosen-drop"));
-                    })
-                    .ajaxChosen({
+                    }).ajaxChosen({
                         keepTypingMsg: "{{ $controller->LL('notice.typing') }}",
                         lookingForMsg: "{{ $controller->LL('notice.looking-for') }}",
                         type: "GET",
                         url: "{!! $urlListTitle !!}",
                         dataType: "json",
-                        minTermLength: 1
+                        minTermLength: 1,
+                        afterTypeDelay: 2000
                     },
-                            function (data)
-                            {
-                                var results = [];
+                    function (data)
+                    {
+                        var results = [];
 
-                                jQuery.each(data, function (i, val) {
-                                    results.push({value: val.value, text: val.text});
-                                });
+                        jQuery.each(data, function (i, val) {
+                            results.push({value: val.value, text: val.text});
+                        });
 
-                                return results;
-                            },
-                            {
-                                width: "100%",
-                                no_results_text: "{{ $controller->LL('notice.not-found') }}"
-                            });
-
+                        return results;
+                    },
+                    {
+                        width: "100%",
+                        no_results_text: "{{ $controller->LL('notice.not-found') }}"
+                    });
                 </script>
                 @endforeach
             </div>

@@ -906,7 +906,6 @@ class Acl {
             return false;
         }
 
-
         if ($permissionCode instanceof \Telenok\Core\Model\Security\Permission)
         {
             $permission = \App\Telenok\Core\Model\Security\Permission::where('id', $resourceCode->getKey())->active()->first();
