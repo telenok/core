@@ -119,23 +119,23 @@ class SeedPageTable extends Migration {
         );
 
         (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-                [
-                    'title' => ['en' => 'URL pattern', 'ru' => 'URL шаблон'],
-                    'title_list' => ['en' => 'URL pattern', 'ru' => 'URL шаблон'],
-                    'key' => 'string',
-                    'code' => 'url_pattern',
-                    'active' => 1,
-                    'string_default' => '/',
-                    'field_object_type' => $modelTypeId,
-                    'field_object_tab' => $tabMainId,
-                    'multilanguage' => 0,
-                    'show_in_form' => 1,
-                    'show_in_list' => 1,
-                    'allow_search' => 1,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 8,
-                ]
+            [
+                'title' => ['en' => 'URL pattern', 'ru' => 'URL шаблон'],
+                'title_list' => ['en' => 'URL pattern', 'ru' => 'URL шаблон'],
+                'key' => 'string',
+                'code' => 'url_pattern',
+                'active' => 1,
+                'string_default' => '/',
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 0,
+                'show_in_form' => 1,
+                'show_in_list' => 1,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'field_order' => 8,
+            ]
         );
 
         (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
@@ -156,7 +156,26 @@ class SeedPageTable extends Migration {
                     'field_order' => 9,
                 ]
         );
-        
+
+        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+            [
+                'title' => ['en' => 'Router name', 'ru' => 'Название роутера'],
+                'title_list' => ['en' => 'Router name', 'ru' => 'Название роутера'],
+                'key' => 'string',
+                'code' => 'router_name',
+                'active' => 1,
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 0,
+                'show_in_form' => 1,
+                'show_in_list' => 1,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'field_order' => 8,
+            ]
+        );
+
         (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
                 'key' => 'tree',

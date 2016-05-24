@@ -153,7 +153,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 
         if ($this->menuType == 1)
         {
-            $ids = (array)json_decode('[' . $this->nodeIds . ']'); 
+            $ids = (array)json_decode('[' . $this->nodeIds . ']');
         }
         else if ($this->menuType == 2)
         {

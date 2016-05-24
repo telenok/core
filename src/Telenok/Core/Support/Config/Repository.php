@@ -246,14 +246,16 @@ class Repository {
 
                 if ($page->page_domain && $domain->getKey() == $page->page_domain)
                 {
-                    $routeDomain[$page->page_domain][] = 'app("router")->get("' . $page->getAttribute('url_pattern') . '", array("as" => "page_' . $page->getKey() . '",'
-                            . ' "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . $page->pagePageController->controller_method . '"));'
+                    $routeDomain[$page->page_domain][] = 'app("router")->get("' . $page->getAttribute('url_pattern') . '", array("as" => "'
+                        . ($page->router_name ? : 'page_' . $page->getKey())
+                        . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . $page->pagePageController->controller_method . '"));'
                     ;
                 }
                 else if (!$page->page_domain)
                 {
-                    $routeCommon[$page->getKey()] = 'app("router")->get("' . $page->getAttribute('url_pattern') . '", array("as" => "page_' . $page->getKey() . '",'
-                            . ' "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . $page->pagePageController->controller_method . '"));'
+                    $routeCommon[$page->getKey()] = 'app("router")->get("' . $page->getAttribute('url_pattern') . '", array("as" => "'
+                        . ($page->router_name ? : 'page_' . $page->getKey())
+                        . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . $page->pagePageController->controller_method . '"));'
                     ;
                 }
             }

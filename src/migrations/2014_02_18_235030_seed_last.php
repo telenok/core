@@ -1222,7 +1222,7 @@ class SeedLast extends Migration {
                 'app.localeDefault' => 'en',
                 'app.locales' => ['en'],
                 'app.timezone' => 'UTC',
-                'telenok.theme' => 'default'
+                'telenok.view.theme' => 'default'
             ]
         ]);
 

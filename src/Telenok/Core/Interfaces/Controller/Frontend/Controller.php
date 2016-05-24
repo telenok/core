@@ -246,8 +246,6 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      */
     public function getContent()
     {
-        $content = [];
-
         $pageId = intval(str_replace('page_', '', app('router')->currentRouteName()));
 
         try
@@ -292,6 +290,8 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      */
     public function getNotCachedContent($page)
     {
+        $content = [];
+
         $listWidget = app('telenok.config.repository')->getWidget();
 
         foreach ($this->container as $containerId)

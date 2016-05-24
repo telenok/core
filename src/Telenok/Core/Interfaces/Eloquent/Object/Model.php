@@ -383,16 +383,14 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
                 if ($this->trashed())
                 {
                     $this->forceDeleting = true;
-
-                    return parent::delete();
                 }
                 else if (app('auth')->check())
                 {
                     $this->deleted_by_user = app('auth')->user()->id;
                     $this->save();
-
-                    return parent::delete();
                 }
+
+                return parent::delete();
             });
         }
         else
@@ -541,6 +539,11 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
         {
             $key = $this->removeTableFromKey($key);
 
+            if ($key == 'multilanguage' && get_class($this) == 'App\Telenok\Core\Model\Object\Type')
+            {
+                dd($key, '$this->isFillable($key) ' . $this->isFillable($key), 'static::$unguarded ' . static::$unguarded);
+            }
+
             if ($this->isFillable($key))
             {
                 $this->__set($key, $value);
@@ -655,7 +658,7 @@ class Model extends \App\Telenok\Core\Interfaces\Eloquent\BaseModel {
         {
             if ($input->has($fillable))
             {
-                
+
             }
             else if (!$model->exists)
             {
