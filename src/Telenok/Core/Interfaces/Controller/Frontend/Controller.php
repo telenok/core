@@ -246,11 +246,18 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
      */
     public function getContent()
     {
-        $pageId = intval(str_replace('page_', '', app('router')->currentRouteName()));
+        $routerName = app('router')->currentRouteName();
 
         try
         {
-            $page = \App\Telenok\Core\Model\Web\Page::active()->withPermission()->cacheTags('page_' . $pageId)->findOrFail($pageId);
+            $pageModel = app(\App\Telenok\Core\Model\Web\Page::class);
+
+            $page = $pageModel->active()->withPermission()
+                ->where(function($query) use ($pageModel, $routerName)
+                {
+                    $query->where($pageModel->getTable() . '.id', intval(str_replace('page_', '', $routerName)));
+                    $query->orWhere($pageModel->getTable() . '.router_name', $routerName);
+                })->cacheTags($routerName)->firstOrFail();
         }
         catch (\Exception $e)
         {

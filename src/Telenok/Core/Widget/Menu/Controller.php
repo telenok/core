@@ -153,13 +153,11 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
 
         if ($this->menuType == 1)
         {
-            $ids = (array)json_decode('[' . $this->nodeIds . ']');
+            $ids = (array)json_decode($this->nodeIds);
         }
         else if ($this->menuType == 2)
         {
-            $ids = str_replace('{', ',[', $this->nodeIds);
-            $ids = str_replace('}', ']', $ids);
-            $ids = (array)json_decode('[' . $ids . ']');
+            $ids = (array)json_decode($this->nodeIds);
         }
 
         $class = \App\Telenok\Core\Model\Object\Type::where(function($query)
@@ -176,7 +174,18 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
         $idsArray = array_flatten($ids); 
 
         array_walk($idsArray, 'trim');
-        array_walk($idsArray, 'intval');
+
+        // replace router_name values in pageId
+        $model->where(function($query) use ($idsArray, $model)
+        {
+            $query->whereIn($model->getTable() . '.id', $idsArray);
+            $query->orWhereIn($model->getTable() . '.router_name', $idsArray);
+        })->get()->each(function($item) use (&$idsArray)
+        {
+            $idsArray = array_map(function ($v) use ($item) {
+                return $item->router_name === $v ? $item->getKey() : $v;
+            }, $idsArray);
+        });
 
         $items = $model::withTreeAttr()
                     ->withPermission()
@@ -195,7 +204,6 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
                         }
                     })
                     ->orderBy(app('db')->raw('FIELD(' . $model->getTable() . '.id, "' . implode('", "', $idsArray) . '")'))
-                    ->orderBy('pivot_tree_children.tree_depth')
                     ->orderBy('pivot_tree_children.tree_depth')
                     ->get();
 
