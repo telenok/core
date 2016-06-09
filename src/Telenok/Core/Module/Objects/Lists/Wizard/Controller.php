@@ -86,7 +86,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     }
 
     public function choose()
-    {        
+    {
         $input = $this->getRequest();
         $typeId = $input->input('typeId', 0);
 
@@ -115,9 +115,6 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
                 'gridId' => str_random(),
                 'saveBtn' => $input->input('saveBtn', true),
                 'chooseBtn' => $input->input('chooseBtn', true),
-                'contentForm' =>
-                    (($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof IPresentation) 
-                        ? $controllerProcessing->getFormContent($model, $type, $fields, $uniqueId) : FALSE),
             ))->render()
         );
     }

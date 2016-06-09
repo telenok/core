@@ -440,7 +440,7 @@ class Acl {
      * \App\Telenok\Core\Security\Acl::subjectAny([200, $user])->setPermission('read', 'control_panel')
      * \App\Telenok\Core\Security\Acl::subjectAll([200, $user])->setPermission('read', 'control_panel')
      * \App\Telenok\Core\Security\Acl::role(316)->setPermission('read', 'control_panel')
-     * \App\Telenok\Core\Security\Acl::role(316)->setPermission(['read', 'update'], 2341)
+     * \App\Telenok\Core\Security\Acl::role(316)->setPermission(['read', 'update'], [2341, 23, 442])
      * \App\Telenok\Core\Security\Acl::user(339)->setPermission('read', 'news')
      * \App\Telenok\Core\Security\Acl::role(800)->setPermission(233, 1901)
      * \App\Telenok\Core\Security\Acl::subject(\Process $process)->setPermission(\App\Telenok\Core\Model\Security\Permission $permission, \App\Telenok\Core\Model\Security\Resource $resource)
@@ -469,6 +469,16 @@ class Acl {
             foreach ($permissionCode as $pCode)
             {
                 $this->setPermission($pCode, $resourceCode);
+            }
+
+            return $this;
+        }
+
+        if (is_array($resourceCode))
+        {
+            foreach ($resourceCode as $rCode)
+            {
+                $this->setPermission($permissionCode, $rCode);
             }
 
             return $this;
