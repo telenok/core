@@ -92,9 +92,20 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 
         try
         {
-            $model = $this->getModelByTypeId($typeId);
-            $type = $this->getType($typeId);
-            $fields = $model->getFieldList();
+            if (is_array($typeId))
+            {
+                $idOfSequenceType = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
+
+                $model = $this->getModelByTypeId($idOfSequenceType);
+                $type = $this->getType($idOfSequenceType);
+                $fields = $model->getFieldList();
+            }
+            else
+            {
+                $model = $this->getModelByTypeId($typeId);
+                $type = $this->getType($typeId);
+                $fields = $model->getFieldList();
+            }
         }
         catch (\Exception $exc)
         {
