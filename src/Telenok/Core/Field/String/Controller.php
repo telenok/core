@@ -142,7 +142,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
             }
             else
             {
-                foreach ($value as $language => $v)
+                foreach ((array)$value as $language => $v)
                 {
                     $current[$language] = $v;
                 }
