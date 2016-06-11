@@ -1,6 +1,6 @@
 <?php namespace {{namespace}};
 
-class {{class}} extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model  {
+class {{class}} extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model  {
 
     protected $table = '{{table}}';
 

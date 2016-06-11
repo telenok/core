@@ -62,7 +62,7 @@ class SeedGroupTable extends Migration {
 
 }
 
-class SeedGroupTableTranslation extends \Telenok\Core\Interfaces\Translation\Controller {
+class SeedGroupTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller {
 
 	public static $keys = [
         'field' => [

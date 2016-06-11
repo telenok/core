@@ -4,10 +4,10 @@ namespace Telenok\Core\Security\Filter\Acl\Resource\ObjectType;
 
 /**
  * @class Telenok.Core.Security.Filter.Acl.Resource.ObjectType.Controller
- * @extends Telenok.Core.Interfaces.Security.Filter.Acl.Resource.Controller
+ * @extends Telenok.Core.Abstraction.Security.Filter.Acl.Resource.Controller
  * Class filtering access to resource by its linked object type permissions.
  */
-class Controller extends \Telenok\Core\Interfaces\Security\Filter\Acl\Resource\Controller {
+class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\Controller {
 
     protected $key = 'object-type';
 

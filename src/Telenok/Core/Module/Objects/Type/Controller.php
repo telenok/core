@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Objects\Type;
 
 /**
  * @class Telenok.Core.Module.Objects.Type.Controller
- * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.TreeTabObject.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller {
 
     protected $key = 'objects-type';
     protected $parent = 'objects';

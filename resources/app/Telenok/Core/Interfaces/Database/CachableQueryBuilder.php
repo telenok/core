@@ -1,3 +1,3 @@
-<?php namespace App\Telenok\Core\Interfaces\Database;
+<?php namespace App\Telenok\Core\Abstraction\Database;
 
-class CachableQueryBuilder extends \Telenok\Core\Interfaces\Database\CachableQueryBuilder {}
+class CachableQueryBuilder extends \Telenok\Core\Abstraction\Database\CachableQueryBuilder {}

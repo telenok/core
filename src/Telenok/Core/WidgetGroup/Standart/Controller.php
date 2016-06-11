@@ -3,9 +3,9 @@
 /**
  * @class Telenok.Core.WidgetGroup.Standart.Controller
  * Standart widget's group.
- * @extends Telenok.Core.Interfaces.Widget.Group.Controller
+ * @extends Telenok.Core.Abstraction.Widget.Group.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Widget\Group\Controller {
+class Controller extends \Telenok\Core\Abstraction\Widget\Group\Controller {
 
     /**
      * @protected

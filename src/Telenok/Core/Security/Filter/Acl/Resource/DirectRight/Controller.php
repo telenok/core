@@ -4,10 +4,10 @@ namespace Telenok\Core\Security\Filter\Acl\Resource\DirectRight;
 
 /**
  * @class Telenok.Core.Security.Filter.Acl.Resource.DirectRight.Controller
- * @extends Telenok.Core.Interfaces.Security.Filter.Acl.Resource.Controller
+ * @extends Telenok.Core.Abstraction.Security.Filter.Acl.Resource.Controller
  * Class filtering direct rights access to resource
  */
-class Controller extends \Telenok\Core\Interfaces\Security\Filter\Acl\Resource\Controller {
+class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\Controller {
 
     /**
      * @protected

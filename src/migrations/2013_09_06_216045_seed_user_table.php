@@ -275,7 +275,7 @@ class SeedUserTable extends Migration {
 
 }
 
-class SeedUserTableTranslation extends \Telenok\Core\Interfaces\Translation\Controller {
+class SeedUserTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller {
 
 	public static $keys = [
         'field' => [

@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Users;
 
 /**
  * @class Telenok.Core.Module.Users.Controller
- * @extends Telenok.Core.Interfaces.Module.Controller
+ * @extends Telenok.Core.Abstraction.Module.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Module\Controller {
+class Controller extends \Telenok\Core\Abstraction\Module\Controller {
 
     protected $key = 'users';
     protected $parent = false;

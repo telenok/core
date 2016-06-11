@@ -9,9 +9,9 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 /**
  * @class Telenok.Core.Model.User.User
- * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class User extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model implements AuthenticatableContract, CanResetPasswordContract {
+class User extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model implements AuthenticatableContract, CanResetPasswordContract {
 
     use Authenticatable,
         CanResetPassword;

@@ -1,3 +1,3 @@
-<?php namespace App\Telenok\Core\Interfaces\Database\Connection;
+<?php namespace App\Telenok\Core\Abstraction\Database\Connection;
 
-class SQLiteConnection extends \Telenok\Core\Interfaces\Database\Connection\SQLiteConnection {}
+class SQLiteConnection extends \Telenok\Core\Abstraction\Database\Connection\SQLiteConnection {}

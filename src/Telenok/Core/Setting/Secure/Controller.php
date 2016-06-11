@@ -4,9 +4,9 @@
  * @class Telenok.Core.Setting.Secure.Controller
  * Controller secure setting.
  * 
- * @extends Telenok.Core.Interfaces.Setting.Controller
+ * @extends Telenok.Core.Abstraction.Setting.Controller
  */
-class Controller extends \App\Telenok\Core\Interfaces\Setting\Controller {
+class Controller extends \App\Telenok\Core\Abstraction\Setting\Controller {
 
     /**
      * @protected
@@ -30,9 +30,9 @@ class Controller extends \App\Telenok\Core\Interfaces\Setting\Controller {
     /**
      * @method save
      * Save setting's values in database.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {Illuminate.Support.Collection} $input
-     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @return {Telenok.Core.Abstraction.Eloquent.Object.Model}
      * @member Telenok.Core.Setting.Secure.Controller
      */
     public function save($model, $input)

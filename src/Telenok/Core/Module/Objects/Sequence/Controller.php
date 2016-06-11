@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Objects\Sequence;
 
 /**
  * @class Telenok.Core.Module.Objects.Sequence.Controller
- * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.TreeTabObject.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller {
 
     protected $key = 'objects-sequence';
     protected $parent = 'objects';

@@ -4,9 +4,9 @@ namespace Telenok\Core\Model\Web;
 
 /**
  * @class Telenok.Core.Model.Web.WidgetOnPage
- * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class WidgetOnPage extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
+class WidgetOnPage extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $ruleList = ['title' => ['required', 'min:1']];
     protected $table = 'widget_on_page';

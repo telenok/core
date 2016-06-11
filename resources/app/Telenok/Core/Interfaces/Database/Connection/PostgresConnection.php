@@ -1,3 +1,3 @@
-<?php namespace App\Telenok\Core\Interfaces\Database\Connection;
+<?php namespace App\Telenok\Core\Abstraction\Database\Connection;
 
-class PostgresConnection extends \Telenok\Core\Interfaces\Database\Connection\PostgresConnection {}
+class PostgresConnection extends \Telenok\Core\Abstraction\Database\Connection\PostgresConnection {}

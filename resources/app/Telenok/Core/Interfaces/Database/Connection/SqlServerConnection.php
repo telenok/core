@@ -1,3 +1,3 @@
-<?php namespace App\Telenok\Core\Interfaces\Database\Connection;
+<?php namespace App\Telenok\Core\Abstraction\Database\Connection;
 
-class SqlServerConnection extends \Telenok\Core\Interfaces\Database\Connection\SqlServerConnection {}
+class SqlServerConnection extends \Telenok\Core\Abstraction\Database\Connection\SqlServerConnection {}

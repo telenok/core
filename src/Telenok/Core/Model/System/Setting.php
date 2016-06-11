@@ -4,9 +4,9 @@ namespace Telenok\Core\Model\System;
 
 /**
  * @class Telenok.Core.Model.System.Setting
- * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Setting extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Setting extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $table = 'setting';
 

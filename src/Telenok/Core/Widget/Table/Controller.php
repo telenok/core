@@ -4,9 +4,9 @@
  * @class Telenok.Core.Widget.Table.Controller
  * Class presents table widget.
  * 
- * @extends Telenok.Core.Interfaces.Widget.Controller
+ * @extends Telenok.Core.Abstraction.Widget.Controller
  */
-class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
+class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 
     /**
      * @protected

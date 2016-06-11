@@ -6,10 +6,10 @@ namespace Telenok\Core\Controller\Frontend;
  * Class to process initial backend http request
  * 
  * @class Telenok.Core.Controller.Frontend.Controller
- * @extends Telenok.Core.Interfaces.Controller.Frontend.Controller
+ * @extends Telenok.Core.Abstraction.Controller.Frontend.Controller
  * @mixin Illuminate.Foundation.Validation.ValidatesRequests
  */
-class Controller extends \Telenok\Core\Interfaces\Controller\Frontend\Controller {
+class Controller extends \Telenok\Core\Abstraction\Controller\Frontend\Controller {
 
     use \Illuminate\Foundation\Validation\ValidatesRequests;
 

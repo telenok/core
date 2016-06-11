@@ -4,9 +4,9 @@ namespace Telenok\Core\Model\System;
 
 /**
  * @class Telenok.Core.Model.System.Language
- * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Language extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Language extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $guarded = [];
     protected $table = 'language';

@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Packages\ComposerManager;
 
 /**
  * @class Telenok.Core.Module.Packages.ComposerManager.Controller
- * @extends Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.TreeTab.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controller {
 
     protected $key = 'composer-manager';
     protected $parent = 'packages';

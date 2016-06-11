@@ -16,7 +16,7 @@ class File {
 
     /**
      * @protected
-     * @property {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @property {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Eloquent object.
      * @member Telenok.Core.Field.Upload.File
      */
@@ -61,7 +61,7 @@ class File {
      * @constructor
      * Initialize internal data
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @member Telenok.Core.Field.Upload.File
      */

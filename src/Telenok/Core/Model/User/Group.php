@@ -4,9 +4,9 @@ namespace Telenok\Core\Model\User;
 
 /**
  * @class Telenok.Core.Model.User.Group
- * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Group extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Group extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $ruleList = ['title' => ['required', 'min:1'], 'code' => ['required', 'unique:group,code,:id:,id', 'regex:/^[A-Za-z][A-Za-z0-9_.-]*$/']];
     protected $table = 'group';

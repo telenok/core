@@ -3,13 +3,13 @@
 namespace Telenok\Core\Controller\Auth;
 
 use Illuminate\Contracts\Auth\Guard;
-use Telenok\Core\Contract\Auth\PasswordBroker;
+use Telenok\Core\Controller\Auth\PasswordBroker;
 
 /**
  * @class Telenok.Core.Controller.Auth.PasswordController
- * @extends Telenok.Core.Interfaces.Controller.Controller
+ * @extends Telenok.Core.Abstraction.Controller.Controller
  */
-class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller {
+class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller {
 
     protected $key = 'backend-password-reset';
     protected $emailView = 'core::email.password-reset';
@@ -30,7 +30,7 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 
         $view = app('config')->get('passwords.users.email');
 
-        $this->passwords = new \App\Telenok\Core\Contract\Auth\PasswordBroker(
+        $this->passwords = new PasswordBroker(
                 $tokens, $users, app('mailer'), $view
         );
 
@@ -129,10 +129,10 @@ class PasswordController extends \Telenok\Core\Interfaces\Controller\Controller 
 
         switch ($response)
         {
-            case \Illuminate\Contracts\Auth\PasswordBroker::RESET_LINK_SENT:
+            case PasswordBroker::RESET_LINK_SENT:
                 return json_encode(['success' => 1]);
 
-            //case \Illuminate\Contracts\Auth\PasswordBroker::INVALID_USER:
+            //case PasswordBroker::INVALID_USER:
             default:
                 return json_encode(['error' => 1]);
         }

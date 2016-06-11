@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\System\Setting;
 
 /**
  * @class Telenok.Core.Module.System.Setting.Controller
- * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.TreeTabObject.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller {
 
     protected $key = 'system-setting';
     protected $presentation = 'tree-tab-object';

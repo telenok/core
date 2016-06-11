@@ -19,7 +19,7 @@ class CoreServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        $this->app->resolving(function(\Telenok\Core\Interfaces\Support\IRequest $object, $app)
+        $this->app->resolving(function(\Telenok\Core\Contract\Injection\Request $object, $app)
         {
             $object->setRequest($app['request']);
         });
@@ -64,7 +64,7 @@ class CoreServiceProvider extends ServiceProvider {
             return;
         }
 
-        \Telenok\Core\Interfaces\Field\Relation\Controller::readMacroFile();
+        \Telenok\Core\Abstraction\Field\Relation\Controller::readMacroFile();
         
         \Event::fire('telenok.compile.setting');
 
@@ -134,7 +134,7 @@ class CoreServiceProvider extends ServiceProvider {
             {
                 list($connection, $database, $prefix, $config) = $parameters;
 
-                $class = '\App\Telenok\Core\Interfaces\Database\Connection\\' . $driver . 'Connection';
+                $class = '\App\Telenok\Core\Abstraction\Database\Connection\\' . $driver . 'Connection';
 
                 return new $class($connection, $database, $prefix, $config);
             });

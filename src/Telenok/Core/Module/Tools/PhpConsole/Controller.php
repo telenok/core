@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Tools\PhpConsole;
 
 /**
  * @class Telenok.Core.Module.Tools.PhpConsole.Controller
- * @extends Telenok.Core.Interfaces.Presentation.Simple.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.Simple.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\Simple\Controller {
 
     protected $key = 'php-console';
     protected $parent = 'tools';

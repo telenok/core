@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Users\ProfileEdit;
 
 /**
  * @class Telenok.Core.Module.Users.ProfileEdit.Controller
- * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.TreeTabObject.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller {
 
     protected $key = 'users-profile-edit';
     protected $parent = 'users';

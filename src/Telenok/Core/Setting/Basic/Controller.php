@@ -4,9 +4,9 @@
  * @class Telenok.Core.Setting.Basic.Controller
  * Controller base setting.
  * 
- * @extends Telenok.Core.Interfaces.Setting.Controller
+ * @extends Telenok.Core.Abstraction.Setting.Controller
  */
-class Controller extends \App\Telenok\Core\Interfaces\Setting\Controller {
+class Controller extends \App\Telenok\Core\Abstraction\Setting\Controller {
 
     /**
      * @protected
@@ -31,7 +31,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Setting\Controller {
     /**
      * @method fillSettingValue
      * Set setting's values in global app('config').
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {mixed} $value
      * @return {void}
      * @member Telenok.Core.Setting.Basic.Controller

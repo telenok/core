@@ -297,7 +297,7 @@ This section is intended to make thoroughly clear what is believed to
 be a consequence of the rest of this License.
 
   8. If the distribution and/or use of the Program is restricted in
-certain countries either by patents or by copyrighted interfaces, the
+certain countries either by patents or by copyrighted Abstraction, the
 original copyright holder who places the Program under this License
 may add an explicit geographical distribution limitation excluding
 those countries, so that distribution is permitted only in or among
@@ -759,7 +759,7 @@ This section is intended to make thoroughly clear what is believed to
 be a consequence of the rest of this License.
 
   12. If the distribution and/or use of the Library is restricted in
-certain countries either by patents or by copyrighted interfaces, the
+certain countries either by patents or by copyrighted Abstraction, the
 original copyright holder who places the Library under this License may add
 an explicit geographical distribution limitation excluding those countries,
 so that distribution is permitted only in or among countries not thus

@@ -4,9 +4,9 @@
  * @class Telenok.Core.Setting.License.Controller
  * Controller license setting.
  * 
- * @extends Telenok.Core.Interfaces.Setting.Controller
+ * @extends Telenok.Core.Abstraction.Setting.Controller
  */
-class Controller extends \App\Telenok\Core\Interfaces\Setting\Controller {
+class Controller extends \App\Telenok\Core\Abstraction\Setting\Controller {
 
     /**
      * @protected

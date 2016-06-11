@@ -13,7 +13,7 @@ class Validator extends \Illuminate\Validation\Validator {
 
     /**
      * @protected
-     * @property {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @property {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Model to validate.
      * @member Telenok.Core.Support.Validator.Validator
      */

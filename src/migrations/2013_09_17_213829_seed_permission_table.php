@@ -41,7 +41,7 @@ class SeedPermissionTable extends Migration {
 
 }
 
-class SeedPermissionTableTranslation extends \Telenok\Core\Interfaces\Translation\Controller {
+class SeedPermissionTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller {
 
 	public static $keys = [
         'field' => [

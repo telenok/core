@@ -4,9 +4,9 @@
  * Class to process initial backend http request
  * 
  * @class Telenok.Core.Controller.Backend.Controller
- * @extends Telenok.Core.Interfaces.Controller.Backend.Controller
+ * @extends Telenok.Core.Abstraction.Controller.Backend.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Controller\Backend\Controller {
+class Controller extends \Telenok\Core\Abstraction\Controller\Backend\Controller {
 
     /**
      * @protected

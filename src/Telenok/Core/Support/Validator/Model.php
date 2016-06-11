@@ -10,7 +10,7 @@ class Model {
 
     /**
      * @protected
-     * @property {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @property {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Model to validate.
      * @member Telenok.Core.Support.Validator.Model
      */
@@ -59,7 +59,7 @@ class Model {
     /**
      * @method setModel
      * Set validation model.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $param
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $param
      * @return {Telenok.Core.Support.Validator.Model}
      * @member Telenok.Core.Support.Validator.Model
      */
@@ -73,7 +73,7 @@ class Model {
     /**
      * @method getModel
      * Return model.
-     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @return {Telenok.Core.Abstraction.Eloquent.Object.Model}
      * @member Telenok.Core.Support.Validator.Model
      */
     public function getModel()
@@ -214,7 +214,7 @@ class Model {
      */
     public function passes()
     {
-        if ($this->model instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model && $this->model->exists)
+        if ($this->model instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model && $this->model->exists)
         {
             $this->ruleList = array_intersect_key($this->getRuleList(), $this->getInput()->toArray());
 

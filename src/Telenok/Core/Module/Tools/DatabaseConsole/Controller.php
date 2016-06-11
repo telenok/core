@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Tools\DatabaseConsole;
 
 /**
  * @class Telenok.Core.Module.Tools.DatabaseConsole.Controller
- * @extends Telenok.Core.Interfaces.Presentation.Simple.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.Simple.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\Simple\Controller {
 
     protected $key = 'database-console';
     protected $parent = 'tools';

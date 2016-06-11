@@ -498,7 +498,7 @@ class Acl {
             throw new \Exception('Can\'t find permission');
         }
 
-        if ($resourceCode instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model)
+        if ($resourceCode instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model)
         {
             $resource = $resourceCode;
         }
@@ -616,7 +616,7 @@ class Acl {
             $permission = \App\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->first();
         }
 
-        if ($subjectCode instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model)
+        if ($subjectCode instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model)
         {
             $subject = $subjectCode;
         }
@@ -898,7 +898,7 @@ class Acl {
         $resource = null;
         $permission = null;
 
-        if ($resourceCode instanceof \Telenok\Core\Interfaces\Eloquent\Object\Model)
+        if ($resourceCode instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model)
         {
             $resource = $resourceCode;
         }

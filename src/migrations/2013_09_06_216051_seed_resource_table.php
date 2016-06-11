@@ -41,7 +41,7 @@ class SeedResourceTable extends Migration {
 	}
 }
 
-class SeedResourceTableTranslation extends \Telenok\Core\Interfaces\Translation\Controller {
+class SeedResourceTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller {
 
 	public static $keys = [
         'field' => [

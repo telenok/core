@@ -4,9 +4,9 @@ namespace Telenok\Core\Model\Object;
 
 /**
  * @class Telenok.Core.Model.Object.Type
- * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Type extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Type extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $ruleList = ['title' => ['required', 'min:1'], 'code' => ['required', 'unique:object_type,code,:id:,id', 'regex:/^[a-z][\w]*$/i'], 'title_list' => ['required', 'min:1']];
     protected $table = 'object_type';

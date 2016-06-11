@@ -6,9 +6,9 @@ use \Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundExcepti
 
 /**
  * @class Telenok.Core.Module.Users.Message.Controller
- * @extends Telenok.Core.Interfaces.Presentation.Simple.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.Simple.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\Simple\Controller {
 
     public function getParent()
     {

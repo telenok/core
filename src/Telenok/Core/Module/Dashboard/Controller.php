@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Dashboard;
 
 /**
  * @class Telenok.Core.Module.Dashboard.Controller
- * @extends Telenok.Core.Interfaces.Presentation.Simple.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.Simple.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\Simple\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\Simple\Controller {
 
     protected $key = 'dashboard';
     protected $parent = false;

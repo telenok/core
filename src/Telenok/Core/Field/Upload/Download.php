@@ -4,9 +4,9 @@
  * @class Telenok.Core.Field.Upload.Download
  * Class for downloading file with field key "upload".
  * 
- * @extends Telenok.Core.Interfaces.Controller.Controller
+ * @extends Telenok.Core.Abstraction.Controller.Controller
  */
-class Download extends \Telenok\Core\Interfaces\Controller\Controller {
+class Download extends \Telenok\Core\Abstraction\Controller\Controller {
 
     /**
      * @method stream

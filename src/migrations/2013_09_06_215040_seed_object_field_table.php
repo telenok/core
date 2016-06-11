@@ -430,7 +430,7 @@ class SeedObjectFieldTable extends Migration {
 
 }
 
-class SeedObjectFieldTableTranslation extends \Telenok\Core\Interfaces\Translation\Controller {
+class SeedObjectFieldTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller {
 
     public static $keys = [
         'field' => [

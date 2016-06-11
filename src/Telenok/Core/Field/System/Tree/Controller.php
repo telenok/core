@@ -19,7 +19,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @protected
      * @property {String} $viewModel
-     * View to show field form-element when creating or updating {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * View to show field form-element when creating or updating {Telenok.Core.Abstraction.Eloquent.Object.Model}
      * @member Telenok.Core.Field.System.Tree.Controller
      */
     protected $viewModel = "core::field.relation-many-to-many.model";
@@ -37,7 +37,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * Return array with URL for variables in $viewModel view.
      *
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @param {String} $uniqueId
      * @return {Array}
@@ -70,7 +70,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * Return HTML content of form element for the field
      *
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @param {String} $uniqueId
      * @return {String}
@@ -78,7 +78,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     {
-        return \Telenok\Core\Interfaces\Field\Controller::getFormModelContent($controller, $model, $field, $uniqueId);
+        return \Telenok\Core\Abstraction\Field\Controller::getFormModelContent($controller, $model, $field, $uniqueId);
     }
 
     /**
@@ -144,11 +144,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * 
      * @param {Telenok.Core.Model.Object.Field} $field
      * Eloquent object Field.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Illuminate.Support.Collection} $input
      * Values of request.
-     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @return {Telenok.Core.Abstraction.Eloquent.Object.Model}
      * @member Telenok.Core.Field.System.Tree.Controller
      * @throws {Exception}
      */

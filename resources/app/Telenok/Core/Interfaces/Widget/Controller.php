@@ -1,3 +1,3 @@
-<?php namespace App\Telenok\Core\Interfaces\Widget;
+<?php namespace App\Telenok\Core\Abstraction\Widget;
 
-class Controller extends \Telenok\Core\Interfaces\Widget\Controller {}
+class Controller extends \Telenok\Core\Abstraction\Widget\Controller {}

@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Widget\Model\Grid;
 
-class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
+class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
 	protected $config;
 	protected $id;
@@ -131,7 +131,7 @@ class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
 	{
 		
 		
-		return app('\Telenok\Core\Interfaces\Field\Relation\Controller')->getTitleList($id, $closure);
+		return app('\Telenok\Core\Abstraction\Field\Relation\Controller')->getTitleList($id, $closure);
 	}
 
 	public function getList($typeId = 0, $closure = null, $btnActionView = 'core::widget.grid.buttonAction')

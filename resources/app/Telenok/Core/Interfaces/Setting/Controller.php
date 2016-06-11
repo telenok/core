@@ -1,5 +1,5 @@
-<?php namespace App\Telenok\Core\Interfaces\Setting;
+<?php namespace App\Telenok\Core\Abstraction\Setting;
 
-class Controller extends \Telenok\Core\Interfaces\Setting\Controller {
+class Controller extends \Telenok\Core\Abstraction\Setting\Controller {
 
 }

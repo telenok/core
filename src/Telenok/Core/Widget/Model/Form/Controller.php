@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Widget\Model\Form;
 
-class Controller extends \Telenok\Core\Interfaces\Controller\Controller {
+class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
 	protected $config;
 	protected $id;

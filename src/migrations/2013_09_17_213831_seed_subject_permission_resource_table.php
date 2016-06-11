@@ -110,7 +110,7 @@ class SeedSubjectPermissionResourceTable extends Migration {
 	}
 }
 
-class SeedObjectPermissionResourceTableTranslation extends \Telenok\Core\Interfaces\Translation\Controller {
+class SeedObjectPermissionResourceTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller {
 
 	public static $keys = [
         'field' => [

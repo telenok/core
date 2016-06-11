@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
+class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
     protected $key = 'morph-one-to-many'; 
     protected $specialField = ['morph_one_to_many_has', 'morph_one_to_many_belong_to', 'morph_one_to_many_belong_to_type_list'];

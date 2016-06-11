@@ -1,5 +1,5 @@
-<?php namespace App\Telenok\Core\Interfaces\Eloquent\Cache;
+<?php namespace App\Telenok\Core\Abstraction\Eloquent\Cache;
 
 trait QueryCache {
-    use \Telenok\Core\Interfaces\Eloquent\Cache\QueryCache;
+    use \Telenok\Core\Abstraction\Eloquent\Cache\QueryCache;
 }

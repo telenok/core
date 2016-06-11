@@ -4,9 +4,9 @@ namespace Telenok\Core\Model\Object;
 
 /**
  * @class Telenok.Core.Model.Object.Sequence
- * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Sequence extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
+class Sequence extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $table = 'object_sequence';
     protected $hasVersioning = false;

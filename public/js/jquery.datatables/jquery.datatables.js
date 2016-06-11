@@ -18562,7 +18562,7 @@ ColReorder.version = "1.3.0";
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * DataTables interfaces
+ * DataTables Abstraction
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // Expose
@@ -20717,7 +20717,7 @@ FixedHeader.defaults = {
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * DataTables interfaces
+ * DataTables Abstraction
  */
 
 // Attach for constructor access

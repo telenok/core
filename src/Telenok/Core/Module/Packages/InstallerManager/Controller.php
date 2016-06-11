@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Packages\InstallerManager;
 
 /**
  * @class Telenok.Core.Module.Packages.InstallerManager.Controller
- * @extends Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.TreeTab.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controller {
 
     protected $key = 'installer-manager';
     protected $parent = 'packages';

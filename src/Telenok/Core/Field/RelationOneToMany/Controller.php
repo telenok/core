@@ -6,9 +6,9 @@ use Illuminate\Database\Schema\Blueprint;
  * @class Telenok.Core.Field.RelationOneToMany.Controller
  * Class of field "relation-one-to-many". Field allow to link objects.
  * 
- * @extends Telenok.Core.Interfaces.Field.Relation.Controller
+ * @extends Telenok.Core.Abstraction.Field.Relation.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
+class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
     /**
      * @protected
@@ -67,7 +67,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * Return array with URL for variables in $viewModel view.
      * 
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @param {String} $uniqueId
      * 
@@ -92,7 +92,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * Return HTML content of form element for the field
      * 
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @param {String} $uniqueId
      * @return {String}
@@ -123,7 +123,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * @method getModelFillableField
      * Define list of fields in Eloquent object which can be filled by user.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Telenok.Core.Model.Object.Field} $field
      * Object with data of field's configuration.
@@ -314,7 +314,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * @method fill
      * Fill model attributes before calling saveModelField.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Telenok.Core.Model.Object.Field} $field
      * Object with data of field's configuration.
@@ -339,11 +339,11 @@ class Controller extends \Telenok\Core\Interfaces\Field\Relation\Controller {
      * 
      * @param {Telenok.Core.Model.Object.Field} $field
      * Eloquent object Field.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {Illuminate.Support.Collection} $input
      * Values of request.
-     * @return {Telenok.Core.Interfaces.Eloquent.Object.Model}
+     * @return {Telenok.Core.Abstraction.Eloquent.Object.Model}
      * @member Telenok.Core.Field.RelationOneToMany.Controller
      */
     public function saveModelField($field, $model, $input)

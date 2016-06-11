@@ -4,9 +4,9 @@
  * @class Telenok.Core.Widget.Menu.Controller
  * Class presents menu widget.
  * 
- * @extends Telenok.Core.Interfaces.Widget.Controller
+ * @extends Telenok.Core.Abstraction.Widget.Controller
  */
-class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
+class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 
     /**
      * @protected
@@ -79,7 +79,7 @@ class Controller extends \App\Telenok\Core\Interfaces\Widget\Controller {
         }
         else 
         {
-            $this->menuType = $this->getConfig('menu_type', $this->cacheTime);
+            $this->menuType = $this->getConfig('menu_type', $this->menuType);
             $this->nodeIds = $this->getConfig('node_ids', $this->nodeIds);
             $this->objectType = $this->getConfig('object_type', $this->objectType);
         }

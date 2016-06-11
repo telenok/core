@@ -4,9 +4,9 @@ namespace Telenok\Core\Model\User;
 
 /**
  * @class Telenok.Core.Model.User.UserMessage
- * @extends Telenok.Core.Interfaces.Eloquent.Object.Model
+ * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class UserMessage extends \App\Telenok\Core\Interfaces\Eloquent\Object\Model {
+class UserMessage extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $ruleList = ['content' => ['required', 'min:1']];
     protected $table = 'user_message';

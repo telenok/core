@@ -1,3 +1,3 @@
-<?php namespace App\Telenok\Core\Interfaces\Eloquent\Object;
+<?php namespace App\Telenok\Core\Abstraction\Eloquent\Object;
 
-class Model extends \Telenok\Core\Interfaces\Eloquent\Object\Model {}
+class Model extends \Telenok\Core\Abstraction\Eloquent\Object\Model {}

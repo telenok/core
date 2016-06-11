@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Web\PageController;
 
 /**
  * @class Telenok.Core.Module.Web.PageController.Controller
- * @extends Telenok.Core.Interfaces.Presentation.TreeTabObject.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.TreeTabObject.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTabObject\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller {
 
     protected $key = 'web-page-controller';
     protected $parent = 'web';

@@ -40,7 +40,7 @@ class SeedFolderTable extends Migration {
 }
 
 
-class SeedFolderTableTranslation extends \Telenok\Core\Interfaces\Translation\Controller {
+class SeedFolderTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller {
 
 	public static $keys = [
         'field' => [

@@ -4,9 +4,9 @@ namespace Telenok\Core\Module\Files\Browser\Wizard\Directory;
 
 /**
  * @class Telenok.Core.Module.Files.Browser.Wizard.Controller
- * @extends Telenok.Core.Interfaces.Presentation.TreeTab.Controller
+ * @extends Telenok.Core.Abstraction.Presentation.TreeTab.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Presentation\TreeTab\Controller {
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controller {
 
     protected $key = 'file-browser';
     protected $parent = 'files';

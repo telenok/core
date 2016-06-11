@@ -133,7 +133,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     /**
      * @method getFilterQuery
      * Return filtered query.
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {Illuminate.Database.Query.Builder} $query
      * @return {void}
      * @member Telenok.Core.Module.Objects.Lists.Wizard.Controller

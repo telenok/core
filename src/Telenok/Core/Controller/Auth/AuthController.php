@@ -4,9 +4,9 @@ namespace Telenok\Core\Controller\Auth;
 
 /**
  * @class Telenok.Core.Controller.Auth.AuthController
- * @extends Telenok.Core.Interfaces.Controller.Backend.Controller
+ * @extends Telenok.Core.Abstraction.Controller.Backend.Controller
  */
-class AuthController extends \Telenok\Core\Interfaces\Controller\Backend\Controller {
+class AuthController extends \Telenok\Core\Abstraction\Controller\Backend\Controller {
 
     use \Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers,
         \Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -35,6 +35,11 @@ class AuthController extends \Telenok\Core\Interfaces\Controller\Backend\Control
      */
     public function getLogin()
     {
+        if (app('auth')->check() && app('auth')->can('read', 'control_panel'))
+        {
+            return redirect()->route('telenok.content');
+        }
+
         return view('core::controller.backend-login', ['controller' => $this])->render();
     }
 

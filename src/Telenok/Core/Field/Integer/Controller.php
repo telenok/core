@@ -6,9 +6,9 @@ use Illuminate\Database\Schema\Blueprint;
  * @class Telenok.Core.Field.Integer.Controller
  * Class of field "integer". Field can store integers.
  * 
- * @extends Telenok.Core.Interfaces.Field.Controller
+ * @extends Telenok.Core.Abstraction.Field.Controller
  */
-class Controller extends \Telenok\Core\Interfaces\Field\Controller {
+class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
     /**
      * @protected
@@ -92,7 +92,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method getModelAttribute
      * Return processed value of field.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {String} $key
      * Field's name.
@@ -117,7 +117,7 @@ class Controller extends \Telenok\Core\Interfaces\Field\Controller {
      * @method setModelAttribute
      * Return processed value of field.
      * 
-     * @param {Telenok.Core.Interfaces.Eloquent.Object.Model} $model
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Eloquent object.
      * @param {String} $key
      * Field's name.
