@@ -50,13 +50,17 @@ class CoreServiceProvider extends ServiceProvider {
         // using custom guard
         app('auth')->extend('telenok', function($app, $name, array $config)
         {
-            return app(
-                        '\App\Telenok\Core\Security\Guard', 
-                        [
-                            $name,
-                            $app['auth']->createUserProvider($config['provider'])
-                        ]
-                    );
+            $guard = app(
+                \App\Telenok\Core\Security\Guard::class,
+                [
+                    $name,
+                    $app['auth']->createUserProvider($config['provider'])
+                ]
+            );
+
+            $guard->setCookieJar($app->make('cookie'));
+
+            return $guard;
         });        
 
         if (!file_exists(storage_path('telenok/installedTelenokCore.lock')))
