@@ -77,7 +77,7 @@ class CoreServiceProvider extends ServiceProvider {
                 \Event::fire('telenok.compile.route');
             }
         }
-        
+
         if ($theme = \App\Telenok\Core\Support\Config\Theme::activeTheme())
         {
             $this->loadViewsFrom(base_path(str_finish(config('app.path_theme'), '/') . $theme . '/views'), 'theme');

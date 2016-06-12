@@ -129,11 +129,6 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         collect($value)->each(function($item, $key)
         {
-            if ($key == 'app.locales')
-            {
-                $item = collect($item);
-            }
-            
             app('config')->set($key, $item);
         });
     }
