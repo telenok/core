@@ -84,13 +84,13 @@ class Package extends Command {
                 {
                     $c = preg_replace(
                         '/["\']' . preg_quote('Telenok\Core\CoreServiceProvider', '/') . '["\']/',
-                        "\"Telenok\Core\CoreServiceProvider\",\n\"$provider\"",
+                        "\"Telenok\Core\CoreServiceProvider\",\n'$provider'",
                         $c
                     );
                 }
                 else
                 {
-                    $c = str_replace('###providers###', "\"$provider\",\n###providers###", $c);
+                    $c = str_replace('###providers###', "'$provider',\n###providers###", $c);
                 }
             }
             
