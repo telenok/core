@@ -1,15 +1,5 @@
 <?php
 
-app('validator')->resolver(function($translator, $data, $rules, $messages, $customAttributes)
-{
-    return new \App\Telenok\Core\Support\Validator\Validator($translator, $data, $rules, $messages, $customAttributes);
-});
-
-app('validator')->extend('valid_regex', function($attribute, $value, $parameters)
-{
-    return (@preg_match($value, NULL) !== FALSE);
-});
-
 app('events')->listen('telenok.repository.package', function($list)
 {
     $list->push('Telenok\Core\PackageInfo');

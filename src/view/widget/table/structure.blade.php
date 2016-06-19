@@ -1,3 +1,6 @@
+
+{!!  Form::hidden("structure[cache_key]", uniqid()) !!}
+
 <div class="form-group">
 	{!!  Form::label("structure[col]", $controller->LL('title.col'), array('class' => 'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-9">

@@ -1246,6 +1246,12 @@ class SeedLast extends Migration {
                 'license.key' => 'demo',
             ],
         ]);
-    }
 
+        (new \App\Telenok\Core\Model\System\Setting())->storeOrUpdate([
+            'title' => ['en' => 'Widget config cache', 'ru' => 'Кэш конфигураций виджетов'],
+            'active' => 1,
+            'code' => 'telenok.widget.config',
+            'value' => [],
+        ]);
+    }
 }

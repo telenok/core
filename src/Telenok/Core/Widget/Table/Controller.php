@@ -74,22 +74,19 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
      */
     public function setConfig($config = [])
     {
-        parent::setConfig($config);
-        
-        if ($m = $this->getWidgetModel())
-        {
-            $structure = $m->structure;
+		parent::setConfig(array_merge($config, [
+			'row'    			=> array_get($config, 'row', $this->row),
+			'col'      			=> array_get($config, 'col', $this->col),
+			'container_ids'  	=> array_get($config, 'container_ids', $this->containerIds),
+		]));
 
-            $this->row = array_get($structure, 'row');
-            $this->col = array_get($structure, 'col');
-            $this->containerIds = array_get($structure, 'containerIds');
-        }
-        else 
-        {
-            $this->row = $this->getConfig('row', $this->row);
-            $this->col = $this->getConfig('col', $this->col);
-            $this->containerIds = $this->getConfig('containerIds', $this->containerIds);
-        }
+		/*
+         * We can restore widget config from cache by cache_key, so set object member value manually
+         *
+         */
+		$this->row     			= $this->getConfig('row');
+		$this->col      		= $this->getConfig('col');
+		$this->containerIds   	= $this->getConfig('container_ids');
 
         return $this;
     }
@@ -184,7 +181,7 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 			$structure->put('col', $this->col);
 		}
 
-		if (!$structure->has('containerIds') || (count($structure->get('containerIds', [])) < $structure->get('col') * $structure->get('row') ))
+		if (!$structure->has('container_ids') || (count($structure->get('container_ids', [])) < $structure->get('col') * $structure->get('row') ))
 		{
 			$ids = [];
 
@@ -196,13 +193,13 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 				}
 			}
 
-			$structure->put('containerIds', $ids);
+			$structure->put('container_ids', $ids);
 			$widgetOnPage->structure = $structure->all();
 			$widgetOnPage->save();
 		}
 
 		$rows = [];
-		$containerIds = $structure->get('containerIds');
+		$containerIds = $structure->get('container_ids');
 
 		for ($r = 0; $r < $structure->get('row'); $r++)
 		{
@@ -374,7 +371,7 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 
 		$newContainres = [];
 
-		foreach($structure->get('containerIds') as $key => $container)
+		foreach($structure->get('container_ids') as $key => $container)
 		{ 
 			$newContainres[$key] = preg_replace('/(container-)(\d+)(-\d+-\d+)/', "\${1}" . $widgetOnPage->id . "\${3}", $container);
 
@@ -395,7 +392,7 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 			});
 		}
 
-		$structure->put('containerIds', $newContainres);
+		$structure->put('container_ids', $newContainres);
 		$widgetOnPage->structure = $structure->all();
 		$widgetOnPage->save();
 	}
@@ -430,7 +427,7 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 			$structure->put('col', $this->col);
 		}
 
-		if (!$structure->has('containerIds')/* || (count($structure->get('containerIds')) < $structure->get('row') * $structure->get('row') )*/)
+		if (!$structure->has('container_ids')/* || (count($structure->get('containerIds')) < $structure->get('row') * $structure->get('row') )*/)
 		{
 			$ids = [];
 
@@ -442,7 +439,7 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 				}
 			}
 
-			$structure->put('containerIds', $ids);
+			$structure->put('container_ids', $ids);
 			$w->structure = $structure->all();
 			$w->save();
 		}
@@ -463,7 +460,7 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 	{
 		$w = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
         
-		if (\App\Telenok\Core\Model\Web\WidgetOnPage::whereIn('container', $w->structure->get('containerIds', []))->count())
+		if (\App\Telenok\Core\Model\Web\WidgetOnPage::whereIn('container', $w->structure->get('container_ids', []))->count())
 		{
             throw new \Exception($this->LL('widget.has.child'));
 		}
@@ -546,7 +543,7 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
             }
         }
 
-        $structure->put('containerIds', $ids);
+        $structure->put('container_ids', $ids);
         $model->structure = $structure->all();
         $model->save();
 

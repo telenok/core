@@ -1,4 +1,6 @@
 
+{!!  Form::hidden("structure[cache_key]", uniqid()) !!}
+
 <div class="widget-box transparent">
 	<div class="widget-header widget-header-small">
 		<h4 class="row">

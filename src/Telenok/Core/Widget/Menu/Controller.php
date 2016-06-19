@@ -67,22 +67,19 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
      */
     public function setConfig($config = [])
     {
-        parent::setConfig($config);
+        parent::setConfig(array_merge($config, [
+            'menu_type'     => array_get($config, 'menu_type', $this->menuType),
+            'node_ids'      => array_get($config, 'node_ids', $this->nodeIds),
+            'object_type'   => array_get($config, 'object_type', $this->objectType),
+        ]));
 
-        if ($m = $this->getWidgetModel())
-        {
-            $structure = $m->structure;
-
-            $this->menuType = array_get($structure, 'menu_type');
-            $this->nodeIds = array_get($structure, 'node_ids');
-            $this->objectType = array_get($structure, 'object_type');
-        }
-        else 
-        {
-            $this->menuType = $this->getConfig('menu_type', $this->menuType);
-            $this->nodeIds = $this->getConfig('node_ids', $this->nodeIds);
-            $this->objectType = $this->getConfig('object_type', $this->objectType);
-        }
+        /*
+         * We can restore widget config from cache by cache_key, so set object member value manually
+         *
+         */
+        $this->menuType     = $this->getConfig('menu_type');
+        $this->nodeIds      = $this->getConfig('node_ids');
+        $this->objectType   = $this->getConfig('object_type');
 
         return $this;
     }

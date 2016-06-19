@@ -439,6 +439,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
             $type = $this->type();
 
+
             $this->sequence()->withTrashed()->first()->fill([
                 'title' => ($this->title instanceof \Illuminate\Support\Collection ? $this->title->all() : $this->title),
                 'created_at' => $this->created_at,
@@ -532,7 +533,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         $model->getDates();
         $model->getRule();
     }
-    
+
     /**
      * @method fill
      * Fill the model with an array of attributes.
@@ -547,11 +548,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         foreach ($this->fillableFromArray($attributes) as $key => $value)
         {
             $key = $this->removeTableFromKey($key);
-
-            if ($key == 'multilanguage' && get_class($this) == 'App\Telenok\Core\Model\Object\Type')
-            {
-                dd($key, '$this->isFillable($key) ' . $this->isFillable($key), 'static::$unguarded ' . static::$unguarded);
-            }
 
             if ($this->isFillable($key))
             {
@@ -630,6 +626,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             $t[$k] = $this->{$k};
         }
 
+        if ($input instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model) {
+            $input = $input->getAttributes();
+        }
+
         $input = collect($t)->merge($input);
 
         try
@@ -667,7 +667,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         {
             if ($input->has($fillable))
             {
-
             }
             else if (!$model->exists)
             {

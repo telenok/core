@@ -19,68 +19,21 @@ class CoreServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        $this->app->resolving(function(\Telenok\Core\Contract\Injection\Request $object, $app)
-        {
-            $object->setRequest($app['request']);
-        });
+        $this->addResolver();
+        $this->extendValidator();
+        $this->loadConfigFile();
+        $this->packageResourceRegister();
+        $this->packageCommandRegister();
 
-        $this->loadViewsFrom(realpath(__DIR__ . '/../../view'), 'core');
-        $this->loadTranslationsFrom(realpath(__DIR__ . '/../../lang'), 'core');
+        $this->setAuthProvider();
+        $this->setAuthGuard();
 
-        $this->publishes([realpath(__DIR__ . '/../../../public') => public_path('packages/telenok/core')], 'public');
+        $this->validateInstallFlag();
 
-        $this->publishes([realpath(__DIR__ . '/../../../resources/app') => app_path()], 'resourcesapp');
+        $this->readDBMacro();
 
-        include __DIR__ . '/../../config/helpers.php';
-        include __DIR__ . '/../../config/routes.php';
-        include __DIR__ . '/../../config/event.php';
-
-        $this->commands('command.telenok.install');
-        $this->commands('command.telenok.seed');
-        $this->commands('command.telenok.package');
-
-        // using custom provider
-        app('auth')->provider('telenok', function($app, array $config)
-        {
-            return new \App\Telenok\Core\Security\UserProvider(
-                    $app['hash'], 
-                    $app['config']['auth.providers.users']['model']);
-        });
-
-        // using custom guard
-        app('auth')->extend('telenok', function($app, $name, array $config)
-        {
-            $guard = app(
-                \App\Telenok\Core\Security\Guard::class,
-                [
-                    $name,
-                    $app['auth']->createUserProvider($config['provider'])
-                ]
-            );
-
-            $guard->setCookieJar($app->make('cookie'));
-
-            return $guard;
-        });        
-
-        if (!file_exists(storage_path('telenok/installedTelenokCore.lock')))
-        {
-            return;
-        }
-
-        \Telenok\Core\Abstraction\Field\Relation\Controller::readMacroFile();
-        
-        \Event::fire('telenok.compile.setting');
-
-        if (!app('request')->is('telenok', 'telenok/*') && !app()->routesAreCached())
-        {
-            $routersPath = storage_path('telenok/route/route.php');
-
-            if (!file_exists($routersPath))
-            {
-                \Event::fire('telenok.compile.route');
-            }
-        }
+        $this->compileSetting();
+        $this->compileRoute();
 
         if ($theme = \App\Telenok\Core\Support\Config\Theme::activeTheme())
         {
@@ -97,22 +50,11 @@ class CoreServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        $this->app->singleton('telenok.config.repository', '\App\Telenok\Core\Support\Config\Repository');
+        $this->registerConfigRepository();
 
-        $this->app['command.telenok.install'] = $this->app->share(function($app)
-        {
-            return new \App\Telenok\Core\Command\Install();
-        });
-
-        $this->app['command.telenok.seed'] = $this->app->share(function($app)
-        {
-            return new \App\Telenok\Core\Command\Seed();
-        });
-
-        $this->app['command.telenok.package'] = $this->app->share(function($app)
-        {
-            return new \App\Telenok\Core\Command\Package($app['composer']);
-        });
+        $this->registerCommandInstall();
+        $this->registerCommandSeed();
+        $this->registerCommandPackage();
 
         $this->registerDBConnection();
         $this->registerMemcache();
@@ -189,6 +131,140 @@ class CoreServiceProvider extends ServiceProvider {
                         return $driver;
                     });
                 });
+            }
+        }
+    }
+
+    public function setAuthProvider()
+    {
+        // using custom provider
+        app('auth')->provider('telenok', function($app, array $config)
+        {
+            return new \App\Telenok\Core\Security\UserProvider(
+                $app['hash'],
+                $app['config']['auth.providers.users']['model']);
+        });
+    }
+
+    public function setAuthGuard()
+    {
+        // using custom guard
+        app('auth')->extend('telenok', function($app, $name, array $config)
+        {
+            $guard = app(
+                \App\Telenok\Core\Security\Guard::class,
+                [
+                    $name,
+                    $app['auth']->createUserProvider($config['provider'])
+                ]
+            );
+
+            $guard->setCookieJar($app->make('cookie'));
+
+            return $guard;
+        });
+    }
+
+    public function extendValidator()
+    {
+        app('validator')->extend('valid_regex', function($attribute, $value, $parameters)
+        {
+            return (@preg_match($value, NULL) !== FALSE);
+        });
+    }
+
+    public function registerConfigRepository()
+    {
+        $this->app->singleton('telenok.config.repository', '\App\Telenok\Core\Support\Config\Repository');
+    }
+
+    public function registerCommandInstall()
+    {
+        $this->app['command.telenok.install'] = $this->app->share(function($app)
+        {
+            return new \App\Telenok\Core\Command\Install();
+        });
+    }
+
+    public function registerCommandSeed()
+    {
+        $this->app['command.telenok.seed'] = $this->app->share(function($app)
+        {
+            return new \App\Telenok\Core\Command\Seed();
+        });
+    }
+
+    public function registerCommandPackage()
+    {
+        $this->app['command.telenok.package'] = $this->app->share(function($app)
+        {
+            return new \App\Telenok\Core\Command\Package($app['composer']);
+        });
+    }
+
+    public function addResolver()
+    {
+        $this->app->resolving(function(\Telenok\Core\Contract\Injection\Request $object, $app)
+        {
+            $object->setRequest($app['request']);
+        });
+
+        app('validator')->resolver(function($translator, $data, $rules, $messages, $customAttributes)
+        {
+            return new \App\Telenok\Core\Support\Validator\Validator($translator, $data, $rules, $messages, $customAttributes);
+        });
+    }
+
+    public function loadConfigFile()
+    {
+        include __DIR__ . '/../../config/helpers.php';
+        include __DIR__ . '/../../config/routes.php';
+        include __DIR__ . '/../../config/event.php';
+    }
+
+    public function packageResourceRegister()
+    {
+        $this->loadViewsFrom(realpath(__DIR__ . '/../../view'), 'core');
+        $this->loadTranslationsFrom(realpath(__DIR__ . '/../../lang'), 'core');
+
+        $this->publishes([realpath(__DIR__ . '/../../../public') => public_path('packages/telenok/core')], 'public');
+        $this->publishes([realpath(__DIR__ . '/../../../resources/app') => app_path()], 'resourcesapp');
+    }
+
+    public function packageCommandRegister()
+    {
+        $this->commands('command.telenok.install');
+        $this->commands('command.telenok.seed');
+        $this->commands('command.telenok.package');
+    }
+
+    public function validateInstallFlag()
+    {
+        if (!file_exists(storage_path('telenok/installedTelenokCore.lock')))
+        {
+            return;
+        }
+    }
+
+    public function readDBMacro()
+    {
+        \Telenok\Core\Abstraction\Field\Relation\Controller::readMacroFile();
+    }
+
+    public function compileSetting()
+    {
+        app('events')->fire('telenok.compile.setting');
+    }
+
+    public function compileRoute()
+    {
+        if (!app('request')->is('telenok', 'telenok/*') && !app()->routesAreCached())
+        {
+            $routersPath = storage_path('telenok/route/route.php');
+
+            if (!file_exists($routersPath))
+            {
+                \Event::fire('telenok.compile.route');
             }
         }
     }

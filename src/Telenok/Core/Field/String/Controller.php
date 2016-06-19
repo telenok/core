@@ -138,13 +138,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
             if (is_string($value))
             {
-                $current[$defaultLanguage] = $value;
+                $current->put($defaultLanguage, $value);
             }
             else
             {
-                foreach ((array)$value as $language => $v)
+                foreach (collect($value)->all() as $language => $v)
                 {
-                    $current[$language] = $v;
+                    $current->put($language, $v);
                 }
             }
 
@@ -152,13 +152,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
             foreach ($default as $language => $v)
             {
-                if (!isset($value[$language]) && !$current->get($language))
+                if (!$current->get($language))
                 {
                     $current->put($language, $v);
                 }
             }
 
-            $value = json_encode($current->all(), JSON_UNESCAPED_UNICODE);
+            $value = json_encode($current->toArray(), JSON_UNESCAPED_UNICODE);
         }
         else
         {

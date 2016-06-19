@@ -184,16 +184,24 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function setConfig($config = [])
     {
-        $this->config = $config;
+        $this->config = array_merge([
+            'cache_key'         => array_get($config, 'cache_key', $this->cacheKey),
+            'cache_time'        => array_get($config, 'cache_time', $this->cacheTime),
+            'frontend_view'     => array_get($config, 'frontend_view', $this->getFrontendView()),
+        ], $config);
 
-        if ($m = $this->getWidgetModel())
+        if ($c = $this->getCachedConfig())
         {
-            $this->cacheTime = array_get($m->structure, 'cache_time', $this->cacheTime);
+            $this->config = $c;
         }
 
-        $this->frontendView = $this->getConfig('frontend_view', $this->getFrontendView());
-        $this->cacheKey = $this->getConfig('cache_key', $this->cacheKey);
-        $this->cacheTime = $this->getConfig('cache_time', $this->cacheTime);
+        /*
+         * We can restore widget config from cache by cache_key, so set object member value manually
+         *
+         */
+        $this->cacheKey     = $this->getConfig('cache_key');
+        $this->cacheTime    = $this->getConfig('cache_time');
+        $this->frontendView = $this->getConfig('frontend_view');
 
         return $this;
     }
@@ -216,6 +224,69 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         {
             return array_get($this->config, $key, $default);
         }
+    }
+
+    /**
+     * @method getCachedConfig
+     * Set widget's config in cache.
+     * @return {Telenok.Core.Abstraction.Widget.Controller}
+     * @member Telenok.Core.Abstraction.Widget.Controller
+     */
+    public function getCachedConfig()
+    {
+        if (!($cacheKey = $this->getConfig('cache_key')))
+        {
+            throw new \Exception('Please, set in config of widget "' . $this->getKey() . '" parameter "cache_key"');
+        }
+
+        return collect(config('telenok.widget.config'))->get($this->getKey() . '.' . $cacheKey, []);
+    }
+
+    public function saveCachedConfig()
+    {
+        if ($this->getWidgetModel())
+        {
+            return;
+        }
+
+        $cacheKey = $this->getConfig('cache_key');
+
+        $config = collect(config('telenok.widget.config'))->get($this->getKey() . '.' . $cacheKey, []);
+
+        $md5Key = md5(serialize($this->getConfig()));
+
+        if ($md5Key == array_get($config, '__md5_key'))
+        {
+            return;
+        }
+
+        $configData = app(\App\Telenok\Core\Model\System\Setting::class)->where('code', 'telenok.widget.config')->first();
+
+        $widgetConfigs = $configData->value;
+
+        $wc = $this->getConfig();
+        $wc['__md5_key'] = $md5Key;
+        $wc['__created_at'] = time();
+
+        $widgetConfigs->put($this->getKey() . '.' . $cacheKey, $wc);
+
+        // clear old widgets config
+        if (rand(0, 500000) == 1)
+        {
+            $t = time();
+
+            foreach($widgetConfigs->all() as $k => $c)
+            {
+                if ($t - $c['__created_at'] > 8640000/* 3 months */)
+                {
+                    $widgetConfigs->forget($k);
+                }
+            }
+        }
+
+        $configData->storeOrUpdate(['value' => $widgetConfigs]);
+
+        app('events')->fire('telenok.compile.setting');
     }
 
     /**
@@ -295,7 +366,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         }
         else
         {
-            throw new \Exception($this->LL('Setup cache-key for widget ' . $this->getKey()));
+            throw new \Exception($this->LL('Please, setup in config "cache_key" parameter for widget "' . $this->getKey()) . '"');
         }
 
         return false;
@@ -343,6 +414,8 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getContent()
     {
+        $this->saveCachedConfig();
+
         $this->setCacheTime($this->getCacheTime());
 
         if (($content = $this->getCachedContent()) !== false)
@@ -673,12 +746,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             app('db')->transaction(function() use ($languageId, $pageId, $key, $id, $container, $order, &$widgetOnPage)
             {
                 $widgetOnPage = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id)
-                        ->storeOrUpdate([
-                    "title" => $this->LL('header'),
-                    "container" => $container,
-                    "widget_order" => $order,
-                    "key" => $key,
-                ]);
+                    ->storeOrUpdate([
+                        "title" => $this->LL('header'),
+                        "container" => $container,
+                        "widget_order" => $order,
+                        "key" => $key,
+                    ]);
 
                 \App\Telenok\Core\Model\Web\WidgetOnPage::where("widget_order", ">=", $order)
                         ->where("container", $container)->get()->each(function($item)
@@ -696,12 +769,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             app('db')->transaction(function() use ($languageId, $pageId, $key, $container, $order, &$widgetOnPage)
             {
                 $widgetOnPage = (new \App\Telenok\Core\Model\Web\WidgetOnPage())
-                        ->storeOrUpdate([
-                    "title" => $this->LL('header'),
-                    "container" => $container,
-                    "widget_order" => $order,
-                    "key" => $key,
-                ]);
+                    ->storeOrUpdate([
+                        "title" => $this->LL('header'),
+                        "container" => $container,
+                        "widget_order" => $order,
+                        "key" => $key,
+                    ]);
 
                 \App\Telenok\Core\Model\Web\WidgetOnPage::where("widget_order", ">=", $order)
                         ->where("container", $container)->get()->each(function($item)
