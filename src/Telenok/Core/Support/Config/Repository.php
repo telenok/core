@@ -4,6 +4,8 @@ namespace Telenok\Core\Support\Config;
 
 use App\Events\Event;
 use Telenok\Core\Event\AclFilterResource;
+use Telenok\Core\Event\RepositoryObjectField;
+use Telenok\Core\Event\RepositoryObjectFieldViewModel;
 use Telenok\Core\Event\RepositoryPackage;
 use Telenok\Core\Event\RepositorySetting;
 
@@ -87,7 +89,7 @@ class Repository {
 
     public function getObjectFieldController($key = '')
     {
-        return $this->getValue('telenok.repository.objects-field', $key);
+        return $this->getValue(new RepositoryObjectField(), $key);
     }
 
     public function getObjectFieldViewModel($flush = false)
@@ -98,11 +100,10 @@ class Repository {
         {
             try
             {
-                $collection = collect();
-
-                \Event::fire('telenok.repository.objects-field.view.model', [$collection]);
+                app('events')->fire($objectRepositoryObjectFieldViewModel = new RepositoryObjectFieldViewModel());
 
                 $l = [];
+                $collection = $objectRepositoryObjectFieldViewModel->getList();
 
                 foreach ($collection as $view)
                 {
