@@ -1,15 +1,14 @@
 <?php
-
+/*
 app('events')->listen('telenok.repository.package', function($list)
 {
     $list->push('Telenok\Core\PackageInfo');
 });
 
+
 app('events')->listen('telenok.repository.setting', function($list)
 {
-    $list->push('App\Telenok\Core\Setting\Basic\Controller');
-    $list->push('App\Telenok\Core\Setting\Secure\Controller');
-    $list->push('App\Telenok\Core\Setting\License\Controller');
+
 });
 
 app('events')->listen('telenok.acl.filter.resource', function($list)
@@ -113,13 +112,4 @@ app('events')->listen('telenok.backend.external', function($controller)
 {
     app('\App\Telenok\Core\Module\Packages\InstallerManager\Controller')->processExternalEvent($controller);
 });
-
-app('db')->listen(function ($event)
-{
-    if (config('querylog'))
-    {
-        $sql = vsprintf(str_replace(array('%', '?'), array('%%', '"%s"'), $event->sql), $event->bindings);
-
-        echo $sql . PHP_EOL;
-    }
-});
+*/

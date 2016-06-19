@@ -1,6 +1,7 @@
 <?php
 
 namespace Telenok\Core\Module\Web\Page;
+use Telenok\Core\Event\CompileRoute;
 
 /**
  * @class Telenok.Core.Module.Web.Page.Controller
@@ -41,7 +42,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     public function postProcess($model, $type, $input)
     {
-        \Event::fire('telenok.compile.route');
+        app('events')->fire(new CompileRoute());
 
         return $this;
     }

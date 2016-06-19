@@ -33,8 +33,10 @@ class Package extends Command {
      * @member Telenok.Core.Command.Package
      */
     protected $signature = 'telenok:package
-                        {action : Can be "refresh" or "add-provider"}
-                        {--provider= : For action="add-provider". The service provider should be added to app.php. Example: "Telenok\News\NewsServiceProvider"}';
+                        {action : Can be "refresh", "add-provider", "add-event-listener"}
+                        {--provider= : For action="add-provider". The service provider should be added to app.php. Example: "Telenok\News\NewsServiceProvider"
+                        {--listener= : For action="add-event-listener". The listener should be added to \App\Providers\EventServiceProvider. '
+                        . 'Example: "\App\Telenok\News\Event\Listener"}';
 
     /**
      * @method fire
@@ -93,7 +95,31 @@ class Package extends Command {
                     $c = str_replace('###providers###', "'$provider',\n###providers###", $c);
                 }
             }
-            
+
+            file_put_contents(config_path('app.php'), $c, LOCK_EX);
+        }
+        else if ($this->argument('action') == 'add-event-listener' && ($provider = $this->option('listener')))
+        {
+            $c = file_get_contents(config_path('app.php'));
+
+            if (strpos($c, $provider) === FALSE)
+            {
+                $this->line('Update app.php. Try to add ' . $provider);
+
+                if (strpos($c, '###providers###') === FALSE)
+                {
+                    $c = preg_replace(
+                        '/["\']' . preg_quote('Telenok\Core\CoreServiceProvider', '/') . '["\']/',
+                        "\"Telenok\Core\CoreServiceProvider\",\n'$provider'",
+                        $c
+                    );
+                }
+                else
+                {
+                    $c = str_replace('###providers###', "'$provider',\n###providers###", $c);
+                }
+            }
+
             file_put_contents(config_path('app.php'), $c, LOCK_EX);
         }
     }

@@ -1,6 +1,8 @@
 <?php namespace Telenok\Core;
 
 use Illuminate\Support\ServiceProvider;
+use Telenok\Core\Event\CompileRoute;
+use Telenok\Core\Event\CompileSetting;
 
 /**
  * @class Telenok.Core.CoreServiceProvider
@@ -20,6 +22,7 @@ class CoreServiceProvider extends ServiceProvider {
     public function boot()
     {
         $this->addResolver();
+        $this->addListener();
         $this->extendValidator();
         $this->loadConfigFile();
         $this->packageResourceRegister();
@@ -165,6 +168,19 @@ class CoreServiceProvider extends ServiceProvider {
         });
     }
 
+    public function addListener()
+    {
+        app('db')->listen(function ($event)
+        {
+            if (config('querylog'))
+            {
+                $sql = vsprintf(str_replace(array('%', '?'), array('%%', '"%s"'), $event->sql), $event->bindings);
+
+                app('log')->debug($sql);
+            }
+        });
+    }
+
     public function extendValidator()
     {
         app('validator')->extend('valid_regex', function($attribute, $value, $parameters)
@@ -253,7 +269,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function compileSetting()
     {
-        app('events')->fire('telenok.compile.setting');
+        app('events')->fire(new CompileSetting());
     }
 
     public function compileRoute()
@@ -264,7 +280,7 @@ class CoreServiceProvider extends ServiceProvider {
 
             if (!file_exists($routersPath))
             {
-                \Event::fire('telenok.compile.route');
+                app('events')->fire(new CompileRoute());
             }
         }
     }

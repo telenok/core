@@ -2,23 +2,28 @@
 
 namespace Telenok\Core\Support\Config;
 
+use App\Events\Event;
+use Telenok\Core\Event\AclFilterResource;
+use Telenok\Core\Event\RepositoryPackage;
+use Telenok\Core\Event\RepositorySetting;
+
 /**
  * @class Telenok.Core.Support.Config.Repository
  * Repository stored configuration data for widgets, eloquent fields, modules, packages, etc.
  */
 class Repository {
 
-    public function getValue($event, $key = '')
+    public function getValue(Event $event, $key = '')
     {
         try
         {
-            $collection = collect();
+            app('events')->fire($event);
 
-            \Event::fire($event, $collection);
+            $collection = $event->getList();
 
             $list = collect();
 
-            foreach ($collection as $class)
+            foreach ($collection->all() as $class)
             {
                 $object = app($class);
 
@@ -27,7 +32,7 @@ class Repository {
         }
         catch (\Exception $e)
         {
-            throw new \RuntimeException('Failed to fire event "' . $event . '". Error: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to fire event "' . get_class($event) . '". Error: ' . $e->getMessage());
         }
 
         if ($key)
@@ -42,7 +47,7 @@ class Repository {
             }
             else
             {
-                throw new \RuntimeException('Failed to fire event "' . $event . '" with key "' . $key . '". Error: Class "' . e($el) . '" not exists.');
+                throw new \RuntimeException('Failed to fire event "' . get_class($event) . '" with key "' . $key . '". Error: Class "' . e($el) . '" not exists.');
             }
         }
         else
@@ -53,17 +58,17 @@ class Repository {
 
     public function getAclResourceFilter($key = '')
     {
-        return $this->getValue('telenok.acl.filter.resource', $key);
+        return $this->getValue(new AclFilterResource(), $key);
     }
 
     public function getPackage($key = '')
     {
-        return $this->getValue('telenok.repository.package', $key);
+        return $this->getValue(new RepositoryPackage(), $key);
     }
 
     public function getSetting($key = '')
     {
-        return $this->getValue('telenok.repository.setting', $key);
+        return $this->getValue(new RepositorySetting(), $key);
     }
 
     public function getViewTheme()

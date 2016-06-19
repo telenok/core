@@ -1,6 +1,7 @@
 <?php
 
 namespace Telenok\Core\Abstraction\Widget;
+use Telenok\Core\Event\CompileSetting;
 
 /**
  * @class Telenok.Core.Abstraction.Widget.Controller
@@ -286,7 +287,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         $configData->storeOrUpdate(['value' => $widgetConfigs]);
 
-        app('events')->fire('telenok.compile.setting');
+        app('events')->fire(new CompileSetting());
     }
 
     /**

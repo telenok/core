@@ -1,5 +1,8 @@
 <?php namespace Telenok\Core\Controller\Backend;
 
+use Telenok\Core\Event\ModuleMenuLeft;
+use Telenok\Core\Event\ModuleMenuTop;
+
 /**
  * Class to process initial backend http request
  * 
@@ -94,9 +97,9 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Backend\Controller
      */
     public function getContent()
     {
-        $listModuleMenuLeft = collect();
+        app('events')->fire($eventModuleMenuLeft = new ModuleMenuLeft());
 
-        \Event::fire('telenok.module.menu.left', [$listModuleMenuLeft]);
+        $listModuleMenuLeft = $eventModuleMenuLeft->getList();
 
         $config = app('telenok.config.repository');
 
@@ -151,11 +154,10 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Backend\Controller
         $setArray['listModuleGroup'] = $listModuleGroup;
 
 
+        app('events')->fire($eventModuleMenuLeft = new ModuleMenuTop());
+
         $listModuleMenuTop = collect();
-
-        $listModuleMenuTopCollection = collect();
-
-        \Event::fire('telenok.module.menu.top', [$listModuleMenuTopCollection]);
+        $listModuleMenuTopCollection = $eventModuleMenuLeft->getList();
 
         $listModuleMenuTopCollection->each(function($item) use ($listModuleMenuTop, $config)
         {

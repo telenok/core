@@ -1,6 +1,7 @@
 <?php
 
 namespace Telenok\Core\Model\System;
+use Telenok\Core\Event\CompileSetting;
 
 /**
  * @class Telenok.Core.Model.System.Setting
@@ -14,19 +15,14 @@ class Setting extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         parent::boot();
 
-        static::creating(function($model)
-        {
-            \Event::fire('telenok.compile.setting');
-        });
-
         static::saved(function($model)
         {
-            \Event::fire('telenok.compile.setting');
+            app('events')->fire(new CompileSetting());
         });
 
-        static::deleting(function($model)
+        static::deleted(function($model)
         {
-            \Event::fire('telenok.compile.setting');
+            app('events')->fire(new CompileSetting());
         });
     }
 
