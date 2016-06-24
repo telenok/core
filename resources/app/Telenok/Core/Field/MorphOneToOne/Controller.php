@@ -1,4 +1,4 @@
-<?php namespace App\Telenok\Core\Field\MorphOneToOne;
+<?php namespace App\Vendor\Telenok\Core\Field\MorphOneToOne;
 
 class Controller extends \Telenok\Core\Field\MorphOneToOne\Controller {
     

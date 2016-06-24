@@ -61,7 +61,7 @@
                                 {!!  Form::label("structure[object_type]", $controller->LL('title.object_type.type'), array('class' => '')) !!}
                                     <?php
 
-                                        $list = \App\Telenok\Core\Model\Object\Type::where('treeable', 1)->get(['title', 'id'])
+                                        $list = \App\Vendor\Telenok\Core\Model\Object\Type::where('treeable', 1)->get(['title', 'id'])
                                                     ->transform(function($item) 
                                                         {
                                                             return ['title' => $item->translate('title'), 'id' => $item->id]; 

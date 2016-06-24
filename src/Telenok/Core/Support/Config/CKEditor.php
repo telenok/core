@@ -6,7 +6,7 @@ namespace Telenok\Core\Support\Config;
  * @class Telenok.Core.Support.Config.CKEditor
  * Support rich text editor caller CKEditor.
  */
-class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
+class CKEditor extends \App\Vendor\Telenok\Core\Controller\Backend\Controller {
 
     protected $key = 'ckeditor';
     protected $configView = "core::special.ckeditor.config";
@@ -45,7 +45,7 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
 
     public function createCache($path, $width = 0, $height = 0, $action = '')
     {
-        $job = new \App\Telenok\Core\Jobs\Cache\Store([
+        $job = new \App\Vendor\Telenok\Core\Jobs\Cache\Store([
             'path' => $path,
             'path_cache' => $this->pathCache($path, $width, $height, $action),
             'storage_key' => app('filesystem')->getDefaultDriver(),
@@ -57,7 +57,7 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
 
         if (config('image.cache.queue'))
         {
-            $job->onQueue(\App\Telenok\Core\Jobs\Cache\Store::QUEUES_CACHE);
+            $job->onQueue(\App\Vendor\Telenok\Core\Jobs\Cache\Store::QUEUES_CACHE);
 
             $this->dispatch($job);
         }
@@ -69,24 +69,24 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
 
     public function isImage($file)
     {
-        return in_array(pathinfo($file, PATHINFO_EXTENSION), \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
+        return in_array(pathinfo($file, PATHINFO_EXTENSION), \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
     }
 
     public function existsCache($filename = '', $width = 0, $height = 0, $action = '')
     {
         $filename = $this->filenameCache($filename, $width, $height, $action);
 
-        return \App\Telenok\Core\Support\File\StoreCache::existsCache(app('filesystem')->getDefaultDriver(), $filename);
+        return \App\Vendor\Telenok\Core\Support\File\StoreCache::existsCache(app('filesystem')->getDefaultDriver(), $filename);
     }
 
     public function pathCache($filename = '', $width = 0, $height = 0, $action = '')
     {
-        return \App\Telenok\Core\Support\File\StoreCache::pathCache($filename, $width, $height, $action);
+        return \App\Vendor\Telenok\Core\Support\File\StoreCache::pathCache($filename, $width, $height, $action);
     }
 
     public function filenameCache($filename = '', $width = 0, $height = 0, $action = '')
     {
-        return \App\Telenok\Core\Support\File\StoreCache::filenameCache($filename, $width, $height, $action);
+        return \App\Vendor\Telenok\Core\Support\File\StoreCache::filenameCache($filename, $width, $height, $action);
     }
 
     public function urlCache($path, $width = 0, $height = 0, $action = '')
@@ -100,7 +100,7 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
         else
         {
             return trim($urlPattern, '\\/') . '/' .
-                    \App\Telenok\Core\Support\File\StoreCache::pathCache($path, $width, $height, $action);
+                    \App\Vendor\Telenok\Core\Support\File\StoreCache::pathCache($path, $width, $height, $action);
         }
     }
 
@@ -124,7 +124,7 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
         {
             $files = $files->filter(function($item)
             {
-                return in_array(pathinfo($item, PATHINFO_EXTENSION), \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
+                return in_array(pathinfo($item, PATHINFO_EXTENSION), \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
             });
         }
 
@@ -141,13 +141,13 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
     {
         $name = $this->getRequest()->input('name');
 
-        $files = \App\Telenok\Core\Model\File\File::active()
+        $files = \App\Vendor\Telenok\Core\Model\File\File::active()
                         ->withPermission()
                         ->where(function($query)
                         {
                             if ($this->getRequest()->input('file_type'))
                             {
-                                foreach (\App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION as $ext)
+                                foreach (\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION as $ext)
                                 {
                                     $query->orWhere('upload_file_name', 'LIKE', '%.' . $ext . '%');
                                 }
@@ -239,7 +239,7 @@ class CKEditor extends \App\Telenok\Core\Controller\Backend\Controller {
 
         $extension = $file->getClientOriginalExtension() ? : $file->guessExtension();
 
-        if (!in_array($extension, \App\Telenok\Core\Support\File\Processing::SAFE_EXTENSION, true))
+        if (!in_array($extension, \App\Vendor\Telenok\Core\Support\File\Processing::SAFE_EXTENSION, true))
         {
             throw new \Exception($this->LL('error.extension', ['attribute' => $extension]));
         }

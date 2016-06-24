@@ -19,16 +19,16 @@
             @if ($controller->isImage($file))
 
                 @if (!$controller->existsCache($file, 300, 300, 
-                    \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE))
+                    \App\Vendor\Telenok\Core\Support\Image\Processing::TODO_RESIZE))
 
                     <?php
-                        $controller->createCache($file, 300, 300, \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE);
+                        $controller->createCache($file, 300, 300, \App\Vendor\Telenok\Core\Support\Image\Processing::TODO_RESIZE);
                     ?>
 
                 @endif
 
                 <img src="{!! $controller->urlCache($file, 300, 300, 
-                    \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE) !!}"
+                    \App\Vendor\Telenok\Core\Support\Image\Processing::TODO_RESIZE) !!}"
                     class="media-object" 
                     style="width: 100%; display: block;" 
                     data-holder-rendered="true">

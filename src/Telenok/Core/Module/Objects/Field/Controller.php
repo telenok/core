@@ -10,8 +10,8 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     protected $key = 'objects-field';
     protected $parent = 'objects';
-    protected $modelListClass = '\App\Telenok\Core\Model\Object\Field';
-    protected $modelTreeClass = '\App\Telenok\Core\Model\Object\Type';
+    protected $modelListClass = '\App\Vendor\Telenok\Core\Model\Object\Field';
+    protected $modelTreeClass = '\App\Vendor\Telenok\Core\Model\Object\Type';
     protected $presentation = 'tree-tab-object';
     protected $presentationTreeView = 'core::module.objects-field.tree';
     protected $presentationFormFieldListView = 'core::module.objects-field.form-field-list';
@@ -20,11 +20,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
     {
         try
         {
-            $model = \App\Telenok\Core\Model\Object\Field::withPermission()->findOrFail($modelId);
+            $model = \App\Vendor\Telenok\Core\Model\Object\Field::withPermission()->findOrFail($modelId);
         }
         catch (\Exception $ex)
         {
-            $model = app('\App\Telenok\Core\Model\Object\Field');
+            $model = app('\App\Vendor\Telenok\Core\Model\Object\Field');
         }
 
 
@@ -33,7 +33,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     public function getTreeListTypes()
     {
-        $types = \App\Telenok\Core\Model\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->pluck('id')->toArray();
+        $types = \App\Vendor\Telenok\Core\Model\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->pluck('id')->toArray();
 
         return $types;
     }
@@ -74,7 +74,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
         }
         else
         {
-            $modelType = \App\Telenok\Core\Model\Object\Type::where('code', $input->get('field_object_type'))->orWhere('id', $input->get('field_object_type'))->firstOrFail();
+            $modelType = \App\Vendor\Telenok\Core\Model\Object\Type::where('code', $input->get('field_object_type'))->orWhere('id', $input->get('field_object_type'))->firstOrFail();
 
             $input->put('field_object_type', $modelType->getKey());
         }

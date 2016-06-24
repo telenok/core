@@ -99,7 +99,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
      */
     public function getLinkedModelType($field)
     {
-        return \App\Telenok\Core\Model\Object\Type::whereIn('id', [$field->morph_one_to_one_has, $field->morph_one_to_one_belong_to])->first();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::whereIn('id', [$field->morph_one_to_one_has, $field->morph_one_to_one_belong_to])->first();
     }
 
     /**
@@ -267,7 +267,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             {
                 $modelTable = $model->getTable();
 
-                $linkedTable = \App\Telenok\Core\Model\Object\Sequence::getModel($field->morph_one_to_one_has)->code;
+                $linkedTable = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($field->morph_one_to_one_has)->code;
                 
                 $alias = $linkedTable . str_random();
 
@@ -313,7 +313,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         
         $id = $field->morph_one_to_one_has ?: $field->morph_one_to_one_belong_to;
         
-        $class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
         
         $model = app($class);
         
@@ -395,7 +395,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         { 
             if ($id && $canUpdate)
             {
-                $objectModel = \App\Telenok\Core\Model\Object\Sequence::find($id)->model()->first();
+                $objectModel = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($id)->model()->first();
 
                 if (in_array($objectModel->type()->getKey(), $field->morph_one_to_one_belong_to_type_list->all(), true))
                 {
@@ -418,7 +418,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 $item->fill([$relatedField . '_id' => 0, $relatedField . '_type' => null])->save();
             });
 
-            $relatedModel = app(\App\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_one_has)->class_model);
+            $relatedModel = app(\App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_one_has)->class_model);
 
             if (intval($id)) 
             {
@@ -442,7 +442,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
     {  
         if ($model->morph_one_to_one_has)
         {
-            $f = \App\Telenok\Core\Model\Object\Field::where(function($query) use ($model)
+            $f = \App\Vendor\Telenok\Core\Model\Object\Field::where(function($query) use ($model)
                     {
                         $query->where('code', $model->code . 'able');
                         $query->where('field_object_type', $model->morph_one_to_one_has);
@@ -495,7 +495,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 		if ($input->get('morph_one_to_one_has'))
 		{
 			$input->put('morph_one_to_one_belong_to', 0);
-            $input->put('morph_one_to_one_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_one_to_one_has'))->orWhere('id', $input->get('morph_one_to_one_has'))->value('id')));
+            $input->put('morph_one_to_one_has', intval(\App\Vendor\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_one_to_one_has'))->orWhere('id', $input->get('morph_one_to_one_has'))->value('id')));
         }
         else
         {
@@ -534,7 +534,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         $codeFieldHasMany = $model->code; 
         $codeTypeHasMany = $relatedTypeOfModelField->code; 
 
-        $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_one_to_one_has')); 
+        $typeBelongTo = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_one_to_one_has')); 
         $tableBelongTo = $typeBelongTo->code;
         $classBelongTo = $typeBelongTo->class_model;
 
@@ -583,7 +583,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 'code' => $relatedSQLField,
                 'field_object_type' => $typeBelongTo->getKey(),
                 'field_object_tab' => $tabTo->getKey(),
-                'morph_one_to_one_belong_to' => \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id'),
+                'morph_one_to_one_belong_to' => \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id'),
                 'morph_one_to_one_belong_to_type_list' => [$relatedTypeOfModelField->getKey()],
                 'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
                 'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
@@ -598,7 +598,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             ];
 
 
-            $f = \App\Telenok\Core\Model\Object\Field::where(function($query) use ($relatedSQLField, $model)
+            $f = \App\Vendor\Telenok\Core\Model\Object\Field::where(function($query) use ($relatedSQLField, $model)
                     {
                         $query->where('code', $relatedSQLField);
                         $query->where('field_object_type', $model->morph_one_to_one_has);
@@ -617,11 +617,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             }
             else
             {
-                $validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
+                $validator = $this->validator(app('\App\Vendor\Telenok\Core\Model\Object\Field'), $toSave, []);
 
                 if ($validator->passes()) 
                 {
-                    \App\Telenok\Core\Model\Object\Field::create($toSave);
+                    \App\Vendor\Telenok\Core\Model\Object\Field::create($toSave);
                 }
             }
 

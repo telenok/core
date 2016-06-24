@@ -27,7 +27,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\Simple\Controlle
 
     public function getModelList()
     {
-        return '\App\Telenok\Core\Model\User\Message';
+        return '\App\Vendor\Telenok\Core\Model\User\Message';
     }
 
     public function getTreeContent()

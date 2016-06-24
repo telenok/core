@@ -13,9 +13,9 @@ app('events')->listen('telenok.repository.setting', function($list)
 
 app('events')->listen('telenok.acl.filter.resource', function($list)
 {
-    $list->push('App\Telenok\Core\Security\Filter\Acl\Resource\ObjectType\Controller');
-    $list->push('App\Telenok\Core\Security\Filter\Acl\Resource\ObjectTypeOwn\Controller');
-    $list->push('App\Telenok\Core\Security\Filter\Acl\Resource\DirectRight\Controller');
+    $list->push('App\Vendor\Telenok\Core\Security\Filter\Acl\Resource\ObjectType\Controller');
+    $list->push('App\Vendor\Telenok\Core\Security\Filter\Acl\Resource\ObjectTypeOwn\Controller');
+    $list->push('App\Vendor\Telenok\Core\Security\Filter\Acl\Resource\DirectRight\Controller');
 });
 
 app('events')->listen('telenok.module.menu.left', function($list)
@@ -59,32 +59,32 @@ app('events')->listen('telenok.module.menu.top', function($list)
 
 app('events')->listen('telenok.repository.objects-field', function($list)
 {
-    $list->push('App\Telenok\Core\Field\Integer\Controller');
-    $list->push('App\Telenok\Core\Field\IntegerUnsigned\Controller');
-    $list->push('App\Telenok\Core\Field\Decimal\Controller');
-    $list->push('App\Telenok\Core\Field\Text\Controller');
-    $list->push('App\Telenok\Core\Field\String\Controller');
-    $list->push('App\Telenok\Core\Field\ComplexArray\Controller');
-    $list->push('App\Telenok\Core\Field\RelationOneToOne\Controller');
-    $list->push('App\Telenok\Core\Field\RelationOneToMany\Controller');
-    $list->push('App\Telenok\Core\Field\RelationManyToMany\Controller');
-    $list->push('App\Telenok\Core\Field\System\Tree\Controller');
-    $list->push('App\Telenok\Core\Field\MorphOneToOne\Controller');
-    $list->push('App\Telenok\Core\Field\MorphOneToMany\Controller');
-    $list->push('App\Telenok\Core\Field\MorphManyToMany\Controller');
-    $list->push('App\Telenok\Core\Field\System\CreatedBy\Controller');
-    $list->push('App\Telenok\Core\Field\System\UpdatedBy\Controller');
-    $list->push('App\Telenok\Core\Field\System\DeletedBy\Controller');
-    $list->push('App\Telenok\Core\Field\System\LockedBy\Controller');
-    $list->push('App\Telenok\Core\Field\System\Permission\Controller');
-    $list->push('App\Telenok\Core\Field\FileManyToMany\Controller');
-    $list->push('App\Telenok\Core\Field\Upload\Controller');
-    $list->push('App\Telenok\Core\Field\SelectOne\Controller');
-    $list->push('App\Telenok\Core\Field\SelectMany\Controller');
-    $list->push('App\Telenok\Core\Field\Time\Controller');
-    $list->push('App\Telenok\Core\Field\DateTime\Controller');
-    $list->push('App\Telenok\Core\Field\TimeRange\Controller');
-    $list->push('App\Telenok\Core\Field\DateTimeRange\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\Integer\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\IntegerUnsigned\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\Decimal\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\Text\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\String\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\ComplexArray\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\RelationOneToOne\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\RelationOneToMany\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\RelationManyToMany\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\System\Tree\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\MorphOneToOne\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\MorphOneToMany\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\MorphManyToMany\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\System\CreatedBy\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\System\UpdatedBy\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\System\DeletedBy\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\System\LockedBy\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\System\Permission\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\FileManyToMany\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\Upload\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\SelectOne\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\SelectMany\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\Time\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\DateTime\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\TimeRange\Controller');
+    $list->push('App\Vendor\Telenok\Core\Field\DateTimeRange\Controller');
 });
 
 app('events')->listen('telenok.repository.objects-field.view.model', function($list)
@@ -100,7 +100,7 @@ app('events')->listen('telenok.repository.objects-field.view.model', function($l
 
 app('events')->listen('telenok.compile.route', function()
 {
-    app('telenok.config.repository')->compileRouter();
+    app('telenok.config.repository')->compileRoute();
 });
 
 app('events')->listen('telenok.compile.setting', function()
@@ -110,6 +110,6 @@ app('events')->listen('telenok.compile.setting', function()
 
 app('events')->listen('telenok.backend.external', function($controller)
 {
-    app('\App\Telenok\Core\Module\Packages\InstallerManager\Controller')->processExternalEvent($controller);
+    app('\App\Vendor\Telenok\Core\Module\Packages\InstallerManager\Controller')->processExternalEvent($controller);
 });
 */

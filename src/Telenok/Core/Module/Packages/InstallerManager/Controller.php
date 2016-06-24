@@ -185,7 +185,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             $url = 'http://telenok.local/account/package/download/' . urlencode($packageId) . '/' . urlencode($versionId);
             $url .= '?laravelVersion=' . urlencode(app()->version());
 
-            \App\Telenok\Core\Model\Web\Domain::active()->get()->each(function($item) use (&$url)
+            \App\Vendor\Telenok\Core\Model\Web\Domain::active()->get()->each(function($item) use (&$url)
             {
                 $url .= '&domain[]=' . urlencode($item->domain);
             });

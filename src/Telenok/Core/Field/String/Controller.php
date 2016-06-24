@@ -56,7 +56,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         if ($value !== null && trim($value))
         {
             $fieldCode = $field->code;
-            $translate = new \App\Telenok\Core\Model\Object\Translation();
+            $translate = new \App\Vendor\Telenok\Core\Model\Object\Translation();
 
             if (in_array($fieldCode, $model->getMultilanguage(), true))
             {

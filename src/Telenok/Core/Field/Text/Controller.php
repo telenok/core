@@ -49,7 +49,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         if ($value !== null && trim($value))
         {
             $fieldCode = $field->code;
-            $translate = new \App\Telenok\Core\Model\Object\Translation();
+            $translate = new \App\Vendor\Telenok\Core\Model\Object\Translation();
 
             if (in_array($fieldCode, $model->getMultilanguage(), true))
             {
@@ -105,12 +105,12 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
             foreach ($value->all() as $k => $v)
             {
-                $value->put($k, app('\App\Telenok\Core\Field\Text\Processing')->setRawValue($v));
+                $value->put($k, app('\App\Vendor\Telenok\Core\Field\Text\Processing')->setRawValue($v));
             }
         }
         else
         {
-            $value = app('\App\Telenok\Core\Field\Text\Processing')->setRawValue($value);
+            $value = app('\App\Vendor\Telenok\Core\Field\Text\Processing')->setRawValue($value);
         }
 
         return $value;

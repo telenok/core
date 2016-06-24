@@ -1,6 +1,6 @@
 <?php 
  
-    $list = new App\Telenok\Core\Module\Users\ProfileEdit\Controller();
+    $list = new App\Vendor\Telenok\Core\Module\Users\ProfileEdit\Controller();
     
     $data = $list->setRequest($controller->getRequest())->edit(app('auth')->user()->getKey());
     

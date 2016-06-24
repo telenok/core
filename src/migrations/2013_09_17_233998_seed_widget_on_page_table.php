@@ -18,7 +18,7 @@ class SeedWidgetOnPageTable extends Migration {
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
 
-		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
                     'title' => ['ru' => "Контейнер", 'en' => "Container"],
                     'title_list' => ['ru' => "Контейнер", 'en' => "Container"], 
@@ -38,7 +38,7 @@ class SeedWidgetOnPageTable extends Migration {
                 ]
         );
 
-		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
                     'title' => ['ru' => "Ключ виджета", 'en' => "Widget key"],
                     'title_list' => ['ru' => "Ключ виджета", 'en' => "Widget key"],
@@ -58,7 +58,7 @@ class SeedWidgetOnPageTable extends Migration {
                 ]
         );
 
-		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
                     'title' => ['ru' => "Порядок", 'en' => "Order"],
                     'title_list' => ['ru' => "Порядок", 'en' => "Order"],
@@ -77,7 +77,7 @@ class SeedWidgetOnPageTable extends Migration {
                 ]
         );
 
-        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['ru' => "Период кэширования", 'en' => "Cache time"],
                     'title_list' => ['ru' => "Период кэширования", 'en' => "Cache time"],
@@ -98,7 +98,7 @@ class SeedWidgetOnPageTable extends Migration {
                 ]
         );
 
-		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
                     'title' => ['en' => 'Structure', 'ru' => 'Структура'],
                     'title_list' => ['en' => 'Structure', 'ru' => 'Структура'],
@@ -117,7 +117,7 @@ class SeedWidgetOnPageTable extends Migration {
                 ]
         );
 
-        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'Link to widget'],
                     'title_list' => ['en' => 'Link to widget'],
@@ -137,7 +137,7 @@ class SeedWidgetOnPageTable extends Migration {
                 ]
         );
 
-        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'Widget'],
                     'title_list' => ['en' => 'Widget'],
@@ -157,7 +157,7 @@ class SeedWidgetOnPageTable extends Migration {
                 ]
         );
 
-        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['en' => 'Widget'],
                     'title_list' => ['en' => 'Widget'],

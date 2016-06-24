@@ -6,7 +6,7 @@ namespace Telenok\Core\Model\Web;
  * @class Telenok.Core.Model.Web.WidgetOnPage
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class WidgetOnPage extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
+class WidgetOnPage extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $ruleList = ['title' => ['required', 'min:1']];
     protected $table = 'widget_on_page';
@@ -18,22 +18,22 @@ class WidgetOnPage extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     public function widgetPage()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\Web\Page', 'widget_page');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\Web\Page', 'widget_page');
     }
 
     public function widgetLink()
     {
-        return $this->hasMany('\App\Telenok\Core\Model\Web\WidgetOnPage', 'widget_link_widget_on_page');
+        return $this->hasMany('\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage', 'widget_link_widget_on_page');
     }
 
     public function widgetLinkWidgetOnPage()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\Web\WidgetOnPage', 'widget_link_widget_on_page');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage', 'widget_link_widget_on_page');
     }
 
     public function widgetLanguageLanguage()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\System\Language', 'widget_language_language');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\System\Language', 'widget_language_language');
     }
 
     public function preProcess($type, $input)

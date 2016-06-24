@@ -17,11 +17,11 @@ class StoreCache {
 
         try
         {
-            if (\App\Telenok\Core\Support\Image\Processing::isImage($pathLocal) && ($width || $height))
+            if (\App\Vendor\Telenok\Core\Support\Image\Processing::isImage($pathLocal) && ($width || $height))
             {
                 $extension = pathinfo($pathLocal, PATHINFO_EXTENSION);
 
-                $imageProcess = app('\App\Telenok\Core\Support\Image\Processing');
+                $imageProcess = app('\App\Vendor\Telenok\Core\Support\Image\Processing');
                 $imageProcess->setImage($imageProcess->imagine()->load($content));
 
                 $content = $imageProcess->process($width, $height, $action)->get($extension, config('image.options'));
@@ -41,10 +41,10 @@ class StoreCache {
 
         if (empty($storages))
         {
-            $storages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('cache.cache_storages'))))->all();
+            $storages = \App\Vendor\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('cache.cache_storages'))))->all();
         }
 
-        foreach (\App\Telenok\Core\Support\File\Store::storageList($storages)->all() as $storage)
+        foreach (\App\Vendor\Telenok\Core\Support\File\Store::storageList($storages)->all() as $storage)
         {
             $disk = app('filesystem')->disk($storage);
 

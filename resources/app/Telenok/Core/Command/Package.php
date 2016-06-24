@@ -1,4 +1,4 @@
-<?php namespace App\Telenok\Core\Command;
+<?php namespace App\Vendor\Telenok\Core\Command;
 
 class Package extends \Telenok\Core\Command\Package {
 

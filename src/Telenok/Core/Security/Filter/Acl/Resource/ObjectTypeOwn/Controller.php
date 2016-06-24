@@ -13,9 +13,9 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
 
     public function filterCan($queryCommon, $queryWhere, $resource, $permission, $subject)
     {
-        $resourceType = new \App\Telenok\Core\Model\Security\Resource();
-        $sequence = new \App\Telenok\Core\Model\Object\Sequence();
-        $spr = new \App\Telenok\Core\Model\Security\SubjectPermissionResource();
+        $resourceType = new \App\Vendor\Telenok\Core\Model\Security\Resource();
+        $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
+        $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
         $r = range_minutes($this->getCacheMinutes());
 
         $queryCommon->leftJoin($resourceType->getTable() . ' as resource_type_permission_user_filter_object_type_own', function($join) use ($r, $resourceType)
@@ -30,8 +30,8 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
         // verify user's right via SubjectPermissionResource on resource with code like "object.some_object_type_code" eg "object.object_type"
         if ($subject instanceof \Telenok\Core\Model\User\User)
         {
-            $role = new \App\Telenok\Core\Model\Security\Role();
-            $group = new \App\Telenok\Core\Model\User\Group();
+            $role = new \App\Vendor\Telenok\Core\Model\Security\Role();
+            $group = new \App\Vendor\Telenok\Core\Model\User\Group();
 
             $queryCommon->leftJoin($spr->getTable() . ' as spr_permission_user_filter_object_type_own', function($join) use ($spr, $permission, $r)
             {
@@ -103,9 +103,9 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
 
     public function filter($queryCommon, $queryWhere, $resource, $permission, $subjectCollection)
     {
-        $resourceType = new \App\Telenok\Core\Model\Security\Resource();
-        $sequence = new \App\Telenok\Core\Model\Object\Sequence();
-        $spr = new \App\Telenok\Core\Model\Security\SubjectPermissionResource();
+        $resourceType = new \App\Vendor\Telenok\Core\Model\Security\Resource();
+        $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
+        $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
         $r = range_minutes($this->getCacheMinutes());
 
         $queryCommon->leftJoin($resourceType->getTable() . ' as resource_type_permission_user_filter_object_type_own', function($join) use ($r, $resourceType)
@@ -124,8 +124,8 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
             // verify user's right via SubjectPermissionResource on resource with code like "object.some_object_type_code" eg "object.object_type"
             if ($subject instanceof \Telenok\Core\Model\User\User)
             {
-                $role = new \App\Telenok\Core\Model\Security\Role();
-                $group = new \App\Telenok\Core\Model\User\Group();
+                $role = new \App\Vendor\Telenok\Core\Model\Security\Role();
+                $group = new \App\Vendor\Telenok\Core\Model\User\Group();
 
                 $queryCommon->leftJoin($spr->getTable() . ' as spr_permission_user_filter_object_type_own', function($join) use ($spr, $permission, $r)
                 {

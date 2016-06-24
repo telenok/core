@@ -19,7 +19,7 @@
 
 					<?php
 
-						$model = new \App\Telenok\Core\Model\Object\Type();
+						$model = new \App\Vendor\Telenok\Core\Model\Object\Type();
 
 						$query = $model::withPermission();
 						

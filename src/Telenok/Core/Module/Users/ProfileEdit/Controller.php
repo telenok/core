@@ -10,7 +10,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     protected $key = 'users-profile-edit';
     protected $parent = 'users';
-    protected $modelListClass = '\App\Telenok\Core\Model\User\User';
+    protected $modelListClass = '\App\Vendor\Telenok\Core\Model\User\User';
     protected $presentation = 'tree-tab-users-profile-edit';
     protected $presentationContentView = 'core::module.users-profile-edit.content';
     protected $presentationView = 'core::module.users-profile-edit.presentation';

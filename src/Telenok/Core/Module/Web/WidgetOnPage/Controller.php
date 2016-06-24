@@ -10,7 +10,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     protected $key = 'web-page-wop';
     protected $presentation = 'tree-tab-object';
-    protected $modelListClass = '\App\Telenok\Core\Model\Web\WidgetOnPage';
+    protected $modelListClass = '\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage';
     protected $presentationFormFieldListView = 'core::module.web-page-wop.form-field-list';
     protected $presentationModuleKey = 'web-page-widget-web-page-constructor';
 

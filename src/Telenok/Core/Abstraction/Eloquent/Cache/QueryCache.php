@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Abstraction\Eloquent\Cache;
 
-use \App\Telenok\Core\Abstraction\Database\CachableQueryBuilder as QueryBuilder;
+use \App\Vendor\Telenok\Core\Abstraction\Database\CachableQueryBuilder as QueryBuilder;
 
 /**
  * @class Telenok.Core.Abstraction.Eloquent.Cache.QueryCache

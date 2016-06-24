@@ -11,7 +11,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
  * @class Telenok.Core.Model.User.User
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class User extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model implements AuthenticatableContract, CanResetPasswordContract {
+class User extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model implements AuthenticatableContract, CanResetPasswordContract {
 
     use Authenticatable,
         CanResetPassword;
@@ -40,37 +40,37 @@ class User extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model implement
 
     public function createdBy()
     {
-        return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'created_by_user');
+        return $this->hasMany('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'created_by_user');
     }
 
     public function updatedBy()
     {
-        return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'updated_by_user');
+        return $this->hasMany('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'updated_by_user');
     }
 
     public function deletedBy()
     {
-        return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'deleted_by_user');
+        return $this->hasMany('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'deleted_by_user');
     }
 
     public function lockedBy()
     {
-        return $this->hasMany('\App\Telenok\Core\Model\Object\Sequence', 'locked_by_user');
+        return $this->hasMany('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'locked_by_user');
     }
 
     public function group()
     {
-        return $this->belongsToMany('\App\Telenok\Core\Model\User\Group', 'pivot_relation_m2m_group_user', 'group_user', 'group')->withTimestamps();
+        return $this->belongsToMany('\App\Vendor\Telenok\Core\Model\User\Group', 'pivot_relation_m2m_group_user', 'group_user', 'group')->withTimestamps();
     }
 
     public function avatarUserFileExtension()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\File\FileExtension', 'avatar_user_file_extension');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\File\FileExtension', 'avatar_user_file_extension');
     }
 
     public function avatarUserFileMimeType()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\File\FileMimeType', 'avatar_user_file_mime_type');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\File\FileMimeType', 'avatar_user_file_mime_type');
     }
 
 }

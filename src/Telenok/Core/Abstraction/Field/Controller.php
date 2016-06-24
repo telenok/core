@@ -486,8 +486,8 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $content = [];
 
         try {
-            $model = \App\Telenok\Core\Model\Object\Sequence::getModel($id);
-            $field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
+            $model = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id);
+            $field = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
             $type = $this->getLinkedModelType($field);
 
             $query = $model->{camel_case($field->code)}();
@@ -820,7 +820,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     public function getFieldTab($typeId, $tabCode)
     {
         try {
-            $tabTo = \App\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)
+            $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)
                 ->where(function ($query) use ($tabCode) {
                     $query->where('id', $tabCode);
                     $query->orWhere('code', $tabCode);
@@ -828,7 +828,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
                 ->firstOrFail();
         } catch (\Exception $ex) {
             try {
-                $tabTo = \App\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
+                $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
             } catch (\Exception $ex) {
                 throw new \Exception($this->LL('error.tab.field.key'));
             }
@@ -847,12 +847,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             $tabTo = $this->getFieldTab($typeId, $tabBelongCode);
         } catch (\Exception $ex) {
             try {
-                $tabHas = \App\Telenok\Core\Model\Object\Tab::firstOrFail('id', $tabHasId);
+                $tabHas = \App\Vendor\Telenok\Core\Model\Object\Tab::firstOrFail('id', $tabHasId);
 
-                $tabTo = \App\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->whereCode($tabHas->code);
+                $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->whereCode($tabHas->code);
             } catch (\Exception $ex) {
                 try {
-                    $tabTo = \App\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
+                    $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
                 } catch (\Exception $ex) {
                     throw new \Exception($this->LL('error.tab.field.key'));
                 }
@@ -872,9 +872,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $return = [];
 
         if ($id) {
-            $model = app(\App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model);
+            $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model);
         } else {
-            $model = app('\App\Telenok\Core\Model\Object\Sequence');
+            $model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
         }
 
         $query = $model::withPermission()->with('sequencesObjectType');

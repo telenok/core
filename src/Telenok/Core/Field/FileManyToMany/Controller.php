@@ -111,16 +111,16 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         $term = trim($this->getRequest()->input('term'));
         $return = [];
 
-        $sequence = new \App\Telenok\Core\Model\Object\Sequence();
+        $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
 
         $sequenceTable = $sequence->getTable();
-        $typeTable = (new \App\Telenok\Core\Model\Object\Type())->getTable();
+        $typeTable = (new \App\Vendor\Telenok\Core\Model\Object\Type())->getTable();
 
         $sequence->addMultilanguage('title_type');
 
         try
         {
-            $query = \App\Telenok\Core\Model\Object\Sequence::withPermission()
+            $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission()
                 ->select($sequenceTable . '.id', $sequenceTable . '.title', $typeTable . '.title as title_type')
                 ->join($typeTable, function($join) use ($sequenceTable, $typeTable)
                 {
@@ -264,11 +264,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             {
                 if ($key == 'file_many_to_many_allow_ext')
                 {
-                    $value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION);
+                    $value = $value ? : json_encode(\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION);
                 }
                 else if ($key == 'file_many_to_many_allow_mime')
                 {
-                    $value = $value ? : json_encode(\App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE);
+                    $value = $value ? : json_encode(\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE);
                 }
 
                 return collect((array)json_decode($value, true));
@@ -307,11 +307,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             }
             else if ($key == 'file_many_to_many_allow_ext')
             {
-                $value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION;
+                $value = $value ? : \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION;
             } 
             else if ($key == 'file_many_to_many_allow_mime')
             {
-                $value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE;
+                $value = $value ? : \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE;
             } 
 
             $model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
@@ -414,7 +414,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function preProcess($model, $type, $input)
     {
-        $input->put('relation_many_to_many_has', \App\Telenok\Core\Model\Object\Type::whereCode('file')->value('id'));
+        $input->put('relation_many_to_many_has', \App\Vendor\Telenok\Core\Model\Object\Type::whereCode('file')->value('id'));
 
         return parent::preProcess($model, $type, $input);
     } 
@@ -458,7 +458,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             'active' => 1,
         ]);
 
-        $file = app('\App\Telenok\Core\Model\File\File');
+        $file = app('\App\Vendor\Telenok\Core\Model\File\File');
 
         $model = $file->storeOrUpdate($input->all(), true); 
 

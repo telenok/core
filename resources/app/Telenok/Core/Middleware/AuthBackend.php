@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Telenok\Core\Middleware;
+namespace App\Vendor\Telenok\Core\Middleware;
 
 class AuthBackend extends \Telenok\Core\Middleware\AuthBackend {
 

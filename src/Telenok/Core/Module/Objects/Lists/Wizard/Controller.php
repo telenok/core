@@ -6,7 +6,7 @@ namespace Telenok\Core\Module\Objects\Lists\Wizard;
  * @class Telenok.Core.Module.Objects.Lists.Wizard.Controller
  * @extends Telenok.Core.Module.Objects.Lists.Controller
  */
-class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
+class Controller extends \App\Vendor\Telenok\Core\Module\Objects\Lists\Controller {
 
     protected $presentation = 'wizard-model';
     protected $presentationModelView = 'core::module.objects-lists.wizard-model';
@@ -94,7 +94,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
         {
             if (is_array($typeId))
             {
-                $idOfSequenceType = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
+                $idOfSequenceType = \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
 
                 $model = $this->getModelByTypeId($idOfSequenceType);
                 $type = $this->getType($idOfSequenceType);

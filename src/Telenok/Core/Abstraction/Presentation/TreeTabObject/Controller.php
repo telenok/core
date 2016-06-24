@@ -235,7 +235,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab
 
     public function getFilterQuery($model, $query)
     {
-        $translate = new \App\Telenok\Core\Model\Object\Translation();
+        $translate = new \App\Vendor\Telenok\Core\Model\Object\Translation();
         $input = $this->getRequest();
 
         if ($title = trim($input->input('search.value')))

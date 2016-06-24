@@ -65,7 +65,7 @@ class Install extends Command {
      */
     public function fire()
     {
-        $this->setProcessingController(app('\App\Telenok\Core\Support\Install\Controller'));
+        $this->setProcessingController(app('\App\Vendor\Telenok\Core\Support\Install\Controller'));
 
         $this->info('Configure Telenok CMS');
 

@@ -155,7 +155,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         $content = ['controller' => $this];
 
-        $wop = \App\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
+        $wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
                 {
                     $query->where('id', $languageId);
                 })
@@ -250,7 +250,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         try
         {
-            $pageModel = app(\App\Telenok\Core\Model\Web\Page::class);
+            $pageModel = app(\App\Vendor\Telenok\Core\Model\Web\Page::class);
 
             $page = $pageModel->active()->withPermission()
                 ->where(function($query) use ($pageModel, $routerName)

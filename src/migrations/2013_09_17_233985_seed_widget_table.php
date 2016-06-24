@@ -18,7 +18,7 @@ class SeedWidgetTable extends Migration {
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
 
-		(new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
 				[
                     'title' => ['en' => 'Controller class', 'ru' => 'Класс контроллера'],
                     'title_list' => ['en' => 'Controller class', 'ru' => 'Класс контроллера'],

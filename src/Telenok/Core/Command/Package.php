@@ -33,10 +33,10 @@ class Package extends Command {
      * @member Telenok.Core.Command.Package
      */
     protected $signature = 'telenok:package
-                        {action : Can be "refresh", "add-provider", "add-event-listener"}
-                        {--provider= : For action="add-provider". The service provider should be added to app.php. Example: "Telenok\News\NewsServiceProvider"
+                        {action : Can be "refresh", "add-provider", "add-listener"}
+                        {--provider= : For action="add-provider". The service provider should be added to app.php. Example: "\App\Vendor\Telenok\News\NewsServiceProvider"
                         {--listener= : For action="add-event-listener". The listener should be added to \App\Providers\EventServiceProvider. '
-                        . 'Example: "\App\Telenok\News\Event\Listener"}';
+                        . 'Example: "\App\Vendor\Telenok\News\Event\Listener"}';
 
     /**
      * @method fire
@@ -48,79 +48,119 @@ class Package extends Command {
     {
         if ($this->argument('action') == 'refresh')
         {
-            $this->info('Updating Telenok CMS packages');
-
-            $composer = (new \Telenok\Core\Composer\Application())
-                            ->getEmbeddedComposer();
-
-            $installationManager = $composer->getInstallationManager();
-
-            $processed = [];
-
-            foreach ($composer->getRepositoryManager()->getLocalRepository()->getPackages() as $package) 
-            {
-                $originDir = $installationManager->getInstallPath($package);
-
-                $file = rtrim($originDir, '\\/') . '/resources/package-process/package-update.php';
-
-                if (file_exists($file) && !isset($processed[$package->getName()]))
-                {
-                    $processed[$package->getName()] = true;
-
-                    $this->info('Process package ' . $package->getName());
-                    $this->comment('Include and process ' . $file);
-
-                    require $file;
-                }
-            }
+            $this->refreshCommand();
         }
-        else if ($this->argument('action') == 'add-provider' && ($provider = $this->option('provider')))
+        else if ($this->argument('action') == 'add-provider')
         {
-            $c = file_get_contents(config_path('app.php'));
-
-            if (strpos($c, $provider) === FALSE)
-            {
-                $this->line('Update app.php. Try to add ' . $provider);
-
-                if (strpos($c, '###providers###') === FALSE)
-                {
-                    $c = preg_replace(
-                        '/["\']' . preg_quote('Telenok\Core\CoreServiceProvider', '/') . '["\']/',
-                        "\"Telenok\Core\CoreServiceProvider\",\n'$provider'",
-                        $c
-                    );
-                }
-                else
-                {
-                    $c = str_replace('###providers###', "'$provider',\n###providers###", $c);
-                }
-            }
-
-            file_put_contents(config_path('app.php'), $c, LOCK_EX);
+            $this->addProviderCommand();
         }
-        else if ($this->argument('action') == 'add-event-listener' && ($provider = $this->option('listener')))
+        else if ($this->argument('action') == 'add-listener' && ($provider = $this->option('listener')))
         {
-            $c = file_get_contents(config_path('app.php'));
-
-            if (strpos($c, $provider) === FALSE)
-            {
-                $this->line('Update app.php. Try to add ' . $provider);
-
-                if (strpos($c, '###providers###') === FALSE)
-                {
-                    $c = preg_replace(
-                        '/["\']' . preg_quote('Telenok\Core\CoreServiceProvider', '/') . '["\']/',
-                        "\"Telenok\Core\CoreServiceProvider\",\n'$provider'",
-                        $c
-                    );
-                }
-                else
-                {
-                    $c = str_replace('###providers###', "'$provider',\n###providers###", $c);
-                }
-            }
-
-            file_put_contents(config_path('app.php'), $c, LOCK_EX);
+            $this->addListenerCommand();
         }
+    }
+
+    public function refreshCommand()
+    {
+        if (!$this->hasOption('all') && !$this->hasOption('package'))
+        {
+            $this->error('Please, set option "--all" or define package via option "--package=my/package"');
+
+            return;
+        }
+
+        $this->info('Updating Telenok CMS package/s');
+
+        $composer = (new \Telenok\Core\Composer\Application())->getEmbeddedComposer();
+
+        $installationManager = $composer->getInstallationManager();
+
+        if ($package = $this->hasOption('package'))
+        {
+            $allPackages = [$package];
+        }
+        else
+        {
+            $allPackages = $composer->getRepositoryManager()->getLocalRepository()->getPackages();
+        }
+
+        $processed = [];
+
+        foreach ($allPackages as $package)
+        {
+            $originDir = $installationManager->getInstallPath($package);
+
+            $file = rtrim($originDir, '\\/') . '/resources/package-process/artisan.php';
+
+            if (file_exists($file) && !isset($processed[$package->getName()]))
+            {
+                $processed[$package->getName()] = true;
+
+                $this->info('Process package ' . $package->getName());
+                $this->comment('Include and process ' . $file);
+
+                require $file;
+            }
+        }
+    }
+
+    public function addProviderCommand()
+    {
+        if (!($provider = $this->option('provider')))
+        {
+            $this->error('Please, set option --provider=\Your\Class\Provider');
+
+            return;
+        }
+
+        $c = file_get_contents(config_path('app.php'));
+
+        if (strpos($c, $provider) === FALSE)
+        {
+            $this->line('Update app.php. Try to add ' . $provider);
+
+            if (strpos($c, '###providers###') === FALSE)
+            {
+                $this->error('Please, add marker ###providers### to config/app.php file in "providers" array');
+
+                return;
+            }
+            else
+            {
+                $c = str_replace('###providers###', "'$provider',\n###providers###", $c);
+            }
+        }
+
+        file_put_contents(config_path('app.php'), $c, LOCK_EX);
+    }
+
+    public function addListenerCommand()
+    {
+        if (!($listener = $this->option('listener')))
+        {
+            $this->error('Please, set option --listener=\Your\Class\Listener');
+
+            return;
+        }
+
+        $c = file_get_contents(app_path('Providers/EventServiceProvider.php'));
+
+        if (strpos($c, $listener) === FALSE)
+        {
+            $this->line('Update \App\Providers\EventServiceProvider. Try to add ' . $listener);
+
+            if (strpos($c, '###listener###') === FALSE)
+            {
+                $this->error('Please, put marker ###listener### to \App\Providers\EventServiceProvider class in "$subscribe" member');
+
+                return;
+            }
+            else
+            {
+                $c = str_replace('###listener###', "'$listener',\n###listener###", $c);
+            }
+        }
+
+        file_put_contents(app_path('Providers/EventServiceProvider.php'), $c, LOCK_EX);
     }
 }

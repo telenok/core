@@ -17,13 +17,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
     /**
      * Return Object Type linked to the field
      * 
-     * @param \App\Telenok\Core\Model\Object\Field $field
-     * @return \App\Telenok\Core\Model\Object\Type
+     * @param \App\Vendor\Telenok\Core\Model\Object\Field $field
+     * @return \App\Vendor\Telenok\Core\Model\Object\Type
      * 
      */
     public function getLinkedModelType($field)
     {
-        return \App\Telenok\Core\Model\Object\Type::findMany([$field->morph_many_to_many_has, $field->morph_many_to_many_belong_to])->first();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::findMany([$field->morph_many_to_many_has, $field->morph_many_to_many_belong_to])->first();
     } 
 
     public function getLinkedField($field)
@@ -75,7 +75,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $id = $field->morph_many_to_many_has ?: $field->morph_many_to_many_belong_to;
 
-        $class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
 
         $model = app($class);
 
@@ -185,7 +185,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 		if ($input->get('morph_many_to_many_has'))
 		{
 			$input->put('morph_many_to_many_belong_to', 0);
-            $input->put('morph_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_many_to_many_has'))->orWhere('id', $input->get('morph_many_to_many_has'))->value('id')));
+            $input->put('morph_many_to_many_has', intval(\App\Vendor\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_many_to_many_has'))->orWhere('id', $input->get('morph_many_to_many_has'))->value('id')));
         }
         else
         {
@@ -206,7 +206,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         } 
 
         $typeMorphMany = $model->fieldObjectType()->first();
-        $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_many_to_many_has')); 
+        $typeBelongTo = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_many_to_many_has')); 
 
         $morphManyCode = $model->code;
         $morphToCode = $morphManyCode . '_' . $typeMorphMany->code;
@@ -292,11 +292,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             ];
 
 
-            $validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
+            $validator = $this->validator(app('\App\Vendor\Telenok\Core\Model\Object\Field'), $toSave, []);
 
             if ($validator->passes()) 
             {
-                \App\Telenok\Core\Model\Object\Field::create($toSave);
+                \App\Vendor\Telenok\Core\Model\Object\Field::create($toSave);
             }
 
             if (!$this->validateMethodExists($morphToObject, $morphTo['method']))

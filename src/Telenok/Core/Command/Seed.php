@@ -65,7 +65,7 @@ class Seed extends Command {
      */
     public function fire()
     {
-        $this->setProcessingController(app('\App\Telenok\Core\Support\Install\Controller'));
+        $this->setProcessingController(app('\App\Vendor\Telenok\Core\Support\Install\Controller'));
 
         $this->info('Create and seed tables');
 
@@ -83,7 +83,7 @@ class Seed extends Command {
 
             $this->processingController->touchInstallFlag();
 
-            $user = \App\Telenok\Core\Model\User\User::where('username', 'admin')->first();
+            $user = \App\Vendor\Telenok\Core\Model\User\User::where('username', 'admin')->first();
 
             $user->storeOrUpdate([
                 'username' => $this->processingController->getSuperuserLogin(),

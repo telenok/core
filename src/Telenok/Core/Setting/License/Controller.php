@@ -6,7 +6,7 @@
  * 
  * @extends Telenok.Core.Abstraction.Setting.Controller
  */
-class Controller extends \App\Telenok\Core\Abstraction\Setting\Controller {
+class Controller extends \App\Vendor\Telenok\Core\Abstraction\Setting\Controller {
 
     /**
      * @protected

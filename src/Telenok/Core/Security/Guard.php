@@ -14,10 +14,10 @@ class Guard extends \Illuminate\Auth\SessionGuard {
     }
 
     /*
-     * app('auth')->cannot(\App\Telenok\Core\Model\Security\Permission->code eg: 'write', \App\Telenok\Core\Model\Security\Resource->code 'log')
+     * app('auth')->cannot(\App\Vendor\Telenok\Core\Model\Security\Permission->code eg: 'write', \App\Vendor\Telenok\Core\Model\Security\Resource->code 'log')
      * app('auth')->cannot(222, \News $news)
-     * app('auth')->cannot(\App\Telenok\Core\Model\Security\Permission $read, \User $user)
-     * app('auth')->cannot(\App\Telenok\Core\Model\Security\Permission $read, ['object_type.language.%'])
+     * app('auth')->cannot(\App\Vendor\Telenok\Core\Model\Security\Permission $read, \User $user)
+     * app('auth')->cannot(\App\Vendor\Telenok\Core\Model\Security\Permission $read, ['object_type.language.%'])
      */
 
     public function cannot($permissionCode = null, $resourceCode = null)
@@ -26,10 +26,10 @@ class Guard extends \Illuminate\Auth\SessionGuard {
     }
 
     /*
-     * app('auth')->can(\App\Telenok\Core\Model\Security\Permission->code eg: 'write', \App\Telenok\Core\Model\Security\Resource->code 'log')
+     * app('auth')->can(\App\Vendor\Telenok\Core\Model\Security\Permission->code eg: 'write', \App\Vendor\Telenok\Core\Model\Security\Resource->code 'log')
      * app('auth')->can(222, \News $news)
-     * app('auth')->can(\App\Telenok\Core\Model\Security\Permission $read, \User $user)
-     * app('auth')->can(\App\Telenok\Core\Model\Security\Permission $read, ['object_type.language.%'])
+     * app('auth')->can(\App\Vendor\Telenok\Core\Model\Security\Permission $read, \User $user)
+     * app('auth')->can(\App\Vendor\Telenok\Core\Model\Security\Permission $read, ['object_type.language.%'])
      */
 
     public function can($permissionCode = null, $resourceCode = null)
@@ -39,25 +39,25 @@ class Guard extends \Illuminate\Auth\SessionGuard {
             return true;
         }
 
-        if (\App\Telenok\Core\Security\Acl::subject('user_any')->can($permissionCode, $resourceCode))
+        if (\App\Vendor\Telenok\Core\Security\Acl::subject('user_any')->can($permissionCode, $resourceCode))
         {
             return true;
         }
 
         if ($this->check())
         {
-            if (\App\Telenok\Core\Security\Acl::user()->can($permissionCode, $resourceCode))
+            if (\App\Vendor\Telenok\Core\Security\Acl::user()->can($permissionCode, $resourceCode))
             {
                 return true;
             }
-            else if (\App\Telenok\Core\Security\Acl::subject('user_authorized')->can($permissionCode, $resourceCode))
+            else if (\App\Vendor\Telenok\Core\Security\Acl::subject('user_authorized')->can($permissionCode, $resourceCode))
             {
                 return true;
             }
         }
         else
         {
-            return \App\Telenok\Core\Security\Acl::subject('user_unauthorized')->can($permissionCode, $resourceCode);
+            return \App\Vendor\Telenok\Core\Security\Acl::subject('user_unauthorized')->can($permissionCode, $resourceCode);
         }
 
         return false;
@@ -67,7 +67,7 @@ class Guard extends \Illuminate\Auth\SessionGuard {
     {
         if ($this->check())
         {
-            return \App\Telenok\Core\Security\Acl::user()->hasRole($id);
+            return \App\Vendor\Telenok\Core\Security\Acl::user()->hasRole($id);
         }
 
         return false;

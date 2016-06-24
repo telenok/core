@@ -112,7 +112,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             $value = $field->decimal_default;
         }
         
-        return \App\Telenok\Core\Field\Decimal\BigDecimal::create($value, $field->decimal_scale);
+        return \App\Vendor\Telenok\Core\Field\Decimal\BigDecimal::create($value, $field->decimal_scale);
     }
 
     /**
@@ -167,15 +167,15 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         { 
             if ($key == 'decimal_default')
             {
-                return \App\Telenok\Core\Field\Decimal\BigDecimal::create(0, 2);
+                return \App\Vendor\Telenok\Core\Field\Decimal\BigDecimal::create(0, 2);
             }
             else if ($key == 'decimal_min')
             {
-                return \App\Telenok\Core\Field\Decimal\BigDecimal::create('-9999999999999999999999999999', 2);
+                return \App\Vendor\Telenok\Core\Field\Decimal\BigDecimal::create('-9999999999999999999999999999', 2);
             }
             else if ($key == 'decimal_max')
             {
-                return \App\Telenok\Core\Field\Decimal\BigDecimal::create('9999999999999999999999999999', 2);
+                return \App\Vendor\Telenok\Core\Field\Decimal\BigDecimal::create('9999999999999999999999999999', 2);
             }
             else if ($key == 'decimal_precision')
             {
@@ -205,7 +205,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
      */
     public function setModelSpecialAttribute($model, $key, $value)
     {
-        if (in_array($key, ['decimal_default', 'decimal_min', 'decimal_max', true]) && $value instanceof \App\Telenok\Core\Field\Decimal\BigDecimal)
+        if (in_array($key, ['decimal_default', 'decimal_min', 'decimal_max', true]) && $value instanceof \App\Vendor\Telenok\Core\Field\Decimal\BigDecimal)
         {
             $value = $value->value();
         }

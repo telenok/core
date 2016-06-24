@@ -33,7 +33,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
 	/*
 
-	echo (new \App\Telenok\Core\Html\Form\Controller())->form([	
+	echo (new \App\Vendor\Telenok\Core\Html\Form\Controller())->form([	
 		'uniqueId' => 'adadad94820sdvbxjkh',
 		'model' => (\App\...\Object\Type::find(10) || 299 ),
 		'modelType' => for security reason (\App\...\Object\Type::find(10) || type code like 'user' || 299 || '\App\Model\Package'),
@@ -335,17 +335,17 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
     public function getModelById($id)
     {
-        return \App\Telenok\Core\Model\Object\Sequence::getModel($id);
+        return \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id);
     }
 
     public function getTypeById($id)
     {
-        return \App\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
     } 
 
     public function getTypeByModelId($id)
     {
-        return \App\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType;
+        return \App\Vendor\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType;
     }
 
     public function getModelByTypeId($id)

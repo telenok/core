@@ -6,7 +6,7 @@ namespace Telenok\Core\Support\Image;
  * @class Telenok.Core.Support.Image.Cropper
  * Class for https://github.com/fengyuanchen/cropper.
  */
-class Cropper extends \App\Telenok\Core\Controller\Backend\Controller {
+class Cropper extends \App\Vendor\Telenok\Core\Controller\Backend\Controller {
 
     protected $key = 'cropper';
     protected $path;

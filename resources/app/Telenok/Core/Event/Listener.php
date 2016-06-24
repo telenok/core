@@ -1,4 +1,4 @@
-<?php namespace App\Telenok\Core\Event;
+<?php namespace App\Vendor\Telenok\Core\Event;
 
 class Listener extends \Telenok\Core\Event\Listener {
 

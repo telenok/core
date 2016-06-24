@@ -138,7 +138,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 
         $input->put('field_object_tab', $tab->getKey());
 
-        $table = \App\Telenok\Core\Model\Object\Type::find($input->get('field_object_type'))->code;
+        $table = \App\Vendor\Telenok\Core\Model\Object\Type::find($input->get('field_object_type'))->code;
 
         $fieldName = 'locked_by_user';
 

@@ -44,7 +44,7 @@
 
         ?>
         {!! Form::hidden($linkedField, $model->{$linkedField}) !!}
-        {!! Form::select($linkedField, \App\Telenok\Core\Model\Object\Type::get(['title', 'id'])->transform(function($item) { return ['title' => $item->translate('title'), 'id' => $item->id]; })->sortBy('title')->pluck('title', 'id'), $model->{$linkedField}, $domAttr) !!}
+        {!! Form::select($linkedField, \App\Vendor\Telenok\Core\Model\Object\Type::get(['title', 'id'])->transform(function($item) { return ['title' => $item->translate('title'), 'id' => $item->id]; })->sortBy('title')->pluck('title', 'id'), $model->{$linkedField}, $domAttr) !!}
     </div>
 </div>
 
@@ -61,7 +61,7 @@
 
             <?php
 
-                $subjects = \App\Telenok\Core\Model\Object\Sequence::getModelByTypeId($model->{$linkedField})
+                $subjects = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModelByTypeId($model->{$linkedField})
                     ->active()->withPermission()
                     ->whereIn($model->getKeyName(), $model->relation_many_to_many_default->all())
                     ->get(['id', 'title']);

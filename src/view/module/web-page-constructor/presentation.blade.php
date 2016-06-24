@@ -75,7 +75,7 @@
 								});">
 				<option value=""></option>
 				<?php
-				$pages = \App\Telenok\Core\Model\Web\Page::all();
+				$pages = \App\Vendor\Telenok\Core\Model\Web\Page::all();
 
 				foreach ($pages as $page)
 				{
@@ -160,7 +160,7 @@
 					<ul class="dropdown-menu" style="position: inherit; display: block;" id="widget-menu-buffer">	
 					<?php
 
-						$widgetBufferedList = \App\Telenok\Core\Model\System\Buffer::with("sequence")->where(function($query) 
+						$widgetBufferedList = \App\Vendor\Telenok\Core\Model\System\Buffer::with("sequence")->where(function($query)
 							{
 								$query->where('user_id', app('auth')->user()->getKey());
 								$query->where('place', 'web-page');
@@ -196,7 +196,7 @@
 						$localeDefault = config('app.localeDefault');
 						$localeDefaultId = 0;
 
-						$languages = \App\Telenok\Core\Model\System\Language::whereIn('locale', config('app.locales')->all())
+						$languages = \App\Vendor\Telenok\Core\Model\System\Language::whereIn('locale', config('app.locales')->all())
 										->get()->sortBy(function($item) use ($localeDefault, &$localeDefaultId)
 						{
 							if ($item->locale == $localeDefault)

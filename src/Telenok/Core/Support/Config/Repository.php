@@ -129,7 +129,7 @@ class Repository {
         {
             $list = collect();
 
-            \App\Telenok\Core\Model\Web\ModuleGroup::active()->get()->each(function($item) use (&$list)
+            \App\Vendor\Telenok\Core\Model\Web\ModuleGroup::active()->get()->each(function($item) use (&$list)
             {
                 $object = app($item->controller_class);
                 $object->setModelModuleGroup($item);
@@ -150,7 +150,7 @@ class Repository {
         {
             $list = collect();
 
-            \App\Telenok\Core\Model\Web\Module::active()->get()->each(function($item) use (&$list)
+            \App\Vendor\Telenok\Core\Model\Web\Module::active()->get()->each(function($item) use (&$list)
             {
                 $object = app($item->controller_class);
                 $object->setModelModule($item);
@@ -171,7 +171,7 @@ class Repository {
         {
             $list = collect();
 
-            \App\Telenok\Core\Model\Web\WidgetGroup::active()->get()->each(function($item) use (&$list)
+            \App\Vendor\Telenok\Core\Model\Web\WidgetGroup::active()->get()->each(function($item) use (&$list)
             {
                 $object = app($item->controller_class);
                 $object->setWidgetGroupModel($item);
@@ -192,7 +192,7 @@ class Repository {
         {
             $list = collect();
 
-            \App\Telenok\Core\Model\Web\Widget::active()->get()->each(function($item) use (&$list)
+            \App\Vendor\Telenok\Core\Model\Web\Widget::active()->get()->each(function($item) use (&$list)
             {
                 $object = app($item->controller_class);
                 $list->put($object->getKey(), $object);
@@ -206,7 +206,7 @@ class Repository {
         return $list;
     }
 
-    public function compileRouter()
+    public function compileRoute()
     {
         $path = storage_path('telenok/route');
 
@@ -221,9 +221,9 @@ class Repository {
         $routeCommon = [];
         $routeDomain = [];
 
-        $domains = \App\Telenok\Core\Model\Web\Domain::active()->get();
+        $domains = \App\Vendor\Telenok\Core\Model\Web\Domain::active()->get();
 
-        $pages = \App\Telenok\Core\Model\Web\Page::whereHas('pageDomain', function($query) use ($domains)
+        $pages = \App\Vendor\Telenok\Core\Model\Web\Page::whereHas('pageDomain', function($query) use ($domains)
                 {
                     $query->whereIn('page_domain', $domains->modelKeys() ? : [0]);
                 }, '>=', 0)
@@ -291,7 +291,7 @@ class Repository {
     {
         if (app('db')->table('setting')->where('active', 1)->whereNull('deleted_at')->count())
         {
-            foreach (\App\Telenok\Core\Model\System\Setting::all() as $setting)
+            foreach (\App\Vendor\Telenok\Core\Model\System\Setting::all() as $setting)
             {
                 try
                 {

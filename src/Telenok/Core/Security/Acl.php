@@ -31,9 +31,9 @@ class Acl {
     /*
      * Set resource as internal variable for manipulating
      * 
-     * \App\Telenok\Core\Security\Acl::resource(200)
-     * \App\Telenok\Core\Security\Acl::resource('control_panel')
-     * \App\Telenok\Core\Security\Acl::resource(\App\Telenok\Core\Model\User\User $user)
+     * \App\Vendor\Telenok\Core\Security\Acl::resource(200)
+     * \App\Vendor\Telenok\Core\Security\Acl::resource('control_panel')
+     * \App\Vendor\Telenok\Core\Security\Acl::resource(\App\Vendor\Telenok\Core\Model\User\User $user)
      * 
      */
 
@@ -47,11 +47,11 @@ class Acl {
         }
         else if (is_numeric($id))
         {
-            $resource = \App\Telenok\Core\Model\Object\Sequence::find($id);
+            $resource = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($id);
         }
         else if (is_string($id))
         {
-            $resource = \App\Telenok\Core\Model\Security\Resource::where('code', $id)->first();
+            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $id)->first();
         }
 
         if (!$resource)
@@ -65,10 +65,10 @@ class Acl {
     /*
      * Set subject as internal variable for manipulating
      * 
-     * \App\Telenok\Core\Security\Acl::subject(200)
-     * \App\Telenok\Core\Security\Acl::subject('user_unauthorized')
-     * \App\Telenok\Core\Security\Acl::subject('user_any')
-     * \App\Telenok\Core\Security\Acl::subject(\App\Telenok\Core\Model\User\User $user)
+     * \App\Vendor\Telenok\Core\Security\Acl::subject(200)
+     * \App\Vendor\Telenok\Core\Security\Acl::subject('user_unauthorized')
+     * \App\Vendor\Telenok\Core\Security\Acl::subject('user_any')
+     * \App\Vendor\Telenok\Core\Security\Acl::subject(\App\Vendor\Telenok\Core\Model\User\User $user)
      * 
      */
 
@@ -82,11 +82,11 @@ class Acl {
         }
         else if (is_numeric($id))
         {
-            $subject = \App\Telenok\Core\Model\Object\Sequence::find($id);
+            $subject = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($id);
         }
         else if (is_scalar($id))
         {
-            $subject = \App\Telenok\Core\Model\Security\Resource::where('code', $id)->first();
+            $subject = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $id)->first();
         }
 
         if (!$subject)
@@ -112,8 +112,8 @@ class Acl {
     /*
      * Set subject as internal variable for manipulating
      * 
-     * \App\Telenok\Core\Security\Acl::subjectAll([200, 'user_unauthorized'])
-     * \App\Telenok\Core\Security\Acl::subjectAll([$user, 'user_unauthorized'])
+     * \App\Vendor\Telenok\Core\Security\Acl::subjectAll([200, 'user_unauthorized'])
+     * \App\Vendor\Telenok\Core\Security\Acl::subjectAll([$user, 'user_unauthorized'])
      * 
      */
 
@@ -133,8 +133,8 @@ class Acl {
     /*
      * Set subject as internal variable for manipulating
      * 
-     * \App\Telenok\Core\Security\Acl::subjectAny([200, 'user_unauthorized'])
-     * \App\Telenok\Core\Security\Acl::subjectAny([$user, 'user_unauthorized'])
+     * \App\Vendor\Telenok\Core\Security\Acl::subjectAny([200, 'user_unauthorized'])
+     * \App\Vendor\Telenok\Core\Security\Acl::subjectAny([$user, 'user_unauthorized'])
      * 
      */
 
@@ -181,9 +181,9 @@ class Acl {
     /*
      * Set user as internal variable for manipulating
      * 
-     * \App\Telenok\Core\Security\Acl::user() - for logged user
-     * \App\Telenok\Core\Security\Acl::user(2)
-     * \App\Telenok\Core\Security\Acl::user(\App\Telenok\Core\Model\User\User $user)
+     * \App\Vendor\Telenok\Core\Security\Acl::user() - for logged user
+     * \App\Vendor\Telenok\Core\Security\Acl::user(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::user(\App\Vendor\Telenok\Core\Model\User\User $user)
      * 
      */
 
@@ -201,7 +201,7 @@ class Acl {
         }
         else if (is_numeric($id))
         {
-            $user = \App\Telenok\Core\Model\User\User::find($id);
+            $user = \App\Vendor\Telenok\Core\Model\User\User::find($id);
         }
 
         if (!$user)
@@ -215,9 +215,9 @@ class Acl {
     /*
      * Set role as internal variable for manipulating
      * 
-     * \App\Telenok\Core\Security\Acl::role('administrator')
-     * \App\Telenok\Core\Security\Acl::role(2)
-     * \App\Telenok\Core\Security\Acl::role(\App\Telenok\Core\Model\Security\Role $role)
+     * \App\Vendor\Telenok\Core\Security\Acl::role('administrator')
+     * \App\Vendor\Telenok\Core\Security\Acl::role(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::role(\App\Vendor\Telenok\Core\Model\Security\Role $role)
      * 
      */
 
@@ -231,7 +231,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $role = \App\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
         }
 
         if (!$role)
@@ -245,9 +245,9 @@ class Acl {
     /*
      * Set group as internal variable for manipulating
      * 
-     * \App\Telenok\Core\Security\Acl::group('administrator')
-     * \App\Telenok\Core\Security\Acl::group(2)
-     * \App\Telenok\Core\Security\Acl::group(\App\Telenok\Core\Model\User\Group $group)
+     * \App\Vendor\Telenok\Core\Security\Acl::group('administrator')
+     * \App\Vendor\Telenok\Core\Security\Acl::group(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::group(\App\Vendor\Telenok\Core\Model\User\Group $group)
      * 
      */
 
@@ -261,7 +261,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $group = \App\Telenok\Core\Model\User\Group::where('code', $id)->orWhere('id', $id)->first();
+            $group = \App\Vendor\Telenok\Core\Model\User\Group::where('code', $id)->orWhere('id', $id)->first();
         }
 
         if (!$group)
@@ -275,8 +275,8 @@ class Acl {
     /*
      * Add role 
      * 
-     * \App\Telenok\Core\Security\Acl::addRole(['en' => 'News writers'], 'news_writers')
-     * \App\Telenok\Core\Security\Acl::addRole('News writers', 'news_writers')
+     * \App\Vendor\Telenok\Core\Security\Acl::addRole(['en' => 'News writers'], 'news_writers')
+     * \App\Vendor\Telenok\Core\Security\Acl::addRole('News writers', 'news_writers')
      * 
      */
 
@@ -287,7 +287,7 @@ class Acl {
             throw new \Exception('Code cant be empty');
         }
 
-        $role = (new \App\Telenok\Core\Model\Security\Role())->storeOrUpdate([
+        $role = (new \App\Vendor\Telenok\Core\Model\Security\Role())->storeOrUpdate([
             'title' => $title,
             'code' => $code,
             'active' => 1,
@@ -299,8 +299,8 @@ class Acl {
     /*
      * Delete role
      * 
-     * \App\Telenok\Core\Security\Acl::deleteRole(2)
-     * \App\Telenok\Core\Security\Acl::deleteRole(\App\Telenok\Core\Model\Security\Role $role)
+     * \App\Vendor\Telenok\Core\Security\Acl::deleteRole(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::deleteRole(\App\Vendor\Telenok\Core\Model\Security\Role $role)
      * 
      */
 
@@ -314,7 +314,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $role = \App\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
         }
 
         if ($role)
@@ -328,8 +328,8 @@ class Acl {
     /*
      * Add resource 
      * 
-     * \App\Telenok\Core\Security\Acl::addResource('file', ['en' => 'File'])
-     * \App\Telenok\Core\Security\Acl::addResource('file', 'File')
+     * \App\Vendor\Telenok\Core\Security\Acl::addResource('file', ['en' => 'File'])
+     * \App\Vendor\Telenok\Core\Security\Acl::addResource('file', 'File')
      * 
      */
 
@@ -340,7 +340,7 @@ class Acl {
             throw new \Exception('Code should be set');
         }
 
-        (new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+        (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
             'title' => (empty($title) ? 'Resource ' . $code : $title),
             'code' => $code,
             'active' => 1,
@@ -352,8 +352,8 @@ class Acl {
     /*
      * Delete resource
      * 
-     * \App\Telenok\Core\Security\Acl::deleteResource(2)
-     * \App\Telenok\Core\Security\Acl::deleteResource(\App\Telenok\Core\Model\Security\Resource $resource)
+     * \App\Vendor\Telenok\Core\Security\Acl::deleteResource(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::deleteResource(\App\Vendor\Telenok\Core\Model\Security\Resource $resource)
      * 
      */
 
@@ -367,7 +367,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $resource = \App\Telenok\Core\Model\Security\Resource::where('code', $id)->orWhere('id', $id)->first();
+            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $id)->orWhere('id', $id)->first();
         }
 
         if ($resource)
@@ -381,8 +381,8 @@ class Acl {
     /*
      * Add permission 
      * 
-     * \App\Telenok\Core\Security\Acl::addPermission(['en' => 'Search'], 'search')
-     * \App\Telenok\Core\Security\Acl::addPermission('Search', 'search')
+     * \App\Vendor\Telenok\Core\Security\Acl::addPermission(['en' => 'Search'], 'search')
+     * \App\Vendor\Telenok\Core\Security\Acl::addPermission('Search', 'search')
      * 
      */
 
@@ -393,7 +393,7 @@ class Acl {
             throw new \Exception('Code should be set');
         }
 
-        (new \App\Telenok\Core\Model\Security\Permission())->storeOrUpdate([
+        (new \App\Vendor\Telenok\Core\Model\Security\Permission())->storeOrUpdate([
             'title' => $title,
             'code' => $code,
             'active' => 1,
@@ -405,9 +405,9 @@ class Acl {
     /*
      * Delete permission
      * 
-     * \App\Telenok\Core\Security\Acl::deletePermission()
-     * \App\Telenok\Core\Security\Acl::deletePermission(2)
-     * \App\Telenok\Core\Security\Acl::deletePermission(\App\Telenok\Core\Model\Security\Permission $permission)
+     * \App\Vendor\Telenok\Core\Security\Acl::deletePermission()
+     * \App\Vendor\Telenok\Core\Security\Acl::deletePermission(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::deletePermission(\App\Vendor\Telenok\Core\Model\Security\Permission $permission)
      * 
      */
 
@@ -421,7 +421,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $permission = \App\Telenok\Core\Model\Security\Permission::where('code', $id)->orWhere('id', $id)->first();
+            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', $id)->orWhere('id', $id)->first();
         }
 
         if ($permission)
@@ -435,15 +435,15 @@ class Acl {
     /*
      * Set permission to subject
      * 
-     * \App\Telenok\Core\Security\Acl::role/subject/user(who)->setPermission(what.can, over.resource)
+     * \App\Vendor\Telenok\Core\Security\Acl::role/subject/user(who)->setPermission(what.can, over.resource)
      * 
-     * \App\Telenok\Core\Security\Acl::subjectAny([200, $user])->setPermission('read', 'control_panel')
-     * \App\Telenok\Core\Security\Acl::subjectAll([200, $user])->setPermission('read', 'control_panel')
-     * \App\Telenok\Core\Security\Acl::role(316)->setPermission('read', 'control_panel')
-     * \App\Telenok\Core\Security\Acl::role(316)->setPermission(['read', 'update'], [2341, 23, 442])
-     * \App\Telenok\Core\Security\Acl::user(339)->setPermission('read', 'news')
-     * \App\Telenok\Core\Security\Acl::role(800)->setPermission(233, 1901)
-     * \App\Telenok\Core\Security\Acl::subject(\Process $process)->setPermission(\App\Telenok\Core\Model\Security\Permission $permission, \App\Telenok\Core\Model\Security\Resource $resource)
+     * \App\Vendor\Telenok\Core\Security\Acl::subjectAny([200, $user])->setPermission('read', 'control_panel')
+     * \App\Vendor\Telenok\Core\Security\Acl::subjectAll([200, $user])->setPermission('read', 'control_panel')
+     * \App\Vendor\Telenok\Core\Security\Acl::role(316)->setPermission('read', 'control_panel')
+     * \App\Vendor\Telenok\Core\Security\Acl::role(316)->setPermission(['read', 'update'], [2341, 23, 442])
+     * \App\Vendor\Telenok\Core\Security\Acl::user(339)->setPermission('read', 'news')
+     * \App\Vendor\Telenok\Core\Security\Acl::role(800)->setPermission(233, 1901)
+     * \App\Vendor\Telenok\Core\Security\Acl::subject(\Process $process)->setPermission(\App\Vendor\Telenok\Core\Model\Security\Permission $permission, \App\Vendor\Telenok\Core\Model\Security\Resource $resource)
      * 
      */
 
@@ -490,7 +490,7 @@ class Acl {
         }
         else if (is_scalar($permissionCode))
         {
-            $permission = \App\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->first();
+            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->first();
         }
 
         if (!$permission)
@@ -504,11 +504,11 @@ class Acl {
         }
         else if (is_numeric($resourceCode))
         {
-            $resource = \App\Telenok\Core\Model\Object\Sequence::find($resourceCode);
+            $resource = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($resourceCode);
         }
         else if (is_string($resourceCode))
         {
-            $resource = \App\Telenok\Core\Model\Security\Resource::where('code', $resourceCode)->first();
+            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $resourceCode)->first();
         }
 
         if (!$resource)
@@ -520,7 +520,7 @@ class Acl {
         {
             try
             {
-                \App\Telenok\Core\Model\Security\SubjectPermissionResource::where('acl_permission_object_sequence', $permission->getKey())
+                \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource::where('acl_permission_object_sequence', $permission->getKey())
                         ->where('acl_subject_object_sequence', $this->subject->getKey())
                         ->where('acl_resource_object_sequence', $resource->getKey())
                         ->firstOrFail();
@@ -545,7 +545,7 @@ class Acl {
                     $typeResource = $resource->type();
                 }
 
-                $spr = (new \App\Telenok\Core\Model\Security\SubjectPermissionResource())->storeOrUpdate([
+                $spr = (new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource())->storeOrUpdate([
                     'title' => '[' . $permission->translate('title') . '] [' . $typeResource->translate('title') . ': ' . $resource->translate('title') . '] by [' . $typeSubject->translate('title') . ': ' . $this->subject->translate('title') . '] ',
                     'code' => $permission->code . '__' . $typeResource->code . '_' . $resource->getKey() . '__by_' . $typeSubject->code . '_' . $this->subject->getKey(),
                     'active' => 1,
@@ -579,9 +579,9 @@ class Acl {
     /*
      * Remove permission from resource 
      * 
-     * \App\Telenok\Core\Security\Acl::resource(120)->unsetPermission('read') remove all permissions on resource with ID 120
-     * \App\Telenok\Core\Security\Acl::role(120)->unsetPermission(null, \User $user) remove all permission from role with ID 120 which assigned to user $user
-     * \App\Telenok\Core\Security\Acl::user($admin)->unsetPermission(\App\Telenok\Core\Model\Security\Permission $permission, \SuperAdmin $subject)
+     * \App\Vendor\Telenok\Core\Security\Acl::resource(120)->unsetPermission('read') remove all permissions on resource with ID 120
+     * \App\Vendor\Telenok\Core\Security\Acl::role(120)->unsetPermission(null, \User $user) remove all permission from role with ID 120 which assigned to user $user
+     * \App\Vendor\Telenok\Core\Security\Acl::user($admin)->unsetPermission(\App\Vendor\Telenok\Core\Model\Security\Permission $permission, \SuperAdmin $subject)
      * 
      */
 
@@ -613,7 +613,7 @@ class Acl {
         }
         else if (is_scalar($permissionCode))
         {
-            $permission = \App\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->first();
+            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->first();
         }
 
         if ($subjectCode instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model)
@@ -622,14 +622,14 @@ class Acl {
         }
         else if (is_numeric($subjectCode))
         {
-            $subject = \App\Telenok\Core\Model\Object\Sequence::find($subjectCode);
+            $subject = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($subjectCode);
         }
         else if (is_string($subjectCode))
         {
-            $subject = \App\Telenok\Core\Model\Security\Resource::where('code', $subjectCode)->orWhere('id', $subjectCode)->first();
+            $subject = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $subjectCode)->orWhere('id', $subjectCode)->first();
         }
 
-        $query = \App\Telenok\Core\Model\Security\SubjectPermissionResource::where('acl_resource_object_sequence', $resource->getKey());
+        $query = \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource::where('acl_resource_object_sequence', $resource->getKey());
 
         if ($permission)
         {
@@ -654,9 +654,9 @@ class Acl {
     /*
      * Add group to user
      * 
-     * \App\Telenok\Core\Security\Acl::user(2)->setGroup('administrator')
-     * \App\Telenok\Core\Security\Acl::user($user)->setGroup(2)
-     * \App\Telenok\Core\Security\Acl::user($user)->setGroup(\App\Telenok\Core\Model\User\Group $group)
+     * \App\Vendor\Telenok\Core\Security\Acl::user(2)->setGroup('administrator')
+     * \App\Vendor\Telenok\Core\Security\Acl::user($user)->setGroup(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::user($user)->setGroup(\App\Vendor\Telenok\Core\Model\User\Group $group)
      * 
      */
 
@@ -683,7 +683,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $group = \App\Telenok\Core\Model\User\Group::where('code', $id)->orWhere('id', $id)->first();
+            $group = \App\Vendor\Telenok\Core\Model\User\Group::where('code', $id)->orWhere('id', $id)->first();
         }
 
         if (!$group)
@@ -699,9 +699,9 @@ class Acl {
     /*
      * Remove group from user
      * 
-     * \App\Telenok\Core\Security\Acl::user(2)->unsetGroup(2)
-     * \App\Telenok\Core\Security\Acl::user(2)->unsetGroup('super_administrator')
-     * \App\Telenok\Core\Security\Acl::user(2)->unsetGroup(\App\Telenok\Core\Model\User\Group $group)
+     * \App\Vendor\Telenok\Core\Security\Acl::user(2)->unsetGroup(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::user(2)->unsetGroup('super_administrator')
+     * \App\Vendor\Telenok\Core\Security\Acl::user(2)->unsetGroup(\App\Vendor\Telenok\Core\Model\User\Group $group)
      * 
      */
 
@@ -719,7 +719,7 @@ class Acl {
 
         if (!$this->subject instanceof \Telenok\Core\Model\User\User)
         {
-            throw new \Exception('Subject should be instance of \App\Telenok\Core\Model\User\User');
+            throw new \Exception('Subject should be instance of \App\Vendor\Telenok\Core\Model\User\User');
         }
 
         if ($id === null)
@@ -732,7 +732,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $group = \App\Telenok\Core\Model\User\Group::where('code', $id)->orWhere('id', $id)->first();
+            $group = \App\Vendor\Telenok\Core\Model\User\Group::where('code', $id)->orWhere('id', $id)->first();
         }
 
         if (!$group)
@@ -748,9 +748,9 @@ class Acl {
     /*
      * Add role to group
      * 
-     * \App\Telenok\Core\Security\Acl::group($admin)->setRole('super_administrator')
-     * \App\Telenok\Core\Security\Acl::group($admin)->setRole(2)
-     * \App\Telenok\Core\Security\Acl::group($admin)->setRole(\App\Telenok\Core\Model\Security\Role $role)
+     * \App\Vendor\Telenok\Core\Security\Acl::group($admin)->setRole('super_administrator')
+     * \App\Vendor\Telenok\Core\Security\Acl::group($admin)->setRole(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::group($admin)->setRole(\App\Vendor\Telenok\Core\Model\Security\Role $role)
      * 
      */
 
@@ -768,7 +768,7 @@ class Acl {
 
         if (!$this->subject instanceof \Telenok\Core\Model\User\Group)
         {
-            throw new \Exception('Subject should be instance of \App\Telenok\Core\Model\User\Group');
+            throw new \Exception('Subject should be instance of \App\Vendor\Telenok\Core\Model\User\Group');
         }
 
         if ($id instanceof \Telenok\Core\Model\Security\Role)
@@ -777,7 +777,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $role = \App\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
         }
 
         if (!$role)
@@ -793,9 +793,9 @@ class Acl {
     /*
      * Remove role from group
      * 
-     * \App\Telenok\Core\Security\Acl::group($admin)->unsetRole() - unset all roles from group
-     * \App\Telenok\Core\Security\Acl::group($admin)->unsetRole(2)
-     * \App\Telenok\Core\Security\Acl::group($admin)->unsetRole('super_administrator')
+     * \App\Vendor\Telenok\Core\Security\Acl::group($admin)->unsetRole() - unset all roles from group
+     * \App\Vendor\Telenok\Core\Security\Acl::group($admin)->unsetRole(2)
+     * \App\Vendor\Telenok\Core\Security\Acl::group($admin)->unsetRole('super_administrator')
      * 
      */
 
@@ -820,13 +820,13 @@ class Acl {
         {
             $this->subject->role()->detach();
         }
-        else if ($id instanceof \App\Telenok\Core\Model\Security\Role)
+        else if ($id instanceof \App\Vendor\Telenok\Core\Model\Security\Role)
         {
             $role = $id;
         }
         else if (is_scalar($id))
         {
-            $role = \App\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
         }
 
         if (!$role)
@@ -842,12 +842,12 @@ class Acl {
     /*
      * Validate subject's permission
      * 
-     * \App\Telenok\Core\Security\Acl::group($admin)->can(\App\Telenok\Core\Model\Security\Permission->code eg: 'write', \App\Telenok\Core\Model\Security\Resource->code 'log')
-     * \App\Telenok\Core\Security\Acl::user(103)->can(222, \News $news, ['object-type-own']) - only 'object-type-own' filter used
-     * \App\Telenok\Core\Security\Acl::subject(103)->can(\App\Telenok\Core\Model\Security\Permission $read, \User $user)
-     * \App\Telenok\Core\Security\Acl::subject(103)->can(12, 'object_type.language')
-     * \App\Telenok\Core\Security\Acl::subject(103)->can('read', 148)
-     * \App\Telenok\Core\Security\Acl::subject(103)->can('read', [148, 'user_any'])
+     * \App\Vendor\Telenok\Core\Security\Acl::group($admin)->can(\App\Vendor\Telenok\Core\Model\Security\Permission->code eg: 'write', \App\Vendor\Telenok\Core\Model\Security\Resource->code 'log')
+     * \App\Vendor\Telenok\Core\Security\Acl::user(103)->can(222, \News $news, ['object-type-own']) - only 'object-type-own' filter used
+     * \App\Vendor\Telenok\Core\Security\Acl::subject(103)->can(\App\Vendor\Telenok\Core\Model\Security\Permission $read, \User $user)
+     * \App\Vendor\Telenok\Core\Security\Acl::subject(103)->can(12, 'object_type.language')
+     * \App\Vendor\Telenok\Core\Security\Acl::subject(103)->can('read', 148)
+     * \App\Vendor\Telenok\Core\Security\Acl::subject(103)->can('read', [148, 'user_any'])
      * 
      */
 
@@ -890,7 +890,7 @@ class Acl {
             return true;
         }
 
-        if (!$this->subject || !\App\Telenok\Core\Model\Object\Sequence::where('id', $this->subject->getKey())->active()->count())
+        if (!$this->subject || !\App\Vendor\Telenok\Core\Model\Object\Sequence::where('id', $this->subject->getKey())->active()->count())
         {
             return false;
         }
@@ -904,11 +904,11 @@ class Acl {
         }
         else if (is_numeric($resourceCode))
         {
-            $resource = \App\Telenok\Core\Model\Object\Sequence::where('id', $resourceCode)->first();
+            $resource = \App\Vendor\Telenok\Core\Model\Object\Sequence::where('id', $resourceCode)->first();
         }
         else if (is_string($resourceCode))
         {
-            $resource = \App\Telenok\Core\Model\Security\Resource::where('code', $resourceCode)->first();
+            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $resourceCode)->first();
         }
 
         if (!$resource)
@@ -918,11 +918,11 @@ class Acl {
 
         if ($permissionCode instanceof \Telenok\Core\Model\Security\Permission)
         {
-            $permission = \App\Telenok\Core\Model\Security\Permission::where('id', $resourceCode->getKey())->active()->first();
+            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('id', $resourceCode->getKey())->active()->first();
         }
         else if (is_scalar($permissionCode))
         {
-            $permission = \App\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->active()->first();
+            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->active()->first();
         }
 
         if (!$permission)
@@ -930,8 +930,8 @@ class Acl {
             return false;
         }
 
-        $type = new \App\Telenok\Core\Model\Object\Type();
-        $sequence = new \App\Telenok\Core\Model\Object\Sequence();
+        $type = new \App\Vendor\Telenok\Core\Model\Object\Type();
+        $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
         $r = range_minutes($this->getCacheMinutes());
 
         $query = $sequence::select($sequence->getTable() . '.id')->where($sequence->getTable() . '.id', $resource->getKey());
@@ -972,10 +972,10 @@ class Acl {
     /*
      * Validate subject's permission
      * 
-     * \App\Telenok\Core\Security\Acl::group($admin)->cannot(\App\Telenok\Core\Model\Security\Permission->code eg: 'write', \App\Telenok\Core\Model\Security\Resource->code 'log')
-     * \App\Telenok\Core\Security\Acl::user(103)->cannot(222, \News $news)
-     * \App\Telenok\Core\Security\Acl::subject(103)->cannot(\App\Telenok\Core\Model\Security\Permission $read, \User $user)
-     * \App\Telenok\Core\Security\Acl::subject(103)->cannot(\App\Telenok\Core\Model\Security\Permission $read, ['object_type.language.%'])
+     * \App\Vendor\Telenok\Core\Security\Acl::group($admin)->cannot(\App\Vendor\Telenok\Core\Model\Security\Permission->code eg: 'write', \App\Vendor\Telenok\Core\Model\Security\Resource->code 'log')
+     * \App\Vendor\Telenok\Core\Security\Acl::user(103)->cannot(222, \News $news)
+     * \App\Vendor\Telenok\Core\Security\Acl::subject(103)->cannot(\App\Vendor\Telenok\Core\Model\Security\Permission $read, \User $user)
+     * \App\Vendor\Telenok\Core\Security\Acl::subject(103)->cannot(\App\Vendor\Telenok\Core\Model\Security\Permission $read, ['object_type.language.%'])
      * 
      */
 
@@ -987,9 +987,9 @@ class Acl {
     /*
      * Validate user's role
      * 
-     * \App\Telenok\Core\Security\Acl::user(103)->hasRole('superadmin')
-     * \App\Telenok\Core\Security\Acl::user($user)->hasRole(1)
-     * \App\Telenok\Core\Security\Acl::user(103)->hasRole(\App\Telenok\Core\Model\Security\Role $role)
+     * \App\Vendor\Telenok\Core\Security\Acl::user(103)->hasRole('superadmin')
+     * \App\Vendor\Telenok\Core\Security\Acl::user($user)->hasRole(1)
+     * \App\Vendor\Telenok\Core\Security\Acl::user(103)->hasRole(\App\Vendor\Telenok\Core\Model\Security\Role $role)
      * 
      */
 
@@ -1012,11 +1012,11 @@ class Acl {
 
         if ($id instanceof \Telenok\Core\Model\Security\Role)
         {
-            $role = \App\Telenok\Core\Model\Security\Role::where($id->getKey())->active()->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where($id->getKey())->active()->first();
         }
         else if (is_scalar($id))
         {
-            $role = \App\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->active()->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->active()->first();
         }
 
         if (!$role)

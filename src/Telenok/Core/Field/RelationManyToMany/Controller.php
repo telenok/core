@@ -118,7 +118,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
      */
     public function getLinkedModelType($field)
     {
-        return \App\Telenok\Core\Model\Object\Type::whereIn('id', [$field->relation_many_to_many_has, $field->relation_many_to_many_belong_to])->first();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::whereIn('id', [$field->relation_many_to_many_has, $field->relation_many_to_many_belong_to])->first();
     }
 
     /**
@@ -177,7 +177,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $id = $field->relation_many_to_many_has ? : $field->relation_many_to_many_belong_to;
 
-        $class = \App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
 
         $model = app($class);
 
@@ -377,7 +377,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         if ($input->get('relation_many_to_many_has'))
         {
             $input->put('relation_many_to_many_belong_to', 0);
-            $input->put('relation_many_to_many_has', intval(\App\Telenok\Core\Model\Object\Type::where('code', $input->get('relation_many_to_many_has'))->orWhere('id', $input->get('relation_many_to_many_has'))->value('id')));
+            $input->put('relation_many_to_many_has', intval(\App\Vendor\Telenok\Core\Model\Object\Type::where('code', $input->get('relation_many_to_many_has'))->orWhere('id', $input->get('relation_many_to_many_has'))->value('id')));
         }
         else
         {
@@ -417,7 +417,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         $codeFieldHasMany = $model->code;
         $codeTypeHasMany = $relatedTypeOfModelField->code;
 
-        $typeBelongTo = \App\Telenok\Core\Model\Object\Type::findOrFail($input->get('relation_many_to_many_has'));
+        $typeBelongTo = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($input->get('relation_many_to_many_has'));
         $tableBelongTo = $typeBelongTo->code;
         $classBelongTo = $typeBelongTo->class_model;
 
@@ -480,11 +480,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 'field_order' => $input->get('field_order_belong', $model->field_order),
             ];
 
-            $validator = $this->validator(new \App\Telenok\Core\Model\Object\Field(), $toSave, []);
+            $validator = $this->validator(new \App\Vendor\Telenok\Core\Model\Object\Field(), $toSave, []);
 
             if ($validator->passes())
             {
-                \App\Telenok\Core\Model\Object\Field::create($toSave);
+                \App\Vendor\Telenok\Core\Model\Object\Field::create($toSave);
             }
 
             if ($this->validateMethodExists($belongToObject, $belongTo['method']))

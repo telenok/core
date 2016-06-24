@@ -22,12 +22,12 @@ class Download extends \Telenok\Core\Abstraction\Controller\Controller {
      */
     public function stream($modelId, $fieldId)
     {
-        $model = \App\Telenok\Core\Model\Object\Sequence::getModel($modelId);
-        $field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
+        $model = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($modelId);
+        $field = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
 
         $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]);
 
-        if (!in_array(false, $responses, true) && (($model instanceof \App\Telenok\Core\Model\File\File && app('auth')->can('read', $model)) || (!($model instanceof \App\Telenok\Core\Model\File\File) &&
+        if (!in_array(false, $responses, true) && (($model instanceof \App\Vendor\Telenok\Core\Model\File\File && app('auth')->can('read', $model)) || (!($model instanceof \App\Vendor\Telenok\Core\Model\File\File) &&
                 app('auth')->can('read', 'object_field.' . $model->getTable() . '.' . $field->code))))
         {
             $fileObject = $model->{$field->code};
@@ -102,8 +102,8 @@ class Download extends \Telenok\Core\Abstraction\Controller\Controller {
      */
     public function image($modelId, $fieldId, $width, $height, $action)
     {
-        $model = \App\Telenok\Core\Model\Object\Sequence::getModel($modelId);
-        $field = \App\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
+        $model = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($modelId);
+        $field = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
 
         $fileObject = $model->{$field->code};
 
@@ -114,8 +114,8 @@ class Download extends \Telenok\Core\Abstraction\Controller\Controller {
             throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException();
         }
 
-        if (!in_array(false, $responses, true) && (($model instanceof \App\Telenok\Core\Model\File\File 
-                && app('auth')->can('read', $model)) || (!($model instanceof \App\Telenok\Core\Model\File\File) &&
+        if (!in_array(false, $responses, true) && (($model instanceof \App\Vendor\Telenok\Core\Model\File\File 
+                && app('auth')->can('read', $model)) || (!($model instanceof \App\Vendor\Telenok\Core\Model\File\File) &&
                 app('auth')->can('read', 'object_field.' . $model->getTable() . '.' . $field->code))))
         {
             if ($modifySince = $this->getRequest()->header('If-Modified-Since'))

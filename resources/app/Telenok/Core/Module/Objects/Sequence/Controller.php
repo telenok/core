@@ -1,4 +1,4 @@
-<?php namespace App\Telenok\Core\Module\Objects\Sequence;
+<?php namespace App\Vendor\Telenok\Core\Module\Objects\Sequence;
 
 class Controller extends \Telenok\Core\Module\Objects\Sequence\Controller { 
     

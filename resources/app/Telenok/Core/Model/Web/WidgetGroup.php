@@ -1,4 +1,4 @@
-<?php namespace App\Telenok\Core\Model\Web;
+<?php namespace App\Vendor\Telenok\Core\Model\Web;
 
 class WidgetGroup extends \Telenok\Core\Model\Web\WidgetGroup {
 

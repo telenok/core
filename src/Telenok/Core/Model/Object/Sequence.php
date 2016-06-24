@@ -6,7 +6,7 @@ namespace Telenok\Core\Model\Object;
  * @class Telenok.Core.Model.Object.Sequence
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Sequence extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
+class Sequence extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $table = 'object_sequence';
     protected $hasVersioning = false;
@@ -20,17 +20,17 @@ class Sequence extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     public static function getModelTrashed($id)
     {
-        return app(\App\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType->class_model)->withTrashed()->findOrFail($id);
+        return app(\App\Vendor\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType->class_model)->withTrashed()->findOrFail($id);
     }
 
     public static function getModel($id)
     {
-        return app(\App\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType->class_model)->findOrFail($id);
+        return app(\App\Vendor\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType->class_model)->findOrFail($id);
     }
 
     public static function getTypeById($id)
     {
-        return \App\Telenok\Core\Model\Object\Type::where('id', $id)->active()->firstOrFail();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->active()->firstOrFail();
     }
 
     public static function getModelByTypeId($id)
@@ -56,32 +56,32 @@ class Sequence extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     public function sequencesObjectType()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\Object\Type', 'sequences_object_type');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\Object\Type', 'sequences_object_type');
     }
 
     public function createdByUser()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'created_by_user');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\User\User', 'created_by_user');
     }
 
     public function updatedByUser()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'updated_by_user');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\User\User', 'updated_by_user');
     }
 
     public function aclResource()
     {
-        return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_resource_object_sequence');
+        return $this->hasMany('\App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_resource_object_sequence');
     }
 
     public function aclSubject()
     {
-        return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_subject_object_sequence');
+        return $this->hasMany('\App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_subject_object_sequence');
     }
 
     public function aclPermission()
     {
-        return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_permission_object_sequence');
+        return $this->hasMany('\App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_permission_object_sequence');
     }
 
 }

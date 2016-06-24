@@ -1,4 +1,4 @@
-<?php namespace App\Telenok\Core\Field\MorphOneToMany;
+<?php namespace App\Vendor\Telenok\Core\Field\MorphOneToMany;
 
 class Controller extends \Telenok\Core\Field\MorphOneToMany\Controller {
     

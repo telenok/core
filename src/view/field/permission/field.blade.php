@@ -12,7 +12,7 @@
 
         if (!$permissions->count())
         {
-            $permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
+            $permissions = \App\Vendor\Telenok\Core\Model\Security\Permission::active()->get();
         }
     }
 
@@ -47,11 +47,11 @@
                                 name="permission_default[{{$permission->code}}][]">
                             <?php
 
-                            $sequence = new \App\Telenok\Core\Model\Object\Sequence();
+                            $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
 
                             $selectedIds = $model->permission_default->get($permission->code);
                             
-                            $subjects = \App\Telenok\Core\Model\Object\Sequence::active()
+                            $subjects = \App\Vendor\Telenok\Core\Model\Object\Sequence::active()
                                     ->whereIn('id', (array)$selectedIds)
                                     ->get();
 

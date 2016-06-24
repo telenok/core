@@ -2,7 +2,7 @@
 
 use \Telenok\Core\Contract\Eloquent\EloquentProcessController;
 use \Illuminate\Database\Eloquent\SoftDeletes;
-use \App\Telenok\Core\Abstraction\Eloquent\Cache\QueryCache;
+use \App\Vendor\Telenok\Core\Abstraction\Eloquent\Cache\QueryCache;
 
 /**
  * @class Telenok.Core.Abstraction.Eloquent.Object.Model
@@ -238,7 +238,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             {
                 if ($model->hasVersioning())
                 {
-                    \App\Telenok\Core\Model\Object\Version::add($model);
+                    \App\Vendor\Telenok\Core\Model\Object\Version::add($model);
                 }
 
                 $model->deleteModelFieldController();
@@ -279,14 +279,14 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         {
             if ($this->getKey())
             {
-                $sequence = new \App\Telenok\Core\Model\Object\Sequence();
+                $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
                 $sequence->id = $this->getKey();
                 $sequence->class_model = get_class($this);
                 $sequence->save();
             }
             else
             {
-                $sequence = \App\Telenok\Core\Model\Object\Sequence::create(['class_model' => get_class($this)]);
+                $sequence = \App\Vendor\Telenok\Core\Model\Object\Sequence::create(['class_model' => get_class($this)]);
             }
 
             $this->id = $sequence->id;
@@ -305,7 +305,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         if (!($this instanceof \Telenok\Core\Model\Object\Sequence))
         {
-            \App\Telenok\Core\Model\Object\Sequence::withTrashed()->find($this->getKey())->restore();
+            \App\Vendor\Telenok\Core\Model\Object\Sequence::withTrashed()->find($this->getKey())->restore();
         }
     }
 
@@ -319,7 +319,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     protected function deleteSequence()
     {
-        $sequence = \App\Telenok\Core\Model\Object\Sequence::withTrashed()->find($this->getKey());
+        $sequence = \App\Vendor\Telenok\Core\Model\Object\Sequence::withTrashed()->find($this->getKey());
 
         if ($this->forceDeleting)
         {
@@ -420,7 +420,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         if (!($this instanceof \Telenok\Core\Model\Object\Sequence))
         {
-            \App\Telenok\Core\Model\Object\Translation::where('translation_object_model_id', $this->getKey())->forceDelete();
+            \App\Vendor\Telenok\Core\Model\Object\Translation::where('translation_object_model_id', $this->getKey())->forceDelete();
 
             foreach ($this->getMultilanguage() as $fieldCode)
             {
@@ -428,7 +428,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
                 foreach ($value as $language => $string)
                 {
-                    \App\Telenok\Core\Model\Object\Translation::create([
+                    \App\Vendor\Telenok\Core\Model\Object\Translation::create([
                         'translation_object_model_id' => $this->getKey(),
                         'translation_object_field_code' => $fieldCode,
                         'translation_object_language' => $language,
@@ -468,7 +468,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function sequence()
     {
-        return $this->hasOne('\App\Telenok\Core\Model\Object\Sequence', 'id');
+        return $this->hasOne('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'id');
     }
 
     /**
@@ -483,7 +483,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function type()
     {
-        return \App\Telenok\Core\Model\Object\Type::whereCode($this->getTable())->first();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::whereCode($this->getTable())->first();
     }
 
     /**
@@ -604,7 +604,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function storeOrUpdate($input = [], $withPermission = false, $withEvent = true)
     {
-        if ($this instanceof \App\Telenok\Core\Model\Object\Sequence)
+        if ($this instanceof \App\Vendor\Telenok\Core\Model\Object\Sequence)
         {
             throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Cant storeOrUpdate sequence model directly');
         }
@@ -689,7 +689,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
                 if ($withEvent)
                 {
-                    //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
+                    //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Vendor\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
                 }
 
                 if (($c = $type->classController()) && ($controllerProcessing = app($c)) && $controllerProcessing instanceof EloquentProcessController)
@@ -699,7 +699,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
                 $model->preProcess($type, $input);
 
-                $validator = app('\App\Telenok\Core\Support\Validator\Model')
+                $validator = app('\App\Vendor\Telenok\Core\Support\Validator\Model')
                         ->setModel($model)
                         ->setInput($input)
                         ->setMessage($this->LL('error'))
@@ -731,7 +731,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
                 if ($withEvent)
                 {
-                    //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.after', (new \App\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
+                    //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.after', (new \App\Vendor\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
                 }
             });
         }
@@ -889,7 +889,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         
         if ($this->hasVersioning())
         {
-            \App\Telenok\Core\Model\Object\Version::add($this);
+            \App\Vendor\Telenok\Core\Model\Object\Version::add($this);
         }
 
         return $this;
@@ -1298,7 +1298,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function scopeTranslateField($query, $linkedTableAlias = '', $translateTableAlias = '', $translateField = '', $locale = '')
     {
-        $translateModel = app('\App\Telenok\Core\Model\Object\Translation');
+        $translateModel = app('\App\Vendor\Telenok\Core\Model\Object\Translation');
 
         $translateTableAlias = $translateTableAlias ? : $translateModel->getTable();
 
@@ -1320,17 +1320,17 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * 
      *      @example
      *      // can current user read (read - by default)
-     *      \App\Telenok\Core\Model\Object\Sequence::withPermission()->take(10)->get();
+     *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission()->take(10)->get();
      *      // can current user write
-     *      \App\Telenok\Core\Model\Object\Sequence::withPermission('write', null)->take(10)->get();
+     *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission('write', null)->take(10)->get();
      *      // can $someObject read 
-     *      \App\Telenok\Core\Model\Object\Sequence::withPermission(null, $someObject)->take(10)->get();
+     *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission(null, $someObject)->take(10)->get();
      *      // can authorized user read 
-     *      \App\Telenok\Core\Model\Object\Sequence::withPermission(null, 'user_authorized')->take(10)->get();
+     *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission(null, 'user_authorized')->take(10)->get();
      *      // can anybody read
-     *      \App\Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_any')->take(10)->get();
+     *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_any')->take(10)->get();
      *      // can user_authorized read with AND condition ['object-type', 'own']
-     *      \App\Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_authorized', ['object-type', 'own'])->take(10)->get();
+     *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_authorized', ['object-type', 'own'])->take(10)->get();
      */
     public function scopeWithPermission($query, $permissionCode = 'read', $subjectCode = null, $filterCode = null)
     {
@@ -1345,11 +1345,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         {
             if (empty($subjectCode))
             {
-                $subjectCollection->push(\App\Telenok\Core\Model\Security\Resource::where('code', 'user_any')->active()->first());
+                $subjectCollection->push(\App\Vendor\Telenok\Core\Model\Security\Resource::where('code', 'user_any')->active()->first());
 
                 if (app('auth')->guest())
                 {
-                    $subjectCollection->push(\App\Telenok\Core\Model\Security\Resource::where('code', 'user_unauthorized')->active()->first());
+                    $subjectCollection->push(\App\Vendor\Telenok\Core\Model\Security\Resource::where('code', 'user_unauthorized')->active()->first());
                 }
                 else if (app('auth')->check())
                 {
@@ -1365,11 +1365,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             }
             else if ($subjectCode instanceof \Illuminate\Database\Eloquent\Model)
             {
-                $subjectCollection->push(\App\Telenok\Core\Model\Object\Sequence::where('id', $subjectCode->getKey())->active()->firstOrFail());
+                $subjectCollection->push(\App\Vendor\Telenok\Core\Model\Object\Sequence::where('id', $subjectCode->getKey())->active()->firstOrFail());
             }
             else
             {
-                $subjectCollection->push(\App\Telenok\Core\Model\Object\Sequence::where('id', $subjectCode)->active()->firstOrFail());
+                $subjectCollection->push(\App\Vendor\Telenok\Core\Model\Object\Sequence::where('id', $subjectCode)->active()->firstOrFail());
             }
         }
         catch (\Exception $e)
@@ -1377,7 +1377,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             
         }
 
-        $permission = \App\Telenok\Core\Model\Security\Permission::where('id', $permissionCode)->orWhere('code', $permissionCode)->active()->first();
+        $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('id', $permissionCode)->orWhere('code', $permissionCode)->active()->first();
 
         if ($subjectCollection->isEmpty() || !$permission)
         {
@@ -1385,9 +1385,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         }
 
         $r = range_minutes($this->getCacheMinutes());
-        $spr = new \App\Telenok\Core\Model\Security\SubjectPermissionResource();
-        $sequence = new \App\Telenok\Core\Model\Object\Sequence();
-        $type = new \App\Telenok\Core\Model\Object\Type();
+        $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
+        $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
+        $type = new \App\Vendor\Telenok\Core\Model\Object\Type();
 
         $query->addSelect($this->getTable() . '.*');
 
@@ -1437,7 +1437,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function treeParent()
     {
-        return $this->belongsToMany('\App\Telenok\Core\Model\Object\Sequence', 'pivot_relation_m2m_tree', 'tree_id', 'tree_pid');
+        return $this->belongsToMany('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'pivot_relation_m2m_tree', 'tree_id', 'tree_pid');
     }
 
     /**
@@ -1449,7 +1449,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function treeChild()
     {
-        return $this->belongsToMany('\App\Telenok\Core\Model\Object\Sequence', 'pivot_relation_m2m_tree', 'tree_pid', 'tree_id');
+        return $this->belongsToMany('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'pivot_relation_m2m_tree', 'tree_pid', 'tree_id');
     }
 
     /* Treeable section */
@@ -1492,12 +1492,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         if ($depth == 1)
         {
-            $query = \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->where('pivot_tree_attr.tree_pid', $this->getKey());
+            $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::withTreeAttr()->where('pivot_tree_attr.tree_pid', $this->getKey());
         }
         else
         {
             $model = $this->treeAttr();
-            $query = \App\Telenok\Core\Model\Object\Sequence::withTreeAttr();
+            $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::withTreeAttr();
 
             if ($depth)
             {
@@ -1580,7 +1580,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function insertTree()
     {
-        if ($this->exists && \App\Telenok\Core\Model\Object\Sequence::findOrFail($this->getKey())->treeable)
+        if ($this->exists && \App\Vendor\Telenok\Core\Model\Object\Sequence::findOrFail($this->getKey())->treeable)
         {
             app('db')->table('pivot_relation_m2m_tree')->insert([
                 'tree_id' => $this->getKey(),
@@ -1609,7 +1609,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         if (!$parent instanceof \Illuminate\Database\Eloquent\Model)
         {
-            $parent = \App\Telenok\Core\Model\Object\Sequence::find($parent);
+            $parent = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($parent);
         }
 
         $this->makeRoot();
@@ -1656,7 +1656,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         if (!$parent instanceof \Illuminate\Database\Eloquent\Model)
         {
-            $parent = \App\Telenok\Core\Model\Object\Sequence::find($parent);
+            $parent = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($parent);
         }
 
         $this->makeRoot();
@@ -1706,7 +1706,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         if (!$descendant instanceof \Illuminate\Database\Eloquent\Model)
         {
-            $descendant = \App\Telenok\Core\Model\Object\Sequence::find($descendant);
+            $descendant = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($descendant);
         }
 
         $sequence = $this->treeAttr();
@@ -1726,7 +1726,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         if (!$ancestor instanceof \Illuminate\Database\Eloquent\Model)
         {
-            $ancestor = \App\Telenok\Core\Model\Object\Sequence::find($ancestor);
+            $ancestor = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($ancestor);
         }
 
         $sequence = $this->treeAttr();
@@ -1749,7 +1749,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         if (!$sibling instanceof \Illuminate\Database\Eloquent\Model)
         {
-            $sibling = \App\Telenok\Core\Model\Object\Sequence::find($sibling);
+            $sibling = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($sibling);
         }
 
         $this->makeRoot();
@@ -1823,7 +1823,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         $sequence = $this->treeAttr();
 
-        return \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->where('tree_pid', '=', $sequence->tree_pid);
+        return \App\Vendor\Telenok\Core\Model\Object\Sequence::withTreeAttr()->where('tree_pid', '=', $sequence->tree_pid);
     }
 
     /**
@@ -1837,7 +1837,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         $sequence = $this->treeAttr();
 
-        return \App\Telenok\Core\Model\Object\Sequence::whereIn($this->getTable() . '.id', array_filter(explode('.', $sequence->tree_path), 'strlen'));
+        return \App\Vendor\Telenok\Core\Model\Object\Sequence::whereIn($this->getTable() . '.id', array_filter(explode('.', $sequence->tree_path), 'strlen'));
     }
 
     /**
@@ -1865,7 +1865,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         if (!$object instanceof \Illuminate\Database\Eloquent\Model)
         {
-            $object = \App\Telenok\Core\Model\Object\Sequence::find($object);
+            $object = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($object);
         }
 
         $sequence = $this->treeAttr();
@@ -1883,7 +1883,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public static function allRoot()
     {
-        $query = \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->where('tree_pid', 0);
+        $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::withTreeAttr()->where('tree_pid', 0);
 
         return $query;
     }
@@ -1898,7 +1898,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public static function allDepth($depth = 0)
     {
-        $query = \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->whereIn('tree_depth', (array) $depth);
+        $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::withTreeAttr()->whereIn('tree_depth', (array) $depth);
 
         return $query;
     }
@@ -1914,7 +1914,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         $model = new static;
 
-        $query = \App\Telenok\Core\Model\Object\Sequence::withTreeAttr()->leftJoin('pivot_relation_m2m_tree as tree_leaf', function($join) use ($model)
+        $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::withTreeAttr()->leftJoin('pivot_relation_m2m_tree as tree_leaf', function($join) use ($model)
                 {
                     $join->on($model->getTable() . '.id', '=', 'tree_leaf.tree_pid');
                 })
@@ -1989,7 +1989,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function createdByUser()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'created_by_user');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\User\User', 'created_by_user');
     }
 
     /**
@@ -2001,7 +2001,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function updatedByUser()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'updated_by_user');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\User\User', 'updated_by_user');
     }
 
     /**
@@ -2013,7 +2013,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function deletedByUser()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'deleted_by_user');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\User\User', 'deleted_by_user');
     }
 
     /**
@@ -2025,7 +2025,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function lockedByUser()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\User\User', 'locked_by_user');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\User\User', 'locked_by_user');
     }
 
     /**
@@ -2037,7 +2037,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function aclSubject()
     {
-        return $this->hasMany('\App\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_subject_object_sequence');
+        return $this->hasMany('\App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_subject_object_sequence');
     }
 
     /**

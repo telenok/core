@@ -11,8 +11,8 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     protected $key = 'web-page';
     protected $parent = 'web';
-    protected $modelListClass = '\App\Telenok\Core\Model\Web\Page';
-    protected $modelTreeClass = '\App\Telenok\Core\Model\Web\Page';
+    protected $modelListClass = '\App\Vendor\Telenok\Core\Model\Web\Page';
+    protected $modelTreeClass = '\App\Vendor\Telenok\Core\Model\Web\Page';
     protected $presentation = 'tree-tab-object';
 
     public function getListItem($model = null)

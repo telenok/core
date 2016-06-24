@@ -62,7 +62,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function getChooseTypeId($field)
     {
-        return \App\Telenok\Core\Model\Object\Type::withPermission()->active()->where('treeable', 1)->get(['id'])->pluck('id')->all();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::withPermission()->active()->where('treeable', 1)->get(['id'])->pluck('id')->all();
     }
 
     /**
@@ -91,7 +91,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function getLinkedModelType($field)
     {
-        return \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->first();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->first();
     }
 
     /**
@@ -208,7 +208,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
                 {
                     try
                     {
-                        $child = \App\Telenok\Core\Model\Object\Sequence::findOrFail($id);
+                        $child = \App\Vendor\Telenok\Core\Model\Object\Sequence::findOrFail($id);
 
                         $child->makeLastChildOf($model);
                     }
@@ -287,15 +287,15 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             'field_order' => $input->get('field_order'),
         ];
 
-        $validator = $this->validator(app('\App\Telenok\Core\Model\Object\Field'), $toSave, []);
+        $validator = $this->validator(app('\App\Vendor\Telenok\Core\Model\Object\Field'), $toSave, []);
 
-        $fieldObjectType = \App\Telenok\Core\Model\Object\Type::find($input->get('field_object_type'));
+        $fieldObjectType = \App\Vendor\Telenok\Core\Model\Object\Type::find($input->get('field_object_type'));
         $fieldObjectType->treeable = 1;
         $fieldObjectType->save();
 
         if ($input->get('create_belong') !== false && $validator->passes())
         {
-            \App\Telenok\Core\Model\Object\Field::create($toSave);
+            \App\Vendor\Telenok\Core\Model\Object\Field::create($toSave);
         }
 
         return $this;

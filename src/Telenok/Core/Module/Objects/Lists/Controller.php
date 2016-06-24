@@ -12,7 +12,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     protected $key = 'objects-lists';
     protected $parent = 'objects';
-    protected $modelTreeClass = '\App\Telenok\Core\Model\Object\Type';
+    protected $modelTreeClass = '\App\Vendor\Telenok\Core\Model\Object\Type';
     protected $presentation = 'tree-tab-object';
     protected $presentationContentView = 'core::module.objects-lists.content';
     protected $presentationModelView = 'core::module.objects-lists.model';
@@ -83,7 +83,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function getTreeListTypes()
     {
-        $types = \App\Telenok\Core\Model\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->pluck('id')->toArray();
+        $types = \App\Vendor\Telenok\Core\Model\Object\Type::whereIn('code', ['folder', 'object_type'])->active()->get()->pluck('id')->toArray();
 
         return $types;
     }
@@ -110,7 +110,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function getTreeListItemProcessed($item)
     {
-        $typeObjectId = \App\Telenok\Core\Model\Object\Type::where('code', 'object_type')->value('id');
+        $typeObjectId = \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_type')->value('id');
 
         $code = '';
         $module = null;
@@ -274,7 +274,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             if (is_array($typeId))
             {
-                $id = \App\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
+                $id = \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id');
 
                 $type = $this->getType($id);
                 $model = $this->getModelByTypeId($id);
@@ -796,11 +796,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             {
                 try
                 {
-                    $type = \App\Telenok\Core\Model\Object\Sequence::findOrFail($input->get('id'))->sequencesObjectType()->firstOrFail();
+                    $type = \App\Vendor\Telenok\Core\Model\Object\Sequence::findOrFail($input->get('id'))->sequencesObjectType()->firstOrFail();
                 }
                 catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
                 {
-                    throw new \Exception("\App\Telenok\Core\Module\Objects\Lists\Controller::save() - Error: 'type of object not found, please, define it'");
+                    throw new \Exception("\App\Vendor\Telenok\Core\Module\Objects\Lists\Controller::save() - Error: 'type of object not found, please, define it'");
                 }
             }
         }

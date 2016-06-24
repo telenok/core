@@ -1,4 +1,4 @@
-<?php namespace App\Telenok\Core\Field\RelationOneToOne;
+<?php namespace App\Vendor\Telenok\Core\Field\RelationOneToOne;
 
 class Controller extends \Telenok\Core\Field\RelationOneToOne\Controller {
     

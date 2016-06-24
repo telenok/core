@@ -44,7 +44,7 @@
 
         ?>
         {!! Form::hidden($linkedField, $model->{$linkedField}) !!}
-        {!! Form::select($linkedField, \App\Telenok\Core\Model\Object\Type::get(['title', 'id'])->keyBy('id')->transform(function($item) { return $item->translate('title'); })->all(), $model->{$linkedField}, $domAttr) !!}
+        {!! Form::select($linkedField, \App\Vendor\Telenok\Core\Model\Object\Type::get(['title', 'id'])->keyBy('id')->transform(function($item) { return $item->translate('title'); })->all(), $model->{$linkedField}, $domAttr) !!}
     </div>
 </div> 
 
@@ -60,7 +60,7 @@
             
         <?php
 
-            $subjects = \App\Telenok\Core\Model\Object\Sequence::getModelByTypeId($model->{$linkedField})
+            $subjects = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModelByTypeId($model->{$linkedField})
                 ->active()->withPermission()
                 ->where($model->getKeyName(), $model->relation_one_to_one_default)
                 ->get(['id', 'title']);

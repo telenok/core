@@ -6,7 +6,7 @@ namespace Telenok\Core\Model\Object;
  * @class Telenok.Core.Model.Object.Field
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Field extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
+class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $ruleList = ['title' => ['required', 'min:1'], 'title_list' => ['required', 'min:1'], 'code' => ['required', 'unique:object_field,code,:id:,id,field_object_type,:field_object_type:', 'regex:/^[A-Za-z][A-Za-z0-9_]*$/']];
     protected $table = 'object_field';
@@ -45,9 +45,9 @@ class Field extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         $code = 'object_field.' . $type->code . '.' . $this->code;
 
-        if (!\App\Telenok\Core\Model\Security\Resource::where('code', $code)->count())
+        if (!\App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $code)->count())
         {
-            (new \App\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+            (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
                 'title' => 'Object ' . $type->code . '. Field ' . $this->code,
                 'code' => $code,
                 'active' => 1
@@ -57,9 +57,9 @@ class Field extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     public function deleteFieldResourcePermission($type)
     {
-        $resource = \App\Telenok\Core\Model\Security\Resource::where('code', 'object_field.' . $type->code . '.' . $this->code)->first();
+        $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', 'object_field.' . $type->code . '.' . $this->code)->first();
 
-        \App\Telenok\Core\Model\Security\SubjectPermissionResource::
+        \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource::
                 whereIn('acl_subject_object_sequence', [$resource->exists ? $resource->getKey() : 0, $this->getKey()])
                 ->whereIn('acl_resource_object_sequence', [$resource->exists ? $resource->getKey() : 0, $this->getKey()])
                 ->get()->each(function($i)
@@ -149,12 +149,12 @@ class Field extends \App\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     public function fieldObjectType()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\Object\Type', 'field_object_type');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\Object\Type', 'field_object_type');
     }
 
     public function fieldObjectTab()
     {
-        return $this->belongsTo('\App\Telenok\Core\Model\Object\Tab', 'field_object_tab');
+        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\Object\Tab', 'field_object_tab');
     }
 
 }

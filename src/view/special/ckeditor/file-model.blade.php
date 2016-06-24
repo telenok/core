@@ -17,16 +17,16 @@
         @if ($file->upload->isImage())
 
             @if (!$file->upload->existsCache(300, 300, 
-                    \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE))
+                    \App\Vendor\Telenok\Core\Support\Image\Processing::TODO_RESIZE))
 
                 <?php
-                    $file->upload->createCache(300, 300, \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE);
+                    $file->upload->createCache(300, 300, \App\Vendor\Telenok\Core\Support\Image\Processing::TODO_RESIZE);
                 ?>
 
             @endif
 
             <img src="{!! $file->upload->downloadImageLink(300, 300, 
-                    \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE) !!}"
+                    \App\Vendor\Telenok\Core\Support\Image\Processing::TODO_RESIZE) !!}"
                 class="media-object" 
                 style="width: 100%; display: block;" 
                 data-holder-rendered="true">

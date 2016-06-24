@@ -19,13 +19,13 @@ class SeedPageControllerTable extends Migration
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
 
-        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
             'title' => ['en' => 'Controller class', 'ru' => 'Класс контроллера'],
             'title_list' => ['en' => 'Controller class', 'ru' => 'Класс контроллера'],
             'key' => 'string',
             'code' => 'controller_class',
             'active' => 1,
-            'string_default' => '\App\Telenok\Core\Controller\Frontend\Controller',
+            'string_default' => '\App\Vendor\Telenok\Core\Controller\Frontend\Controller',
             'field_object_type' => $modelTypeId,
             'field_object_tab' => $tabMainId,
             'multilanguage' => 0,
@@ -37,7 +37,7 @@ class SeedPageControllerTable extends Migration
             'field_order' => 4,
         ]);
 
-        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'title' => ['en' => 'Controller method', 'ru' => 'Метод контроллера'],
                 'title_list' => ['en' => 'Controller method', 'ru' => 'Метод контроллера'],
                 'key' => 'string',
@@ -55,7 +55,7 @@ class SeedPageControllerTable extends Migration
                 'field_order' => 5,
             ]);
 
-        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'title' => ['en' => 'Controller template', 'ru' => 'Шаблон контроллера'],
                 'title_list' => ['en' => 'Controller template', 'ru' => 'Шаблон контроллера'],
                 'key' => 'string',
@@ -73,7 +73,7 @@ class SeedPageControllerTable extends Migration
                 'field_order' => 6,
             ]);
 
-        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
                 'title' => ['en' => 'Controller\'s container template', 'ru' => 'Шаблон контейнера контроллера'],
                 'title_list' => ['en' => 'Controller\'s container template', 'ru' => 'Шаблон контейнера контроллера'],
@@ -93,7 +93,7 @@ class SeedPageControllerTable extends Migration
             ]
         );
 
-        (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
                 'title' => ['en' => 'Page'],
                 'title_list' => ['en' => 'Page'],

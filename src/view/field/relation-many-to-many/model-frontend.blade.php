@@ -19,7 +19,7 @@
 
 	if ($model->exists 
             && ($r = $model->{camel_case($field->code)}) 
-            && ($v = \App\Telenok\Core\Model\Object\Sequence::whereIn('id', (array)$r->modelKeys())->get()))
+            && ($v = \App\Vendor\Telenok\Core\Model\Object\Sequence::whereIn('id', (array)$r->modelKeys())->get()))
 	{
 		$values = $v->transform(function($item)
 		{

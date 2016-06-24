@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Telenok\Core\Model\User;
+namespace App\Vendor\Telenok\Core\Model\User;
 
 class User extends \Telenok\Core\Model\User\User implements \Illuminate\Contracts\Auth\CanResetPassword {
 

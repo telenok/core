@@ -1004,7 +1004,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getModel($id)
     {
-        return \App\Telenok\Core\Model\Object\Sequence::getModel($id);
+        return \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id);
     }
 
     /**
@@ -1015,7 +1015,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getModelTrashed($id)
     {
-        return \App\Telenok\Core\Model\Object\Sequence::getModelTrashed($id);
+        return \App\Vendor\Telenok\Core\Model\Object\Sequence::getModelTrashed($id);
     }
 
     /**
@@ -1026,7 +1026,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getType($id)
     {
-        return \App\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
     }
 
     /**
@@ -1038,7 +1038,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getTypeByModelId($id)
     {
-        return \App\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType;
+        return \App\Vendor\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType;
     }
 
     /**
@@ -1431,7 +1431,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
     {
         $types = [];
 
-        $types[] = \App\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->value('id');
+        $types[] = \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->value('id');
 
         if ($this->getModelTreeClass())
         {
@@ -1452,7 +1452,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getTreeListModel($treeId = 0, $str = '')
     {
-        $sequence = app('\App\Telenok\Core\Model\Object\Sequence');
+        $sequence = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
 
         if ($str)
         {
@@ -1466,11 +1466,11 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
             if ($treeId == 0)
             {
-                $query = \App\Telenok\Core\Model\Object\Sequence::withChildren(2)->orderBy('pivot_tree_children.tree_order');
+                $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::withChildren(2)->orderBy('pivot_tree_children.tree_order');
             }
             else
             {
-                $query = \App\Telenok\Core\Model\Object\Sequence::find($treeId)->children(2)->orderBy('pivot_tree_attr.tree_order')->active();
+                $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($treeId)->children(2)->orderBy('pivot_tree_attr.tree_order')->active();
             }
 
             $query->whereIn('object_sequence.sequences_object_type', $types);
@@ -1864,7 +1864,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
         try
         {
-            $model = \App\Telenok\Core\Model\Object\Sequence::find($id);
+            $model = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($id);
 
             if ($model && ($model = $model->model) && !$model->locked())
             {
@@ -1891,7 +1891,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
         {
             foreach ($tableCheckAll as $id)
             {
-                $model = \App\Telenok\Core\Model\Object\Sequence::find($id)->model;
+                $model = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($id)->model;
 
                 if ($model && !$model->locked())
                 {
@@ -1921,7 +1921,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
             foreach ($tableCheckAll as $id)
             {
-                $model = \App\Telenok\Core\Model\Object\Sequence::withTrashed()->find($id)->model;
+                $model = \App\Vendor\Telenok\Core\Model\Object\Sequence::withTrashed()->find($id)->model;
 
                 if ($model && $model->locked_by_user == $userId)
                 {
@@ -2028,7 +2028,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
         {
             try
             {
-                $model->makeLastChildOf(\App\Telenok\Core\Model\System\Folder::findOrFail($input->get('tree_pid'))->sequence);
+                $model->makeLastChildOf(\App\Vendor\Telenok\Core\Model\System\Folder::findOrFail($input->get('tree_pid'))->sequence);
             }
             catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
             {

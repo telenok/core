@@ -98,14 +98,14 @@ class File {
      * @return {String}
      * @member Telenok.Core.Field.Upload.File
      */
-    public function downloadImageLink($width = 0, $height = 0, $action = \App\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
+    public function downloadImageLink($width = 0, $height = 0, $action = \App\Vendor\Telenok\Core\Support\Image\Processing::TODO_RESIZE)
     {
         if (!$this->existsCache($width, $height, $action))
         {
             $this->createCache($width, $height, $action);
         }
 
-        if (\App\Telenok\Core\Security\Acl::subjectAny(['user_any', 'user_unauthorized'])
+        if (\App\Vendor\Telenok\Core\Security\Acl::subjectAny(['user_any', 'user_unauthorized'])
                         ->can('read', [$this->model, 'object_field.' . $this->model->getTable() . '.' . $this->field->code]))
         {
             $urlPattern = config("filesystems.disks.{$this->getStorageCacheKey()}.retrieve_url");
@@ -154,9 +154,9 @@ class File {
      */
     public function initDisk()
     {
-        $uploadStorages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('filesystems.upload_storages'))))->all();
+        $uploadStorages = \App\Vendor\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('filesystems.upload_storages'))))->all();
 
-        $storages = \App\Telenok\Core\Support\File\Store::storageList(json_decode($this->field->upload_storage, TRUE));
+        $storages = \App\Vendor\Telenok\Core\Support\File\Store::storageList(json_decode($this->field->upload_storage, TRUE));
 
         $storageKey = $storages->shuffle()->first(function($k, $v) use ($uploadStorages)
         {
@@ -186,8 +186,8 @@ class File {
     {
         $logic = config('filesystems.cache.logic_storage');
 
-        $cacheStorages = \App\Telenok\Core\Support\File\Store::storageList($logic($this->filename()));
-        $storages = \App\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('cache.cache_storages'))));
+        $cacheStorages = \App\Vendor\Telenok\Core\Support\File\Store::storageList($logic($this->filename()));
+        $storages = \App\Vendor\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('cache.cache_storages'))));
 
         $storageKey = $cacheStorages->first(function($k, $v)
         {
@@ -274,7 +274,7 @@ class File {
      */
     public function pathCache($width = 0, $height = 0, $action = '')
     {
-        return \App\Telenok\Core\Support\File\StoreCache::pathCache($this->filename(), $width, $height, $action);
+        return \App\Vendor\Telenok\Core\Support\File\StoreCache::pathCache($this->filename(), $width, $height, $action);
     }
 
     /**
@@ -291,7 +291,7 @@ class File {
      */
     public function createCache($width = 0, $height = 0, $action = '')
     {
-        $job = new \App\Telenok\Core\Jobs\Cache\Store([
+        $job = new \App\Vendor\Telenok\Core\Jobs\Cache\Store([
             'path' => $this->path(),
             'path_cache' => $this->pathCache($width, $height, $action),
             'storage_key' => $this->getStorageKey(),
@@ -303,7 +303,7 @@ class File {
 
         if (config('image.cache.queue'))
         {
-            $job->onQueue(\App\Telenok\Core\Jobs\Cache\Store::QUEUES_CACHE);
+            $job->onQueue(\App\Vendor\Telenok\Core\Jobs\Cache\Store::QUEUES_CACHE);
 
             $this->dispatch($job);
         }
@@ -351,7 +351,7 @@ class File {
      */
     public function filenameCache($width = 0, $height = 0, $action = '')
     {
-        return \App\Telenok\Core\Support\File\StoreCache::filenameCache($this->filename(), $width, $height, $action);
+        return \App\Vendor\Telenok\Core\Support\File\StoreCache::filenameCache($this->filename(), $width, $height, $action);
     }
 
     /**
@@ -476,7 +476,7 @@ class File {
     {
         $filename = $this->filenameCache($width, $height, $action);
 
-        return \App\Telenok\Core\Support\File\StoreCache::existsCache($this->getStorageCacheKey(), $filename);
+        return \App\Vendor\Telenok\Core\Support\File\StoreCache::existsCache($this->getStorageCacheKey(), $filename);
     }
 
     /**
@@ -487,7 +487,7 @@ class File {
      */
     public function isImage()
     {
-        return in_array($this->extension(), \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
+        return in_array($this->extension(), \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
     }
 
     /**
@@ -499,7 +499,7 @@ class File {
      */
     public function removeCachedFile($path = '')
     {
-        \App\Telenok\Core\Support\File\StoreCache::removeFile($path ?: $this->pathCache());
+        \App\Vendor\Telenok\Core\Support\File\StoreCache::removeFile($path ?: $this->pathCache());
 
         return $this;
     }
@@ -513,7 +513,7 @@ class File {
      */
     public function removeFile($path = '')
     {
-        \App\Telenok\Core\Support\File\Store::removeFile($path ?: $this->path());
+        \App\Vendor\Telenok\Core\Support\File\Store::removeFile($path ?: $this->path());
 
         $this->removeCachedFile($path);
 
@@ -529,7 +529,7 @@ class File {
      */
     public function upload(\Telenok\Core\Field\Upload\UploadedFile $file)
     {
-        \App\Telenok\Core\Support\File\Store::storeFile($file->getPathname(), $this->path(), json_decode($this->field->upload_storage, TRUE));
+        \App\Vendor\Telenok\Core\Support\File\Store::storeFile($file->getPathname(), $this->path(), json_decode($this->field->upload_storage, TRUE));
 
         return $this;
     }

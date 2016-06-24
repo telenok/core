@@ -35,7 +35,7 @@ class Processing {
         {
             $widgetInlineElement = $widgetInline->item($i);
 
-            $wop = \App\Telenok\Core\Model\Web\WidgetOnPage::withPermission()->find((int)$widgetInlineElement->getAttribute('data-widget-id'));
+            $wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::withPermission()->find((int)$widgetInlineElement->getAttribute('data-widget-id'));
 
             if ($wop)
             {

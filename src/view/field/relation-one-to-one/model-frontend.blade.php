@@ -17,7 +17,7 @@
         $disabled = true; 
     }
 
-	if ($model->exists && ($v = \App\Telenok\Core\Model\Object\Sequence::where('id', $model->{$field->code})->get()))
+	if ($model->exists && ($v = \App\Vendor\Telenok\Core\Model\Object\Sequence::where('id', $model->{$field->code})->get()))
 	{
 		$value = $v->transform(function($item)
 		{

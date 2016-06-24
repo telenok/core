@@ -27,7 +27,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
 	/*
 
-	echo (new \App\Telenok\Core\Html\Grid\Controller())->form([
+	echo (new \App\Vendor\Telenok\Core\Html\Grid\Controller())->form([
 		'modelType' => (model object \App\...\Object\Type::find(10) || 299 || '\App\Model\Package' or type code eg 'user'),
 		'buttonTop' => [
 			'create' => function($controller)
@@ -542,7 +542,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
     public function getTypeById($id)
     {
-        return \App\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
     } 
 
     public function getModelByType()

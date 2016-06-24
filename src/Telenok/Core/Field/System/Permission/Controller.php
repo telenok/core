@@ -124,7 +124,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         if (!$permissions->count())
         {
-            $permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
+            $permissions = \App\Vendor\Telenok\Core\Model\Security\Permission::active()->get();
         }
 
         $this->setViewModel($field, $controller->getModelFieldView($field), $controller->getModelFieldViewKey($field));
@@ -198,7 +198,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     public function getListFieldContent($field, $item, $type = null)
     {
         $items = [];
-        $rows = collect(\App\Telenok\Core\Model\Security\Permission::take(8)->get());
+        $rows = collect(\App\Vendor\Telenok\Core\Model\Security\Permission::take(8)->get());
 
         if ($rows->count())
         {
@@ -225,7 +225,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         return view($this->getViewFilter(), [
                     'controller' => $this,
                     'field' => $field,
-                    'permissions' => \App\Telenok\Core\Model\Security\Permission::active()->get(),
+                    'permissions' => \App\Vendor\Telenok\Core\Model\Security\Permission::active()->get(),
                 ])->render();
     }
 
@@ -250,9 +250,9 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     {
         if ($value !== null)
         {
-            $sequence = new \App\Telenok\Core\Model\Object\Sequence();
-            $spr = new \App\Telenok\Core\Model\Security\SubjectPermissionResource();
-            $type = new \App\Telenok\Core\Model\Object\Type();
+            $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
+            $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
+            $type = new \App\Vendor\Telenok\Core\Model\Object\Type();
 
             foreach ((array) $value as $permissionId => $ids)
             {
@@ -290,9 +290,9 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         }
 
         if ($id) {
-            $model = app(\App\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model);
+            $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model);
         } else {
-            $model = app('\App\Telenok\Core\Model\Object\Sequence');
+            $model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
         }
 
         $query = $model::select([$model->getTable() . '.*', 'resource.code as resource_code'])
@@ -363,13 +363,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     {
         if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.permission'))
         {
-            $permissions = \App\Telenok\Core\Model\Security\Permission::active()->get();
+            $permissions = \App\Vendor\Telenok\Core\Model\Security\Permission::active()->get();
 
             $permissionList = (array) $input->get('permission', []);
 
             $permissionListDefault = $field->permission_default;
 
-            \App\Telenok\Core\Security\Acl::resource($model)->unsetPermission();
+            \App\Vendor\Telenok\Core\Security\Acl::resource($model)->unsetPermission();
 
             foreach ($permissions->all() as $permission)
             {
@@ -386,7 +386,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
                 foreach ($persmissionIds as $id)
                 {
-                    \App\Telenok\Core\Security\Acl::subject($id)->setPermission($permission->code, $model);
+                    \App\Vendor\Telenok\Core\Security\Acl::subject($id)->setPermission($permission->code, $model);
                 }
             }
         }

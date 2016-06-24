@@ -1,4 +1,4 @@
-<?php namespace App\Telenok\Core\Model\Object;
+<?php namespace App\Vendor\Telenok\Core\Model\Object;
 
 class Field extends \Telenok\Core\Model\Object\Field {
  

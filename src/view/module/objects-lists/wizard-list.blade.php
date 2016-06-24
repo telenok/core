@@ -3,7 +3,7 @@
 
         <div class="modal-header table-header">
             <button data-dismiss="modal" class="close" type="button">×</button>
-            <h4>{{ \App\Telenok\Core\Model\Object\Type::where('code', $model->getTable())->first()->translate('title_list') }}</h4>
+            <h4>{{ \App\Vendor\Telenok\Core\Model\Object\Type::where('code', $model->getTable())->first()->translate('title_list') }}</h4>
         </div>
         <div class="modal-body" style="padding: 15px; position: relative;">
             <div class="widget-main">

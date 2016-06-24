@@ -34,7 +34,7 @@ class Store extends Job implements ShouldQueue {
 
         if (array_get($this->collection, 'path') && array_get($this->collection, 'path_cache') && array_get($this->collection, 'storage_key') && array_get($this->collection, 'storage_cache_key'))
         {
-            \App\Telenok\Core\Support\File\StoreCache::storeFile(
+            \App\Vendor\Telenok\Core\Support\File\StoreCache::storeFile(
                     array_get($this->collection, 'path'), array_get($this->collection, 'path_cache'), array_get($this->collection, 'storage_key'), array_get($this->collection, 'storage_cache_key'), array_get($this->collection, 'width'), array_get($this->collection, 'height'), array_get($this->collection, 'action')
             );
         }

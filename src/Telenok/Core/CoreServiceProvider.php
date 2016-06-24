@@ -38,7 +38,7 @@ class CoreServiceProvider extends ServiceProvider {
         $this->compileSetting();
         $this->compileRoute();
 
-        if ($theme = \App\Telenok\Core\Support\Config\Theme::activeTheme())
+        if ($theme = \App\Vendor\Telenok\Core\Support\Config\Theme::activeTheme())
         {
             $this->loadViewsFrom(base_path(str_finish(config('app.path_theme'), '/') . $theme . '/views'), 'theme');
             $this->loadTranslationsFrom(base_path('resources/views/template/' . $theme . '/lang'), 'theme');
@@ -83,7 +83,7 @@ class CoreServiceProvider extends ServiceProvider {
             {
                 list($connection, $database, $prefix, $config) = $parameters;
 
-                $class = '\App\Telenok\Core\Abstraction\Database\Connection\\' . $driver . 'Connection';
+                $class = '\App\Vendor\Telenok\Core\Abstraction\Database\Connection\\' . $driver . 'Connection';
 
                 return new $class($connection, $database, $prefix, $config);
             });
@@ -109,8 +109,8 @@ class CoreServiceProvider extends ServiceProvider {
 
         if ($isCacheDriver)
         {
-            $memcache = (new \App\Telenok\Core\Support\Memcache\MemcacheConnector())->connect($servers);
-            $repo = new \Illuminate\Cache\Repository(new \App\Telenok\Core\Support\Memcache\MemcacheStore($memcache, $prefix));
+            $memcache = (new \App\Vendor\Telenok\Core\Support\Memcache\MemcacheConnector())->connect($servers);
+            $repo = new \Illuminate\Cache\Repository(new \App\Vendor\Telenok\Core\Support\Memcache\MemcacheStore($memcache, $prefix));
 
             $this->app->resolving('cache', function($cache) use ($repo)
             {
@@ -122,8 +122,8 @@ class CoreServiceProvider extends ServiceProvider {
 
             if ($isSessionDriver)
             {
-                $handler = new \App\Telenok\Core\Support\Memcache\MemcacheHandler($repo, $minutes);
-                $manager = new \App\Telenok\Core\Support\Memcache\MemcacheSessionManager($handler);
+                $handler = new \App\Vendor\Telenok\Core\Support\Memcache\MemcacheHandler($repo, $minutes);
+                $manager = new \App\Vendor\Telenok\Core\Support\Memcache\MemcacheSessionManager($handler);
 
                 $driver = $manager->driver('memcache');
 
@@ -143,7 +143,7 @@ class CoreServiceProvider extends ServiceProvider {
         // using custom provider
         app('auth')->provider('telenok', function($app, array $config)
         {
-            return new \App\Telenok\Core\Security\UserProvider(
+            return new \App\Vendor\Telenok\Core\Security\UserProvider(
                 $app['hash'],
                 $app['config']['auth.providers.users']['model']);
         });
@@ -155,7 +155,7 @@ class CoreServiceProvider extends ServiceProvider {
         app('auth')->extend('telenok', function($app, $name, array $config)
         {
             $guard = app(
-                \App\Telenok\Core\Security\Guard::class,
+                \App\Vendor\Telenok\Core\Security\Guard::class,
                 [
                     $name,
                     $app['auth']->createUserProvider($config['provider'])
@@ -191,14 +191,14 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function registerConfigRepository()
     {
-        $this->app->singleton('telenok.config.repository', '\App\Telenok\Core\Support\Config\Repository');
+        $this->app->singleton('telenok.config.repository', '\App\Vendor\Telenok\Core\Support\Config\Repository');
     }
 
     public function registerCommandInstall()
     {
         $this->app['command.telenok.install'] = $this->app->share(function($app)
         {
-            return new \App\Telenok\Core\Command\Install();
+            return new \App\Vendor\Telenok\Core\Command\Install();
         });
     }
 
@@ -206,7 +206,7 @@ class CoreServiceProvider extends ServiceProvider {
     {
         $this->app['command.telenok.seed'] = $this->app->share(function($app)
         {
-            return new \App\Telenok\Core\Command\Seed();
+            return new \App\Vendor\Telenok\Core\Command\Seed();
         });
     }
 
@@ -214,7 +214,7 @@ class CoreServiceProvider extends ServiceProvider {
     {
         $this->app['command.telenok.package'] = $this->app->share(function($app)
         {
-            return new \App\Telenok\Core\Command\Package($app['composer']);
+            return new \App\Vendor\Telenok\Core\Command\Package($app['composer']);
         });
     }
 
@@ -227,7 +227,7 @@ class CoreServiceProvider extends ServiceProvider {
 
         app('validator')->resolver(function($translator, $data, $rules, $messages, $customAttributes)
         {
-            return new \App\Telenok\Core\Support\Validator\Validator($translator, $data, $rules, $messages, $customAttributes);
+            return new \App\Vendor\Telenok\Core\Support\Validator\Validator($translator, $data, $rules, $messages, $customAttributes);
         });
     }
 
@@ -235,7 +235,6 @@ class CoreServiceProvider extends ServiceProvider {
     {
         include __DIR__ . '/../../config/helpers.php';
         include __DIR__ . '/../../config/routes.php';
-        include __DIR__ . '/../../config/event.php';
     }
 
     public function packageResourceRegister()

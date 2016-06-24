@@ -22,7 +22,7 @@ class SeedObjectTabTable extends Migration {
 
 			DB::table('object_field')->insert(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['ru' => 'Код', 'en' => 'Code'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'Код', 'en' => 'Code'], JSON_UNESCAPED_UNICODE),
 						'key' => 'string',
@@ -42,7 +42,7 @@ class SeedObjectTabTable extends Migration {
 			
 			DB::table('object_field')->insert(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['en' => 'Order in tab'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['en' => 'Order in tab'], JSON_UNESCAPED_UNICODE),
 						'key' => 'integer-unsigned',
@@ -62,7 +62,7 @@ class SeedObjectTabTable extends Migration {
 
 			DB::table('object_field')->insert(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['ru' => 'ICON класс', 'en' => 'ICON class'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'ICON класс', 'en' => 'ICON class'], JSON_UNESCAPED_UNICODE),
 						'key' => 'string',
@@ -82,7 +82,7 @@ class SeedObjectTabTable extends Migration {
 
 			DB::table('object_field')->insert(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['en' => 'Field'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['en' => 'Field'], JSON_UNESCAPED_UNICODE),
 						'key' => 'relation-one-to-many',
@@ -103,7 +103,7 @@ class SeedObjectTabTable extends Migration {
 
 			DB::table('object_field')->insert(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['en' => 'Type'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['en' => 'Type'], JSON_UNESCAPED_UNICODE),
 						'key' => 'relation-one-to-many',

@@ -6,7 +6,7 @@
  * 
  * @extends Telenok.Core.Abstraction.Widget.Controller
  */
-class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
+class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller {
 
     /**
      * @protected

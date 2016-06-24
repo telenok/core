@@ -11,6 +11,6 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
     protected $key = 'web-domain';
     protected $parent = 'web';
     protected $presentation = 'tree-tab-object';
-    protected $modelListClass = '\App\Telenok\Core\Model\Web\Domain';
+    protected $modelListClass = '\App\Vendor\Telenok\Core\Model\Web\Domain';
 
 }

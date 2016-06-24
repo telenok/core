@@ -6,7 +6,7 @@ namespace Telenok\Core\Module\Web\PageConstructor;
  * @class Telenok.Core.Module.Web.PageConstructor.Controller
  * @extends Telenok.Core.Module.Objects.Lists.Controller
  */
-class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
+class Controller extends \App\Vendor\Telenok\Core\Module\Objects\Lists\Controller {
 
     protected $key = 'web-page-constructor';
     protected $parent = 'web';
@@ -42,7 +42,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     {
         try
         {
-            $page = \App\Telenok\Core\Model\Web\Page::findOrFail($id);
+            $page = \App\Vendor\Telenok\Core\Model\Web\Page::findOrFail($id);
 
             if (!$page->pagePageController)
             {
@@ -72,7 +72,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     {
         $return = collect();
 
-        $query = \App\Telenok\Core\Model\Web\Page::query();
+        $query = \App\Vendor\Telenok\Core\Model\Web\Page::query();
 
         if ($this->getRequest()->input('term'))
         {
@@ -112,7 +112,7 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
     {
         try
         {
-            $widget = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
+            $widget = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
 
             app('telenok.config.repository')->getWidget()->get($widget->key)->removeFromPage($id);
 
@@ -130,16 +130,16 @@ class Controller extends \App\Telenok\Core\Module\Objects\Lists\Controller {
 
     public function addBufferWidget($id = 0, $key = 'copy')
     {
-        $widget = \App\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
+        $widget = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
 
-        $buffer = \App\Telenok\Core\Model\System\Buffer::addBuffer(app('auth')->user()->getKey(), $widget->getKey(), 'web-page', $key);
+        $buffer = \App\Vendor\Telenok\Core\Model\System\Buffer::addBuffer(app('auth')->user()->getKey(), $widget->getKey(), 'web-page', $key);
 
         return ['widget' => $widget, 'buffer' => $buffer];
     }
 
     public function deleteBufferWidget($id = 0)
     {
-        $w = \App\Telenok\Core\Model\System\Buffer::find($id);
+        $w = \App\Vendor\Telenok\Core\Model\System\Buffer::find($id);
 
         if ($w)
         {

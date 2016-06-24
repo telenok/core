@@ -117,7 +117,7 @@
 
                                                 <div class="col-sm-5">
                                                     {!! Form::select('category_add[]', 
-                                                        \App\Telenok\Core\Model\File\FileCategory::active()->get(['title', 'id'])
+                                                        \App\Vendor\Telenok\Core\Model\File\FileCategory::active()->get(['title', 'id'])
                                                             ->transform(function($item) { 
                                                                 return ['title' => $item->translate('title'), 'id' => $item->id]; 
                                                             })->sortBy('title')->pluck('title', 'id'), 

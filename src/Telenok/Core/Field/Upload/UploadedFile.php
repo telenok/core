@@ -41,12 +41,12 @@ class UploadedFile {
         {
             if (!empty($mimeType))
             {
-                return \App\Telenok\Core\Model\File\FileMimeType::where('mime_type', $mimeType)->firstOrFail();
+                return \App\Vendor\Telenok\Core\Model\File\FileMimeType::where('mime_type', $mimeType)->firstOrFail();
             }
         }
         catch (\Exception $e)
         {
-            return (new \App\Telenok\Core\Model\File\FileMimeType())->storeOrUpdate([
+            return (new \App\Vendor\Telenok\Core\Model\File\FileMimeType())->storeOrUpdate([
                         'title' => $mimeType,
                         'active' => 1,
                         'mime_type' => $mimeType
@@ -69,12 +69,12 @@ class UploadedFile {
         {
             if (!empty($extension))
             {
-                return \App\Telenok\Core\Model\File\FileExtension::where('extension', $extension)->firstOrFail();
+                return \App\Vendor\Telenok\Core\Model\File\FileExtension::where('extension', $extension)->firstOrFail();
             }
         }
         catch (\Exception $e)
         {
-            return (new \App\Telenok\Core\Model\File\FileExtension())->storeOrUpdate([
+            return (new \App\Vendor\Telenok\Core\Model\File\FileExtension())->storeOrUpdate([
                         'title' => $extension,
                         'active' => 1,
                         'mime_type' => $extension

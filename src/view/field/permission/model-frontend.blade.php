@@ -44,13 +44,13 @@
 						<select class="chosen" multiple data-placeholder="{{$controller->LL('notice.choose')}}" id="permission-{{$permission->code . $jsUnique}}" name="permission[{{$permission->code}}][]">
 							<?php
 
-								$sequence = new \App\Telenok\Core\Model\Object\Sequence();
-								$spr = new \App\Telenok\Core\Model\Security\SubjectPermissionResource();
-								$type = new \App\Telenok\Core\Model\Object\Type();
+								$sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
+								$spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
+								$type = new \App\Vendor\Telenok\Core\Model\Object\Type();
 
 								$sequence->addMultilanguage('title_type');
 
-								$subjects = \App\Telenok\Core\Model\Object\Sequence::select($sequence->getTable() . '.id', $sequence->getTable() . '.title', $type->getTable() . '.title as title_type')
+								$subjects = \App\Vendor\Telenok\Core\Model\Object\Sequence::select($sequence->getTable() . '.id', $sequence->getTable() . '.title', $type->getTable() . '.title as title_type')
 								->join($spr->getTable(), function($query) use ($spr, $sequence, $model) 
 								{
 									$query->on($sequence->getTable() . '.id', '=', $spr->getTable() . '.acl_subject_object_sequence');

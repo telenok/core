@@ -6,7 +6,7 @@
  * 
  * @extends Telenok.Core.Abstraction.Widget.Controller
  */
-class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
+class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller {
 
     /**
      * @protected
@@ -157,7 +157,7 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
             $ids = (array)json_decode($this->nodeIds);
         }
 
-        $class = \App\Telenok\Core\Model\Object\Type::where(function($query)
+        $class = \App\Vendor\Telenok\Core\Model\Object\Type::where(function($query)
         {
             $query->where('id', $this->objectType);
             $query->orWhere('code', $this->objectType);
@@ -226,9 +226,9 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
 
 		$return = [];
 
-		$model = app('\App\Telenok\Core\Model\Object\Sequence');
+		$model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
 
-        $objectFolderId = \App\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->value('id');
+        $objectFolderId = \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->value('id');
 
         $query = $model::whereIn('sequences_object_type', [$objectFolderId, $typeId])
             ->withPermission()

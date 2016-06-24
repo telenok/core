@@ -6,7 +6,7 @@
  * 
  * @extends Telenok.Core.Abstraction.Widget.Controller
  */
-class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
+class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller {
 
     /**
      * @protected
@@ -44,7 +44,7 @@ class Controller extends \App\Telenok\Core\Abstraction\Widget\Controller {
             {
                 $widgetTag = $widgetInline->item($i);
 
-                $wop = \App\Telenok\Core\Model\Web\WidgetOnPage::withPermission()->find((int)$widgetTag->getAttribute('data-widget-id'));
+                $wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::withPermission()->find((int)$widgetTag->getAttribute('data-widget-id'));
 
                 if ($wop)
                 {

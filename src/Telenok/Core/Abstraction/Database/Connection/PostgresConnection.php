@@ -16,7 +16,7 @@ class PostgresConnection extends \Illuminate\Database\PostgresConnection {
      */
     public function query()
     {
-        return new \App\Telenok\Core\Abstraction\Database\CachableQueryBuilder(
+        return new \App\Vendor\Telenok\Core\Abstraction\Database\CachableQueryBuilder(
             $this, $this->getQueryGrammar(), $this->getPostProcessor()
         );
     }

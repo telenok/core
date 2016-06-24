@@ -34,7 +34,7 @@
 		$selected = $v_;
 	}
 	
-	if ($v = \App\Telenok\Core\Model\Object\Sequence::whereIn('id', (array)$selected)->get())
+	if ($v = \App\Vendor\Telenok\Core\Model\Object\Sequence::whereIn('id', (array)$selected)->get())
 	{
 		$values = $v->transform(function($item)
 		{

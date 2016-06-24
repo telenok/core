@@ -10,7 +10,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     protected $key = 'objects-version';
     protected $parent = 'objects';
-    protected $modelListClass = '\App\Telenok\Core\Model\Object\Version';
+    protected $modelListClass = '\App\Vendor\Telenok\Core\Model\Object\Version';
     protected $presentation = 'tree-tab-object';
     protected $presentationModelView = 'core::module.objects-version.model';
     protected $presentationView = 'core::module.objects-version.presentation';
@@ -18,11 +18,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
     public function save($input = null, $type = null)
     {
         $input = collect($input);
-        $model = \App\Telenok\Core\Model\Object\Version::findOrFail($input->get('id'));
+        $model = \App\Vendor\Telenok\Core\Model\Object\Version::findOrFail($input->get('id'));
 
         try
         {
-            return \App\Telenok\Core\Model\Object\Version::toRestore($model);
+            return \App\Vendor\Telenok\Core\Model\Object\Version::toRestore($model);
         }
         catch (\Telenok\Core\Support\Exception\ObjectTypeNotFound $ex)
         {

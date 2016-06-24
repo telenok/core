@@ -1,6 +1,6 @@
 <?php namespace Telenok\Core\Field\Upload;
 
-use \App\Telenok\Core\Field\Upload\File;
+use \App\Vendor\Telenok\Core\Field\Upload\File;
 
 /**
  * @class Telenok.Core.Field.Upload.Controller
@@ -55,8 +55,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         if ($this->getRequest()->input('model_id'))
         {
-            $model = \App\Telenok\Core\Model\Object\Sequence::getModel($this->getRequest()->input('model_id'));
-            $field = \App\Telenok\Core\Model\Object\Sequence::getModel($this->getRequest()->input('field_id'));
+            $model = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($this->getRequest()->input('model_id'));
+            $field = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($this->getRequest()->input('field_id'));
 
             $cropper->setPath($model->{$field->code}->exists() ? $model->{$field->code}->downloadImageLink() : '');
         }
@@ -184,7 +184,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         /*
          * Delete all fields for Upload Controller
          */
-        \App\Telenok\Core\Model\Object\Field::where(function($query) use ($model, $type)
+        \App\Vendor\Telenok\Core\Model\Object\Field::where(function($query) use ($model, $type)
                 {
                     $query->whereIn('code', [
                         $model->code,
@@ -287,7 +287,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             return $model;
         }
 
-        $protectedFileUpload = app('\App\Telenok\Core\Field\Upload\UploadedFile', [$file]);
+        $protectedFileUpload = app('\App\Vendor\Telenok\Core\Field\Upload\UploadedFile', [$file]);
 
         $model->{$field->code}->removeCachedFile();
 
@@ -395,7 +395,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
      */
     public function getModelAttribute($model, $key, $value, $field)
     {
-        return app('\App\Telenok\Core\Field\Upload\File', [$model, $field]);
+        return app('\App\Vendor\Telenok\Core\Field\Upload\File', [$model, $field]);
     }
 
     /**
@@ -419,11 +419,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             {
                 if ($key == 'upload_allow_ext')
                 {
-                    $value = $value ? : json_encode(\App\Telenok\Core\Support\File\Processing::SAFE_EXTENSION);
+                    $value = $value ? : json_encode(\App\Vendor\Telenok\Core\Support\File\Processing::SAFE_EXTENSION);
                 }
                 else if ($key == 'upload_allow_mime')
                 {
-                    $value = $value ? : json_encode(\App\Telenok\Core\Support\File\Processing::SAFE_MIME_TYPE);
+                    $value = $value ? : json_encode(\App\Vendor\Telenok\Core\Support\File\Processing::SAFE_MIME_TYPE);
                 }
                 else if ($key == 'upload_storage')
                 {
@@ -466,11 +466,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             }
             else if ($key == 'upload_allow_ext')
             {
-                $value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION;
+                $value = $value ? : \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION;
             }
             else if ($key == 'upload_allow_mime')
             {
-                $value = $value ? : \App\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE;
+                $value = $value ? : \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE;
             }
             else if ($key == 'upload_storage')
             {
@@ -542,7 +542,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         try
         {
-            (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+            (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => $model->title->all(),
                     'title_list' => $model->title_list->all(),
@@ -569,7 +569,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         try
         {
-            (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+            (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => $model->title->all(),
                     'title_list' => $model->title_list->all(),
@@ -596,7 +596,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         try
         {
-            (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+            (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['ru' => "Имя файла", 'en' => "File name"],
                     'title_list' => ['ru' => "Имя файла", 'en' => "File name"],
@@ -622,7 +622,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         try
         {
-            (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+            (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['ru' => "Оригинальное имя", 'en' => "Original name"],
                     'title_list' => ['ru' => "Оригинальное имя", 'en' => "Original name"],
@@ -648,7 +648,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         try
         {
-            (new \App\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+            (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
                     'title' => ['ru' => "Размер", 'en' => "Size"],
                     'title_list' => ['ru' => "Размер", 'en' => "Size"],
