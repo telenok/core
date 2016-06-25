@@ -6,12 +6,12 @@ class Custom {
 
     public function postInstall(\Composer\Script\Event $event)
     {
-        $this->run($event);
+        static::run($event);
     }
 
     public function postUpdate(\Composer\Script\Event $event)
     {
-        $this->run($event);
+        static::run($event);
     }
 
     public function run(\Composer\Script\Event $event)
