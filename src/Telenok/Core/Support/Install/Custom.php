@@ -4,6 +4,16 @@ namespace Telenok\Core\Support\Install;
 
 class Custom {
 
+    public function postInstall(\Composer\Script\Event $event)
+    {
+        $this->run($event);
+    }
+
+    public function postUpdate(\Composer\Script\Event $event)
+    {
+        $this->run($event);
+    }
+
     public function run(\Composer\Script\Event $event)
     {
         $composer = $event->getComposer();
