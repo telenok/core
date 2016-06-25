@@ -123,7 +123,7 @@ class ComposerScripts {
         if (is_array($content))
         {
             file_put_contents(base_path('composer.json'), json_encode($rewrite
-                ? array_replace_recursive($content, $config) : array_replace_recursive($config, $content), JSON_PRETTY_PRINT), LOCK_EX);
+                ? array_replace_recursive($content, $config) : array_replace_recursive($config, $content), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), LOCK_EX);
         }
         else
         {
