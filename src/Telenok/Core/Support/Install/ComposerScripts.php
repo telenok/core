@@ -62,7 +62,7 @@ class ComposerScripts {
                 {
                     if (is_dir($src . '/' . $file))
                     {
-                        static::recursiveCopy($src . '/' . $file, $dst . '/' . $file, $rewrite);
+                        static::recursiveCopy($src . '/' . $file, $dst . '/' . $file, $rewrite, $mode);
                     }
                     else if ((file_exists($dst . '/' . $file) && $rewrite) || !file_exists($dst . '/' . $file))
                     {
