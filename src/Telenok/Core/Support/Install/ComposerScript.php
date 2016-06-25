@@ -2,7 +2,7 @@
 
 namespace Telenok\Core\Support\Install;
 
-class Custom {
+class ComposerScript {
 
     public static function postInstall(\Composer\Script\Event $event)
     {
