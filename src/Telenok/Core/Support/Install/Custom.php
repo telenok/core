@@ -4,17 +4,17 @@ namespace Telenok\Core\Support\Install;
 
 class Custom {
 
-    public function postInstall(\Composer\Script\Event $event)
+    public static function postInstall(\Composer\Script\Event $event)
     {
         static::run($event);
     }
 
-    public function postUpdate(\Composer\Script\Event $event)
+    public static function postUpdate(\Composer\Script\Event $event)
     {
         static::run($event);
     }
 
-    public function run(\Composer\Script\Event $event)
+    public static function run(\Composer\Script\Event $event)
     {
         $composer = $event->getComposer();
         $installationManager = $composer->getInstallationManager();
@@ -101,8 +101,6 @@ class Custom {
             $content = str_replace('###providers###', "'{$provider}',\n###providers###", $content);
             file_put_contents(config_path('app.php'), $content, LOCK_EX);
         }
-
-
     }
 }
 
