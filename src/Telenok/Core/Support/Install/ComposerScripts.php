@@ -90,7 +90,7 @@ class ComposerScripts {
         if (strpos($content, $listener) === FALSE)
         {
             $content = file_get_contents($fn);
-            $content = str_replace('###listener###', "'{$listener}'\n###listener###", $content);
+            $content = str_replace('###listener###', "'{$listener}',\n###listener###", $content);
             file_put_contents($fn, $content, LOCK_EX);
         }
     }
