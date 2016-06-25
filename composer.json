@@ -25,7 +25,7 @@
         "ext-mbstring": "*",
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "5.2.*",
-        "composer/composer": "1.0.0-alpha10",
+        "composer/composer": "1.*",
         "imagine/imagine": "~0.5"
     },
     "autoload": {
