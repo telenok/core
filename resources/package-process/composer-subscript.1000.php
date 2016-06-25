@@ -6,7 +6,7 @@
 
     if (strpos($content, '###listener###') === FALSE)
     {
-        $content = preg_replace('/\$subscribe\s*=\s*\[/', "$1\n###listener###", $content);
+        $content = preg_replace('/\$subscribe\s*=\s*\[/', "$0\n###listener###", $content);
         file_put_contents($fn, $content, LOCK_EX);
     }
 
