@@ -20,22 +20,30 @@ class ComposerScripts {
         $installationManager = $composer->getInstallationManager();
         $allPackages = $composer->getRepositoryManager()->getLocalRepository()->getPackages();
 
-        $processed = [];
+        $packageComposerScripts = [];
 
         foreach ($allPackages as $package)
         {
             $originDir = $installationManager->getInstallPath($package);
 
-            $file = rtrim($originDir, '\\/') . '/resources/package-process/custom.php';
+            $files = glob(rtrim($originDir, '\\/') . '/resources/package-process/composer-subscript.*.php');
 
-            if (file_exists($file) && !isset($processed[$package->getName()]))
+            foreach($files as $file)
             {
-                $processed[$package->getName()] = true;
+                $packageComposerScripts[basename($file) . $package->getName()] = ['file' => $file, 'package' => $package->getName()];
+            }
+        }
 
-                $event->getIO()->write('Process package ' . $package->getName());
-                $event->getIO()->write('Include and process ' . $file);
+        ksort($packageComposerScripts);
 
-                require $file;
+        foreach($packageComposerScripts as $script)
+        {
+            if (file_exists($script['file'])) {
+
+                $event->getIO()->write('Process package ' . $script['package']);
+                $event->getIO()->write('Include and process ' . $script['file']);
+
+                require $script['file'];
             }
         }
     }
