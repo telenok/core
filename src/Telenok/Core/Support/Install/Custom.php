@@ -44,7 +44,7 @@ class Custom {
     {
         try
         {
-            @mkdir($dst);
+            @mkdir($dst, 0775, true);
 
             $dir = opendir($src);
 
