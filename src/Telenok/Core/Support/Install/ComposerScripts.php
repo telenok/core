@@ -110,5 +110,26 @@ class ComposerScripts {
             file_put_contents(config_path('app.php'), $content, LOCK_EX);
         }
     }
+
+    /*
+     *
+     * Merge $config with root composer.json
+     *
+     */
+    public static function mergeRootComposerJson($config, $rewrite = false)
+    {
+        $content = json_decode(file_get_contents(base_path('composer.json')), true);
+
+        if (is_array($content))
+        {
+            file_put_contents(base_path('composer.json'), json_encode($rewrite
+                ? array_replace_recursive($content, $config) : array_replace_recursive($config, $content)), LOCK_EX);
+        }
+        else
+        {
+            throw new \Exception('Cant merge composer.json with data ' . json_encode($config, JSON_PRETTY_PRINT));
+        }
+    }
+
 }
 
