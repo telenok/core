@@ -40,11 +40,11 @@ class Custom {
         }
     }
 
-    public static function recursiveCopy($src, $dst, $rewrite = false)
+    public static function recursiveCopy($src, $dst, $rewrite = false, $mode = 0755)
     {
         try
         {
-            @mkdir($dst, 0775, true);
+            @mkdir($dst, $mode, true);
 
             $dir = opendir($src);
 

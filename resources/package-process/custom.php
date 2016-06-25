@@ -11,5 +11,5 @@
     }
 
     \Telenok\Core\Support\Install\Custom::recursiveCopy(__DIR__ . "/../app", __DIR__ . "/../../../../app/Vendor");
-    \App\Vendor\Telenok\Core\Support\Install\Custom::addListener('\App\Vendor\Telenok\Core\Event\Listener');
-    \App\Vendor\Telenok\Core\Support\Install\Custom::addServiceProvider('\App\Vendor\Telenok\Core\CoreServiceProvider');
+    \Telenok\Core\Support\Install\Custom::addListener('\App\Vendor\Telenok\Core\Event\Listener');
+    \Telenok\Core\Support\Install\Custom::addServiceProvider('\App\Vendor\Telenok\Core\CoreServiceProvider');
