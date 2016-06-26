@@ -62,13 +62,6 @@ class Package extends Command {
 
     public function refreshCommand()
     {
-        if (!$this->hasOption('all') && !$this->hasOption('package'))
-        {
-            $this->error('Please, set option "--all" or define package via option "--package=my/package"');
-
-            return;
-        }
-
         $this->info('Updating Telenok CMS package/s');
 
         $composer = (new \Telenok\Core\Composer\Application())->getEmbeddedComposer();
