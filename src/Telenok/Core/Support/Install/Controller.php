@@ -318,11 +318,11 @@ class Controller {
         {
             if (preg_match('/^[ \t]*' . preg_quote($k, '/') . '=.*$/imu', $stub))
             {
-                $stub = preg_replace('/^[ \t]*' . preg_quote($k, '/') . '=.*$/imu', $k . '=' . $v, $stub);
+                $stub = preg_replace('/^[ \t]*' . preg_quote($k, '/') . '=.*$/imu', $k . '=' . trim($v), $stub);
             }
             else
             {
-                $stub .= "\n" . $k . '=' . $v;
+                $stub .= "\n" . $k . '=' . trim($v);
             }
         }
 
