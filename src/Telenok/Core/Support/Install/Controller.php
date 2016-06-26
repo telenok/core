@@ -365,6 +365,11 @@ class Controller {
         file_put_contents($path, $stub, LOCK_EX);
     }
 
+    public function isTelenokInstalled()
+    {
+        return file_exists(storage_path($this->installFlag));
+    }
+
     public function installFlag()
     {
         return storage_path($this->installFlag);

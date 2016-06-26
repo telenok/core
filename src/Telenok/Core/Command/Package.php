@@ -37,10 +37,10 @@ class Package extends Command {
     protected function getOptions() {
         return [
             ['provider', 'p', InputOption::VALUE_OPTIONAL,
-                'What should be service provider added to app.php. Example: "\App\Vendor\Telenok\News\NewsServiceProvider"',
+                'What service provider should be added to app.php. Example: "\App\Vendor\Telenok\News\NewsServiceProvider"',
                 null],
             ['listener', 'l', InputOption::VALUE_OPTIONAL,
-                'What should be listener added to \App\Providers\EventServiceProvider',
+                'What listener should be added to \App\Providers\EventServiceProvider. Example: "\App\Vendor\Telenok\News\Event\Listener"',
                 null],
         ];
     }
