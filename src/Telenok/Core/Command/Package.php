@@ -84,22 +84,29 @@ class Package extends Command {
             $allPackages = $composer->getRepositoryManager()->getLocalRepository()->getPackages();
         }
 
-        $processed = [];
+        $packageArtisan = [];
 
         foreach ($allPackages as $package)
         {
             $originDir = $installationManager->getInstallPath($package);
 
-            $file = rtrim($originDir, '\\/') . '/resources/package-process/artisan.php';
+            $files = glob(rtrim($originDir, '\\/') . '/resources/package-process/artisan.*.php');
 
-            if (file_exists($file) && !isset($processed[$package->getName()]))
+            foreach($files as $file)
             {
-                $processed[$package->getName()] = true;
+                $packageArtisan[basename($file) . $package->getName()] = ['file' => $file, 'package' => $package->getName()];
+            }
+        }
 
-                $this->info('Process package ' . $package->getName());
-                $this->comment('Include and process ' . $file);
+        ksort($packageArtisan);
 
-                require $file;
+        foreach($packageArtisan as $script)
+        {
+            if (file_exists($script['file']))
+            {
+                $this->info('Process package ' . $script['package']);
+                $this->comment('Include and process ' . $script['file']);
+                require $script['file'];
             }
         }
     }

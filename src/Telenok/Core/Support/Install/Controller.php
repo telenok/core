@@ -247,10 +247,16 @@ class Controller {
     public function processConfigAppFile()
     {
         $param = array(
-            'APP_URL' => 'http' . ($this->domainSecure ? 's' : '') . '://' . $this->domain,
-            'APP_LOCALE' => $this->locale,
-            'APP_KEY' => str_random(),
+            'APP_URL'       => 'http' . ($this->domainSecure ? 's' : '') . '://' . $this->domain,
+            'APP_LOCALE'    => $this->locale,
+            'APP_KEY'       => str_random(),
         );
+
+        config([
+            'app.url'       => $param['APP_URL'],
+            'app.locale'    => $param['APP_LOCALE'],
+            'app.key'       => $param['APP_KEY'],
+        ]);
 
         $path = base_path('.env');
         $path_example = base_path('.env.example');
@@ -286,11 +292,11 @@ class Controller {
     {
         $param = array(
             'DB_CONNECTION_DEFAULT' => $this->dbDriver,
-            'DB_DATABASE' => $this->dbDatabase,
-            'DB_HOST' => $this->dbHost,
-            'DB_USERNAME' => $this->dbUsername,
-            'DB_PASSWORD' => $this->dbPassword,
-            'DB_PREFIX' => $this->dbPrefix,
+            'DB_DATABASE'           => $this->dbDatabase,
+            'DB_HOST'           => $this->dbHost,
+            'DB_USERNAME'       => $this->dbUsername,
+            'DB_PASSWORD'       => $this->dbPassword,
+            'DB_PREFIX'         => $this->dbPrefix,
         );
 
         $path = base_path('.env');
@@ -322,18 +328,20 @@ class Controller {
 
         // validate database connection
         $conn = array(
-            'driver' => $this->dbDriver,
-            'host' => $this->dbHost,
-            'database' => $this->dbDatabase,
-            'username' => $this->dbUsername,
-            'password' => $this->dbPassword,
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => $this->dbPrefix,
+            'driver'        => $this->dbDriver,
+            'host'          => $this->dbHost,
+            'database'      => $this->dbDatabase,
+            'username'      => $this->dbUsername,
+            'password'      => $this->dbPassword,
+            'charset'       => 'utf8',
+            'collation'     => 'utf8_unicode_ci',
+            'prefix'        => $this->dbPrefix,
         );
 
-        \Config::set('database.connections.install', $conn);
-        \Config::set('database.default', 'install');
+        config([
+            'database.connections.install'  => $conn,
+            'database.default'              => 'install'
+        ]);
 
         try
         {
