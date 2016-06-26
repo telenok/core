@@ -8,6 +8,8 @@ class ComposerScripts {
     {
         static::run($event);
 
+        $event->getIO()->write('Install TELENOK');
+
         app('artisan')->call('telenok:install');
     }
 
