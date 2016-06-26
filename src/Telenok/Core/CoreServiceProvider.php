@@ -31,7 +31,10 @@ class CoreServiceProvider extends ServiceProvider {
         $this->setAuthProvider();
         $this->setAuthGuard();
 
-        $this->validateInstallFlag();
+        if (!$this->validateInstallFlag())
+        {
+            return;
+        }
 
         $this->readDBMacro();
 
@@ -257,7 +260,7 @@ class CoreServiceProvider extends ServiceProvider {
     {
         if (!file_exists(storage_path('telenok/installedTelenokCore.lock')))
         {
-            return;
+            return false;
         }
     }
 

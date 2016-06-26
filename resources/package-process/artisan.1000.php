@@ -18,7 +18,6 @@
         '--force' => true
     ]);
 
-
     $this->line('Package assets publishing');
 
     $this->call('vendor:publish', [
@@ -26,3 +25,4 @@
         '--provider' => 'App\Vendor\Telenok\Core\CoreServiceProvider',
         '--force' => true
     ]);
+
