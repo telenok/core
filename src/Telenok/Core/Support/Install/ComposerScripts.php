@@ -7,19 +7,11 @@ class ComposerScripts {
     public static function postInstall(\Composer\Script\Event $event)
     {
         static::run($event);
-
-        $event->getIO()->write('Install TELENOK');
-
-        app('artisan')->call('telenok:install');
     }
 
     public static function postUpdate(\Composer\Script\Event $event)
     {
         static::run($event);
-
-        $event->getIO()->write('Update TELENOK');
-
-        app('artisan')->call('telenok:install');
     }
 
     public static function run(\Composer\Script\Event $event)
