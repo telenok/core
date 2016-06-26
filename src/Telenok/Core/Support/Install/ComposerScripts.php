@@ -7,6 +7,8 @@ class ComposerScripts {
     public static function postInstall(\Composer\Script\Event $event)
     {
         static::run($event);
+
+        app('artisan')->call('telenok:install');
     }
 
     public static function postUpdate(\Composer\Script\Event $event)

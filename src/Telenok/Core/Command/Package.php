@@ -1,6 +1,8 @@
 <?php namespace Telenok\Core\Command;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Command to add licensed Telenok Packages
@@ -16,7 +18,7 @@ class Package extends Command {
      * Command name. Calling without parameters.
      * @member Telenok.Core.Command.Package
      */
-    protected $name = 'telenok:package {action=refresh} {--provider=null}';
+    protected $name = 'telenok:package';
 
     /**
      * @protected
@@ -26,17 +28,22 @@ class Package extends Command {
      */
     protected $description = 'Updating Telenok CMS packages';
 
-    /**
-     * @protected
-     * @property {String} $signature
-     * Command signature.
-     * @member Telenok.Core.Command.Package
-     */
-    protected $signature = 'telenok:package
-                        {action : Can be "refresh", "add-provider", "add-listener"}
-                        {--provider= : For action="add-provider". The service provider should be added to app.php. Example: "\App\Vendor\Telenok\News\NewsServiceProvider"
-                        {--listener= : For action="add-event-listener". The listener should be added to \App\Providers\EventServiceProvider. '
-                        . 'Example: "\App\Vendor\Telenok\News\Event\Listener"}';
+    protected function getArguments() {
+        return [
+            ['action', InputArgument::OPTIONAL, 'Can be "refresh", "add-provider", "add-listener"', null],
+        ];
+    }
+
+    protected function getOptions() {
+        return [
+            ['provider', 'p', InputOption::VALUE_OPTIONAL,
+                'What should be service provider added to app.php. Example: "\App\Vendor\Telenok\News\NewsServiceProvider"',
+                null],
+            ['listener', 'l', InputOption::VALUE_OPTIONAL,
+                'What should be listener added to \App\Providers\EventServiceProvider',
+                null],
+        ];
+    }
 
     /**
      * @method fire
