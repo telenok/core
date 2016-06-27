@@ -338,10 +338,8 @@ class Controller {
             'prefix'        => $this->dbPrefix,
         );
 
-        config([
-            'database.connections.install'  => $conn,
-            'database.default'              => 'install'
-        ]);
+        config(['database.connections.install'  => $conn]);
+        config(['database.default'  => 'install']);
 
         try
         {
