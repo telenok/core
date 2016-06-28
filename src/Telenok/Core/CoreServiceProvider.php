@@ -27,15 +27,15 @@ class CoreServiceProvider extends ServiceProvider {
         $this->packageResourceRegister();
         $this->packageCommandRegister();
 
+        $this->setAuthProvider();
+        $this->setAuthGuard();
+
         if (!$this->validateInstallFlag())
         {
             return;
         }
 
         $this->addListener();
-
-        $this->setAuthProvider();
-        $this->setAuthGuard();
 
         $this->readDBMacro();
 
