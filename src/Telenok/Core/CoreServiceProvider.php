@@ -22,19 +22,20 @@ class CoreServiceProvider extends ServiceProvider {
     public function boot()
     {
         $this->addResolver();
-        $this->addListener();
         $this->extendValidator();
         $this->loadConfigFile();
         $this->packageResourceRegister();
         $this->packageCommandRegister();
 
-        $this->setAuthProvider();
-        $this->setAuthGuard();
-
         if (!$this->validateInstallFlag())
         {
             return;
         }
+
+        $this->addListener();
+
+        $this->setAuthProvider();
+        $this->setAuthGuard();
 
         $this->readDBMacro();
 

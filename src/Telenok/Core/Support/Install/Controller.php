@@ -338,8 +338,10 @@ class Controller {
             'prefix'        => $this->dbPrefix,
         );
 
-        config(['database.connections.install'  => $conn]);
-        config(['database.default'  => 'install']);
+        config([
+            'database.connections.install'  => $conn,
+            'database.default'  => 'install'
+        ]);
 
         try
         {
@@ -357,7 +359,8 @@ class Controller {
         }
         catch (\Exception $e)
         {
-            throw new \Exception('Cant create table in database. Please, validate setting in app/config/database.php or set its again with current console command.');
+            throw new \Exception('Cant create table in database. Please, validate setting .env file or'
+                                    . ' in app/config/database.php or set its again with current console command.');
         }
 
         file_put_contents($path, $stub, LOCK_EX);
