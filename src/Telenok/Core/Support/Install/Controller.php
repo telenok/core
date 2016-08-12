@@ -379,6 +379,7 @@ class Controller {
     public function touchInstallFlag()
     {
         touch($this->installFlag());
+        chmod($this->installFlag(), 0775);
     }
 
     public function createBaseTable($commandObject)

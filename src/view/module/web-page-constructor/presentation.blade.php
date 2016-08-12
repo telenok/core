@@ -24,7 +24,7 @@
 
 		.frontend-container {
 			border: 1px solid #D5E3EF;
-		} 
+		}
 
 		div.module-web-page-view-container .widget-header {
 			padding-left: 2px;
@@ -48,12 +48,12 @@
     <div>
         <div class="page-header position-relativee"></div>
         <div>
-            <div class="col-xs-12 telenok-presentation-tabs"> 
+            <div class="col-xs-12 telenok-presentation-tabs">
                 <div class="tabbable">
                     <ul class="nav nav-tabs" id="nav-tabs-{{$presentation}}"></ul>
                     <div class="tab-content module-web-page-view-container" id="tab-content-{{$presentation}}"></div>
                 </div>
-            </div>	
+            </div>
         </div>
     </div>
 
@@ -66,7 +66,7 @@
 
 
         <div class="clearfix" style="white-space: nowrap; display: inline-block;">
-			<select class="chosen" data-placeholder="{{$controller->LL('page.select')}}" id="module-web-page-widget-list-page-list" 
+			<select class="chosen" data-placeholder="{{$controller->LL('page.select')}}" id="module-web-page-widget-list-page-list"
 					onchange="telenok.getPresentation('{{$presentationModuleKey}}').addTabByURL({
 									url:'{!! route("telenok.module.web-page-constructor.view.page.container", ['id' => '--id--', 'languageId' => ':languageId:']) !!}'
 											.replace(/--id--/gi, parseInt(this.value, 10))
@@ -75,17 +75,17 @@
 								});">
 				<option value=""></option>
 				<?php
-				$pages = \App\Vendor\Telenok\Core\Model\Web\Page::all();
+					$pages = \App\Vendor\Telenok\Core\Model\Web\Page::all();
 
-				foreach ($pages as $page)
-				{
-					?>
+					foreach ($pages as $page)
+					{
+						?>
 
-					<option value="{{$page->id}}">{{$page->translate('title')}} [{{$page->url_pattern}}]</option>
+						<option value="{{$page->id}}">{{$page->translate('title')}} [{{$page->url_pattern}}]</option>
 
-					<?php
-				}
-				?>    
+						<?php
+					}
+				?>
 			</select>
             <button type="button" class="btn btn-xs btn-info" onclick="reloadWebPageContainer();">
                 <span class="glyphicon glyphicon-refresh"></span>
@@ -133,18 +133,22 @@
 
 								<ul id="module-web-page-widget-list-item" class="dropdown-menu dropdown-success">
 
-					<?php
-					foreach ($g->children() as $w)
-					{
-						?>
+							<?php
+								foreach ($g->children() as $w)
+								{
+									?>
 
-                                    <li>
-                                        <a href="javascript:void(0)" class="dragabble" data-widget-key="{{$w->getKey()}}" data-widget-id="0" data-widget-buffer-id="0" data-widget-buffer-key="0"><i class="{{$w->getIcon()}}"></i> {{ $w->getName() }}</a>
-                                    </li>
+										<li>
+											<a href="javascript:void(0)" class="dragabble"
+											   data-widget-key="{{$w->getKey()}}"
+											   data-widget-id="0"
+											   data-widget-buffer-id="0"
+											   data-widget-buffer-key="0"><i class="{{$w->getIcon()}}"></i> {{ $w->getName() }}</a>
+										</li>
 
-						<?php
-					}
-					?>
+									<?php
+								}
+							?>
 
 								</ul>
 
@@ -157,25 +161,25 @@
 				</div>
 
 				<div id="menu-buffer-{{$uniqueId}}" class="tab-pane">
-					<ul class="dropdown-menu" style="position: inherit; display: block;" id="widget-menu-buffer">	
+					<ul class="dropdown-menu" style="position: inherit; display: block;" id="widget-menu-buffer">
 					<?php
 
 						$widgetBufferedList = \App\Vendor\Telenok\Core\Model\System\Buffer::with("sequence")->where(function($query)
 							{
 								$query->where('user_id', app('auth')->user()->getKey());
 								$query->where('place', 'web-page');
-							})->get(); 
+							})->get();
 
 						if (!$widgetBufferedList->isEmpty())
-						{  
+						{
 					?>
-						@foreach($widgetBufferedList as $li) 
+						@foreach($widgetBufferedList as $li)
 							<li>
-								<a href="javascript:void(0)" class="dragabble" 
-								   data-widget-key="{{$li->sequence->model->key}}" 
+								<a href="javascript:void(0)" class="dragabble"
+								   data-widget-key="{{$li->sequence->model->key}}"
 								   data-widget-buffer-id="{{$li->getKey()}}"
 								   data-widget-buffer-key="{{$li->key}}"
-								   data-widget-id="{{$li->sequence->model->getKey()}}"><i class="fa fa-times"></i> {{$li->sequence->model->translate('title')}}</a> 
+								   data-widget-id="{{$li->sequence->model->getKey()}}"><i class="fa fa-times"></i> {{$li->sequence->model->translate('title')}}</a>
 							</li>
 						@endforeach
 
@@ -185,7 +189,7 @@
 
 					?>
 					</ul>
-				</div> 
+				</div>
 
 				<div id="menu-command-{{$uniqueId}}" class="tab-pane">
 
@@ -219,7 +223,7 @@
 
 							<?php
 						}
-						?>    
+						?>
 					</select>
 
 					<hr class="sep-1">
@@ -230,7 +234,7 @@
 					</div>
 				</div>
 			</div>
-		</div> 
+		</div>
 	</div>
 
 
@@ -282,7 +286,7 @@
 									.replace(/:order:/gi, ui.item.index())
 							})
 							.done(function(data)
-							{  
+							{
 								var bufferKey = jQuery(ui.item).data('widget-buffer-key');
 
 								if (bufferKey == 'cut')
@@ -295,7 +299,7 @@
 										$container.append($el);
 									}
 									else
-									{ 
+									{
 										jQuery('div.telenok-widget-box[data-widget-id="' + jQuery(ui.item).data('widget-id') + '"]').remove();
 									}
 
@@ -336,7 +340,7 @@
 					event.preventDefault();
 					event.stopPropagation();
 
-                    if (!confirm('Are you sure ?')) 
+                    if (!confirm('Are you sure ?'))
                     {
                         return false;
                     }
@@ -351,10 +355,10 @@
 					.done(function(data)
 					{
 						if (data.success)
-						{ 
+						{
 							jQuery('div#menu-buffer-{{$uniqueId}} ul li a[data-widget-id="' + jQuery(this_).closest(".telenok-widget-box").data('widget-id') + '"] i').click();
 
-							jQuery(this_).closest('.telenok-widget-box').fadeOut(function() 
+							jQuery(this_).closest('.telenok-widget-box').fadeOut(function()
                             {
 								jQuery(this).remove();
 							});
@@ -374,14 +378,14 @@
 			jQuery('.telenok-widget-box .widget-toolbar a[data-action="settings"]:not(.settings-me)')
 				.addClass("settings-me")
 				.click(function(event)
-				{	
+				{
 					jQuery.ajax({
 						url: '{!! route("telenok.module.objects-lists.wizard.edit", ['id' => '--id--', 'chooseBtn' => 0, 'saveBtn' => 1]) !!}'
-								.replace(/--id--/gi, jQuery(this).closest(".telenok-widget-box").data('widget-id')),					
+								.replace(/--id--/gi, jQuery(this).closest(".telenok-widget-box").data('widget-id')),
 						method: 'get',
 						dataType: 'json'
 					})
-					.done(function(data) 
+					.done(function(data)
 					{
 						if (!jQuery('div#widget-setting-{{$uniqueId}}').size())
 						{
@@ -391,9 +395,9 @@
 						jQuery('div#widget-setting-{{$uniqueId}}').data('model-data', function(data) {})
                             .html(data.tabContent)
                             .modal('show')
-                            .on('hidden', function() 
-                            { 
-                                jQuery(this).empty(); 
+                            .on('hidden', function()
+                            {
+                                jQuery(this).empty();
                             });
 					})
                     .fail(function(jqXHR, textStatus, errorThrown)
@@ -427,7 +431,7 @@
 					})
 					.done(function(data)
 					{
-						var $buffer = jQuery("ul#widget-menu-buffer"); 
+						var $buffer = jQuery("ul#widget-menu-buffer");
 						var $el = $buffer.find("li a[data-widget-id='" + data.widget.id + "']");
 
 						jQuery('div#module-web-page-widget-list ul.widget-choosing li.widget-buffer a').click();
@@ -442,9 +446,9 @@
 						{
 							$buffer.append(
 								'<li>' +
-								'	<a href="javascript:void(0)" class="dragabble" data-widget-key="' + data.widget.key + '" data-widget-buffer-key="' + data.buffer.key + '" data-widget-buffer-id="' + data.buffer.id + '" data-widget-id="' + data.widget.id + '"><i class="fa fa-times"></i> ' + data.widget.title + '</a>' + 
+								'	<a href="javascript:void(0)" class="dragabble" data-widget-key="' + data.widget.key + '" data-widget-buffer-key="' + data.buffer.key + '" data-widget-buffer-id="' + data.buffer.id + '" data-widget-id="' + data.widget.id + '"><i class="fa fa-times"></i> ' + data.widget.title + '</a>' +
 								'</li>');
-						} 
+						}
 
 						updateContainer();
 					})
@@ -474,7 +478,7 @@
 			jQuery("a.dragabble i:not(.close-me)", "ul#widget-menu-buffer")
 				.addClass("close-me")
 				.click(function(event)
-				{ 
+				{
 					event.stopPropagation();
 					event.preventDefault();
 
@@ -486,7 +490,7 @@
 						context: document.body
 					})
 					.done(function(data)
-					{ 
+					{
 						jQuery(this_).closest('li').remove();
 						updateContainer();
 					})
@@ -541,9 +545,9 @@
                         .chosen({disable_search_threshold: 10, width: "200px"});
 
 		updateContainer();
-		
+
 	</script>
-	
+
 </template>
 
 
@@ -590,12 +594,12 @@
 			jQuery('ul.nav-tabs#nav-tabs-{{$presentation}}', tabs).append($li);
 			jQuery('div.tab-content#tab-content-{{$presentation}}', tabs).append("<div class='tab-pane web-page-structure' id='" + id + "' data-web-page-id='" + param.pageId + "'>" + param.tabContent + "</div>");
 
-			jQuery('ul.nav-tabs#nav-tabs-{{$presentation}} a:last', tabs).on('shown.bs.tab', function (e) 
+			jQuery('ul.nav-tabs#nav-tabs-{{$presentation}} a:last', tabs).on('shown.bs.tab', function (e)
 				{
 					telenok_module_web_page_pid = jQuery(this).data('page-id');
-					this_.setBreadcrumbs(this_.getPresentationParam()); 
-					this_.setPageHeader(); 
-				}).tab('show');  
+					this_.setBreadcrumbs(this_.getPresentationParam());
+					this_.setPageHeader();
+				}).tab('show');
 
 			jQuery('a i.fa.fa-times', $li).click(function()
 				{
@@ -603,7 +607,7 @@
 					jQuery(tabId).remove();
 					$li.remove();
 					this_.removePageAttribute();
-					jQuery('ul.nav-tabs#nav-tabs-{{$presentation}} a:last', tabs).tab('show'); 
+					jQuery('ul.nav-tabs#nav-tabs-{{$presentation}} a:last', tabs).tab('show');
 				});
 
 			$li.on('mousedown', function(event)
@@ -655,15 +659,15 @@
 						time: 3000,
 					});
 				});
-				
+
 				return this;
 		},
 		callMe: function(param)
 		{
-			this.setParam(param); 
-			this.showSkeleton(); 
-			this.setPageHeader(); 
-			this.setBreadcrumbs(param); 
+			this.setParam(param);
+			this.showSkeleton();
+			this.setPageHeader();
+			this.setBreadcrumbs(param);
 
 			return this;
 		},
@@ -680,8 +684,8 @@
 			return this;
 		}
 	});
-	
+
 	telenok.addPresentation('{{$presentationModuleKey}}', new presentationTreeTabWebPageConstructor{{$uniqueId}});
-   
+
 	@stop
 </script>

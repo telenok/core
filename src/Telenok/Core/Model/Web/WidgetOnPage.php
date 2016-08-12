@@ -54,5 +54,4 @@ class WidgetOnPage extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\
             app('telenok.config.repository')->getWidget()->get($key)->delete($this);
         }
     }
-
 }

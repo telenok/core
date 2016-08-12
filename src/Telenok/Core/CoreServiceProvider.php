@@ -259,10 +259,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function validateInstallFlag()
     {
-        if (!file_exists(storage_path('telenok/installedTelenokCore.lock')))
-        {
-            return false;
-        }
+        return file_exists(storage_path('telenok/installedTelenokCore.lock'));
     }
 
     public function readDBMacro()
