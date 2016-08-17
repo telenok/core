@@ -22,6 +22,7 @@ class CreatePageTable extends Migration {
 				$table->string('url_pattern')->nullable();
 				$table->string('url_redirect')->nullable();
 				$table->integer('page_page_controller')->unsigned()->nullable();
+				$table->string('controller_method')->nullable();
 				$table->integer('active')->unsigned()->nullable();
 				$table->dateTime('active_at_start')->nullable();
 				$table->dateTime('active_at_end')->nullable();

@@ -254,14 +254,14 @@ class Repository {
                 {
                     $routeDomain[$page->page_domain][] = 'app("router")->get("' . $page->getAttribute('url_pattern') . '", array("as" => "'
                         . ($page->router_name ? : 'page_' . $page->getKey())
-                        . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . $page->pagePageController->controller_method . '"));'
+                        . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . ($page->controller_method ?:$page->pagePageController->controller_method) . '"));'
                     ;
                 }
                 else if (!$page->page_domain)
                 {
                     $routeCommon[$page->getKey()] = 'app("router")->get("' . $page->getAttribute('url_pattern') . '", array("as" => "'
                         . ($page->router_name ? : 'page_' . $page->getKey())
-                        . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . $page->pagePageController->controller_method . '"));'
+                        . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . ($page->controller_method ?:$page->pagePageController->controller_method) . '"));'
                     ;
                 }
             }

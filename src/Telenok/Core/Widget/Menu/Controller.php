@@ -67,6 +67,8 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
      */
     public function setConfig($config = [])
     {
+        $config = collect($config)->all();
+
         parent::setConfig(array_merge($config, [
             'menu_type'     => array_get($config, 'menu_type', $this->menuType),
             'node_ids'      => array_get($config, 'node_ids', $this->nodeIds),

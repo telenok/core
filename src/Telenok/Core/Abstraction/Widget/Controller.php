@@ -120,7 +120,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Where store template's changes which user make in backend.
      * @member Telenok.Core.Abstraction.Widget.Controller
      */
-    protected $widgetTemplateDirectory = 'resources/views/widget/';
+    protected $widgetTemplateDirectory = 'resources/views/page_constructor/widget/';
 
     /**
      * @protected
@@ -185,6 +185,8 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function setConfig($config = [])
     {
+        $config = collect($config)->all();
+
         $this->config = array_merge([
             'cache_key'         => array_get($config, 'cache_key', $this->cacheKey),
             'cache_time'        => array_get($config, 'cache_time', $this->cacheTime),
@@ -516,7 +518,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         if ($m = $this->getWidgetModel())
         {
-            return 'widget.' . $m->getKey();
+            return 'page_constructor.widget.' . $m->getKey();
         }
         else if ($this->frontendView)
         {
@@ -911,9 +913,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             $templateFile = base_path($this->widgetTemplateDirectory . $model->getKey() . '.blade.php');
         }
 
-        \File::makeDirectory(dirname(realpath($templateFile)), 0777, true, true);
+        \File::makeDirectory(dirname($templateFile), 0775, true, true);
 
-        file_put_contents($templateFile, $input->get('template_content', $this->getTemplateContent()), LOCK_EX);
+        file_put_contents($templateFile, $input->get('template_content', $this->getTemplateContent()));
 
         return $this;
     }

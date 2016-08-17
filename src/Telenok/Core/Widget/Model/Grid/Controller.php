@@ -494,7 +494,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
 	public function setConfig($config)
 	{
-		$this->config = $config;
+		$this->config = collect($config)->all();
 		
 		$this->uniqueId = $this->getConfig('uniqueId', str_random());
 		$this->buttonTop = $this->getConfig('buttonTop', []);

@@ -118,6 +118,27 @@ class SeedPageTable extends Migration {
                 ]
         );
 
+
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+            [
+                'title' => ['en' => 'Controller method', 'ru' => 'Метод контроллера'],
+                'title_list' => ['en' => 'Controller method', 'ru' => 'Метод контроллера'],
+                'key' => 'string',
+                'code' => 'controller_method',
+                'active' => 1,
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 1,
+                'show_in_form' => 1,
+                'show_in_list' => 0,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'required' => 0,
+                'field_order' => 8,
+            ]
+        );
+
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
                 'title' => ['en' => 'URL pattern', 'ru' => 'URL шаблон'],
