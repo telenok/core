@@ -7,7 +7,7 @@
  * @extends Telenok.Core.Abstraction.Controller.Controller
  */
 abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
-    
+
     /**
      * @protected
      * @property {Array} $container
@@ -15,7 +15,15 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $container = [];
-    
+
+    /**
+     * @protected
+     * @property {Array} $additionalViewParams
+     * Array can be set in custom method.
+     * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
+     */
+    protected $additionalViewParams = [];
+
     /**
      * @protected
      * @property {Array} $jsFilePath
@@ -198,7 +206,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method setBackendView
      * Set value of $backendView.
-     * 
+     *
+     * @param {String} $param
+     * View name of backend.
      * @return {Telenok.Core.Abstraction.Controller.Frontend.Controller}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -246,24 +256,42 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getContent()
     {
-        $routerName = app('router')->currentRouteName();
-
         try
         {
-            $pageModel = app(\App\Vendor\Telenok\Core\Model\Web\Page::class);
+            $page = $this->getPageEloquentObject();
 
-            $page = $pageModel->active()->withPermission()
-                ->where(function($query) use ($pageModel, $routerName)
-                {
-                    $query->where($pageModel->getTable() . '.id', intval(str_replace('page_', '', $routerName)));
-                    $query->orWhere($pageModel->getTable() . '.router_name', $routerName);
-                })->cacheTags($routerName)->firstOrFail();
+            $this->initFrontendView($page);
+
+            $this->setCacheTime($page->cache_time);
+
+            if (($content = $this->getCachedContent()) !== false)
+            {
+                return $this->processContent($content);
+            }
+
+            $content = $this->getNotCachedContent($page);
+
+            $this->setCachedContent($content);
+
+            return $this->processContent($content);
         }
         catch (\Exception $e)
         {
             app()->abort(404);
         }
+    }
 
+    /**
+     * @method initFrontendView
+     * Set value of $frontendView.
+     *
+     * @param {Telenok.Core.Model.Web.Page} $page
+     * Eloquent page with template field.
+     * @return {Void}
+     * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
+     */
+    public function initFrontendView($page)
+    {
         if ($t = $page->translate('template_view'))
         {
             $this->setFrontendView($t);
@@ -272,19 +300,27 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         {
             $this->setFrontendView($controllerTemplate);
         }
+    }
 
-        $this->setCacheTime($page->cache_time);
+    /**
+     * @method getPageEloquentObject
+     * Return Eloquent Page object by parsing router name.
+     *
+     * @return {Telenok.Core.Model.Web.Page}
+     * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
+     */
+    public function getPageEloquentObject()
+    {
+        $routerName = app('router')->currentRouteName();
 
-        if (($content = $this->getCachedContent()) !== false)
-        {
-            return $this->processContent($content);
-        }
+        $pageModel = app(\App\Vendor\Telenok\Core\Model\Web\Page::class);
 
-        $content = $this->getNotCachedContent($page);
-
-        $this->setCachedContent($content);
-
-        return $this->processContent($content);
+        return $pageModel->active()->withPermission()
+            ->where(function($query) use ($pageModel, $routerName)
+            {
+                $query->where($pageModel->getTable() . '.id', intval(str_replace('page_', '', $routerName)));
+                $query->orWhere($pageModel->getTable() . '.router_name', $routerName);
+            })->cacheTags($routerName)->firstOrFail();
     }
 
     /**
@@ -317,11 +353,37 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
                     });
         }
 
-        return view($this->getFrontendView(), [
+        return view($this->getFrontendView(), array_merge([
                     'page' => $page,
                     'controller' => $this,
                     'content' => $content,
-                ])->render();
+                ], $this->getAdditionalViewParams()))->render();
+    }
+
+    /**
+     * @method getAdditionalViewParams
+     * Additionally process view's variables.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
+     */
+    public function getAdditionalViewParams()
+    {
+        return $this->additionalViewParams;
+    }
+
+    /**
+     * @method getAdditionalViewParams
+     * Additionally process view's variables.
+     *
+     * @return {Array}
+     * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
+     */
+    public function setAdditionalViewParams($param = [])
+    {
+        $this->additionalViewParams = $param;
+        
+        return $this;
     }
 
     /**

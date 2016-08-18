@@ -128,7 +128,7 @@ class SeedPageTable extends Migration {
                 'active' => 1,
                 'field_object_type' => $modelTypeId,
                 'field_object_tab' => $tabMainId,
-                'multilanguage' => 1,
+                'multilanguage' => 0,
                 'show_in_form' => 1,
                 'show_in_list' => 0,
                 'allow_search' => 1,
