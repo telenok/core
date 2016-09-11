@@ -803,14 +803,24 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     }
 
     /**
-     * @method getMultilanguage
+     * @method getMultilanguageField
      * @member Telenok.Core.Abstraction.Field.Controller
      */
-    public function getMultilanguage($model, $field)
+    public function getMultilanguageField($model, $field)
     {
-        if ($field->multilanguage) {
+        if ($field->multilanguage)
+        {
             return [$field->code];
         }
+    }
+
+    /**
+     * @method getTranslatedField
+     * @member Telenok.Core.Abstraction.Field.Controller
+     */
+    public function getTranslatedField($model, $field)
+    {
+        return $this->getMultilanguageField($model, $field);
     }
 
     /**
@@ -879,7 +889,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         $query = $model::withPermission()->with('sequencesObjectType');
 
-        if (in_array('title', $model->getMultilanguage(), true)) {
+        if (in_array('title', $model->getTranslatedField(), true)) {
             $query->join('object_translation', function ($join) use ($model) {
                 $join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id')
                     ->on('object_translation.translation_object_field_code', '=', app('db')->raw("'title'"))
@@ -894,7 +904,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
                         return !trim($i);
                     })
                     ->each(function ($i) use ($query, $model) {
-                        if (in_array('title', $model->getMultilanguage(), true)) {
+                        if (in_array('title', $model->getTranslatedField(), true)) {
                             $query->where('object_translation.translation_object_string', 'like', "%{$i}%");
                         } else {
                             $query->where($model->getTable() . '.title', 'like', "%{$i}%");

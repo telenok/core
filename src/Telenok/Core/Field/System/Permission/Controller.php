@@ -298,7 +298,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         $query = $model::select([$model->getTable() . '.*', 'resource.code as resource_code'])
                     ->withPermission()->with('sequencesObjectType');
 
-        if (in_array('title', $model->getMultilanguage(), true)) {
+        if (in_array('title', $model->getTranslatedField(), true)) {
             $query->join('object_translation', function ($join) use ($model) {
                 $join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id')
                     ->on('object_translation.translation_object_field_code', '=', app('db')->raw("'title'"))
@@ -318,7 +318,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
                         return !trim($i);
                     })
                     ->each(function ($i) use ($query, $model) {
-                        if (in_array('title', $model->getMultilanguage(), true)) {
+                        if (in_array('title', $model->getTranslatedField(), true)) {
                             $query->where('object_translation.translation_object_string', 'like', "%{$i}%");
                         } else {
                             $query->where($model->getTable() . '.title', 'like', "%{$i}%");

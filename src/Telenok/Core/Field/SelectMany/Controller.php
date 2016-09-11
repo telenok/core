@@ -25,14 +25,14 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
      * @member Telenok.Core.Field.SelectMany.Controller
      */
     protected $specialField = ['select_many_data'];
-    
+
     /**
      * @protected
      * @property {Boolean} $allowMultilanguage
      * Field doesn't support multilanguage
      * @member Telenok.Core.Field.SelectMany.Controller
      */
-    protected $allowMultilanguage = false;
+    protected $allowMultilanguage = true;
 
     /**
      * @protected
@@ -41,6 +41,12 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
      * @member Telenok.Core.Field.SelectMany.Controller
      */
     protected $viewModel = "core::field.select-many.model-select-box";
+
+    /**
+     * @method getTranslatedField
+     * @member Telenok.Core.Field.SelectMany.Controller
+     */
+    public function getTranslatedField($model, $field) {}
 
     /**
      * @method saveModelField
@@ -214,23 +220,34 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
             if ($key == 'select_many_data')
             {
-                $localeDefault = config('app.localeDefault');
-
-                $title = array_get($value, 'title.' . $localeDefault, []);
-
-                foreach (array_get($value, 'title', []) as $k => $t)
+                if ($model->multilanguage)
                 {
-                    if ($k != $localeDefault)
+                    if (is_array(array_first(array_get($value, 'title'))))
                     {
-                        foreach ($t as $k_ => $t_)
+                        $localeDefault = config('app.localeDefault');
+
+                        $title = array_get($value, 'title.' . $localeDefault, []);
+
+                        foreach (array_get($value, 'title', []) as $k => $t)
                         {
-                            if (!trim($t_))
+                            if ($k != $localeDefault)
                             {
-                                $value['title'][$k][$k_] = $title[$k_];
+                                foreach ($t as $k_ => $t_)
+                                {
+                                    if (!trim($t_))
+                                    {
+                                        $value['title'][$k][$k_] = $title[$k_];
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                else
+                {
+                    $value['title'] = array_get($value, 'title', []);
+                }
+
 
                 $defaultKey = [];
 

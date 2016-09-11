@@ -48,7 +48,7 @@
 								$spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
 								$type = new \App\Vendor\Telenok\Core\Model\Object\Type();
 
-								$sequence->addMultilanguage('title_type');
+								$sequence->addTranslatedField('title_type');
 
 								$subjects = \App\Vendor\Telenok\Core\Model\Object\Sequence::select($sequence->getTable() . '.id', $sequence->getTable() . '.title', $type->getTable() . '.title as title_type')
 								->join($spr->getTable(), function($query) use ($spr, $sequence, $model) 

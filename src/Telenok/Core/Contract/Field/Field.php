@@ -97,8 +97,10 @@ interface Field extends \Telenok\Core\Contract\Injection\Request {
 
     public function allowMultilanguage();
 
-    public function getMultilanguage($model, $field);
-
+    public function getMultilanguageField($model, $field);
+    
+    public function getTranslatedField($model, $field);
+    
     public function getFieldTab($typeId, $tabCode);
 
     public function getFieldTabBelongTo($typeId, $tabBelongCode, $tabHasId);

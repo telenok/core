@@ -150,7 +150,7 @@ class SeedCommonFields extends Migration {
                     'field_view' => 'core::field.select-one.model-toggle-button',
                     'field_object_type' => $typeId,
                     'field_object_tab' => $tabId,
-                    'multilanguage' => 0,
+                    'multilanguage' => 1,
                     'show_in_form' => 1,
                     'show_in_list' => 0,
                     'allow_search' => 1,

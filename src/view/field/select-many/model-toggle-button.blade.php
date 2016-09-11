@@ -14,15 +14,23 @@
 
     $title = $field->select_many_data->get('title', []);
     $keys = $field->select_many_data->get('key', []);
-    $default = $field->select_many_data->get('default', []);
-    $titleLocale = array_get($title, $locale, []);
 
-    if (empty($titleLocale))
+    if ($field->multilanguage)
     {
-        $titleLocale = array_get($title, $localeDefault, []);
-    }
+        $default = $field->select_many_data->get('default', []);
+        $titleLocale = array_get($title, $locale, []);
 
-    $values = array_combine($keys, $titleLocale);
+        if (empty($titleLocale))
+        {
+            $titleLocale = array_get($title, $localeDefault, []);
+        }
+
+        $values = array_combine($keys, $titleLocale);
+    }
+    else
+    {
+        $values = array_combine($keys, $title);
+    }
 ?>
 
 <div class="form-group" data-field-key='{{ $field->code }}'>

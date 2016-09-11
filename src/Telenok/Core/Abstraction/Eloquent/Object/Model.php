@@ -57,7 +57,15 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
     protected $multilanguageList = [];
-    
+
+    /**
+     * @protected
+     * @property {Array} $translatedList
+     * List of translated (for multilanguages) fields.
+     * @member Telenok.Core.Abstraction.Eloquent.Object.Model
+     */
+    protected $translatedList = [];
+
     /**
      * @protected
      * @property {Array} $dates
@@ -105,11 +113,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     /**
      * @protected
      * @static
-     * @property {Array} $listMultilanguage
-     * List of cached mltilanguage fields.
+     * @property {Array} $listTranslated
+     * List of cached translated fields.
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
-    protected static $listMultilanguage = [];
+    protected static $listTranslated = [];
 
     /**
      * @protected
@@ -422,7 +430,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         {
             \App\Vendor\Telenok\Core\Model\Object\Translation::where('translation_object_model_id', $this->getKey())->forceDelete();
 
-            foreach ($this->getMultilanguage() as $fieldCode)
+            foreach ($this->getTranslatedField() as $fieldCode)
             {
                 $value = $this->{$fieldCode}->all();
 
@@ -525,11 +533,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         static::$listField[$class] = null;
         static::$listAllFieldController[$class] = null;
         static::$listFillableFieldController[$class] = null;
-        static::$listMultilanguage[$class] = null;
+        static::$listTranslated[$class] = null;
 
         $model->getObjectField();
         $model->getFillable();
-        $model->getMultilanguage();
+        $model->getTranslatedField();
         $model->getDates();
         $model->getRule();
     }
@@ -1040,18 +1048,18 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     }
 
     /**
-     * @method getMultilanguage
+     * @method getTranslatedField
      * Return list of multilanguage fields.
      * @return {Array}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
-    public function getMultilanguage()
+    public function getTranslatedField()
     {
         $class = get_class($this);
 
-        if (!isset(static::$listMultilanguage[$class]))
+        if (!isset(static::$listTranslated[$class]))
         {
-            static::$listMultilanguage[$class] = (array) $this->multilanguageList;
+            static::$listTranslated[$class] = (array) $this->translatedList;
 
             $fields = app('telenok.config.repository')->getObjectFieldController();
 
@@ -1061,29 +1069,29 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
                 if ($controller)
                 {
-                    static::$listMultilanguage[$class] = array_merge(static::$listMultilanguage[$class], (array) $controller->getMultilanguage($this, $field));
+                    static::$listTranslated[$class] = array_merge(static::$listTranslated[$class], (array) $controller->getTranslatedField($this, $field));
                 }
             }
         }
 
-        return static::$listMultilanguage[$class];
+        return static::$listTranslated[$class];
     }
 
     /**
-     * @method addMultilanguage
-     * Add multilanguage field's code.
+     * @method addTranslatedField
+     * Add translated field's code.
      * @param {String} $fieldCode
-     * Code of multilanguage field.
+     * Code of translated field.
      * @return {Telenok.Core.Abstraction.Eloquent.Object.Model}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
-    public function addMultilanguage($fieldCode)
+    public function addTranslatedField($fieldCode)
     {
         $class = get_class($this);
 
-        static::$listMultilanguage[$class][] = $fieldCode;
+        static::$listTranslated[$class][] = $fieldCode;
 
-        static::$listMultilanguage[$class] = array_unique(static::$listMultilanguage[$class]);
+        static::$listTranslated[$class] = array_unique(static::$listTranslated[$class]);
 
         return $this;
     }

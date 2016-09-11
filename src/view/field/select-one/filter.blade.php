@@ -13,18 +13,21 @@ $jsUnique = str_random();
         
         if (!empty($data))
         {
-            $title = array_get($data, 'title.' . config('app.locale'));
-            
-            if (empty($title))
+            if (is_array(array_first($data)))
             {
-                $title = array_get($data, 'title.' . config('app.localeDefault'));
-            }
-            
-            $keys = array_get($data, 'key');
-            
-            foreach ($title as $key => $value)
-            {
-                echo '<option value="' . $keys[$key] . '">' . e($value) . '</option>';
+                $title = array_get($data, 'title.' . config('app.locale'));
+
+                if (empty($title))
+                {
+                    $title = array_get($data, 'title.' . config('app.localeDefault'));
+                }
+
+                $keys = array_get($data, 'key');
+
+                foreach ($title as $key => $value)
+                {
+                    echo '<option value="' . $keys[$key] . '">' . e($value) . '</option>';
+                }
             }
         }
     } 

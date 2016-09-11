@@ -51,7 +51,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             $fieldCode = $field->code;
             $translate = new \App\Vendor\Telenok\Core\Model\Object\Translation();
 
-            if (in_array($fieldCode, $model->getMultilanguage(), true))
+            if (in_array($fieldCode, $model->getTranslatedField(), true))
             {
                 $query->leftJoin($translate->getTable(), function($join) use ($model, $translate, $fieldCode)
                 {

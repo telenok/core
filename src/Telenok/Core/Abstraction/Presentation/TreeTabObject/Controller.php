@@ -257,7 +257,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab
                     return $orderByField === $item->code;
                 })->count())
         {
-            if (in_array($orderByField, $model->getMultilanguage(), true))
+            if (in_array($orderByField, $model->getTranslatedField(), true))
             {
                 $query->leftJoin($translate->getTable(), function($join) use ($model, $translate, $orderByField)
                 {
@@ -298,7 +298,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab
                 'uniqueId' => str_random(),
                 'routerParam' => $this->getRouterParam('create', $eventResource->get('type'), $eventResource->get('model')),
                 'canCreate' => app('auth')->can('create', $eventResource->get('model')),
-                            ], $this->getAdditionalViewParam()))->render()
+            ], $this->getAdditionalViewParam()))->render()
         ];
     }
 

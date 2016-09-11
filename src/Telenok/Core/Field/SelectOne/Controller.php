@@ -32,7 +32,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
      * Field doesn't support multilanguage
      * @member Telenok.Core.Field.SelectOne.Controller
      */
-    protected $allowMultilanguage = false;
+    protected $allowMultilanguage = true;
 
     /**
      * @protected
@@ -86,13 +86,10 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     {
         if ($value === null)
         {
-            $default = array_get((array) json_decode($field->select_one_data, true), 'default', null);
-            $model->setAttribute($key, $default);
+            $value = array_get((array) json_decode($field->select_one_data, true), 'default', null);
         }
-        else
-        {
-            $model->setAttribute($key, $value);
-        }
+
+        $model->setAttribute($key, $value);
     }
 
     /**
@@ -144,42 +141,53 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     {
         if (in_array($key, ['select_one_data'], true))
         {
-            $default = [];
-
-            if ($value instanceof \Illuminate\Support\Collection)
-            {
-                if ($value->count())
-                {
-                    $value = $value->toArray();
-                }
-                else
-                {
-                    $value = $default;
-                }
-            }
-            else
-            {
-                $value = $value ? : $default;
-            }
-
             if ($key == 'select_one_data')
             {
-                $localeDefault = config('app.localeDefault');
-
-                $title = array_get($value, 'title.' . $localeDefault, []);
-
-                foreach (array_get($value, 'title', []) as $k => $t)
+                if ($model->multilanguage)
                 {
-                    if ($k != $localeDefault)
+                    $default = [];
+
+                    if ($value instanceof \Illuminate\Support\Collection)
                     {
-                        foreach ($t as $k_ => $t_)
+                        if ($value->count())
                         {
-                            if (!trim($t_))
+                            $value = $value->toArray();
+                        }
+                        else
+                        {
+                            $value = $default;
+                        }
+                    }
+                    else
+                    {
+                        $value = $value ?: $default;
+                    }
+
+                    if (is_array(array_first(array_get($value, 'title'))))
+                    {
+                        $localeDefault = config('app.localeDefault');
+
+                        $title = array_get($value, 'title.' . $localeDefault, []);
+
+                        foreach (array_get($value, 'title', []) as $k => $t)
+                        {
+                            if ($k != $localeDefault)
                             {
-                                $value['title'][$k][$k_] = $title[$k_];
+                                foreach ($t as $k_ => $t_)
+                                {
+                                    if (!trim($t_))
+                                    {
+                                        $value['title'][$k][$k_] = $title[$k_];
+                                    }
+                                }
                             }
                         }
                     }
+                }
+                else
+                {
+                    $value['title'] = array_get($value, 'title', []);
+                    $value['default'] = array_get($value, 'default', 0);
                 }
             }
 
@@ -213,11 +221,19 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         if (!empty($value))
         {
             $config = $field->select_one_data->toArray();
-            $locale = config('app.locale');
-            $title = array_get($config, 'title.' . $locale, []);
-            $key = array_get($config, 'key', []);
 
-            $val = array_get(array_combine($key, $title), $value);
+            if (is_array(array_first(array_get($value, 'title'))))
+            {
+                $locale = config('app.locale');
+                $title = array_get($config, 'title.' . $locale, []);
+                $key = array_get($config, 'key', []);
+
+                $val = array_get(array_combine($key, $title), $value);
+            }
+            else
+            {
+                $val = array_get($value, 'title');
+            }
 
             return e(\Str::limit($val, 20));
         }

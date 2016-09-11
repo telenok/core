@@ -141,6 +141,31 @@ class SeedPageTable extends Migration {
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
+                'title' => ['en' => 'Action', 'ru' => 'Действие'],
+                'title_list' => ['en' => 'Action', 'ru' => 'Действие'],
+                'key' => 'select-one',
+                'code' => 'action',
+                'select_one_data' => [
+                    'title' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+                    'key' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+                    'default' => 'GET'
+                ],
+                'active' => 1,
+                'field_view' => 'core::field.select-one.model-toggle-button',
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 0,
+                'show_in_form' => 1,
+                'show_in_list' => 0,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'field_order' => 9,
+            ]
+        );
+
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+            [
                 'title' => ['en' => 'URL pattern', 'ru' => 'URL шаблон'],
                 'title_list' => ['en' => 'URL pattern', 'ru' => 'URL шаблон'],
                 'key' => 'string',
@@ -155,7 +180,7 @@ class SeedPageTable extends Migration {
                 'allow_search' => 1,
                 'allow_create' => 1,
                 'allow_update' => 1,
-                'field_order' => 8,
+                'field_order' => 9,
             ]
         );
 
@@ -174,7 +199,7 @@ class SeedPageTable extends Migration {
                     'allow_search' => 1,
                     'allow_create' => 1,
                     'allow_update' => 1,
-                    'field_order' => 9,
+                    'field_order' => 10,
                 ]
         );
 
@@ -193,7 +218,7 @@ class SeedPageTable extends Migration {
                 'allow_search' => 1,
                 'allow_create' => 1,
                 'allow_update' => 1,
-                'field_order' => 8,
+                'field_order' => 11,
             ]
         );
 

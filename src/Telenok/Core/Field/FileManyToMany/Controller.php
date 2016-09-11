@@ -116,7 +116,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         $sequenceTable = $sequence->getTable();
         $typeTable = (new \App\Vendor\Telenok\Core\Model\Object\Type())->getTable();
 
-        $sequence->addMultilanguage('title_type');
+        $sequence->addTranslatedField('title_type');
 
         try
         {

@@ -494,7 +494,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
                 'field_view' => 'core::field.select-one.model-toggle-button',
                 'field_object_type' => $model->getKey(),
                 'field_object_tab' => $tabVisible->getKey(),
-                'multilanguage' => 0,
+                'multilanguage' => 1,
                 'show_in_form' => 1,
                 'show_in_list' => 0,
                 'allow_search' => 1,
