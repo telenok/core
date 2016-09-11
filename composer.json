@@ -23,8 +23,8 @@
         "ext-bcmath": "*",
         "ext-exif": "*",
         "ext-mbstring": "*",
-        "laravel/framework": "5.2.*",
-        "laravelcollective/html": "5.2.*",
+        "laravel/framework": "5.3.*",
+        "laravelcollective/html": "5.3.*@dev",
         "composer/composer": "1.*",
         "imagine/imagine": "~0.5"
     },
