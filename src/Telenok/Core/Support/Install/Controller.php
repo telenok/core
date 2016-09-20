@@ -291,7 +291,7 @@ class Controller {
     public function processConfigDatabaseFile()
     {
         $param = array(
-            'DB_CONNECTION_DEFAULT' => $this->dbDriver,
+            'DB_CONNECTION' => $this->dbDriver,
             'DB_DATABASE'           => $this->dbDatabase,
             'DB_HOST'           => $this->dbHost,
             'DB_USERNAME'       => $this->dbUsername,
@@ -396,8 +396,8 @@ class Controller {
                 $table->string('code')->nullable()->default(null)->unique('code');
                 $table->mediumText('value');
                 $table->integer('active')->unsigned()->nullable()->default(null);
-                $table->timestamp('active_at_start');
-                $table->timestamp('active_at_end');
+                $table->timestamp('active_at_start')->nullable();
+                $table->timestamp('active_at_end')->nullable();
                 $table->integer('created_by_user')->unsigned()->nullable()->default(null);
                 $table->integer('updated_by_user')->unsigned()->nullable()->default(null);
                 $table->integer('deleted_by_user')->unsigned()->nullable()->default(null);

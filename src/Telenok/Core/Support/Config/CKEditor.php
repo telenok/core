@@ -142,19 +142,19 @@ class CKEditor extends \App\Vendor\Telenok\Core\Controller\Backend\Controller {
         $name = $this->getRequest()->input('name');
 
         $files = \App\Vendor\Telenok\Core\Model\File\File::active()
-                        ->withPermission()
-                        ->where(function($query)
+                    ->withPermission()
+                    ->where(function($query)
+                    {
+                        if ($this->getRequest()->input('file_type'))
                         {
-                            if ($this->getRequest()->input('file_type'))
+                            foreach (\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION as $ext)
                             {
-                                foreach (\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION as $ext)
-                                {
-                                    $query->orWhere('upload_file_name', 'LIKE', '%.' . $ext . '%');
-                                }
+                                $query->orWhere('upload_file_name', 'LIKE', '%.' . $ext . '%');
                             }
-                        })
-                        ->where('title', 'LIKE', '%' . $name . '%')
-                        ->take(51)->get();
+                        }
+                    })
+                    ->where('title', 'LIKE', '%' . $name . '%')
+                    ->take(51)->get();
 
         return view('core::special.ckeditor.file-model', [
             'controller' => $this,

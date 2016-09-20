@@ -69,6 +69,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
                 $query->where(function($query) use ($value, $model, $translate)
                 {
+                    $query->where(app('db')->raw(1), 1);
+
                     collect(explode(' ', $value))
                             ->filter(function($i)
                             {

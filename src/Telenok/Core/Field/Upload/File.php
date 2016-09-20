@@ -158,7 +158,7 @@ class File {
 
         $storages = \App\Vendor\Telenok\Core\Support\File\Store::storageList(json_decode($this->field->upload_storage, TRUE));
 
-        $storageKey = $storages->shuffle()->first(function($k, $v) use ($uploadStorages)
+        $storageKey = $storages->shuffle()->first(function($v, $k) use ($uploadStorages)
         {
             if (in_array($v, $uploadStorages, true) && app('filesystem')->disk($v)->exists($this->path()))
             {
@@ -189,7 +189,7 @@ class File {
         $cacheStorages = \App\Vendor\Telenok\Core\Support\File\Store::storageList($logic($this->filename()));
         $storages = \App\Vendor\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('cache.cache_storages'))));
 
-        $storageKey = $cacheStorages->first(function($k, $v)
+        $storageKey = $cacheStorages->first(function($v, $k)
         {
             if ($this->filename() && app('filesystem')->disk($v)->exists($this->pathCache()))
             {

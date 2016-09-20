@@ -127,7 +127,7 @@ class Acl {
             $acl->addSubjects($subject);
         }
 
-        return $this;
+        return $acl;
     }
 
     /*
@@ -869,7 +869,7 @@ class Acl {
                 }
                 else
                 {
-                    $can = static::subject($subject)->can($permissionCode, $r, $filterCode);
+                    $can = static::subject($subject)->can($permissionCode, $resourceCode, $filterCode);
                 }
 
                 if ($this->getCollision() == static::SUBJECT_COLLISION_ANY && $can)

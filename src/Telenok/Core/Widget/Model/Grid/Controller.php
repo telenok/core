@@ -249,6 +249,8 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 			->where('created_by_user', app('auth')->user()->getKey())
 			->where(function($query) use ($term)
 			{
+				$query->where(app('db')->raw(1), 1);
+
 				collect(explode(' ', $term))
 				->reject(function($i)
 				{

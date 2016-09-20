@@ -311,16 +311,25 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             $join->on($model->getTable() . '.id', '=', 'resource.id');
         });
 
-        $query->where(function ($query) use ($term, $model) {
-            if (trim($term)) {
+        $query->where(function ($query) use ($term, $model)
+        {
+            $query->where(app('db')->raw(1), 1);
+
+            if (trim($term))
+            {
                 collect(explode(' ', $term))
-                    ->reject(function ($i) {
+                    ->reject(function ($i)
+                    {
                         return !trim($i);
                     })
-                    ->each(function ($i) use ($query, $model) {
-                        if (in_array('title', $model->getTranslatedField(), true)) {
+                    ->each(function ($i) use ($query, $model)
+                    {
+                        if (in_array('title', $model->getTranslatedField(), true))
+                        {
                             $query->where('object_translation.translation_object_string', 'like', "%{$i}%");
-                        } else {
+                        }
+                        else
+                        {
                             $query->where($model->getTable() . '.title', 'like', "%{$i}%");
                         }
                     });
@@ -330,7 +339,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             }
         });
 
-        if ($closure instanceof \Closure) {
+        if ($closure instanceof \Closure)
+        {
             $closure($query);
         }
 

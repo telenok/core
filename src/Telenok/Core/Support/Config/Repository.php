@@ -208,9 +208,9 @@ class Repository {
 
     public function compileRoute()
     {
-        $path = storage_path('telenok/route');
+        $path = base_path('routes');
 
-        $file = 'route.php';
+        $file = 'telenok.php';
 
         if (!\File::exists($path))
         {

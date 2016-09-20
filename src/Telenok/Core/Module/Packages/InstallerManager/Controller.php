@@ -223,7 +223,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             {
                 $contentDir = $this->getFolderContent((string) reset($contentDir));
 
-                $composerJsonPath = collect($contentDir)->keys()->first(function($key, $value)
+                $composerJsonPath = collect($contentDir)->keys()->first(function($value, $key)
                 {
                     if (strpos($value, 'composer.json') !== FALSE)
                     {

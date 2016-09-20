@@ -1188,6 +1188,8 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
     {
         $query->where(function($query) use ($value, $model, $field)
         {
+            $query->where(app('db')->raw(1), 1);
+
             collect(explode(' ', $value))
                     ->filter(function($i)
                     {

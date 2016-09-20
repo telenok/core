@@ -62,15 +62,17 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
                 $query->where(function($query) use ($value, $model, $translate)
                 {
+                    $query->where(app('db')->raw(1), 1);
+
                     collect(explode(' ', $value))
-                            ->filter(function($i)
-                            {
-                                return trim($i);
-                            })
-                            ->each(function($i) use ($query, $translate)
-                            {
-                                $query->orWhere($translate->getTable() . '.translation_object_string', 'like', '%' . trim($i) . '%');
-                            });
+                        ->filter(function($i)
+                        {
+                            return trim($i);
+                        })
+                        ->each(function($i) use ($query, $translate)
+                        {
+                            $query->orWhere($translate->getTable() . '.translation_object_string', 'like', '%' . trim($i) . '%');
+                        });
 
                     $query->orWhere($model->getTable() . '.id', intval($value));
                 });

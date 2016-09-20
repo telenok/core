@@ -159,7 +159,7 @@ app('router')->post('telenok/module/web-page-constructor/view/page/widget/buffer
 
 app('router')->get('telenok/login', array('as' => 'telenok.login.control-panel', 'uses' => '\App\Vendor\Telenok\Core\Controller\Auth\AuthController@getLogin'));
 app('router')->post('telenok/process/login', array('as' => 'telenok.login.process', 'uses' => '\App\Vendor\Telenok\Core\Controller\Auth\AuthController@postLogin'));
-app('router')->get('telenok/logout', array('as' => 'telenok.logout', 'uses' => '\App\Vendor\Telenok\Core\Controller\Auth\AuthController@logout'));
+app('router')->post('telenok/logout', array('as' => 'telenok.logout', 'uses' => '\App\Vendor\Telenok\Core\Controller\Auth\AuthController@logout'));
 app('router')->post('telenok/password/reset/email', array('as' => 'telenok.password.reset.email.process', 'uses' => '\App\Vendor\Telenok\Core\Controller\Auth\PasswordController@postEmail'));
 app('router')->get('telenok/password/reset/{token}', array('as' => 'telenok.password.reset.token', 'uses' => '\App\Vendor\Telenok\Core\Controller\Auth\PasswordController@getReset'));
 app('router')->post('telenok/password/reset/process', array('as' => 'telenok.password.reset.token.process', 'uses' => '\App\Vendor\Telenok\Core\Controller\Auth\PasswordController@postReset'));

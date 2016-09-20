@@ -243,6 +243,8 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 			{
 				if (trim($term))
 				{
+                    $query->where(app('db')->raw(1), 1);
+
 					collect(explode(' ', $term))
 					->reject(function($i)
 					{

@@ -597,7 +597,10 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null)
     {
         if ($value !== null && trim($value)) {
-            $query->where(function ($query) use ($value, $name, $model) {
+            $query->where(function ($query) use ($value, $name, $model)
+            {
+                $query->where(app('db')->raw(1), 1);
+
                 collect(explode(' ', $value))
                     ->reject(function ($i) {
                         return !trim($i);
@@ -881,33 +884,47 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $term = trim($this->getRequest()->input('term'));
         $return = [];
 
-        if ($id) {
+        if ($id)
+        {
             $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model);
-        } else {
+        }
+        else
+        {
             $model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
         }
 
         $query = $model::withPermission()->with('sequencesObjectType');
 
-        if (in_array('title', $model->getTranslatedField(), true)) {
-            $query->join('object_translation', function ($join) use ($model) {
+        if (in_array('title', $model->getTranslatedField(), true))
+        {
+            $query->join('object_translation', function ($join) use ($model)
+            {
                 $join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id')
                     ->on('object_translation.translation_object_field_code', '=', app('db')->raw("'title'"))
                     ->on('object_translation.translation_object_language', '=', app('db')->raw("'" . config('app.locale') . "'"));
             });
         }
 
-        $query->where(function ($query) use ($term, $model) {
-            if (trim($term)) {
+        $query->where(function ($query) use ($term, $model)
+        {
+            $query->where(app('db')->raw(1), 1);
+
+            if (trim($term))
+            {
                 collect(explode(' ', $term))
-                    ->reject(function ($i) {
+                    ->reject(function ($i)
+                    {
                         return !trim($i);
                     })
-                    ->each(function ($i) use ($query, $model) {
-                        if (in_array('title', $model->getTranslatedField(), true)) {
-                            $query->where('object_translation.translation_object_string', 'like', "%{$i}%");
-                        } else {
-                            $query->where($model->getTable() . '.title', 'like', "%{$i}%");
+                    ->each(function ($i) use ($query, $model)
+                    {
+                        if (in_array('title', $model->getTranslatedField(), true))
+                        {
+                            $query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
+                        }
+                        else
+                        {
+                            $query->orWhere($model->getTable() . '.title', 'like', "%{$i}%");
                         }
                     });
 
@@ -915,11 +932,13 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             }
         });
 
-        if ($closure instanceof \Closure) {
+        if ($closure instanceof \Closure)
+        {
             $closure($query);
         }
 
-        $query->take(20)->groupBy($model->getTable() . '.id')->get()->each(function ($item) use (&$return) {
+        $query->take(20)->groupBy($model->getTable() . '.id')->get()->each(function ($item) use (&$return)
+        {
             $return[] = ['value' => $item->id, 'text' => "[{$item->sequencesObjectType->translate('title')} #{$item->id}] " . $item->translate('title')];
         });
 
