@@ -224,7 +224,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function addResolver()
     {
-        $this->app->resolving(function(\Telenok\Core\Contract\Injection\Request $object, $app)
+        $this->app->resolving(\Telenok\Core\Contract\Injection\Request::class, function($object, $app)
         {
             $object->setRequest($app['request']);
         });
@@ -237,8 +237,8 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function loadConfigFile()
     {
-        include __DIR__ . '/../../config/helpers.php';
-        include __DIR__ . '/../../config/routes.php';
+        include_once __DIR__ . '/../../config/helpers.php';
+        include_once __DIR__ . '/../../config/routes.php';
     }
 
     public function packageResourceRegister()
@@ -276,7 +276,7 @@ class CoreServiceProvider extends ServiceProvider {
     {
         if (!app('request')->is('telenok', 'telenok/*') && !app()->routesAreCached())
         {
-            $routersPath = storage_path('telenok/route/route.php');
+            $routersPath = base_path('routes/telenok.php');
 
             if (!file_exists($routersPath))
             {

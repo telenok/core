@@ -2,20 +2,11 @@
 
 namespace Telenok\Core\Model\User;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-
 /**
  * @class Telenok.Core.Model.User.User
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class User extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model implements AuthenticatableContract, CanResetPasswordContract {
-
-    use Authenticatable, Notifiable,
-        CanResetPassword;
+class User extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     protected $ruleList = ['title' => ['required', 'min:1'], 'email' => ['unique:user,email,:id:,id'], 'usernick' => ['unique:user,usernick,:id:,id']];
     protected $table = 'user';
