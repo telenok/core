@@ -8,8 +8,7 @@ namespace Telenok\Core\Controller\Auth;
  */
 class AuthController extends \Telenok\Core\Abstraction\Controller\Backend\Controller {
 
-    use \Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers,
-        \Illuminate\Foundation\Auth\ThrottlesLogins;
+    use \Illuminate\Foundation\Auth\ThrottlesLogins;
 
     protected $key = 'auth';
 
@@ -21,10 +20,9 @@ class AuthController extends \Telenok\Core\Abstraction\Controller\Backend\Contro
      * @param {Illuminate.Contracts.Auth.Registrar} $registrar
      * @return {void}
      */
-    public function __construct(\Illuminate\Contracts\Auth\Guard $auth, \Illuminate\Contracts\Auth\Registrar $registrar)
+    public function __construct(\Illuminate\Contracts\Auth\Guard $auth)
     {
         $this->auth = $auth;
-        $this->registrar = $registrar;
     }
 
     /**
