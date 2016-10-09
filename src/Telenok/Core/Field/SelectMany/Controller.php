@@ -200,28 +200,28 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     {
         if (in_array($key, ['select_many_data'], true))
         {
-            $default = [];
-
-            if ($value instanceof \Illuminate\Support\Collection)
-            {
-                if ($value->count())
-                {
-                    $value = $value->toArray();
-                }
-                else
-                {
-                    $value = $default;
-                }
-            }
-            else
-            {
-                $value = $value ? : $default;
-            }
-
             if ($key == 'select_many_data')
             {
                 if ($model->multilanguage)
                 {
+                    $default = [];
+
+                    if ($value instanceof \Illuminate\Support\Collection)
+                    {
+                        if ($value->count())
+                        {
+                            $value = $value->toArray();
+                        }
+                        else
+                        {
+                            $value = $default;
+                        }
+                    }
+                    else
+                    {
+                        $value = $value ? : $default;
+                    }
+
                     if (is_array(array_first(array_get($value, 'title'))))
                     {
                         $localeDefault = config('app.localeDefault');
@@ -247,7 +247,6 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
                 {
                     $value['title'] = array_get($value, 'title', []);
                 }
-
 
                 $defaultKey = [];
 
@@ -292,12 +291,19 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         if (!empty($value))
         {
             $config = $field->select_many_data->toArray();
-            $locale = config('app.locale');
 
-            $title = array_get($config, 'title.' . $locale, []);
-            $key = array_get($config, 'key', []);
+            if ($field->multilanguage)
+            {
+                $locale = config('app.locale');
+                $title = array_get($config, 'title.' . $locale, []);
+                $key = array_get($config, 'key', []);
 
-            $val = array_only(array_slice(array_combine($key, $title), 0, 10, true), $value);
+                $val = array_only(array_slice(array_combine($key, $title), 0, 10, true), $value);
+            }
+            else
+            {
+                $val = array_get($value, 'title');
+            }
 
             return e(\Str::limit(implode(', ', $val), 30));
         }

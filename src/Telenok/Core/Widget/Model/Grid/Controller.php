@@ -249,7 +249,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 			->where('created_by_user', app('auth')->user()->getKey())
 			->where(function($query) use ($term)
 			{
-				$query->where(app('db')->raw(1), 1);
+				$query->where(app('db')->raw(1), 0);
 
 				collect(explode(' ', $term))
 				->reject(function($i)
@@ -544,7 +544,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
     public function getTypeById($id)
     {
-        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', (string)$id)->active()->firstOrFail();
     } 
 
     public function getModelByType()

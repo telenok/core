@@ -136,7 +136,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 	{
 		$content = [];
 
-		$wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', $container_id)->active()->orderBy('widget_order')->get();
+		$wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', (string)$container_id)->active()->orderBy('widget_order')->get();
 
 		$widgetConfig = app('telenok.config.repository')->getWidget();
 
@@ -235,7 +235,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 	{
 		$content = [];
 
-		$wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', $container_id)->orderBy('widget_order')->get();
+		$wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', (string)$container_id)->orderBy('widget_order')->get();
 
 		$widgetConfig = app('telenok.config.repository')->getWidget();
 
@@ -377,7 +377,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 		{ 
 			$newContainres[$key] = preg_replace('/(container-)(\d+)(-\d+-\d+)/', "\${1}" . $widgetOnPage->id . "\${3}", $container);
 
-			\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where("container", $container)->get()->each(function($item) use ($widgetOnPage, $buffer, $newContainres, $key)
+			\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where("container", (string)$container)->get()->each(function($item) use ($widgetOnPage, $buffer, $newContainres, $key)
 			{
 				$buffer = \App\Vendor\Telenok\Core\Model\System\Buffer::addBuffer(app('auth')->user()->getKey(), $item->getKey(), 'web-page', $buffer->key);
 				

@@ -15,6 +15,7 @@
 				this.presentationDomId = '';
 				this.moduleKey = '';
 				this.presentationParam = {};
+				this.presentationParam = {};
 			},
 			setBreadcrumbs: function(param)
 			{
@@ -74,7 +75,7 @@
 				});
 
 				jQuery('div.tab-content#tab-content-{{$presentation}}', tabs).append("<div class='tab-pane' id='" + id + "'>" + param.tabContent + "</div>");
-				jQuery('ul.nav-tabs#nav-tabs-{{$presentation}} a:last', tabs).on('shown.bs.tab', function (e) 
+				jQuery('ul.nav-tabs#nav-tabs-{{$presentation}} a:last', tabs).on('shown.bs.tab', function (e)
 					{
 						this_.setBreadcrumbs(this_.getPresentationParam()); 
 						this_.setPageHeader(); 
@@ -94,7 +95,7 @@
 			addTabByURL: function(param)
 			{ 
 				var _this = this;
-				
+
 				jQuery.ajax(jQuery.extend({}, {
 						method: 'get',
 						dataType: 'json',

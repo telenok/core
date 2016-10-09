@@ -231,11 +231,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         });
     }
 
-    public function getFilterQueryLike($str, $query, $model, $field)
+    public function getFilterQueryLike($str, $query, $model, $fieldCode)
     {
-        $query->where(function($query) use ($str, $query, $model, $field)
+        $query->where(function($query) use ($str, $query, $model, $fieldCode)
         {
-            $f = $model->getObjectField()->get($field);
+            $f = $model->getObjectField()->get($fieldCode);
             app('telenok.config.repository')
                     ->getObjectFieldController($f->key)
                     ->getFilterQuery($f, $model, $query, $f->code, $str);

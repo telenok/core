@@ -225,8 +225,10 @@ class Model {
         }
 
         $this->validator = app('validator')->make(
-                        $this->getInput()->toArray(), $this->getRuleList(), $this->getMessage(), $this->getInput()->merge($this->getCustomAttribute())->toArray()
-                )
+                    $this->getInput()->toArray(),
+                    $this->getRuleList(),
+                    $this->getMessage(),
+                    $this->getInput()->merge($this->getCustomAttribute())->toArray())
                 ->setModel($this->getModel());
 
         if ($this->validator()->passes())

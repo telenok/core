@@ -187,8 +187,9 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
                 else
                 {
                     $value['title'] = array_get($value, 'title', []);
-                    $value['default'] = array_get($value, 'default', 0);
                 }
+
+                $value['default'] = array_get($value, 'default', 0);
             }
 
             $model->setAttribute($key, json_encode($value, JSON_UNESCAPED_UNICODE));
@@ -222,7 +223,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         {
             $config = $field->select_one_data->toArray();
 
-            if (is_array(array_first(array_get($value, 'title'))))
+            if ($field->multilanguage)
             {
                 $locale = config('app.locale');
                 $title = array_get($config, 'title.' . $locale, []);
@@ -279,6 +280,15 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         {
             $query->whereIn($model->getTable() . '.' . $name, $value);
         }
+    }
+
+    /**
+     * @method getMultilanguageField
+     * @member Telenok.Core.Field.SelectOne.Controller
+     */
+    public function getMultilanguageField($model, $field)
+    {
+        return [];
     }
 
     /**

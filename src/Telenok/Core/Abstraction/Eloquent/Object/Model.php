@@ -634,7 +634,8 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             $t[$k] = $this->{$k};
         }
 
-        if ($input instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model) {
+        if ($input instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model)
+        {
             $input = $input->getAttributes();
         }
 
@@ -1009,7 +1010,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                     ->where('active_at_end', '>=', $r[0])
                     ->get();
 
-            static::$listField[$class] = collect(array_combine(array_pluck($f, 'code'), $f));
+            static::$listField[$class] = collect(array_combine(array_pluck($f, 'code'), $f->toArray()));
         }
 
         return static::$listField[$class];

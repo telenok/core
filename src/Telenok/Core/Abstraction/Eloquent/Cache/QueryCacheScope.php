@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Builder as Builder;
 use Illuminate\Database\Eloquent\Model as Model;
-use Illuminate\Database\Eloquent\ScopeInterface;
+use Illuminate\Database\Eloquent\Scope;
 
 /**
  * @class Telenok.Core.Abstraction.Eloquent.Cache.QueryCacheScope
@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\ScopeInterface;
  * @uses Illuminate.Database.Eloquent.Builder
  * @uses Illuminate.Database.Eloquent.Model
  * @uses Illuminate.Database.Eloquent.ScopeInterface
- * @extends Illuminate.Database.Eloquent.ScopeInterface
+ * @extends Illuminate.Database.Eloquent.Scope
  */
-class QueryCacheScope implements ScopeInterface {
+class QueryCacheScope implements Scope {
 
     /**
      * @method apply

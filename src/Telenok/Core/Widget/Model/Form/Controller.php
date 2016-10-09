@@ -340,7 +340,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
     public function getTypeById($id)
     {
-        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', (string)$id)->active()->firstOrFail();
     } 
 
     public function getTypeByModelId($id)

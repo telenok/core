@@ -44,7 +44,7 @@
         </div>
 
         <div class="widget-body">
-            <div class="widget-main">
+            <div class="widget-main many-language-{{$uniqueId}}">
                 <div class="row">
                     <div class="col-sm-12">
                         <ul class="nav nav-tabs">
@@ -59,7 +59,7 @@
                         <div class="tab-content">
                             @foreach($languages as $language)
                             <div class="tab-pane in <?php if ($language->locale == $localeDefault) echo "active"; ?>" id="{{$uniqueId}}-language-{{$language->locale}}-{{$model->code}}">
-                                <input type="text" value="" name="select_many_data[title][{{$language->locale}}][]" class="title-{{$language->locale}} col-xs-12 col-sm-12">
+                                <input type="text" value="" name="select_many_data[title][{{$language->locale}}][]" class="multilanguage-field title-{{$language->locale}} col-xs-12 col-sm-12">
                             </div>
                             @endforeach
                         </div> 
@@ -70,10 +70,10 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label no-padding-right" for="select_many_data[key][]">{{$controller->LL('row.title.key')}}</label>
                         <div class="col-sm-9 select-many-group">
-                            <input type="text" name="select_many_data[key][]" value="" placeholder="Key value" class="input-large key-value" />
+                            <input type="text" name="select_many_data[key][]" value="" placeholder="Key value" class="multilanguage-field input-large key-value" />
                             <label class="inline">
-                                <input type="hidden" class="key-default-hidden" name="select_many_data[default][]" value="" />
-                                <input type="checkbox" class="ace key-default" />
+                                <input type="hidden" class="multilanguage-field key-default-hidden" name="select_many_data[default][]" value="" />
+                                <input type="checkbox" class="multilanguage-field ace key-default" />
                                 <span class="lbl"> {{$controller->LL('row.title.key.default')}}</span>
                             </label>
                         </div>
@@ -81,6 +81,43 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="widget-body">
+            <div class="widget-main one-language-{{$uniqueId}}">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#{{$uniqueId}}-language">
+                                    {{$controller->LL('title.value')}}
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane in active" id="{{$uniqueId}}-language">
+                                <input type="text" value="" name="select_many_data[title][]" class="onelanguage-field col-xs-12 col-sm-12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right" for="select_many_data[]">{{$controller->LL('row.title.key')}}</label>
+                        <div class="col-sm-9 select-many-group">
+                            <input type="text" name="select_many_data[key][]" value="" placeholder="Key value" class="onelanguage-field input-large key-value" />
+                            <label class="inline">
+                                <input type="hidden" class="onelanguage-field key-default-hidden" name="select_many_data[default][]" value="" />
+                                <input type="checkbox" class="onelanguage-field ace key-default" />
+                                <span class="lbl"> {{$controller->LL('row.title.key.default')}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </template>
@@ -98,7 +135,6 @@
     <div class="widget-body">
         <div class="widget-main form-group"> 
             <div class="col-sm-12 select-many-container"> 
-                
             </div>
         </div>
     </div>
@@ -112,6 +148,30 @@
         $default = $model->select_many_data->get('default', []);
     ?>
 
+    var $form{{$uniqueId}} = jQuery('#model-ajax-{{$uniqueId}}');
+    var $multilanguage{{$uniqueId}} = jQuery('input[name=multilanguage]', $form{{$uniqueId}});
+
+    var closureMultilanguage{{$uniqueId}} = function()
+    {
+        if (jQuery('input:checked[name=multilanguage]', $form{{$uniqueId}}).val() == 1)
+        {
+            $('.onelanguage-field', $form{{$uniqueId}}).attr('disabled', 'disabled');
+            $('.multilanguage-field', $form{{$uniqueId}}).removeAttr('disabled');
+
+            jQuery('.many-language-{{$uniqueId}}', $form{{$uniqueId}}).show();
+            jQuery('.one-language-{{$uniqueId}}', $form{{$uniqueId}}).hide();
+        }
+        else
+        {
+            $('input.multilanguage-field').attr('disabled', 'disabled');
+            $('input.onelanguage-field').removeAttr('disabled');
+
+            jQuery('.many-language-{{$uniqueId}}', $form{{$uniqueId}}).hide();
+            jQuery('.one-language-{{$uniqueId}}', $form{{$uniqueId}}).show();
+        }
+    };
+
+
     var data{{$uniqueId}} = []; 
 
     @foreach($allKeys as $k => $key)
@@ -122,11 +182,19 @@
             'default': '{{(in_array($key, $default, true) ? $key : "")}}',
         };
 
-        @foreach($languages as $l)
+        @if ($model->multilanguage)
 
-            insert['title']["{{$l->locale}}"] = "{{array_get($selectManyData, 'title.'.$l->locale.'.'.$k)}}";
+            @foreach($languages as $l)
 
-        @endforeach
+                insert['title']["{{$l->locale}}"] = "{{array_get($selectManyData, 'title.'.$l->locale.'.'.$k)}}";
+
+            @endforeach
+
+        @else
+
+            insert['title'] = "{{array_get($selectManyData, 'title.'.$k)}}";
+
+        @endif
 
         data{{$uniqueId}}.push(insert);
 
@@ -179,11 +247,14 @@
         jQuery("input.key-value", $templateClone).on('keyup', function()
         {
             jQuery(".widget-title", $templateClone).text("{{$controller->LL('row.title')}}" + this.value);
-              
+
+            jQuery("input.key-value", $templateClone).val(this.value);
+/*
             if (jQuery("input.key-default", $templateClone).prop('checked'))
             {
                 jQuery("input.key-default-hidden", $templateClone).val(this.value);
             }
+*/
         }); 
 
         jQuery('div.widget-header a[data-action="close"]', $templateClone).on('click', function()
@@ -192,20 +263,26 @@
             {
                 addSelectManyRow{{$uniqueId}}();
             }
-        })
+        });
+
+        closureMultilanguage{{$uniqueId}}();
 
         return $templateClone;
     }
 
     if (data{{$uniqueId}}.length)
     {
-        data{{$uniqueId}}.forEach(function(o) 
+        data{{$uniqueId}}.forEach(function(o)
         {
             $templateClone = addSelectManyRow{{$uniqueId}}();
 
             for(var key in o.title)
             {
-                 jQuery("input[name='select_many_data\[title\]\[" + key + "\]\[\]']", $templateClone).val(o.title[key]);
+                @if ($model->multilanguage)
+                    jQuery("input[name='select_many_data\[title\]\[" + key + "\]\[\]']", $templateClone).val(o.title[key]);
+                @else
+                    jQuery("input[name='select_many_data\[title\]\[\]']", $templateClone).val(o.title);
+                @endif
             }
 
             jQuery(".widget-title", $templateClone).text("{{$controller->LL('row.title')}}" + o.key); 
@@ -232,7 +309,13 @@
         delay: 150,
         cursor: "move",
         handle: ".widget-header"
-    }); 
+    });
+
+    closureMultilanguage{{$uniqueId}}();
+
+    $multilanguage{{$uniqueId}}.change(function() { closureMultilanguage{{$uniqueId}}(); });
+
+
 
     jQuery('div.field-select-many-{{$uniqueId}}').on('click', 'a[data-action="clone-row"]', function()
     {

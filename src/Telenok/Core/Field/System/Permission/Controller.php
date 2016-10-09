@@ -301,8 +301,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         if (in_array('title', $model->getTranslatedField(), true)) {
             $query->join('object_translation', function ($join) use ($model) {
                 $join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id')
-                    ->on('object_translation.translation_object_field_code', '=', app('db')->raw("'title'"))
-                    ->on('object_translation.translation_object_language', '=', app('db')->raw("'" . config('app.locale') . "'"));
+                    ->where('object_translation.translation_object_field_code', app('db')->raw("'title'"))
+                    ->where('object_translation.translation_object_language', app('db')->raw("'" . config('app.locale') . "'"));
             });
         }
 
@@ -313,10 +313,10 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         $query->where(function ($query) use ($term, $model)
         {
-            $query->where(app('db')->raw(1), 1);
-
             if (trim($term))
             {
+                $query->where(app('db')->raw(1), 0);
+
                 collect(explode(' ', $term))
                     ->reject(function ($i)
                     {
@@ -326,11 +326,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
                     {
                         if (in_array('title', $model->getTranslatedField(), true))
                         {
-                            $query->where('object_translation.translation_object_string', 'like', "%{$i}%");
+                            $query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
                         }
                         else
                         {
-                            $query->where($model->getTable() . '.title', 'like', "%{$i}%");
+                            $query->orWhere($model->getTable() . '.title', 'like', "%{$i}%");
                         }
                     });
 

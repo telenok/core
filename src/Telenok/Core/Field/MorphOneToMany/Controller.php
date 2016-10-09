@@ -314,7 +314,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 		if ($input->get('morph_one_to_many_has'))
 		{
 			$input->put('morph_one_to_many_belong_to', 0);
-            $input->put('morph_one_to_many_has', intval(\App\Vendor\Telenok\Core\Model\Object\Type::where('code', $input->get('morph_one_to_many_has'))->orWhere('id', $input->get('morph_one_to_many_has'))->value('id')));
+            $input->put('morph_one_to_many_has', intval(\App\Vendor\Telenok\Core\Model\Object\Type::where('code', (string)$input->get('morph_one_to_many_has'))->orWhere('id', $input->get('morph_one_to_many_has'))->value('id')));
         }
         else
         {
@@ -435,7 +435,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
             $f = \App\Vendor\Telenok\Core\Model\Object\Field::where(function($query) use ($relatedSQLField, $model)
                     {
-                        $query->where('code', $relatedSQLField);
+                        $query->where('code', (string)$relatedSQLField);
                         $query->where('field_object_type', $model->morph_one_to_many_has);
                     })
                     ->first();

@@ -51,7 +51,7 @@ class Acl {
         }
         else if (is_string($id))
         {
-            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $id)->first();
+            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$id)->first();
         }
 
         if (!$resource)
@@ -86,7 +86,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $subject = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $id)->first();
+            $subject = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$id)->first();
         }
 
         if (!$subject)
@@ -231,7 +231,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', (string)$id)->orWhere('id', $id)->first();
         }
 
         if (!$role)
@@ -261,7 +261,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $group = \App\Vendor\Telenok\Core\Model\User\Group::where('code', $id)->orWhere('id', $id)->first();
+            $group = \App\Vendor\Telenok\Core\Model\User\Group::where('code', (string)$id)->orWhere('id', $id)->first();
         }
 
         if (!$group)
@@ -314,7 +314,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', (string)$id)->orWhere('id', $id)->first();
         }
 
         if ($role)
@@ -367,7 +367,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $id)->orWhere('id', $id)->first();
+            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$id)->orWhere('id', $id)->first();
         }
 
         if ($resource)
@@ -421,7 +421,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', $id)->orWhere('id', $id)->first();
+            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', (string)$id)->orWhere('id', $id)->first();
         }
 
         if ($permission)
@@ -490,7 +490,7 @@ class Acl {
         }
         else if (is_scalar($permissionCode))
         {
-            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->first();
+            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', (string)$permissionCode)->orWhere('id', $permissionCode)->first();
         }
 
         if (!$permission)
@@ -508,7 +508,7 @@ class Acl {
         }
         else if (is_string($resourceCode))
         {
-            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $resourceCode)->first();
+            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$resourceCode)->first();
         }
 
         if (!$resource)
@@ -613,7 +613,7 @@ class Acl {
         }
         else if (is_scalar($permissionCode))
         {
-            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->first();
+            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', (string)$permissionCode)->orWhere('id', $permissionCode)->first();
         }
 
         if ($subjectCode instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model)
@@ -626,7 +626,7 @@ class Acl {
         }
         else if (is_string($subjectCode))
         {
-            $subject = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $subjectCode)->orWhere('id', $subjectCode)->first();
+            $subject = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$subjectCode)->orWhere('id', $subjectCode)->first();
         }
 
         $query = \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource::where('acl_resource_object_sequence', $resource->getKey());
@@ -683,7 +683,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $group = \App\Vendor\Telenok\Core\Model\User\Group::where('code', $id)->orWhere('id', $id)->first();
+            $group = \App\Vendor\Telenok\Core\Model\User\Group::where('code', (string)$id)->orWhere('id', $id)->first();
         }
 
         if (!$group)
@@ -732,7 +732,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $group = \App\Vendor\Telenok\Core\Model\User\Group::where('code', $id)->orWhere('id', $id)->first();
+            $group = \App\Vendor\Telenok\Core\Model\User\Group::where('code', (string)$id)->orWhere('id', $id)->first();
         }
 
         if (!$group)
@@ -777,7 +777,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', (string)$id)->orWhere('id', $id)->first();
         }
 
         if (!$role)
@@ -826,7 +826,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', (string)$id)->orWhere('id', $id)->first();
         }
 
         if (!$role)
@@ -908,7 +908,7 @@ class Acl {
         }
         else if (is_string($resourceCode))
         {
-            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $resourceCode)->first();
+            $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$resourceCode)->first();
         }
 
         if (!$resource)
@@ -922,7 +922,7 @@ class Acl {
         }
         else if (is_scalar($permissionCode))
         {
-            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', $permissionCode)->orWhere('id', $permissionCode)->active()->first();
+            $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('code', (string)$permissionCode)->orWhere('id', $permissionCode)->active()->first();
         }
 
         if (!$permission)
@@ -939,8 +939,8 @@ class Acl {
         $query->join($type->getTable() . ' as otype', function($join) use ($type, $r, $sequence)
         {
             $join->on($sequence->getTable() . '.sequences_object_type', '=', 'otype.id');
-            $join->on('otype.' . $type->getDeletedAtColumn(), ' is ', app('db')->raw("null"));
-            $join->where('otype.active', '=', 1);
+            $join->where('otype.' . $type->getDeletedAtColumn(), ' is ', app('db')->raw("null"));
+            $join->where('otype.active', 1);
             $join->where('otype.active_at_start', '<=', $r[1]);
             $join->where('otype.active_at_end', '>=', $r[0]);
         });
@@ -1016,7 +1016,7 @@ class Acl {
         }
         else if (is_scalar($id))
         {
-            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', $id)->orWhere('id', $id)->active()->first();
+            $role = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', (string)$id)->orWhere('id', $id)->active()->first();
         }
 
         if (!$role)

@@ -187,7 +187,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function extendValidator()
     {
-        app('validator')->extend('valid_regex', function($attribute, $value, $parameters)
+        app('validator')->extend('valid_regex', function($attribute, $value, $parameters, $validator)
         {
             return (@preg_match($value, NULL) !== FALSE);
         });

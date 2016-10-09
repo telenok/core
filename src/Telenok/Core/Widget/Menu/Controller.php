@@ -162,7 +162,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
         $class = \App\Vendor\Telenok\Core\Model\Object\Type::where(function($query)
         {
             $query->where('id', $this->objectType);
-            $query->orWhere('code', $this->objectType);
+            $query->orWhere('code', (string)$this->objectType);
         })
         ->active()
         ->first()
@@ -243,7 +243,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 			{
 				if (trim($term))
 				{
-                    $query->where(app('db')->raw(1), 1);
+                    $query->where(app('db')->raw(1), 0);
 
 					collect(explode(' ', $term))
 					->reject(function($i)

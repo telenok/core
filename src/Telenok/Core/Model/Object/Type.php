@@ -37,7 +37,7 @@ class Type extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         $code = 'object_type.' . $this->code;
 
-        \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $code)->forceDelete();
+        \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$code)->forceDelete();
     }
 
     protected function translateSync()

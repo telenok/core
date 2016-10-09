@@ -14,10 +14,10 @@
 
     $title = $field->select_many_data->get('title', []);
     $keys = $field->select_many_data->get('key', []);
+    $default = $field->select_many_data->get('default', []);
 
     if ($field->multilanguage)
     {
-        $default = $field->select_many_data->get('default', []);
         $titleLocale = array_get($title, $locale, []);
 
         if (empty($titleLocale))
@@ -31,6 +31,7 @@
     {
         $values = array_combine($keys, $title);
     }
+
 ?>
 
 <div class="form-group" data-field-key='{{ $field->code }}'>
@@ -48,7 +49,7 @@
 		<div>
             @endif	
             
-            {!! Form::select($field->code . '[]', $values, $model->exists ? $model->{$field->code} : $default, $domAttr) !!}
+            {!! Form::select($field->code . '[]', $values, $model->exists ? $model->{$field->code}->all() : $default, $domAttr) !!}
 
             @if ($field->translate('description'))
             <span title="" data-content="{{ $field->translate('description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 

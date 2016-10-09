@@ -1,12 +1,12 @@
-<?php 
-    
-    $domAttr = ['id' => $field->code . '-' . $uniqueId, 'class' => $field->css_class?: ''];
+<?php
+
+    $domAttr = ['id' => $field->code . '-' . $uniqueId, 'class' => 'ace ' . ($field->css_class?: '')];
     $disabled = false;
 
-	if ( (!$model->exists && (!$field->allow_create || !$permissionCreate)) || ($model->exists && (!$field->allow_update || !$permissionUpdate)) )
+    if ( (!$model->exists && (!$field->allow_create || !$permissionCreate)) || ($model->exists && (!$field->allow_update || !$permissionUpdate)) )
     {
         $domAttr['disabled'] = 'disabled';
-        $disabled = true; 
+        $disabled = true;
     }
 
     $localeDefault = config('app.localeDefault');
@@ -14,10 +14,10 @@
 
     $title = $field->select_many_data->get('title', []);
     $keys = $field->select_many_data->get('key', []);
+    $default = $field->select_many_data->get('default', []);
 
     if ($field->multilanguage)
     {
-        $default = $field->select_many_data->get('default', []);
         $titleLocale = array_get($title, $locale, []);
 
         if (empty($titleLocale))
@@ -48,7 +48,7 @@
                 ?>
 
                 <label class="btn btn-white btn-sm btn-primary @if ($checked) active @endif" @if ($disabled) disabled="disabled" @endif>
-                    {!! Form::checkbox($field->code . '[]', $k, $checked, $domAttr); !!}
+                    {!! Form::checkbox($field->code . '[]', $k, $checked, $domAttr) !!} {{$v}}
                 </label>
 
                 @endforeach

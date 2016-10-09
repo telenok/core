@@ -45,7 +45,7 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         $code = 'object_field.' . $type->code . '.' . $this->code;
 
-        if (!\App\Vendor\Telenok\Core\Model\Security\Resource::where('code', $code)->count())
+        if (!\App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$code)->count())
         {
             (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
                 'title' => 'Object ' . $type->code . '. Field ' . $this->code,

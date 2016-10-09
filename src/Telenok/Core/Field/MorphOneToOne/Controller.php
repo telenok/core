@@ -600,7 +600,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
             $f = \App\Vendor\Telenok\Core\Model\Object\Field::where(function($query) use ($relatedSQLField, $model)
                     {
-                        $query->where('code', $relatedSQLField);
+                        $query->where('code', (string)$relatedSQLField);
                         $query->where('field_object_type', $model->morph_one_to_one_has);
                     })
                     ->first();

@@ -6,4 +6,5 @@ return array(
     'row.title' => 'Key #',
     'row.title.key' => 'Key',
     'row.title.key.default' => 'default',
+    'title.value' => 'Title',
 );

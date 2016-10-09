@@ -145,6 +145,8 @@ class CKEditor extends \App\Vendor\Telenok\Core\Controller\Backend\Controller {
                     ->withPermission()
                     ->where(function($query)
                     {
+                        $query->where(app('db')->raw(1), 0);
+
                         if ($this->getRequest()->input('file_type'))
                         {
                             foreach (\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION as $ext)

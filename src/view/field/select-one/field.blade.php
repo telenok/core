@@ -142,16 +142,16 @@
     {
         if (jQuery('input:checked[name=multilanguage]', $form{{$uniqueId}}).val() == 1)
         {
-            $('input.onelanguage-field').attr('disabled', 'disabled');
-            $('input.multilanguage-field').removeAttr('disabled');
+            $('.onelanguage-field', $form{{$uniqueId}}).attr('disabled', 'disabled');
+            $('.multilanguage-field', $form{{$uniqueId}}).removeAttr('disabled');
 
             jQuery('.many-language-{{$uniqueId}}', $form{{$uniqueId}}).show();
             jQuery('.one-language-{{$uniqueId}}', $form{{$uniqueId}}).hide();
         }
         else
         {
-            $('input.multilanguage-field').attr('disabled', 'disabled');
-            $('input.onelanguage-field').removeAttr('disabled');
+            $('.multilanguage-field').attr('disabled', 'disabled');
+            $('.onelanguage-field').removeAttr('disabled');
 
             jQuery('.many-language-{{$uniqueId}}', $form{{$uniqueId}}).hide();
             jQuery('.one-language-{{$uniqueId}}', $form{{$uniqueId}}).show();
@@ -173,6 +173,7 @@
         };
 
         @if ($model->multilanguage)
+
             @foreach($languages as $l)
 
                 insert['title']["{{$l->locale}}"] = "{{array_get($selectOneData, 'title.'.$l->locale.'.'.$key)}}";

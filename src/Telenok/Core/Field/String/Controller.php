@@ -63,13 +63,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
                 $query->leftJoin($translate->getTable(), function($join) use ($model, $translate, $fieldCode)
                 {
                     $join->on($model->getTable() . '.id', '=', $translate->getTable() . '.translation_object_model_id')
-                            ->on($translate->getTable() . '.translation_object_field_code', '=', app('db')->raw("'" . $fieldCode . "'"))
-                            ->on($translate->getTable() . '.translation_object_language', '=', app('db')->raw("'" . config('app.locale') . "'"));
+                            ->where($translate->getTable() . '.translation_object_field_code', app('db')->raw("'" . $fieldCode . "'"))
+                            ->where($translate->getTable() . '.translation_object_language', app('db')->raw("'" . config('app.locale') . "'"));
                 });
 
                 $query->where(function($query) use ($value, $model, $translate)
                 {
-                    $query->where(app('db')->raw(1), 1);
+                    $query->where(app('db')->raw(1), 0);
 
                     collect(explode(' ', $value))
                             ->filter(function($i)

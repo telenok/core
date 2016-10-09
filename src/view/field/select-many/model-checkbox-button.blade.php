@@ -14,10 +14,10 @@
 
     $title = $field->select_many_data->get('title', []);
     $keys = $field->select_many_data->get('key', []);
+    $default = $field->select_many_data->get('default', []);
 
     if ($field->multilanguage)
     {
-        $default = $field->select_many_data->get('default', []);
         $titleLocale = array_get($title, $locale, []);
 
         if (empty($titleLocale))
@@ -51,7 +51,7 @@
 
                 <div class="checkbox">
                     <label>
-                        {!! Form::checkbox($field->code . '[]', $k, $checked, $domAttr); !!}
+                        {!! Form::checkbox($field->code . '[]', $k, $checked, $domAttr) !!}
                         <span class="lbl"> {{$v}}</span>
                     </label>
                 </div>

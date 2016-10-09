@@ -10,6 +10,10 @@ class AuthController extends \Telenok\Core\Abstraction\Controller\Backend\Contro
 
     use \Illuminate\Foundation\Auth\ThrottlesLogins;
 
+    const ERROR_LOGIN_PASSWORD = 1;
+    const ERROR_THROTTLE = 2;
+
+
     protected $key = 'auth';
 
     /**
@@ -50,17 +54,27 @@ class AuthController extends \Telenok\Core\Abstraction\Controller\Backend\Contro
      */
     public function postLogin(\Illuminate\Http\Request $request)
     {
-        $v = app('validator')->make($request->all(), [
-            'username' => 'required', 'password' => 'required',
-        ]);
+        $v = app('validator')->make($request->all(), [$this->username() => 'required', 'password' => 'required']);
 
         if ($v->fails())
         {
-            return json_encode(['error' => 1]);
+            return json_encode(['error' => static::ERROR_LOGIN_PASSWORD]);
         } 
         else
         {
-            $credentials = $request->only('username', 'password');
+            // If the class is using the ThrottlesLogins trait, we can automatically throttle
+            // the login attempts for this application. We'll key this by the username and
+            // the IP address of the client making these requests into this application.
+            if ($this->hasTooManyLoginAttempts($request))
+            {
+                $this->fireLockoutEvent($request);
+
+                $seconds = $this->limiter()->availableIn($this->throttleKey($request));
+
+                return json_encode(['error' => static::ERROR_THROTTLE, 'seconds' => $seconds]);
+            }
+
+            $credentials = $request->only($this->username(), 'password');
 
             if ($this->auth->attempt($credentials, $request->has('remember')))
             {
@@ -74,7 +88,7 @@ class AuthController extends \Telenok\Core\Abstraction\Controller\Backend\Contro
                 }
             }
 
-            return json_encode(['error' => 1]);
+            return json_encode(['error' => static::ERROR_LOGIN_PASSWORD]);
         }
     }
 
@@ -89,4 +103,13 @@ class AuthController extends \Telenok\Core\Abstraction\Controller\Backend\Contro
         return ['success' => true];
     }
 
+    /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return 'username';
+    }
 }

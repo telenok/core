@@ -1026,7 +1026,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getType($id)
     {
-        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', $id)->active()->firstOrFail();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::where('id', $id)->orWhere('code', (string)$id)->active()->firstOrFail();
     }
 
     /**
@@ -1079,7 +1079,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function validator($model = null, $input = [], $message = [], $customAttribute = [])
     {
-        return app('\Telenok\Core\Support\Validator\Model')
+        return app('\App\Vendor\Telenok\Core\Support\Validator\Model')
                         ->setModel($model ? : $this->getModelList())
                         ->setInput($input)
                         ->setMessage($message)
@@ -1184,20 +1184,20 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      * @return {void}
      * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
      */
-    public function getFilterQueryLike($value, $query, $model, $field)
+    public function getFilterQueryLike($value, $query, $model, $fieldCode)
     {
-        $query->where(function($query) use ($value, $model, $field)
+        $query->where(function($query) use ($value, $model, $fieldCode)
         {
-            $query->where(app('db')->raw(1), 1);
+            $query->where(app('db')->raw(1), 0);
 
             collect(explode(' ', $value))
                     ->filter(function($i)
                     {
                         return trim($i);
                     })
-                    ->each(function($i) use ($query, $model, $field)
+                    ->each(function($i) use ($query, $model, $fieldCode)
                     {
-                        $query->orWhere($model->getTable() . '.' . $field, 'like', '%' . trim($i) . '%');
+                        $query->orWhere($model->getTable() . '.' . $fieldCode, 'like', '%' . trim($i) . '%');
                     });
 
             $query->orWhere($model->getTable() . '.id', intval($value));
@@ -1399,7 +1399,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
             }
             else
             {
-                $parents = $list->lists('id', 'tree_pid');
+                $parents = $list->pluck('id', 'tree_pid');
 
                 foreach ($list as $key => $item)
                 {
