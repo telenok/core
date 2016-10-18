@@ -626,36 +626,22 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Telenok\Core\Abstraction\Eloquent\Object\Model::storeOrUpdate() - Error: "type of object not found, please, define it"');
         }
 
-        // merge attributes if model filled via $model->fill() and plus ->storeOrUpdate([some attributes])
-        $t = [];
-
-        foreach ($this->getAttributes() as $k => $v)
-        {
-            $t[$k] = $this->{$k};
-        }
 
         if ($input instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model)
         {
-            $input = $input->getAttributes();
+            $input = collect($input->getAttributes());
+        }
+        else
+        {
+            $input = collect($input);
         }
 
-        $input = collect($t)->merge($input);
 
         try
         {
             if (!$this->exists)
             {
                 $model = $this->findOrFail($input->get($this->getKeyName()));
-
-                // if model exists - add its attributes to $input for process all attributes in events
-                $t = [];
-
-                foreach ($model->getAttributes() as $k => $v)
-                {
-                    $t[$k] = $model->{$k};
-                }
-
-                $input = collect($t)->merge($input);
             }
             else
             {
@@ -667,25 +653,25 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             $model = new static();
         }
 
+
+        foreach ($model->fillable as $k)
+        {
+            // set the default value
+            if (!$model->exists)
+            {
+                $model->{$k} = null;
+            }
+
+            if (!$input->has($k))
+            {
+                $input->put($k, $model->{$k});
+            }
+        }
+
+
         if ($withPermission)
         {
             $model->validateStoreOrUpdatePermission($type, $input);
-        }
-
-        foreach ($model->fillable as $fillable)
-        {
-            if ($input->has($fillable))
-            {
-            }
-            else if (!$model->exists)
-            {
-                $model->{$fillable} = null;
-                $input->put($fillable, null);
-            }
-            else
-            {
-                //$input->put($fillable, $model->{$fillable});
-            }
         }
 
         try
@@ -773,11 +759,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         {
             $attr = [];
 
-            $attr['table'] = $this->getTable();
+            $attr['custom_table'] = $this->getTable();
 
             foreach ($this->getFieldForm() as $field)
             {
-                $attr[$field->code] = $field->translate('title');
+                $attr['custom_' . $field->code] = $field->translate('title');
             }
         }
 
@@ -1174,17 +1160,31 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             {
                 foreach ($value as $key_ => $value_)
                 {
-                    static::$listRule[$class][$key][head(explode(':', $value_))] = $value_;
+                    if (in_array($key, $this->getTranslatedField()))
+                    {
+                        static::$listRule[$class][$key . '.*'][head(explode(':', $value_))] = $value_;
+                    }
+                    else
+                    {
+                        static::$listRule[$class][$key][head(explode(':', $value_))] = $value_;
+                    }
                 }
             }
 
-            foreach ($this->type()->field()->active()->get() as $key => $field)
+            foreach (static::$listField[$class]->all() as $key => $field)
             {
                 if ($field->rule instanceof \Illuminate\Support\Collection)
                 {
                     foreach ($field->rule->all() as $key => $value)
                     {
-                        static::$listRule[$class][$field->code][head(explode(':', $value))] = $value;
+                        if (in_array($field->code, $this->getTranslatedField()))
+                        {
+                            static::$listRule[$class][$field->code . '.*'][head(explode(':', $value))] = $value;
+                        }
+                        else
+                        {
+                            static::$listRule[$class][$field->code][head(explode(':', $value))] = $value;
+                        }
                     }
                 }
             }

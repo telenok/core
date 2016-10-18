@@ -175,7 +175,7 @@ class Setting {
      */
     public function passes()
     {
-        $this->validator = app('validator')->make($this->getInput()->toArray(), $this->getRuleList(), $this->getMessage());
+        $this->validator = app('validator_telenok')->make($this->getInput()->toArray(), $this->getRuleList(), $this->getMessage());
 
         if ($this->validator->passes()) return true;
         

@@ -424,11 +424,8 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             }
 
             $validator = app('validator')->make(
-                    [
-                'name' => $name,
-                    ], [
-                'name' => ['required', 'regex:/^[\w .-]+$/u'],
-                    ]
+                ['name' => $name], 
+                ['name' => ['required', 'regex:/^[\w .-]+$/u']]
             );
 
             if ($validator->fails())

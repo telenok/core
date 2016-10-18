@@ -224,7 +224,7 @@ class Model {
             }
         }
 
-        $this->validator = app('validator')->make(
+        $this->validator = app('validator_telenok')->make(
                     $this->getInput()->toArray(),
                     $this->getRuleList(),
                     $this->getMessage(),

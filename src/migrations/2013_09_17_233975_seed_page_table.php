@@ -19,103 +19,103 @@ class SeedPageTable extends Migration {
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-				[
-                    'title' => ['ru' => "Заголовок в теге <meta>", 'en' => "Title in <meta> tag"],
-                    'title_list' => ['ru' => "Заголовок в теге <meta>", 'en' => "Title in <meta> tag"],
-                    'key' => 'string',
-                    'code' => 'title_ceo',
-                    'active' => 1,
-                    'field_object_type' => $modelTypeId,
-                    'field_object_tab' => $tabMainId,
-                    'multilanguage' => 1,
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'required' => 0,
-                    'field_order' => 3,
-                ]
+            [
+                'title' => ['ru' => "Заголовок в теге <meta>", 'en' => "Title in <meta> tag"],
+                'title_list' => ['ru' => "Заголовок в теге <meta>", 'en' => "Title in <meta> tag"],
+                'key' => 'string',
+                'code' => 'title_ceo',
+                'active' => 1,
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 1,
+                'show_in_form' => 1,
+                'show_in_list' => 0,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'required' => 0,
+                'field_order' => 3,
+            ]
         );
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-				[
-                    'title' => ['ru' => "Ключевые слова в теге <meta>", 'en' => "Keywords in <meta> tag"],
-                    'title_list' => ['ru' => "Ключевые слова в теге <meta>", 'en' => "Keywords in <meta> tag"],
-                    'key' => 'string',
-                    'code' => 'keywords_ceo',
-                    'active' => 1,
-                    'field_object_type' => $modelTypeId,
-                    'field_object_tab' => $tabMainId,
-                    'multilanguage' => 1,
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'required' => 0,
-                    'field_order' => 4,
-                ]
+            [
+                'title' => ['ru' => "Ключевые слова в теге <meta>", 'en' => "Keywords in <meta> tag"],
+                'title_list' => ['ru' => "Ключевые слова в теге <meta>", 'en' => "Keywords in <meta> tag"],
+                'key' => 'string',
+                'code' => 'keywords_ceo',
+                'active' => 1,
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 1,
+                'show_in_form' => 1,
+                'show_in_list' => 0,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'required' => 0,
+                'field_order' => 4,
+            ]
         );
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-				[
-                    'title' => ['ru' => "Описание in <meta> tag", 'en' => "Description in <meta> tag"],
-                    'title_list' => ['ru' => "Описание in <meta> tag", 'en' => "Description in <meta> tag"],
-                    'key' => 'string',
-                    'code' => 'description_ceo',
-                    'active' => 1,
-                    'field_object_type' => $modelTypeId,
-                    'field_object_tab' => $tabMainId,
-                    'multilanguage' => 1,
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'required' => 0,
-                    'field_order' => 5,
-                ]
+            [
+                'title' => ['ru' => "Описание in <meta> tag", 'en' => "Description in <meta> tag"],
+                'title_list' => ['ru' => "Описание in <meta> tag", 'en' => "Description in <meta> tag"],
+                'key' => 'string',
+                'code' => 'description_ceo',
+                'active' => 1,
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 1,
+                'show_in_form' => 1,
+                'show_in_list' => 0,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'required' => 0,
+                'field_order' => 5,
+            ]
         );
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-				[
-                    'title' => ['ru' => "Имя файла шаблона", 'en' => "File name of template"],
-                    'title_list' => ['ru' => "Имя файла шаблона", 'en' => "File name of template"],
-                    'key' => 'string',
-                    'code' => 'template_view',
-                    'active' => 1,
-                    'field_object_type' => $modelTypeId,
-                    'field_object_tab' => $tabMainId,
-                    'multilanguage' => 1,
-                    'show_in_form' => 1,
-                    'show_in_list' => 1,
-                    'allow_search' => 1,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 6,
-                ]
+            [
+                'title' => ['ru' => "Имя файла шаблона", 'en' => "File name of template"],
+                'title_list' => ['ru' => "Имя файла шаблона", 'en' => "File name of template"],
+                'key' => 'string',
+                'code' => 'template_view',
+                'active' => 1,
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 1,
+                'show_in_form' => 1,
+                'show_in_list' => 1,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'field_order' => 6,
+            ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-                [
-                    'title' => ['ru' => "Период кэширования", 'en' => "Cache time"],
-                    'title_list' => ['ru' => "Период кэширования", 'en' => "Cache time"],
-                    'description' => ['ru' => "Период кэширования задается в минутах от 0 (без кэширования)", 'en' => "Cache time in minutes from 0 (no cache)"],
-                    'key' => 'integer-unsigned',
-                    'code' => 'cache_time',
-                    'active' => 1,
-                    'integer_unsigned_default' => 3600,
-                    'field_object_type' => $modelTypeId,
-                    'field_object_tab' => $tabMainId,
-                    'multilanguage' => 0,
-                    'show_in_form' => 1,
-                    'show_in_list' => 1,
-                    'allow_search' => 1,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 7,
-                ]
+            [
+                'title' => ['ru' => "Период кэширования", 'en' => "Cache time"],
+                'title_list' => ['ru' => "Период кэширования", 'en' => "Cache time"],
+                'description' => ['ru' => "Период кэширования задается в минутах от 0 (без кэширования)", 'en' => "Cache time in minutes from 0 (no cache)"],
+                'key' => 'integer-unsigned',
+                'code' => 'cache_time',
+                'active' => 1,
+                'integer_unsigned_default' => 3600,
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 0,
+                'show_in_form' => 1,
+                'show_in_list' => 1,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'field_order' => 7,
+            ]
         );
 
 
@@ -146,8 +146,8 @@ class SeedPageTable extends Migration {
                 'key' => 'select-one',
                 'code' => 'action',
                 'select_one_data' => [
-                    'title' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-                    'key' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+                    'title' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+                    'key' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
                     'default' => 'GET'
                 ],
                 'active' => 1,
@@ -185,22 +185,22 @@ class SeedPageTable extends Migration {
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-                [
-                    'title' => ['en' => 'URL redirect', 'ru' => 'URL перенаправления'],
-                    'title_list' => ['en' => 'URL redirect', 'ru' => 'URL перенаправления'],
-                    'key' => 'string',
-                    'code' => 'url_redirect',
-                    'active' => 1,
-                    'field_object_type' => $modelTypeId,
-                    'field_object_tab' => $tabMainId,
-                    'multilanguage' => 0,
-                    'show_in_form' => 1,
-                    'show_in_list' => 1,
-                    'allow_search' => 1,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 10,
-                ]
+            [
+                'title' => ['en' => 'URL redirect', 'ru' => 'URL перенаправления'],
+                'title_list' => ['en' => 'URL redirect', 'ru' => 'URL перенаправления'],
+                'key' => 'string',
+                'code' => 'url_redirect',
+                'active' => 1,
+                'field_object_type' => $modelTypeId,
+                'field_object_tab' => $tabMainId,
+                'multilanguage' => 0,
+                'show_in_form' => 1,
+                'show_in_list' => 1,
+                'allow_search' => 1,
+                'allow_create' => 1,
+                'allow_update' => 1,
+                'field_order' => 10,
+            ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(

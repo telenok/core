@@ -241,6 +241,28 @@ class Repository {
                 ->active()
                 ->get();
 
+        $chooseHttpMethod = function($page)
+        {
+            switch ($page->action)
+            {
+                case 'GET':
+                    return 'get';
+                case 'POST':
+                    return 'post';
+                case 'PUT':
+                    return 'put';
+                case 'PATCH':
+                    return 'patch';
+                case 'DELETE':
+                    return 'delete';
+                case 'OPTIONS':
+                    return 'options';
+            }
+
+            return 'get';
+        };
+
+
         foreach ($domains->all() as $domain)
         {
             foreach ($pages->all() as $page)
@@ -252,14 +274,14 @@ class Repository {
 
                 if ($page->page_domain && $domain->getKey() == $page->page_domain)
                 {
-                    $routeDomain[$page->page_domain][] = 'app("router")->get("' . $page->getAttribute('url_pattern') . '", array("as" => "'
+                    $routeDomain[$page->page_domain][] = 'app("router")->' . $chooseHttpMethod($page) . '("' . $page->getAttribute('url_pattern') . '", array("as" => "'
                         . ($page->router_name ? : 'page_' . $page->getKey())
                         . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . ($page->controller_method ?:$page->pagePageController->controller_method) . '"));'
                     ;
                 }
                 else if (!$page->page_domain)
                 {
-                    $routeCommon[$page->getKey()] = 'app("router")->get("' . $page->getAttribute('url_pattern') . '", array("as" => "'
+                    $routeCommon[$page->getKey()] = 'app("router")->' . $chooseHttpMethod($page) . '("' . $page->getAttribute('url_pattern') . '", array("as" => "'
                         . ($page->router_name ? : 'page_' . $page->getKey())
                         . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . ($page->controller_method ?:$page->pagePageController->controller_method) . '"));'
                     ;

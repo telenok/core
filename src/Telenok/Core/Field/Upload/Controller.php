@@ -368,7 +368,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         if (!$rule->isEmpty())
         {
             $validator = app('validator')->make(
-                    array('file' => $protectedFile->getFile()), array('file' => implode('|', $rule->all()))
+                ['file' => $protectedFile->getFile()],
+                ['file' => implode('|', $rule->all())]
             );
 
             if ($validator->fails())

@@ -74,7 +74,9 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
         }
         else
         {
-            $modelType = \App\Vendor\Telenok\Core\Model\Object\Type::where('code', (string)$input->get('field_object_type'))->orWhere('id', $input->get('field_object_type'))->firstOrFail();
+            $modelType = \App\Vendor\Telenok\Core\Model\Object\Type::active()
+                            ->where('code', (string)$input->get('field_object_type'))
+                            ->orWhere('id', $input->get('field_object_type'))->firstOrFail();
 
             $input->put('field_object_type', $modelType->getKey());
         }

@@ -1,6 +1,7 @@
 <?php namespace Telenok\Core;
 
 use Illuminate\Support\ServiceProvider;
+use App\Vendor\Telenok\Core\Support\Validator\Factory;
 use Telenok\Core\Event\CompileRoute;
 use Telenok\Core\Event\CompileSetting;
 
@@ -59,6 +60,8 @@ class CoreServiceProvider extends ServiceProvider {
     {
         $this->registerConfigRepository();
 
+        $this->registerValidationFactory();
+        
         $this->registerCommandInstall();
         $this->registerCommandSeed();
         $this->registerCommandPackage();
@@ -142,6 +145,29 @@ class CoreServiceProvider extends ServiceProvider {
         }
     }
 
+    /**
+     * Register the validation factory.
+     *
+     * @return void
+     */
+    protected function registerValidationFactory()
+    {
+        $this->app->bind('validator_model', function ($app)
+        {
+            $validator = new Factory($app['translator'], $app);
+
+            // The validation presence verifier is responsible for determining the existence
+            // of values in a given data collection, typically a relational database or
+            // other persistent data stores. And it is used to check for uniqueness.
+            if (isset($app['validation.presence']))
+            {
+                $validator->setPresenceVerifier($app['validation.presence']);
+            }
+
+            return $validator;
+        });
+    }
+
     public function setAuthProvider()
     {
         // using custom provider
@@ -187,7 +213,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function extendValidator()
     {
-        app('validator')->extend('valid_regex', function($attribute, $value, $parameters, $validator)
+        app('validator_telenok')->extend('valid_regex', function($attribute, $value, $parameters, $validator)
         {
             return (@preg_match($value, NULL) !== FALSE);
         });
@@ -227,11 +253,6 @@ class CoreServiceProvider extends ServiceProvider {
         $this->app->resolving(\Telenok\Core\Contract\Injection\Request::class, function($object, $app)
         {
             $object->setRequest($app['request']);
-        });
-
-        app('validator')->resolver(function($translator, $data, $rules, $messages, $customAttributes)
-        {
-            return new \App\Vendor\Telenok\Core\Support\Validator\Validator($translator, $data, $rules, $messages, $customAttributes);
         });
     }
 
