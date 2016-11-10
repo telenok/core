@@ -243,7 +243,7 @@ class Repository {
 
         $chooseHttpMethod = function($page)
         {
-            switch ($page->action)
+            switch (strtoupper($page->http_method))
             {
                 case 'GET':
                     return 'get';

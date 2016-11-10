@@ -94,7 +94,7 @@ abstract class Controller {
             {
                 $join->on('spr.acl_subject_object_sequence', '=', 'role.id');
                 $join->where('role.active', 1);
-                $join->where('role.' . $spr->getDeletedAtColumn(), ' is ', app('db')->raw('null'));
+                $join->whereNull('role.' . $spr->getDeletedAtColumn());
             });
 
             $query->join('pivot_relation_m2m_role_group', function($join) use ($spr, $group, $role)
@@ -106,7 +106,7 @@ abstract class Controller {
             {
                 $join->on('pivot_relation_m2m_role_group.role_group', '=', 'group.id');
                 $join->where('group.active', 1);
-                $join->where('group.' . $spr->getDeletedAtColumn(), ' is ', app('db')->raw('null'));
+                $join->whereNull('group.' . $spr->getDeletedAtColumn());
             });
 
             $query->join('pivot_relation_m2m_group_user', function($join) use ($spr, $group, $role)
@@ -118,7 +118,7 @@ abstract class Controller {
             {
                 $join->on('pivot_relation_m2m_group_user.group_user', '=', 'user.id');
                 $join->where('user.active', '=', 1);
-                $join->where('user.' . $spr->getDeletedAtColumn(), ' is ', app('db')->raw('null'));
+                $join->whereNull('user.' . $spr->getDeletedAtColumn());
             });
 
             if ($query->get()->first())

@@ -939,7 +939,7 @@ class Acl {
         $query->join($type->getTable() . ' as otype', function($join) use ($type, $r, $sequence)
         {
             $join->on($sequence->getTable() . '.sequences_object_type', '=', 'otype.id');
-            $join->where('otype.' . $type->getDeletedAtColumn(), ' is ', app('db')->raw("null"));
+            $join->whereNull('otype.' . $type->getDeletedAtColumn());
             $join->where('otype.active', 1);
             $join->where('otype.active_at_start', '<=', $r[1]);
             $join->where('otype.active_at_end', '>=', $r[0]);

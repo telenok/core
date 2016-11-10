@@ -1383,7 +1383,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         }
         catch (\Exception $e)
         {
-            
+
         }
 
         $permission = \App\Vendor\Telenok\Core\Model\Security\Permission::where('id', $permissionCode)->orWhere('code', $permissionCode)->active()->first();

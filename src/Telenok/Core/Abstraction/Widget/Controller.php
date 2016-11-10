@@ -6,7 +6,7 @@ use Telenok\Core\Event\CompileSetting;
 /**
  * @class Telenok.Core.Abstraction.Widget.Controller
  * Base controller for widgets.
- * 
+ *
  * @extends Telenok.Core.Abstraction.Controller.Controller
  */
 abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
@@ -247,6 +247,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     public function saveCachedConfig()
     {
+        return;
+
+
+
+
+
         if ($this->getWidgetModel())
         {
             return;
@@ -569,7 +575,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         }
         catch (\Exception $e)
         {
-            
+
         }
     }
 
@@ -593,7 +599,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             }
             catch (\Exception $e)
             {
-                
+
             }
         }
     }
@@ -615,7 +621,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         }
         catch (\Exception $e)
         {
-            
+
         }
 
         return false;

@@ -655,7 +655,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         {
             $query->where(function ($query) use ($value, $name, $model)
             {
-                $query->where(app('db')->raw(1), 1);
+                $query->where(app('db')->raw(1), 0);
 
                 collect(explode(' ', $value))
                     ->reject(function ($i)
@@ -995,7 +995,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         $query->where(function ($query) use ($term, $model)
         {
-            $query->where(app('db')->raw(1), 1);
+            $query->where(app('db')->raw(1), 0);
 
             if (trim($term))
             {

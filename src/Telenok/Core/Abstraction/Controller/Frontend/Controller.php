@@ -1,4 +1,6 @@
 <?php namespace Telenok\Core\Abstraction\Controller\Frontend;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * @class Telenok.Core.Abstraction.Controller.Frontend.Controller
@@ -275,9 +277,37 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
             return $this->processContent($content);
         }
+        catch (AccessDeniedHttpException $e)
+        {
+            if (config("app.debug"))
+            {
+                throw $e;
+            }
+            else
+            {
+                if (app('auth')->check())
+                {
+                    // 403 Forbidden
+                    return redirect()->route('page.error.403');
+                }
+                else
+                {
+                    // 401 Unauthorized
+                    return redirect()->route('page.error.401');
+                }
+            }
+        }
         catch (\Exception $e)
         {
-            app()->abort(404);
+            if (config("app.debug"))
+            {
+                throw $e;
+            }
+            else
+            {
+                // 404 Not Found
+                return redirect()->route('page.error.404');
+            }
         }
     }
 
@@ -315,12 +345,34 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         $pageModel = app(\App\Vendor\Telenok\Core\Model\Web\Page::class);
 
-        return $pageModel->active()->withPermission()
+        $query = $pageModel->active()
             ->where(function($query) use ($pageModel, $routerName)
             {
                 $query->where($pageModel->getTable() . '.id', intval(str_replace('page_', '', $routerName)));
                 $query->orWhere($pageModel->getTable() . '.router_name', $routerName);
-            })->cacheTags($routerName)->firstOrFail();
+            });
+
+        // first validate object exists
+        try
+        {
+            $query->cacheTags($routerName)->firstOrFail();
+        }
+        catch (ModelNotFoundException $e)
+        {
+            throw $e;
+        }
+
+        // second validate permissions
+        try
+        {
+            $page = $query->withPermission()->cacheTags($routerName)->firstOrFail();
+        }
+        catch (ModelNotFoundException $e)
+        {
+            throw new AccessDeniedHttpException();
+        }
+
+        return $page;
     }
 
     /**
@@ -340,17 +392,17 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         foreach ($this->container as $containerId)
         {
             $page->widget()->active()->get()->filter(function($item) use ($containerId)
-                    {
-                        return $item->container === $containerId;
-                    })
-                    ->each(function($item) use (&$content, $containerId, $listWidget)
-                    {
-                        $content[$containerId][] = $listWidget->get($item->key)
-                                ->setWidgetModel($item)
-                                ->setConfig($item->structure)
-                                ->setFrontendController($this)
-                                ->getContent();
-                    });
+                {
+                    return $item->container === $containerId;
+                })
+                ->each(function($item) use (&$content, $containerId, $listWidget)
+                {
+                    $content[$containerId][] = $listWidget->get($item->key)
+                        ->setWidgetModel($item)
+                        ->setConfig($item->structure)
+                        ->setFrontendController($this)
+                        ->getContent();
+                });
         }
 
         return view($this->getFrontendView(), array_merge([

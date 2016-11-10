@@ -152,7 +152,7 @@ class CoreServiceProvider extends ServiceProvider {
      */
     protected function registerValidationFactory()
     {
-        $this->app->bind('validator_model', function ($app)
+        $this->app->bind('validator_telenok', function ($app)
         {
             $validator = new Factory($app['translator'], $app);
 
