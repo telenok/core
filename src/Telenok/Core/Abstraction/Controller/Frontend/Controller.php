@@ -326,7 +326,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         {
             $this->setFrontendView($t);
         }
-        else if (($v = $page->pagePageController) && ($controllerTemplate = $v->template_view))
+        else if (($v = new $page->controller_class) && ($controllerTemplate = $v->template_view))
         {
             $this->setFrontendView($controllerTemplate);
         }

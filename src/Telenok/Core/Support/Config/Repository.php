@@ -227,17 +227,6 @@ class Repository {
                 {
                     $query->whereIn('page_domain', $domains->modelKeys() ? : [0]);
                 }, '>=', 0)
-                ->whereHas('pagePageController', function($query)
-                {
-                    $query->where(function($query)
-                    {
-                        $r = range_minutes(config('cache.db_query.minutes', 0));
-
-                        $query->where('active', 1)
-                        ->where('active_at_start', '<=', $r[1])
-                        ->where('active_at_end', '>=', $r[0]);
-                    });
-                })
                 ->active()
                 ->get();
 
@@ -267,23 +256,23 @@ class Repository {
         {
             foreach ($pages->all() as $page)
             {
-                if (!method_exists($page->pagePageController->controller_class, $page->pagePageController->controller_method))
+                if (!method_exists($page->controller_class, $page->controller_method))
                 {
-                    throw new \Exception('Method "' . $page->pagePageController->controller_method . '" not exists in class "' . $page->pagePageController->controller_class . '"');
+                    throw new \Exception('Method "' . $page->controller_method . '" not exists in class "' . $page->controller_class . '"');
                 }
 
                 if ($page->page_domain && $domain->getKey() == $page->page_domain)
                 {
                     $routeDomain[$page->page_domain][] = 'app("router")->' . $chooseHttpMethod($page) . '("' . $page->getAttribute('url_pattern') . '", array("as" => "'
                         . ($page->router_name ? : 'page_' . $page->getKey())
-                        . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . ($page->controller_method ?:$page->pagePageController->controller_method) . '"));'
+                        . '", "uses" => "' . addcslashes($page->controller_class, '\\"') . '@' . $page->controller_method . '"));'
                     ;
                 }
                 else if (!$page->page_domain)
                 {
                     $routeCommon[$page->getKey()] = 'app("router")->' . $chooseHttpMethod($page) . '("' . $page->getAttribute('url_pattern') . '", array("as" => "'
                         . ($page->router_name ? : 'page_' . $page->getKey())
-                        . '", "uses" => "' . addcslashes($page->pagePageController->controller_class, '\\"') . '@' . ($page->controller_method ?:$page->pagePageController->controller_method) . '"));'
+                        . '", "uses" => "' . addcslashes($page->controller_class, '\\"') . '@' . $page->controller_method . '"));'
                     ;
                 }
             }

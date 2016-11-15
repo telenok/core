@@ -241,18 +241,6 @@ class SeedTypes extends Migration {
 			DB::table('object_type')->insertGetId(
 					[
 						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Type']),
-						'title' => json_encode(['ru' => 'Контроллер страницы', 'en' => 'Page controller'], JSON_UNESCAPED_UNICODE),
-						'title_list' => json_encode(['ru' => 'Контроллер страницы', 'en' => 'Page controller'], JSON_UNESCAPED_UNICODE),
-						'code' => 'page_controller',
-						'active' => 1,
-						'class_model' => '\App\Vendor\Telenok\Core\Model\Web\PageController',
-						'class_controller' => '\App\Vendor\Telenok\Core\Module\Web\PageController\Controller',
-					]
-			);
-
-			DB::table('object_type')->insertGetId(
-					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Type']),
 						'title' => json_encode(['ru' => 'Виджет на странице', 'en' => 'Widget on page'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'Виджет на странице', 'en' => 'Widget on page'], JSON_UNESCAPED_UNICODE),
 						'code' => 'widget_on_page',

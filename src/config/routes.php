@@ -128,9 +128,6 @@ app('router')->get('telenok/module/objects-sequence/list', array('as' => 'teleno
 // Module Web Domain
 app('router')->get('telenok/module/web-domain/action-param', array('as' => 'telenok.module.web-domain.action.param', 'uses' => 'App\Vendor\Telenok\Core\Module\Web\Domain\Controller@getActionParam'));
 
-// Module Page Controller
-app('router')->get('telenok/module/web-page-controller/action-param', array('as' => 'telenok.module.web-page-controller.action.param', 'uses' => 'App\Vendor\Telenok\Core\Module\Web\PageController\Controller@getActionParam'));
-
 // Module Files
 app('router')->get('telenok/module/files/browser/action-param', array('as' => 'telenok.module.files-browser.action.param', 'uses' => 'App\Vendor\Telenok\Core\Module\Files\Browser\Controller@getActionParam'));
 app('router')->get('telenok/module/files/browser', array('as' => 'telenok.module.files-browser', 'uses' => 'App\Vendor\Telenok\Core\Module\Files\Browser\Controller@getContent'));

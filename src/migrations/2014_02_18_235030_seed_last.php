@@ -1102,13 +1102,6 @@ class SeedLast extends Migration {
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Page Controller', 'ru' => 'Контроллер страницы'],
-            'active' => 1,
-            'controller_class' => 'App\Vendor\Telenok\Core\Module\Web\PageController\Controller',
-            'module_order' => 3,
-        ]);
-
-        (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
             'title' => ['en' => 'Tools', 'ru' => 'Инструменты'],
             'active' => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Tools\Controller',

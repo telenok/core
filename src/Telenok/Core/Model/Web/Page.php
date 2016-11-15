@@ -11,11 +11,6 @@ class Page extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     protected $ruleList = ['title' => ['required', 'min:1']];
     protected $table = 'page';
 
-    public function pagePageController()
-    {
-        return $this->belongsTo('\App\Vendor\Telenok\Core\Model\Web\PageController', 'page_page_controller');
-    }
-
     public function widget()
     {
         return $this->hasMany('\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage', 'widget_page');

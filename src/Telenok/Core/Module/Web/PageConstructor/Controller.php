@@ -44,12 +44,12 @@ class Controller extends \App\Vendor\Telenok\Core\Module\Objects\Lists\Controlle
         {
             $page = \App\Vendor\Telenok\Core\Model\Web\Page::findOrFail($id);
 
-            if (!$page->pagePageController)
+            if (!$page->controller_class)
             {
                 throw new \Exception('Please, set "Page Controller" for current page');
             }
 
-            $controllerClass = app($page->pagePageController->controller_class);
+            $controllerClass = app($page->controller_class);
 
             return [
                 'pageId' => $id,

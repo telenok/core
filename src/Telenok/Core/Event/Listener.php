@@ -37,7 +37,6 @@ class Listener {
         $list->put('system-setting', 0);
         $list->put('web-page-constructor', 10);
         $list->put('web-page', 11);
-        $list->put('web-page-controller', 12);
         $list->put('web-domain', 13);
 
         $list->put('files', 4);
