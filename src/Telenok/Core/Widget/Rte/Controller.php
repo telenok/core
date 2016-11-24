@@ -62,7 +62,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
                         }
                     }
 
-                    $widgetRepository = app('telenok.config.repository')->getWidget();
+                    $widgetRepository = app('telenok.repository')->getWidget();
 
                     $content = $widgetRepository->get($wop->key)
                         ->setWidgetModel($wop)

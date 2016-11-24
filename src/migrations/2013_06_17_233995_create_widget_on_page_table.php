@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateWidgetOnPageTable extends Migration {
+class CreateWidgetOnPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('widget_on_page'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('widget_on_page'))
 		{
 			Schema::create('widget_on_page', function(Blueprint $table)
 			{

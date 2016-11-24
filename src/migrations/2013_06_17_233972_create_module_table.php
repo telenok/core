@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateModuleTable extends Migration {
+class CreateModuleTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('module'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('module'))
 		{
 			Schema::create('module', function(Blueprint $table)
 			{

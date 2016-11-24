@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-
-class CreateSessionTable extends Migration {
+class CreateSessionTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
     public function up()
     {
+        parent::up();
+
         Schema::create('session', function($t)
         {
             $t->string('id')->unique();

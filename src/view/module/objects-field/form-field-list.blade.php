@@ -6,7 +6,7 @@
 
 	@if (!in_array($field->code, ['key', 'field_view'], true)) 
 
-		{!! app('telenok.config.repository')->getObjectFieldController($field->key)->getFormModelContent($controller, $model, $field, $uniqueId) !!}
+		{!! app('telenok.repository')->getObjectFieldController($field->key)->getFormModelContent($controller, $model, $field, $uniqueId) !!}
 		 
 	@elseif ($field->code=='key')
 
@@ -28,7 +28,7 @@
 				$selectFields = [];
 				$multilanguageFields = [];
 
-				app('telenok.config.repository')->getObjectFieldController()
+				app('telenok.repository')->getObjectFieldController()
                         ->reject(function($i) use ($model) { return !$model->exists && in_array($i->getKey(), ['locked-by', 'deleted-by', 'created-by', 'active', 'permission', 'updated-by'], true); })
                         ->each(function($field) use (&$selectFields, &$multilanguageFields) 
 				{  

@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateWidgetGroupTable extends Migration {
+class CreateWidgetGroupTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('widget_group'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('widget_group'))
 		{
 			Schema::create('widget_group', function(Blueprint $table)
 			{

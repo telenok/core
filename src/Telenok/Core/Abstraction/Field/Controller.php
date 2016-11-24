@@ -560,7 +560,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
                 return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
             });
 
-            $config = app('telenok.config.repository')->getObjectFieldController();
+            $config = app('telenok.repository')->getObjectFieldController();
 
             $canUpdate = app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code);
 
@@ -613,7 +613,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         foreach ($objectField as $key => $field)
         {
-            if (($key == 0 && $objectField->count() > 1) || $objectField->count() == 1)
+            if (($key == 0 && $objectField->count()) || $objectField->count() == 1)
             {
                 $fields['tableManageItem'] = [
                     "data"      => 'tableManageItem',
@@ -974,7 +974,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         if ($id)
         {
-            $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model);
+            $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class);
         }
         else
         {

@@ -85,16 +85,16 @@ app('router')->get('field/file-many-to-many/list/title', array('as' => 'telenok.
 
 app('router')->get('field/upload/modal-cropper', array('as' => 'telenok.field.upload.modal-cropper', 'uses' => '\App\Vendor\Telenok\Core\Field\Upload\Controller@modalCropperContent'));
 
-app('router')->get('telenok/ckeditor.custom.config.js', array('as' => 'telenok.ckeditor.config', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@getCKEditorConfig'));
-app('router')->get('telenok/ckeditor/browser/file', array('as' => 'telenok.ckeditor.file', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@browseFile'));
-app('router')->get('telenok/ckeditor/browser/image', array('as' => 'telenok.ckeditor.image', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@browseImage'));
-app('router')->get('telenok/ckeditor/browser/file/list', array('as' => 'telenok.ckeditor.storage.list', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@storageFileList'));
-app('router')->get('telenok/ckeditor/browser/model/list', array('as' => 'telenok.ckeditor.model.list', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@modelFileList'));
-app('router')->get('telenok/packages/telenok/core/js/ckeditor_addons/plugins/widget_inline/plugin.js', array('as' => 'telenok.ckeditor.plugin.inline-widget.config', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@getCKEditorPluginWidgetInline'));
-app('router')->get('telenok/ckeditor/modal-cropper', array('as' => 'telenok.ckeditor.modal-cropper', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@modalCropperContent'));
-app('router')->post('telenok/ckeditor/image/create', array('as' => 'telenok.ckeditor.image.create', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@imageCreate'));
-app('router')->post('telenok/ckeditor/directory/create', array('as' => 'telenok.ckeditor.directory.create', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@directoryCreate'));
-app('router')->post('telenok/ckeditor/file/upload', array('as' => 'telenok.ckeditor.file.upload', 'uses' => 'App\Vendor\Telenok\Core\Support\Config\CKEditor@uploadFile'));
+app('router')->get('telenok/ckeditor.custom.config.js', array('as' => 'telenok.ckeditor.config', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@getCKEditorConfig'));
+app('router')->get('telenok/ckeditor/browser/file', array('as' => 'telenok.ckeditor.file', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@browseFile'));
+app('router')->get('telenok/ckeditor/browser/image', array('as' => 'telenok.ckeditor.image', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@browseImage'));
+app('router')->get('telenok/ckeditor/browser/file/list', array('as' => 'telenok.ckeditor.storage.list', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@storageFileList'));
+app('router')->get('telenok/ckeditor/browser/model/list', array('as' => 'telenok.ckeditor.model.list', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@modelFileList'));
+app('router')->get('telenok/packages/telenok/core/js/ckeditor_addons/plugins/widget_inline/plugin.js', array('as' => 'telenok.ckeditor.plugin.inline-widget.config', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@getCKEditorPluginWidgetInline'));
+app('router')->get('telenok/ckeditor/modal-cropper', array('as' => 'telenok.ckeditor.modal-cropper', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@modalCropperContent'));
+app('router')->post('telenok/ckeditor/image/create', array('as' => 'telenok.ckeditor.image.create', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@imageCreate'));
+app('router')->post('telenok/ckeditor/directory/create', array('as' => 'telenok.ckeditor.directory.create', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@directoryCreate'));
+app('router')->post('telenok/ckeditor/file/upload', array('as' => 'telenok.ckeditor.file.upload', 'uses' => 'App\Vendor\Telenok\Core\Support\CKEditor\Controller@uploadFile'));
 
 
 // Module Dashboard 
@@ -141,9 +141,9 @@ app('router')->get('telenok/module/files/browser/list/edit', array('as' => 'tele
 app('router')->get('telenok/module/files/browser/list/delete', array('as' => 'telenok.module.files-browser.list.delete', 'uses' => 'App\Vendor\Telenok\Core\Module\Files\Browser\Controller@deleteList'));
 app('router')->post('telenok/module/files/browser/upload', array('as' => 'telenok.module.files-browser.upload', 'uses' => 'App\Vendor\Telenok\Core\Module\Files\Browser\Controller@uploadFile'));
 
-// Module System\Setting
-app('router')->get('telenok/module/system-setting/action-param', array('as' => 'telenok.module.system-setting.action.param', 'uses' => 'App\Vendor\Telenok\Core\Module\System\Setting\Controller@getActionParam'));
-app('router')->post('telenok/module/system-setting/save', array('as' => 'telenok.module.system-setting.save', 'uses' => 'App\Vendor\Telenok\Core\Module\System\Setting\Controller@save'));
+// Module System\Config
+app('router')->get('telenok/module/system-config/action-param', array('as' => 'telenok.module.system-config.action.param', 'uses' => 'App\Vendor\Telenok\Core\Module\System\Config\Controller@getActionParam'));
+app('router')->post('telenok/module/system-config/save', array('as' => 'telenok.module.system-config.save', 'uses' => 'App\Vendor\Telenok\Core\Module\System\Config\Controller@save'));
 
 // Module Web\PageConstructor
 app('router')->get('telenok/module/web-page-constructor/action-param', array('as' => 'telenok.module.web-page-constructor.action.param', 'uses' => 'App\Vendor\Telenok\Core\Module\Web\PageConstructor\Controller@getActionParam'));

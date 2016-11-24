@@ -61,7 +61,7 @@ trait Language {
      */
     public function LL($key = '', $param = [], $default = '')
     {
-        if (($v = trans($key, $param)) && $v != $key)
+        if (($v = trans($key, $param)) && ($v != $key))
         {
             return $v;
         }

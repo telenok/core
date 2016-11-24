@@ -20,9 +20,9 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
         {
             $type = $model->fieldObjectType()->first();
 
-            if ($type && $type->class_model)
+            if ($type && $type->model_class)
             {
-                static::eraseStatic(app($type->class_model));
+                static::eraseStatic(app($type->model_class));
 
                 $model->createFieldResource($type);
             }
@@ -32,7 +32,7 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
         {
             $type = $model->fieldObjectType()->first();
 
-            if ($controllers = app('telenok.config.repository')->getObjectFieldController($model->key))
+            if ($controllers = app('telenok.repository')->getObjectFieldController($model->key))
             {
                 $controllers->processFieldDelete($model, $type);
             }
@@ -45,7 +45,7 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         $code = 'object_field.' . $type->code . '.' . $this->code;
 
-        if (!\App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$code)->count())
+        if (!\App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$code)->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
                 'title' => 'Object ' . $type->code . '. Field ' . $this->code,
@@ -78,7 +78,7 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
         {
             parent::getFillable();
 
-            foreach (app('telenok.config.repository')->getObjectFieldController()->all() as $controller)
+            foreach (app('telenok.repository')->getObjectFieldController()->all() as $controller)
             {
                 $dateField = (array) $controller->getSpecialDateField($this);
 

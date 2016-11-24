@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-class SeedModuleTable extends Migration {
+class SeedModuleTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
     public function up()
     {
+        parent::up();
+
         $modelTypeId = DB::table('object_type')->where('code', 'module')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);

@@ -38,7 +38,7 @@ class WidgetOnPage extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\
 
     public function preProcess($type, $input)
     {
-        app('telenok.config.repository')->getWidget()->get($input->get('key'))->validate($this, $input);
+        app('telenok.repository')->getWidget()->get($input->get('key'))->validate($this, $input);
 
         return parent::preProcess($type, $input);
     }
@@ -51,7 +51,7 @@ class WidgetOnPage extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\
 
         if ($this->forceDeleting)
         {
-            app('telenok.config.repository')->getWidget()->get($key)->delete($this);
+            app('telenok.repository')->getWidget()->get($key)->delete($this);
         }
     }
 }

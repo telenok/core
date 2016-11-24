@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
-class CreateUserMessageTable extends Migration {
+class CreateUserMessageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('user_message'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('user_message'))
 		{
 			Schema::create('user_message', function(Blueprint $table)
 			{

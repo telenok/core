@@ -28,7 +28,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
         }
 
 
-        return app('telenok.config.repository')->getObjectFieldController($fieldKey)->getFormFieldContent($model, $uniqueId);
+        return app('telenok.repository')->getObjectFieldController($fieldKey)->getFormFieldContent($model, $uniqueId);
     }
 
     public function getTreeListTypes()
@@ -44,7 +44,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
         if ($key)
         {
-            app('telenok.config.repository')->getObjectFieldController($key)->validate($model, $input, $message);
+            app('telenok.repository')->getObjectFieldController($key)->validate($model, $input, $message);
         }
 
         return $this;
@@ -62,12 +62,12 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             $id = $model->getOriginal('field_object_type');
             $key = $model->getOriginal('key');
 
-            if ($id > 0 && $input->get('field_object_type') > 0 && $id != $input->get('field_object_type'))
+            if ($id > 0 && $input->get('field_object_type') > 0 && ($id != $input->get('field_object_type')))
             {
                 throw new \Exception($this->LL('error.change.field.linked.type'));
             }
 
-            if ($key && $input->get('key') && $key != $input->get('key'))
+            if ($key && $input->get('key') && ($key != $input->get('key')))
             {
                 throw new \Exception($this->LL('error.change.field.key'));
             }
@@ -82,13 +82,13 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
         }
 
         // preprocessing at field controller
-        if (!app('telenok.config.repository')->getObjectFieldController()->has($input->get('key')))
+        if (!app('telenok.repository')->getObjectFieldController()->has($input->get('key')))
         {
             throw new \Exception('There are not field controller for field key "' . $input->get('key') . '"');
         }
         else
         {
-            app('telenok.config.repository')->getObjectFieldController($input->get('key'))->preProcess($model, $type, $input);
+            app('telenok.repository')->getObjectFieldController($input->get('key'))->preProcess($model, $type, $input);
         }
 
         return parent::preProcess($model, $type, $input);
@@ -96,7 +96,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     public function postProcess($model, $type, $input)
     {
-        $field = app('telenok.config.repository')->getObjectFieldController($input->get('key'));
+        $field = app('telenok.repository')->getObjectFieldController($input->get('key'));
 
         $field->postProcess($model, $type, $input);
 

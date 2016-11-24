@@ -166,7 +166,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
         })
         ->active()
         ->first()
-        ->class_model;
+        ->model_class;
 
         $model = app($class);
 

@@ -1,6 +1,6 @@
-<?php 
-    
-    $domAttr = ['class' => $field->css_class?: ''];
+<?php
+
+	$domAttr = ['class' => $field->css_class?: ''];
     $disabled = false;
     $jsUnique = str_random();
 
@@ -29,7 +29,7 @@
 
 				$localeDefault = config('app.localeDefault');
 
-				$languages = \App\Vendor\Telenok\Core\Model\System\Language::whereIn('locale', config('app.locales')->all())
+				$languages = \App\Vendor\Telenok\Core\Model\System\Language::whereIn('locale', config('app.locales'))
 								->get()->sortBy(function($item) use ($localeDefault)
 				{
 					return $item->locale == $localeDefault ? 0 : 1;

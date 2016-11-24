@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+class CreateObjectFieldMorphManyToManyTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-class CreateObjectFieldMorphManyToManyTable extends Migration {
+    public function up()
+    {
+        parent::up();
 
-	public function up()
-	{
-		if (Schema::hasTable('object_field'))
+        if (Schema::hasTable('object_field'))
 		{
 			Schema::table('object_field', function($table)
 			{

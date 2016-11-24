@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-class CreateObjectFieldRelatedOnetoOneTable extends Migration {
+class CreateObjectFieldRelatedOnetoOneTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
     public function up()
     {
+        parent::up();
+
         if (Schema::hasTable('object_field'))
         {
             Schema::table('object_field', function($table)

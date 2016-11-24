@@ -1,14 +1,15 @@
 
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateDomainTable extends Migration {
+class CreateDomainTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('domain'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('domain'))
 		{
 			Schema::create('domain', function(Blueprint $table)
 			{

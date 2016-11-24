@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
-class CreateObjectSequenceTable extends Migration {
+class CreateObjectSequenceTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('object_sequence'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('object_sequence'))
 		{
 			Schema::create('object_sequence', function(Blueprint $table)
 			{
@@ -22,7 +23,7 @@ class CreateObjectSequenceTable extends Migration {
 				$table->dateTime('active_at_end')->nullable();
 				$table->dateTime('locked_at')->nullable();
 
-				$table->string('class_model')->nullable();
+				$table->string('model_class')->nullable();
 				
 				$table->integer('created_by_user')->unsigned()->nullable()->default(null);
 				$table->integer('updated_by_user')->unsigned()->nullable()->default(null);

@@ -213,7 +213,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         {
             $item->{camel_case($field->code)}()->orderBy('sort')->get()->take(5)->each(function($item) use (&$content)
             {
-                if ($item->upload->exists())
+                if ($item->upload->count())
                 {
                     if ($item->upload->isImage())
                     {

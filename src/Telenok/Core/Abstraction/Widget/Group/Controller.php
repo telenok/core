@@ -76,7 +76,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
 	public function children()
 	{
-		return app('telenok.config.repository')->getWidget()->filter(function($item)
+		return app('telenok.repository')->getWidget()->filter(function($item)
 				{
 					return $this->getKey() == $item->getParent();
 				});

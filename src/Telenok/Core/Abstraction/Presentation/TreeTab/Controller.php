@@ -1050,7 +1050,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getModelByTypeId($id)
     {
-        return app($this->getType($id)->class_model);
+        return app($this->getType($id)->model_class);
     }
 
     /**

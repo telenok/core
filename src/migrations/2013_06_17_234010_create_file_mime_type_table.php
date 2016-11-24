@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateFileMimeTypeTable extends Migration {
+class CreateFileMimeTypeTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('file_mime_type'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('file_mime_type'))
 		{
 			Schema::create('file_mime_type', function(Blueprint $table)
 			{

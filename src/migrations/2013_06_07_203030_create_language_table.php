@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
-class CreateLanguageTable extends Migration 
-{
+class CreateLanguageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
+
     public function up()
     {
+        parent::up();
+
         if (!Schema::hasTable('language')) 
         {
             Schema::create('language', function(Blueprint $table)

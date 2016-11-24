@@ -30,7 +30,7 @@ class Type extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
      */
     public function classController()
     {
-        return $this->class_controller;
+        return $this->controller_class;
     }
 
     public function deleteTypeResource()

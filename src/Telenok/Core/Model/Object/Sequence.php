@@ -15,17 +15,17 @@ class Sequence extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Mode
 
     public function model()
     {
-        return $this->morphTo('model', 'class_model', 'id');
+        return $this->morphTo('model', 'model_class', 'id');
     }
 
     public static function getModelTrashed($id)
     {
-        return app(\App\Vendor\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType->class_model)->withTrashed()->findOrFail($id);
+        return app(\App\Vendor\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType->model_class)->withTrashed()->findOrFail($id);
     }
 
     public static function getModel($id)
     {
-        return app(\App\Vendor\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType->class_model)->findOrFail($id);
+        return app(\App\Vendor\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType->model_class)->findOrFail($id);
     }
 
     public static function getTypeById($id)
@@ -35,7 +35,7 @@ class Sequence extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Mode
 
     public static function getModelByTypeId($id)
     {
-        return app(static::getTypeById($id)->class_model);
+        return app(static::getTypeById($id)->model_class);
     }
 
     public function delete()

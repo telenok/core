@@ -55,7 +55,7 @@
                         <div class="form-group {{$key < 2 || $userConfig->get('field-filter.' . $controller->getKey() . '.' . $field->id) ? '' : 'hidden'}}" id="{{$uniqueId}}-field-filter-{{$field->id}}">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1">{{ $field->translate('title') }}</label>
                             <div class="col-sm-9">
-                                {!! app('telenok.config.repository')->getObjectFieldController($field->key)->getFilterContent($field) !!} 
+                                {!! app('telenok.repository')->getObjectFieldController($field->key)->getFilterContent($field) !!}
                             </div>
                         </div> 
 

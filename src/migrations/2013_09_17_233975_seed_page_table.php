@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-class SeedPageTable extends Migration {
+class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
     public function up()
     {
+        parent::up();
+
         $modelTypeId = DB::table('object_type')->where('code', 'page')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
@@ -108,7 +107,7 @@ class SeedPageTable extends Migration {
                 'field_object_tab' => $tabMainId,
                 'multilanguage' => 0,
                 'show_in_form' => 1,
-                'show_in_list' => 1,
+                'show_in_list' => 0,
                 'allow_search' => 1,
                 'allow_create' => 1,
                 'allow_update' => 1,
@@ -167,7 +166,7 @@ class SeedPageTable extends Migration {
                 'field_object_tab' => $tabMainId,
                 'multilanguage' => 0,
                 'show_in_form' => 1,
-                'show_in_list' => 0,
+                'show_in_list' => 1,
                 'allow_search' => 1,
                 'allow_create' => 1,
                 'allow_update' => 1,
@@ -178,10 +177,10 @@ class SeedPageTable extends Migration {
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
-                'title' => ['en' => 'Action', 'ru' => 'Действие'],
-                'title_list' => ['en' => 'Action', 'ru' => 'Действие'],
+                'title' => ['en' => 'HTTP request method', 'ru' => 'HTTP метод запроса'],
+                'title_list' => ['en' => 'HTTP request method', 'ru' => 'HTTP метод запроса'],
                 'key' => 'select-one',
-                'code' => 'action',
+                'code' => 'http_method',
                 'select_one_data' => [
                     'title' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
                     'key' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],

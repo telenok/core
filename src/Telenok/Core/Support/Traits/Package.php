@@ -36,7 +36,7 @@ trait Package {
                 return $this->package;
             }
 
-            $package = app('telenok.config.repository')->getPackage()->filter(function($item)
+            $package = app('telenok.repository')->getPackage()->filter(function($item)
                     {
                         return strpos('\\' . trim(get_class($this), '\\') . '\\', $item->getBaseClass()) !== FALSE;
                     })->first();

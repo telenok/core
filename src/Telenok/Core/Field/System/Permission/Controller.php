@@ -290,7 +290,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         }
 
         if ($id) {
-            $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model);
+            $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class);
         } else {
             $model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
         }

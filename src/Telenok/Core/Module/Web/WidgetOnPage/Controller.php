@@ -23,7 +23,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
     {
         if ($input->get('key'))
         {
-            app('telenok.config.repository')->getWidget()->get($input->get('key'))->preProcess($model, $type, $input);
+            app('telenok.repository')->getWidget()->get($input->get('key'))->preProcess($model, $type, $input);
         }
 
         return parent::postProcess($model, $type, $input);
@@ -33,7 +33,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
     {
         if ($input->get('key'))
         {
-            app('telenok.config.repository')->getWidget()->get($input->get('key'))->postProcess($model, $type, $input);
+            app('telenok.repository')->getWidget()->get($input->get('key'))->postProcess($model, $type, $input);
         }
 
         return parent::postProcess($model, $type, $input);

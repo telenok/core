@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
-class CreatePivotRelationM2MTreeTable extends Migration {
+class CreatePivotRelationM2MTreeTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('pivot_relation_m2m_tree'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('pivot_relation_m2m_tree'))
 		{
 			Schema::create('pivot_relation_m2m_tree', function(Blueprint $table) 
 			{

@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+class SeedPermissionTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-class SeedPermissionTable extends Migration {
+    public function up()
+    {
+        parent::up();
 
-	public function up()
-	{
-		$modelTypeId = DB::table('object_type')->where('code', 'permission')->value('id');
+        $modelTypeId = DB::table('object_type')->where('code', 'permission')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);
@@ -20,7 +19,7 @@ class SeedPermissionTable extends Migration {
 
 		DB::table('object_field')->insert(
             [
-                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
                 'title' => json_encode(SeedPermissionTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
                 'title_list' => json_encode(SeedPermissionTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
                 'key' => 'string',

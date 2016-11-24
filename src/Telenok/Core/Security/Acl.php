@@ -890,7 +890,7 @@ class Acl {
             return true;
         }
 
-        if (!$this->subject || !\App\Vendor\Telenok\Core\Model\Object\Sequence::where('id', $this->subject->getKey())->active()->count())
+        if (!$this->subject || !\App\Vendor\Telenok\Core\Model\Object\Sequence::where('id', $this->subject->getKey())->active()->exists())
         {
             return false;
         }
@@ -949,7 +949,7 @@ class Acl {
         {
             $queryWhere->where(app('db')->raw(1), 0);
 
-            $filters = app('telenok.config.repository')->getAclResourceFilter();
+            $filters = app('telenok.repository')->getAclResourceFilter();
 
             if (!empty($filterCode))
             {
@@ -966,7 +966,7 @@ class Acl {
             });
         });
 
-        return $query->take(1)->count() ? true : false;
+        return $query->exists() ? true : false;
     }
 
     /*

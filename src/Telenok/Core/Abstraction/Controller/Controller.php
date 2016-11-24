@@ -118,8 +118,8 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
     /**
      * @method getRequest
      * Return http request object.
-     * 
-     * @return {Illuminate.Http.Request}
+     *
+     * @return \Illuminate\Http\Request
      * @member Telenok.Core.Abstraction.Controller.Controller
      */
     public function getRequest()
@@ -136,7 +136,7 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
      */
     public function getRequestCollected()
     {
-        return collect($this->request->input());
+        return collect($this->getRequest()->input());
     }
 
     /**
@@ -150,5 +150,4 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
     {
         return new static;
     }
-
 }

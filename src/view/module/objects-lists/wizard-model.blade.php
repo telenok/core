@@ -295,7 +295,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 				<script type="text/javascript">
 					<?php
 					
-						$config = app('telenok.config.repository')->getObjectFieldController();
+						$config = app('telenok.repository')->getObjectFieldController();
 
 						$put = collect(); 
 

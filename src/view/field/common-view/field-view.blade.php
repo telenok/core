@@ -1,7 +1,7 @@
 <?php
 $jsUnique = str_random();
 
-$viewsCollection = collect(app('telenok.config.repository')->getObjectFieldViewModel()->get($controller->getKey(), []));
+$viewsCollection = collect(app('telenok.repository')->getObjectFieldViewModel()->get($controller->getKey(), []));
 
 $viewsCollection->push($controller->getViewModel());
 

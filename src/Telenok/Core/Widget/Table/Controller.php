@@ -138,7 +138,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 
 		$wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', (string)$container_id)->active()->orderBy('widget_order')->get();
 
-		$widgetConfig = app('telenok.config.repository')->getWidget();
+		$widgetConfig = app('telenok.repository')->getWidget();
 
 		$wop->each(function($w) use (&$content, $widgetConfig)
 		{
@@ -237,7 +237,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 
 		$wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', (string)$container_id)->orderBy('widget_order')->get();
 
-		$widgetConfig = app('telenok.config.repository')->getWidget();
+		$widgetConfig = app('telenok.repository')->getWidget();
 
 		$wop->each(function($w) use (&$content, $widgetConfig)
 		{
@@ -381,7 +381,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 			{
 				$buffer = \App\Vendor\Telenok\Core\Model\System\Buffer::addBuffer(app('auth')->user()->getKey(), $item->getKey(), 'web-page', $buffer->key);
 				
-				$widget = app('telenok.config.repository')->getWidget()->get($item->key);
+				$widget = app('telenok.repository')->getWidget()->get($item->key);
 				
 				$widget->insertFromBufferOnPage(
 						$widgetOnPage->widgetLanguageLanguage()->first()->value('id'), 
@@ -462,7 +462,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 	{
 		$w = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::findOrFail($id);
         
-		if (\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::whereIn('container', $w->structure->get('container_ids', []))->count())
+		if (\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::whereIn('container', $w->structure->get('container_ids', []))->exists())
 		{
             throw new \Exception($this->LL('widget.has.child'));
 		}
@@ -501,7 +501,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
             {
                 for($y = 0; $y < $row; $y++)
                 {
-                    if (\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', 'container-' . $model->id . '-' . $y . '-' . $x)->count())
+                    if (\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', 'container-' . $model->id . '-' . $y . '-' . $x)->exists())
                     {
                         throw new \Exception($this->LL('widget.has.child'));
                     }
@@ -512,7 +512,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
             {
                 for($y = $inputRow; $y < $row; $y++)
                 {
-                    if (\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', 'container-' . $model->id . '-' . $y . '-' . $x)->count())
+                    if (\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('container', 'container-' . $model->id . '-' . $y . '-' . $x)->exists())
                     {
                         throw new \Exception($this->LL('widget.has.child'));
                     }

@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
-class CreateObjectTabTable extends Migration {
+class CreateObjectTabTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('object_tab'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('object_tab'))
 		{
 			Schema::create('object_tab', function(Blueprint $table)
 			{

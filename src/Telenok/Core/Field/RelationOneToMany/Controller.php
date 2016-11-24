@@ -210,7 +210,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $id = $field->relation_one_to_many_has ? : $field->relation_one_to_many_belong_to;
 
-        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
 
         $model = app($class);
 
@@ -385,7 +385,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 }
             }
 
-            if (!$relatedQuery->count() && empty($idsAdd))
+            if (!$relatedQuery->exists() && empty($idsAdd))
             {
                 $idsAdd = $field->relation_one_to_many_default->all();
             }
@@ -394,8 +394,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             {
                 foreach ($idsAdd as $id)
                 {
-                    $relatedQuery->getRelated()->findOrFail((int) $id)
-                            ->fill([$relatedField => $model->getKey()])->save();
+                    $relatedQuery->getRelated()->findOrFail((int) $id)->fill([$relatedField => $model->getKey()])->save();
                 }
             }
             catch (\Exception $e)
@@ -403,14 +402,14 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 
             }
         }
-        else if ($field->relation_one_to_many_belong_to && $v = (int) $input->get($field->code, 0))
+        else if ($field->relation_one_to_many_belong_to && ($v = (int) $input->get($field->code, 0)))
         {
             // just validation input value
             \App\Vendor\Telenok\Core\Model\Object\Sequence::getModelByTypeId($field->relation_one_to_many_belong_to)
                     ->findOrFail($v);
         }
 
-        if ($field->required && !$relatedQuery->count())
+        if ($field->required && !$relatedQuery->exists())
         {
             throw new \Exception($this->LL('error.field.required', ['attribute' => $field->translate('title')]));
         }
@@ -482,13 +481,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $relatedTypeOfModelField = $model->fieldObjectType()->first();   // eg object \App\Vendor\Telenok\Core\Model\Object\Type which DB-field "code" is "author"
 
-        $classModelHasMany = $relatedTypeOfModelField->class_model;
+        $classModelHasMany = $relatedTypeOfModelField->model_class;
         $codeFieldHasMany = $model->code;
         $codeTypeHasMany = $relatedTypeOfModelField->code;
 
         $typeBelongTo = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($input->get('relation_one_to_many_has'));
         $tableBelongTo = $typeBelongTo->code;
-        $classBelongTo = $typeBelongTo->class_model;
+        $classBelongTo = $typeBelongTo->model_class;
 
         $relatedSQLField = $codeFieldHasMany . '_' . $codeTypeHasMany;
 

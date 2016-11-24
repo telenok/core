@@ -161,7 +161,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 			{
 				$f = $this->getModel()->getObjectField()->get('title');
 
-				app('telenok.config.repository')
+				app('telenok.repository')
 						->getObjectFieldController($f->key)
 						->getFilterQuery($f, $this->getModel(), $query, $f->code, $str);
 			});       
@@ -174,7 +174,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 		
 		if ($input->input('multifield_search', false))
 		{
-			$controller = app('telenok.config.repository')->getObjectFieldController();
+			$controller = app('telenok.repository')->getObjectFieldController();
 
 			if (!$input->input('filter', []) instanceof \Illuminate\Support\Collection)
 			{
@@ -209,7 +209,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 				->skip($this->getRequest()->input('pageStart', 0))
 				->take($this->getpageLength() + 1)->get();
 		
-		$config = app('telenok.config.repository')->getObjectFieldController();
+		$config = app('telenok.repository')->getObjectFieldController();
 
 		$content = [];
 		
@@ -549,7 +549,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
     public function getModelByType()
     {
-        return app($this->getModelType()->class_model);
+        return app($this->getModelType()->model_class);
     }
 	
 	public function getpageLength()

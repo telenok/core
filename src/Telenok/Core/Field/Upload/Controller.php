@@ -172,7 +172,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
          */
         $storages = File::storageList($model->upload_storage)->all();
 
-        app($type->class_model)->chunk(200, function ($rows) use ($storages, $model)
+        app($type->model_class)->chunk(200, function ($rows) use ($storages, $model)
         {
             foreach ($rows as $row)
             {
@@ -293,7 +293,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         if ($file !== null)
         {
-            while (($filename = $protectedFileUpload->generateFileName()) && $model::where($field->code . '_file_name', $filename)->count() > 0)
+            while (($filename = $protectedFileUpload->generateFileName()) && $model::where($field->code . '_file_name', $filename)->exists())
             {
             }
 

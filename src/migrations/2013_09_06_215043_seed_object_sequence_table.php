@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+class SeedObjectSequenceTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-class SeedObjectSequenceTable extends Migration {
+    public function up()
+    {
+        parent::up();
 
-	public function up()
-	{
-		if (Schema::hasTable('object_sequence'))
+        if (Schema::hasTable('object_sequence'))
 		{
 			$modelTypeId = DB::table('object_type')->where('code', 'object_sequence')->value('id');
 
@@ -22,11 +21,11 @@ class SeedObjectSequenceTable extends Migration {
 
 			DB::table('object_field')->insertGetId(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['ru' => 'Класс модели', 'en' => 'Class model'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'Класс модели', 'en' => 'Class model'], JSON_UNESCAPED_UNICODE),
 						'key' => 'string',
-						'code' => 'class_model',
+						'code' => 'model_class',
 						'active' => 1,
 						'field_object_type' => $modelTypeId,
 						'field_object_tab' => $tabMainId,
@@ -41,7 +40,7 @@ class SeedObjectSequenceTable extends Migration {
 
 			DB::table('object_field')->insertGetId(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['ru' => 'Тип', 'en' => 'Type'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'Тип', 'en' => 'Type'], JSON_UNESCAPED_UNICODE),
 						'key' => 'relation-one-to-many',
@@ -62,7 +61,7 @@ class SeedObjectSequenceTable extends Migration {
 
 			DB::table('object_field')->insert(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['en' => 'Parent'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['en' => 'Parent'], JSON_UNESCAPED_UNICODE),
                         'key' => 'select-one',

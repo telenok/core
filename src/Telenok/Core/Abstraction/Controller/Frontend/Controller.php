@@ -171,7 +171,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
                 })
                 ->orderBy('widget_order')->get();
 
-        $widgetRepository = app('telenok.config.repository')->getWidget();
+        $widgetRepository = app('telenok.repository')->getWidget();
 
         $wop->each(function($w) use (&$content, $widgetRepository)
         {
@@ -387,7 +387,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         $content = [];
 
-        $listWidget = app('telenok.config.repository')->getWidget();
+        $listWidget = app('telenok.repository')->getWidget();
 
         foreach ($this->container as $containerId)
         {

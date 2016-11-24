@@ -1,7 +1,7 @@
 <?php
 
 namespace Telenok\Core\Abstraction\Widget;
-use Telenok\Core\Event\CompileSetting;
+use Telenok\Core\Event\CompileConfig;
 
 /**
  * @class Telenok.Core.Abstraction.Widget.Controller
@@ -247,6 +247,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     public function saveCachedConfig()
     {
+
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return;
 
 
@@ -269,7 +272,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             return;
         }
 
-        $configData = app(\App\Vendor\Telenok\Core\Model\System\Setting::class)->where('code', 'telenok.widget.config')->first();
+        $configData = app(\App\Vendor\Telenok\Core\Model\System\Config::class)->where('code', 'telenok.widget.config')->first();
 
         $widgetConfigs = $configData->value;
 
@@ -295,7 +298,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         $configData->storeOrUpdate(['value' => $widgetConfigs]);
 
-        app('events')->fire(new CompileSetting());
+        app('events')->fire(new CompileConfig());
     }
 
     /**

@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+class SeedSubjectPermissionResourceTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-class SeedSubjectPermissionResourceTable extends Migration {
+    public function up()
+    {
+        parent::up();
 
-	public function up()
-	{
-		$modelTypeId = DB::table('object_type')->where('code', 'subject_permission_resource')->value('id');
+        $modelTypeId = DB::table('object_type')->where('code', 'subject_permission_resource')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
         $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);
@@ -21,7 +20,7 @@ class SeedSubjectPermissionResourceTable extends Migration {
         $now = \Carbon\Carbon::now()->toDateTimeString();
         $plus15Year = \Carbon\Carbon::now()->addYears(15)->toDateTimeString();
 
-        foreach(['object_type', 'object_field', 'object_tab', 'setting', 'object_sequence'] as $table)
+        foreach(['object_type', 'object_field', 'object_tab', 'config', 'object_sequence'] as $table)
         {
             app('db')->table($table)->update([
                 'active_at_start' => $now, 

@@ -62,18 +62,18 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     public function validateClassModel($model, $type = null, $input = [])
     {
-        if ($model->exists && $model->class_model)
+        if ($model->exists && $model->model_class)
         {
-            \Session::flash('warning.class_model_exists', $this->LL('error.class_model_exists'));
+            \Session::flash('warning.model_class_exists', $this->LL('error.model_class_exists'));
 
-            $input->forget('class_model');
+            $input->forget('model_class');
 
             return;
         }
 
-        $input->put('class_model', trim($input->get('class_model'), '\\ '));
+        $input->put('model_class', trim($input->get('model_class'), '\\ '));
 
-        $classNameCollection = collect(explode('\\', $input->get('class_model')))
+        $classNameCollection = collect(explode('\\', $input->get('model_class')))
                 ->filter(function($i)
                 {
                     return trim($i);
@@ -82,7 +82,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
                 {
                     if (!preg_match('/^[a-z][\w]*$/i', $item))
                     {
-                        throw new \Exception($this->LL('error.class_model.name'));
+                        throw new \Exception($this->LL('error.model_class.name'));
                     }
                 })
                 ->transform(function($item)
@@ -92,29 +92,29 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
         if ($classNameCollection->isEmpty())
         {
-            throw new \Exception($this->LL('error.class_model.name'));
+            throw new \Exception($this->LL('error.model_class.name'));
         }
 
-        $input->put('class_model', '\\' . implode('\\', $classNameCollection->all()));
+        $input->put('model_class', '\\' . implode('\\', $classNameCollection->all()));
 
-        $classModel = $input->get('class_model');
+        $classModel = $input->get('model_class');
 
         if (preg_match('/^\\\\App\\\\Model\\\\.+/', $classModel) !== 1 && !class_exists($classModel))
         {
-            throw new \Exception($this->LL('error.class_model.store', ['class' => $classModel]));
+            throw new \Exception($this->LL('error.model_class.store', ['class' => $classModel]));
         }
     }
 
     public function validateClassController($model, $type = null, $input = [])
     {
-        if (!$input->get('class_controller'))
+        if (!$input->get('controller_class'))
         {
             return;
         }
 
-        $input->put('class_controller', trim($input->get('class_controller'), '\\ '));
+        $input->put('controller_class', trim($input->get('controller_class'), '\\ '));
 
-        $classNameCollection = collect(explode('\\', $input->get('class_controller')))
+        $classNameCollection = collect(explode('\\', $input->get('controller_class')))
                 ->filter(function($i)
                 {
                     return trim($i);
@@ -122,7 +122,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
                 {
                     if (!preg_match('/^[a-z][\w]*$/i', $item))
                     {
-                        throw new \Exception($this->LL('error.class_controller.name'));
+                        throw new \Exception($this->LL('error.controller_class.name'));
                     }
                 })
                 ->transform(function($item)
@@ -130,17 +130,17 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             return ucfirst($item);
         });
 
-        $input->put('class_controller', '\\' . implode('\\', $classNameCollection->all()));
+        $input->put('controller_class', '\\' . implode('\\', $classNameCollection->all()));
 
-        $classController = $input->get('class_controller');
+        $classController = $input->get('controller_class');
 
         if (class_exists($classController))
         {
-            \Session::flash('warning.class_controller_exists', $this->LL($this->LL('error.class_controller_exists')));
+            \Session::flash('warning.controller_class_exists', $this->LL($this->LL('error.controller_class_exists')));
         }
         else if (preg_match('/^\\\\App\\\\Http\\\\Controllers\\\\.+/', $classController) !== 1)
         {
-            throw new \Exception($this->LL('error.class_controller.store', ['class' => $classController]));
+            throw new \Exception($this->LL('error.controller_class.store', ['class' => $classController]));
         }
     }
 
@@ -210,9 +210,9 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     public function createModelFile($model, $type = null, $input = [])
     {
-        $class = class_basename($model->class_model);
+        $class = class_basename($model->model_class);
 
-        $ns = trim(preg_replace('/\\\\' . $class . '$/', '', $model->class_model), '\\');
+        $ns = trim(preg_replace('/\\\\' . $class . '$/', '', $model->model_class), '\\');
 
         $path = trim(str_replace('App', '', $ns), '\\');
 
@@ -249,13 +249,13 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     public function createControllerFile($model, $type = null, $input = [])
     {
-        if (!$model->class_controller)
+        if (!$model->controller_class)
         {
             return;
         }
 
-        $class = class_basename($model->class_controller);
-        $ns = trim(preg_replace('/\\\\' . $class . '$/', '', $model->class_controller), '\\');
+        $class = class_basename($model->controller_class);
+        $ns = trim(preg_replace('/\\\\' . $class . '$/', '', $model->controller_class), '\\');
 
         $path = preg_replace('/^(App)(.+)$/', '${2}', $ns);
 
@@ -274,7 +274,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
                     'key' => "objects-{$model->code}",
                     'parent' => 'objects',
                     'presentation' => 'tree-tab-object',
-                    'classList' => "{$model->class_model}",
+                    'classList' => "{$model->model_class}",
                     'classTree' => "",
                 ];
 
@@ -362,7 +362,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             );
         }
 
-        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('code', 'id')->count())
+        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('code', 'id')->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'title' => array_get($translationSeed, 'model.№'),
@@ -382,7 +382,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             ]);
         }
 
-        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('code', 'title')->count())
+        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('code', 'title')->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'title' => array_get($translationSeed, 'model.title'),
@@ -403,7 +403,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             ]);
         }
 
-        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'created-by')->count())
+        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'created-by')->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'key' => 'created-by',
@@ -415,7 +415,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             ]);
         }
 
-        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'updated-by')->count())
+        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'updated-by')->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'key' => 'updated-by',
@@ -427,7 +427,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             ]);
         }
 
-        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'locked-by')->count())
+        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'locked-by')->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'key' => 'locked-by',
@@ -439,7 +439,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             ]);
         }
 
-        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'deleted-by')->count())
+        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'deleted-by')->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'key' => 'deleted-by',
@@ -453,7 +453,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
         if ($model->treeable)
         {
-            if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'tree')->count())
+            if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'tree')->exists())
             {
                 (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                     'key' => 'tree',
@@ -478,7 +478,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
                     ->update(['treeable' => 0]);
         }
 
-        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('code', 'active')->count())
+        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('code', 'active')->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'title' => array_get($translationSeed, 'model.active'),
@@ -504,7 +504,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             ]);
         }
 
-        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('code', 'active_at')->count())
+        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('code', 'active_at')->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'title' => array_get($translationSeed, 'model.active_at'),
@@ -526,7 +526,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
             ]);
         }
 
-        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'permission')->count())
+        if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('key', 'permission')->exists())
         {
             (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                 'key' => 'permission',

@@ -70,7 +70,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     public function children()
     {
-        return app('telenok.config.repository')->getModule()->filter(function($item) 
+        return app('telenok.repository')->getModule()->filter(function($item)
         {
             return $this->getKey() == $item->getParent();
         });
@@ -80,12 +80,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         if (!$this->getParent()) return false;
         
-        return app('telenok.config.repository')->getModule()->get($this->getParent());
+        return app('telenok.repository')->getModule()->get($this->getParent());
     }
 
     public function isParentAndSingle()
     {
-        $collection = app('telenok.config.repository')->getModule()->filter(function($item) {
+        $collection = app('telenok.repository')->getModule()->filter(function($item) {
             return $item->getParent() == $this->getKey();
         });
         

@@ -124,7 +124,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab
     public function getFilterSubQuery($input, $model, $query)
     {
         $input = collect($input);
-        $fieldConfig = app('telenok.config.repository')->getObjectFieldController();
+        $fieldConfig = app('telenok.repository')->getObjectFieldController();
 
         $model->getFieldForm()->each(function($field) use ($input, $query, $fieldConfig, $model)
         {
@@ -156,7 +156,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab
 
             $items = $this->getListItem($model);
 
-            $config = app('telenok.config.repository')->getObjectFieldController();
+            $config = app('telenok.repository')->getObjectFieldController();
 
             $fields = $model->getFieldList();
 
@@ -227,7 +227,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab
         {
             $f = $model->getObjectField()->get($field);
 
-            app('telenok.config.repository')
+            app('telenok.repository')
                     ->getObjectFieldController($f->key)
                     ->getFilterQuery($f, $model, $query, $f->code, $str);
         });

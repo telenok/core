@@ -4,7 +4,7 @@
 
 		<?php
 
-		$acceptedLocales = config('app.locales')->all();
+		$acceptedLocales = config('app.locales');
 		$defauleLocale = config('app.localeDefault');
 
 		?>

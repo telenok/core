@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
-class CreateBufferTable extends Migration {
+class CreateBufferTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('buffer'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('buffer'))
 		{
 			Schema::create('buffer', function(Blueprint $table)
 			{

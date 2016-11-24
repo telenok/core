@@ -7,13 +7,6 @@ class Listener {
         $event->getList()->push('Telenok\Core\PackageInfo');
     }
 
-    public function onRepositorySetting(RepositorySetting $event)
-    {
-        $event->getList()->push('App\Vendor\Telenok\Core\Setting\Basic\Controller');
-        $event->getList()->push('App\Vendor\Telenok\Core\Setting\Secure\Controller');
-        $event->getList()->push('App\Vendor\Telenok\Core\Setting\License\Controller');
-    }
-
     public function onAclFilterResource(AclFilterResource $event)
     {
         $event->getList()->push('App\Vendor\Telenok\Core\Security\Filter\Acl\Resource\ObjectType\Controller');
@@ -34,7 +27,7 @@ class Listener {
         $list->put('objects-lists', 0);
         $list->put('objects-type', 0);
         $list->put('objects-version', 0);
-        $list->put('system-setting', 0);
+        $list->put('system-config', 0);
         $list->put('web-page-constructor', 10);
         $list->put('web-page', 11);
         $list->put('web-domain', 13);
@@ -70,7 +63,7 @@ class Listener {
         $list->push('App\Vendor\Telenok\Core\Field\Decimal\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\Text\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\String\Controller');
-        $list->push('App\Vendor\Telenok\Core\Field\ComplexArray\Controller');
+        $list->push('App\Vendor\Telenok\Core\Field\ComplexData\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\RelationOneToOne\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\RelationOneToMany\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\RelationManyToMany\Controller');
@@ -108,25 +101,24 @@ class Listener {
 
     public function onCompileRoute(CompileRoute $event)
     {
-        app('telenok.config.repository')->compileRoute();
+        app('telenok.repository')->compileRoute();
     }
 
-    public function onCompileSetting(CompileSetting $event)
+    public function onCompileConfig(CompileConfig $event)
     {
-        app('telenok.config.repository')->compileSetting();
+        app('telenok.repository')->compileConfig();
     }
 
     public function subscribe($events)
     {
         $this->addListenerRepositoryPackage($events);
-        $this->addListenerRepositorySetting($events);
         $this->addListenerAclFilterResource($events);
         $this->addListenerModuleMenuLeft($events);
         $this->addListenerModuleMenuTop($events);
         $this->addListenerRepositoryObjectField($events);
         $this->addListenerRepositoryObjectFieldViewModel($events);
         $this->addListenerCompileRoute($events);
-        $this->addListenerCompileSetting($events);
+        $this->addListenerCompileConfig($events);
     }
 
     public function addListenerRepositoryPackage($events)
@@ -134,14 +126,6 @@ class Listener {
         $events->listen(
             'Telenok\Core\Event\RepositoryPackage',
             'App\Vendor\Telenok\Core\Event\Listener@onRepositoryPackage'
-        );
-    }
-
-    public function addListenerRepositorySetting($events)
-    {
-        $events->listen(
-            'Telenok\Core\Event\RepositorySetting',
-            'App\Vendor\Telenok\Core\Event\Listener@onRepositorySetting'
         );
     }
 
@@ -193,11 +177,11 @@ class Listener {
         );
     }
 
-    public function addListenerCompileSetting($events)
+    public function addListenerCompileConfig($events)
     {
         $events->listen(
-            'Telenok\Core\Event\CompileSetting',
-            'App\Vendor\Telenok\Core\Event\Listener@onCompileSetting'
+            'Telenok\Core\Event\CompileConfig',
+            'App\Vendor\Telenok\Core\Event\Listener@onCompileConfig'
         );
     }
 }

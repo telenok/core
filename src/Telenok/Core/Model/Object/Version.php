@@ -16,7 +16,7 @@ class Version extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
     {
         $data = static::findOrFail($versionId);
 
-        $class = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($data->object_type_id)->class_model;
+        $class = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($data->object_type_id)->model_class;
 
         $model = $class::findOrFail($data->object_id);
         $model->setRawAttributes(json_decode($data->object_data, true));
@@ -37,7 +37,7 @@ class Version extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
 
         try
         {
-            $class = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($versionData->object_type_id)->class_model;
+            $class = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($versionData->object_type_id)->model_class;
         }
         catch (\Exception $ex)
         {

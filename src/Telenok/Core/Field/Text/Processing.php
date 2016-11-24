@@ -39,7 +39,7 @@ class Processing {
 
             if ($wop)
             {
-                $repositoryWidgets = app('telenok.config.repository')->getWidget(); 
+                $repositoryWidgets = app('telenok.repository')->getWidget();
 
                 $node = $doc->createElement("span", $repositoryWidgets->get($wop->key)
                                                     ->setWidgetModel($wop)

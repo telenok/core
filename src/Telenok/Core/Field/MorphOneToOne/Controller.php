@@ -313,7 +313,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         
         $id = $field->morph_one_to_one_has ?: $field->morph_one_to_one_belong_to;
         
-        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
         
         $model = app($class);
         
@@ -418,7 +418,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 $item->fill([$relatedField . '_id' => 0, $relatedField . '_type' => null])->save();
             });
 
-            $relatedModel = app(\App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_one_has)->class_model);
+            $relatedModel = app(\App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_one_has)->model_class);
 
             if (intval($id)) 
             {
@@ -530,13 +530,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $relatedTypeOfModelField = $model->fieldObjectType()->first();
 
-        $classModelHasMany = $relatedTypeOfModelField->class_model;
+        $classModelHasMany = $relatedTypeOfModelField->model_class;
         $codeFieldHasMany = $model->code; 
         $codeTypeHasMany = $relatedTypeOfModelField->code; 
 
         $typeBelongTo = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_one_to_one_has')); 
         $tableBelongTo = $typeBelongTo->code;
-        $classBelongTo = $typeBelongTo->class_model;
+        $classBelongTo = $typeBelongTo->model_class;
 
         $relatedSQLField = $codeFieldHasMany . 'able';
 

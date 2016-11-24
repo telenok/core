@@ -172,7 +172,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         
         $id = $field->morph_one_to_many_has ?: $field->morph_one_to_many_belong_to;
         
-        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
         
         $model = app($class);
         
@@ -278,7 +278,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                     });
                 }
                 
-                $relatedModel = app(\App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_many_has)->class_model);
+                $relatedModel = app(\App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_many_has)->model_class);
 
                 collect($idsAdd)->each(function($id) use ($model, $method, $relatedModel) 
                 {
@@ -365,13 +365,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $relatedTypeOfModelField = $model->fieldObjectType()->first();   // eg object \App\Vendor\Telenok\Core\Model\Object\Type which DB-field "code" is "author"
 
-        $classModelHasMany = $relatedTypeOfModelField->class_model;
+        $classModelHasMany = $relatedTypeOfModelField->model_class;
         $codeFieldHasMany = $model->code; 
         $codeTypeHasMany = $relatedTypeOfModelField->code; 
 
         $typeBelongTo = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($input->get('morph_one_to_many_has')); 
         $tableBelongTo = $typeBelongTo->code;
-        $classBelongTo = $typeBelongTo->class_model;
+        $classBelongTo = $typeBelongTo->model_class;
 
         $relatedSQLField = $codeFieldHasMany . 'able';
 

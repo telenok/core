@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
-class CreateObjectFieldTable extends Migration {
+class CreateObjectFieldTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('object_field'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('object_field'))
 		{
 			Schema::create('object_field', function(Blueprint $table)
 			{

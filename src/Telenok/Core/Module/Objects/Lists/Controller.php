@@ -119,9 +119,9 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         {
             $code = $item->model->code;
 
-            if ($item->model->class_controller)
+            if ($item->model->controller_class)
             {
-                $module = app($item->model->class_controller);
+                $module = app($item->model->controller_class);
             }
         }
 
@@ -216,7 +216,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     public function getFilterSubQuery($input, $model, $query)
     {
         $input = collect($input);
-        $controller = app('telenok.config.repository')->getObjectFieldController();
+        $controller = app('telenok.repository')->getObjectFieldController();
 
         $model->getFieldForm()->each(function($field) use ($input, $query, $controller, $model)
         {
@@ -236,7 +236,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         $query->where(function($query) use ($str, $query, $model, $fieldCode)
         {
             $f = $model->getObjectField()->get($fieldCode);
-            app('telenok.config.repository')
+            app('telenok.repository')
                     ->getObjectFieldController($f->key)
                     ->getFilterQuery($f, $model, $query, $f->code, $str);
         });
@@ -339,7 +339,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null, $type = null)
     {
-        $config = app('telenok.config.repository')->getObjectFieldController();
+        $config = app('telenok.repository')->getObjectFieldController();
 
         $put->put('tableCheckAll', '<input type="checkbox" class="ace ace-checkbox-2" '
             . 'name="tableCheckAll[]" value="' . $item->getKey() . '"><span class="lbl"></span>');

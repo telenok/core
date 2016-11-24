@@ -101,7 +101,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Backend\Controller
 
         $listModuleMenuLeft = $eventModuleMenuLeft->getList();
 
-        $config = app('telenok.config.repository');
+        $config = app('telenok.repository');
 
         $setArray = [];
         

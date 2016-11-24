@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+class CreateObjectFieldDatetimeTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-class CreateObjectFieldDatetimeTable extends Migration {
+    public function up()
+    {
+        parent::up();
 
-	public function up()
-	{
-		if (Schema::hasTable('object_field'))
+        if (Schema::hasTable('object_field'))
 		{
 			Schema::table('object_field', function($table)
 			{

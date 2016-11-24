@@ -240,16 +240,14 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     {
         $sequenceTypeId = app('db')->table('object_type')->where('code', 'object_sequence')->value('id');
 
-        $translationSeed = $this->translationSeed();
-
-        if (!$input->get('title'))
+        if ($input->get('title')->isEmpty())
         {
-            $input->put('title', array_get($translationSeed, 'model.parent'));
+            $input->put('title', $this->translationSeed('parent'));
         }
 
-        if (!$input->get('title_list'))
+        if ($input->get('title_list')->isEmpty())
         {
-            $input->put('title_list', array_get($translationSeed, 'model.parent'));
+            $input->put('title_list', $this->translationSeed('parent'));
         }
 
         $input->put('key', 'tree');
@@ -268,8 +266,8 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         $input->put('field_object_tab', $tab->getKey());
 
         $toSave = [
-            'title' => array_get($translationSeed, 'model.children'),
-            'title_list' => array_get($translationSeed, 'model.children'),
+            'title' => $this->translationSeed('children'),
+            'title_list' => $this->translationSeed('children'),
             'key' => 'tree',
             'code' => 'tree_child',
             'field_object_type' => $input->get('field_object_type'),
@@ -326,13 +324,13 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * @return {Array}
      * @member Telenok.Core.Field.System.Tree.Controller
      */
-    public function translationSeed()
+    public function translationSeed($key)
     {
-        return [
-            'model' => [
-                'parent' => ['en' => 'Parent', 'ru' => 'Родитель'],
-                'children' => ['en' => 'Children', 'ru' => 'Потомок'],
-            ],
+        $translated = [
+            'parent' => ['en' => 'Parent', 'ru' => 'Родитель'],
+            'children' => ['en' => 'Children', 'ru' => 'Потомок'],
         ];
+
+        return array_get($translated, $key);
     }
 }

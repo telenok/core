@@ -75,7 +75,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $id = $field->morph_many_to_many_has ?: $field->morph_many_to_many_belong_to;
 
-        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
 
         $model = app($class);
 
@@ -211,8 +211,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         $morphManyCode = $model->code;
         $morphToCode = $morphManyCode . '_' . $typeMorphMany->code;
 
-        $classModelMorphMany = $typeMorphMany->class_model;
-        $classModelMorphTo = $typeBelongTo->class_model;
+        $classModelMorphMany = $typeMorphMany->model_class;
+        $classModelMorphTo = $typeBelongTo->model_class;
 
 
         $morphManyObject = app($classModelMorphMany);

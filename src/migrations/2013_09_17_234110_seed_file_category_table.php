@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-class SeedFileCategoryTable extends Migration {
+class SeedFileCategoryTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
     public function up()
     {
+        parent::up();
+
         $modelTypeId = DB::table('object_type')->where('code', 'file_category')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);

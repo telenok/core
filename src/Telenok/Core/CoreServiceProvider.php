@@ -3,7 +3,7 @@
 use Illuminate\Support\ServiceProvider;
 use App\Vendor\Telenok\Core\Support\Validator\Factory;
 use Telenok\Core\Event\CompileRoute;
-use Telenok\Core\Event\CompileSetting;
+use Telenok\Core\Event\CompileConfig;
 
 /**
  * @class Telenok.Core.CoreServiceProvider
@@ -40,10 +40,10 @@ class CoreServiceProvider extends ServiceProvider {
 
         $this->readDBMacro();
 
-        $this->compileSetting();
+        $this->compileConfig();
         $this->compileRoute();
 
-        if ($theme = \App\Vendor\Telenok\Core\Support\Config\Theme::activeTheme())
+        if ($theme = \App\Vendor\Telenok\Core\Support\Theme::activeTheme())
         {
             $this->loadViewsFrom(base_path(str_finish(config('app.path_theme'), '/') . $theme . '/views'), 'theme');
             $this->loadTranslationsFrom(base_path('resources/views/template/' . $theme . '/lang'), 'theme');
@@ -58,7 +58,7 @@ class CoreServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        $this->registerConfigRepository();
+        $this->registerTelenokRepository();
 
         $this->registerValidationFactory();
         
@@ -219,9 +219,9 @@ class CoreServiceProvider extends ServiceProvider {
         });
     }
 
-    public function registerConfigRepository()
+    public function registerTelenokRepository()
     {
-        $this->app->singleton('telenok.config.repository', '\App\Vendor\Telenok\Core\Support\Config\Repository');
+        $this->app->singleton('telenok.repository', '\App\Vendor\Telenok\Core\Support\Repository');
     }
 
     public function registerCommandInstall()
@@ -288,9 +288,9 @@ class CoreServiceProvider extends ServiceProvider {
         \Telenok\Core\Abstraction\Field\Relation\Controller::readMacroFile();
     }
 
-    public function compileSetting()
+    public function compileConfig()
     {
-        app('events')->fire(new CompileSetting());
+        app('events')->fire(new CompileConfig());
     }
 
     public function compileRoute()

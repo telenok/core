@@ -289,12 +289,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             {
                 $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
                 $sequence->id = $this->getKey();
-                $sequence->class_model = get_class($this);
+                $sequence->model_class = get_class($this);
                 $sequence->save();
             }
             else
             {
-                $sequence = \App\Vendor\Telenok\Core\Model\Object\Sequence::create(['class_model' => get_class($this)]);
+                $sequence = \App\Vendor\Telenok\Core\Model\Object\Sequence::create(['model_class' => get_class($this)]);
             }
 
             $this->id = $sequence->id;
@@ -349,7 +349,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     protected function deleteModelFieldController()
     {
-        $controllers = app('telenok.config.repository')->getObjectFieldController();
+        $controllers = app('telenok.repository')->getObjectFieldController();
 
         foreach ($this->getObjectField()->all() as $field)
         {
@@ -503,7 +503,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function hasVersioning()
     {
-        return $this->hasVersioning;
+        return ($this->hasVersioning === false || !$this->type()->has_versioning) ? false : true;
     }
 
     /**
@@ -801,7 +801,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         foreach ($input->all() as $key => $value)
         {
             $f = $objectField->get($key);
-            $f_ = app('telenok.config.repository')->getObjectFieldController();
+            $f_ = app('telenok.repository')->getObjectFieldController();
 
             if ($f)
             {
@@ -855,7 +855,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function preProcess($type, $input)
     {
-        $config = app('telenok.config.repository')->getObjectFieldController();
+        $config = app('telenok.repository')->getObjectFieldController();
 
         foreach ($type->field()->get() as $field)
         {
@@ -875,7 +875,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function postProcess($type, $input)
     {
-        $config = app('telenok.config.repository')->getObjectFieldController();
+        $config = app('telenok.repository')->getObjectFieldController();
 
         foreach ($type->field()->get() as $field)
         {
@@ -1048,7 +1048,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         {
             static::$listTranslated[$class] = (array) $this->translatedList;
 
-            $fields = app('telenok.config.repository')->getObjectFieldController();
+            $fields = app('telenok.repository')->getObjectFieldController();
 
             foreach ($this->getObjectField()->all() as $key => $field)
             {
@@ -1112,7 +1112,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             static::$listFillableFieldController[$class] = [];
             static::$listFieldDate[$class] = [];
 
-            $controllers = app('telenok.config.repository')->getObjectFieldController();
+            $controllers = app('telenok.repository')->getObjectFieldController();
 
             foreach ($this->getObjectField()->all() as $key => $field)
             {
@@ -1418,7 +1418,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         {
             $queryWhere->where(app('db')->raw(1), 0);
 
-            $filters = app('telenok.config.repository')->getAclResourceFilter();
+            $filters = app('telenok.repository')->getAclResourceFilter();
 
             if (!empty($filterCode))
             {
@@ -1860,7 +1860,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         $sequence = $this->treeAttr();
 
-        return !$sequence->children(1)->count();
+        return !$sequence->children(1)->exists();
     }
 
     /**

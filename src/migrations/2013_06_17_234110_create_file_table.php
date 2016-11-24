@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateFileTable extends Migration {
+class CreateFileTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('file'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('file'))
 		{
 			Schema::create('file', function(Blueprint $table)
 			{

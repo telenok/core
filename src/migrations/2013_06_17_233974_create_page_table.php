@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreatePageTable extends Migration {
+class CreatePageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('page'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('page'))
 		{
 			Schema::create('page', function(Blueprint $table)
 			{

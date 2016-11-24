@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
 
-class CreateRoleTable extends Migration {
+class CreateRoleTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('role'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('role'))
 		{
 			Schema::create('role', function(Blueprint $table)
 			{

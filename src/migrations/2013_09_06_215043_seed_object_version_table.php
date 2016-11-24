@@ -1,13 +1,12 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+class SeedObjectVersionTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-class SeedObjectVersionTable extends Migration {
+    public function up()
+    {
+        parent::up();
 
-	public function up()
-	{
-		if (Schema::hasTable('object_version'))
+        if (Schema::hasTable('object_version'))
 		{
 			$modelTypeId = DB::table('object_type')->where('code', 'object_version')->value('id');
 
@@ -22,7 +21,7 @@ class SeedObjectVersionTable extends Migration {
 
 			DB::table('object_field')->insertGetId(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['ru' => 'ID объекта', 'en' => 'ID of object'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'ID объекта', 'en' => 'ID of object'], JSON_UNESCAPED_UNICODE),
 						'key' => 'integer-unsigned',
@@ -41,7 +40,7 @@ class SeedObjectVersionTable extends Migration {
 
 			DB::table('object_field')->insertGetId(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['ru' => 'ID типа объекта', 'en' => 'ID type of object'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'ID типа объекта', 'en' => 'ID type of object'], JSON_UNESCAPED_UNICODE),
 						'key' => 'integer-unsigned',
@@ -60,10 +59,10 @@ class SeedObjectVersionTable extends Migration {
 
 			DB::table('object_field')->insertGetId(
 					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'class_model' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
 						'title' => json_encode(['ru' => 'Данные объекта', 'en' => 'Data of object'], JSON_UNESCAPED_UNICODE),
 						'title_list' => json_encode(['ru' => 'Данные объекта', 'en' => 'Data of object'], JSON_UNESCAPED_UNICODE),
-						'key' => 'complex-array',
+						'key' => 'complex-data',
 						'code' => 'object_data',
 						'active' => 1,
 						'field_object_type' => $modelTypeId,

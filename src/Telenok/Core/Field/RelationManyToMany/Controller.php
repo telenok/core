@@ -177,7 +177,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $id = $field->relation_many_to_many_has ? : $field->relation_many_to_many_belong_to;
 
-        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->class_model;
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
 
         $model = app($class);
 
@@ -319,7 +319,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 }
             }
 
-            if (!$model->{$method}()->count() && empty($idsAdd))
+            if (!$model->{$method}()->exists() && empty($idsAdd))
             {
                 $idsAdd = $field->relation_many_to_many_default->all();
             }
@@ -340,7 +340,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             }
         }
 
-        if ($field->required && !$model->{$method}()->count())
+        if ($field->required && !$model->{$method}()->exists())
         {
             throw new \Exception($this->LL('error.field.required', ['attribute' => $field->translate('title')]));
         }
@@ -412,14 +412,14 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $relatedTypeOfModelField = $model->fieldObjectType()->first();
 
-        $classModelHasMany = $relatedTypeOfModelField->class_model;
+        $classModelHasMany = $relatedTypeOfModelField->model_class;
         $tableHasMany = $relatedTypeOfModelField->code;
         $codeFieldHasMany = $model->code;
         $codeTypeHasMany = $relatedTypeOfModelField->code;
 
         $typeBelongTo = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($input->get('relation_many_to_many_has'));
         $tableBelongTo = $typeBelongTo->code;
-        $classBelongTo = $typeBelongTo->class_model;
+        $classBelongTo = $typeBelongTo->model_class;
 
         $pivotTable = 'pivot_relation_m2m_' . $codeFieldHasMany . '_' . $codeTypeHasMany;
         $pivotField = $codeFieldHasMany . '_' . $codeTypeHasMany;

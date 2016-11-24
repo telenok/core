@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreatePermissionTable extends Migration {
+class CreatePermissionTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
-	public function up()
-	{
-		if (!Schema::hasTable('permission'))
+    public function up()
+    {
+        parent::up();
+
+        if (!Schema::hasTable('permission'))
 		{
 			Schema::create('permission', function(Blueprint $table)
 			{

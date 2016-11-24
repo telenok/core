@@ -120,8 +120,8 @@
 				<div id="menu-list-{{$uniqueId}}" class="tab-pane active">
 					<ul class="dropdown-menu" style="position: inherit; display: block;">
 						<?php
-						$group = app('telenok.config.repository')->getWidgetGroup();
-						$widget = app('telenok.config.repository')->getWidget();
+						$group = app('telenok.repository')->getWidgetGroup();
+						$widget = app('telenok.repository')->getWidget();
 
 						foreach ($group as $g)
 						{
@@ -200,7 +200,7 @@
 						$localeDefault = config('app.localeDefault');
 						$localeDefaultId = 0;
 
-						$languages = \App\Vendor\Telenok\Core\Model\System\Language::whereIn('locale', config('app.locales')->all())
+						$languages = \App\Vendor\Telenok\Core\Model\System\Language::whereIn('locale', config('app.locales'))
 										->get()->sortBy(function($item) use ($localeDefault, &$localeDefaultId)
 						{
 							if ($item->locale == $localeDefault)

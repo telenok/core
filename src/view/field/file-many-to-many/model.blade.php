@@ -228,7 +228,7 @@
 
                                 <?php
 
-                                if ($model->{$method}()->take(1)->count())
+                                if ($model->{$method}()->exists())
                                 {
                                     $items = $model->{$method}()->orderBy('sort')->take(100)->get();
                                 ?>    
