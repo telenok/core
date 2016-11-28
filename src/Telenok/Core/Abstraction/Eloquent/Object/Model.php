@@ -1214,7 +1214,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         {
             return $val->get($locale) ? : ($val->get($localeDefault) ? : $val->get('en'));
         }
-        else if ((($v = $val) instanceof \ArrayAccess && $val) || (($v = json_decode($val, true)) && json_last_error() === JSON_ERROR_NONE))
+        else if ((($v = $val) instanceof \ArrayAccess && $v || is_array($v) && $v) || (($v = json_decode($val, true)) && json_last_error() === JSON_ERROR_NONE))
         {
             if (isset($v[$locale]))
             {

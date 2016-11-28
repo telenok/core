@@ -1,53 +1,17 @@
-<div class="form-group">
-    {!!  Form::label('value[app.backend.brand]', $controller->LL('app.backend.brand.title'), ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-    <div class="col-sm-9">
-        {!!  Form::text('value[app.backend.brand]',  $model->value->get('app.backend.brand')) !!}
-        <span title="" data-content="{{ $controller->LL('app.backend.brand.description') }}" data-placement="right" data-trigger="hover" data-rel="popover"
-              class="help-button" data-original-title="{{ $controller->LL('core::default.tooltip.description') }}">?</span>
-    </div>
-</div>
 
 <div class="form-group">
-    {!!  Form::label('value[app.localeDefault]', $controller->LL('localedefault.title'), ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-    <div class="col-sm-9">
-        {!!  Form::select('value[app.localeDefault]', \App\Vendor\Telenok\Core\Model\System\Language::all()->pluck('title', 'locale'), $model->value->get('app.localeDefault')) !!}
-        <span title="" data-content="{{ $controller->LL('localedefault.description') }}" data-placement="right" data-trigger="hover" data-rel="popover"
-              class="help-button" data-original-title="{{ $controller->LL('core::default.tooltip.description') }}">?</span>
-    </div>
-</div>
-
-<div class="form-group">
-    {!!  Form::label("value[app.locales][]", $controller->LL('locales.title'), [ 'class'=>'col-sm-3 control-label no-padding-right' ]) !!}
-    <div class="col-sm-9">
-        {!!  Form::select("value[app.locales][]", \App\Vendor\Telenok\Core\Model\System\Language::all()->pluck('title', 'locale'),
-            $model->value->get('app.locales', []), [ 'multiple'=>'multiple', 'size'=>10 ] ) !!}
-        <span title="" data-content="{{ $controller->LL('locales.description') }}" data-placement="right" data-trigger="hover" data-rel="popover"
-              class="help-button" data-original-title="{{ $controller->LL('core::default.tooltip.description') }}">?</span>
-    </div>
-</div>
-
-<div class="form-group">
-    {!!  Form::label('value[app.timezone]', $controller->LL('timezone.title'), ['class' => 'col-sm-3 control-label no-padding-right']) !!}
-    <div class="col-sm-9">
-        {!!  Form::text('value[app.timezone]',  $model->value->get('app.timezone')) !!}
-        <span title="" data-content="{{ $controller->LL('timezone.description') }}" data-placement="right" data-trigger="hover" data-rel="popover"
-              class="help-button" data-original-title="{{ $controller->LL('core::default.tooltip.description') }}">?</span>
-    </div>
-</div>
-
-<div class="form-group">
-    {!!  Form::label('value[telenok.view.theme][]', $controller->LL('view.theme.title'), ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+    {!!  Form::label('value[]', $model->translate('title'), ['class' => 'col-sm-3 control-label no-padding-right']) !!}
     <div class="col-sm-9">
 
         <?php
 
-            $settingCollect = collect($model->value->get("telenok.view.theme", "default"));
+        $settingCollect = collect($model->value);
 
         ?>
 
         @if ($cnt = count((array)$settingCollect->get('key')))
 
-        <?php
+            <?php
 
             for ($iterSetting = 0; $iterSetting < $cnt; $iterSetting++)
             {
@@ -57,7 +21,7 @@
 
             <div class="template-key-row-{{$uniqueId}}">
 
-                {!! Form::select('value[telenok.view.theme][key][]',
+                {!! Form::select('value[key][]',
                     (function($array){
                         $arr = [];
                         foreach($array as $k => $v)
@@ -69,7 +33,7 @@
                     })(app('telenok.repository')->getViewTheme()->all()),
                     array_get($settingCollect->get('key'), $iterSetting)) !!}
 
-                {!! Form::select('value[telenok.view.theme][case][]', [
+                {!! Form::select('value[case][]', [
                         'default' => 'default',
                         'url-regex' => 'url-regex',
                         'time-range' => 'time-range',
@@ -81,12 +45,12 @@
 
                 @if ($selectedCase == 'time-range' || $selectedCase == 'date-range')
 
-                    {!!  Form::text('value[telenok.view.theme][value1][]', array_get($settingCollect->get('value1'), $iterSetting),
+                    {!!  Form::text('value[value1][]', array_get($settingCollect->get('value1'), $iterSetting),
                         [
                             'placeholder' => ($selectedCase == 'time-range' ? '10:30' : '2020-01-20 10:30')
                         ]) !!}
 
-                    {!!  Form::text('value[telenok.view.theme][value2][]',
+                    {!!  Form::text('value[value2][]',
                             array_get($settingCollect->get('value2'), $iterSetting),
                             [
                                 'class' => 'template-value2',
@@ -95,18 +59,18 @@
 
                 @elseif ($selectedCase == 'default')
 
-                    {!!  Form::hidden('value[telenok.view.theme][value1][]',
+                    {!!  Form::hidden('value[value1][]',
                             array_get($settingCollect->get('value1'), $iterSetting)) !!}
 
-                    {!!  Form::hidden('value[telenok.view.theme][value2][]',
+                    {!!  Form::hidden('value[value2][]',
                             array_get($settingCollect->get('value2'), $iterSetting),
                             ['class' => 'template-value2']) !!}
 
                 @else
 
-                    {!!  Form::text('value[telenok.view.theme][value1][]', array_get($settingCollect->get('value1'), $iterSetting)) !!}
+                    {!!  Form::text('value[value1][]', array_get($settingCollect->get('value1'), $iterSetting)) !!}
 
-                    {!!  Form::hidden('value[telenok.view.theme][value2][]',
+                    {!!  Form::hidden('value[value2][]',
                             array_get($settingCollect->get('value2'), $iterSetting),
                             ['class' => 'template-value2']) !!}
 
@@ -115,7 +79,7 @@
                 <button type="button" class="btn btn-success btn-minier btn-add"><i class="fa fa-plus"></i></button>
 
                 @if ($iterSetting)
-                <button type="button" class="btn btn-danger btn-remove btn-minier"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-danger btn-remove btn-minier"><i class="fa fa-minus"></i></button>
                 @endif
             </div>
 
@@ -129,7 +93,7 @@
 
             <div class="template-key-row-{{$uniqueId}}">
 
-                {!! Form::select('value[telenok.view.theme][key][]',
+                {!! Form::select('value[key][]',
                                     (function($array){
                         $arr = [];
                         foreach($array as $k => $v)
@@ -138,10 +102,9 @@
                         }
 
                         return $arr;
-                    })(app('telenok.repository')->getViewTheme()->all())
-                    , config('telenok.view.theme')) !!}
+                    })(app('telenok.repository')->getViewTheme()->all()), config('telenok.view.theme')) !!}
 
-                {!! Form::select('value[telenok.view.theme][case][]', [
+                {!! Form::select('value[case][]', [
                         'default' => 'default',
                         'url-regex' => 'url-regex',
                         'time-range' => 'time-range',
@@ -151,8 +114,8 @@
                     '',
                     ['class' => 'template-select-case']) !!}
 
-                {!! Form::hidden('value[telenok.view.theme][value1][]', '') !!}
-                {!! Form::hidden('value[telenok.view.theme][value2][]', '', ['class' => 'template-value2']) !!}
+                {!! Form::hidden('value[value1][]', '') !!}
+                {!! Form::hidden('value[value2][]', '', ['class' => 'template-value2']) !!}
 
                 <button type="button" class="btn btn-success btn-minier btn-add"><i class="fa fa-plus"></i></button>
             </div>
@@ -162,8 +125,8 @@
         <template id="template-key-select-{{$uniqueId}}">
             <div class="template-key-row-{{$uniqueId}}">
 
-                {!! Form::select('value[telenok.view.theme][key][]', app('telenok.repository')->getViewTheme()->all(), config('telenok.view.theme')) !!}
-                {!! Form::select('value[telenok.view.theme][case][]', [
+                {!! Form::select('value[key][]', app('telenok.repository')->getViewTheme()->all(), config('telenok.view.theme')) !!}
+                {!! Form::select('value[case][]', [
                         'default' => 'default',
                         'url-regex' => 'url-regex',
                         'time-range' => 'time-range',
@@ -173,8 +136,8 @@
                     '',
                     ['class' => 'template-select-case']) !!}
 
-                {!! Form::hidden('value[telenok.view.theme][value1][]', '') !!}
-                {!! Form::hidden('value[telenok.view.theme][value2][]', '', ['class' => 'template-value2']) !!}
+                {!! Form::hidden('value[value1][]', '') !!}
+                {!! Form::hidden('value[value2][]', '', ['class' => 'template-value2']) !!}
 
                 <button type="button" class="btn btn-success btn-add btn-minier"><i class="fa fa-plus"></i></button>
                 <button type="button" class="btn btn-danger btn-remove btn-minier"><i class="fa fa-minus"></i></button>

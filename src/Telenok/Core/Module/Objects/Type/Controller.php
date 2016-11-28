@@ -80,7 +80,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
                 })
                 ->each(function($item)
                 {
-                    if (!preg_match('/^[a-z][\w]*$/i', $item))
+                    if (!preg_match('/^[\\a-z][\w]*$/i', $item))
                     {
                         throw new \Exception($this->LL('error.model_class.name'));
                     }
@@ -120,7 +120,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
                     return trim($i);
                 })->each(function($item)
                 {
-                    if (!preg_match('/^[a-z][\w]*$/i', $item))
+                    if (!preg_match('/^[\\a-z][\w]*$/i', $item))
                     {
                         throw new \Exception($this->LL('error.controller_class.name'));
                     }

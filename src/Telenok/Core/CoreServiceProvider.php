@@ -58,6 +58,8 @@ class CoreServiceProvider extends ServiceProvider {
      */
     public function register()
     {
+        var_dump('bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+
         $this->registerTelenokRepository();
 
         $this->registerValidationFactory();

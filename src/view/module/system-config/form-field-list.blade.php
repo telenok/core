@@ -8,9 +8,14 @@
 
             try
             {
-                $w = app('telenok.repository')->getConfigGroup(strtolower($model->code));
-
-                echo $w->getFormConfigContent($field, $model, $uniqueId);
+                if ($model->controller_class && class_exists($model->controller_class))
+                {
+                    echo with(new $model->controller_class)->getValueContent($controller, $model, $field, $uniqueId);
+                }
+                else
+                {
+                    throw new \Exception();
+                }
             }
             catch (\Exception $e)
             {

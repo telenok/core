@@ -991,7 +991,6 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
         \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_field')->first()->makeLastChildOf($folderSystem);
         \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'language')->first()->makeLastChildOf($folderSystem);
         \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_tab')->first()->makeLastChildOf($folderSystem);
-        \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'config_group')->first()->makeLastChildOf($folderSystem);
         \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'folder')->first()->makeLastChildOf($folderSystem);
         \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_version')->first()->makeLastChildOf($folderSystem);
         \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->first()->makeLastChildOf($folderSystem);
@@ -1251,19 +1250,11 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
 
 
-        $configGroupBase = (new \App\Vendor\Telenok\Core\Model\System\ConfigGroup())->storeOrUpdate([
-            'title' => ['en' => 'Base configs', 'ru' => 'Основная конфигурация'],
-            'active' => 1,
-            'code' => 'telenok.basic',
-            'controller_class' => '\App\Vendor\Telenok\Core\Config\Basic\Controller',
-        ]);
-
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
             'title' => ['en' => 'Brand name', 'ru' => 'Название компании'],
             'active' => 1,
             'code' => 'app.backend.brand',
             'value' => 'My Company',
-            'config_config_group' => $configGroupBase->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
@@ -1271,7 +1262,6 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             'active' => 1,
             'code' => 'app.localeDefault',
             'value' => 'en',
-            'config_config_group' => $configGroupBase->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
@@ -1279,7 +1269,6 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             'active' => 1,
             'code' => 'app.locales',
             'value' => ['en'],
-            'config_config_group' => $configGroupBase->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
@@ -1287,7 +1276,6 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             'active' => 1,
             'code' => 'app.timezone',
             'value' => 'UTC',
-            'config_config_group' => $configGroupBase->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
@@ -1295,24 +1283,16 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             'active' => 1,
             'code' => 'telenok.view.theme',
             'value' => 'default',
-            'config_config_group' => $configGroupBase->getKey(),
+            'controller_class' => '\App\Vendor\Telenok\Core\Config\Item\Theme',
         ]);
 
 
-
-        $configGroupSecurity = (new \App\Vendor\Telenok\Core\Model\System\ConfigGroup())->storeOrUpdate([
-            'title' => ['en' => 'Secure settings', 'ru' => 'Настройки безопасности'],
-            'active' => 1,
-            'code' => 'telenok.secure',
-            'controller_class' => '\App\Vendor\Telenok\Core\Config\Secure\Controller',
-        ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
             'title' => ['en' => 'Min password length', 'ru' => 'Минимальная длина пароля'],
             'active' => 1,
             'code' => 'auth.password.length-min',
             'value' => 8,
-            'config_config_group' => $configGroupSecurity->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
@@ -1320,7 +1300,6 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             'active' => 1,
             'code' => 'auth.logout.period',
             'value' => 20,
-            'config_config_group' => $configGroupSecurity->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
@@ -1328,46 +1307,26 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             'active' => 1,
             'code' => 'app.acl.enabled',
             'value' => 1,
-            'config_config_group' => $configGroupSecurity->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
             'title' => ['en' => 'Versioning enabled', 'ru' => 'Версионирование разрешено'],
             'active' => 1,
             'code' => 'app.version.enabled',
-            'value' => 1,
-            'config_config_group' => $configGroupSecurity->getKey(),
+            'value' => 0,
         ]);
 
 
-
-        $configGroupLicense = (new \App\Vendor\Telenok\Core\Model\System\ConfigGroup())->storeOrUpdate([
-            'title' => ['en' => 'License settings', 'ru' => 'Настройки лицензии'],
-            'active' => 1,
-            'code' => 'telenok.license',
-            'controller_class' => '\App\Vendor\Telenok\Core\Config\License\Controller',
-        ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Versioning enabled', 'ru' => 'Версионирование разрешено'],
+            'title' => ['en' => 'License key', 'ru' => 'Лицензионный ключ'],
             'active' => 1,
             'code' => 'license.key',
             'value' => 'demo',
-            'config_config_group' => $configGroupLicense->getKey(),
-        ]);
-
-
-
-        (new \App\Vendor\Telenok\Core\Model\System\ConfigGroup())->storeOrUpdate([
-            'title' => ['en' => 'Widget config cache', 'ru' => 'Кэш конфигураций виджетов'],
-            'active' => 1,
-            'code' => 'telenok.widget.config',
-            'value' => [],
         ]);
 
         (new \Symfony\Component\Console\Output\ConsoleOutput(
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Config added');
-
     }
 }
