@@ -3,7 +3,6 @@
     app()->register('App\Vendor\Telenok\Core\CoreServiceProvider');
     app('events')->subscribe('App\Vendor\Telenok\Core\Event\Listener');
 
-
     $this->line('Package assets publishing');
     
     $this->call('vendor:publish', [

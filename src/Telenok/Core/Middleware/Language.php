@@ -5,12 +5,11 @@ namespace Telenok\Core\Middleware;
 use Illuminate\Routing\Redirector;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
-use Illuminate\Contracts\Routing\Middleware;
 
 /**
  * @class Telenok.Core.Middleware.Language
  */
-class Language implements Middleware {
+class Language {
 
     public function __construct(Application $app, Redirector $redirector, Request $request)
     {
@@ -23,7 +22,7 @@ class Language implements Middleware {
     {
         $localeHeader = substr($request->server('HTTP_ACCEPT_LANGUAGE'), 0, 2);
 
-        $localeCollection = $this->app->config->get('app.locales');
+        $localeCollection = collect($this->app->config->get('app.locales'));
 
         if (in_array($localeHeader, $localeCollection->all(), true))
         {
