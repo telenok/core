@@ -1,6 +1,6 @@
 
 <div class="form-group">
-    {!!  Form::label('value[]', $model->translate('title'), ['class' => 'col-sm-3 control-label no-padding-right']) !!}
+    {!!  Form::label("value[{$model->code}][]", $model->translate('title'), ['class' => 'col-sm-3 control-label no-padding-right']) !!}
     <div class="col-sm-9">
 
         <?php
@@ -21,7 +21,7 @@
 
             <div class="template-key-row-{{$uniqueId}}">
 
-                {!! Form::select('value[key][]',
+                {!! Form::select("value[{$model->code}][key][]",
                     (function($array){
                         $arr = [];
                         foreach($array as $k => $v)
@@ -33,7 +33,7 @@
                     })(app('telenok.repository')->getViewTheme()->all()),
                     array_get($settingCollect->get('key'), $iterSetting)) !!}
 
-                {!! Form::select('value[case][]', [
+                {!! Form::select("value[{$model->code}][case][]", [
                         'default' => 'default',
                         'url-regex' => 'url-regex',
                         'time-range' => 'time-range',
@@ -45,12 +45,12 @@
 
                 @if ($selectedCase == 'time-range' || $selectedCase == 'date-range')
 
-                    {!!  Form::text('value[value1][]', array_get($settingCollect->get('value1'), $iterSetting),
+                    {!!  Form::text("value[{$model->code}][value1][]", array_get($settingCollect->get('value1'), $iterSetting),
                         [
                             'placeholder' => ($selectedCase == 'time-range' ? '10:30' : '2020-01-20 10:30')
                         ]) !!}
 
-                    {!!  Form::text('value[value2][]',
+                    {!!  Form::text("value[{$model->code}][value2][]",
                             array_get($settingCollect->get('value2'), $iterSetting),
                             [
                                 'class' => 'template-value2',
@@ -59,18 +59,18 @@
 
                 @elseif ($selectedCase == 'default')
 
-                    {!!  Form::hidden('value[value1][]',
+                    {!!  Form::hidden("value[{$model->code}][value1][]",
                             array_get($settingCollect->get('value1'), $iterSetting)) !!}
 
-                    {!!  Form::hidden('value[value2][]',
+                    {!!  Form::hidden("value[{$model->code}][value2][]",
                             array_get($settingCollect->get('value2'), $iterSetting),
                             ['class' => 'template-value2']) !!}
 
                 @else
 
-                    {!!  Form::text('value[value1][]', array_get($settingCollect->get('value1'), $iterSetting)) !!}
+                    {!!  Form::text("value[{$model->code}][value1][]", array_get($settingCollect->get('value1'), $iterSetting)) !!}
 
-                    {!!  Form::hidden('value[value2][]',
+                    {!!  Form::hidden("value[{$model->code}][value2][]",
                             array_get($settingCollect->get('value2'), $iterSetting),
                             ['class' => 'template-value2']) !!}
 
@@ -93,7 +93,7 @@
 
             <div class="template-key-row-{{$uniqueId}}">
 
-                {!! Form::select('value[key][]',
+                {!! Form::select("value[{$model->code}][key][]",
                                     (function($array){
                         $arr = [];
                         foreach($array as $k => $v)
@@ -104,7 +104,7 @@
                         return $arr;
                     })(app('telenok.repository')->getViewTheme()->all()), config('telenok.view.theme')) !!}
 
-                {!! Form::select('value[case][]', [
+                {!! Form::select("value[{$model->code}][case][]", [
                         'default' => 'default',
                         'url-regex' => 'url-regex',
                         'time-range' => 'time-range',
@@ -114,8 +114,8 @@
                     '',
                     ['class' => 'template-select-case']) !!}
 
-                {!! Form::hidden('value[value1][]', '') !!}
-                {!! Form::hidden('value[value2][]', '', ['class' => 'template-value2']) !!}
+                {!! Form::hidden("value[{$model->code}][value1][]", '') !!}
+                {!! Form::hidden("value[{$model->code}][value2][]", '', ['class' => 'template-value2']) !!}
 
                 <button type="button" class="btn btn-success btn-minier btn-add"><i class="fa fa-plus"></i></button>
             </div>
@@ -125,8 +125,8 @@
         <template id="template-key-select-{{$uniqueId}}">
             <div class="template-key-row-{{$uniqueId}}">
 
-                {!! Form::select('value[key][]', app('telenok.repository')->getViewTheme()->all(), config('telenok.view.theme')) !!}
-                {!! Form::select('value[case][]', [
+                {!! Form::select("value[{$model->code}][key][]", app('telenok.repository')->getViewTheme()->all(), config('telenok.view.theme')) !!}
+                {!! Form::select("value[{$model->code}][case][]", [
                         'default' => 'default',
                         'url-regex' => 'url-regex',
                         'time-range' => 'time-range',
@@ -136,8 +136,8 @@
                     '',
                     ['class' => 'template-select-case']) !!}
 
-                {!! Form::hidden('value[value1][]', '') !!}
-                {!! Form::hidden('value[value2][]', '', ['class' => 'template-value2']) !!}
+                {!! Form::hidden("value[{$model->code}][value1][]", '') !!}
+                {!! Form::hidden("value[{$model->code}][value2][]", '', ['class' => 'template-value2']) !!}
 
                 <button type="button" class="btn btn-success btn-add btn-minier"><i class="fa fa-plus"></i></button>
                 <button type="button" class="btn btn-danger btn-remove btn-minier"><i class="fa fa-minus"></i></button>

@@ -426,6 +426,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         $input->put('multilanguage', 0);
         $input->put('field_order', $input->get('field_order', 4));
         $input->put('allow_search', $input->get('allow_search', 1));
+        $input->put('show_in_list', $input->get('show_in_list', 0));
 
         if (!$input->get('field_object_tab'))
         {

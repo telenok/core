@@ -118,11 +118,6 @@ class Config {
      */
     public function getRuleList()
     {
-        if (empty($this->ruleList))
-        {
-            $this->ruleList = $this->processRule($this->getModel()->getRule());
-        }
-        
         return $this->ruleList;
     } 
     
@@ -139,7 +134,7 @@ class Config {
 
         return $this;
     }
-    
+
     /**
      * @method getCustomAttribute
      * Return custom attribute list.

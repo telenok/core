@@ -74,7 +74,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         $validator = $this->validator($this->ruleList, $input);
 
-        if ($validator->fails())
+        if (!$validator->passes())
         {
             throw $this->validateException()->setMessageError($validator->messages());
         }
@@ -110,5 +110,5 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         return new \Telenok\Core\Support\Exception\Validator;
     }
 
-    public function save($model, $input) {}
+    public function preProcess($model, $type, $input) {}
 }

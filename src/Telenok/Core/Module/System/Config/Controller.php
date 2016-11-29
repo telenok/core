@@ -13,22 +13,31 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
     protected $presentationFormFieldListView = 'core::module.system-config.form-field-list';
     protected $modelListClass = '\App\Vendor\Telenok\Core\Model\System\Config';
 
-    public function save($input = [], $type = null)
+    public function preProcess($model, $type, $input)
     {
-        $input = collect($input);
-
-        $model = parent::save($input, $type);
-
-        if ($model->controller_class && class_exists($model->controller_class))
+        /*
+         * Value can holds many values for other config like
+         *
+         * $value = ['license.key' => 'demo', 'locale' => 'en'];
+         *
+         */
+        if (($v = $input->get('value')) && isset($v[$input->get('code')]))
         {
-            $controller = new $model->controller_class;
-
-            $controller->validate($input->get('value', []));
-            $controller->save($model, $input);
+            $input->put('value', $v[$input->get('code')]);
         }
-        else
+
+        if ($model->controller_class)
         {
-            throw new \Exception();
+            if (class_exists($model->controller_class) && ($controller = new $model->controller_class)
+                    && ($controller instanceof \Telenok\Core\Abstraction\Config\Controller))
+            {
+                $controller->validate($input);
+                $controller->preProcess($model, $type, $input);
+            }
+            else
+            {
+                throw new \Exception();
+            }
         }
     }
 }

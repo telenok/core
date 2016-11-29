@@ -113,6 +113,18 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
                 ]
             );
 
+            DB::table('object_type')->insertGetId(
+                [
+                    'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Type']),
+                    'title' => json_encode(['ru' => 'Группа конфигураций', 'en' => 'Configuration group'], JSON_UNESCAPED_UNICODE),
+                    'title_list' => json_encode(['ru' => 'Группа конфигураций', 'en' => 'Configuration group'], JSON_UNESCAPED_UNICODE),
+                    'code' => 'config_group',
+                    'active' => 1,
+                    'model_class' => '\App\Vendor\Telenok\Core\Model\System\ConfigGroup',
+                    'controller_class' => '\App\Vendor\Telenok\Core\Module\System\ConfigGroup\Controller',
+                ]
+            );
+
 			DB::table('object_type')->insertGetId(
 					[
 						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Type']),
