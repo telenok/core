@@ -14,7 +14,14 @@ class Theme {
     {
         if (static::$theme === null)
         {
-            $themeConfig = collect(config('telenok.view.theme', []));
+            $themeConfigData = config('telenok.view.theme', []);
+
+            if (is_string($themeConfigData))
+            {
+                return (static::$theme = $themeConfigData);
+            }
+
+            $themeConfig = collect($themeConfigData);
 
             foreach($themeConfig->get('key', []) as $k => $val)
             {

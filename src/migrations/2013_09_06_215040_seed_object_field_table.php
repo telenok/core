@@ -99,7 +99,7 @@ class SeedObjectFieldTable extends \App\Vendor\Telenok\Core\Support\Migrations\M
                     'relation_one_to_many_belong_to' => $typeId,
                     'multilanguage'                  => 0,
                     'show_in_form'                   => 1,
-                    'show_in_list'                   => 1,
+                    'show_in_list'                   => 0,
                     'allow_search'                   => 1,
                     'allow_create'                   => 1,
                     'allow_update'                   => 0,
@@ -386,6 +386,8 @@ class SeedObjectFieldTable extends \App\Vendor\Telenok\Core\Support\Migrations\M
                     'show_in_form'      => 1,
                     'show_in_list'      => 0,
                     'allow_search'      => 1,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
                     'field_order'       => 20,
                 ]
             );
@@ -404,6 +406,8 @@ class SeedObjectFieldTable extends \App\Vendor\Telenok\Core\Support\Migrations\M
                     'show_in_form'      => 1,
                     'show_in_list'      => 0,
                     'allow_search'      => 1,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
                     'field_order'       => 21,
                 ]
             );
@@ -422,6 +426,8 @@ class SeedObjectFieldTable extends \App\Vendor\Telenok\Core\Support\Migrations\M
                     'show_in_form'      => 1,
                     'show_in_list'      => 0,
                     'allow_search'      => 1,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
                     'field_order'       => 22,
                 ]
             );
