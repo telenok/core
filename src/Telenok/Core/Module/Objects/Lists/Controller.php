@@ -45,10 +45,23 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             {
                 return $controllerProcessing->getActionParam();
             }
+            else
+            {
+                return [
+                    'presentation' => $this->getPresentation(),
+                    'presentationModuleKey' => $this->getPresentationModuleKey(),
+                    'presentationContent' => $this->getPresentationContent(),
+                    'key' => $this->getKey(),
+                    'treeContent' => $this->getTreeContent(),
+                    'url' => $this->getRouterContent(['typeId' => $typeId, 'treeId' => 0]),
+                    'breadcrumbs' => $this->getBreadcrumbs(),
+                    'pageHeader' => $this->getPageHeader(),
+                ];
+            }
         }
         else
         {
-            return json_encode([
+            return [
                 'presentation' => $this->getPresentation(),
                 'presentationModuleKey' => $this->getPresentationModuleKey(),
                 'presentationContent' => $this->getPresentationContent(),
@@ -58,7 +71,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 'breadcrumbs' => $this->getBreadcrumbs(),
                 'pageHeader' => $this->getPageHeader(),
                 'uniqueId' => str_random(),
-            ]);
+            ];
         }
     }
 

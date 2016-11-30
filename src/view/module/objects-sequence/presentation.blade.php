@@ -7,58 +7,52 @@
 ?> 
 
     @section('tableListBtnCreate')
-        aButtons.push({
-            "sExtends": "text",
-            "sButtonText": "<i class='fa fa-plus smaller-90'></i> {{ $controller->LL('list.btn.create') }}",
-            'sButtonClass': 'btn-success btn-sm' + (param.btnCreateDisabled ? ' disabled ' : ''),
-            "fnClick": function(nButton, oConfig, oFlash)
-            {
-                if (param.btnCreateDisabled || !param.btnCreateUrl) return false;
+        buttons.push({
+            text : "<i class='fa fa-plus smaller-90'></i> {{ $controller->LL('list.btn.create') }}",
+            className : 'btn-success btn-sm' + (param.btnCreateDisabled ? ' disabled ' : ''),
+            action : function (e, dt, button, config) {
+                if (param.btnCreateDisabled) return false;
                 else
-                { 
-                    jQuery('#modal-{{$jsPresentationUnique}}').append('body').modal('show').data('model-data', function(id)
+                {
+                    if (!jQuery('#modal-choose-type-{{$jsPresentationUnique}}').data('model-data'))
                     {
-                        var url = "{!! route("telenok.module.objects-lists.action.param", ['typeId' => '__typeId__']) !!}".replace("__typeId__", id);
+                        jQuery('#modal-choose-type-{{$jsPresentationUnique}}').data('model-data', function(id)
+                        {
+                            var url = "{!! route("telenok.module.objects-lists.action.param", ['typeId' => '__typeId__']) !!}".replace("__typeId__", id);
 
-                        jQuery.ajax({
+                            jQuery.ajax({
                                 method: 'get',
                                 dataType: 'json',
                                 url: url
                             })
-                        .done(function(data)
-                        { 
-                            telenok.addModule(
-                                data.key, 
-                                url, 
-                                function(moduleKey) 
-                                {
-                                    param = telenok.getModule(data.key);
+                            .done(function(data)
+                            {
+                                telenok.addModule(
+                                    data.key,
+                                    url,
+                                    function(moduleKey)
+                                    {
+                                        param = telenok.getModule(data.key);
 
-                                    param.addTree = false;
-                                    param.addTab = false;
-                                    
-                                    telenok.setModuleParam(data.key, param);                                  
-                                    
-                                    telenok.processModuleContent(data.key);
+                                        param.addTree = false;
+                                        param.addTab = false;
 
-                                    var url = "{!! route("telenok.module.objects-lists.create", ['id' => '__id__']) !!}".replace("__id__", id);
+                                        telenok.setModuleParam(data.key, param);
 
-                                    this_.addTabByURL({url : url});
+                                        telenok.processModuleContent(data.key);
 
-                                    jQuery('#modal-{{$jsPresentationUnique}}').modal('hide');
-                                }
-                            );
-                        })
-                        .fail(function(jqXHR, textStatus, errorThrown)
-                        {
-                            jQuery.gritter.add({
-                                title: 'Error',
-                                text: jqXHR.responseText,
-                                class_name: 'gritter-error gritter-light',
-                                time: 3000,
+                                        var url = "{!! route("telenok.module.objects-lists.create", ['id' => '__id__']) !!}".replace("__id__", id);
+
+                                        this_.addTabByURL({url : url});
+
+                                        jQuery('#modal-choose-type-{{$jsPresentationUnique}}').modal('hide');
+                                    }
+                                );
                             });
-                        });  
-                    });
+                        });
+                    }
+
+                    jQuery('#modal-choose-type-{{$jsPresentationUnique}}').append('body').modal('show');
                 }
             }
         });
@@ -67,7 +61,7 @@
     
     
     
-<div class="modal fade" id="modal-{{$jsPresentationUnique}}">
+<div class="modal fade" id="modal-choose-type-{{$jsPresentationUnique}}">
     <div class="modal-dialog">
         <div class="modal-content">
 

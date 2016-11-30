@@ -1267,7 +1267,7 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Default locale', 'ru' => 'Локаль по умолчанию'],
+            'title' => ['en' => 'Locale default', 'ru' => 'Локаль по умолчанию'],
             'active' => 1,
             'code' => 'app.localeDefault',
             'value' => 'en',
