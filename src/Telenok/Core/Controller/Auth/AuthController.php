@@ -104,6 +104,74 @@ class AuthController extends \Telenok\Core\Abstraction\Controller\Backend\Contro
     }
 
     /**
+     * Clone session for current domain from other domain to allow user cross-domain login.
+     *
+     * @return void
+     */
+    public function setCrossDomainAuth()
+    {
+        app('session')->forget('telenok.user.logined');
+
+        if (app('auth')->check())
+        {
+            return;
+        }
+
+        $data = $this->getRequest()->input('data');
+        $hash = $this->getRequest()->input('hash');
+        $ip = $this->getRequest()->ip();
+
+        try
+        {
+            $decrypted = app('encrypter')->decrypt($data);
+
+            $userId = intval($decrypted->get('userId'));
+
+            if ($hash == md5(collect([config('app.key'), $userId, $ip])->toJson()))
+            {
+                app('auth')->loginUsingId($userId, true);
+            }
+
+        }
+        catch (\Exception $e)
+        {
+            abort(500, 'Sorry, data not properly set');
+        }
+    }
+
+    /**
+     * Create "logined" session for current domain from other domain to allow user cross-domain login.
+     *
+     * @return void
+     */
+    public function getCrossDomainAuthUrl()
+    {
+        if (!app('auth')->check())
+        {
+            return collect();
+        }
+        $collect = collect();
+
+        \App\Vendor\Telenok\Core\Model\Web\Domain::active()->get()->each(function ($item) use ($collect)
+        {
+            $collect->push(
+                'http://' . trim($item->domain) . route('telenok.account.cross-domain.auth', [
+                    'data' => app('encrypter')->encrypt(collect([
+                        'userId' => app('auth')->user()->getKey()
+                    ])),
+                    'hash' => md5(collect([
+                        config('app.key'),
+                        app('auth')->user()->getKey(),
+                        $this->getRequest()->ip()
+                    ])->toJson())
+                ], false)
+            );
+        });
+
+        return $collect;
+    }
+
+    /**
      * Get the login username to be used by the controller.
      *
      * @return string

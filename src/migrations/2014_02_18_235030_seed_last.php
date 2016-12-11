@@ -1271,6 +1271,7 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             'active' => 1,
             'code' => 'app.localeDefault',
             'value' => 'en',
+            'controller_class' => '\App\Vendor\Telenok\Core\Config\Item\LocaleDefault',
             'config_config_group' => $configGroupMain->getKey(),
         ]);
 
@@ -1279,6 +1280,7 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             'active' => 1,
             'code' => 'app.locales',
             'value' => ['en'],
+            'controller_class' => '\App\Vendor\Telenok\Core\Config\Item\Locales',
             'config_config_group' => $configGroupMain->getKey(),
         ]);
 

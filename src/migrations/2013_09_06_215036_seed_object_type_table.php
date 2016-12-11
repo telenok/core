@@ -1,19 +1,20 @@
 <?php
 
-class SeedObjectTypeTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
+class SeedObjectTypeTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
+{
 
     public function up()
     {
         parent::up();
 
         if (Schema::hasTable('object_type') && Schema::hasTable('object_field'))
-		{
-			$modelTypeId = DB::table('object_type')->where('code', 'object_type')->value('id');
-			$modelFieldId = DB::table('object_type')->where('code', 'object_field')->value('id');
+        {
+            $modelTypeId = DB::table('object_type')->where('code', 'object_type')->value('id');
+            $modelFieldId = DB::table('object_type')->where('code', 'object_field')->value('id');
 
-			$tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
-			$tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);
-			$tabAdditionallyId = \SeedCommonFields::createTabAdditionally($modelTypeId);
+            $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
+            $tabVisibleId = \SeedCommonFields::createTabVisible($modelTypeId);
+            $tabAdditionallyId = \SeedCommonFields::createTabAdditionally($modelTypeId);
 
             \SeedCommonFields::alterId($modelTypeId, $tabMainId);
             \SeedCommonFields::alterTitle($modelTypeId, $tabMainId);
@@ -21,193 +22,194 @@ class SeedObjectTypeTable extends \App\Vendor\Telenok\Core\Support\Migrations\Mi
             \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
             \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
 
-			DB::table('object_field')->insert([
-                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
-                'title' => json_encode(SeedObjectTypeTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
-                'title_list' => json_encode(SeedObjectTypeTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
-                'key' => 'string',
-                'code' => 'code',
-                'active' => 1,
+            DB::table('object_field')->insert([
+                'id'                => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'title'             => json_encode(SeedObjectTypeTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
+                'title_list'        => json_encode(SeedObjectTypeTableTranslation::get('field.code'), JSON_UNESCAPED_UNICODE),
+                'key'               => 'string',
+                'code'              => 'code',
+                'active'            => 1,
                 'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
-                'multilanguage' => 0,
-                'show_in_form' => 1,
-                'show_in_list' => 1,
-                'allow_search' => 1,
-                'allow_create' => 1,
-                'allow_update' => 0,
-                'field_order' => 4,
+                'field_object_tab'  => $tabMainId,
+                'multilanguage'     => 0,
+                'show_in_form'      => 1,
+                'show_in_list'      => 1,
+                'allow_search'      => 1,
+                'allow_create'      => 1,
+                'allow_update'      => 0,
+                'field_order'       => 4,
             ]);
 
             DB::table('object_field')->insert([
-                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
-                'title' => json_encode(['en' => 'Versioning', 'ru' => 'Версионирование'], JSON_UNESCAPED_UNICODE),
-                'title_list' => json_encode(['en' => 'Versioning', 'ru' => 'Версионирование'], JSON_UNESCAPED_UNICODE),
-                'key' => 'select-one',
-                'code' => 'has_versioning',
-                'select_one_data' => json_encode([
-                    'title' => \SeedCommonFields::llYesNo(),
-                    'key' => [0, 1],
+                'id'                => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'title'             => json_encode(['en' => 'Versioning', 'ru' => 'Версионирование'], JSON_UNESCAPED_UNICODE),
+                'title_list'        => json_encode(['en' => 'Versioning', 'ru' => 'Версионирование'], JSON_UNESCAPED_UNICODE),
+                'key'               => 'select-one',
+                'code'              => 'has_versioning',
+                'select_one_data'   => json_encode([
+                    'title'   => \SeedCommonFields::llYesNo(),
+                    'key'     => [0, 1],
                     'default' => 0,
                 ], JSON_UNESCAPED_UNICODE),
-                'active' => 1,
-                'field_view' => 'core::field.select-one.model-toggle-button',
+                'active'            => 1,
+                'field_view'        => 'core::field.select-one.model-toggle-button',
                 'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
-                'multilanguage' => 1,
-                'show_in_form' => 1,
-                'show_in_list' => 0,
-                'allow_search' => 1,
-                'allow_create' => 1,
-                'allow_update' => 1,
-                'field_order' => 4,
+                'field_object_tab'  => $tabMainId,
+                'multilanguage'     => 1,
+                'show_in_form'      => 1,
+                'show_in_list'      => 0,
+                'allow_search'      => 1,
+                'allow_create'      => 1,
+                'allow_update'      => 1,
+                'field_order'       => 4,
             ]);
 
-			DB::table('object_field')->insert([
-                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
-                'title' => json_encode(SeedObjectTypeTableTranslation::get('field.model_class'), JSON_UNESCAPED_UNICODE),
-                'title_list' => json_encode(SeedObjectTypeTableTranslation::get('field.model_class'), JSON_UNESCAPED_UNICODE),
-                'key' => 'string',
-                'code' => 'model_class',
-                'active' => 1,
+            DB::table('object_field')->insert([
+                'id'                => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'title'             => json_encode(SeedObjectTypeTableTranslation::get('field.model_class'), JSON_UNESCAPED_UNICODE),
+                'title_list'        => json_encode(SeedObjectTypeTableTranslation::get('field.model_class'), JSON_UNESCAPED_UNICODE),
+                'key'               => 'string',
+                'code'              => 'model_class',
+                'active'            => 1,
                 'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
-                'multilanguage' => 0,
-                'show_in_form' => 1,
-                'show_in_list' => 1,
-                'allow_search' => 1,
-                'allow_create' => 1,
-                'allow_update' => 0,
-                'field_order' => 5,
+                'field_object_tab'  => $tabMainId,
+                'multilanguage'     => 0,
+                'show_in_form'      => 1,
+                'show_in_list'      => 1,
+                'allow_search'      => 1,
+                'allow_create'      => 1,
+                'allow_update'      => 0,
+                'field_order'       => 5,
             ]);
 
-			DB::table('object_field')->insert([
-                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
-                'title' => json_encode(SeedObjectTypeTableTranslation::get('field.controller_class'), JSON_UNESCAPED_UNICODE),
-                'title_list' => json_encode(SeedObjectTypeTableTranslation::get('field.controller_class'), JSON_UNESCAPED_UNICODE),
-                'key' => 'string',
-                'code' => 'controller_class',
-                'active' => 1,
+            DB::table('object_field')->insert([
+                'id'                => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'title'             => json_encode(SeedObjectTypeTableTranslation::get('field.controller_class'), JSON_UNESCAPED_UNICODE),
+                'title_list'        => json_encode(SeedObjectTypeTableTranslation::get('field.controller_class'), JSON_UNESCAPED_UNICODE),
+                'key'               => 'string',
+                'code'              => 'controller_class',
+                'active'            => 1,
                 'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
-                'multilanguage' => 0,
-                'show_in_form' => 1,
-                'show_in_list' => 0,
-                'allow_update' => 0,
-                'allow_search' => 1,
-                'field_order' => 6,
+                'field_object_tab'  => $tabMainId,
+                'multilanguage'     => 0,
+                'show_in_form'      => 1,
+                'show_in_list'      => 0,
+                'allow_update'      => 0,
+                'allow_search'      => 1,
+                'field_order'       => 6,
             ]);
 
-			DB::table('object_field')->insert([
-                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
-                'title' => json_encode(SeedObjectTypeTableTranslation::get('field.treeable'), JSON_UNESCAPED_UNICODE),
-                'title_list' => json_encode(SeedObjectTypeTableTranslation::get('field.treeable'), JSON_UNESCAPED_UNICODE),
-                'key' => 'select-one',
-                'code' => 'treeable',
-                'select_one_data' => json_encode([
-                    'title' => \SeedCommonFields::llYesNo(),
-                    'key' => [0, 1],
+            DB::table('object_field')->insert([
+                'id'                => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'title'             => json_encode(SeedObjectTypeTableTranslation::get('field.treeable'), JSON_UNESCAPED_UNICODE),
+                'title_list'        => json_encode(SeedObjectTypeTableTranslation::get('field.treeable'), JSON_UNESCAPED_UNICODE),
+                'key'               => 'select-one',
+                'code'              => 'treeable',
+                'select_one_data'   => json_encode([
+                    'title'   => \SeedCommonFields::llYesNo(),
+                    'key'     => [0, 1],
                     'default' => 0,
                 ], JSON_UNESCAPED_UNICODE),
-                'active' => 1,
-                'field_view' => 'core::field.select-one.model-toggle-button',
+                'active'            => 1,
+                'field_view'        => 'core::field.select-one.model-toggle-button',
                 'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
-                'multilanguage' => 1,
-                'show_in_list' => 0,
-                'show_in_form' => 1,
-                'allow_search' => 1,
-                'allow_create' => 1,
-                'allow_update' => 1,
-                'field_order' => 8,
+                'field_object_tab'  => $tabMainId,
+                'multilanguage'     => 1,
+                'show_in_list'      => 0,
+                'show_in_form'      => 1,
+                'allow_search'      => 1,
+                'allow_create'      => 1,
+                'allow_update'      => 1,
+                'field_order'       => 8,
             ]);
 
-			DB::table('object_field')->insert([
-                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
-                'title' => json_encode(SeedObjectTypeTableTranslation::get('field.field'), JSON_UNESCAPED_UNICODE),
-                'title_list' => json_encode(SeedObjectTypeTableTranslation::get('field.field'), JSON_UNESCAPED_UNICODE),
-                'key' => 'relation-one-to-many',
-                'code' => 'field',
-                'active' => 1,
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabAdditionallyId,
+            DB::table('object_field')->insert([
+                'id'                       => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'title'                    => json_encode(SeedObjectTypeTableTranslation::get('field.field'), JSON_UNESCAPED_UNICODE),
+                'title_list'               => json_encode(SeedObjectTypeTableTranslation::get('field.field'), JSON_UNESCAPED_UNICODE),
+                'key'                      => 'relation-one-to-many',
+                'code'                     => 'field',
+                'active'                   => 1,
+                'field_object_type'        => $modelTypeId,
+                'field_object_tab'         => $tabAdditionallyId,
                 'relation_one_to_many_has' => $modelFieldId,
-                'multilanguage' => 0,
-                'show_in_form' => 1,
-                'show_in_list' => 0,
-                'allow_search' => 1,
-                'allow_create' => 0,
-                'allow_update' => 1,
-                'field_order' => 10,
+                'multilanguage'            => 0,
+                'show_in_form'             => 1,
+                'show_in_list'             => 0,
+                'allow_search'             => 1,
+                'allow_create'             => 0,
+                'allow_update'             => 1,
+                'field_order'              => 10,
             ]);
 
-			DB::table('object_field')->insert(
-					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
-						'title' => json_encode(['en' => 'Tab'], JSON_UNESCAPED_UNICODE),
-						'title_list' => json_encode(['en' => 'Tab'], JSON_UNESCAPED_UNICODE),
-						'key' => 'relation-one-to-many',
-						'code' => 'tab',
-						'active' => 1,
-						'field_object_type' => $modelTypeId,
-						'field_object_tab' => $tabAdditionallyId,
-						'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_tab')->value('id'),
-						'multilanguage' => 0,
-						'show_in_form' => 1,
-						'show_in_list' => 0,
-						'allow_search' => 1,
-						'allow_create' => 1,
-						'allow_update' => 1,
-						'field_order' => 10,
-					]
-			); 
+            DB::table('object_field')->insert(
+                [
+                    'id'                       => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                    'title'                    => json_encode(['en' => 'Tab'], JSON_UNESCAPED_UNICODE),
+                    'title_list'               => json_encode(['en' => 'Tab'], JSON_UNESCAPED_UNICODE),
+                    'key'                      => 'relation-one-to-many',
+                    'code'                     => 'tab',
+                    'active'                   => 1,
+                    'field_object_type'        => $modelTypeId,
+                    'field_object_tab'         => $tabAdditionallyId,
+                    'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_tab')->value('id'),
+                    'multilanguage'            => 0,
+                    'show_in_form'             => 1,
+                    'show_in_list'             => 0,
+                    'allow_search'             => 1,
+                    'allow_create'             => 1,
+                    'allow_update'             => 1,
+                    'field_order'              => 10,
+                ]
+            );
 
-			DB::table('object_field')->insertGetId(
-					[
-						'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
-						'title' => json_encode(['ru' => 'Объекты', 'en' => 'Objects'], JSON_UNESCAPED_UNICODE),
-						'title_list' => json_encode(['ru' => 'Объекты', 'en' => 'Objects'], JSON_UNESCAPED_UNICODE),
-						'key' => 'relation-one-to-many',
-						'code' => 'sequences',
-						'active' => 1,
-						'field_object_type' => $modelTypeId,
-						'field_object_tab' => $tabAdditionallyId,
-						'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->value('id'),
-						'multilanguage' => 0,
-						'show_in_form' => 1,
-						'show_in_list' => 0,
-						'allow_search' => 1,
-						'allow_create' => 0,
-						'allow_update' => 1,
-						'field_order' => 11,
-					]
-			); 
-		}
-	}
+            DB::table('object_field')->insertGetId(
+                [
+                    'id'                       => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                    'title'                    => json_encode(['ru' => 'Объекты', 'en' => 'Objects'], JSON_UNESCAPED_UNICODE),
+                    'title_list'               => json_encode(['ru' => 'Объекты', 'en' => 'Objects'], JSON_UNESCAPED_UNICODE),
+                    'key'                      => 'relation-one-to-many',
+                    'code'                     => 'sequences',
+                    'active'                   => 1,
+                    'field_object_type'        => $modelTypeId,
+                    'field_object_tab'         => $tabAdditionallyId,
+                    'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->value('id'),
+                    'multilanguage'            => 0,
+                    'show_in_form'             => 1,
+                    'show_in_list'             => 0,
+                    'allow_search'             => 1,
+                    'allow_create'             => 0,
+                    'allow_update'             => 1,
+                    'field_order'              => 11,
+                ]
+            );
+        }
+    }
 
 }
 
-class SeedObjectTypeTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller {
+class SeedObjectTypeTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller
+{
 
-	public static $keys = [
+    public static $keys = [
         'field' => [
-            'code' => [
+            'code'             => [
                 'ru' => "Код",
                 'en' => "Code",
             ],
-            'field' => [
+            'field'            => [
                 'ru' => "Поле",
                 'en' => "Field",
             ],
-            'treeable' => [
+            'treeable'         => [
                 'ru' => "Деревообразный",
                 'en' => "Treeable",
             ],
-            'multilanguage' => [
+            'multilanguage'    => [
                 'ru' => "Мультиязычный",
                 'en' => "Multilanguage",
             ],
-            'model_class' => [
+            'model_class'      => [
                 'ru' => "Класс модели",
                 'en' => "Class of model",
             ],
@@ -216,6 +218,6 @@ class SeedObjectTypeTableTranslation extends \Telenok\Core\Abstraction\Translati
                 'en' => "Class of form",
             ],
         ],
-	];
+    ];
 
 }

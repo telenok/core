@@ -226,9 +226,9 @@ class Repository {
         $domains = \App\Vendor\Telenok\Core\Model\Web\Domain::active()->get();
 
         $pages = \App\Vendor\Telenok\Core\Model\Web\Page::whereHas('pageDomain', function($query) use ($domains)
-        {
-            $query->whereIn('page_domain', $domains->modelKeys() ? : [0]);
-        }, '>=', 0)
+            {
+                $query->whereIn('page_domain', $domains->modelKeys() ? : [0]);
+            }, '>=', 0)
             ->active()
             ->get();
 

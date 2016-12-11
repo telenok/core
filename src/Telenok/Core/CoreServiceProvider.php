@@ -1,5 +1,6 @@
 <?php namespace Telenok\Core;
 
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
 use App\Vendor\Telenok\Core\Support\Validator\Factory;
 use Telenok\Core\Event\CompileRoute;
@@ -43,10 +44,11 @@ class CoreServiceProvider extends ServiceProvider {
         $this->compileConfig();
         $this->compileRoute();
 
+
         if ($theme = \App\Vendor\Telenok\Core\Support\Theme::activeTheme())
         {
             $this->loadViewsFrom(base_path(str_finish(config('app.path_theme'), '/') . $theme . '/views'), 'theme');
-            $this->loadTranslationsFrom(base_path('resources/views/template/' . $theme . '/lang'), 'theme');
+            $this->loadTranslationsFrom(base_path('resources/views/theme/' . $theme . '/lang'), 'theme');
         }
     }
 

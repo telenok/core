@@ -18,7 +18,7 @@ class Language {
         $this->request = $request;
     }
 
-    public function handle($request, \Closure $next)
+    public function handle($request, callable $next)
     {
         $localeHeader = substr($request->server('HTTP_ACCEPT_LANGUAGE'), 0, 2);
 
@@ -35,8 +35,10 @@ class Language {
 
         $sessionLocale = $this->app->session->get('app.locale');
 
+        // get locale from http://some.domain.com/locale/some-other-path
         $segmentUrl = $request->segment(1);
 
+        // if locale == 'telenok' then we are in backend
         if ($segmentUrl == 'telenok')
         {
             if (app('auth')->check())
@@ -50,7 +52,19 @@ class Language {
         }
         else
         {
-            $locale = $segmentUrl;
+            // get locale from http://locale.domain.com/some-other-path
+            if ($locale = $localeCollection->first(function($item) use ($request)
+            {
+                if (strpos('.' . $request->getHost(), ".{$item}.") !== FALSE)
+                {
+                    return TRUE;
+                }
+            })) {}
+            // get locale from http://some.domain.com/locale/some-other-path
+            else
+            {
+                $locale = $segmentUrl;
+            }
         }
 
         $localeHost = $localeCollection->first(function($item) use ($request)
