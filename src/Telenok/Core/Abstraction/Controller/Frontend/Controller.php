@@ -258,6 +258,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getContent()
     {
+
         try
         {
             $page = $this->getPageEloquentObject();
