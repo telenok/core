@@ -1,7 +1,9 @@
-<?php namespace Telenok\Core\Event;
+<?php
 
-class Listener {
+namespace Telenok\Core\Event;
 
+class Listener
+{
     public function onRepositoryPackage(RepositoryPackage $event)
     {
         $event->getList()->push('Telenok\Core\PackageInfo');

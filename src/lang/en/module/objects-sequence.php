@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'name' => 'Repository',
-    'header.title' => 'All objects',
+return [
+    'name'               => 'Repository',
+    'header.title'       => 'All objects',
     'header.description' => 'viewing and editing',
-);
+];

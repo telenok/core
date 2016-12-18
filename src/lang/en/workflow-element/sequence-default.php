@@ -1,10 +1,7 @@
 <?php
 
 return [
-    'title' => 'Default',
+    'title'        => 'Default',
     'title.groups' => 'Connecting Objects',
-    'description' => '',
+    'description'  => '',
 ];
-
-
-

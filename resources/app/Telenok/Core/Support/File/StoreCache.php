@@ -1,3 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Support\File;
+<?php
 
-class StoreCache extends \Telenok\Core\Support\File\StoreCache {}
+namespace App\Vendor\Telenok\Core\Support\File;
+
+class StoreCache extends \Telenok\Core\Support\File\StoreCache
+{
+}

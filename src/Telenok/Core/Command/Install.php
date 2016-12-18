@@ -1,17 +1,20 @@
-<?php namespace Telenok\Core\Command;
+<?php
+
+namespace Telenok\Core\Command;
 
 use Illuminate\Console\Command;
 
 /**
- * Command to install core package
- * 
+ * Command to install core package.
+ *
  * @class Telenok.Core.Command.Install
  * @extends Illuminate.Console.Command
  */
-class Install extends Command {
-
+class Install extends Command
+{
     /**
      * @protected
+     *
      * @property {String} $name
      * Command name. Calling without parameters.
      * @member Telenok.Core.Command.Install
@@ -20,6 +23,7 @@ class Install extends Command {
 
     /**
      * @protected
+     *
      * @property {String} $description
      * Command description.
      * @member Telenok.Core.Command.Install
@@ -28,7 +32,8 @@ class Install extends Command {
 
     /**
      * @protected
-     * @property {Telenok.Core.Support.Install.Controller} $processingController 
+     *
+     * @property {Telenok.Core.Support.Install.Controller} $processingController
      * Object which processed command data.
      * @member Telenok.Core.Command.Install
      */
@@ -38,7 +43,9 @@ class Install extends Command {
      * @method setProcessingController
      * Set processing controller
      * @member Telenok.Core.Command.Install
+     *
      * @param {Telenok.Core.Support.Install.Controller} $param
+     *
      * @return {void}
      */
     public function setProcessingController($param = null)
@@ -50,6 +57,7 @@ class Install extends Command {
      * @method getProcessingController
      * Get processing controller
      * @member Telenok.Core.Command.Install
+     *
      * @return {Telenok.Core.Support.Install.Controller}
      */
     public function getProcessingController()
@@ -61,6 +69,7 @@ class Install extends Command {
      * @method fire
      * Fire command processing
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function fire()
@@ -69,30 +78,24 @@ class Install extends Command {
 
         $this->info('Configure Telenok CMS');
 
-        if ($this->confirm('Do you want to configure enviroment for app.php [yes/no]: ', false))
-        {
+        if ($this->confirm('Do you want to configure enviroment for app.php [yes/no]: ', false)) {
             $this->inputDomain();
             $this->inputDomainSecure();
             $this->inputLocale();
 
-            if ($this->confirm('Do you want to update .env file [yes/no]: ', false))
-            {
-                try
-                {
+            if ($this->confirm('Do you want to update .env file [yes/no]: ', false)) {
+                try {
                     $this->processingController->processConfigAppFile();
 
                     $this->info('Done. Thank you.');
-                }
-                catch (\Exception $ex)
-                {
+                } catch (\Exception $ex) {
                     $this->error('Sorry, an error occured.');
                     $this->error($ex->getMessage());
                 }
             }
         }
 
-        if ($this->confirm('Do you want to configure enviroment for database.php [yes/no]: ', false))
-        {
+        if ($this->confirm('Do you want to configure enviroment for database.php [yes/no]: ', false)) {
             $this->inputDbDriver();
             $this->inputDbHost();
             $this->inputDbUsername();
@@ -100,22 +103,18 @@ class Install extends Command {
             $this->inputDbDatabase();
             $this->inputDbPrefix();
 
-            if ($this->confirm('Do you want to update .env file [yes/no]: ', false))
-            {
-                try
-                {
+            if ($this->confirm('Do you want to update .env file [yes/no]: ', false)) {
+                try {
                     $this->processingController->processConfigDatabaseFile();
 
                     $this->info('Done. Thank you.');
-                }
-                catch (\Exception $ex)
-                {
+                } catch (\Exception $ex) {
                     $this->error('Sorry, an error occured.');
                     $this->error($ex->getMessage());
                 }
             }
         }
-        
+
         $this->processingController->createBaseTable($this);
     }
 
@@ -123,24 +122,21 @@ class Install extends Command {
      * @method inputDomain
      * Fill domain from console
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function inputDomain()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is site domain or IP, eg, mysite.com or 192.168.0.1: ');
 
             $this->info('Wait, please...');
 
-            try
-            {
+            try {
                 $this->processingController->setDomain($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }
@@ -149,6 +145,7 @@ class Install extends Command {
      * @method inputDomainSecure
      * Fill domain secure param (yes/no https) from console
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function inputDomainSecure()
@@ -160,22 +157,19 @@ class Install extends Command {
      * @method inputLocale
      * Fill site locale from console
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function inputLocale()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is locale, eg, en: ');
 
-            try
-            {
+            try {
                 $this->processingController->setLocale($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }
@@ -184,22 +178,19 @@ class Install extends Command {
      * @method inputDbDriver
      * Fill default database driver from console
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function inputDbDriver()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is database driver, eg, mysql: ');
 
-            try
-            {
+            try {
                 $this->processingController->setDbDriver($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }
@@ -208,24 +199,21 @@ class Install extends Command {
      * @method inputDbHost
      * Fill host for default database driver from console
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function inputDbHost()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is database host, eg, 127.0.0.1 or mysql.mysite.com: ');
 
             $this->info('Wait, please...');
 
-            try
-            {
+            try {
                 $this->processingController->setDbHost($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }
@@ -234,22 +222,19 @@ class Install extends Command {
      * @method inputDbUsername
      * Fill username for default database driver from console
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function inputDbUsername()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is database username: ');
 
-            try
-            {
+            try {
                 $this->processingController->setDbUsername($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }
@@ -258,22 +243,19 @@ class Install extends Command {
      * @method inputDbPassword
      * Fill password for default database driver from console
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function inputDbPassword()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is database user\'s password: ', false);
 
-            try
-            {
+            try {
                 $this->processingController->setDbPassword($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }
@@ -282,22 +264,19 @@ class Install extends Command {
      * @method inputDbDatabase
      * Fill name of database for default database driver from console
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function inputDbDatabase()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is database name: ');
 
-            try
-            {
+            try {
                 $this->processingController->setDbDatabase($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }
@@ -306,22 +285,19 @@ class Install extends Command {
      * @method inputDbPrefix
      * Fill prefix of database for default database driver from console. Can be empty.
      * @member Telenok.Core.Command.Install
+     *
      * @return {void}
      */
     public function inputDbPrefix()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is database prefix [empty default]: ', false);
 
-            try
-            {
+            try {
                 $this->processingController->setDbPrefix($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }

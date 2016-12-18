@@ -6,8 +6,8 @@ namespace Telenok\Core\Module\Objects\Version;
  * @class Telenok.Core.Module.Objects.Version.Controller
  * @extends Telenok.Core.Abstraction.Presentation.TreeTabObject.Controller
  */
-class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller {
-
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller
+{
     protected $key = 'objects-version';
     protected $parent = 'objects';
     protected $modelListClass = '\App\Vendor\Telenok\Core\Model\Object\Version';
@@ -20,12 +20,9 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
         $input = collect($input);
         $model = \App\Vendor\Telenok\Core\Model\Object\Version::findOrFail($input->get('id'));
 
-        try
-        {
+        try {
             return \App\Vendor\Telenok\Core\Model\Object\Version::toRestore($model);
-        }
-        catch (\Telenok\Core\Support\Exception\ObjectTypeNotFound $ex)
-        {
+        } catch (\Telenok\Core\Support\Exception\ObjectTypeNotFound $ex) {
             throw new \Exception($this->LL('error.restore.type.first', ['id' => $model->object_type_id]));
         }
 
@@ -36,5 +33,4 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
     {
         return parent::delete($id, true);
     }
-
 }

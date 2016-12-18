@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\RelationManyToMany;
+<?php
 
-class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
-    
+namespace App\Vendor\Telenok\Core\Field\RelationManyToMany;
+
+class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller
+{
 }

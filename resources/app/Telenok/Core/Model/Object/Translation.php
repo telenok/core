@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Model\Object;
+<?php
 
-class Translation extends \Telenok\Core\Model\Object\Translation {
+namespace App\Vendor\Telenok\Core\Model\Object;
 
+class Translation extends \Telenok\Core\Model\Object\Translation
+{
 }

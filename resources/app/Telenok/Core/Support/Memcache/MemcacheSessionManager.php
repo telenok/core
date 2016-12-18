@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Support\Memcache;
+<?php
 
-class MemcacheSessionManager extends \Telenok\Core\Support\Memcache\MemcacheSessionManager {
+namespace App\Vendor\Telenok\Core\Support\Memcache;
 
+class MemcacheSessionManager extends \Telenok\Core\Support\Memcache\MemcacheSessionManager
+{
 }

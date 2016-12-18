@@ -4,17 +4,18 @@ namespace Telenok\Core\Support\Traits;
 
 /**
  * Trait get easy access to Laravel's localization.
- * Use {@link Telenok.Core.Support.Traits.Package Telenok.Core.Support.Traits.Package} to define language file's path
- * 
+ * Use {@link Telenok.Core.Support.Traits.Package Telenok.Core.Support.Traits.Package} to define language file's path.
+ *
  * @mixins Telenok.Core.Support.Traits.Package
  * @class Telenok.Core.Support.Traits.Language
  */
-trait Language {
-
+trait Language
+{
     use Package;
 
     /**
      * @protected
+     *
      * @property {String} $languageDirectory
      * Language directory for {@link Telenok.Core.Support.Traits.Language#LL Telenok.Core.Support.Traits.Language->LL()} method.
      * @member Telenok.Core.Support.Traits.Language
@@ -25,6 +26,7 @@ trait Language {
      * @method getLanguageDirectory
      * Return language directory
      * @member Telenok.Core.Support.Traits.Language
+     *
      * @return {String}
      */
     public function getLanguageDirectory()
@@ -36,8 +38,10 @@ trait Language {
      * @method setLanguageDirectory
      * Return language directory
      * @member Telenok.Core.Support.Traits.Language
+     *
      * @param {String} $param
-     * Name of language directory
+     *                        Name of language directory
+     *
      * @return {Telenok.Core.Support.Traits.Language}
      */
     public function setLanguageDirectory($param)
@@ -51,18 +55,19 @@ trait Language {
      * @method LL
      * Return word by key from language file
      * @member Telenok.Core.Support.Traits.Language
-     * @param {String} $key 
-     * Key of word
-     * @param {Array} $param
-     * Array of attributes to replace attribute marker in word
+     *
+     * @param {String} $key
+     *                          Key of word
+     * @param {Array}  $param
+     *                          Array of attributes to replace attribute marker in word
      * @param {String} $default
-     * Default value
+     *                          Default value
+     *
      * @return {String}
      */
     public function LL($key = '', $param = [], $default = '')
     {
-        if (($v = trans($key, $param)) && ($v != $key))
-        {
+        if (($v = trans($key, $param)) && ($v != $key)) {
             return $v;
         }
 
@@ -77,26 +82,21 @@ trait Language {
         $word = trans($k, $param);
 
         // not found in current wordspace and have default value
-        if ($k === $word && !empty($default))
-        {
+        if ($k === $word && !empty($default)) {
             return $default;
         }
         // not found in current wordspace
-        else if ($k === $word)
-        {
+        elseif ($k === $word) {
             $word = trans($kNoPackage, $param);
 
-            if ($kNoPackage === $word)
-            {
+            if ($kNoPackage === $word) {
                 $word = trans($kDefault, $param);
 
                 // not found in default wordspace
-                if ($kDefault === $word)
-                {
+                if ($kDefault === $word) {
                     $word = trans($kDefaultCore, $param);
 
-                    if ($kDefaultCore === $word)
-                    {
+                    if ($kDefaultCore === $word) {
                         return trans($kStandart, $param);
                     }
                 }

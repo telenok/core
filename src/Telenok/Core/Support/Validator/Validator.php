@@ -1,18 +1,19 @@
-<?php namespace Telenok\Core\Support\Validator;
+<?php
 
-use Illuminate\Support\Arr;
+namespace Telenok\Core\Support\Validator;
 
 /**
  * @class Telenok.Core.Support.Validator.Validator
  * Validator for eloquent models.
- * 
+ *
  * @uses Symfony.Component.Translation.TranslatorInterface
  * @extends Illuminate.Validation.Validator
  */
-class Validator extends \Illuminate\Validation\Validator {
-
+class Validator extends \Illuminate\Validation\Validator
+{
     /**
      * @protected
+     *
      * @property {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * Model to validate.
      * @member Telenok.Core.Support.Validator.Validator
@@ -22,10 +23,11 @@ class Validator extends \Illuminate\Validation\Validator {
     /**
      * Replace all error message place-holders with actual values.
      *
-     * @param  string  $message
-     * @param  string  $attribute
-     * @param  string  $rule
-     * @param  array   $parameters
+     * @param string $message
+     * @param string $attribute
+     * @param string $rule
+     * @param array  $parameters
+     *
      * @return string
      */
     protected function doReplacements($message, $attribute, $rule, $parameters)

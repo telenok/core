@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'name' => 'Date and remover',
+return [
+    'name'  => 'Date and remover',
     'title' => 'Deleted',
-    'by' => 'by',
-);
+    'by'    => 'by',
+];

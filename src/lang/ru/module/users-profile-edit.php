@@ -1,9 +1,9 @@
 <?php
 
-return array(
-    'name' => 'Профиль',
-    'header.title' => 'Профиль',
+return [
+    'name'               => 'Профиль',
+    'header.title'       => 'Профиль',
     'header.description' => 'пользовательские данные',
-    'btn.logout' => 'Выход',
-    'welcome' => 'Добро пожаловать, :username!',
-);
+    'btn.logout'         => 'Выход',
+    'welcome'            => 'Добро пожаловать, :username!',
+];

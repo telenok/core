@@ -6,8 +6,8 @@ namespace Telenok\Core\Security;
  * @class Telenok.Core.Security.Guard
  * Class for validation user's rights.
  */
-class Guard extends \Illuminate\Auth\SessionGuard {
-
+class Guard extends \Illuminate\Auth\SessionGuard
+{
     public function check()
     {
         return parent::check() && $this->user()->active;
@@ -34,29 +34,21 @@ class Guard extends \Illuminate\Auth\SessionGuard {
 
     public function can($permissionCode = null, $resourceCode = null)
     {
-        if (!config('app.acl.enabled') || app('auth')->hasRole('super_administrator'))
-        {
+        if (!config('app.acl.enabled') || app('auth')->hasRole('super_administrator')) {
             return true;
         }
 
-        if (\App\Vendor\Telenok\Core\Security\Acl::subject('user_any')->can($permissionCode, $resourceCode))
-        {
+        if (\App\Vendor\Telenok\Core\Security\Acl::subject('user_any')->can($permissionCode, $resourceCode)) {
             return true;
         }
 
-        if ($this->check())
-        {
-            if (\App\Vendor\Telenok\Core\Security\Acl::user()->can($permissionCode, $resourceCode))
-            {
+        if ($this->check()) {
+            if (\App\Vendor\Telenok\Core\Security\Acl::user()->can($permissionCode, $resourceCode)) {
+                return true;
+            } elseif (\App\Vendor\Telenok\Core\Security\Acl::subject('user_authorized')->can($permissionCode, $resourceCode)) {
                 return true;
             }
-            else if (\App\Vendor\Telenok\Core\Security\Acl::subject('user_authorized')->can($permissionCode, $resourceCode))
-            {
-                return true;
-            }
-        }
-        else
-        {
+        } else {
             return \App\Vendor\Telenok\Core\Security\Acl::subject('user_unauthorized')->can($permissionCode, $resourceCode);
         }
 
@@ -65,12 +57,10 @@ class Guard extends \Illuminate\Auth\SessionGuard {
 
     public function hasRole($id = null)
     {
-        if ($this->check())
-        {
+        if ($this->check()) {
             return \App\Vendor\Telenok\Core\Security\Acl::user()->hasRole($id);
         }
 
         return false;
     }
-
 }

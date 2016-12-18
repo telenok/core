@@ -1,17 +1,20 @@
-<?php namespace Telenok\Core\Command;
+<?php
+
+namespace Telenok\Core\Command;
 
 use Illuminate\Console\Command;
 
 /**
  * @class Telenok.Core.Command.Seed
  * Command to seed database
- * 
+ *
  * @extends Illuminate.Console.Command
  */
-class Seed extends Command {
-
+class Seed extends Command
+{
     /**
      * @protected
+     *
      * @property {String} $name
      * Command name. Calling without parameters.
      * @member Telenok.Core.Command.Seed
@@ -20,6 +23,7 @@ class Seed extends Command {
 
     /**
      * @protected
+     *
      * @property {String} $description
      * Command description.
      * @member Telenok.Core.Command.Seed
@@ -28,7 +32,8 @@ class Seed extends Command {
 
     /**
      * @protected
-     * @property {Telenok.Core.Support.Install.Controller} $processingController 
+     *
+     * @property {Telenok.Core.Support.Install.Controller} $processingController
      * Object which processed command data.
      * @member Telenok.Core.Command.Seed
      */
@@ -38,7 +43,9 @@ class Seed extends Command {
      * @method setProcessingController
      * Set processing controller
      * @member Telenok.Core.Command.Seed
+     *
      * @param {Telenok.Core.Support.Install.Controller} $param
+     *
      * @return {void}
      */
     public function setProcessingController($param = null)
@@ -50,6 +57,7 @@ class Seed extends Command {
      * @method getProcessingController
      * Get processing controller
      * @member Telenok.Core.Command.Seed
+     *
      * @return {Telenok.Core.Support.Install.Controller}
      */
     public function getProcessingController()
@@ -61,6 +69,7 @@ class Seed extends Command {
      * @method fire
      * Fire command processing
      * @member Telenok.Core.Command.Seed
+     *
      * @return {void}
      */
     public function fire()
@@ -69,8 +78,7 @@ class Seed extends Command {
 
         $this->info('Create and seed tables');
 
-        if ($this->confirm('Do you want to create and seed tables in database [yes/no]: ', false))
-        {
+        if ($this->confirm('Do you want to create and seed tables in database [yes/no]: ', false)) {
             $this->inputSuperuserLogin();
             $this->inputSuperuserEmail();
             $this->inputSuperuserPassword();
@@ -79,7 +87,7 @@ class Seed extends Command {
 
             $this->processingController->createBaseTable($this);
 
-            $this->call('migrate', array('--force' => true, '--path' => 'vendor/telenok/core/src/migrations'));
+            $this->call('migrate', ['--force' => true, '--path' => 'vendor/telenok/core/src/migrations']);
 
             $this->processingController->touchInstallFlag();
 
@@ -87,7 +95,7 @@ class Seed extends Command {
 
             $user->storeOrUpdate([
                 'username' => $this->processingController->getSuperuserLogin(),
-                'email' => $this->processingController->getSuperuserEmail(),
+                'email'    => $this->processingController->getSuperuserEmail(),
                 'password' => $this->processingController->getSuperuserPassword(),
             ]);
         }
@@ -97,46 +105,37 @@ class Seed extends Command {
      * @method inputSuperuserPassword
      * Fill password for superuser in administration panel
      * @member Telenok.Core.Command.Seed
+     *
      * @return {void}
      */
     public function inputSuperuserPassword()
     {
-        while (true)
-        {
+        while (true) {
             $question = new \Symfony\Component\Console\Question\Question('What is password for superuser in backend:', 'random');
 
             $question->setHidden(true);
             $question->setValidator(null);
 
-            $password = $this->output->askQuestion($question);            
+            $password = $this->output->askQuestion($question);
 
-            try
-            {
+            try {
                 $this->processingController->setSuperuserPassword($password);
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
 
                 continue;
             }
 
-            if ($password !== 'random')
-            {
+            if ($password !== 'random') {
                 $confirmPassword = $this->secret('Please, type password again to confirm it: ');
 
-                if ($password === $confirmPassword)
-                {
+                if ($password === $confirmPassword) {
                     break;
-                }
-                else
-                {
+                } else {
                     $this->error('Wrong confirmed password. Try again, please.');
                 }
-            }
-            else
-            {
-                $this->info('Your password: ' . $this->processingController->getSuperuserPassword());
+            } else {
+                $this->info('Your password: '.$this->processingController->getSuperuserPassword());
 
                 break;
             }
@@ -147,47 +146,40 @@ class Seed extends Command {
      * @method inputSuperuserLogin
      * Fill login for superuser in administration panel
      * @member Telenok.Core.Command.Seed
+     *
      * @return {void}
      */
     public function inputSuperuserLogin()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is login for superuser in backend: ');
 
-            try
-            {
+            try {
                 $this->processingController->setSuperuserLogin($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }
-
 
     /**
      * @method inputSuperuserEmail
      * Fill email for superuser in administration panel
      * @member Telenok.Core.Command.Seed
+     *
      * @return {void}
      */
     public function inputSuperuserEmail()
     {
-        while (true)
-        {
+        while (true) {
             $name = $this->ask('What is superuser\'s email: ');
 
-            try
-            {
+            try {
                 $this->processingController->setSuperuserEmail($name);
                 break;
-            }
-            catch (\Exception $e)
-            {
-                $this->error($e->getMessage() . ' Please, retry.');
+            } catch (\Exception $e) {
+                $this->error($e->getMessage().' Please, retry.');
             }
         }
     }

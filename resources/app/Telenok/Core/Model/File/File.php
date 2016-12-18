@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Model\File;
+<?php
 
-class File extends \Telenok\Core\Model\File\File {
-    
+namespace App\Vendor\Telenok\Core\Model\File;
+
+class File extends \Telenok\Core\Model\File\File
+{
 }

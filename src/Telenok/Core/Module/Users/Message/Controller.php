@@ -2,14 +2,12 @@
 
 namespace Telenok\Core\Module\Users\Message;
 
-use \Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
-
 /**
  * @class Telenok.Core.Module.Users.Message.Controller
  * @extends Telenok.Core.Abstraction.Presentation.Simple.Controller
  */
-class Controller extends \Telenok\Core\Abstraction\Presentation\Simple\Controller {
-
+class Controller extends \Telenok\Core\Abstraction\Presentation\Simple\Controller
+{
     public function getParent()
     {
         return 'users';
@@ -32,12 +30,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\Simple\Controlle
 
     public function getTreeContent()
     {
-        return "";
+        return '';
     }
 
     public function getAdditionalViewParam()
     {
         return [];
     }
-
 }

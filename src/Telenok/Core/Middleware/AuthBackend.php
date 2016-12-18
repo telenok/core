@@ -5,8 +5,8 @@ namespace Telenok\Core\Middleware;
 /**
  * @class Telenok.Core.Middleware.AuthBackend
  */
-class AuthBackend {
-
+class AuthBackend
+{
     public function getSpecialRoutes()
     {
         return [
@@ -15,7 +15,7 @@ class AuthBackend {
             'telenok.validate.session',
             'telenok.password.reset.email.process',
             'telenok.password.reset.token',
-            'telenok.password.reset.token.process'
+            'telenok.password.reset.token.process',
         ];
     }
 
@@ -24,50 +24,36 @@ class AuthBackend {
      * Handle an incoming request.
      *
      * @param {Illuminate.Http.Request} $request
-     * @param {Closure} $next
+     * @param {Closure}                 $next
+     *
      * @return {mixed}
      */
     public function handle($request, \Closure $next)
     {
         $routeName = $request->route()->getName();
 
-        if (!in_array($routeName, $this->getSpecialRoutes(), true))
-        {
-            if (config('app.acl.enabled'))
-            {
+        if (!in_array($routeName, $this->getSpecialRoutes(), true)) {
+            if (config('app.acl.enabled')) {
                 $accessControlPanel = app('auth')->can('read', 'control_panel');
-            }
-            else
-            {
+            } else {
                 $accessControlPanel = app('auth')->hasRole('super_administrator');
             }
 
-            if (!$accessControlPanel && $routeName != 'telenok.login.control-panel')
-            {
-                if ($request->ajax())
-                {
+            if (!$accessControlPanel && $routeName != 'telenok.login.control-panel') {
+                if ($request->ajax()) {
                     return response()->json(['error' => 'Unauthorized'], 403 /* Denied */);
-                }
-                else if (app('auth')->guest())
-                {
+                } elseif (app('auth')->guest()) {
                     return redirect()->route('telenok.login.control-panel');
-                }
-                else
-                {
+                } else {
                     return redirect()->route('error.access-denied');
                 }
-            }
-            else if ($routeName != 'telenok.login.control-panel' && (\Request::is('telenok', 'telenok/*')) && app('auth')->guest())
-            {
+            } elseif ($routeName != 'telenok.login.control-panel' && (\Request::is('telenok', 'telenok/*')) && app('auth')->guest()) {
                 return redirect()->route('telenok.login.control-panel');
-            }
-            else if (\Request::is('telenok/login') && !app('auth')->guest() && $accessControlPanel)
-            {
+            } elseif (\Request::is('telenok/login') && !app('auth')->guest() && $accessControlPanel) {
                 return redirect()->route('telenok.content');
             }
         }
 
         return $next($request);
     }
-
 }

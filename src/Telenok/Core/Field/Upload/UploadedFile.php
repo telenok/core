@@ -1,13 +1,16 @@
-<?php namespace Telenok\Core\Field\Upload;
+<?php
+
+namespace Telenok\Core\Field\Upload;
 
 /**
  * @class Telenok.Core.Field.Upload.UploadedFile
  * Class to manipulate data during file uploading.
  */
-class UploadedFile {
-
+class UploadedFile
+{
     /**
      * @protected
+     *
      * @property {Symfony.Component.HttpFoundation.File.UploadedFile} $file
      * Symfony uploaded file.
      * @member Telenok.Core.Field.Upload.UploadedFile
@@ -17,7 +20,7 @@ class UploadedFile {
     /**
      * @constructor
      * Initialize internal data
-     * 
+     *
      * @param {Symfony.Component.HttpFoundation.File.UploadedFile} $file
      * @member Telenok.Core.Field.Upload.UploadedFile
      */
@@ -29,7 +32,7 @@ class UploadedFile {
     /**
      * @method getModelMimeType
      * Return or create if not exists eloquent's object mime type of uploaded file.
-     * 
+     *
      * @return {Telenok.Core.Model.File.FileMimeType}
      * @member Telenok.Core.Field.Upload.UploadedFile
      */
@@ -37,19 +40,15 @@ class UploadedFile {
     {
         $mimeType = $this->getMimeType();
 
-        try
-        {
-            if (!empty($mimeType))
-            {
+        try {
+            if (!empty($mimeType)) {
                 return \App\Vendor\Telenok\Core\Model\File\FileMimeType::where('mime_type', $mimeType)->firstOrFail();
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return (new \App\Vendor\Telenok\Core\Model\File\FileMimeType())->storeOrUpdate([
-                        'title' => $mimeType,
-                        'active' => 1,
-                        'mime_type' => $mimeType
+                        'title'     => $mimeType,
+                        'active'    => 1,
+                        'mime_type' => $mimeType,
             ]);
         }
     }
@@ -57,7 +56,7 @@ class UploadedFile {
     /**
      * @method getModelExtension
      * Return or create if not exists eloquent's object file extension of uploaded file.
-     * 
+     *
      * @return {Telenok.Core.Model.File.FileMimeType}
      * @member Telenok.Core.Field.Upload.UploadedFile
      */
@@ -65,19 +64,15 @@ class UploadedFile {
     {
         $extension = $this->getExtensionExpected();
 
-        try
-        {
-            if (!empty($extension))
-            {
+        try {
+            if (!empty($extension)) {
                 return \App\Vendor\Telenok\Core\Model\File\FileExtension::where('extension', $extension)->firstOrFail();
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return (new \App\Vendor\Telenok\Core\Model\File\FileExtension())->storeOrUpdate([
-                        'title' => $extension,
-                        'active' => 1,
-                        'mime_type' => $extension
+                        'title'     => $extension,
+                        'active'    => 1,
+                        'mime_type' => $extension,
             ]);
         }
     }
@@ -85,20 +80,21 @@ class UploadedFile {
     /**
      * @method generateFileName
      * Return random string with filename and the same extension.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Field.Upload.UploadedFile
      */
     public function generateFileName()
     {
-        return str_random(30) . '.' . $this->getExtensionExpected();
+        return str_random(30).'.'.$this->getExtensionExpected();
     }
 
     /**
      * @method setFile
      * Set uploaded file's object.
-     * 
+     *
      * @param {Symfony.Component.HttpFoundation.File.UploadedFile} $file
+     *
      * @return {Telenok.Core.Field.Upload.UploadedFile}
      * @member Telenok.Core.Field.Upload.UploadedFile
      */
@@ -112,7 +108,7 @@ class UploadedFile {
     /**
      * @method getFile
      * Return uploaded file's object.
-     * 
+     *
      * @return {Telenok.Core.Field.Upload.UploadedFile}
      * @member Telenok.Core.Field.Upload.UploadedFile
      */
@@ -124,27 +120,26 @@ class UploadedFile {
     /**
      * @method getExtensionExpected
      * Return extension's value.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Field.Upload.UploadedFile
      */
     public function getExtensionExpected()
     {
-        return $this->getClientOriginalExtension() ? : $this->guessExtension();
+        return $this->getClientOriginalExtension() ?: $this->guessExtension();
     }
 
     /**
      * @method __call
      * Magic method transparent call methods of Symfony.Component.HttpFoundation.File.UploadedFile.
-     * 
+     *
      * @return {mixed}
      * @member Telenok.Core.Field.Upload.UploadedFile
      */
     public function __call($method, $args)
     {
-        if (method_exists($this->getFile(), $method))
-        {
-            return call_user_func_array(array($this->getFile(), $method), $args);
+        if (method_exists($this->getFile(), $method)) {
+            return call_user_func_array([$this->getFile(), $method], $args);
         }
 
         throw new \Exception("Undefined method {$method} called");
@@ -153,14 +148,13 @@ class UploadedFile {
     /**
      * @method __callStatic
      * Magic method transparent call methods of Symfony.Component.HttpFoundation.File.UploadedFile.
-     * 
+     *
      * @return {mixed}
      * @member Telenok.Core.Field.Upload.UploadedFile
      */
     public static function __callStatic($method, $args)
     {
-        if (method_exists('\Symfony\Component\HttpFoundation\File\UploadedFile', $method))
-        {
+        if (method_exists('\Symfony\Component\HttpFoundation\File\UploadedFile', $method)) {
             return call_user_func_array(['\Symfony\Component\HttpFoundation\File\UploadedFile', $method], $args);
         }
 

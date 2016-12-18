@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Security;
+<?php
 
-class Guard extends \Telenok\Core\Security\Guard {
+namespace App\Vendor\Telenok\Core\Security;
 
+class Guard extends \Telenok\Core\Security\Guard
+{
 }

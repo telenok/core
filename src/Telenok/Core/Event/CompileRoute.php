@@ -1,9 +1,11 @@
-<?php namespace Telenok\Core\Event;
+<?php
+
+namespace Telenok\Core\Event;
 
 use App\Events\Event;
 
-class CompileRoute extends Event{
-
+class CompileRoute extends Event
+{
     protected $list;
 
     public function __construct()

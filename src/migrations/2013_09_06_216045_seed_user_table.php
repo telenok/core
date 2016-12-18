@@ -4,7 +4,6 @@ use Illuminate\Database\Schema\Blueprint;
 
 class SeedUserTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
 {
-
     public function up()
     {
         parent::up();
@@ -261,10 +260,8 @@ class SeedUserTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
             ]
         );
 
-        if (!Schema::hasTable('pivot_relation_m2m_group_user'))
-        {
-            Schema::create('pivot_relation_m2m_group_user', function (Blueprint $table)
-            {
+        if (!Schema::hasTable('pivot_relation_m2m_group_user')) {
+            Schema::create('pivot_relation_m2m_group_user', function (Blueprint $table) {
                 $table->increments('id');
                 $table->nullableTimestamps();
                 $table->integer('group')->unsigned()->default(0);
@@ -277,39 +274,36 @@ class SeedUserTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
             });
         }
     }
-
 }
 
 class SeedUserTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller
 {
-
     public static $keys = [
         'field' => [
             'username'      => [
-                'ru' => "Логин",
-                'en' => "Login",
+                'ru' => 'Логин',
+                'en' => 'Login',
             ],
             'usernick'      => [
-                'ru' => "Ник",
-                'en' => "Nick",
+                'ru' => 'Ник',
+                'en' => 'Nick',
             ],
             'email'         => [
-                'ru' => "Email",
-                'en' => "Email",
+                'ru' => 'Email',
+                'en' => 'Email',
             ],
             'password'      => [
-                'ru' => "Пароль",
-                'en' => "Password",
+                'ru' => 'Пароль',
+                'en' => 'Password',
             ],
             'group'         => [
-                'ru' => "Группа",
-                'en' => "Group",
+                'ru' => 'Группа',
+                'en' => 'Group',
             ],
             'configuration' => [
-                'ru' => "Конфигурация",
-                'en' => "Configuration",
+                'ru' => 'Конфигурация',
+                'en' => 'Configuration',
             ],
         ],
     ];
-
 }

@@ -1,124 +1,101 @@
 <?php
 
-class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
-
+class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
+{
     public function up()
     {
         parent::up();
 
-        \Schema::table('object_type', function ($table)
-        {
+        \Schema::table('object_type', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('object_field', function ($table)
-        {
+        \Schema::table('object_field', function ($table) {
             $table->foreign('field_object_type')->references('id')->on('object_type')->onDelete('cascade');
             $table->foreign('field_object_tab')->references('id')->on('object_tab')->onDelete('cascade');
         });
 
-        \Schema::table('object_translation', function ($table)
-        {
+        \Schema::table('object_translation', function ($table) {
             $table->foreign('translation_object_model_id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('user', function ($table)
-        {
+        \Schema::table('user', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('resource', function ($table)
-        {
+        \Schema::table('resource', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('language', function ($table)
-        {
+        \Schema::table('language', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('user_message', function ($table)
-        {
+        \Schema::table('user_message', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('group', function ($table)
-        {
+        \Schema::table('group', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('role', function ($table)
-        {
+        \Schema::table('role', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('permission', function ($table)
-        {
+        \Schema::table('permission', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('subject_permission_resource', function ($table)
-        {
+        \Schema::table('subject_permission_resource', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('folder', function ($table)
-        {
+        \Schema::table('folder', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('module_group', function ($table)
-        {
+        \Schema::table('module_group', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('module', function ($table)
-        {
+        \Schema::table('module', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('page', function ($table)
-        {
+        \Schema::table('page', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('widget_group', function ($table)
-        {
+        \Schema::table('widget_group', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('widget', function ($table)
-        {
+        \Schema::table('widget', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('widget_on_page', function ($table)
-        {
+        \Schema::table('widget_on_page', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('file_category', function ($table)
-        {
+        \Schema::table('file_category', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('file_extension', function ($table)
-        {
+        \Schema::table('file_extension', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('file_mime_type', function ($table)
-        {
+        \Schema::table('file_mime_type', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('file', function ($table)
-        {
+        \Schema::table('file', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
-        \Schema::table('domain', function ($table)
-        {
+        \Schema::table('domain', function ($table) {
             $table->foreign('id')->references('id')->on('object_sequence')->onDelete('cascade');
         });
 
@@ -126,17 +103,16 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Added references');
 
-        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function($type)
-        {
+        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function ($type) {
             $table = $type->code;
             $now = \Carbon\Carbon::now()->toDateTimeString();
             $plus15Year = \Carbon\Carbon::now()->addYears(15)->toDateTimeString();
 
             app('db')->table($table)->update([
-                'created_at' => $now,
-                'updated_at' => $now,
+                'created_at'      => $now,
+                'updated_at'      => $now,
                 'active_at_start' => $now,
-                'active_at_end' => $plus15Year,
+                'active_at_end'   => $plus15Year,
             ]);
         });
 
@@ -146,39 +122,32 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
         //User superadmin
         $user = (new \App\Vendor\Telenok\Core\Model\User\User())->storeOrUpdate([
-            'title' => 'Super Administrator',
+            'title'    => 'Super Administrator',
             'username' => 'admin',
             'usernick' => 'Super administrator',
-            'email' => 'support@telenok.com',
+            'email'    => 'support@telenok.com',
             'password' => str_random(),
-            'active' => 1,
+            'active'   => 1,
         ]);
 
-        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function($type) use ($user)
-        {
+        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function ($type) use ($user) {
             (new \App\Vendor\Telenok\Core\Module\Objects\Type\Controller())->createResource($type);
 
             $class = $type->model_class;
 
-            $model = new $class;
+            $model = new $class();
 
-            $model::all()->each(function($i) use ($user)
-            {
+            $model::all()->each(function ($i) use ($user) {
                 $i->update([
                     'created_by_user' => $user->getKey(),
                     'updated_by_user' => $user->getKey(),
                 ]);
             });
 
-            $type->field()->get()->each(function($field) use ($type)
-            {
-                try
-                {
-                    \App\Vendor\Telenok\Core\Security\Acl::addResource("object_field.{$type->code}.{$field->code}", 'Object ' . $type->code . '. Field ' . $field->code);
-                }
-                catch (\Exception $e)
-                {
-                    
+            $type->field()->get()->each(function ($field) use ($type) {
+                try {
+                    \App\Vendor\Telenok\Core\Security\Acl::addResource("object_field.{$type->code}.{$field->code}", 'Object '.$type->code.'. Field '.$field->code);
+                } catch (\Exception $e) {
                 }
             });
         });
@@ -188,21 +157,21 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
         ))->writeln('ACL updated');
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
-            'title' => ['en' => 'Role', 'ru' => 'Роль'],
-            'title_list' => ['en' => 'Role', 'ru' => 'Роль'],
-            'key' => 'relation-many-to-many',
-            'code' => 'role',
-            'active' => 1,
-            'field_object_type' => 'group',
+            'title'                     => ['en' => 'Role', 'ru' => 'Роль'],
+            'title_list'                => ['en' => 'Role', 'ru' => 'Роль'],
+            'key'                       => 'relation-many-to-many',
+            'code'                      => 'role',
+            'active'                    => 1,
+            'field_object_type'         => 'group',
             'relation_many_to_many_has' => 'role',
-            'field_object_tab' => 'main',
-            'multilanguage' => 0,
-            'show_in_form' => 1,
-            'show_in_list' => 1,
-            'allow_search' => 1,
-            'allow_create' => 1,
-            'allow_update' => 1,
-            'field_order' => 6,
+            'field_object_tab'          => 'main',
+            'multilanguage'             => 0,
+            'show_in_form'              => 1,
+            'show_in_list'              => 1,
+            'allow_search'              => 1,
+            'allow_create'              => 1,
+            'allow_update'              => 1,
+            'field_order'               => 6,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Language())->storeOrUpdate(['title' => 'German', 'locale' => 'de', 'active' => 1]);
@@ -316,7 +285,6 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Folders added');
 
-
         (new \App\Vendor\Telenok\Core\Model\File\FileExtension())->storeOrUpdate(['title' => '3D Studio MAX graphics file', 'extension' => '3ds', 'active' => 1]);
         (new \App\Vendor\Telenok\Core\Model\File\FileExtension())->storeOrUpdate(['title' => 'Multimedia files for wireless networks', 'extension' => '3gp', 'active' => 1]);
         (new \App\Vendor\Telenok\Core\Model\File\FileExtension())->storeOrUpdate(['title' => '7-ZIP compressed 7z archive file', 'extension' => '7z', 'active' => 1]);
@@ -428,132 +396,130 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('File mimetypes added');
 
-
         //Resource
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Control Panel', 'ru' => 'Панель управления'],
-            'code' => 'control_panel',
-            'active' => 1
+            'title'  => ['en' => 'Control Panel', 'ru' => 'Панель управления'],
+            'code'   => 'control_panel',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'User authorized', 'ru' => 'Авторизованный пользователь'],
-            'code' => 'user_authorized',
-            'active' => 1
+            'title'  => ['en' => 'User authorized', 'ru' => 'Авторизованный пользователь'],
+            'code'   => 'user_authorized',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'User unauthorized', 'ru' => 'Неавторизованный пользователь'],
-            'code' => 'user_unauthorized',
-            'active' => 1
+            'title'  => ['en' => 'User unauthorized', 'ru' => 'Неавторизованный пользователь'],
+            'code'   => 'user_unauthorized',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Anybody', 'ru' => 'Все'],
-            'code' => 'user_any',
-            'active' => 1
+            'title'  => ['en' => 'Anybody', 'ru' => 'Все'],
+            'code'   => 'user_any',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Field', 'ru' => 'Модуль: Поле'],
-            'code' => 'module.objects-field',
-            'active' => 1
+            'title'  => ['en' => 'Module: Field', 'ru' => 'Модуль: Поле'],
+            'code'   => 'module.objects-field',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Type', 'ru' => 'Модуль: Тип'],
-            'code' => 'module.objects-type',
-            'active' => 1
+            'title'  => ['en' => 'Module: Type', 'ru' => 'Модуль: Тип'],
+            'code'   => 'module.objects-type',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: List', 'ru' => 'Модуль: Список'],
-            'code' => 'module.objects-lists',
-            'active' => 1
+            'title'  => ['en' => 'Module: List', 'ru' => 'Модуль: Список'],
+            'code'   => 'module.objects-lists',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: File browser', 'ru' => 'Модуль: Обзор Файлов'],
-            'code' => 'module.file-browser',
-            'active' => 1
+            'title'  => ['en' => 'Module: File browser', 'ru' => 'Модуль: Обзор Файлов'],
+            'code'   => 'module.file-browser',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Config', 'ru' => 'Модуль: Конфигурация'],
-            'code' => 'module.system-config-group',
-            'active' => 1
+            'title'  => ['en' => 'Module: Config', 'ru' => 'Модуль: Конфигурация'],
+            'code'   => 'module.system-config-group',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Object Version', 'ru' => 'Модуль: Версии объектов'],
-            'code' => 'module.objects-version',
-            'active' => 1
+            'title'  => ['en' => 'Module: Object Version', 'ru' => 'Модуль: Версии объектов'],
+            'code'   => 'module.objects-version',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Constructor Web Page', 'ru' => 'Модуль: Конструктр Веб Страницы'],
-            'code' => 'module.web-page-constructor',
-            'active' => 1
+            'title'  => ['en' => 'Module: Constructor Web Page', 'ru' => 'Модуль: Конструктр Веб Страницы'],
+            'code'   => 'module.web-page-constructor',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Web Page', 'ru' => 'Модуль: Веб Страница'],
-            'code' => 'module.web-page',
-            'active' => 1
+            'title'  => ['en' => 'Module: Web Page', 'ru' => 'Модуль: Веб Страница'],
+            'code'   => 'module.web-page',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Web Domain', 'ru' => 'Модуль: Веб Домен'],
-            'code' => 'module.web-domain',
-            'active' => 1
+            'title'  => ['en' => 'Module: Web Domain', 'ru' => 'Модуль: Веб Домен'],
+            'code'   => 'module.web-domain',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Page Controller', 'ru' => 'Модуль: Контроллер страницы'],
-            'code' => 'module.web-page-controller',
-            'active' => 1
+            'title'  => ['en' => 'Module: Page Controller', 'ru' => 'Модуль: Контроллер страницы'],
+            'code'   => 'module.web-page-controller',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Tools', 'ru' => 'Модуль: Инструменты'],
-            'code' => 'module.tools',
-            'active' => 1
+            'title'  => ['en' => 'Module: Tools', 'ru' => 'Модуль: Инструменты'],
+            'code'   => 'module.tools',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: PHP Console', 'ru' => 'Модуль: PHP консоль'],
-            'code' => 'module.php-console',
-            'active' => 1
+            'title'  => ['en' => 'Module: PHP Console', 'ru' => 'Модуль: PHP консоль'],
+            'code'   => 'module.php-console',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Database Console', 'ru' => 'Модуль: Базаданных консоль'],
-            'code' => 'module.database-console',
-            'active' => 1
+            'title'  => ['en' => 'Module: Database Console', 'ru' => 'Модуль: Базаданных консоль'],
+            'code'   => 'module.database-console',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Packages', 'ru' => 'Модуль: Пакеты'],
-            'code' => 'module.packages',
-            'active' => 1
+            'title'  => ['en' => 'Module: Packages', 'ru' => 'Модуль: Пакеты'],
+            'code'   => 'module.packages',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Composer manager', 'ru' => 'Модуль: Composer менеджер'],
-            'code' => 'module.composer-manager',
-            'active' => 1
+            'title'  => ['en' => 'Module: Composer manager', 'ru' => 'Модуль: Composer менеджер'],
+            'code'   => 'module.composer-manager',
+            'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-            'title' => ['en' => 'Module: Installer manager', 'ru' => 'Модуль: Менеджер инсталляции'],
-            'code' => 'module.installer-manager',
-            'active' => 1
+            'title'  => ['en' => 'Module: Installer manager', 'ru' => 'Модуль: Менеджер инсталляции'],
+            'code'   => 'module.installer-manager',
+            'active' => 1,
         ]);
 
         (new \Symfony\Component\Console\Output\ConsoleOutput(
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Resources added');
-
 
         //Login User
         Auth::login($user);
@@ -562,110 +528,109 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('User logined');
 
-
         //User tab
         (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Contact', 'ru' => 'Контакт'],
-                    'code' => 'contact',
-                    'active' => 1,
+                    'title'           => ['en' => 'Contact', 'ru' => 'Контакт'],
+                    'code'            => 'contact',
+                    'active'          => 1,
                     'tab_object_type' => 'user',
-                    'tab_order' => 2
+                    'tab_order'       => 2,
                 ]
         );
 
         //User fields
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Firstname', 'ru' => "Имя"],
-                    'title_list' => ['en' => 'Firstname', 'ru' => "Имя"],
-                    'key' => 'string',
-                    'code' => 'firstname',
-                    'active' => 1,
+                    'title'             => ['en' => 'Firstname', 'ru' => 'Имя'],
+                    'title_list'        => ['en' => 'Firstname', 'ru' => 'Имя'],
+                    'key'               => 'string',
+                    'code'              => 'firstname',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'main',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 5,
+                    'field_object_tab'  => 'main',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 5,
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Middlename', 'ru' => "Отчество"],
-                    'title_list' => ['en' => 'Middlename', 'ru' => "Отчество"],
-                    'key' => 'string',
-                    'code' => 'middlename',
-                    'active' => 1,
+                    'title'             => ['en' => 'Middlename', 'ru' => 'Отчество'],
+                    'title_list'        => ['en' => 'Middlename', 'ru' => 'Отчество'],
+                    'key'               => 'string',
+                    'code'              => 'middlename',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'main',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 6,
+                    'field_object_tab'  => 'main',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 6,
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Lastname', 'ru' => "Фамилия"],
-                    'title_list' => ['en' => 'Lastname', 'ru' => "Фамилия"],
-                    'key' => 'string',
-                    'code' => 'lastname',
-                    'active' => 1,
+                    'title'             => ['en' => 'Lastname', 'ru' => 'Фамилия'],
+                    'title_list'        => ['en' => 'Lastname', 'ru' => 'Фамилия'],
+                    'key'               => 'string',
+                    'code'              => 'lastname',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'main',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 7,
+                    'field_object_tab'  => 'main',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 7,
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Telephone', 'ru' => 'Телефон'],
-                    'title_list' => ['en' => 'Telephone', 'ru' => 'Телефон'],
-                    'key' => 'string',
-                    'code' => 'telephone',
-                    'active' => 1,
+                    'title'             => ['en' => 'Telephone', 'ru' => 'Телефон'],
+                    'title_list'        => ['en' => 'Telephone', 'ru' => 'Телефон'],
+                    'key'               => 'string',
+                    'code'              => 'telephone',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'show_in_form' => 1,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 8,
-                    'allow_search' => 1,
-                    'field_object_tab' => 'main',
+                    'show_in_form'      => 1,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 8,
+                    'allow_search'      => 1,
+                    'field_object_tab'  => 'main',
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Avatar', 'ru' => 'Аватар'],
-                    'title_list' => ['en' => 'Avatar', 'ru' => 'Аватар'],
-                    'key' => 'upload',
-                    'code' => 'avatar',
-                    'active' => 1,
+                    'title'             => ['en' => 'Avatar', 'ru' => 'Аватар'],
+                    'title_list'        => ['en' => 'Avatar', 'ru' => 'Аватар'],
+                    'key'               => 'upload',
+                    'code'              => 'avatar',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'main',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 33,
-                    'upload_allow_ext' => ['jpg', 'jpeg', 'png'],
+                    'field_object_tab'  => 'main',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 33,
+                    'upload_allow_ext'  => ['jpg', 'jpeg', 'png'],
                     'upload_allow_mime' => ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png'],
                     'upload_allow_size' => 200000,
                 ]
@@ -673,142 +638,142 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Website', 'ru' => 'Веб-сайт'],
-                    'title_list' => ['en' => 'Website', 'ru' => 'Веб-сайт'],
-                    'key' => 'string',
-                    'code' => 'web_site',
-                    'active' => 1,
+                    'title'             => ['en' => 'Website', 'ru' => 'Веб-сайт'],
+                    'title_list'        => ['en' => 'Website', 'ru' => 'Веб-сайт'],
+                    'key'               => 'string',
+                    'code'              => 'web_site',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'contact',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 1,
-                    'icon_class' => 'ace-icon fa fa-globe',
+                    'field_object_tab'  => 'contact',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 1,
+                    'icon_class'        => 'ace-icon fa fa-globe',
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'VKontakte', 'ru' => 'ВКонтакте'],
-                    'title_list' => ['en' => 'VKontakte', 'ru' => 'ВКонтакте'],
-                    'key' => 'string',
-                    'code' => 'vkontakte',
-                    'active' => 1,
+                    'title'             => ['en' => 'VKontakte', 'ru' => 'ВКонтакте'],
+                    'title_list'        => ['en' => 'VKontakte', 'ru' => 'ВКонтакте'],
+                    'key'               => 'string',
+                    'code'              => 'vkontakte',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'contact',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 2,
-                    'icon_class' => 'ace-icon fa fa-vk blue',
+                    'field_object_tab'  => 'contact',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 2,
+                    'icon_class'        => 'ace-icon fa fa-vk blue',
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Facebook', 'ru' => 'Facebook'],
-                    'title_list' => ['en' => 'Facebook', 'ru' => 'Facebook'],
-                    'key' => 'string',
-                    'code' => 'facebook',
-                    'active' => 1,
+                    'title'             => ['en' => 'Facebook', 'ru' => 'Facebook'],
+                    'title_list'        => ['en' => 'Facebook', 'ru' => 'Facebook'],
+                    'key'               => 'string',
+                    'code'              => 'facebook',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'contact',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 3,
-                    'icon_class' => 'ace-icon fa fa-facebook blue',
+                    'field_object_tab'  => 'contact',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 3,
+                    'icon_class'        => 'ace-icon fa fa-facebook blue',
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Twitter', 'ru' => 'Твиттер'],
-                    'title_list' => ['en' => 'Twitter', 'ru' => 'Твиттер'],
-                    'key' => 'string',
-                    'code' => 'twitter',
-                    'active' => 1,
+                    'title'             => ['en' => 'Twitter', 'ru' => 'Твиттер'],
+                    'title_list'        => ['en' => 'Twitter', 'ru' => 'Твиттер'],
+                    'key'               => 'string',
+                    'code'              => 'twitter',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'contact',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 4,
-                    'icon_class' => 'ace-icon fa fa-twitter light-blue',
+                    'field_object_tab'  => 'contact',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 4,
+                    'icon_class'        => 'ace-icon fa fa-twitter light-blue',
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Skype', 'ru' => 'Skype'],
-                    'title_list' => ['en' => 'Skype', 'ru' => 'Skype'],
-                    'key' => 'string',
-                    'code' => 'skype',
-                    'active' => 1,
+                    'title'             => ['en' => 'Skype', 'ru' => 'Skype'],
+                    'title_list'        => ['en' => 'Skype', 'ru' => 'Skype'],
+                    'key'               => 'string',
+                    'code'              => 'skype',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'contact',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 4,
-                    'icon_class' => 'ace-icon fa fa-skype light-blue',
-                    'string_unique' => 1,
+                    'field_object_tab'  => 'contact',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 4,
+                    'icon_class'        => 'ace-icon fa fa-skype light-blue',
+                    'string_unique'     => 1,
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Google+', 'ru' => 'Google+'],
-                    'title_list' => ['en' => 'Google+', 'ru' => 'Google+'],
-                    'key' => 'string',
-                    'code' => 'google_plus',
-                    'active' => 1,
+                    'title'             => ['en' => 'Google+', 'ru' => 'Google+'],
+                    'title_list'        => ['en' => 'Google+', 'ru' => 'Google+'],
+                    'key'               => 'string',
+                    'code'              => 'google_plus',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'contact',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 5,
-                    'icon_class' => 'ace-icon fa fa-google-plus red',
+                    'field_object_tab'  => 'contact',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 5,
+                    'icon_class'        => 'ace-icon fa fa-google-plus red',
                 ]
         );
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [
-                    'title' => ['en' => 'Language', 'ru' => "Язык"],
-                    'title_list' => ['en' => 'Language', 'ru' => "Язык"],
-                    'key' => 'string',
-                    'code' => 'locale',
-                    'active' => 1,
+                    'title'             => ['en' => 'Language', 'ru' => 'Язык'],
+                    'title_list'        => ['en' => 'Language', 'ru' => 'Язык'],
+                    'key'               => 'string',
+                    'code'              => 'locale',
+                    'active'            => 1,
                     'field_object_type' => 'user',
-                    'field_object_tab' => 'main',
-                    'field_view' => 'core::special.field.user-language',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 5,
+                    'field_object_tab'  => 'main',
+                    'field_view'        => 'core::special.field.user-language',
+                    'show_in_form'      => 1,
+                    'show_in_list'      => 0,
+                    'allow_search'      => 1,
+                    'multilanguage'     => 0,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
+                    'field_order'       => 5,
                 ]
         );
 
@@ -816,61 +781,47 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Custom fields added');
 
-        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function($item)
-        {
-            if ($item->treeable && !$item->field()->where('code', 'tree_parent')->exists())
-            {
+        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function ($item) {
+            if ($item->treeable && !$item->field()->where('code', 'tree_parent')->exists()) {
                 (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
-                    'key' => 'tree',
+                    'key'               => 'tree',
                     'field_object_type' => $item->getKey(),
-                    'field_object_tab' => 'main',
-                    'field_order' => 20,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
+                    'field_object_tab'  => 'main',
+                    'field_order'       => 20,
+                    'allow_create'      => 1,
+                    'allow_update'      => 1,
                 ]);
             }
 
-            try
-            {
+            try {
                 (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
-                    'key' => 'locked-by',
+                    'key'               => 'locked-by',
                     'field_object_type' => $item->getKey(),
-                    'allow_search' => 1,
-                    'show_in_list' => 0,
-                    'field_order' => 3,
+                    'allow_search'      => 1,
+                    'show_in_list'      => 0,
+                    'field_order'       => 3,
                 ]);
-            }
-            catch (\Exception $e)
-            {
-                
+            } catch (\Exception $e) {
             }
 
-            try
-            {
+            try {
                 (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
-                    'key' => 'deleted-by',
+                    'key'               => 'deleted-by',
                     'field_object_type' => $item->getKey(),
-                    'allow_search' => 1,
-                    'show_in_list' => 0,
-                    'field_order' => 4,
+                    'allow_search'      => 1,
+                    'show_in_list'      => 0,
+                    'field_order'       => 4,
                 ]);
-            }
-            catch (\Exception $e)
-            {
-                
+            } catch (\Exception $e) {
             }
 
-            try
-            {
+            try {
                 (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
-                    'key' => 'permission',
+                    'key'               => 'permission',
                     'field_object_type' => $item->getKey(),
-                    'field_order' => 10,
+                    'field_order'       => 10,
                 ]);
-            }
-            catch (\Exception $e)
-            {
-                
+            } catch (\Exception $e) {
             }
         });
 
@@ -878,54 +829,52 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Trees added');
 
-        \App\Vendor\Telenok\Core\Model\Object\Sequence::where('treeable', 1)->get()->each(function($item)
-        {
+        \App\Vendor\Telenok\Core\Model\Object\Sequence::where('treeable', 1)->get()->each(function ($item) {
             $item->makeRoot();
         });
 
         //Group
         (new \App\Vendor\Telenok\Core\Model\User\Group())->storeOrUpdate([
-            'title' => ['en' => 'Super administrator', 'ru' => 'Супер администратор'],
-            'code' => 'super_administrator',
+            'title'  => ['en' => 'Super administrator', 'ru' => 'Супер администратор'],
+            'code'   => 'super_administrator',
             'active' => 1,
         ]);
 
         //Role
         (new \App\Vendor\Telenok\Core\Model\Security\Role())->storeOrUpdate([
-            'title' => ['en' => 'Super administrator', 'ru' => 'Супер администратор'],
-            'code' => 'super_administrator',
+            'title'  => ['en' => 'Super administrator', 'ru' => 'Супер администратор'],
+            'code'   => 'super_administrator',
             'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Role())->storeOrUpdate([
-            'title' => ['en' => 'Control panel', 'ru' => 'Control panel'],
-            'code' => 'control_panel',
+            'title'  => ['en' => 'Control panel', 'ru' => 'Control panel'],
+            'code'   => 'control_panel',
             'active' => 1,
         ]);
-
 
         //Permission
         (new \App\Vendor\Telenok\Core\Model\Security\Permission())->storeOrUpdate([
-            'title' => ['en' => 'Create', 'ru' => 'Создание'],
-            'code' => 'create',
+            'title'  => ['en' => 'Create', 'ru' => 'Создание'],
+            'code'   => 'create',
             'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Permission())->storeOrUpdate([
-            'title' => ['en' => 'Read', 'ru' => 'Чтение'],
-            'code' => 'read',
+            'title'  => ['en' => 'Read', 'ru' => 'Чтение'],
+            'code'   => 'read',
             'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Permission())->storeOrUpdate([
-            'title' => ['en' => 'Update', 'ru' => 'Изменение'],
-            'code' => 'update',
+            'title'  => ['en' => 'Update', 'ru' => 'Изменение'],
+            'code'   => 'update',
             'active' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Security\Permission())->storeOrUpdate([
-            'title' => ['en' => 'Delete', 'ru' => 'Удаление'],
-            'code' => 'delete',
+            'title'  => ['en' => 'Delete', 'ru' => 'Удаление'],
+            'code'   => 'delete',
             'active' => 1,
         ]);
 
@@ -939,52 +888,52 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
         // ACL Type's Permissions
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
-            'title' => ['en' => 'Type permissions', 'ru' => 'Разрешения для типа'],
-            'title_list' => ['en' => 'Type permissions', 'ru' => 'Разрешения для типа'],
-            'key' => 'relation-many-to-many',
-            'code' => 'permission_type',
-            'active' => 1,
-            'field_object_type' => 'object_type',
+            'title'                     => ['en' => 'Type permissions', 'ru' => 'Разрешения для типа'],
+            'title_list'                => ['en' => 'Type permissions', 'ru' => 'Разрешения для типа'],
+            'key'                       => 'relation-many-to-many',
+            'code'                      => 'permission_type',
+            'active'                    => 1,
+            'field_object_type'         => 'object_type',
             'relation_many_to_many_has' => 'permission',
-            'field_object_tab' => 'additionally',
-            'multilanguage' => 0,
-            'show_in_form' => 1,
-            'show_in_list' => 0,
-            'allow_search' => 1,
-            'allow_create' => 1,
-            'allow_update' => 1,
-            'field_order' => 10,
+            'field_object_tab'          => 'additionally',
+            'multilanguage'             => 0,
+            'show_in_form'              => 1,
+            'show_in_list'              => 0,
+            'allow_search'              => 1,
+            'allow_create'              => 1,
+            'allow_update'              => 1,
+            'field_order'               => 10,
         ]);
 
         //Folder
         $folderSystem = (new \App\Vendor\Telenok\Core\Model\System\Folder())->storeOrUpdate([
-                    'title' => ['en' => 'System', 'ru' => 'Система'],
+                    'title'  => ['en' => 'System', 'ru' => 'Система'],
                     'active' => 1,
-                    'code' => 'system',
+                    'code'   => 'system',
                 ])->makeRoot();
 
         $folderUser = (new \App\Vendor\Telenok\Core\Model\System\Folder())->storeOrUpdate([
-                    'title' => ['en' => 'User', 'ru' => 'Пользователь'],
+                    'title'  => ['en' => 'User', 'ru' => 'Пользователь'],
                     'active' => 1,
-                    'code' => 'user',
+                    'code'   => 'user',
                 ])->makeRoot();
 
         $folderOther = (new \App\Vendor\Telenok\Core\Model\System\Folder())->storeOrUpdate([
-                    'title' => ['en' => 'Other', 'ru' => 'Другое'],
+                    'title'  => ['en' => 'Other', 'ru' => 'Другое'],
                     'active' => 1,
-                    'code' => 'other',
+                    'code'   => 'other',
                 ])->makeRoot();
 
         $folderFile = (new \App\Vendor\Telenok\Core\Model\System\Folder())->storeOrUpdate([
-                    'title' => ['en' => 'File', 'ru' => 'Файл'],
+                    'title'  => ['en' => 'File', 'ru' => 'Файл'],
                     'active' => 1,
-                    'code' => 'file',
+                    'code'   => 'file',
                 ])->makeRoot();
 
         $folderWeb = (new \App\Vendor\Telenok\Core\Model\System\Folder())->storeOrUpdate([
-                    'title' => ['en' => 'Web', 'ru' => 'Веб'],
+                    'title'  => ['en' => 'Web', 'ru' => 'Веб'],
                     'active' => 1,
-                    'code' => 'web',
+                    'code'   => 'web',
                 ])->makeRoot();
 
         \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_type')->first()->makeLastChildOf($folderSystem);
@@ -1026,203 +975,202 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
         //Module group
         (new \App\Vendor\Telenok\Core\Model\Web\ModuleGroup())->storeOrUpdate([
-            'title' => ['en' => 'Content', 'ru' => 'Содержание'],
-            'active' => 1,
+            'title'            => ['en' => 'Content', 'ru' => 'Содержание'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\ModuleGroup\Content\Controller',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\ModuleGroup())->storeOrUpdate([
-            'title' => ['en' => 'User', 'ru' => 'Пользователь'],
-            'active' => 1,
+            'title'            => ['en' => 'User', 'ru' => 'Пользователь'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\ModuleGroup\User\Controller',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\ModuleGroup())->storeOrUpdate([
-            'title' => ['en' => 'Веб', 'ru' => 'Web'],
-            'active' => 1,
+            'title'            => ['en' => 'Веб', 'ru' => 'Web'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\ModuleGroup\Web\Controller',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\ModuleGroup())->storeOrUpdate([
-            'title' => ['en' => 'Setting', 'ru' => 'Настройки'],
-            'active' => 1,
+            'title'            => ['en' => 'Setting', 'ru' => 'Настройки'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\ModuleGroup\Setting\Controller',
         ]);
 
         //Module
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Users', 'ru' => 'Пользователи'],
-            'active' => 1,
+            'title'            => ['en' => 'Users', 'ru' => 'Пользователи'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Users\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Profile', 'ru' => 'Профиль'],
-            'active' => 1,
+            'title'            => ['en' => 'Profile', 'ru' => 'Профиль'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Users\ProfileEdit\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Objects', 'ru' => 'Объекты'],
-            'active' => 1,
+            'title'            => ['en' => 'Objects', 'ru' => 'Объекты'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Objects\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Type', 'ru' => 'Типы'],
-            'active' => 1,
+            'title'            => ['en' => 'Type', 'ru' => 'Типы'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Objects\Type\Controller',
-            'module_order' => 3,
+            'module_order'     => 3,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Field', 'ru' => 'Поле'],
-            'active' => 1,
+            'title'            => ['en' => 'Field', 'ru' => 'Поле'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Objects\Field\Controller',
-            'module_order' => 2,
+            'module_order'     => 2,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Lists', 'ru' => 'Список'],
-            'active' => 1,
+            'title'            => ['en' => 'Lists', 'ru' => 'Список'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Objects\Lists\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Version', 'ru' => 'Версии'],
-            'active' => 1,
+            'title'            => ['en' => 'Version', 'ru' => 'Версии'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Objects\Version\Controller',
-            'module_order' => 4,
+            'module_order'     => 4,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Web', 'ru' => 'Веб'],
-            'active' => 1,
+            'title'            => ['en' => 'Web', 'ru' => 'Веб'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Web\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Files', 'ru' => 'Файлы'],
-            'active' => 1,
+            'title'            => ['en' => 'Files', 'ru' => 'Файлы'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Files\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Browser', 'ru' => 'Менеджер'],
-            'active' => 1,
+            'title'            => ['en' => 'Browser', 'ru' => 'Менеджер'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Files\Browser\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Page', 'ru' => 'Страница'],
-            'active' => 1,
+            'title'            => ['en' => 'Page', 'ru' => 'Страница'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Web\Page\Controller',
-            'module_order' => 2,
+            'module_order'     => 2,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Page Constructor', 'ru' => 'Конструктор страницы'],
-            'active' => 1,
+            'title'            => ['en' => 'Page Constructor', 'ru' => 'Конструктор страницы'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Web\PageConstructor\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Domain', 'ru' => 'Домен'],
-            'active' => 1,
+            'title'            => ['en' => 'Domain', 'ru' => 'Домен'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Web\Domain\Controller',
-            'module_order' => 4,
+            'module_order'     => 4,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Tools', 'ru' => 'Инструменты'],
-            'active' => 1,
+            'title'            => ['en' => 'Tools', 'ru' => 'Инструменты'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Tools\Controller',
-            'module_order' => 4,
+            'module_order'     => 4,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'PHP Console', 'ru' => 'PHP консоль'],
-            'active' => 1,
+            'title'            => ['en' => 'PHP Console', 'ru' => 'PHP консоль'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Tools\PhpConsole\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Database Console', 'ru' => 'Консоль базы данных'],
-            'active' => 1,
+            'title'            => ['en' => 'Database Console', 'ru' => 'Консоль базы данных'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Tools\DatabaseConsole\Controller',
-            'module_order' => 2,
+            'module_order'     => 2,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Packages', 'ru' => 'Пакеты'],
-            'active' => 1,
+            'title'            => ['en' => 'Packages', 'ru' => 'Пакеты'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Packages\Controller',
-            'module_order' => 3,
+            'module_order'     => 3,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Composer manager', 'ru' => 'Composer менеджер'],
-            'active' => 1,
+            'title'            => ['en' => 'Composer manager', 'ru' => 'Composer менеджер'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Packages\ComposerManager\Controller',
-            'module_order' => 1,
+            'module_order'     => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Module())->storeOrUpdate([
-            'title' => ['en' => 'Installer manager', 'ru' => 'Менеджер инсталляции'],
-            'active' => 1,
+            'title'            => ['en' => 'Installer manager', 'ru' => 'Менеджер инсталляции'],
+            'active'           => 1,
             'controller_class' => 'App\Vendor\Telenok\Core\Module\Packages\InstallerManager\Controller',
-            'module_order' => 2,
+            'module_order'     => 2,
         ]);
 
         (new \Symfony\Component\Console\Output\ConsoleOutput(
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Modules added');
 
-
         // Widget group
         (new \App\Vendor\Telenok\Core\Model\Web\WidgetGroup())->storeOrUpdate([
-            'title' => ['en' => 'Standart', 'ru' => 'Стандартные'],
-            'active' => 1,
+            'title'            => ['en' => 'Standart', 'ru' => 'Стандартные'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\WidgetGroup\Standart\Controller',
         ]);
 
         // Widget
         (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Html', 'ru' => 'Html'],
-            'active' => 1,
+            'title'            => ['en' => 'Html', 'ru' => 'Html'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\Widget\Html\Controller',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Table', 'ru' => 'Таблица'],
-            'active' => 1,
+            'title'            => ['en' => 'Table', 'ru' => 'Таблица'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\Widget\Table\Controller',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Menu', 'ru' => 'Menu'],
-            'active' => 1,
+            'title'            => ['en' => 'Menu', 'ru' => 'Menu'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\Widget\Menu\Controller',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Rich text editor', 'ru' => 'Редактор'],
-            'active' => 1,
+            'title'            => ['en' => 'Rich text editor', 'ru' => 'Редактор'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\Widget\Rte\Controller',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Php code', 'ru' => 'Php код'],
-            'active' => 1,
+            'title'            => ['en' => 'Php code', 'ru' => 'Php код'],
+            'active'           => 1,
             'controller_class' => '\App\Vendor\Telenok\Core\Widget\Php\Controller',
         ]);
 
@@ -1231,133 +1179,122 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
         ))->writeln('Widgets added');
 
         //Change classes
-        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function($item)
-        {
+        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function ($item) {
             $modelClassNew = str_replace('\Core\Model', '', $item->model_class);
 
-            if (class_exists($modelClassNew))
-            {
+            if (class_exists($modelClassNew)) {
                 $item->update(['model_class' => $modelClassNew]);
             }
         });
 
-        \App\Vendor\Telenok\Core\Model\Object\Sequence::all()->each(function($item)
-        {
+        \App\Vendor\Telenok\Core\Model\Object\Sequence::all()->each(function ($item) {
             $modelClassNew = str_replace('\Core\Model', '', $item->model_class);
 
-            if (class_exists($modelClassNew))
-            {
+            if (class_exists($modelClassNew)) {
                 $item->update(['model_class' => $modelClassNew]);
             }
         });
-
 
         $configGroupMain = (new \App\Vendor\Telenok\Core\Model\System\ConfigGroup())->storeOrUpdate([
-            'title' => ['en' => 'Base setting', 'ru' => 'Базовые настройки'],
+            'title'  => ['en' => 'Base setting', 'ru' => 'Базовые настройки'],
             'active' => 1,
-            'code' => 'base',
+            'code'   => 'base',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Brand name', 'ru' => 'Название компании'],
-            'active' => 1,
-            'code' => 'app.backend.brand',
-            'value' => 'My Company',
+            'title'               => ['en' => 'Brand name', 'ru' => 'Название компании'],
+            'active'              => 1,
+            'code'                => 'app.backend.brand',
+            'value'               => 'My Company',
             'config_config_group' => $configGroupMain->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Locale default', 'ru' => 'Локаль по умолчанию'],
-            'active' => 1,
-            'code' => 'app.localeDefault',
-            'value' => 'en',
-            'controller_class' => '\App\Vendor\Telenok\Core\Config\Item\LocaleDefault',
+            'title'               => ['en' => 'Locale default', 'ru' => 'Локаль по умолчанию'],
+            'active'              => 1,
+            'code'                => 'app.localeDefault',
+            'value'               => 'en',
+            'controller_class'    => '\App\Vendor\Telenok\Core\Config\Item\LocaleDefault',
             'config_config_group' => $configGroupMain->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Locales', 'ru' => 'Локали'],
-            'active' => 1,
-            'code' => 'app.locales',
-            'value' => ['en'],
-            'controller_class' => '\App\Vendor\Telenok\Core\Config\Item\Locales',
+            'title'               => ['en' => 'Locales', 'ru' => 'Локали'],
+            'active'              => 1,
+            'code'                => 'app.locales',
+            'value'               => ['en'],
+            'controller_class'    => '\App\Vendor\Telenok\Core\Config\Item\Locales',
             'config_config_group' => $configGroupMain->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Timezone', 'ru' => 'Временная зона'],
-            'active' => 1,
-            'code' => 'app.timezone',
-            'value' => 'UTC',
+            'title'               => ['en' => 'Timezone', 'ru' => 'Временная зона'],
+            'active'              => 1,
+            'code'                => 'app.timezone',
+            'value'               => 'UTC',
             'config_config_group' => $configGroupMain->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Default theme', 'ru' => 'Тема оформления'],
-            'active' => 1,
-            'code' => 'telenok.view.theme',
-            'value' => 'default',
-            'controller_class' => '\App\Vendor\Telenok\Core\Config\Item\Theme',
+            'title'               => ['en' => 'Default theme', 'ru' => 'Тема оформления'],
+            'active'              => 1,
+            'code'                => 'telenok.view.theme',
+            'value'               => 'default',
+            'controller_class'    => '\App\Vendor\Telenok\Core\Config\Item\Theme',
             'config_config_group' => $configGroupMain->getKey(),
         ]);
-
-
 
         $configGroupSecurity = (new \App\Vendor\Telenok\Core\Model\System\ConfigGroup())->storeOrUpdate([
-            'title' => ['en' => 'Security', 'ru' => 'Безопасность'],
+            'title'  => ['en' => 'Security', 'ru' => 'Безопасность'],
             'active' => 1,
-            'code' => 'auth',
+            'code'   => 'auth',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Min password length', 'ru' => 'Минимальная длина пароля'],
-            'active' => 1,
-            'code' => 'auth.password.length-min',
-            'value' => 8,
+            'title'               => ['en' => 'Min password length', 'ru' => 'Минимальная длина пароля'],
+            'active'              => 1,
+            'code'                => 'auth.password.length-min',
+            'value'               => 8,
             'config_config_group' => $configGroupSecurity->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Forced logout, minutes', 'ru' => 'Принудительное разлогинивание, минут'],
-            'active' => 1,
-            'code' => 'auth.logout.period',
-            'value' => 20,
+            'title'               => ['en' => 'Forced logout, minutes', 'ru' => 'Принудительное разлогинивание, минут'],
+            'active'              => 1,
+            'code'                => 'auth.logout.period',
+            'value'               => 20,
             'config_config_group' => $configGroupSecurity->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'ACL enabled', 'ru' => 'ACL разрешена'],
-            'active' => 1,
-            'code' => 'app.acl.enabled',
-            'value' => 1,
+            'title'               => ['en' => 'ACL enabled', 'ru' => 'ACL разрешена'],
+            'active'              => 1,
+            'code'                => 'app.acl.enabled',
+            'value'               => 1,
             'config_config_group' => $configGroupSecurity->getKey(),
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'Versioning enabled', 'ru' => 'Версионирование разрешено'],
-            'active' => 1,
-            'code' => 'app.version.enabled',
-            'value' => 0,
+            'title'               => ['en' => 'Versioning enabled', 'ru' => 'Версионирование разрешено'],
+            'active'              => 1,
+            'code'                => 'app.version.enabled',
+            'value'               => 0,
             'config_config_group' => $configGroupSecurity->getKey(),
         ]);
-
-
 
         $configGroupLicense = (new \App\Vendor\Telenok\Core\Model\System\ConfigGroup())->storeOrUpdate([
-            'title' => ['en' => 'License', 'ru' => 'Лицензия'],
+            'title'  => ['en' => 'License', 'ru' => 'Лицензия'],
             'active' => 1,
-            'code' => 'license',
+            'code'   => 'license',
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
-            'title' => ['en' => 'License key', 'ru' => 'Лицензионный ключ'],
-            'active' => 1,
-            'code' => 'license.key',
-            'value' => 'demo',
+            'title'               => ['en' => 'License key', 'ru' => 'Лицензионный ключ'],
+            'active'              => 1,
+            'code'                => 'license.key',
+            'value'               => 'demo',
             'config_config_group' => $configGroupLicense->getKey(),
         ]);
-
-
 
         (new \Symfony\Component\Console\Output\ConsoleOutput(
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL

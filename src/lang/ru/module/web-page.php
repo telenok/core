@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'name' => 'Страница',
-    'header.title' => 'Веб страницы',
+return [
+    'name'               => 'Страница',
+    'header.title'       => 'Веб страницы',
     'header.description' => 'создание и редактирование',
-);
+];

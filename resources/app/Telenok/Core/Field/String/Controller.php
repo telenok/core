@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\String;
+<?php
 
-class Controller extends \Telenok\Core\Field\String\Controller {
-    
+namespace App\Vendor\Telenok\Core\Field\String;
+
+class Controller extends \Telenok\Core\Field\String\Controller
+{
 }

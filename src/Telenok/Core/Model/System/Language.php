@@ -6,8 +6,8 @@ namespace Telenok\Core\Model\System;
  * @class Telenok.Core.Model.System.Language
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Language extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
-
+class Language extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
+{
     protected $guarded = [];
     protected $table = 'language';
     protected $ruleList = ['title' => ['required', 'min:1'], 'locale' => ['required', 'unique:language,locale,:id:,id']];
@@ -16,5 +16,4 @@ class Language extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Mode
     {
         return $this->hasMany('\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage', 'widget_language_language');
     }
-
 }

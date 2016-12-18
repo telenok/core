@@ -6,8 +6,8 @@ namespace Telenok\Core\Module\Packages\InstallerManager;
  * @class Telenok.Core.Module.Packages.InstallerManager.Controller
  * @extends Telenok.Core.Abstraction.Presentation.TreeTab.Controller
  */
-class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controller {
-
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controller
+{
     protected $key = 'installer-manager';
     protected $parent = 'packages';
     protected $icon = 'fa fa-file';
@@ -18,21 +18,20 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function getTreeContent()
     {
-        return;
     }
 
     public function getContent()
     {
         return [
-            'tabKey' => "{$this->getTabKey()}-{$this->getParent()}",
-            'tabLabel' => $this->LL('header.title'),
-            'tabContent' => view($this->getPresentationContentView(), array(
-                'controller' => $this,
+            'tabKey'     => "{$this->getTabKey()}-{$this->getParent()}",
+            'tabLabel'   => $this->LL('header.title'),
+            'tabContent' => view($this->getPresentationContentView(), [
+                'controller'       => $this,
                 'currentDirectory' => addslashes(base_path()),
-                'fields' => $this->tableColumn,
-                'gridId' => $this->getGridId(),
-                'uniqueId' => str_random(),
-            ))->render()
+                'fields'           => $this->tableColumn,
+                'gridId'           => $this->getGridId(),
+                'uniqueId'         => str_random(),
+            ])->render(),
         ];
     }
 
@@ -49,14 +48,13 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         $pageStart = $request->input('pageStart', 0);
         $iTotalDisplayRecords = $request->input('pageLength', 20);
 
-        foreach ($list as $item)
-        {
-            $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="' . $item['key'] . '"><span class="lbl"></span>'];
+        foreach ($list as $item) {
+            $put = ['tableCheckAll' => '<input type="checkbox" class="ace ace-checkbox-2" name="tableCheckAll[]" value="'.$item['key'].'"><span class="lbl"></span>'];
 
-            $put['name'] = '<i class="fa fa-folder"></i> ' . array_get($item, 'title.en');
+            $put['name'] = '<i class="fa fa-folder"></i> '.array_get($item, 'title.en');
             $put['key'] = $item['key'];
             $put['description'] = array_get($item, 'description.en');
-            $put['image'] = '<img src="' . $item['image_path'] . '" alt="" height="140" />';
+            $put['image'] = '<img src="'.$item['image_path'].'" alt="" height="140" />';
 
             $put['tableManageItem'] = $this->getListButton($item);
 
@@ -64,11 +62,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         }
 
         return [
-            'gridId' => $this->getGridId(),
-            'draw' => $draw,
-            'iTotalRecords' => count($list),
+            'gridId'               => $this->getGridId(),
+            'draw'                 => $draw,
+            'iTotalRecords'        => count($list),
             'iTotalDisplayRecords' => count($list),
-            'data' => $content
+            'data'                 => $content,
         ];
     }
 
@@ -78,8 +76,8 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 <div class="hidden-phone visible-lg btn-group">
 				
                     <button class="btn btn-xs btn-info" 
-                        onclick="telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').addTabByURL({url : \''
-                . $this->getRouterView(['id' => $item['key']]) . '\'});">
+                        onclick="telenok.getPresentation(\''.$this->getPresentationModuleKey().'\').addTabByURL({url : \''
+                .$this->getRouterView(['id' => $item['key']]).'\'});">
                         <i class="ace-icon glyphicon glyphicon-eye-open bigger-110"></i>
 						View
 						<i class="ace-icon fa fa-arrow-circle-o-right icon-on-right"></i>
@@ -89,15 +87,15 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function view($id)
     {
-        $packageInfo = (array) json_decode(file_get_contents('http://telenok.local/package/view/' . $id . '/json'), true);
+        $packageInfo = (array) json_decode(file_get_contents('http://telenok.local/package/view/'.$id.'/json'), true);
 
         return [
-            'tabKey' => $this->getTabKey() . '-new-' . str_random(),
-            'tabLabel' => 'View package',
-            'tabContent' => view($this->getPresentationModelView(), array_merge(array(
-                'controller' => $this,
+            'tabKey'     => $this->getTabKey().'-new-'.str_random(),
+            'tabLabel'   => 'View package',
+            'tabContent' => view($this->getPresentationModelView(), array_merge([
+                'controller'  => $this,
                 'packageInfo' => $packageInfo,
-                            ), $this->getAdditionalViewParam()))->render()
+                            ], $this->getAdditionalViewParam()))->render(),
         ];
     }
 
@@ -119,17 +117,14 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function getPackageRandomKey($packageId, $versionId)
     {
-        return substr(md5($packageId . $versionId), 0, 10);
+        return substr(md5($packageId.$versionId), 0, 10);
     }
 
     public function installPackageStatus()
     {
-        if (file_exists($file = storage_path('telenok/composer/log')))
-        {
+        if (file_exists($file = storage_path('telenok/composer/log'))) {
             return (array) json_decode(file_get_contents($file), true);
-        }
-        else
-        {
+        } else {
             return [];
         }
     }
@@ -149,16 +144,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     {
         $file = storage_path('telenok/composer/log');
 
-        if (!file_exists($file))
-        {
+        if (!file_exists($file)) {
             touch($file);
-        }
-        else if (($sec = time() - filemtime($file)) < 300)
-        {
-            abort(500, 'Sorry, other installation process still in progress. Please, wait about ' . $sec . 'seconds ');
-        }
-        else
-        {
+        } elseif (($sec = time() - filemtime($file)) < 300) {
+            abort(500, 'Sorry, other installation process still in progress. Please, wait about '.$sec.'seconds ');
+        } else {
             file_put_contents($file, '', LOCK_EX);
         }
     }
@@ -167,8 +157,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     {
         $this->initLogFile();
 
-        try
-        {
+        try {
             $packageRandomKey = $this->getPackageRandomKey($packageId, $versionId);
 
             // make composer.json copy
@@ -182,18 +171,17 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             // download package
             $this->appendLogFile('download package', $this->LL('Download package'));
 
-            $url = 'http://telenok.local/account/package/download/' . urlencode($packageId) . '/' . urlencode($versionId);
-            $url .= '?laravelVersion=' . urlencode(app()->version());
+            $url = 'http://telenok.local/account/package/download/'.urlencode($packageId).'/'.urlencode($versionId);
+            $url .= '?laravelVersion='.urlencode(app()->version());
 
-            \App\Vendor\Telenok\Core\Model\Web\Domain::active()->get()->each(function($item) use (&$url)
-            {
-                $url .= '&domain[]=' . urlencode($item->domain);
+            \App\Vendor\Telenok\Core\Model\Web\Domain::active()->get()->each(function ($item) use (&$url) {
+                $url .= '&domain[]='.urlencode($item->domain);
             });
 
-            $directory = storage_path('telenok/composer/' . $packageRandomKey);
-            $directoryUnzipped = $directory . '/unzipped';
+            $directory = storage_path('telenok/composer/'.$packageRandomKey);
+            $directoryUnzipped = $directory.'/unzipped';
 
-            $packagePath = $directory . '/' . $packageRandomKey . '.zip';
+            $packagePath = $directory.'/'.$packageRandomKey.'.zip';
 
             \File::makeDirectory($directory, 0775, true, true);
             \File::makeDirectory($directoryUnzipped, 0775, true, true);
@@ -205,13 +193,10 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             $zip = new \ZipArchive();
 
-            if ($zip->open($packagePath) === TRUE)
-            {
+            if ($zip->open($packagePath) === true) {
                 $zip->extractTo($directoryUnzipped);
                 $zip->close();
-            }
-            else
-            {
+            } else {
                 throw \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
             }
 
@@ -219,24 +204,18 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             $contentDir = $this->getFolderContent($directoryUnzipped);
 
-            if (count($contentDir) == 1 && is_dir(reset($contentDir)))
-            {
+            if (count($contentDir) == 1 && is_dir(reset($contentDir))) {
                 $contentDir = $this->getFolderContent((string) reset($contentDir));
 
-                $composerJsonPath = collect($contentDir)->keys()->first(function($value, $key)
-                {
-                    if (strpos($value, 'composer.json') !== FALSE)
-                    {
-                        return TRUE;
-                    }
-                    else
-                    {
-                        return FALSE;
+                $composerJsonPath = collect($contentDir)->keys()->first(function ($value, $key) {
+                    if (strpos($value, 'composer.json') !== false) {
+                        return true;
+                    } else {
+                        return false;
                     }
                 });
 
-                if (!$composerJsonPath)
-                {
+                if (!$composerJsonPath) {
                     throw new \Exception('Cant find composer.json');
                 }
 
@@ -246,34 +225,28 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 $jsonArray = json_decode(file_get_contents($composerPath), true);
                 $jsonPackageArray = json_decode(file_get_contents($composerJsonPath), true);
 
-                if (!($packageName = array_get($jsonPackageArray, 'name')))
-                {
+                if (!($packageName = array_get($jsonPackageArray, 'name'))) {
                     throw new \Exception('Empty package name');
                 }
 
-                if (is_array(array_get($jsonArray, 'repositories')))
-                {
-                    foreach ($jsonArray['repositories'] as &$v)
-                    {
-                        if ($v['package']['name'] == $packageName)
-                        {
+                if (is_array(array_get($jsonArray, 'repositories'))) {
+                    foreach ($jsonArray['repositories'] as &$v) {
+                        if ($v['package']['name'] == $packageName) {
                             $v['package']['version'] = 'dev-master';
                             $v['package']['dist']['url'] = $packagePath;
                         }
                     }
-                }
-                else
-                {
+                } else {
                     $jsonArray['repositories'][] = [
-                        'type' => 'package',
+                        'type'    => 'package',
                         'package' => [
-                            'name' => $packageName,
+                            'name'    => $packageName,
                             'version' => 'dev-master',
-                            'dist' => [
-                                'url' => $packagePath,
+                            'dist'    => [
+                                'url'  => $packagePath,
                                 'type' => 'zip',
-                            ]
-                        ]
+                            ],
+                        ],
                     ];
                 }
 
@@ -284,9 +257,9 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 $this->appendLogFile('run', $this->LL('Run composer'));
 
                 $input = new \Symfony\Component\Console\Input\ArrayInput([
-                    'command' => 'require',
+                    'command'       => 'require',
                     '--working-dir' => base_path(),
-                    'packages' => [$packageName],
+                    'packages'      => [$packageName],
                 ]);
 
                 ob_start();
@@ -298,23 +271,18 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
                 ob_end_clean();
 
-                if ($exitCode !== 0)
-                {
+                if ($exitCode !== 0) {
                     throw new \Exception('Error during installing package. Sorry, try again.');
                 }
 
                 \File::deleteDirectory($directoryUnzipped);
                 \File::delete(storage_path('telenok/composer/log'));
-            }
-            else
-            {
+            } else {
                 throw \Symfony\Component\HttpKernel\Exception\NotFoundHttpException('Package archive contains wrong amount of folders');
             }
 
             return ['finished' => $this->LL('Finished')];
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             \File::delete(storage_path('telenok/composer/log'));
 
             return [
@@ -325,35 +293,31 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function create()
     {
-        try
-        {
+        try {
             $modelType = $this->getRequest()->input('modelType');
             $currentDirectory = realpath($this->getRequest()->input('currentDirectory'));
 
-            if (strstr($currentDirectory, base_path()) === FALSE)
-            {
+            if (strstr($currentDirectory, base_path()) === false) {
                 throw new \Exception($this->LL('error.access-denied-over-base-directory'));
             }
 
             $tabKey = str_random();
 
             return [
-                'tabKey' => $this->getTabKey() . '-new-' . $tabKey,
-                'tabLabel' => $this->LL('list.create.' . (in_array($modelType, ['file', 'directory'], true) ? $modelType : "")),
-                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
-                    'controller' => $this,
-                    'currentDirectory' => addslashes($currentDirectory),
-                    'modelType' => $modelType,
-                    'model' => null,
-                    'tabKey' => $tabKey,
+                'tabKey'     => $this->getTabKey().'-new-'.$tabKey,
+                'tabLabel'   => $this->LL('list.create.'.(in_array($modelType, ['file', 'directory'], true) ? $modelType : '')),
+                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge([
+                    'controller'            => $this,
+                    'currentDirectory'      => addslashes($currentDirectory),
+                    'modelType'             => $modelType,
+                    'model'                 => null,
+                    'tabKey'                => $tabKey,
                     'modelCurrentDirectory' => new \SplFileInfo($currentDirectory),
-                    'routerParam' => $this->getRouterParam('create'),
-                    'uniqueId' => str_random(),
-                                ), $this->getAdditionalViewParam()))->render()
+                    'routerParam'           => $this->getRouterParam('create'),
+                    'uniqueId'              => str_random(),
+                                ], $this->getAdditionalViewParam()))->render(),
             ];
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             return [
                 'exception' => $ex->getMessage(),
             ];
@@ -362,45 +326,38 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function edit($id = 0)
     {
-        $id = $id ? : $this->getRequest()->input('id');
+        $id = $id ?: $this->getRequest()->input('id');
 
-        try
-        {
+        try {
             $model = new \SplFileInfo($id);
 
-            if (strstr($model->getPath(), base_path()) === FALSE)
-            {
+            if (strstr($model->getPath(), base_path()) === false) {
                 throw new \Exception($this->LL('error.access-denied-over-base-directory'));
             }
 
-            if ($model->isFile())
-            {
+            if ($model->isFile()) {
                 $modelType = 'file';
-            }
-            else if ($model->isDir())
-            {
+            } elseif ($model->isDir()) {
                 $modelType = 'directory';
             }
 
             $tabKey = str_random();
 
             return [
-                'tabKey' => $this->getTabKey() . '-edit-' . $tabKey,
-                'tabLabel' => $this->LL('list.edit.' . $modelType),
-                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
-                    'controller' => $this,
-                    'currentDirectory' => addslashes($model->getPath()),
-                    'modelType' => $modelType,
-                    'model' => $model,
-                    'tabKey' => $tabKey,
+                'tabKey'     => $this->getTabKey().'-edit-'.$tabKey,
+                'tabLabel'   => $this->LL('list.edit.'.$modelType),
+                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge([
+                    'controller'            => $this,
+                    'currentDirectory'      => addslashes($model->getPath()),
+                    'modelType'             => $modelType,
+                    'model'                 => $model,
+                    'tabKey'                => $tabKey,
                     'modelCurrentDirectory' => new \SplFileInfo($model->getPath()),
-                    'routerParam' => $this->getRouterParam('edit'),
-                    'uniqueId' => str_random(),
-                                ), $this->getAdditionalViewParam()))->render()
+                    'routerParam'           => $this->getRouterParam('edit'),
+                    'uniqueId'              => str_random(),
+                                ], $this->getAdditionalViewParam()))->render(),
             ];
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             return [
                 'exception' => $ex->getMessage(),
             ];
@@ -409,8 +366,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function store($id = null)
     {
-        try
-        {
+        try {
             $input = $this->getRequest();
 
             $modelType = $input->input('modelType');
@@ -418,68 +374,55 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             $currentDirectory = new \SplFileInfo($this->getRequest()->input('directory'));
 
-            if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE)
-            {
+            if (strstr($currentDirectory->getRealPath(), base_path()) === false) {
                 throw new \Exception($this->LL('error.access-denied-over-base-directory'));
             }
 
             $validator = app('validator')->make(
-                ['name' => $name], 
+                ['name' => $name],
                 ['name' => ['required', 'regex:/^[\w .-]+$/u']]
             );
 
-            if ($validator->fails())
-            {
+            if ($validator->fails()) {
                 throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError($validator->messages());
             }
 
-            $modelPath = $currentDirectory->getRealPath() . DIRECTORY_SEPARATOR . $name;
+            $modelPath = $currentDirectory->getRealPath().DIRECTORY_SEPARATOR.$name;
 
-            if (file_exists($modelPath))
-            {
+            if (file_exists($modelPath)) {
                 throw new \Exception($this->LL('error.file.exists'));
             }
 
-            if ($modelType == 'directory')
-            {
+            if ($modelType == 'directory') {
                 \File::makeDirectory($modelPath, 0775, true, true);
-            }
-            else if ($modelType == 'file')
-            {
+            } elseif ($modelType == 'file') {
                 file_put_contents($modelPath, $this->getRequest()->input('content', ''), LOCK_EX);
-            }
-            else
-            {
+            } else {
                 throw new \Exception($this->LL('error.create.unknown-file-type'));
             }
 
             return [
-                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
-                    'controller' => $this,
-                    'currentDirectory' => addslashes($currentDirectory->getRealPath()),
-                    'success' => true,
-                    'modelType' => $modelType,
-                    'model' => new \SplFileInfo($modelPath),
+                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge([
+                    'controller'            => $this,
+                    'currentDirectory'      => addslashes($currentDirectory->getRealPath()),
+                    'success'               => true,
+                    'modelType'             => $modelType,
+                    'model'                 => new \SplFileInfo($modelPath),
                     'modelCurrentDirectory' => $currentDirectory,
-                    'routerParam' => $this->getRouterParam('update'),
-                    'uniqueId' => str_random(),
-                                ), $this->getAdditionalViewParam()))->render()
+                    'routerParam'           => $this->getRouterParam('update'),
+                    'uniqueId'              => str_random(),
+                                ], $this->getAdditionalViewParam()))->render(),
             ];
-        }
-        catch (\Telenok\Core\Support\Exception\Validator $e)
-        {
+        } catch (\Telenok\Core\Support\Exception\Validator $e) {
             throw $e;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
 
     public function update($id = null)
     {
-        try
-        {
+        try {
             $input = $this->getRequest();
 
             $modelType = $input->input('modelType');
@@ -490,8 +433,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             $currentDirectory = new \SplFileInfo($directory);
             $model = new \SplFileInfo($modelPath);
 
-            if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE || strstr($model->getPath(), base_path()) === FALSE)
-            {
+            if (strstr($currentDirectory->getRealPath(), base_path()) === false || strstr($model->getPath(), base_path()) === false) {
                 throw new \Exception($this->LL('error.access-denied-over-base-directory'));
             }
 
@@ -503,96 +445,72 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                     ]
             );
 
-            if ($validator->fails())
-            {
+            if ($validator->fails()) {
                 throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError($validator->messages());
             }
 
-            if ($modelType == 'directory')
-            {
-                $pathNew = $currentDirectory->getPathname() . DIRECTORY_SEPARATOR . $name;
+            if ($modelType == 'directory') {
+                $pathNew = $currentDirectory->getPathname().DIRECTORY_SEPARATOR.$name;
 
                 \File::move($model->getRealPath(), $pathNew);
-            }
-            else if ($modelType == 'file')
-            {
-                $pathNew = $currentDirectory->getPathname() . DIRECTORY_SEPARATOR . $name;
+            } elseif ($modelType == 'file') {
+                $pathNew = $currentDirectory->getPathname().DIRECTORY_SEPARATOR.$name;
 
-                if (strlen($this->getRequest()->input('content', '')) && \File::size($modelPath) < $this->getMaxSizeToView())
-                {
+                if (strlen($this->getRequest()->input('content', '')) && \File::size($modelPath) < $this->getMaxSizeToView()) {
                     file_put_contents($model->getRealPath(), $this->getRequest()->input('content'), LOCK_EX);
                 }
 
-                if ($model->getRealPath() != $pathNew)
-                {
+                if ($model->getRealPath() != $pathNew) {
                     \File::move($model->getRealPath(), $pathNew);
                 }
-            }
-            else
-            {
+            } else {
                 throw new \Exception($this->LL('error.create.unknown-file-type'));
             }
 
             return [
-                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
-                    'controller' => $this,
-                    'currentDirectory' => addslashes($currentDirectory->getRealPath()),
-                    'success' => true,
-                    'modelType' => $modelType,
-                    'model' => new \SplFileInfo($pathNew),
+                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge([
+                    'controller'            => $this,
+                    'currentDirectory'      => addslashes($currentDirectory->getRealPath()),
+                    'success'               => true,
+                    'modelType'             => $modelType,
+                    'model'                 => new \SplFileInfo($pathNew),
                     'modelCurrentDirectory' => $currentDirectory,
-                    'routerParam' => $this->getRouterParam('update'),
-                    'uniqueId' => str_random(),
-                                ), $this->getAdditionalViewParam()))->render()
+                    'routerParam'           => $this->getRouterParam('update'),
+                    'uniqueId'              => str_random(),
+                                ], $this->getAdditionalViewParam()))->render(),
             ];
-        }
-        catch (\Telenok\Core\Support\Exception\Validator $e)
-        {
+        } catch (\Telenok\Core\Support\Exception\Validator $e) {
             throw $e;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
 
     public function delete($id = null, $force = false)
     {
-        try
-        {
+        try {
             $model = new \SplFileInfo(strlen($id) ? $id : $this->getRequest()->input('id'));
 
-            if (strstr($model->getPath(), base_path()) === FALSE)
-            {
+            if (strstr($model->getPath(), base_path()) === false) {
                 throw new \Exception($this->LL('error.access-denied-over-base-directory'));
             }
 
             $name = $model->getFilename();
 
-            if (preg_match('/^_delme/', $name) || $force)
-            {
-                if ($model->isDir())
-                {
+            if (preg_match('/^_delme/', $name) || $force) {
+                if ($model->isDir()) {
                     \File::deleteDirectory($model->getRealPath());
-                }
-                else
-                {
+                } else {
                     \File::delete($model->getRealPath());
                 }
-            }
-            else
-            {
-                \File::move($model->getRealPath(), $model->getPath() . DIRECTORY_SEPARATOR . '_delme' . date('YmdHis') . '_' . $name);
+            } else {
+                \File::move($model->getRealPath(), $model->getPath().DIRECTORY_SEPARATOR.'_delme'.date('YmdHis').'_'.$name);
             }
 
             return ['success' => 1];
-        }
-        catch (\Telenok\Core\Support\Exception\Validator $e)
-        {
+        } catch (\Telenok\Core\Support\Exception\Validator $e) {
             throw $e;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
@@ -603,49 +521,40 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
         $ids = $input->input('tableCheckAll');
 
-        if (empty($ids))
-        {
+        if (empty($ids)) {
             return \Response::json(['message' => 'Expectation Failed'], 417 /* Expectation Failed */);
         }
 
         $content = [];
         $modelType = 'file';
 
-        foreach ($ids as $id_)
-        {
-            try
-            {
+        foreach ($ids as $id_) {
+            try {
                 $model = new \SplFileInfo($id_);
 
-                if (strstr($model->getPath(), base_path()) === FALSE)
-                {
+                if (strstr($model->getPath(), base_path()) === false) {
                     throw new \Exception($this->LL('error.access-denied-over-base-directory'));
                 }
 
-                if ($model->isFile())
-                {
+                if ($model->isFile()) {
                     $modelType = 'file';
-                }
-                else if ($model->isDir())
-                {
+                } elseif ($model->isDir()) {
                     $modelType = 'directory';
                 }
 
                 $tabKey = str_random();
 
-                $content[] = view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
-                    'controller' => $this,
-                    'currentDirectory' => addslashes($model->getPath()),
-                    'modelType' => $modelType,
-                    'model' => $model,
-                    'tabKey' => $tabKey,
+                $content[] = view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge([
+                    'controller'            => $this,
+                    'currentDirectory'      => addslashes($model->getPath()),
+                    'modelType'             => $modelType,
+                    'model'                 => $model,
+                    'tabKey'                => $tabKey,
                     'modelCurrentDirectory' => new \SplFileInfo($model->getPath()),
-                    'routerParam' => $this->getRouterParam('edit'),
-                    'uniqueId' => str_random(),
-                                ), $this->getAdditionalViewParam()))->render();
-            }
-            catch (\Exception $ex)
-            {
+                    'routerParam'           => $this->getRouterParam('edit'),
+                    'uniqueId'              => str_random(),
+                                ], $this->getAdditionalViewParam()))->render();
+            } catch (\Exception $ex) {
                 return [
                     'exception' => $ex->getMessage(),
                 ];
@@ -653,9 +562,9 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         }
 
         return [
-            'tabKey' => $this->getTabKey() . '-edit-' . md5(implode('', $ids)),
-            'tabLabel' => $this->LL('list.edit.' . $modelType),
-            'tabContent' => implode('<div class="hr hr-double hr-dotted hr18"></div>', $content)
+            'tabKey'     => $this->getTabKey().'-edit-'.md5(implode('', $ids)),
+            'tabLabel'   => $this->LL('list.edit.'.$modelType),
+            'tabContent' => implode('<div class="hr hr-double hr-dotted hr18"></div>', $content),
         ];
     }
 
@@ -663,53 +572,44 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     {
         $ids = empty($ids) ? (array) $this->getRequest()->input('tableCheckAll') : $ids;
 
-        if (empty($ids))
-        {
+        if (empty($ids)) {
             return \Response::json(['message' => 'Expectation Failed'], 417 /* Expectation Failed */);
         }
 
         $error = false;
 
-        try
-        {
-            foreach ($ids as $id_)
-            {
+        try {
+            foreach ($ids as $id_) {
                 $this->delete($id_);
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = true;
         }
 
-        if ($error)
-        {
+        if ($error) {
             return \Response::json(['message' => 'Expectation Failed'], 417 /* Expectation Failed */);
-        }
-        else
-        {
+        } else {
             return \Response::json(['success' => 1]);
         }
     }
 
     public function getRouterParam($action = '', $filePath = null, $tabKey = null)
     {
-        switch ($action)
-        {
+        switch ($action) {
             case 'create':
-                return [ $this->getRouterStore(['saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', false), 'tabKey' => $tabKey])];
+                return [$this->getRouterStore(['saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', false), 'tabKey' => $tabKey])];
                 break;
 
             case 'edit':
-                return [ $this->getRouterUpdate(['id' => $filePath, 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey])];
+                return [$this->getRouterUpdate(['id' => $filePath, 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey])];
                 break;
 
             case 'store':
-                return [ $this->getRouterUpdate(['saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey])];
+                return [$this->getRouterUpdate(['saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey])];
                 break;
 
             case 'update':
-                return [ $this->getRouterUpdate(['id' => $filePath, 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey])];
+                return [$this->getRouterUpdate(['id' => $filePath, 'saveBtn' => $this->getRequest()->input('saveBtn', true), 'chooseBtn' => $this->getRequest()->input('chooseBtn', true), 'tabKey' => $tabKey])];
                 break;
 
             default:
@@ -720,13 +620,13 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function getWizardListContent111()
     {
-        return array(
-            'content' => view("core::module/files-browser.wizard", array(
+        return [
+            'content' => view('core::module/files-browser.wizard', [
                 'controller' => $this,
-                'route' => $this->getRouterEdit(),
-                'uniqueId' => str_random(),
-            ))->render()
-        );
+                'route'      => $this->getRouterEdit(),
+                'uniqueId'   => str_random(),
+            ])->render(),
+        ];
     }
 
     public function getTreeList111()
@@ -736,32 +636,30 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
         $input = $this->getRequest();
 
-        $id = $basePath . $input->input('id');
+        $id = $basePath.$input->input('id');
 
         $listTree = [];
 
-        foreach (\Symfony\Component\Finder\Finder::create()->ignoreDotFiles(true)->ignoreVCS(true)->directories()->in($id)->depth(0) as $dir)
-        {
+        foreach (\Symfony\Component\Finder\Finder::create()->ignoreDotFiles(true)->ignoreVCS(true)->directories()->in($id)->depth(0) as $dir) {
             $path = $dir->getPathname();
 
-            $listTree[] = array(
-                "data" => $dir->getFilename(),
-                "metadata" => array('path' => substr($dir->getPathname(), $basePathLength, \Str::length($path) - $basePathLength)),
-                "state" => "closed",
-                "children" => [],
-            );
+            $listTree[] = [
+                'data'     => $dir->getFilename(),
+                'metadata' => ['path' => substr($dir->getPathname(), $basePathLength, \Str::length($path) - $basePathLength)],
+                'state'    => 'closed',
+                'children' => [],
+            ];
         }
 
-        if (!$input->input('id'))
-        {
-            $listTree = array(
-                'data' => array(
-                    "title" => "Root node",
-                    "attr" => array('id' => 'root-not-delete'),
-                ),
-                "state" => "open",
-                'children' => $listTree
-            );
+        if (!$input->input('id')) {
+            $listTree = [
+                'data' => [
+                    'title' => 'Root node',
+                    'attr'  => ['id' => 'root-not-delete'],
+                ],
+                'state'    => 'open',
+                'children' => $listTree,
+            ];
         }
 
         return $listTree;
@@ -769,19 +667,18 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function processExternalEvent($controller)
     {
-        if ($this->getRequest()->input('backend_external_event') == 'install_package' && ($package = $this->getRequest()->input('package_key')))
-        {
+        if ($this->getRequest()->input('backend_external_event') == 'install_package' && ($package = $this->getRequest()->input('package_key'))) {
             $controller->addJsCode('
 				<script>
 					telenok.addModule(
-						"' . $this->getKey() . '", 
-						"' . route('telenok.module.installer-manager.action.param') . '", 
+						"'.$this->getKey().'", 
+						"'.route('telenok.module.installer-manager.action.param').'", 
 						function(moduleKey) 
 						{
 							telenok.processModuleContent(moduleKey);
 							
 							telenok.getPresentation("tree-tab-object-installer-manager").addTabByURL({
-								url : "' . route('telenok.module.installer-manager.view', ['id' => $package]) . '"
+								url : "'.route('telenok.module.installer-manager.view', ['id' => $package]).'"
 							});
 						}
 					);
@@ -789,5 +686,4 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 			');
         }
     }
-
 }

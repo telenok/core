@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\System\LockedBy;
+<?php
 
-class Controller extends \Telenok\Core\Field\System\LockedBy\Controller {
-    
+namespace App\Vendor\Telenok\Core\Field\System\LockedBy;
+
+class Controller extends \Telenok\Core\Field\System\LockedBy\Controller
+{
 }

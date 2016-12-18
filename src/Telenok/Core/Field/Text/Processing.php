@@ -1,13 +1,16 @@
-<?php namespace Telenok\Core\Field\Text;
+<?php
+
+namespace Telenok\Core\Field\Text;
 
 /**
  * @class Telenok.Core.Field.Text.Processing
  * Process value of field Telenok.Core.Field.Text.Controller
  */
-class Processing {
-
+class Processing
+{
     /**
      * @protected
+     *
      * @property {String} $rawValue
      * Plain not processed text.
      * @member Telenok.Core.Field.Text.Processing
@@ -18,7 +21,7 @@ class Processing {
      * @method getProcessed
      * Return processed value of field Telenok.Core.Field.Text.Controller.
      * Text can contain special tags like &lt;widget_inline/&gt;
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Field.Text.Processing
      */
@@ -28,35 +31,30 @@ class Processing {
         $toRemove = [];
         $doc = new \DOMDocument();
 
-        @$doc->loadHTML('<?xml version="1.0" encoding="UTF-8"?>' . "\n" . $v);
+        @$doc->loadHTML('<?xml version="1.0" encoding="UTF-8"?>'."\n".$v);
         $widgetInline = $doc->getElementsByTagName('widget_inline');
 
-        for ($i = 0; $i < $widgetInline->length; $i++)
-        {
+        for ($i = 0; $i < $widgetInline->length; $i++) {
             $widgetInlineElement = $widgetInline->item($i);
 
-            $wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::withPermission()->find((int)$widgetInlineElement->getAttribute('data-widget-id'));
+            $wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::withPermission()->find((int) $widgetInlineElement->getAttribute('data-widget-id'));
 
-            if ($wop)
-            {
+            if ($wop) {
                 $repositoryWidgets = app('telenok.repository')->getWidget();
 
-                $node = $doc->createElement("span", $repositoryWidgets->get($wop->key)
+                $node = $doc->createElement('span', $repositoryWidgets->get($wop->key)
                                                     ->setWidgetModel($wop)
                                                     ->setConfig($wop->structure)
                                                     ->setFrontendController(app('controllerRequest'))
                                                     ->getContent());
 
                 $widgetInlineElement->parentNode->replaceChild($node, $widgetInlineElement);
-            }
-            else
-            {
+            } else {
                 $toRemove[] = $widgetInlineElement;
             }
         }
-        
-        foreach($toRemove as $remove)
-        {
+
+        foreach ($toRemove as $remove) {
             $remove->parentNode->removeChild($remove);
         }
 
@@ -66,21 +64,21 @@ class Processing {
     /**
      * @method setRawValue
      * Set raw value of text field.
-     * 
+     *
      * @return {Telenok.Core.Field.Text.Processing}
      * @member Telenok.Core.Field.Text.Processing
      */
     public function setRawValue($rawValue)
     {
         $this->rawValue = $rawValue;
-        
+
         return $this;
     }
 
     /**
      * @method getRawValue
      * Return raw value of text field.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Field.Text.Processing
      */
@@ -88,16 +86,16 @@ class Processing {
     {
         return $this->rawValue;
     }
-    
+
     /**
      * @method __toString
      * Cast value to {String}.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Field.Text.Processing
      */
     public function __toString()
     {
-        return (string)$this->getRawValue();
+        return (string) $this->getRawValue();
     }
 }

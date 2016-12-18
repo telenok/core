@@ -6,8 +6,8 @@ namespace Telenok\Core\Support\File;
  * @class Telenok.Core.Support.File.StoreCache
  * Class for storing files in cache.
  */
-class StoreCache {
-
+class StoreCache
+{
     public static function storeFile($pathLocal, $pathCache, $storageKey = '', $storageacheKey = '', $width = 0, $height = 0, $action = '')
     {
         $storage = app('filesystem')->disk($storageKey);
@@ -15,10 +15,8 @@ class StoreCache {
 
         $content = $storage->get($pathLocal);
 
-        try
-        {
-            if (\App\Vendor\Telenok\Core\Support\Image\Processing::isImage($pathLocal) && ($width || $height))
-            {
+        try {
+            if (\App\Vendor\Telenok\Core\Support\Image\Processing::isImage($pathLocal) && ($width || $height)) {
                 $extension = pathinfo($pathLocal, PATHINFO_EXTENSION);
 
                 $imageProcess = app('\App\Vendor\Telenok\Core\Support\Image\Processing');
@@ -28,10 +26,7 @@ class StoreCache {
             }
 
             $storeageCache->put($pathCache, $content, \Illuminate\Contracts\Filesystem\Filesystem::VISIBILITY_PUBLIC);
-        }
-        catch (\Exception $e)
-        {
-            
+        } catch (\Exception $e) {
         }
     }
 
@@ -39,26 +34,18 @@ class StoreCache {
     {
         $name = pathinfo($filepath, PATHINFO_FILENAME);
 
-        if (empty($storages))
-        {
-            $storages = \App\Vendor\Telenok\Core\Support\File\Store::storageList(array_map("trim", explode(',', config('cache.cache_storages'))))->all();
+        if (empty($storages)) {
+            $storages = \App\Vendor\Telenok\Core\Support\File\Store::storageList(array_map('trim', explode(',', config('cache.cache_storages'))))->all();
         }
 
-        foreach (\App\Vendor\Telenok\Core\Support\File\Store::storageList($storages)->all() as $storage)
-        {
+        foreach (\App\Vendor\Telenok\Core\Support\File\Store::storageList($storages)->all() as $storage) {
             $disk = app('filesystem')->disk($storage);
 
-            foreach ($disk->files(pathinfo($filepath, PATHINFO_DIRNAME)) as $filename)
-            {
-                if (strpos($filename, $name) !== FALSE)
-                {
-                    try
-                    {
+            foreach ($disk->files(pathinfo($filepath, PATHINFO_DIRNAME)) as $filename) {
+                if (strpos($filename, $name) !== false) {
+                    try {
                         $disk->delete($filename);
-                    }
-                    catch (\Exception $e)
-                    {
-                        
+                    } catch (\Exception $e) {
                     }
                 }
             }
@@ -78,22 +65,18 @@ class StoreCache {
             trim(config('filesystems.cache.directory'), '\\/'),
             substr($filename, 0, 2),
             substr($filename, 2, 2),
-            $filename
+            $filename,
         ]);
     }
 
     public static function filenameCache($filename = '', $width = 0, $height = 0, $action = '')
     {
-        if (!$width && !$height)
-        {
+        if (!$width && !$height) {
             return md5($filename);
-        }
-        else
-        {
+        } else {
             return md5(pathinfo($filename, PATHINFO_FILENAME)
-                    . "_{$width}_{$height}_{$action}"
-                    . (($ext = pathinfo($filename, PATHINFO_EXTENSION)) ? ".{$ext}" : ''));
+                    ."_{$width}_{$height}_{$action}"
+                    .(($ext = pathinfo($filename, PATHINFO_EXTENSION)) ? ".{$ext}" : ''));
         }
     }
-
 }

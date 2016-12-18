@@ -6,8 +6,8 @@ namespace Telenok\Core\Model\File;
  * @class Telenok.Core.Model.File.FileMimeType
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class FileMimeType extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
-
+class FileMimeType extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
+{
     protected $table = 'file_mime_type';
     protected $ruleList = ['title' => ['required', 'min:1'], 'mime_type' => ['required', 'unique:file_mime_type,mime_type,:id:,id']];
 
@@ -20,5 +20,4 @@ class FileMimeType extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\
     {
         return $this->hasMany('\App\Vendor\Telenok\Core\Model\User\User', 'avatar_user_file_mime_type');
     }
-
 }

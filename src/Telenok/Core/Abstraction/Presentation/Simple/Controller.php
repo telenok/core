@@ -2,15 +2,15 @@
 
 namespace Telenok\Core\Abstraction\Presentation\Simple;
 
-use \Telenok\Core\Contract\Presentation\Presentation;
+use Telenok\Core\Contract\Presentation\Presentation;
 
 /**
  * @class Telenok.Core.Abstraction.Presentation.Simple.Controller
  * Base controller for presentation "simple".
  * @extends Telenok.Core.Abstraction.Module.Controller
  */
-abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller implements Presentation {
-
+abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller implements Presentation
+{
     protected $presentation = 'simple';
     protected $presentationView = '';
     protected $presentationContentView = '';
@@ -32,7 +32,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
     public function getTabKey()
     {
-        return $this->tabKey ? : $this->getKey();
+        return $this->tabKey ?: $this->getKey();
     }
 
     public function setTabKey($key)
@@ -49,7 +49,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
     public function getPresentationModuleKey()
     {
-        return $this->presentationModuleKey ? : $this->presentation . '-' . $this->getKey();
+        return $this->presentationModuleKey ?: $this->presentation.'-'.$this->getKey();
     }
 
     public function setPresentationModuleKey($key)
@@ -61,7 +61,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
     public function getPresentationView()
     {
-        return $this->presentationView ? : "core::presentation.simple.presentation";
+        return $this->presentationView ?: 'core::presentation.simple.presentation';
     }
 
     public function setPresentationView($key)
@@ -73,7 +73,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
     public function getPresentationContentView()
     {
-        return $this->presentationContentView ? : "{$this->getPackage()}::module.{$this->getKey()}.content";
+        return $this->presentationContentView ?: "{$this->getPackage()}::module.{$this->getKey()}.content";
     }
 
     public function setPresentationContentView($key)
@@ -97,20 +97,17 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
     public function getActionParam()
     {
-        try
-        {
+        try {
             return [
-                'presentation' => $this->getPresentation(),
+                'presentation'          => $this->getPresentation(),
                 'presentationModuleKey' => $this->getPresentationModuleKey(),
-                'presentationContent' => $this->getPresentationContent(),
-                'key' => $this->getKey(),
-                'breadcrumbs' => $this->getBreadcrumbs(),
-                'pageHeader' => $this->getPageHeader(),
-                'content' => $this->getContent(),
+                'presentationContent'   => $this->getPresentationContent(),
+                'key'                   => $this->getKey(),
+                'breadcrumbs'           => $this->getBreadcrumbs(),
+                'pageHeader'            => $this->getPageHeader(),
+                'content'               => $this->getContent(),
             ];
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return [
                 'error' => $e->getMessage(),
             ];
@@ -119,73 +116,62 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
     public function getPresentationContent()
     {
-        return view($this->getPresentationView(), array(
-                    'presentation' => $this->getPresentation(),
+        return view($this->getPresentationView(), [
+                    'presentation'          => $this->getPresentation(),
                     'presentationModuleKey' => $this->getPresentationModuleKey(),
-                    'uniqueId' => str_random(),
-                    'controller' => $this,
-                    'key' => $this->getKey(),
-                    'breadcrumbs' => $this->getBreadcrumbs(),
-                    'pageHeader' => $this->getPageHeader(),
-                ))->render();
+                    'uniqueId'              => str_random(),
+                    'controller'            => $this,
+                    'key'                   => $this->getKey(),
+                    'breadcrumbs'           => $this->getBreadcrumbs(),
+                    'pageHeader'            => $this->getPageHeader(),
+                ])->render();
     }
 
     public function getContent()
     {
         return view($this->getPresentationContentView(), array_merge([
                     'controller' => $this,
-                    'uniqueId' => str_random(),
+                    'uniqueId'   => str_random(),
                                 ], $this->getAdditionalViewParam()))->render();
     }
 
     public function getModelFieldViewKey($field)
     {
-        
     }
 
     public function getModelFieldView($field)
     {
-        
     }
 
     public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null)
     {
-        
     }
 
     public function setDisplayType($type)
     {
-        
     }
 
     public function create()
     {
-        
     }
 
     public function edit($id = null)
     {
-        
     }
 
     public function store($id = null)
     {
-        
     }
 
     public function update($id = null)
     {
-        
     }
 
     public function save($input = [], $type = null)
     {
-        
     }
 
     public function getListItem($model = null)
     {
-        
     }
-
 }

@@ -2,15 +2,15 @@
 
 namespace Telenok\Core\Middleware;
 
-use Illuminate\Routing\Redirector;
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 
 /**
  * @class Telenok.Core.Middleware.Language
  */
-class Language {
-
+class Language
+{
     public function __construct(Application $app, Redirector $redirector, Request $request)
     {
         $this->app = $app;
@@ -24,12 +24,9 @@ class Language {
 
         $localeCollection = collect($this->app->config->get('app.locales'));
 
-        if (in_array($localeHeader, $localeCollection->all(), true))
-        {
+        if (in_array($localeHeader, $localeCollection->all(), true)) {
             $localeCurrent = $localeHeader;
-        }
-        else
-        {
+        } else {
             $localeCurrent = $this->app->config->get('app.locale', 'en');
         }
 
@@ -39,60 +36,43 @@ class Language {
         $segmentUrl = $request->segment(1);
 
         // if locale == 'telenok' then we are in backend
-        if ($segmentUrl == 'telenok')
-        {
-            if (app('auth')->check())
-            {
+        if ($segmentUrl == 'telenok') {
+            if (app('auth')->check()) {
                 $locale = app('auth')->user()->locale;
-            }
-            else
-            {
+            } else {
                 $locale = $localeCurrent;
             }
-        }
-        else
-        {
+        } else {
             // get locale from http://locale.domain.com/some-other-path
-            if ($locale = $localeCollection->first(function($item) use ($request)
-            {
-                if (strpos('.' . $request->getHost(), ".{$item}.") !== FALSE)
-                {
-                    return TRUE;
+            if ($locale = $localeCollection->first(function ($item) use ($request) {
+                if (strpos('.'.$request->getHost(), ".{$item}.") !== false) {
+                    return true;
                 }
-            })) {}
+            })) {
+            }
             // get locale from http://some.domain.com/locale/some-other-path
-            else
-            {
+            else {
                 $locale = $segmentUrl;
             }
         }
 
-        $localeHost = $localeCollection->first(function($item) use ($request)
-        {
-            return strpos('.' . $request->getHost(), ".{$item}.") !== FALSE;
+        $localeHost = $localeCollection->first(function ($item) use ($request) {
+            return strpos('.'.$request->getHost(), ".{$item}.") !== false;
         });
 
-        if (($locale !== $sessionLocale && in_array($locale, $localeCollection->all(), true)))
-        {
+        if (($locale !== $sessionLocale && in_array($locale, $localeCollection->all(), true))) {
             $this->app->session->set('app.locale', $locale);
             $this->app->setLocale($locale);
-        }
-        else if ($localeHost !== $sessionLocale && in_array($localeHost, $localeCollection->all(), true))
-        {
+        } elseif ($localeHost !== $sessionLocale && in_array($localeHost, $localeCollection->all(), true)) {
             $this->app->session->set('app.locale', $localeHost);
             $this->app->setLocale($localeHost);
-        }
-        else if ($sessionLocale)
-        {
+        } elseif ($sessionLocale) {
             $this->app->setLocale($sessionLocale);
-        }
-        else if (!$sessionLocale)
-        {
+        } elseif (!$sessionLocale) {
             $this->app->session->set('app.locale', $localeCurrent);
             $this->app->setLocale($localeCurrent);
         }
 
         return $next($request);
     }
-
 }

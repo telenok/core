@@ -1,5 +1,6 @@
-<?php namespace Telenok\Core\Abstraction\Config;
-use Illuminate\Support\Collection;
+<?php
+
+namespace Telenok\Core\Abstraction\Config;
 
 /**
  * @class Telenok.Core.Abstraction.Config.Controller
@@ -11,6 +12,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 {
     /**
      * @protected
+     *
      * @property {Array} $defaultValue
      * Default config values.
      * @member Telenok.Core.Abstraction.Config.Controller
@@ -19,6 +21,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {Array} $ruleList
      * List of rules to validate config before saving.
      * @member Telenok.Core.Abstraction.Config.Controller
@@ -27,6 +30,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $languageDirectory
      * Relative path to language directory of settings.
      * @member Telenok.Core.Abstraction.Config.Controller
@@ -35,6 +39,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $formConfigContentView
      * Name of view for display settings in form.
      * @member Telenok.Core.Abstraction.Config.Controller
@@ -45,28 +50,31 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         return view($this->getValueContentView(), [
                 'parentController' => $controller,
-                'controller' => $this,
-                'model' => $model,
-                'field' => $field,
-                'uniqueId' => $uniqueId
+                'controller'       => $this,
+                'model'            => $model,
+                'field'            => $field,
+                'uniqueId'         => $uniqueId,
             ])->render();
     }
 
     /**
      * @method getValueContentView
      * Return name of view to display value in form.
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Config.Controller
      */
     public function getValueContentView()
     {
-        return $this->valueContentView ? : "{$this->getPackage()}::config.{$this->getKey()}.value";
+        return $this->valueContentView ?: "{$this->getPackage()}::config.{$this->getKey()}.value";
     }
 
     /**
      * @method validate
      * Validate input data.
+     *
      * @param {Array} $input
+     *
      * @return {Boolean}
      * @member Telenok.Core.Abstraction.Config.Controller
      */
@@ -74,8 +82,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         $validator = $this->validator($this->ruleList, $input);
 
-        if (!$validator->passes())
-        {
+        if (!$validator->passes()) {
             throw $this->validateException()->setMessageError($validator->messages());
         }
     }
@@ -83,10 +90,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method validator
      * Create and return validator.
+     *
      * @param {Array} $rule
      * @param {Array} $input
      * @param {Array} $message
      * @param {Array} $customAttribute
+     *
      * @return {Telenok.Core.Support.Validator.Config}
      * @member Telenok.Core.Abstraction.Config.Controller
      */
@@ -102,13 +111,16 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method validateException
      * Create and return validator's exception.
+     *
      * @return {Telenok.Core.Support.Exception.Validator}
      * @member Telenok.Core.Abstraction.Config.Controller
      */
     public function validateException()
     {
-        return new \Telenok\Core\Support\Exception\Validator;
+        return new \Telenok\Core\Support\Exception\Validator();
     }
 
-    public function preProcess($model, $type, $input) {}
+    public function preProcess($model, $type, $input)
+    {
+    }
 }

@@ -3,14 +3,15 @@
 namespace Telenok\Core\Support\Traits;
 
 /**
- * Trait to define path for specific packages
- * 
+ * Trait to define path for specific packages.
+ *
  * @class Telenok.Core.Support.Traits.Package
  */
-trait Package {
-
+trait Package
+{
     /**
      * @protected
+     *
      * @property {String} $package
      * Key defined package. It can be "core" or "news" etc.
      * @member Telenok.Core.Support.Traits.Package
@@ -21,6 +22,7 @@ trait Package {
      * @method getPackage
      * Cache and return package key for called class.
      * @member Telenok.Core.Support.Traits.Package
+     *
      * @return {String}
      */
     public function getPackage()
@@ -29,24 +31,18 @@ trait Package {
 
         $class = get_called_class();
 
-        if (!isset($ns[$class]))
-        {
-            if ($this->package)
-            {
+        if (!isset($ns[$class])) {
+            if ($this->package) {
                 return $this->package;
             }
 
-            $package = app('telenok.repository')->getPackage()->filter(function($item)
-                    {
-                        return strpos('\\' . trim(get_class($this), '\\') . '\\', $item->getBaseClass()) !== FALSE;
-                    })->first();
+            $package = app('telenok.repository')->getPackage()->filter(function ($item) {
+                return strpos('\\'.trim(get_class($this), '\\').'\\', $item->getBaseClass()) !== false;
+            })->first();
 
-            if ($package)
-            {
+            if ($package) {
                 $ns[$class] = strtolower($package->getKey());
-            }
-            else
-            {
+            } else {
                 $ns[$class] = '';
             }
         }
@@ -58,6 +54,7 @@ trait Package {
      * @method setPackage
      * Set package key.
      * @member Telenok.Core.Support.Traits.Package
+     *
      * @return {void}
      */
     public function setPackage($param)

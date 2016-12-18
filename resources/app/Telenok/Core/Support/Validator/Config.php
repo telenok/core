@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Support\Validator;
+<?php
 
-class Config extends \Telenok\Core\Support\Validator\Config {
+namespace App\Vendor\Telenok\Core\Support\Validator;
 
+class Config extends \Telenok\Core\Support\Validator\Config
+{
 }

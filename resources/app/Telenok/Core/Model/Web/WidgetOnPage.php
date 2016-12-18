@@ -1,4 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Model\Web;
+<?php
 
-class WidgetOnPage extends \Telenok\Core\Model\Web\WidgetOnPage {
+namespace App\Vendor\Telenok\Core\Model\Web;
+
+class WidgetOnPage extends \Telenok\Core\Model\Web\WidgetOnPage
+{
 }

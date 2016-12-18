@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Field\System\CreatedBy;
+<?php
+
+namespace Telenok\Core\Field\System\CreatedBy;
 
 use Illuminate\Database\Schema\Blueprint;
 
@@ -6,36 +8,38 @@ use Illuminate\Database\Schema\Blueprint;
  * @class Telenok.Core.Field.System.CreatedBy.Controller
  * Class of field "created-by". Field allow to store data about date
  * and creator.
- * 
+ *
  * @extends Telenok.Core.Field.RelationOneToMany.Controller
  */
-class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
-
+class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller
+{
     /**
      * @protected
+     *
      * @property {String} $key
      * Field key.
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */
     protected $key = 'created-by';
-    
+
     /**
      * @protected
+     *
      * @property {String} $routeListTitle
      * Router's name to show list.
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */
-    protected $routeListTitle = "telenok.field.relation-one-to-many.list.title";
+    protected $routeListTitle = 'telenok.field.relation-one-to-many.list.title';
 
     /**
      * @method getModelFieldViewVariable
      * Return array with URL for variables in $viewModel view.
-     * 
+     *
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
-     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * @param {String} $uniqueId
-     * 
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model}  $model
+     * @param {Telenok.Core.Model.Object.Field}                 $field
+     * @param {String}                                          $uniqueId
+     *
      * @return {Array}
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */
@@ -46,11 +50,12 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     /**
      * @method getDateField
      * Define list of date fields in Eloquent object to process it saving and filling.
-     * 
+     *
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Eloquent object.
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                                Eloquent object.
+     * @param {Telenok.Core.Model.Object.Field}                $field
+     *                                                                Object with data of field's configuration.
+     *
      * @return {Array}
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */
@@ -62,11 +67,12 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     /**
      * @method getModelFillableField
      * Define list of fields in Eloquent object which can be filled by user.
-     * 
+     *
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Eloquent object.
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                                Eloquent object.
+     * @param {Telenok.Core.Model.Object.Field}                $field
+     *                                                                Object with data of field's configuration.
+     *
      * @return {Array}
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */
@@ -75,26 +81,25 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
         return $field->relation_one_to_many_belong_to ? [$field->code, 'created_at'] : [];
     }
 
-    
     /**
      * @method getModelAttribute
      * Return processed value of field.
-     * 
+     *
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Eloquent object.
-     * @param {String} $key
-     * Field's name.
-     * @param {mixed} $value
-     * Value of field from database for processing in this method.
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                                Eloquent object.
+     * @param {String}                                         $key
+     *                                                                Field's name.
+     * @param {mixed}                                          $value
+     *                                                                Value of field from database for processing in this method.
+     * @param {Telenok.Core.Model.Object.Field}                $field
+     *                                                                Object with data of field's configuration.
+     *
      * @return {String}
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */
     public function getModelAttribute($model, $key, $value, $field)
     {
-        if ($key == 'created_at' && $value === null)
-        {
+        if ($key == 'created_at' && $value === null) {
             $value = \Carbon\Carbon::now();
         }
 
@@ -104,26 +109,24 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     /**
      * @method setModelAttribute
      * Return processed value of field.
-     * 
+     *
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Eloquent object.
-     * @param {String} $key
-     * Field's name.
-     * @param {mixed} $value
-     * Value of field from php code for processing in this method.
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                                Eloquent object.
+     * @param {String}                                         $key
+     *                                                                Field's name.
+     * @param {mixed}                                          $value
+     *                                                                Value of field from php code for processing in this method.
+     * @param {Telenok.Core.Model.Object.Field}                $field
+     *                                                                Object with data of field's configuration.
+     *
      * @return {void}
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */
     public function setModelAttribute($model, $key, $value, $field)
     {
-        if ($key == 'created_by_user' && $value === null)
-        {
+        if ($key == 'created_by_user' && $value === null) {
             $value = app('auth')->check() ? app('auth')->user()->id : 0;
-        }
-        else if ($key == 'created_at' && $value === null)
-        {
+        } elseif ($key == 'created_at' && $value === null) {
             $value = \Carbon\Carbon::now();
         }
 
@@ -133,13 +136,14 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     /**
      * @method preProcess
      * Preprocess save {@link Telenok.Core.Model.Object.Field $model}.
-     * 
+     *
      * @param {Telenok.Core.Model.Object.Field} $model
-     * Object to save.
-     * @param {Telenok.Core.Model.Object.Type} $type
-     * Object with data of field's configuration.
-     * @param {Illuminate.Http.Request} $input
-     * Laravel request object.
+     *                                                 Object to save.
+     * @param {Telenok.Core.Model.Object.Type}  $type
+     *                                                 Object with data of field's configuration.
+     * @param {Illuminate.Http.Request}         $input
+     *                                                 Laravel request object.
+     *
      * @return {Telenok.Core.Field.System.CreatedBy.Controller}
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */
@@ -159,8 +163,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
         $input->put('allow_sort', 0);
         $input->put('allow_search', $input->get('allow_search', 1));
 
-        if (!$input->get('field_object_tab'))
-        {
+        if (!$input->get('field_object_tab')) {
             $input->put('field_object_tab', 'additionally');
         }
 
@@ -172,10 +175,8 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
 
         $fieldName = 'created_by_user';
 
-        if (!\Schema::hasColumn($table, $fieldName))
-        {
-            \Schema::table($table, function(Blueprint $table) use ($fieldName)
-            {
+        if (!\Schema::hasColumn($table, $fieldName)) {
+            \Schema::table($table, function (Blueprint $table) use ($fieldName) {
                 $table->integer($fieldName)->unsigned()->nullable();
             });
         }
@@ -186,13 +187,14 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     /**
      * @method postProcess
      * postProcess save {@link Telenok.Core.Model.Object.Field $model}.
-     * 
+     *
      * @param {Telenok.Core.Model.Object.Field} $model
-     * Object to save.
-     * @param {Telenok.Core.Model.Object.Type} $type
-     * Object with data of field's configuration.
-     * @param {Illuminate.Http.Request} $input
-     * Laravel request object.
+     *                                                 Object to save.
+     * @param {Telenok.Core.Model.Object.Type}  $type
+     *                                                 Object with data of field's configuration.
+     * @param {Illuminate.Http.Request}         $input
+     *                                                 Laravel request object.
+     *
      * @return {Telenok.Core.Field.System.CreatedBy.Controller}
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */
@@ -204,7 +206,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     /**
      * @method translationSeed
      * Return multilanguage array
-     * 
+     *
      * @return {Array}
      * @member Telenok.Core.Field.System.CreatedBy.Controller
      */

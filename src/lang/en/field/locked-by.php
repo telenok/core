@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'name' => 'Date and creator',
+return [
+    'name'  => 'Date and creator',
     'title' => 'Locked',
-    'by' => 'by',
-);
+    'by'    => 'by',
+];

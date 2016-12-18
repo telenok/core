@@ -6,8 +6,8 @@ namespace Telenok\Core\Module\Files\Browser\Wizard\Directory;
  * @class Telenok.Core.Module.Files.Browser.Wizard.Controller
  * @extends Telenok.Core.Abstraction.Presentation.TreeTab.Controller
  */
-class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controller {
-
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controller
+{
     protected $key = 'file-browser';
     protected $parent = 'files';
     protected $icon = 'fa fa-file';
@@ -18,50 +18,40 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         $new = trim($this->getRequest()->input('new'));
         $op = trim($this->getRequest()->input('op'));
 
-        try
-        {
-            if (!$path)
-            {
-                throw new \Exception($this->LL('error.path', array('dir' => $path)));
+        try {
+            if (!$path) {
+                throw new \Exception($this->LL('error.path', ['dir' => $path]));
             }
 
-            switch ($op)
-            {
+            switch ($op) {
                 case 'create':
-                    if (!$new)
-                    {
-                        throw new \Exception($this->LL('error.path', array('dir' => $path)));
+                    if (!$new) {
+                        throw new \Exception($this->LL('error.path', ['dir' => $path]));
                     }
 
-                    $this->createModelDirectory($path . DIRECTORY_SEPARATOR . $new);
+                    $this->createModelDirectory($path.DIRECTORY_SEPARATOR.$new);
 
-                    return ['success' => 1, 'path' => $path . DIRECTORY_SEPARATOR . $new, 'id' => str_random()];
+                    return ['success' => 1, 'path' => $path.DIRECTORY_SEPARATOR.$new, 'id' => str_random()];
                     break;
                 case 'rename':
                     break;
                 case 'remove':
                     break;
             }
-        }
-        catch (\Exception $exc)
-        {
+        } catch (\Exception $exc) {
             return ['error' => (array) $exc->getMessage()];
         }
     }
 
     public function createModelDirectory($path)
     {
-        $dir = base_path() . DIRECTORY_SEPARATOR . trim($path, '\\');
+        $dir = base_path().DIRECTORY_SEPARATOR.trim($path, '\\');
 
-        if (!\File::isDirectory($dir))
-        {
-            try
-            {
+        if (!\File::isDirectory($dir)) {
+            try {
                 \File::makeDirectory($dir, null, true);
-            }
-            catch (\Exception $e)
-            {
-                throw new \Exception($this->LL('error.directory.create', array('dir' => $dir)));
+            } catch (\Exception $e) {
+                throw new \Exception($this->LL('error.directory.create', ['dir' => $dir]));
             }
         }
     }
@@ -78,12 +68,12 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function getListContent()
     {
-        return array(
-            'content' => view("core::module/files-browser.wizard-directory", array(
+        return [
+            'content' => view('core::module/files-browser.wizard-directory', [
                 'controller' => $this,
-                'uniqueId' => str_random(),
-            ))->render()
-        );
+                'uniqueId'   => str_random(),
+            ])->render(),
+        ];
     }
 
     public function getTreeList($id = null)
@@ -91,36 +81,33 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         $basePath = base_path();
         $basePathLength = \Str::length($basePath);
 
-        $id = $basePath . $this->getRequest()->input('id');
+        $id = $basePath.$this->getRequest()->input('id');
 
         $listTree = [];
 
-        foreach (\Symfony\Component\Finder\Finder::create()->ignoreDotFiles(true)->ignoreVCS(true)->directories()->in($id)->depth(0) as $dir)
-        {
+        foreach (\Symfony\Component\Finder\Finder::create()->ignoreDotFiles(true)->ignoreVCS(true)->directories()->in($id)->depth(0) as $dir) {
             $path = $dir->getPathname();
 
-            $listTree[] = array(
-                "data" => $dir->getFilename(),
-                "metadata" => array('path' => substr($dir->getPathname(), $basePathLength, \Str::length($path) - $basePathLength)),
-                "state" => "closed",
-                "children" => [],
-            );
+            $listTree[] = [
+                'data'     => $dir->getFilename(),
+                'metadata' => ['path' => substr($dir->getPathname(), $basePathLength, \Str::length($path) - $basePathLength)],
+                'state'    => 'closed',
+                'children' => [],
+            ];
         }
 
-        if (!$this->getRequest()->input('id'))
-        {
-            $listTree = array(
-                'data' => array(
-                    "title" => "Root node",
-                    "attr" => array('id' => 'root-not-delete'),
-                ),
-                "state" => "open",
-                "metadata" => array('path' => '\\'),
-                'children' => $listTree
-            );
+        if (!$this->getRequest()->input('id')) {
+            $listTree = [
+                'data' => [
+                    'title' => 'Root node',
+                    'attr'  => ['id' => 'root-not-delete'],
+                ],
+                'state'    => 'open',
+                'metadata' => ['path' => '\\'],
+                'children' => $listTree,
+            ];
         }
 
         return $listTree;
     }
-
 }

@@ -6,8 +6,8 @@ namespace Telenok\Core\Model\Object;
  * @class Telenok.Core.Model.Object.Sequence
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Sequence extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
-
+class Sequence extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
+{
     protected $table = 'object_sequence';
     protected $hasVersioning = false;
     public $incrementing = true;
@@ -40,12 +40,9 @@ class Sequence extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Mode
 
     public function delete()
     {
-        app('db')->transaction(function()
-        {
-            if ($this->model && $this->model->exists)
-            {
-                if ($this->forceDeleting)
-                {
+        app('db')->transaction(function () {
+            if ($this->model && $this->model->exists) {
+                if ($this->forceDeleting) {
                     $this->model->forceDelete();
                 }
             }
@@ -83,5 +80,4 @@ class Sequence extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Mode
     {
         return $this->hasMany('\App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource', 'acl_permission_object_sequence');
     }
-
 }

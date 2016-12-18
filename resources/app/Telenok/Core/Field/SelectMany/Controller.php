@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\SelectMany;
+<?php
 
-class Controller extends \Telenok\Core\Field\SelectMany\Controller {
-    
+namespace App\Vendor\Telenok\Core\Field\SelectMany;
+
+class Controller extends \Telenok\Core\Field\SelectMany\Controller
+{
 }

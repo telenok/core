@@ -1,3 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Abstraction\Database\Connection;
+<?php
 
-class MySqlConnection extends \Telenok\Core\Abstraction\Database\Connection\MySqlConnection {}
+namespace App\Vendor\Telenok\Core\Abstraction\Database\Connection;
+
+class MySqlConnection extends \Telenok\Core\Abstraction\Database\Connection\MySqlConnection
+{
+}

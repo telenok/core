@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\Upload;
+<?php
 
-class Download extends \Telenok\Core\Field\Upload\Download {
-    
+namespace App\Vendor\Telenok\Core\Field\Upload;
+
+class Download extends \Telenok\Core\Field\Upload\Download
+{
 }

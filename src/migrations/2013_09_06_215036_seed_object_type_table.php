@@ -2,13 +2,11 @@
 
 class SeedObjectTypeTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
 {
-
     public function up()
     {
         parent::up();
 
-        if (Schema::hasTable('object_type') && Schema::hasTable('object_field'))
-        {
+        if (Schema::hasTable('object_type') && Schema::hasTable('object_field')) {
             $modelTypeId = DB::table('object_type')->where('code', 'object_type')->value('id');
             $modelFieldId = DB::table('object_type')->where('code', 'object_field')->value('id');
 
@@ -185,39 +183,36 @@ class SeedObjectTypeTable extends \App\Vendor\Telenok\Core\Support\Migrations\Mi
             );
         }
     }
-
 }
 
 class SeedObjectTypeTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller
 {
-
     public static $keys = [
         'field' => [
             'code'             => [
-                'ru' => "Код",
-                'en' => "Code",
+                'ru' => 'Код',
+                'en' => 'Code',
             ],
             'field'            => [
-                'ru' => "Поле",
-                'en' => "Field",
+                'ru' => 'Поле',
+                'en' => 'Field',
             ],
             'treeable'         => [
-                'ru' => "Деревообразный",
-                'en' => "Treeable",
+                'ru' => 'Деревообразный',
+                'en' => 'Treeable',
             ],
             'multilanguage'    => [
-                'ru' => "Мультиязычный",
-                'en' => "Multilanguage",
+                'ru' => 'Мультиязычный',
+                'en' => 'Multilanguage',
             ],
             'model_class'      => [
-                'ru' => "Класс модели",
-                'en' => "Class of model",
+                'ru' => 'Класс модели',
+                'en' => 'Class of model',
             ],
             'controller_class' => [
-                'ru' => "Класс формы",
-                'en' => "Class of form",
+                'ru' => 'Класс формы',
+                'en' => 'Class of form',
             ],
         ],
     ];
-
 }

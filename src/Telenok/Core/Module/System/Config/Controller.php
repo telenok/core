@@ -21,21 +21,16 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
          * $value = ['license.key' => 'demo', 'locale' => 'en'];
          *
          */
-        if (($v = $input->get('value')) && isset($v[$input->get('code')]))
-        {
+        if (($v = $input->get('value')) && isset($v[$input->get('code')])) {
             $input->put('value', $v[$input->get('code')]);
         }
 
-        if ($model->controller_class)
-        {
-            if (class_exists($model->controller_class) && ($controller = new $model->controller_class)
-                    && ($controller instanceof \Telenok\Core\Abstraction\Config\Controller))
-            {
+        if ($model->controller_class) {
+            if (class_exists($model->controller_class) && ($controller = new $model->controller_class())
+                    && ($controller instanceof \Telenok\Core\Abstraction\Config\Controller)) {
                 $controller->validate($input);
                 $controller->preProcess($model, $type, $input);
-            }
-            else
-            {
+            } else {
                 throw new \Exception();
             }
         }

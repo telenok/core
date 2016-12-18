@@ -6,8 +6,8 @@ namespace Telenok\Core\Model\Object;
  * @class Telenok.Core.Model.Object.Field
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
-
+class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
+{
     protected $ruleList = ['title' => ['required', 'min:1'], 'title_list' => ['required', 'min:1'], 'code' => ['required', 'unique:object_field,code,:id:,id,field_object_type,:field_object_type:', 'regex:/^[A-Za-z][A-Za-z0-9_]*$/']];
     protected $table = 'object_field';
     protected static $listSpecialFieldController = [];
@@ -16,24 +16,20 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         parent::boot();
 
-        static::saved(function($model)
-        {
+        static::saved(function ($model) {
             $type = $model->fieldObjectType()->first();
 
-            if ($type && $type->model_class)
-            {
+            if ($type && $type->model_class) {
                 static::eraseStatic(app($type->model_class));
 
                 $model->createFieldResource($type);
             }
         });
 
-        static::deleting(function($model)
-        {
+        static::deleting(function ($model) {
             $type = $model->fieldObjectType()->first();
 
-            if ($controllers = app('telenok.repository')->getObjectFieldController($model->key))
-            {
+            if ($controllers = app('telenok.repository')->getObjectFieldController($model->key)) {
                 $controllers->processFieldDelete($model, $type);
             }
 
@@ -43,29 +39,27 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     public function createFieldResource($type)
     {
-        $code = 'object_field.' . $type->code . '.' . $this->code;
+        $code = 'object_field.'.$type->code.'.'.$this->code;
 
-        if (!\App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$code)->exists())
-        {
+        if (!\App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string) $code)->exists()) {
             (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
-                'title' => 'Object ' . $type->code . '. Field ' . $this->code,
-                'code' => $code,
-                'active' => 1
+                'title'  => 'Object '.$type->code.'. Field '.$this->code,
+                'code'   => $code,
+                'active' => 1,
             ]);
         }
     }
 
     public function deleteFieldResourcePermission($type)
     {
-        $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', 'object_field.' . $type->code . '.' . $this->code)->first();
+        $resource = \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', 'object_field.'.$type->code.'.'.$this->code)->first();
 
         \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource::
                 whereIn('acl_subject_object_sequence', [$resource->exists ? $resource->getKey() : 0, $this->getKey()])
                 ->whereIn('acl_resource_object_sequence', [$resource->exists ? $resource->getKey() : 0, $this->getKey()])
-                ->get()->each(function($i)
-        {
-            $i->forceDelete();
-        });
+                ->get()->each(function ($i) {
+                    $i->forceDelete();
+                });
 
         $resource->forceDelete();
     }
@@ -74,24 +68,20 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         $class = get_class($this);
 
-        if (!isset(static::$listFillableFieldController[$class]))
-        {
+        if (!isset(static::$listFillableFieldController[$class])) {
             parent::getFillable();
 
-            foreach (app('telenok.repository')->getObjectFieldController()->all() as $controller)
-            {
+            foreach (app('telenok.repository')->getObjectFieldController()->all() as $controller) {
                 $dateField = (array) $controller->getSpecialDateField($this);
 
                 static::$listFieldDate[$class] = array_merge(static::$listFieldDate[$class], $dateField);
 
-                foreach (array_merge((array) $controller->getSpecialField($this), $dateField) as $f_)
-                {
+                foreach (array_merge((array) $controller->getSpecialField($this), $dateField) as $f_) {
                     static::$listAllFieldController[$class][$f_] = $controller;
                     static::$listFillableFieldController[$class][$f_] = $controller;
                     static::$listSpecialFieldController[$class][$f_] = $controller;
 
-                    if ($this->exists)
-                    {
+                    if ($this->exists) {
                         static::$listField[$class][$f_] = static::$listField[$class][$this->code];
                     }
                 }
@@ -116,12 +106,9 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         $class = get_class($this);
 
-        if (isset(static::$listSpecialFieldController[$class][$key]))
-        {
+        if (isset(static::$listSpecialFieldController[$class][$key])) {
             return static::$listSpecialFieldController[$class][$key]->getModelSpecialAttribute($this, $key, $value);
-        }
-        else
-        {
+        } else {
             return parent::getModelAttributeController($key, $value);
         }
     }
@@ -130,12 +117,9 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         $class = get_class($this);
 
-        if (isset(static::$listSpecialFieldController[$class][$key]))
-        {
+        if (isset(static::$listSpecialFieldController[$class][$key])) {
             static::$listSpecialFieldController[$class][$key]->setModelSpecialAttribute($this, $key, $value);
-        }
-        else
-        {
+        } else {
             $f = static::$listFillableFieldController[$class][$key];
 
             $f->setModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
@@ -156,5 +140,4 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         return $this->belongsTo('\App\Vendor\Telenok\Core\Model\Object\Tab', 'field_object_tab');
     }
-
 }

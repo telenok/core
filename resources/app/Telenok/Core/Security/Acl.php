@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Security;
+<?php
 
-class Acl extends \Telenok\Core\Security\Acl {
+namespace App\Vendor\Telenok\Core\Security;
 
+class Acl extends \Telenok\Core\Security\Acl
+{
 }
