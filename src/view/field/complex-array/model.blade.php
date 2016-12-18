@@ -16,30 +16,17 @@ if ( (!$model->exists && (!$field->allow_create || !$permissionCreate)) || ($mod
     {!! Form::label($disabled ? str_random() : "{$field->code}", $field->translate('title'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-9">
 
-		@if ((is_string($value) && mb_strlen($value) < 250) || is_numeric($value))
-			{!! Form::text("{$field->code}", $value, $domAttr) !!}
-		@elseif (is_string($value) && mb_strlen($value) >= 250)
-			<?php
-				$domAttr['class'] = $field->css_class ?: 'form-control';
-			?>
-			{!! Form::textarea("{$field->code}", $value, $domAttr ) !!}
-
-		@elseif (!is_null($value))
-
+		@if ($value->isEmpty())
 			<?php
 				$domAttr['disabled'] = 'disabled';
 			?>
-
-			{!! Form::text("", 'Not editable value', $domAttr) !!}
-
-		@else
-
-			<?php
-				$domAttr['disabled'] = 'disabled';
-			?>
-
 			{!! Form::text("", 'Empty data', $domAttr) !!}
+		@else
+			<?php
+				$domAttr['disabled'] = 'disabled';
+			?>
 
+			{!! Form::text("", 'Not editable Object Collection', $domAttr) !!}
 		@endif
 
 	</div>

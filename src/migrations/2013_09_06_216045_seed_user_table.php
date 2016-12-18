@@ -110,7 +110,7 @@ class SeedUserTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'id'                => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
                 'title'             => json_encode(SeedUserTableTranslation::get('field.configuration'), JSON_UNESCAPED_UNICODE),
                 'title_list'        => json_encode(SeedUserTableTranslation::get('field.configuration'), JSON_UNESCAPED_UNICODE),
-                'key'               => 'complex-data',
+                'key'               => 'complex-array',
                 'code'              => 'configuration',
                 'active'            => 1,
                 'field_object_type' => $modelTypeId,

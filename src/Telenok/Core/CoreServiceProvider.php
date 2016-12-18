@@ -208,7 +208,7 @@ class CoreServiceProvider extends ServiceProvider {
             {
                 $sql = vsprintf(str_replace(array('%', '?'), array('%%', '"%s"'), $event->sql), $event->bindings);
 
-                app('log')->debug($sql);
+                app('log')->debug($sql . "\n\n");
             }
         });
     }

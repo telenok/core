@@ -63,6 +63,7 @@ class Listener {
         $list->push('App\Vendor\Telenok\Core\Field\Decimal\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\Text\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\String\Controller');
+        $list->push('App\Vendor\Telenok\Core\Field\ComplexArray\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\ComplexData\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\RelationOneToOne\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\RelationOneToMany\Controller');

@@ -101,7 +101,7 @@ class SeedWidgetOnPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\
             [
                 'title' => ['en' => 'Structure', 'ru' => 'Структура'],
                 'title_list' => ['en' => 'Structure', 'ru' => 'Структура'],
-                'key' => 'complex-data',
+                'key' => 'complex-array',
                 'code' => 'structure',
                 'active' => 1,
                 'field_object_type' => $modelTypeId,

@@ -3,7 +3,7 @@
 /**
  * @class Telenok.Core.Field.FileManyToMany.Controller
  * Class of field "file-many-to-many". Field allow to manipulate list of files.
- * 
+ *
  * @extends Telenok.Core.Field.RelationManyToMany.Controller
  */
 class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
@@ -15,7 +15,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
     protected $key = 'file-many-to-many';
-    
+
     /**
      * @protected
      * @property {Array} $specialField
@@ -59,7 +59,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @method getRouteUpload
      * Return name of upload router.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
@@ -71,12 +71,12 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @method getModelFieldViewVariable
      * Return array with URL for variables in $viewModel view.
-     * 
+     *
      * @param {Telenok.Core.Field.FileManyToMany.Controller} $controller
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
      * @param {String} $uniqueId
-     * 
+     *
      * @return {Array}
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
@@ -97,12 +97,12 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @method getTitleList
      * Return array with titles of model's records
-     * 
+     *
      * @param {Integer} $id
-     * ID of Telenok.Core.Model.Object.Type 
+     * ID of Telenok.Core.Model.Object.Type
      * @param {Function} $closure
      * Closure to adding eloquent builder's query filter
-     * 
+     *
      * @return {Array}
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
@@ -177,7 +177,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @method getFormModelContent
      * Return HTML content of form element for the field
-     * 
+     *
      * @param {Telenok.Core.Field.FileManyToMany.Controller} $controller
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
      * @param {Telenok.Core.Model.Object.Field} $field
@@ -188,12 +188,12 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         return parent::getFormModelContent($controller, $model, $field, $uniqueId);
-    } 
+    }
 
     /**
      * @method getListFieldContent
      * Return value of field for show in list cell like Javascript Datatables().
-     * 
+     *
      * @param {Telenok.Core.Model.Object.Field} $field
      * Object with data of field's configuration.
      * @param {Object} $item
@@ -226,7 +226,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
                                 . e(\Str::limit($item->translate('title'), 20)) . "</a>";
                     }
                 }
-                else 
+                else
                 {
                     $content .= ' ' . e($item->translate('title'));
                 }
@@ -246,7 +246,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @method getModelSpecialAttribute
      * Return processed value of special fields.
-     * 
+     *
      * @param {Telenok.Core.Model.Object.Field} $model
      * Eloquent object.
      * @param {String} $key
@@ -287,7 +287,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @method setModelSpecialAttribute
      * Set processed value of special fields.
-     * 
+     *
      * @param {Telenok.Core.Model.Object.Field} $model
      * Eloquent object.
      * @param {String} $key
@@ -301,18 +301,18 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     {
         if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
         {
-            if ($value instanceof \Illuminate\Support\Collection) 
+            if ($value instanceof \Illuminate\Support\Collection)
             {
                 $value = $value->toArray();
             }
             else if ($key == 'file_many_to_many_allow_ext')
             {
                 $value = $value ? : \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION;
-            } 
+            }
             else if ($key == 'file_many_to_many_allow_mime')
             {
                 $value = $value ? : \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE;
-            } 
+            }
 
             $model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
         }
@@ -320,14 +320,14 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         {
             parent::setModelSpecialAttribute($model, $key, $value);
         }
-        
+
         return $this;
     }
 
     /**
      * @method saveModelField
      * Save eloquent model with field's data.
-     * 
+     *
      * @param {Telenok.Core.Model.Object.Field} $field
      * Eloquent object Field.
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
@@ -378,7 +378,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
                     }
                     catch (\Exception $e)
                     {
-                        
+
                     }
                 }
 
@@ -398,11 +398,11 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
         return $model;
     }
-    
+
     /**
      * @method preProcess
      * Preprocess save {@link Telenok.Core.Model.Object.Field $model}.
-     * 
+     *
      * @param {Telenok.Core.Model.Object.Field} $model
      * Object to save.
      * @param {Telenok.Core.Model.Object.Type} $type
@@ -417,12 +417,12 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         $input->put('relation_many_to_many_has', \App\Vendor\Telenok\Core\Model\Object\Type::whereCode('file')->value('id'));
 
         return parent::preProcess($model, $type, $input);
-    } 
+    }
 
     /**
      * @method schemeCreateExtraField
      * Create special fields in database table.
-     * 
+     *
      * @param {String} $table
      * Name of table.
      * @param {Mixed} $p1
@@ -441,7 +441,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @method upload
      * File uploading and storing in storages.
-     * 
+     *
      * @return {Integer}
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
@@ -460,7 +460,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
         $file = app('\App\Vendor\Telenok\Core\Model\File\File');
 
-        $model = $file->storeOrUpdate($input->all(), true); 
+        $model = $file->storeOrUpdate($input->all(), true);
 
         return $model->id;
     }
@@ -468,7 +468,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     /**
      * @method getStubFileDirectory
      * Path to directory of stub (class template) files
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */

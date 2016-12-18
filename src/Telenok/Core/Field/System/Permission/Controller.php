@@ -394,7 +394,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
                     $persmissionIds = $permissionListDefault->get($permission->code);
                 }
 
-                foreach ($persmissionIds as $id)
+                foreach ((array)$persmissionIds as $id)
                 {
                     \App\Vendor\Telenok\Core\Security\Acl::subject($id)->setPermission($permission->code, $model);
                 }
