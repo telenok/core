@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Command;
+<?php
 
-class Install extends \Telenok\Core\Command\Install {
+namespace App\Vendor\Telenok\Core\Command;
 
+class Install extends \Telenok\Core\Command\Install
+{
 }

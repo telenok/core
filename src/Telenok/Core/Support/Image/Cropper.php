@@ -6,8 +6,8 @@ namespace Telenok\Core\Support\Image;
  * @class Telenok.Core.Support.Image.Cropper
  * Class for https://github.com/fengyuanchen/cropper.
  */
-class Cropper extends \App\Vendor\Telenok\Core\Controller\Backend\Controller {
-
+class Cropper extends \App\Vendor\Telenok\Core\Controller\Backend\Controller
+{
     protected $key = 'cropper';
     protected $path;
     protected $allowNew = true;
@@ -78,16 +78,15 @@ class Cropper extends \App\Vendor\Telenok\Core\Controller\Backend\Controller {
 
     public function getContent()
     {
-        $url = $this->getPath() ? : 'clear.gif';
+        $url = $this->getPath() ?: 'clear.gif';
         $jsUnique = $this->getJsUnique();
 
         return view($this->getView(), [
             'controller' => $this,
-            'path' => $url,
-            'allowNew' => $this->getAllowNew(),
-            'allowBlob' => $this->getAllowBlob(),
-            'jsUnique' => $jsUnique,
+            'path'       => $url,
+            'allowNew'   => $this->getAllowNew(),
+            'allowBlob'  => $this->getAllowBlob(),
+            'jsUnique'   => $jsUnique,
         ]);
     }
-
 }

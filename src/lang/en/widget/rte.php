@@ -1,6 +1,6 @@
 <?php
 
-return array(
-    'name' => 'Rte',
+return [
+    'name'   => 'Rte',
     'header' => 'Rte',
-);
+];

@@ -1,17 +1,21 @@
-<?php namespace Telenok\Core\Abstraction\Controller\Frontend;
+<?php
+
+namespace Telenok\Core\Abstraction\Controller\Frontend;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * @class Telenok.Core.Abstraction.Controller.Frontend.Controller
  * Class to display and process frontend data.
- * 
+ *
  * @extends Telenok.Core.Abstraction.Controller.Controller
  */
-abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
-
+abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controller
+{
     /**
      * @protected
+     *
      * @property {Array} $container
      * List with DOM IDs of containers from HTML container's template.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
@@ -20,6 +24,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {Array} $additionalViewParams
      * Array can be set in custom method.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
@@ -28,46 +33,52 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {Array} $jsFilePath
      * List with DOM IDs of containers from HTML container's template.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $jsFilePath = [];
-    
+
     /**
      * @protected
+     *
      * @property {Array} $cssFilePath
      * Accumulate CSS files.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $cssFilePath = [];
-    
+
     /**
      * @protected
+     *
      * @property {Array} $cssCode
      * Accumulate CSS code.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $cssCode = [];
-    
+
     /**
      * @protected
+     *
      * @property {Array} $jsCode
      * Accumulate JS code.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $jsCode = [];
-    
+
     /**
      * @protected
+     *
      * @property {Number} $cacheTime
      * Cache time in minuts for page. Can be float to set as part's of minute.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $cacheTime = 60;
-    
+
     /**
      * @protected
+     *
      * @property {String} $cacheKey
      * Cache key for caching page.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
@@ -76,6 +87,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $frontendView
      * Default view for frontend.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
@@ -84,38 +96,43 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $backendView
      * Default view for backend to show containers with widgets.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $backendView = 'core::controller.frontend-container';
-    
+
     /**
      * @protected
+     *
      * @property {Array} $languageDirectory
      * Define directory with translated files.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $languageDirectory = 'controller';
-    
+
     /**
      * @protected
+     *
      * @property {String} $pageMetaTitle
      * Title in meta tag of page.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $pageMetaTitle;
-    
+
     /**
      * @protected
+     *
      * @property {String} $pageMetaDescription
      * Description in meta tag of page.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     protected $pageMetaDescription;
-    
+
     /**
      * @protected
+     *
      * @property {String} $pageMetaKeywords
      * Key words in meta tag of page.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
@@ -125,9 +142,10 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method setCacheTime
      * Set cache time in minuts for page. Can be float to set as part's of minute.
-     * 
+     *
      * @param {Number} $param
-     * Time in minuts or float as part of minute.
+     *                        Time in minuts or float as part of minute.
+     *
      * @return {Telenok.Core.Abstraction.Controller.Frontend.Controller}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -141,7 +159,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getCacheTime
      * Return $cacheTime.
-     * 
+     *
      * @return {Number}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -149,15 +167,16 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         return $this->cacheTime;
     }
-    
+
     /**
      * @method getContainerContent
      * Return HTML content of container.
-     * 
+     *
      * @param {Integer} $pageId
-     * ID of eloquent model of page.
+     *                              ID of eloquent model of page.
      * @param {Integer} $languageId
-     * ID of eloquent model of language.
+     *                              ID of eloquent model of language.
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -165,16 +184,14 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         $content = ['controller' => $this];
 
-        $wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function($query) use ($languageId)
-                {
-                    $query->where('id', $languageId);
-                })
+        $wop = \App\Vendor\Telenok\Core\Model\Web\WidgetOnPage::where('widget_page', $pageId)->whereHas('widgetLanguageLanguage', function ($query) use ($languageId) {
+            $query->where('id', $languageId);
+        })
                 ->orderBy('widget_order')->get();
 
         $widgetRepository = app('telenok.repository')->getWidget();
 
-        $wop->each(function($w) use (&$content, $widgetRepository)
-        {
+        $wop->each(function ($w) use (&$content, $widgetRepository) {
             $content[$w->container][] = $widgetRepository->get($w->key)->getInsertContent($w->getKey());
         });
 
@@ -184,7 +201,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getContiner
      * Return IDs of DOM container's elements in $backendView.
-     * 
+     *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -196,7 +213,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getBackendView
      * Return value of $backendView.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -210,7 +227,8 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Set value of $backendView.
      *
      * @param {String} $param
-     * View name of backend.
+     *                        View name of backend.
+     *
      * @return {Telenok.Core.Abstraction.Controller.Frontend.Controller}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -224,7 +242,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getFrontendView
      * Return value of frontendView.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -236,9 +254,10 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method setFrontendView
      * Set value of frontendView.
-     * 
+     *
      * @param {String} $frontendView
-     * View of fronend.
+     *                               View of fronend.
+     *
      * @return {Telenok.Core.Abstraction.Controller.Frontend.Controller}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -252,23 +271,20 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getContent
      * Return HTML for current request.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function getContent()
     {
-
-        try
-        {
+        try {
             $page = $this->getPageEloquentObject();
 
             $this->initFrontendView($page);
 
             $this->setCacheTime($page->cache_time);
 
-            if (($content = $this->getCachedContent()) !== false)
-            {
+            if (($content = $this->getCachedContent()) !== false) {
                 return $this->processContent($content);
             }
 
@@ -277,35 +293,22 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             $this->setCachedContent($content);
 
             return $this->processContent($content);
-        }
-        catch (AccessDeniedHttpException $e)
-        {
-            if (config("app.debug"))
-            {
+        } catch (AccessDeniedHttpException $e) {
+            if (config('app.debug')) {
                 throw $e;
-            }
-            else
-            {
-                if (app('auth')->check())
-                {
+            } else {
+                if (app('auth')->check()) {
                     // 403 Forbidden
                     return redirect()->route('page.error.403');
-                }
-                else
-                {
+                } else {
                     // 401 Unauthorized
                     return redirect()->route('page.error.401');
                 }
             }
-        }
-        catch (\Exception $e)
-        {
-            if (config("app.debug"))
-            {
+        } catch (\Exception $e) {
+            if (config('app.debug')) {
                 throw $e;
-            }
-            else
-            {
+            } else {
                 // 404 Not Found
                 return redirect()->route('page.error.404');
             }
@@ -317,18 +320,16 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Set value of $frontendView.
      *
      * @param {Telenok.Core.Model.Web.Page} $page
-     * Eloquent page with template field.
+     *                                            Eloquent page with template field.
+     *
      * @return {Void}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function initFrontendView($page)
     {
-        if ($t = $page->translate('template_view'))
-        {
+        if ($t = $page->translate('template_view')) {
             $this->setFrontendView($t);
-        }
-        else if (($v = new $page->controller_class) && ($controllerTemplate = $v->template_view))
-        {
+        } elseif (($v = new $page->controller_class()) && ($controllerTemplate = $v->template_view)) {
             $this->setFrontendView($controllerTemplate);
         }
     }
@@ -347,29 +348,22 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $pageModel = app(\App\Vendor\Telenok\Core\Model\Web\Page::class);
 
         $query = $pageModel->active()
-            ->where(function($query) use ($pageModel, $routerName)
-            {
-                $query->where($pageModel->getTable() . '.id', intval(str_replace('page_', '', $routerName)));
-                $query->orWhere($pageModel->getTable() . '.router_name', $routerName);
+            ->where(function ($query) use ($pageModel, $routerName) {
+                $query->where($pageModel->getTable().'.id', intval(str_replace('page_', '', $routerName)));
+                $query->orWhere($pageModel->getTable().'.router_name', $routerName);
             });
 
         // first validate object exists
-        try
-        {
+        try {
             $query->cacheTags($routerName)->firstOrFail();
-        }
-        catch (ModelNotFoundException $e)
-        {
+        } catch (ModelNotFoundException $e) {
             throw $e;
         }
 
         // second validate permissions
-        try
-        {
+        try {
             $page = $query->withPermission()->cacheTags($routerName)->firstOrFail();
-        }
-        catch (ModelNotFoundException $e)
-        {
+        } catch (ModelNotFoundException $e) {
             throw new AccessDeniedHttpException();
         }
 
@@ -379,8 +373,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getNotCachedContent
      * Return not cached HTML for page.
-     * 
+     *
      * @param {Telenok.Core.Model.Web.Page} $page
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -390,14 +385,11 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         $listWidget = app('telenok.repository')->getWidget();
 
-        foreach ($this->container as $containerId)
-        {
-            $page->widget()->active()->get()->filter(function($item) use ($containerId)
-                {
-                    return $item->container === $containerId;
-                })
-                ->each(function($item) use (&$content, $containerId, $listWidget)
-                {
+        foreach ($this->container as $containerId) {
+            $page->widget()->active()->get()->filter(function ($item) use ($containerId) {
+                return $item->container === $containerId;
+            })
+                ->each(function ($item) use (&$content, $containerId, $listWidget) {
                     $content[$containerId][] = $listWidget->get($item->key)
                         ->setWidgetModel($item)
                         ->setConfig($item->structure)
@@ -407,9 +399,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         }
 
         return view($this->getFrontendView(), array_merge([
-                    'page' => $page,
+                    'page'       => $page,
                     'controller' => $this,
-                    'content' => $content,
+                    'content'    => $content,
                 ], $this->getAdditionalViewParams()))->render();
     }
 
@@ -435,15 +427,16 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     public function setAdditionalViewParams($param = [])
     {
         $this->additionalViewParams = $param;
-        
+
         return $this;
     }
 
     /**
      * @method processContent
      * Additionally process content. Here we can process tags like "script" and move them
-     * 
+     *
      * @param {String} $content
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -455,28 +448,27 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getCacheKey
      * Return cache key for page.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function getCacheKey()
     {
-        return $this->cacheKey ? $this->cacheKey . $this->getFrontendView()
-                . "." . config('app.locale', config('app.localeDefault'))
-                . "." . $this->getRequest()->fullUrl() : false;
+        return $this->cacheKey ? $this->cacheKey.$this->getFrontendView()
+                .'.'.config('app.locale', config('app.localeDefault'))
+                .'.'.$this->getRequest()->fullUrl() : false;
     }
 
     /**
      * @method getCachedContent
      * Return cached content.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function getCachedContent()
     {
-        if (($k = $this->getCacheKey()) !== false)
-        {
+        if (($k = $this->getCacheKey()) !== false) {
             return app('cache')->get($k, false);
         }
 
@@ -486,15 +478,15 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method setCachedContent
      * Set cached content.
-     * 
+     *
      * @param {String} $content
+     *
      * @return {Telenok.Core.Abstraction.Controller.Frontend.Controller}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function setCachedContent($content = '')
     {
-        if (($t = $this->getCacheTime()) && ($k = $this->getCacheKey()) !== false)
-        {
+        if (($t = $this->getCacheTime()) && ($k = $this->getCacheKey()) !== false) {
             app('cache')->put($k, $content, $t);
         }
 
@@ -504,7 +496,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method validateSession
      * Validate session.
-     * 
+     *
      * @return {void}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -516,23 +508,19 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method hasAddedCssFile
      * Search CSS file added already to $cssFilePath.
-     * 
+     *
      * @param {String} $filePath
-     * File path.
-     * @param {mixed} $key
-     * Key for the file.
+     *                           File path.
+     * @param {mixed}  $key
+     *                           Key for the file.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function hasAddedCssFile($filePath = '', $key = '')
     {
-        foreach ($this->cssFilePath as $k => $p)
-        {
-            if ($p['file'] == $filePath)
-            {
+        foreach ($this->cssFilePath as $k => $p) {
+            if ($p['file'] == $filePath) {
                 return true;
-            }
-            else if (!is_array($key) && strpos(".$k.", ".$key.") !== FALSE)
-            {
+            } elseif (!is_array($key) && strpos(".$k.", ".$key.") !== false) {
                 return true;
             }
         }
@@ -541,25 +529,23 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method addCssFile
      * Add CSS file to $cssFilePath.
-     * 
-     * @param {String} $filePath
-     * File path.
-     * @param {mixed} $key
-     * Key for the file.
+     *
+     * @param {String}  $filePath
+     *                            File path.
+     * @param {mixed}   $key
+     *                            Key for the file.
      * @param {Integer} $order
-     * Order of file in array.
+     *                            Order of file in array.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function addCssFile($filePath, $key = '', $order = 1000000)
     {
-        if (!$this->hasAddedCssFile($filePath, $key))
-        {
-            if (is_array($key))
-            {
-                $key = implode(".", $key);
+        if (!$this->hasAddedCssFile($filePath, $key)) {
+            if (is_array($key)) {
+                $key = implode('.', $key);
             }
 
-            $this->cssFilePath[($key ? : $filePath)] = ['file' => $filePath, 'order' => $order];
+            $this->cssFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
         }
 
         return $this;
@@ -568,9 +554,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method addCssCode
      * Add CSS code to $cssCode.
-     * 
+     *
      * @param {String} $code
-     * CSS code.
+     *                       CSS code.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function addCssCode($code)
@@ -583,23 +569,19 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method hasAddedJsFile
      * Search JS file added already to $jsFilePath.
-     * 
+     *
      * @param {String} $filePath
-     * File path.
-     * @param {mixed} $key
-     * Key for the file.
+     *                           File path.
+     * @param {mixed}  $key
+     *                           Key for the file.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function hasAddedJsFile($filePath = '', $key = '')
     {
-        foreach ($this->jsFilePath as $k => $p)
-        {
-            if ($p['file'] == $filePath)
-            {
+        foreach ($this->jsFilePath as $k => $p) {
+            if ($p['file'] == $filePath) {
                 return true;
-            }
-            else if (!is_array($key) && strpos(".$k.", ".$key.") !== FALSE)
-            {
+            } elseif (!is_array($key) && strpos(".$k.", ".$key.") !== false) {
                 return true;
             }
         }
@@ -608,25 +590,23 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method addJsFile
      * Add JS file to $jsFilePath.
-     * 
-     * @param {String} $filePath
-     * File path.
-     * @param {mixed} $key
-     * Key for the file.
+     *
+     * @param {String}  $filePath
+     *                            File path.
+     * @param {mixed}   $key
+     *                            Key for the file.
      * @param {Integer} $order
-     * Order of file in array.
+     *                            Order of file in array.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function addJsFile($filePath, $key = '', $order = 100000)
     {
-        if (!$this->hasAddedJsFile($filePath, $key))
-        {
-            if (is_array($key))
-            {
-                $key = implode(".", $key);
+        if (!$this->hasAddedJsFile($filePath, $key)) {
+            if (is_array($key)) {
+                $key = implode('.', $key);
             }
 
-            $this->jsFilePath[($key ? : $filePath)] = ['file' => $filePath, 'order' => $order];
+            $this->jsFilePath[($key ?: $filePath)] = ['file' => $filePath, 'order' => $order];
         }
 
         return $this;
@@ -635,9 +615,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method addJsCode
      * Add JS code to $jsCode.
-     * 
+     *
      * @param {String} $code
-     * CSS code.
+     *                       CSS code.
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function addJsCode($code)
@@ -650,14 +630,13 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getJsFile
      * List of JS files.
-     * 
+     *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function getJsFile()
     {
-        usort($this->jsFilePath, function($a, $b)
-        {
+        usort($this->jsFilePath, function ($a, $b) {
             return $a['order'] < $b['order'] ? -1 : 1;
         });
 
@@ -667,7 +646,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getJsCode
      * List of JS codes.
-     * 
+     *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -679,14 +658,13 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getCssFile
      * List of CSS files.
-     * 
+     *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
     public function getCssFile()
     {
-        usort($this->cssFilePath, function($a, $b)
-        {
+        usort($this->cssFilePath, function ($a, $b) {
             return $a['order'] < $b['order'] ? -1 : 1;
         });
 
@@ -696,7 +674,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getCssCode
      * List of CSS codes.
-     * 
+     *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -708,7 +686,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getName
      * Get name of controller.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -720,6 +698,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getKey
      * Return key of controller.
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -731,13 +710,14 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method setPageMetaTitle
      * Set page meta title from any place of code.
-     * 
+     *
      * If any view you can set page title in next way:
-     * 
+     *
      *     @example
      *     $controllerRequest->setPageMetaTitle($news->translate('title'))
-     * 
+     *
      * @param {String} $title
+     *
      * @return {Telenok.Core.Abstraction.Controller.Frontend.Controller}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -751,7 +731,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getPageMetaTitle
      * Return meta title of page.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -763,12 +743,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method setPageMetaDescription
      * Set page meta description from any place of code.
-     * 
+     *
      * If any view you can set page description in next way:
-     * 
+     *
      *     @example
      *     $controllerRequest->setPageMetaDescription($news->translate('content'))
-     * 
+     *
      * @return {Telenok.Core.Abstraction.Controller.Frontend.Controller}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -782,7 +762,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getPageMetaDescription
      * Return meta description of page.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -794,12 +774,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method setPageMetaKeywords
      * Set page meta keywords from any place of code.
-     * 
+     *
      * If any view you can set page keywords in next way:
-     * 
+     *
      *     @example
      *     $controllerRequest->setPageMetaKeywords($news->translate('content'))
-     * 
+     *
      * @return {Telenok.Core.Abstraction.Controller.Frontend.Controller}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */
@@ -813,7 +793,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @method getPageMetaKeywords
      * Return meta keywords of page.
-     * 
+     *
      * @return {String}
      * @member Telenok.Core.Abstraction.Controller.Frontend.Controller
      */

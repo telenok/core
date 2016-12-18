@@ -1,7 +1,7 @@
 <?php
 
-class SeedFileCategoryTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
-
+class SeedFileCategoryTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
+{
     public function up()
     {
         parent::up();
@@ -17,5 +17,4 @@ class SeedFileCategoryTable extends \App\Vendor\Telenok\Core\Support\Migrations\
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
     }
-
 }

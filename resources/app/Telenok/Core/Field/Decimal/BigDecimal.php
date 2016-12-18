@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\Decimal;
+<?php
 
-class BigDecimal extends \Telenok\Core\Field\Decimal\BigDecimal {
+namespace App\Vendor\Telenok\Core\Field\Decimal;
 
+class BigDecimal extends \Telenok\Core\Field\Decimal\BigDecimal
+{
 }

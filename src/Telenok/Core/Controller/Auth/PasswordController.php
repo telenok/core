@@ -3,14 +3,13 @@
 namespace Telenok\Core\Controller\Auth;
 
 use Illuminate\Contracts\Auth\Guard;
-use Telenok\Core\Controller\Auth\PasswordBroker;
 
 /**
  * @class Telenok.Core.Controller.Auth.PasswordController
  * @extends Telenok.Core.Abstraction.Controller.Controller
  */
-class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller {
-
+class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller
+{
     protected $key = 'backend-password-reset';
     protected $emailView = 'core::email.password-reset';
     protected $resetView = 'core::controller.backend-password-reset';
@@ -42,13 +41,13 @@ class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller
      * Display the password reset view for the given token.
      *
      * @param {String} $token
+     *
      * @return {String}
      */
     public function getReset($token = null)
     {
-        if (is_null($token))
-        {
-            throw new NotFoundHttpException;
+        if (is_null($token)) {
+            throw new NotFoundHttpException();
         }
 
         return view('core::controller.backend-password-reset', ['token' => $token, 'controller' => $this])->render();
@@ -58,27 +57,25 @@ class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller
      * @method postReset
      *
      * @param {Illuminate.Http.Request} $request
+     *
      * @return {String}
      */
     public function postReset(\Illuminate\Http\Request $request)
     {
-        try
-        {
+        try {
             $v = $this->getValidationFactory()->make($request->all(), [
-                'token' => 'required',
-                'email' => 'required|email',
-                'password' => 'required|confirmed|min:' . config('auth.password.length-min'),
+                'token'    => 'required',
+                'email'    => 'required|email',
+                'password' => 'required|confirmed|min:'.config('auth.password.length-min'),
             ]);
 
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 return json_encode(['error' => 1]);
             }
 
             $credentials = $request->only('email', 'password', 'password_confirmation', 'token');
 
-            $response = $this->passwords->reset($credentials, function($user, $password)
-            {
+            $response = $this->passwords->reset($credentials, function ($user, $password) {
                 $user->password = $password;
 
                 $user->save();
@@ -86,17 +83,14 @@ class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller
                 $this->auth->login($user);
             });
 
-            switch ($response)
-            {
+            switch ($response) {
                 case PasswordBroker::PASSWORD_RESET:
                     return json_encode(['success' => 1]);
 
                 default:
                     return json_encode(['error' => 1]);
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return json_encode(['error' => 1]);
         }
     }
@@ -105,14 +99,14 @@ class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller
      * @method postEmail
      *
      * @param {Illuminate.Http.Request} $request
+     *
      * @return {String}
      */
     public function postEmail(\Illuminate\Http\Request $request)
     {
         $v = app('validator')->make($request->all(), ['email' => 'required|email']);
 
-        if ($v->fails())
-        {
+        if ($v->fails()) {
             return json_encode(['error' => 1]);
         }
 
@@ -120,15 +114,13 @@ class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller
 
         $this->passwords->setView($this->emailView);
 
-        $response = $this->passwords->sendResetLink($request->only('email'), function($m)
-        {
+        $response = $this->passwords->sendResetLink($request->only('email'), function ($m) {
             $m->subject($this->getEmailSubject());
         });
 
         $this->passwords->setView($oldView);
 
-        switch ($response)
-        {
+        switch ($response) {
             case PasswordBroker::RESET_LINK_SENT:
                 return json_encode(['success' => 1]);
 
@@ -141,11 +133,11 @@ class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller
     /**
      * @method getEmailSubject
      * Get the e-mail subject line to be used for the reset link email.
+     *
      * @return {String}
      */
     protected function getEmailSubject()
     {
         return $this->LL('email.subject');
     }
-
 }

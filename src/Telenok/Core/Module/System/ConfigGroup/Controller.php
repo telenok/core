@@ -24,12 +24,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
         $value = collect($input->get('value'));
 
-        $value->each(function($item, $key)
-        {
+        $value->each(function ($item, $key) {
             $config = \App\Vendor\Telenok\Core\Model\System\Config::active()->where('code', $key)->first();
 
             $config->storeOrUpdate([
-                'value' => $item
+                'value' => $item,
             ], true, true);
         });
     }

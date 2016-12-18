@@ -2,15 +2,15 @@
 
 namespace Telenok\Core\Support\Memcache;
 
-use \Illuminate\Cache\StoreInterface;
-use \Illuminate\Cache\TaggableStore;
+use Illuminate\Cache\StoreInterface;
+use Illuminate\Cache\TaggableStore;
 
 /**
  * @class Telenok.Core.Support.Memcache.MemcacheStore
  * @extends Illuminate.Cache.TaggableStore
  */
-class MemcacheStore extends TaggableStore implements StoreInterface {
-
+class MemcacheStore extends TaggableStore implements StoreInterface
+{
     /**
      * @protected
      * The Memcached instance.
@@ -34,14 +34,15 @@ class MemcacheStore extends TaggableStore implements StoreInterface {
      * Create a new Memcached store.
      *
      * @param {Memcached} $memcache
-     * @param {String} $prefix
+     * @param {String}    $prefix
+     *
      * @return {void}
      * @member Telenok.Core.Support.Memcache.MemcacheStore
      */
     public function __construct(\Memcache $memcache, $prefix = '')
     {
         $this->memcache = $memcache;
-        $this->prefix = strlen($prefix) > 0 ? $prefix . ':' : '';
+        $this->prefix = strlen($prefix) > 0 ? $prefix.':' : '';
     }
 
     /**
@@ -49,13 +50,13 @@ class MemcacheStore extends TaggableStore implements StoreInterface {
      * Retrieve an item from the cache by key.
      *
      * @param {String} $key
+     *
      * @return {mixed}
      * @member Telenok.Core.Support.Memcache.MemcacheStore
      */
     public function get($key)
     {
-        if ($value = $this->memcache->get($this->prefix . $key))
-        {
+        if ($value = $this->memcache->get($this->prefix.$key)) {
             return $value;
         }
     }
@@ -65,14 +66,15 @@ class MemcacheStore extends TaggableStore implements StoreInterface {
      * Store an item in the cache for a given number of minutes.
      *
      * @param {String} $key
-     * @param {mixed} $value
+     * @param {mixed}  $value
      * @param {Number} $minutes
+     *
      * @return {void}
      * @member Telenok.Core.Support.Memcache.MemcacheStore
      */
     public function put($key, $value, $minutes)
     {
-        $this->memcache->set($this->prefix . $key, $value, false, $minutes * 60);
+        $this->memcache->set($this->prefix.$key, $value, false, $minutes * 60);
     }
 
     /**
@@ -80,27 +82,29 @@ class MemcacheStore extends TaggableStore implements StoreInterface {
      * Increment the value of an item in the cache.
      *
      * @param {String} $key
-     * @param {mixed} $value
+     * @param {mixed}  $value
+     *
      * @return {void}
      * @member Telenok.Core.Support.Memcache.MemcacheStore
      */
     public function increment($key, $value = 1)
     {
-        return $this->memcache->increment($this->prefix . $key, $value);
+        return $this->memcache->increment($this->prefix.$key, $value);
     }
-    
+
     /**
      * @method decrement
      * Decrement the value of an item in the cache.
      *
      * @param {String} $key
-     * @param {mixed} $value
+     * @param {mixed}  $value
+     *
      * @return {void}
      * @member Telenok.Core.Support.Memcache.MemcacheStore
      */
     public function decrement($key, $value = 1)
     {
-        return $this->memcache->decrement($this->prefix . $key, $value);
+        return $this->memcache->decrement($this->prefix.$key, $value);
     }
 
     /**
@@ -108,7 +112,8 @@ class MemcacheStore extends TaggableStore implements StoreInterface {
      * Store an item in the cache indefinitely.
      *
      * @param {String} $key
-     * @param {mixed} $value
+     * @param {mixed}  $value
+     *
      * @return {void}
      * @member Telenok.Core.Support.Memcache.MemcacheStore
      */
@@ -122,12 +127,13 @@ class MemcacheStore extends TaggableStore implements StoreInterface {
      * Remove an item from the cache.
      *
      * @param {String} $key
+     *
      * @return {void}
      * @member Telenok.Core.Support.Memcache.MemcacheStore
      */
     public function forget($key)
     {
-        $this->memcache->delete($this->prefix . $key);
+        $this->memcache->delete($this->prefix.$key);
     }
 
     /**

@@ -2,13 +2,11 @@
 
 class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
 {
-
     public function up()
     {
         parent::up();
 
-        if (Schema::hasTable('object_type') && Schema::hasTable('object_field'))
-        {
+        if (Schema::hasTable('object_type') && Schema::hasTable('object_field')) {
             DB::table('object_type')->insertGetId(
                 [
                     'id'               => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Type']),
@@ -53,7 +51,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'title_list'  => json_encode(['ru' => 'Вкладка', 'en' => 'Tab'], JSON_UNESCAPED_UNICODE),
                     'code'        => 'object_tab',
                     'active'      => 1,
-                    'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Tab'
+                    'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Tab',
                 ]
             );
 
@@ -201,7 +199,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'code'        => 'folder',
                     'active'      => 1,
                     'model_class' => '\App\Vendor\Telenok\Core\Model\System\Folder',
-                    'treeable'    => 1
+                    'treeable'    => 1,
                 ]
             );
 
@@ -225,7 +223,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'title_list'  => json_encode(['ru' => 'Группа модулей', 'en' => 'Module group'], JSON_UNESCAPED_UNICODE),
                     'code'        => 'module_group',
                     'active'      => 1,
-                    'model_class' => '\App\Vendor\Telenok\Core\Model\Web\ModuleGroup'
+                    'model_class' => '\App\Vendor\Telenok\Core\Model\Web\ModuleGroup',
                 ]
             );
 
@@ -236,7 +234,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'title_list'  => json_encode(['ru' => 'Модуль', 'en' => 'Module'], JSON_UNESCAPED_UNICODE),
                     'code'        => 'module',
                     'active'      => 1,
-                    'model_class' => '\App\Vendor\Telenok\Core\Model\Web\Module'
+                    'model_class' => '\App\Vendor\Telenok\Core\Model\Web\Module',
                 ]
             );
 
@@ -247,7 +245,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'title_list'  => json_encode(['ru' => 'Группа виджетов', 'en' => 'Widget group'], JSON_UNESCAPED_UNICODE),
                     'code'        => 'widget_group',
                     'active'      => 1,
-                    'model_class' => '\App\Vendor\Telenok\Core\Model\Web\WidgetGroup'
+                    'model_class' => '\App\Vendor\Telenok\Core\Model\Web\WidgetGroup',
                 ]
             );
 
@@ -258,7 +256,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'title_list'  => json_encode(['ru' => 'Виджет', 'en' => 'Widget'], JSON_UNESCAPED_UNICODE),
                     'code'        => 'widget',
                     'active'      => 1,
-                    'model_class' => '\App\Vendor\Telenok\Core\Model\Web\Widget'
+                    'model_class' => '\App\Vendor\Telenok\Core\Model\Web\Widget',
                 ]
             );
 
@@ -331,5 +329,4 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
             );
         }
     }
-
 }

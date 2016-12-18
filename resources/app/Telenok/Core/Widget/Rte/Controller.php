@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Widget\Rte;
+<?php
 
-class Controller extends \Telenok\Core\Widget\Rte\Controller {
+namespace App\Vendor\Telenok\Core\Widget\Rte;
 
+class Controller extends \Telenok\Core\Widget\Rte\Controller
+{
 }

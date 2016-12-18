@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Support;
+<?php
 
-class Theme extends \Telenok\Core\Support\Theme {
+namespace App\Vendor\Telenok\Core\Support;
 
+class Theme extends \Telenok\Core\Support\Theme
+{
 }

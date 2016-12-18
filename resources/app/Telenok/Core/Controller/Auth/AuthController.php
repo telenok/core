@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Controller\Auth;
+<?php
 
-class AuthController extends \Telenok\Core\Controller\Auth\AuthController {
- 
+namespace App\Vendor\Telenok\Core\Controller\Auth;
+
+class AuthController extends \Telenok\Core\Controller\Auth\AuthController
+{
 }

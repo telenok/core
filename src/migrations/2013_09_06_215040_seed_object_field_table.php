@@ -2,13 +2,11 @@
 
 class SeedObjectFieldTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
 {
-
     public function up()
     {
         parent::up();
 
-        if (Schema::hasTable('object_type') && Schema::hasTable('object_field'))
-        {
+        if (Schema::hasTable('object_type') && Schema::hasTable('object_field')) {
             $typeId = DB::table('object_type')->where('code', 'object_type')->value('id');
             $modelTypeId = DB::table('object_type')->where('code', 'object_field')->value('id');
 
@@ -193,7 +191,6 @@ class SeedObjectFieldTable extends \App\Vendor\Telenok\Core\Support\Migrations\M
                     'field_order'       => 10,
                 ]
             );
-
 
             DB::table('object_field')->insert(
                 [
@@ -433,79 +430,76 @@ class SeedObjectFieldTable extends \App\Vendor\Telenok\Core\Support\Migrations\M
             );
         }
     }
-
 }
 
 class SeedObjectFieldTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller
 {
-
     public static $keys = [
         'field' => [
             'code'              => [
-                'ru' => "Код",
-                'en' => "Code",
+                'ru' => 'Код',
+                'en' => 'Code',
             ],
             'key'               => [
-                'ru' => "Тип поля",
-                'en' => "Type of field",
+                'ru' => 'Тип поля',
+                'en' => 'Type of field',
             ],
             'field_object_type' => [
-                'ru' => "Принадлежит типу",
-                'en' => "Belong to type",
+                'ru' => 'Принадлежит типу',
+                'en' => 'Belong to type',
             ],
             'multilanguage'     => [
-                'ru' => "Мультиязычное",
-                'en' => "Multilanguage",
+                'ru' => 'Мультиязычное',
+                'en' => 'Multilanguage',
             ],
             'field_view'        => [
-                'ru' => "Шаблон поля",
-                'en' => "View of field",
+                'ru' => 'Шаблон поля',
+                'en' => 'View of field',
             ],
             'rule'              => [
-                'ru' => "Правила проверки",
-                'en' => "Validation rules",
+                'ru' => 'Правила проверки',
+                'en' => 'Validation rules',
             ],
             'show_in_list'      => [
-                'ru' => "Показывать в списке",
-                'en' => "Show in list",
+                'ru' => 'Показывать в списке',
+                'en' => 'Show in list',
             ],
             'show_in_form'      => [
-                'ru' => "Показывать в форме",
-                'en' => "Show in form",
+                'ru' => 'Показывать в форме',
+                'en' => 'Show in form',
             ],
             'allow_create'      => [
-                'ru' => "Доступно при создании объекта",
-                'en' => "Available at object creation",
+                'ru' => 'Доступно при создании объекта',
+                'en' => 'Available at object creation',
             ],
             'allow_search'      => [
-                'ru' => "Разрешить искать по полю",
-                'en' => "Available search by field",
+                'ru' => 'Разрешить искать по полю',
+                'en' => 'Available search by field',
             ],
             'allow_update'      => [
-                'ru' => "Доступно при редактировании объекта",
-                'en' => "Available at object editing",
+                'ru' => 'Доступно при редактировании объекта',
+                'en' => 'Available at object editing',
             ],
             'allow_sort'        => [
-                'ru' => "Cортировка в списке",
-                'en' => "Sorting",
+                'ru' => 'Cортировка в списке',
+                'en' => 'Sorting',
             ],
             'description'       => [
-                'ru' => "Описание",
-                'en' => "Description",
+                'ru' => 'Описание',
+                'en' => 'Description',
             ],
             'css_class'         => [
-                'ru' => "CSS класс",
-                'en' => "CSS class",
+                'ru' => 'CSS класс',
+                'en' => 'CSS class',
             ],
             'icon_class'        => [
-                'ru' => "ICON класс",
-                'en' => "ICON class",
+                'ru' => 'ICON класс',
+                'en' => 'ICON class',
             ],
             'required'          => [
-                'ru' => "Обязательно заполняется",
-                'en' => "Required",
+                'ru' => 'Обязательно заполняется',
+                'en' => 'Required',
             ],
         ],
     ];
-
 }

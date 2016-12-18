@@ -1,9 +1,11 @@
-<?php namespace Telenok\Core\Event;
+<?php
+
+namespace Telenok\Core\Event;
 
 use App\Events\Event;
 
-class RepositoryPackage extends Event{
-
+class RepositoryPackage extends Event
+{
     protected $list;
 
     public function __construct()

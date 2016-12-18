@@ -8,15 +8,12 @@ class Repository extends \Illuminate\Config\Repository
     {
         app('config')->set($key, $value);
 
-        try
-        {
+        try {
             \App\Vendor\Telenok\Core\Model\System\Config::where('code', $key)->first()->storeOrUpdate(['value' => $value]);
-        }
-        catch (\Exception $exception)
-        {
+        } catch (\Exception $exception) {
             (new \App\Vendor\Telenok\Core\Model\System\Config())->storeOrUpdate([
                 'code'  => $key,
-                'value' => $value
+                'value' => $value,
             ]);
         }
     }

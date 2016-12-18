@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\MorphManyToMany;
+<?php
 
-class Controller extends \Telenok\Core\Field\MorphManyToMany\Controller {
-    
+namespace App\Vendor\Telenok\Core\Field\MorphManyToMany;
+
+class Controller extends \Telenok\Core\Field\MorphManyToMany\Controller
+{
 }

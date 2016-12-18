@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Widget\Menu;
+<?php
 
-class Controller extends \Telenok\Core\Widget\Menu\Controller {
+namespace App\Vendor\Telenok\Core\Widget\Menu;
 
+class Controller extends \Telenok\Core\Widget\Menu\Controller
+{
 }

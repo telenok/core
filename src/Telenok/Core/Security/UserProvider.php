@@ -6,13 +6,14 @@ namespace Telenok\Core\Security;
  * @class Telenok.Core.Security.UserProvider
  * Class for user's authorization.
  */
-class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
-
+class UserProvider extends \Illuminate\Auth\EloquentUserProvider
+{
     /**
      * @method retrieveById
      * Retrieve a user by their unique identifier.
      *
      * @param {mixed} $identifier
+     *
      * @return {Illuminate.Auth.UserInterface}
      * @member Telenok.Core.Security.UserProvider
      */
@@ -22,13 +23,14 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
                         ->whereId($identifier)
                         ->active()->first();
     }
-    
+
     /**
      * @method retrieveByToken
      * Retrieve a user by their unique identifier and "remember me" token.
      *
-     * @param {mixed} $identifier
+     * @param {mixed}  $identifier
      * @param {String} $token
+     *
      * @return {Illuminate.Auth.UserInterface}
      * @member Telenok.Core.Security.UserProvider
      */
@@ -50,6 +52,7 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
      * Retrieve a user by their unique identifier and "remember me" token.
      *
      * @param {Array} $credentials
+     *
      * @return {Illuminate.Auth.UserInterface}
      * @member Telenok.Core.Security.UserProvider
      */
@@ -61,10 +64,10 @@ class UserProvider extends \Illuminate\Auth\EloquentUserProvider {
         $query = $this->createModel()->newQuery();
         $r = range_minutes(config('cache.db_query.minutes', 0));
 
-        foreach ($credentials as $key => $value)
-        {
-            if (!str_contains($key, 'password'))
+        foreach ($credentials as $key => $value) {
+            if (!str_contains($key, 'password')) {
                 $query->where($key, $value);
+            }
         }
 
         $query->where('active', 1)

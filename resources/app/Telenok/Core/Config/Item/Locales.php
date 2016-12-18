@@ -2,4 +2,6 @@
 
 namespace App\Vendor\Telenok\Core\Config\Item;
 
-class Locales extends \Telenok\Core\Config\Item\Locales {}
+class Locales extends \Telenok\Core\Config\Item\Locales
+{
+}

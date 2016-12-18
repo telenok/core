@@ -1,10 +1,7 @@
 <?php
 
 return [
-    'title' => 'Terminate',
+    'title'        => 'Terminate',
     'title.groups' => 'End point',
-    'description' => 'End point',
+    'description'  => 'End point',
 ];
-
-
-

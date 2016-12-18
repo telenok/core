@@ -5,8 +5,8 @@ namespace Telenok\Core\Support\Install;
 /**
  * @class Telenok.Core.Support.Install.Controller
  */
-class Controller {
-
+class Controller
+{
     protected $domain = '';
     protected $domainSecure = false;
     protected $superuserLogin = '';
@@ -23,12 +23,9 @@ class Controller {
 
     public function setDomain($param = '')
     {
-        if ($this->validateDomainOrIp($param))
-        {
+        if ($this->validateDomainOrIp($param)) {
             $this->domain = $param;
-        }
-        else
-        {
+        } else {
             throw new \Exception('Wrong domain or domain doesnt link to IP or wrong IP, may be server not running ?');
         }
 
@@ -42,12 +39,9 @@ class Controller {
 
     public function setSuperuserLogin($param = '')
     {
-        if (preg_match('/^[A-Za-z][A-Za-z0-9_]+$/', $param))
-        {
+        if (preg_match('/^[A-Za-z][A-Za-z0-9_]+$/', $param)) {
             $this->superuserLogin = $param;
-        }
-        else
-        {
+        } else {
             throw new \Exception('Wrong superuser login.');
         }
 
@@ -61,12 +55,9 @@ class Controller {
 
     public function setSuperuserEmail($param = '')
     {
-        if (mb_strlen($param))
-        {
+        if (mb_strlen($param)) {
             $this->superuserEmail = $param;
-        }
-        else
-        {
+        } else {
             throw new \Exception('Wrong superuser email.');
         }
 
@@ -80,16 +71,11 @@ class Controller {
 
     public function setSuperuserPassword($param = '')
     {
-        if ($param == 'random')
-        {
+        if ($param == 'random') {
             $this->superuserPassword = str_random(8);
-        }
-        else if (mb_strlen($param) < ($length = config('auth.password.length-min', 8)))
-        {
-            throw new \Exception('Wrong superuser password, it should be at least ' . $length . ' symbols.');
-        }
-        else
-        {
+        } elseif (mb_strlen($param) < ($length = config('auth.password.length-min', 8))) {
+            throw new \Exception('Wrong superuser password, it should be at least '.$length.' symbols.');
+        } else {
             $this->superuserPassword = $param;
         }
 
@@ -103,12 +89,9 @@ class Controller {
 
     public function setLocale($param = '')
     {
-        if (preg_match('/^[a-z]{2}$/', $param))
-        {
+        if (preg_match('/^[a-z]{2}$/', $param)) {
             $this->locale = $param;
-        }
-        else
-        {
+        } else {
             throw new \Exception('Wrong locale. It should contain two symbols like "en" or "ru"');
         }
 
@@ -122,12 +105,9 @@ class Controller {
 
     public function setDbDatabase($param = '')
     {
-        if (preg_match('/^[A-Za-z][A-Za-z0-9_]+$/', $param))
-        {
+        if (preg_match('/^[A-Za-z][A-Za-z0-9_]+$/', $param)) {
             $this->dbDatabase = $param;
-        }
-        else
-        {
+        } else {
             throw new \Exception('Wrong database name.');
         }
 
@@ -141,12 +121,9 @@ class Controller {
 
     public function setDbDriver($param = '')
     {
-        if (in_array($param, ['sqlite', 'mysql', 'pgsql', 'sqlsrv'], true))
-        {
+        if (in_array($param, ['sqlite', 'mysql', 'pgsql', 'sqlsrv'], true)) {
             $this->dbDriver = $param;
-        }
-        else
-        {
+        } else {
             throw new \Exception('Wrong database driver. Choose one of sqlite, mysql, pgsql, sqlsrv.');
         }
 
@@ -160,12 +137,9 @@ class Controller {
 
     public function setDbHost($param = '')
     {
-        if ($this->validateDomainOrIp($param))
-        {
+        if ($this->validateDomainOrIp($param)) {
             $this->dbHost = $param;
-        }
-        else if ($this->dbDriver != 'sqlite')
-        {
+        } elseif ($this->dbDriver != 'sqlite') {
             throw new \Exception('Wrong domain or domain hasnt link to IP or wrong IP, may be LAMP server (like Denwer, XAMPP) not running ?');
         }
 
@@ -179,12 +153,9 @@ class Controller {
 
     public function setDbUsername($param = '')
     {
-        if (mb_strlen($param))
-        {
+        if (mb_strlen($param)) {
             $this->dbUsername = $param;
-        }
-        else if ($this->dbDriver != 'sqlite')
-        {
+        } elseif ($this->dbDriver != 'sqlite') {
             throw new \Exception('Wrong database username.');
         }
 
@@ -210,12 +181,9 @@ class Controller {
 
     public function setDbPrefix($param = '')
     {
-        if (mb_strlen($param) && preg_match('/^[A-Za-z][A-Za-z0-9_]+$/', $param))
-        {
+        if (mb_strlen($param) && preg_match('/^[A-Za-z][A-Za-z0-9_]+$/', $param)) {
             $this->dbPrefix = $param;
-        }
-        else if (mb_strlen($param))
-        {
+        } elseif (mb_strlen($param)) {
             throw new \Exception('Wrong database prefix.');
         }
 
@@ -246,11 +214,11 @@ class Controller {
 
     public function processConfigAppFile()
     {
-        $param = array(
-            'APP_URL'       => 'http' . ($this->domainSecure ? 's' : '') . '://' . $this->domain,
+        $param = [
+            'APP_URL'       => 'http'.($this->domainSecure ? 's' : '').'://'.$this->domain,
             'APP_LOCALE'    => $this->locale,
             'APP_KEY'       => str_random(),
-        );
+        ];
 
         config([
             'app.url'       => $param['APP_URL'],
@@ -261,27 +229,21 @@ class Controller {
         $path = base_path('.env');
         $path_example = base_path('.env.example');
 
-        if (!file_exists($path))
-        {
+        if (!file_exists($path)) {
             copy($path_example, $path);
         }
 
-        if (!file_exists($path))
-        {
-            throw new \Exception('Cant create "' . $path . '" file');
+        if (!file_exists($path)) {
+            throw new \Exception('Cant create "'.$path.'" file');
         }
 
         $stub = file_get_contents($path);
 
-        foreach ($param as $k => $v)
-        {
-            if (preg_match('/^[ \t]*' . preg_quote($k, '/') . '=.*$/imu', $stub))
-            {
-                $stub = preg_replace('/^[ \t]*' . preg_quote($k, '/') . '=.*$/imu', $k . '=' . $v, $stub);
-            }
-            else
-            {
-                $stub .= "\n" . $k . '=' . $v;
+        foreach ($param as $k => $v) {
+            if (preg_match('/^[ \t]*'.preg_quote($k, '/').'=.*$/imu', $stub)) {
+                $stub = preg_replace('/^[ \t]*'.preg_quote($k, '/').'=.*$/imu', $k.'='.$v, $stub);
+            } else {
+                $stub .= "\n".$k.'='.$v;
             }
         }
 
@@ -290,44 +252,38 @@ class Controller {
 
     public function processConfigDatabaseFile()
     {
-        $param = array(
-            'DB_CONNECTION' => $this->dbDriver,
+        $param = [
+            'DB_CONNECTION'         => $this->dbDriver,
             'DB_DATABASE'           => $this->dbDatabase,
-            'DB_HOST'           => $this->dbHost,
-            'DB_USERNAME'       => $this->dbUsername,
-            'DB_PASSWORD'       => $this->dbPassword,
-            'DB_PREFIX'         => $this->dbPrefix,
-        );
+            'DB_HOST'               => $this->dbHost,
+            'DB_USERNAME'           => $this->dbUsername,
+            'DB_PASSWORD'           => $this->dbPassword,
+            'DB_PREFIX'             => $this->dbPrefix,
+        ];
 
         $path = base_path('.env');
         $path_example = base_path('.env.example');
 
-        if (!file_exists($path))
-        {
+        if (!file_exists($path)) {
             copy($path_example, $path);
         }
 
-        if (!file_exists($path))
-        {
-            throw new \Exception('Cant create "' . $path . '" file');
+        if (!file_exists($path)) {
+            throw new \Exception('Cant create "'.$path.'" file');
         }
 
         $stub = file_get_contents($path);
 
-        foreach ($param as $k => $v)
-        {
-            if (preg_match('/^[ \t]*' . preg_quote($k, '/') . '=.*$/imu', $stub))
-            {
-                $stub = preg_replace('/^[ \t]*' . preg_quote($k, '/') . '=.*$/imu', $k . '=' . trim($v), $stub);
-            }
-            else
-            {
-                $stub .= "\n" . $k . '=' . trim($v);
+        foreach ($param as $k => $v) {
+            if (preg_match('/^[ \t]*'.preg_quote($k, '/').'=.*$/imu', $stub)) {
+                $stub = preg_replace('/^[ \t]*'.preg_quote($k, '/').'=.*$/imu', $k.'='.trim($v), $stub);
+            } else {
+                $stub .= "\n".$k.'='.trim($v);
             }
         }
 
         // validate database connection
-        $conn = array(
+        $conn = [
             'driver'        => $this->dbDriver,
             'host'          => $this->dbHost,
             'database'      => $this->dbDatabase,
@@ -336,31 +292,26 @@ class Controller {
             'charset'       => 'utf8',
             'collation'     => 'utf8_unicode_ci',
             'prefix'        => $this->dbPrefix,
-        );
+        ];
 
         config([
             'database.connections.install'  => $conn,
-            'database.default'  => 'install'
+            'database.default'              => 'install',
         ]);
 
-        try
-        {
-            if (\Schema::hasTable('deletemeplease'))
-            {
+        try {
+            if (\Schema::hasTable('deletemeplease')) {
                 \Schema::drop('deletemeplease');
             }
 
-            \Schema::create('deletemeplease', function($table)
-            {
+            \Schema::create('deletemeplease', function ($table) {
                 $table->increments('id');
             });
 
             \Schema::drop('deletemeplease');
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             throw new \Exception('Cant create table in database. Please, validate setting .env file or'
-                                    . ' in app/config/database.php or set its again with current console command.');
+                                    .' in app/config/database.php or set its again with current console command.');
         }
 
         file_put_contents($path, $stub, LOCK_EX);
@@ -384,14 +335,10 @@ class Controller {
 
     public function createBaseTable($commandObject)
     {
-        try
-        {
+        try {
             $commandObject->call('migrate:install');
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             $commandObject->info('Seems, table "migrations" already exists');
         }
     }
-
 }

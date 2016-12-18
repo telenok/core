@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Abstraction\Field;
+<?php
+
+namespace Telenok\Core\Abstraction\Field;
 
 /**
  * @class Telenok.Core.Abstraction.Field.Controller
@@ -9,9 +11,9 @@
  */
 abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controller implements \Telenok\Core\Contract\Field\Field
 {
-
     /**
      * @protected
+     *
      * @property {Array} $ruleList
      * List of rules for special field's attributes.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -20,6 +22,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {Array} $specialField
      * List of names for special field's attributes.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -28,6 +31,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {Array} $specialDateField
      * List of names for special date field's attributes.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -36,6 +40,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {Boolean} $allowMultilanguage
      * Can be field multilanguage.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -45,6 +50,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     /**
      * @protected
      * @static
+     *
      * @property {Integer} $pageLength
      * Amount of rows to show in table for relation's fields.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -53,6 +59,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $viewModel
      * View name for show model's form.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -61,6 +68,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $viewField
      * View name for show field's form.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -69,6 +77,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $viewFilter
      * View name for show field's filter.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -77,6 +86,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $routeListTable
      * Name of router to list data.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -85,6 +95,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $routeListTitle
      * Name of router to list title.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -93,6 +104,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $routeWizardCreate
      * Name of router to creating wizard (modal window).
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -101,6 +113,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $routeWizardEdit
      * Name of router to editing wizard (modal window).
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -109,6 +122,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $routeWizardChoose
      * Name of router to choosing wizard (modal window).
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -117,6 +131,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $languageDirectory
      * Default language directory for fields.
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -140,11 +155,11 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Set view name for model's form.
      *
      * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
-     * @param {String} $templateView
-     * Optional view.
-     * @param {String} $templateKey
-     * Optional view key. Used for fields like select box etc, which can be presents in many ways.
+     *                                                        Object with data of field's configuration.
+     * @param {String}                          $templateView
+     *                                                        Optional view.
+     * @param {String}                          $templateKey
+     *                                                        Optional view key. Used for fields like select box etc, which can be presents in many ways.
      *
      * @return {Telenok.Core.Abstraction.Field.Relation.Controller}
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -156,42 +171,25 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $fieldView = '';
         $defaultTemplate = $this->viewModel ?: "{$this->getPackage()}::field.{$this->getKey()}.model";
 
-        if ($field instanceof \Telenok\Core\Model\Object\Field && $viewObj->exists($field->field_view))
-        {
+        if ($field instanceof \Telenok\Core\Model\Object\Field && $viewObj->exists($field->field_view)) {
             $fieldView = $field->field_view;
         }
 
-        if ($templateView && $viewObj->exists($templateView))
-        {
+        if ($templateView && $viewObj->exists($templateView)) {
             $this->viewModel = $templateView;
-        }
-        else
-        {
-            if ($templateKey && $viewObj->exists($t = ($fieldView ?: $defaultTemplate) . '-' . $templateKey))
-            {
+        } else {
+            if ($templateKey && $viewObj->exists($t = ($fieldView ?: $defaultTemplate).'-'.$templateKey)) {
                 $this->viewModel = $t;
-            }
-            else
-            {
-                if ($fieldView)
-                {
+            } else {
+                if ($fieldView) {
                     $this->viewModel = $fieldView;
-                }
-                else
-                {
-                    if ($viewObj->exists($this->viewModel))
-                    {
-
-                    }
-                    else
-                    {
-                        if ($viewObj->exists($defaultTemplate))
-                        {
+                } else {
+                    if ($viewObj->exists($this->viewModel)) {
+                    } else {
+                        if ($viewObj->exists($defaultTemplate)) {
                             $this->viewModel = $defaultTemplate;
-                        }
-                        else
-                        {
-                            throw new \Exception('Please set view for field "' . $this->getKey() . '"');
+                        } else {
+                            throw new \Exception('Please set view for field "'.$this->getKey().'"');
                         }
                     }
                 }
@@ -210,7 +208,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getViewField()
     {
-        return $this->viewField ?: $this->getPackage() . "::field.{$this->getKey()}.field";
+        return $this->viewField ?: $this->getPackage()."::field.{$this->getKey()}.field";
     }
 
     /**
@@ -222,7 +220,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getViewFilter()
     {
-        return $this->viewFilter ?: $this->getPackage() . "::field.{$this->getKey()}.filter";
+        return $this->viewFilter ?: $this->getPackage()."::field.{$this->getKey()}.filter";
     }
 
     /**
@@ -234,7 +232,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getRouteListTable()
     {
-        return $this->routeListTable ?: $this->getVendorName() . ".field.{$this->getKey()}.list.table";
+        return $this->routeListTable ?: $this->getVendorName().".field.{$this->getKey()}.list.table";
     }
 
     /**
@@ -246,7 +244,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getRouteListTitle()
     {
-        return $this->routeListTitle ?: $this->getVendorName() . ".field.{$this->getKey()}.list.title";
+        return $this->routeListTitle ?: $this->getVendorName().".field.{$this->getKey()}.list.title";
     }
 
     /**
@@ -290,7 +288,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Return list with names of special fields.
      *
      * @param {Telenok.Core.Model.Object.Field} $model
-     * Object with data of field's configuration.
+     *                                                 Object with data of field's configuration.
      *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -305,9 +303,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Return names of field for $model.
      *
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Eloquent object.
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                                Eloquent object.
+     * @param {Telenok.Core.Model.Object.Field}                $field
+     *                                                                Object with data of field's configuration.
      *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -322,9 +320,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Return fillable names of field for $model.
      *
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Eloquent object.
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                                Eloquent object.
+     * @param {Telenok.Core.Model.Object.Field}                $field
+     *                                                                Object with data of field's configuration.
      *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -339,9 +337,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Return list names of date field for $model.
      *
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Eloquent object.
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                                Eloquent object.
+     * @param {Telenok.Core.Model.Object.Field}                $field
+     *                                                                Object with data of field's configuration.
      *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -356,7 +354,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Return list names of date field for special field's attributes.
      *
      * @param {Telenok.Core.Model.Object.Field} $model
-     * Object with data of field's configuration.
+     *                                                 Object with data of field's configuration.
      *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -371,7 +369,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Return list of rules for field.
      *
      * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                 Object with data of field's configuration.
      *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -386,25 +384,22 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Return value of field's attributes.
      *
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Eloquent object.
-     * @param {String} $key
-     * Code of field in $model.
-     * @param {mixed} $value
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                                Eloquent object.
+     * @param {String}                                         $key
+     *                                                                Code of field in $model.
+     * @param {mixed}                                          $value
+     * @param {Telenok.Core.Model.Object.Field}                $field
+     *                                                                Object with data of field's configuration.
      *
      * @return {mixed}
      * @member Telenok.Core.Abstraction.Field.Controller
      */
     public function getModelAttribute($model, $key, $value, $field)
     {
-        try
-        {
+        try {
             return $model->getAttribute($key);
-        }
-        catch (\Exception $e)
-        {
-            return null;
+        } catch (\Exception $e) {
+            return;
         }
     }
 
@@ -413,12 +408,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Set value for field.
      *
      * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Eloquent object.
-     * @param {String} $key
-     * Code of field in $model.
-     * @param {mixed} $value
-     * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                                Eloquent object.
+     * @param {String}                                         $key
+     *                                                                Code of field in $model.
+     * @param {mixed}                                          $value
+     * @param {Telenok.Core.Model.Object.Field}                $field
+     *                                                                Object with data of field's configuration.
      *
      * @return {Telenok.Core.Abstraction.Field.Relation.Controller}
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -435,23 +430,20 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Return value of field's attributes.
      *
      * @param {Telenok.Core.Model.Object.Field} $model
-     * Object with data of field's configuration.
-     * @param {String} $key
-     * Code of field in $model.
-     * @param {mixed} $value
+     *                                                 Object with data of field's configuration.
+     * @param {String}                          $key
+     *                                                 Code of field in $model.
+     * @param {mixed}                           $value
      *
      * @return {mixed}
      * @member Telenok.Core.Abstraction.Field.Controller
      */
     public function getModelSpecialAttribute($model, $key, $value)
     {
-        try
-        {
+        try {
             return $model->getAttribute($key);
-        }
-        catch (\Exception $e)
-        {
-            return null;
+        } catch (\Exception $e) {
+            return;
         }
     }
 
@@ -479,12 +471,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             'controller'       => $this,
             'model'            => $model,
             'field'            => $field,
-            'permissionCreate' => app('auth')->can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
-            'permissionUpdate' => app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
-            'permissionDelete' => app('auth')->can('delete', 'object_field.' . $model->getTable() . '.' . $field->code),
+            'permissionCreate' => app('auth')->can('create', 'object_field.'.$model->getTable().'.'.$field->code),
+            'permissionUpdate' => app('auth')->can('update', 'object_field.'.$model->getTable().'.'.$field->code),
+            'permissionDelete' => app('auth')->can('delete', 'object_field.'.$model->getTable().'.'.$field->code),
             'pageLength'       => $this->pageLength,
             'uniqueId'         => $uniqueId,
-        ], (array)$this->getModelFieldViewVariable($controller, $model, $field, $uniqueId), (array)$controller->getModelFieldViewVariable($this, $model, $field, $uniqueId)
+        ], (array) $this->getModelFieldViewVariable($controller, $model, $field, $uniqueId), (array) $controller->getModelFieldViewVariable($this, $model, $field, $uniqueId)
         ))->render();
     }
 
@@ -493,7 +485,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * Return Object Type linked to the field
      *
      * @param {Telenok.Core.Model.Object.Field} $field
-     * Object with data of field's configuration.
+     *                                                 Object with data of field's configuration.
      *
      * @return {Telenok.Core.Model.Object.Type}
      * @member Telenok.Core.Abstraction.Field.Controller
@@ -508,7 +500,6 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
-
     }
 
     /**
@@ -527,25 +518,20 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         $content = [];
 
-        try
-        {
+        try {
             $model = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id);
             $field = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($fieldId);
             $type = $this->getLinkedModelType($field);
 
             $query = $model->{camel_case($field->code)}();
 
-            if ($term)
-            {
-                $query->where(function ($query) use ($term)
-                {
+            if ($term) {
+                $query->where(function ($query) use ($term) {
                     collect(explode(' ', $term))
-                        ->reject(function ($i)
-                        {
+                        ->reject(function ($i) {
                             return !trim($i);
                         })
-                        ->each(function ($i) use ($query)
-                        {
+                        ->each(function ($i) use ($query) {
                             $query->where('title', 'like', "%{$i}%");
                         });
                 });
@@ -555,21 +541,18 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
             $items = $query->get();
 
-            $objectField = $type->field()->active()->get()->filter(function ($item) use ($type)
-            {
-                return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
+            $objectField = $type->field()->active()->get()->filter(function ($item) use ($type) {
+                return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.'.$type->code.'.'.$item->code);
             });
 
             $config = app('telenok.repository')->getObjectFieldController();
 
-            $canUpdate = app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code);
+            $canUpdate = app('auth')->can('update', 'object_field.'.$model->getTable().'.'.$field->code);
 
-            foreach ($items->slice(0, $length, true) as $item)
-            {
+            foreach ($items->slice(0, $length, true) as $item) {
                 $c = [];
 
-                foreach ($objectField as $f)
-                {
+                foreach ($objectField as $f) {
                     $c[$f->code] = $config->get($f->key)->getListFieldContent($f, $item, $type);
                 }
 
@@ -584,9 +567,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
                 'recordsTotal'    => ($start + $items->count()),
                 'recordsFiltered' => ($start + $items->count()),
             ];
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return [
                 'draw'            => $draw,
                 'data'            => [],
@@ -606,26 +587,23 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $fields = [];
         $type = $this->getLinkedModelType($field);
 
-        $objectField = $type->field()->active()->get()->filter(function ($item) use ($type)
-        {
-            return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
+        $objectField = $type->field()->active()->get()->filter(function ($item) use ($type) {
+            return $item->show_in_list == 1 && app('auth')->can('read', 'object_field.'.$type->code.'.'.$item->code);
         });
 
-        foreach ($objectField as $key => $field)
-        {
-            if (($key == 0 && $objectField->count()) || $objectField->count() == 1)
-            {
+        foreach ($objectField as $key => $field) {
+            if (($key == 0 && $objectField->count()) || $objectField->count() == 1) {
                 $fields['tableManageItem'] = [
-                    "data"      => 'tableManageItem',
-                    "title"     => "",
-                    "orderable" => false,
+                    'data'      => 'tableManageItem',
+                    'title'     => '',
+                    'orderable' => false,
                 ];
             }
 
             $fields[$field->code] = [
-                "data"      => $field->code,
-                "title"     => e($field->translate('title_list')),
-                "orderable" => $field->allow_sort ? true : false,
+                'data'      => $field->code,
+                'title'     => e($field->translate('title_list')),
+                'orderable' => $field->allow_sort ? true : false,
             ];
         }
 
@@ -638,11 +616,11 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getFormFieldContent($model = null, $uniqueId = null)
     {
-        return view($this->getViewField(), array(
+        return view($this->getViewField(), [
             'controller' => $this,
             'model'      => $model,
             'uniqueId'   => $uniqueId,
-        ))->render();
+        ])->render();
     }
 
     /**
@@ -651,23 +629,19 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null)
     {
-        if ($value !== null && trim($value))
-        {
-            $query->where(function ($query) use ($value, $name, $model)
-            {
+        if ($value !== null && trim($value)) {
+            $query->where(function ($query) use ($value, $name, $model) {
                 $query->where(app('db')->raw(1), 0);
 
                 collect(explode(' ', $value))
-                    ->reject(function ($i)
-                    {
+                    ->reject(function ($i) {
                         return !trim($i);
                     })
-                    ->each(function ($i) use ($query, $name, $model)
-                    {
-                        $query->orWhere($model->getTable() . '.' . $name, 'like', '%' . trim($i) . '%');
+                    ->each(function ($i) use ($query, $name, $model) {
+                        $query->orWhere($model->getTable().'.'.$name, 'like', '%'.trim($i).'%');
                     });
 
-                $query->orWhere($model->getTable() . '.id', intval($value));
+                $query->orWhere($model->getTable().'.id', intval($value));
             });
         }
     }
@@ -678,7 +652,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getFilterContent($field = null)
     {
-        return '<input type="text" name="filter[' . $field->code . ']" value="" />';
+        return '<input type="text" name="filter['.$field->code.']" value="" />';
     }
 
     /**
@@ -687,7 +661,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getListFieldContent($field, $item, $type = null)
     {
-        return e(\Str::limit($item->translate((string)$field->code), 20));
+        return e(\Str::limit($item->translate((string) $field->code), 20));
     }
 
     /**
@@ -698,8 +672,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         $validator = $this->validator($model, $input, array_merge($messages, $this->LL('error')));
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             throw $this->validateException()->setMessageError($validator->messages());
         }
 
@@ -715,15 +688,11 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $reflector = new \ReflectionClass($object);
         $file = $reflector->getFileName();
 
-        try
-        {
-            if (method_exists($object, $method) || preg_match('/function\s+{$method}\s*\(/', file_get_contents($file)))
-            {
+        try {
+            if (method_exists($object, $method) || preg_match('/function\s+{$method}\s*\(/', file_get_contents($file))) {
                 return true;
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -756,41 +725,33 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $file = $reflector->getFileName();
         $dir = $this->getStubFileDirectory();
 
-        try
-        {
+        try {
             $param['class_name'] = get_class($model);
 
             // update /app/Model/macro.php
-            $stub = file_get_contents($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.macro.stub");
+            $stub = file_get_contents($dir.DIRECTORY_SEPARATOR.'stubs'.DIRECTORY_SEPARATOR."$stubFile.macro.stub");
 
-            foreach ($param as $k => $v)
-            {
-                $stub = str_replace('{{' . $k . '}}', $v, $stub);
+            foreach ($param as $k => $v) {
+                $stub = str_replace('{{'.$k.'}}', $v, $stub);
             }
 
             file_put_contents(app_path(static::$macroFile), $stub, FILE_APPEND | LOCK_EX);
 
-
             // update class file
-            $stub = file_get_contents($dir . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . "$stubFile.stub");
+            $stub = file_get_contents($dir.DIRECTORY_SEPARATOR.'stubs'.DIRECTORY_SEPARATOR."$stubFile.stub");
 
-
-            foreach ($param as $k => $v)
-            {
-                $stub = str_replace('{{' . $k . '}}', $v, $stub);
+            foreach ($param as $k => $v) {
+                $stub = str_replace('{{'.$k.'}}', $v, $stub);
             }
 
-            $res = preg_replace('/\}\s*(\?\>)?$/', $stub, file_get_contents($file)) . PHP_EOL . PHP_EOL . '}' . PHP_EOL . '?>';
+            $res = preg_replace('/\}\s*(\?\>)?$/', $stub, file_get_contents($file)).PHP_EOL.PHP_EOL.'}'.PHP_EOL.'?>';
 
             file_put_contents($file, $res, LOCK_EX);
 
-
             // reload /app/Model/macro.php
             \Telenok\Core\Abstraction\Field\Relation\Controller::readMacroFile();
-        }
-        catch (\Exception $e)
-        {
-            throw new \Exception($this->LL('error.file.update', array('file' => $file)));
+        } catch (\Exception $e) {
+            throw new \Exception($this->LL('error.file.update', ['file' => $file]));
         }
     }
 
@@ -813,7 +774,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function validateException()
     {
-        return new \Telenok\Core\Support\Exception\Validator;
+        return new \Telenok\Core\Support\Exception\Validator();
     }
 
     /**
@@ -844,16 +805,11 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function processFieldDelete($model, $type)
     {
-        try
-        {
-            \Schema::table($type->code, function ($table) use ($model)
-            {
+        try {
+            \Schema::table($type->code, function ($table) use ($model) {
                 $table->dropColumn($model->code);
             });
-        }
-        catch (\Exception $e)
-        {
-
+        } catch (\Exception $e) {
         }
 
         return true;
@@ -883,8 +839,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getMultilanguageField($model, $field)
     {
-        if ($field->multilanguage)
-        {
+        if ($field->multilanguage) {
             return [$field->code];
         }
     }
@@ -904,24 +859,17 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getFieldTab($typeId, $tabCode)
     {
-        try
-        {
+        try {
             $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)
-                ->where(function ($query) use ($tabCode)
-                {
+                ->where(function ($query) use ($tabCode) {
                     $query->where('id', $tabCode);
                     $query->orWhere('code', $tabCode);
                 })
                 ->firstOrFail();
-        }
-        catch (\Exception $ex)
-        {
-            try
-            {
+        } catch (\Exception $ex) {
+            try {
                 $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
-            }
-            catch (\Exception $ex)
-            {
+            } catch (\Exception $ex) {
                 throw new \Exception($this->LL('error.tab.field.key'));
             }
         }
@@ -935,26 +883,17 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getFieldTabBelongTo($typeId, $tabBelongCode, $tabHasId)
     {
-        try
-        {
+        try {
             $tabTo = $this->getFieldTab($typeId, $tabBelongCode);
-        }
-        catch (\Exception $ex)
-        {
-            try
-            {
+        } catch (\Exception $ex) {
+            try {
                 $tabHas = \App\Vendor\Telenok\Core\Model\Object\Tab::firstOrFail('id', $tabHasId);
 
                 $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->whereCode($tabHas->code);
-            }
-            catch (\Exception $ex)
-            {
-                try
-                {
+            } catch (\Exception $ex) {
+                try {
                     $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
-                }
-                catch (\Exception $ex)
-                {
+                } catch (\Exception $ex) {
                     throw new \Exception($this->LL('error.tab.field.key'));
                 }
             }
@@ -972,62 +911,48 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $term = trim($this->getRequest()->input('term'));
         $return = [];
 
-        if ($id)
-        {
+        if ($id) {
             $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class);
-        }
-        else
-        {
+        } else {
             $model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
         }
 
         $query = $model::withPermission()->with('sequencesObjectType');
 
-        if (in_array('title', $model->getTranslatedField(), true))
-        {
-            $query->join('object_translation', function ($join) use ($model)
-            {
-                $join->on($model->getTable() . '.id', '=', 'object_translation.translation_object_model_id')
+        if (in_array('title', $model->getTranslatedField(), true)) {
+            $query->join('object_translation', function ($join) use ($model) {
+                $join->on($model->getTable().'.id', '=', 'object_translation.translation_object_model_id')
                     ->on('object_translation.translation_object_field_code', '=', app('db')->raw("'title'"))
-                    ->on('object_translation.translation_object_language', '=', app('db')->raw("'" . config('app.locale') . "'"));
+                    ->on('object_translation.translation_object_language', '=', app('db')->raw("'".config('app.locale')."'"));
             });
         }
 
-        $query->where(function ($query) use ($term, $model)
-        {
+        $query->where(function ($query) use ($term, $model) {
             $query->where(app('db')->raw(1), 0);
 
-            if (trim($term))
-            {
+            if (trim($term)) {
                 collect(explode(' ', $term))
-                    ->reject(function ($i)
-                    {
+                    ->reject(function ($i) {
                         return !trim($i);
                     })
-                    ->each(function ($i) use ($query, $model)
-                    {
-                        if (in_array('title', $model->getTranslatedField(), true))
-                        {
+                    ->each(function ($i) use ($query, $model) {
+                        if (in_array('title', $model->getTranslatedField(), true)) {
                             $query->orWhere('object_translation.translation_object_string', 'like', "%{$i}%");
-                        }
-                        else
-                        {
-                            $query->orWhere($model->getTable() . '.title', 'like', "%{$i}%");
+                        } else {
+                            $query->orWhere($model->getTable().'.title', 'like', "%{$i}%");
                         }
                     });
 
-                $query->orWhere($model->getTable() . '.id', (int)$term);
+                $query->orWhere($model->getTable().'.id', (int) $term);
             }
         });
 
-        if ($closure instanceof \Closure)
-        {
+        if ($closure instanceof \Closure) {
             $closure($query);
         }
 
-        $query->take(20)->groupBy($model->getTable() . '.id')->get()->each(function ($item) use (&$return)
-        {
-            $return[] = ['value' => $item->id, 'text' => "[{$item->sequencesObjectType->translate('title')} #{$item->id}] " . $item->translate('title')];
+        $query->take(20)->groupBy($model->getTable().'.id')->get()->each(function ($item) use (&$return) {
+            $return[] = ['value' => $item->id, 'text' => "[{$item->sequencesObjectType->translate('title')} #{$item->id}] ".$item->translate('title')];
         });
 
         return $return;

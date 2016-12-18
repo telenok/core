@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'title' => 'Manual',
+    'title'        => 'Manual',
     'title.groups' => 'Start point',
-    'description' => 'Processing manual start',
-    'modal.title' => 'Manual event',
+    'description'  => 'Processing manual start',
+    'modal.title'  => 'Manual event',
 ];

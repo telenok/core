@@ -1,4 +1,6 @@
-<?php namespace Telenok\Core\Field\Decimal;
+<?php
+
+namespace Telenok\Core\Field\Decimal;
 
 /*
  * Copyright (c)
@@ -7,23 +9,23 @@
  *
  * This source file is subject to the MIT license that is bundled
  * with this package in the file LICENSE.
- * 
+ *
  * https://github.com/v3labs/math
- * 
- * 
+ *
+ *
  * Immutable Arbitrary Precision decimal number.
  * Wrapper for BC Math
  *
- * 
+ *
  * @author Kirill chEbba Chebunin <iam@chebba.org>
  * @author Vladislav Veselinov <vladislav@v3labs.com>
- * 
- * 
+ *
+ *
  * @class Telenok.Core.Field.Decimal.BigDecimal
  * Class to manipulate big numbers.
  */
-class BigDecimal {
-
+class BigDecimal
+{
     const MAX_SCALE = 2147483647;
     const ROUND_UP = 1;
     const ROUND_DOWN = 2;
@@ -38,6 +40,7 @@ class BigDecimal {
 
     /**
      * @private
+     *
      * @property {mixed} $value
      * Value of number.
      * @member Telenok.Core.Field.Decimal.BigDecimal
@@ -46,6 +49,7 @@ class BigDecimal {
 
     /**
      * @private
+     *
      * @property {scalar} $scale
      * Value of dimension.
      * @member Telenok.Core.Field.Decimal.BigDecimal
@@ -55,44 +59,40 @@ class BigDecimal {
     /**
      * @constructor
      * Filling internal variables and validate dimension.
-     * 
-     * @param {mixed} $value
-     * Value of number.
+     *
+     * @param {mixed}  $value
+     *                        Value of number.
      * @param {scalar} $scale
-     * Value of dimension.
+     *                        Value of dimension.
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function __construct($value, $scale = null)
     {
-        if ($scale !== null)
-        {
+        if ($scale !== null) {
             $scale = (int) $scale;
 
-            if (abs($scale) > self::MAX_SCALE)
-            {
+            if (abs($scale) > self::MAX_SCALE) {
                 throw new \InvalidArgumentException(sprintf('Scale "%s" is grater than max "%s"', $scale, self::MAX_SCALE));
             }
         }
 
-        if (!is_scalar($value))
-        {
+        if (!is_scalar($value)) {
             throw new \InvalidArgumentException(sprintf('Value of type "%s" is not as scalar', gettype($value)));
         }
 
         $value = (string) $value;
         $matches = [];
 
-        if (!preg_match(self::STRING_FORMAT_REGEX, $value, $matches))
-        {
+        if (!preg_match(self::STRING_FORMAT_REGEX, $value, $matches)) {
             throw new \InvalidArgumentException(sprintf('Wrong value "%s" format: expected "%s"', $value, self::STRING_FORMAT_REGEX));
         }
 
         $sign = $matches[1] === '-' ? '-' : '';
-        $integer = ltrim($matches[2], '0') ? : '0';
+        $integer = ltrim($matches[2], '0') ?: '0';
         $fraction = isset($matches[4]) ? $matches[4] : '';
-        $exponent = - strlen($fraction) + (isset($matches[6]) ? (int) $matches[6] : 0);
+        $exponent = -strlen($fraction) + (isset($matches[6]) ? (int) $matches[6] : 0);
 
-        $significand = $sign . $integer . $fraction;
+        $significand = $sign.$integer.$fraction;
 
         $exponentScale = abs(min($exponent, 0));
 
@@ -100,25 +100,19 @@ class BigDecimal {
 
         list($integer, $fraction) = (array_pad(explode('.', $newValue, 2), 2, ''));
 
-        if ($scale === null)
-        {
+        if ($scale === null) {
             $scale = strlen($fraction);
-        } 
-        else
-        {
+        } else {
             $scale = (int) $scale;
-            
-            if (strlen($fraction) > $scale)
-            {
+
+            if (strlen($fraction) > $scale) {
                 $fraction = substr($fraction, 0, $scale);
-            } 
-            else
-            {
+            } else {
                 $fraction = str_pad($fraction, $scale, '0');
             }
         }
 
-        $this->value = $integer . ($scale ? ('.' . $fraction) : '');
+        $this->value = $integer.($scale ? ('.'.$fraction) : '');
         $this->scale = $scale;
     }
 
@@ -126,10 +120,12 @@ class BigDecimal {
      * @method create
      * Create new instance of Telenok.Core.Field.Decimal.BigDecimal.
      * @static
+     *
      * @param {scalar} $value
-     * Value of number.
+     *                        Value of number.
      * @param {scalar} $scale
-     * Value of dimension.
+     *                        Value of dimension.
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -142,8 +138,9 @@ class BigDecimal {
      * @method zero
      * Create new instance of Telenok.Core.Field.Decimal.BigDecimal.
      * @static
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
-     * Return instance with zero value and zero scale
+     *                                                 Return instance with zero value and zero scale
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public static function zero()
@@ -155,8 +152,9 @@ class BigDecimal {
      * @method one
      * Create new instance of Telenok.Core.Field.Decimal.BigDecimal.
      * @static
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
-     * Return instance with value equal one and zero scale
+     *                                                 Return instance with value equal one and zero scale
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public static function one()
@@ -167,6 +165,7 @@ class BigDecimal {
     /**
      * @method value
      * Return value of instance.
+     *
      * @return {Number}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -178,6 +177,7 @@ class BigDecimal {
     /**
      * @method scale
      * Return scale of instance.
+     *
      * @return {Integer}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -189,8 +189,10 @@ class BigDecimal {
     /**
      * @method setScale
      * Create new instance with the same value and new scale.
+     *
      * @param {scalar} $scale
-     * Value of dimension.
+     *                        Value of dimension.
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -202,6 +204,7 @@ class BigDecimal {
     /**
      * @method precision
      * Return amount of digits in value.
+     *
      * @return {Integer}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -215,6 +218,7 @@ class BigDecimal {
     /**
      * @method __toString
      * Convert value to string.
+     *
      * @return {String}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -225,42 +229,48 @@ class BigDecimal {
 
     /**
      * @method add
-     * Calculate sum of two Telenok.Core.Field.Decimal.BigDecimal and return new 
+     * Calculate sum of two Telenok.Core.Field.Decimal.BigDecimal and return new
      * instance.
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $addend
-     * Summable number.
+     *                                                        Summable number.
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function add(BigDecimal $addend)
     {
         $scale = max($this->scale(), $addend->scale());
-        
+
         return new static(bcadd($this->value, $addend->value(), $scale), $scale);
     }
 
     /**
      * @method subtract
-     * Calculate subtract of two Telenok.Core.Field.Decimal.BigDecimal and return new 
+     * Calculate subtract of two Telenok.Core.Field.Decimal.BigDecimal and return new
      * instance.
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $subtrahend
-     * Subtract number.
+     *                                                            Subtract number.
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function subtract(BigDecimal $subtrahend)
     {
         $scale = max($this->scale(), $subtrahend->scale());
-        
+
         return new static(bcsub($this->value, $subtrahend->value(), $scale), $scale);
     }
 
     /**
      * @method multiply
-     * Calculate multiply of two Telenok.Core.Field.Decimal.BigDecimal and return new 
+     * Calculate multiply of two Telenok.Core.Field.Decimal.BigDecimal and return new
      * instance.
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $multiplier
-     * To multiply.
+     *                                                            To multiply.
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -273,20 +283,21 @@ class BigDecimal {
 
     /**
      * @method divide
-     * Calculate divide of two Telenok.Core.Field.Decimal.BigDecimal and return new 
+     * Calculate divide of two Telenok.Core.Field.Decimal.BigDecimal and return new
      * instance.
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $divisor
-     * To divide.
+     *                                                         To divide.
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function divide(BigDecimal $divisor)
     {
-        if ($divisor->signum() === 0)
-        {
+        if ($divisor->signum() === 0) {
             throw new \InvalidArgumentException('Division by zero');
         }
-        
+
         $scale = min($this->scale + $divisor->scale(), self::MAX_SCALE);
 
         return new static(bcdiv($this->value, $divisor->value(), $scale), $scale);
@@ -295,22 +306,22 @@ class BigDecimal {
     /**
      * @method pow
      * Calculate pow return new instance.
+     *
      * @param {Integer} $divisor
-     * To pow.
+     *                           To pow.
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function pow($n)
     {
         $n = (int) $n;
-        
-        if ($n < 0)
-        {
+
+        if ($n < 0) {
             throw new \InvalidArgumentException(sprintf('Power "%s" is negative', $n));
         }
-        
-        if ($n === 0)
-        {
+
+        if ($n === 0) {
             return static::one();
         }
 
@@ -320,9 +331,9 @@ class BigDecimal {
     /**
      * @method signum
      * Returns the number sign.
-     * 
+     *
      * @return {Integer}
-     * Return [-1, 0, 1].
+     *                   Return [-1, 0, 1].
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function signum()
@@ -333,22 +344,21 @@ class BigDecimal {
     /**
      * @method negate
      * Returns negative.
-     * 
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function negate()
     {
         $value = $this->value;
-        
-        switch ($this->signum())
-        {
+
+        switch ($this->signum()) {
             case -1:
                 $value = substr($value, 1);
                 break;
-            
+
             case 1:
-                $value = '-' . $value;
+                $value = '-'.$value;
                 break;
         }
 
@@ -358,7 +368,7 @@ class BigDecimal {
     /**
      * @method abs
      * Returns absolute value.
-     * 
+     *
      * @return {Telenok.Core.Field.Decimal.BigDecimal}
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
@@ -370,53 +380,49 @@ class BigDecimal {
     /**
      * @method round
      * Returns round value.
-     * 
+     *
      * @param {Integer} $scale
      * @param {Integer} $roundMode
      *
+     * @throws \RuntimeException
+     *                           If round mode is UNNECESSARY and digit truncation is required
+     *
      * @return static
-     * @throws \RuntimeException 
-     * If round mode is UNNECESSARY and digit truncation is required
      * @member Telenok.Core.Field.Decimal.BigDecimal
      */
     public function round($scale = 0, $roundMode = self::ROUND_HALF_UP)
     {
-        if ($scale >= $this->scale)
-        {
+        if ($scale >= $this->scale) {
             return new static($this->value, $scale);
         }
 
         // Break string to 2 parts. Ex '123.45678', 3: '123.456' and '78'
         list($newValue, $truncated) = str_split($this->value, strlen($this->value) - ($this->scale - $scale));
-        
+
         // Remove trailing dot for integer round
-        if ($scale === 0)
-        {
+        if ($scale === 0) {
             $newValue = substr($newValue, 0, -1);
         }
         // remove extra zeros
         $truncated = rtrim($truncated, '0');
 
         // Check if truncated digits are zeros, than no rounding required
-        if ($truncated === '')
-        {
+        if ($truncated === '') {
             return new static($newValue, $scale);
         }
 
         // If we should not round but got some truncated digits
-        if ($roundMode === self::ROUND_UNNECESSARY)
-        {
+        if ($roundMode === self::ROUND_UNNECESSARY) {
             throw new \RuntimeException(sprintf('Digits "%s" of "%s" should not be truncated with scale "%d"', $truncated, $this->value, $scale));
         }
 
         $rounded = new static($newValue, $scale);
 
         $sign = $this->signum() !== -1;
-        
-        if (self::isRoundAdditionRequired($roundMode, $sign, $newValue, $truncated))
-        {
+
+        if (self::isRoundAdditionRequired($roundMode, $sign, $newValue, $truncated)) {
             // If addition required we add (+/-)1E-{scale}
-            $addition = ($sign ? '' : '-') . '1e-' . $scale;
+            $addition = ($sign ? '' : '-').'1e-'.$scale;
             $rounded = $rounded->add(new static(number_format($addition, $scale, '.', '')));
         }
 
@@ -425,12 +431,13 @@ class BigDecimal {
 
     /**
      * @private
+     *
      * @method isRoundAdditionRequired
      * Validate requiring addditional round value.
-     * 
+     *
      * @param {Integer} $roundMode
      * @param {Integer} $sign
-     * @param {String} $value
+     * @param {String}  $value
      * @param {Boolean} $truncated
      *
      * @return {Boolean}
@@ -438,8 +445,7 @@ class BigDecimal {
      */
     private static function isRoundAdditionRequired($roundMode, $sign, $value, $truncated)
     {
-        switch ($roundMode)
-        {
+        switch ($roundMode) {
             case self::ROUND_UP:
                 return true;
 
@@ -456,7 +462,7 @@ class BigDecimal {
                 return $truncated === '5' || $truncated[0] >= 5;
 
             case self::ROUND_HALF_DOWN:
-                return !($truncated === '5' || $truncated[0] < 5 );
+                return !($truncated === '5' || $truncated[0] < 5);
 
             case self::ROUND_HALF_EVEN:
                 return !($truncated[0] < 5 || ($truncated === '5' && ($value[strlen($value) - 1] % 2 === 0)));
@@ -471,7 +477,7 @@ class BigDecimal {
     /**
      * @method compareTo
      * Compare with other BigDecimal number.
-     * 
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
      *
      * @return {Integer}
@@ -480,14 +486,14 @@ class BigDecimal {
     public function compareTo(BigDecimal $number)
     {
         $scale = max($this->scale(), $number->scale());
-        
+
         return bccomp($this->value, $number->value(), $scale);
     }
 
     /**
      * @method isEqualTo
      * Compare with other BigDecimal number and return TRUE if equal.
-     * 
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
      *
      * @return {Boolean}
@@ -501,7 +507,7 @@ class BigDecimal {
     /**
      * @method isGreaterThan
      * Compare with other BigDecimal number and return TRUE if greater.
-     * 
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
      *
      * @return {Boolean}
@@ -515,7 +521,7 @@ class BigDecimal {
     /**
      * @method isGreaterThanOrEqualTo
      * Compare with other BigDecimal number and return TRUE if greater or equal.
-     * 
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
      *
      * @return {Boolean}
@@ -529,7 +535,7 @@ class BigDecimal {
     /**
      * @method isLessThan
      * Compare with other BigDecimal number and return TRUE if less.
-     * 
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
      *
      * @return {Boolean}
@@ -543,7 +549,7 @@ class BigDecimal {
     /**
      * @method isLessThanOrEqualTo
      * Compare with other BigDecimal number and return TRUE if less or equal.
-     * 
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
      *
      * @return {Boolean}
@@ -557,7 +563,7 @@ class BigDecimal {
     /**
      * @method isNegative
      * Compare with zero and return TRUE if less.
-     * 
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
      *
      * @return {Boolean}
@@ -571,7 +577,7 @@ class BigDecimal {
     /**
      * @method isPositive
      * Compare with zero and return TRUE if more.
-     * 
+     *
      * @param {Telenok.Core.Field.Decimal.BigDecimal} $number
      *
      * @return {Boolean}

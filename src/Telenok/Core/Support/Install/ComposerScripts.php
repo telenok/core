@@ -2,8 +2,8 @@
 
 namespace Telenok\Core\Support\Install;
 
-class ComposerScripts {
-
+class ComposerScripts
+{
     public static function postInstall(\Composer\Script\Event $event)
     {
         static::run($event);
@@ -22,26 +22,22 @@ class ComposerScripts {
 
         $packageComposerScripts = [];
 
-        foreach ($allPackages as $package)
-        {
+        foreach ($allPackages as $package) {
             $originDir = $installationManager->getInstallPath($package);
 
-            $files = glob(rtrim($originDir, '\\/') . '/resources/package-process/composer-subscript.*.php');
+            $files = glob(rtrim($originDir, '\\/').'/resources/package-process/composer-subscript.*.php');
 
-            foreach($files as $file)
-            {
-                $packageComposerScripts[basename($file) . $package->getName()] = ['file' => $file, 'package' => $package->getName()];
+            foreach ($files as $file) {
+                $packageComposerScripts[basename($file).$package->getName()] = ['file' => $file, 'package' => $package->getName()];
             }
         }
 
         ksort($packageComposerScripts);
 
-        foreach($packageComposerScripts as $script)
-        {
+        foreach ($packageComposerScripts as $script) {
             if (file_exists($script['file'])) {
-
-                $event->getIO()->write('Process package ' . $script['package']);
-                $event->getIO()->write('Include and process ' . $script['file']);
+                $event->getIO()->write('Process package '.$script['package']);
+                $event->getIO()->write('Include and process '.$script['file']);
 
                 require $script['file'];
             }
@@ -50,29 +46,21 @@ class ComposerScripts {
 
     public static function recursiveCopy($src, $dst, $rewrite = false, $mode = 0755)
     {
-        try
-        {
+        try {
             @mkdir($dst, $mode, true);
 
             $dir = opendir($src);
 
-            while (false !== ($file = readdir($dir)))
-            {
-                if (($file != '.') && ($file != '..'))
-                {
-                    if (is_dir($src . '/' . $file))
-                    {
-                        static::recursiveCopy($src . '/' . $file, $dst . '/' . $file, $rewrite, $mode);
-                    }
-                    else if ((file_exists($dst . '/' . $file) && $rewrite) || !file_exists($dst . '/' . $file))
-                    {
-                        copy($src . '/' . $file, $dst . '/' . $file);
+            while (false !== ($file = readdir($dir))) {
+                if (($file != '.') && ($file != '..')) {
+                    if (is_dir($src.'/'.$file)) {
+                        static::recursiveCopy($src.'/'.$file, $dst.'/'.$file, $rewrite, $mode);
+                    } elseif ((file_exists($dst.'/'.$file) && $rewrite) || !file_exists($dst.'/'.$file)) {
+                        copy($src.'/'.$file, $dst.'/'.$file);
                     }
                 }
             }
-        }
-        finally
-        {
+        } finally {
             closedir($dir);
         }
     }
@@ -87,8 +75,7 @@ class ComposerScripts {
         $fn = (new \ReflectionClass('App\Providers\EventServiceProvider'))->getFileName();
         $content = file_get_contents($fn);
 
-        if (strpos($content, $listener) === FALSE)
-        {
+        if (strpos($content, $listener) === false) {
             $content = file_get_contents($fn);
             $content = str_replace('###listener###', "'{$listener}',\n###listener###", $content);
             file_put_contents($fn, $content, LOCK_EX);
@@ -104,8 +91,7 @@ class ComposerScripts {
     {
         $content = file_get_contents(config_path('app.php'));
 
-        if (strpos($content, $provider) === FALSE)
-        {
+        if (strpos($content, $provider) === false) {
             $content = str_replace('###providers###', "'{$provider}',\n###providers###", $content);
             file_put_contents(config_path('app.php'), $content, LOCK_EX);
         }
@@ -120,16 +106,11 @@ class ComposerScripts {
     {
         $content = json_decode(file_get_contents(base_path('composer.json')), true);
 
-        if (is_array($content))
-        {
+        if (is_array($content)) {
             file_put_contents(base_path('composer.json'), json_encode($rewrite
                 ? array_replace_recursive($content, $config) : array_replace_recursive($config, $content), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), LOCK_EX);
-        }
-        else
-        {
-            throw new \Exception('Cant merge composer.json with data ' . json_encode($config, JSON_PRETTY_PRINT));
+        } else {
+            throw new \Exception('Cant merge composer.json with data '.json_encode($config, JSON_PRETTY_PRINT));
         }
     }
-
 }
-

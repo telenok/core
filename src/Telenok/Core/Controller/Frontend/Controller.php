@@ -3,18 +3,19 @@
 namespace Telenok\Core\Controller\Frontend;
 
 /**
- * Class to process initial backend http request
- * 
+ * Class to process initial backend http request.
+ *
  * @class Telenok.Core.Controller.Frontend.Controller
  * @extends Telenok.Core.Abstraction.Controller.Frontend.Controller
  * @mixin Illuminate.Foundation.Validation.ValidatesRequests
  */
-class Controller extends \Telenok\Core\Abstraction\Controller\Frontend\Controller {
-
+class Controller extends \Telenok\Core\Abstraction\Controller\Frontend\Controller
+{
     use \Illuminate\Foundation\Validation\ValidatesRequests;
 
     /**
      * @protected
+     *
      * @property {String} $key
      * Controller string key.
      * @member Telenok.Core.Controller.Frontend.Controller
@@ -23,6 +24,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Frontend\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $frontendView
      * Frontend view. Template to show frontend user.
      * @member Telenok.Core.Controller.Frontend.Controller
@@ -31,6 +33,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Frontend\Controlle
 
     /**
      * @protected
+     *
      * @property {String} $backendView
      * Frontend view. Template to show backend user to add/update widgets by
      * Control Panel.
@@ -40,6 +43,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Frontend\Controlle
 
     /**
      * @protected
+     *
      * @property {Array} $container
      * Array of strings defined dom ID in $backendView and $frontendView
      * filled by widget's content
@@ -54,13 +58,11 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Frontend\Controlle
      */
     public function __construct()
     {
-        app('view')->composer('*', function($view)
-        {
+        app('view')->composer('*', function ($view) {
             $view->with(['controllerRequest' => $this]);
         });
 
-        app()->singleton('controllerRequest', function ($app)
-        {
+        app()->singleton('controllerRequest', function ($app) {
             return $this;
         });
     }

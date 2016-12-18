@@ -1,17 +1,20 @@
-<?php namespace Telenok\Core\Abstraction\Eloquent\Cache;
+<?php
 
-use \App\Vendor\Telenok\Core\Abstraction\Database\CachableQueryBuilder as QueryBuilder;
+namespace Telenok\Core\Abstraction\Eloquent\Cache;
+
+use App\Vendor\Telenok\Core\Abstraction\Database\CachableQueryBuilder as QueryBuilder;
 
 /**
  * @class Telenok.Core.Abstraction.Eloquent.Cache.QueryCache
  * Trait support query caching.
- * 
+ *
  * @uses Telenok.Core.Abstraction.Database.CachableQueryBuilder
  */
-trait QueryCache {
-
+trait QueryCache
+{
     /**
      * @protected
+     *
      * @property {Number} $cacheMinutes
      * The number of minutes to cache the query. Can be float as part of minute.
      * @member Telenok.Core.Abstraction.Eloquent.Cache.QueryCache
@@ -21,6 +24,7 @@ trait QueryCache {
     /**
      * @method bootQueryCache
      * Booting methods to pre- and post- steps.
+     *
      * @return {void}
      * @member Telenok.Core.Abstraction.Eloquent.Cache.QueryCache
      */
@@ -28,18 +32,15 @@ trait QueryCache {
     {
         static::addGlobalScope(new QueryCacheScope());
 
-        static::creating(function($model)
-        {
+        static::creating(function ($model) {
             $model->clearCache();
         });
 
-        static::updating(function($model)
-        {
+        static::updating(function ($model) {
             $model->clearCache();
         });
 
-        static::deleting(function($model)
-        {
+        static::deleting(function ($model) {
             $model->clearCache();
         });
     }
@@ -47,24 +48,25 @@ trait QueryCache {
     /**
      * @method uncached
      * Return Query Builder without cache's features.
+     *
      * @return {Telenok.Core.Abstraction.Database.CachableQueryBuilder}
      * @member Telenok.Core.Abstraction.Eloquent.Cache.QueryCache
      */
     public static function uncached()
     {
-        return (new static)->newQueryWithoutScope(new QueryCacheScope(null));
+        return (new static())->newQueryWithoutScope(new QueryCacheScope(null));
     }
 
     /**
      * @method clearCache
      * Clear cache for current query.
+     *
      * @return {void}
      * @member Telenok.Core.Abstraction.Eloquent.Cache.QueryCache
      */
     public function clearCache()
     {
-        if ($this->newBaseQueryBuilder()->cacheTagEnabled())
-        {
+        if ($this->newBaseQueryBuilder()->cacheTagEnabled()) {
             $this->getCacheObject()->tags($this->getCacheTags())->flush();
         }
     }
@@ -72,6 +74,7 @@ trait QueryCache {
     /**
      * @method getCacheMinutes
      * Return cache time.
+     *
      * @return {Number}
      * @member Telenok.Core.Abstraction.Eloquent.Cache.QueryCache
      */
@@ -83,6 +86,7 @@ trait QueryCache {
     /**
      * @method getCacheObject
      * Return cache object.
+     *
      * @return {Illuminate.Contracts.Cache.Repository}
      * @member Telenok.Core.Abstraction.Eloquent.Cache.QueryCache
      */
@@ -94,17 +98,19 @@ trait QueryCache {
     /**
      * @method getCacheTags
      * Return list of tags for current query.
+     *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Eloquent.Cache.QueryCache
      */
     public function getCacheTags()
     {
-        return $this->newBaseQueryBuilder()->getCachePrefix() . strtok($this->getTable(), " ");
+        return $this->newBaseQueryBuilder()->getCachePrefix().strtok($this->getTable(), ' ');
     }
 
     /**
      * @method newBaseQueryBuilder
      * Return new query buider with cache support.
+     *
      * @return {Telenok.Core.Abstraction.Database.CachableQueryBuilder}
      * @member Telenok.Core.Abstraction.Eloquent.Cache.QueryCache
      */

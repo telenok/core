@@ -6,19 +6,19 @@ use Illuminate\Cache\Repository;
 
 /**
  *  Create a new cache driven handler instance.
- * 
+ *
  * @class Telenok.Core.Support.Memcache.MemcacheHandler
  * @extends SessionHandlerInterface
  */
-class MemcacheHandler implements \SessionHandlerInterface {
-
+class MemcacheHandler implements \SessionHandlerInterface
+{
     /**
-     * @constructor 
+     * @constructor
      * Create a new cache driven handler instance.
      *
-     * @param  {Illuminate.Cache.Repository}  $cache
-     * @param  {Number} $minutes
-     * Can be float as part of minute.
+     * @param {Illuminate.Cache.Repository} $cache
+     * @param {Number}                      $minutes
+     *                                               Can be float as part of minute.
      */
     public function __construct(Repository $cache, $minutes)
     {
@@ -31,14 +31,15 @@ class MemcacheHandler implements \SessionHandlerInterface {
      * Open session.
      * See [php.net][1] for more.
      * [1]: http://php.net/sessionhandlerinterface.open
-     * 
+     *
      * @param {String} $savePath
-     * Save path.
+     *                              Save path.
      * @param {String} $sessionName
-     * Session Name.
-     * 
-     * @return {Boolean}
+     *                              Session Name.
+     *
      * @throws {RuntimeException}
+     *
+     * @return {Boolean}
      */
     public function open($savePath, $sessionName)
     {
@@ -50,7 +51,7 @@ class MemcacheHandler implements \SessionHandlerInterface {
      * Open session.
      * See [php.net][1] for more.
      * [1]: http://php.net/sessionhandlerinterface.close
-     * 
+     *
      * @return {Boolean}
      */
     public function close()
@@ -60,17 +61,20 @@ class MemcacheHandler implements \SessionHandlerInterface {
 
     /**
      * @method read
-     * Read session. 
+     * Read session.
      * See [php.net][1] for more.
      * [1]: http://php.net/sessionhandlerinterface.read
+     *
      * @param {String} $sessionId
-     * @return {String}
-     * String as stored in persistent storage or empty string in all other cases.
+     *
      * @throws {RuntimeException}
+     *
+     * @return {String}
+     *                  String as stored in persistent storage or empty string in all other cases.
      */
     public function read($sessionId)
     {
-        return $this->cache->get($sessionId) ? : '';
+        return $this->cache->get($sessionId) ?: '';
     }
 
     /**
@@ -78,12 +82,15 @@ class MemcacheHandler implements \SessionHandlerInterface {
      * Commit session to storage.
      * See [php.net][1] for more.
      * [1]: http://php.net/sessionhandlerinterface.read
+     *
      * @param {String} $sessionId
-     * Session ID.
+     *                            Session ID.
      * @param {String} $data
-     * Session serialized data to save.
-     * @return {Boolean}
+     *                            Session serialized data to save.
+     *
      * @throws {RuntimeException}
+     *
+     * @return {Boolean}
      */
     public function write($sessionId, $data)
     {
@@ -95,10 +102,13 @@ class MemcacheHandler implements \SessionHandlerInterface {
      * Commit session to storage.
      * See [php.net][1] for more.
      * [1]: http://php.net/sessionhandlerinterface.read
+     *
      * @param {String} $sessionId
-     * Session ID.
-     * @return {Boolean}
+     *                            Session ID.
+     *
      * @throws {RuntimeException}
+     *
+     * @return {Boolean}
      */
     public function destroy($sessionId)
     {
@@ -110,10 +120,13 @@ class MemcacheHandler implements \SessionHandlerInterface {
      * Garbage collection for storage.
      * See [php.net][1] for more.
      * [1]: http://php.net/sessionhandlerinterface.gc
+     *
      * @param {Integer} $lifetime
-     * Max lifetime in seconds to keep sessions stored.
-     * @return {Boolean}
+     *                            Max lifetime in seconds to keep sessions stored.
+     *
      * @throws {RuntimeException}
+     *
+     * @return {Boolean}
      */
     public function gc($lifetime)
     {
@@ -130,5 +143,4 @@ class MemcacheHandler implements \SessionHandlerInterface {
     {
         return $this->cache;
     }
-
 }

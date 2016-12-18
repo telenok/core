@@ -6,14 +6,14 @@ namespace Telenok\Core\Model\Web;
  * @class Telenok.Core.Model.Web.WidgetOnPage
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class WidgetOnPage extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
-
+class WidgetOnPage extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
+{
     protected $ruleList = ['title' => ['required', 'min:1']];
     protected $table = 'widget_on_page';
 
     public function isWidgetLink()
     {
-        return !!$this->widget_link_widget_on_page;
+        return (bool) $this->widget_link_widget_on_page;
     }
 
     public function widgetPage()
@@ -49,8 +49,7 @@ class WidgetOnPage extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\
 
         parent::delete();
 
-        if ($this->forceDeleting)
-        {
+        if ($this->forceDeleting) {
             app('telenok.repository')->getWidget()->get($key)->delete($this);
         }
     }

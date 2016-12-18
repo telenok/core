@@ -1,3 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Abstraction\Database;
+<?php
 
-class CachableQueryBuilder extends \Telenok\Core\Abstraction\Database\CachableQueryBuilder {}
+namespace App\Vendor\Telenok\Core\Abstraction\Database;
+
+class CachableQueryBuilder extends \Telenok\Core\Abstraction\Database\CachableQueryBuilder
+{
+}

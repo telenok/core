@@ -6,8 +6,8 @@ namespace Telenok\Core\Model\Security;
  * @class Telenok.Core.Model.Security.SubjectPermissionResource
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class SubjectPermissionResource extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
-
+class SubjectPermissionResource extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
+{
     protected $table = 'subject_permission_resource';
     protected $ruleList = ['title' => ['required', 'min:1'], 'code' => ['required', 'unique:subject_permission_resource,code,:id:,id', 'regex:/^[A-Za-z][A-Za-z0-9_.-]*$/']];
 
@@ -30,5 +30,4 @@ class SubjectPermissionResource extends \App\Vendor\Telenok\Core\Abstraction\Elo
     {
         return $this->belongsTo('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'acl_permission_object_sequence');
     }
-
 }

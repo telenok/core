@@ -6,8 +6,8 @@ namespace Telenok\Core\Model\User;
  * @class Telenok.Core.Model.User.User
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class User extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
-
+class User extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
+{
     protected $ruleList = ['title' => ['required', 'min:1'], 'email' => ['unique:user,email,:id:,id'], 'usernick' => ['unique:user,usernick,:id:,id']];
     protected $table = 'user';
     protected $hidden = ['password', 'remember_token'];
@@ -15,19 +15,16 @@ class User extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     public function setPasswordAttribute($value)
     {
-        if ($value = trim($value))
-        {
+        if ($value = trim($value)) {
             $this->attributes['password'] = password_hash($value, PASSWORD_BCRYPT);
-        }
-        else if (!$this->exists && !$value)
-        {
+        } elseif (!$this->exists && !$value) {
             $this->attributes['password'] = password_hash(str_random(), PASSWORD_BCRYPT);
         }
     }
 
     public function setUsernickAttribute($value)
     {
-        $this->attributes['usernick'] = trim($value) ? : $this->username;
+        $this->attributes['usernick'] = trim($value) ?: $this->username;
     }
 
     public function createdBy()
@@ -64,5 +61,4 @@ class User extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         return $this->belongsTo('\App\Vendor\Telenok\Core\Model\File\FileMimeType', 'avatar_user_file_mime_type');
     }
-
 }

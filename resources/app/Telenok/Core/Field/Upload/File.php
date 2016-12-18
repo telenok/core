@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\Upload;
+<?php
 
-class File extends \Telenok\Core\Field\Upload\File {
-    
+namespace App\Vendor\Telenok\Core\Field\Upload;
+
+class File extends \Telenok\Core\Field\Upload\File
+{
 }

@@ -1,6 +1,6 @@
 <?php
 
-return array(
-    'name' => 'Php code',
+return [
+    'name'   => 'Php code',
     'header' => 'Php',
-);
+];

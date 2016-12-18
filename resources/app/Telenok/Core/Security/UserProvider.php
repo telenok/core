@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Security;
+<?php
 
-class UserProvider extends \Telenok\Core\Security\UserProvider {
+namespace App\Vendor\Telenok\Core\Security;
 
+class UserProvider extends \Telenok\Core\Security\UserProvider
+{
 }

@@ -3,16 +3,16 @@
 namespace Telenok\Core\Jobs\Cache;
 
 use App\Jobs\Job;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 /**
  * @class Telenok.Core.Jobs.Cache.Store
  * @extends App.Jobs.Job
  */
-class Store extends Job implements ShouldQueue {
-
+class Store extends Job implements ShouldQueue
+{
     use InteractsWithQueue,
         SerializesModels;
 
@@ -27,17 +27,14 @@ class Store extends Job implements ShouldQueue {
 
     public function handle()
     {
-        if ($this->attempts() > 1)
-        {
+        if ($this->attempts() > 1) {
             $this->delete();
         }
 
-        if (array_get($this->collection, 'path') && array_get($this->collection, 'path_cache') && array_get($this->collection, 'storage_key') && array_get($this->collection, 'storage_cache_key'))
-        {
+        if (array_get($this->collection, 'path') && array_get($this->collection, 'path_cache') && array_get($this->collection, 'storage_key') && array_get($this->collection, 'storage_cache_key')) {
             \App\Vendor\Telenok\Core\Support\File\StoreCache::storeFile(
                     array_get($this->collection, 'path'), array_get($this->collection, 'path_cache'), array_get($this->collection, 'storage_key'), array_get($this->collection, 'storage_cache_key'), array_get($this->collection, 'width'), array_get($this->collection, 'height'), array_get($this->collection, 'action')
             );
         }
     }
-
 }

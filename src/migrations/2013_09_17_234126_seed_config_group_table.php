@@ -1,7 +1,7 @@
 <?php
 
-class SeedConfigGroupTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
-
+class SeedConfigGroupTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
+{
     public function up()
     {
         parent::up();
@@ -18,41 +18,41 @@ class SeedConfigGroupTable extends \App\Vendor\Telenok\Core\Support\Migrations\M
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
-            'title' => ['ru' => "Код", 'en' => "Code"],
-            'title_list' => ['ru' => "Код", 'en' => "Code"],
-            'key' => 'string',
-            'code' => 'code',
-            'active' => 1,
+            'title'             => ['ru' => 'Код', 'en' => 'Code'],
+            'title_list'        => ['ru' => 'Код', 'en' => 'Code'],
+            'key'               => 'string',
+            'code'              => 'code',
+            'active'            => 1,
             'field_object_type' => $modelTypeId,
-            'field_object_tab' => $tabMainId,
-            'multilanguage' => 0,
-            'show_in_form' => 1,
-            'show_in_list' => 0,
-            'allow_create' => 1,
-            'allow_update' => 1,
-            'allow_search' => 0,
-            'field_order' => 4,
-            'string_list_size' => 150,
-            'string_unique' => 1,
-            'required' => 1,
+            'field_object_tab'  => $tabMainId,
+            'multilanguage'     => 0,
+            'show_in_form'      => 1,
+            'show_in_list'      => 0,
+            'allow_create'      => 1,
+            'allow_update'      => 1,
+            'allow_search'      => 0,
+            'field_order'       => 4,
+            'string_list_size'  => 150,
+            'string_unique'     => 1,
+            'required'          => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
-            'title' => ['en' => 'Configuration', 'ru' => 'Конфигурация'],
-            'title_list' => ['en' => 'Configuration', 'ru' => 'Конфигурация'],
-            'key' => 'relation-one-to-many',
-            'code' => 'config',
-            'active' => 1,
-            'field_object_type' => 'config_group',
-            'field_object_tab' => 'additionally',
+            'title'                    => ['en' => 'Configuration', 'ru' => 'Конфигурация'],
+            'title_list'               => ['en' => 'Configuration', 'ru' => 'Конфигурация'],
+            'key'                      => 'relation-one-to-many',
+            'code'                     => 'config',
+            'active'                   => 1,
+            'field_object_type'        => 'config_group',
+            'field_object_tab'         => 'additionally',
             'relation_one_to_many_has' => 'config',
-            'show_in_form' => 1,
-            'show_in_list' => 0,
-            'allow_search' => 0,
-            'multilanguage' => 0,
-            'allow_create' => 1,
-            'allow_update' => 1,
-            'field_order' => 5,
+            'show_in_form'             => 1,
+            'show_in_list'             => 0,
+            'allow_search'             => 0,
+            'multilanguage'            => 0,
+            'allow_create'             => 1,
+            'allow_update'             => 1,
+            'field_order'              => 5,
         ]);
     }
 }

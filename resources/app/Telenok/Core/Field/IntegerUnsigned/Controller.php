@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\IntegerUnsigned;
+<?php
 
-class Controller extends \Telenok\Core\Field\IntegerUnsigned\Controller {
-    
+namespace App\Vendor\Telenok\Core\Field\IntegerUnsigned;
+
+class Controller extends \Telenok\Core\Field\IntegerUnsigned\Controller
+{
 }

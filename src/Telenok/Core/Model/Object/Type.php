@@ -6,8 +6,8 @@ namespace Telenok\Core\Model\Object;
  * @class Telenok.Core.Model.Object.Type
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Type extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
-
+class Type extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
+{
     protected $ruleList = ['title' => ['required', 'min:1'], 'code' => ['required', 'unique:object_type,code,:id:,id', 'regex:/^[a-z][\w]*$/i'], 'title_list' => ['required', 'min:1']];
     protected $table = 'object_type';
 
@@ -15,8 +15,7 @@ class Type extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         parent::boot();
 
-        static::deleting(function($model)
-        {
+        static::deleting(function ($model) {
             $model->deleteTypeResource();
         });
     }
@@ -35,9 +34,9 @@ class Type extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
     public function deleteTypeResource()
     {
-        $code = 'object_type.' . $this->code;
+        $code = 'object_type.'.$this->code;
 
-        \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string)$code)->forceDelete();
+        \App\Vendor\Telenok\Core\Model\Security\Resource::where('code', (string) $code)->forceDelete();
     }
 
     protected function translateSync()

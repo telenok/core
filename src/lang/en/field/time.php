@@ -1,6 +1,6 @@
 <?php
 
-return array(
-    'name' => 'Time',
-    'property.time_default' => "Time default",
-);
+return [
+    'name'                  => 'Time',
+    'property.time_default' => 'Time default',
+];

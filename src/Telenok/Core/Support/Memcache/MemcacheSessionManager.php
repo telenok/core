@@ -4,24 +4,25 @@ namespace Telenok\Core\Support\Memcache;
 
 /**
  * Create a new session manager instance.
- * 
+ *
  * @class Telenok.Core.Support.Memcache.MemcacheSessionManager
  * @extends Illuminate.Support.Manager
  */
-class MemcacheSessionManager extends \Illuminate\Support\Manager {
-
+class MemcacheSessionManager extends \Illuminate\Support\Manager
+{
     /**
      * @protected
+     *
      * @property {Telenok.Core.Support.Memcache.MemcacheHandler} $handler
      * @member Telenok.Core.Support.Memcache.MemcacheSessionManager
      */
     protected $handler;
 
     /**
-     * @constructor 
+     * @constructor
      * Create a new manager instance.
      *
-     * @param  {Telenok.Core.Support.Memcache.MemcacheHandler} $handler
+     * @param {Telenok.Core.Support.Memcache.MemcacheHandler} $handler
      * @member Telenok.Core.Support.Memcache.MemcacheSessionManager
      */
     public function __construct(MemcacheHandler $handler)
@@ -52,5 +53,4 @@ class MemcacheSessionManager extends \Illuminate\Support\Manager {
     {
         return 'memcache';
     }
-
 }

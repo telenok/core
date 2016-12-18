@@ -5,8 +5,8 @@ namespace Telenok\Core\Contract\Module;
 /**
  * @class Telenok.Core.Contract.Module.Module
  */
-interface Module extends \Telenok\Core\Contract\Injection\Request {
-
+interface Module extends \Telenok\Core\Contract\Injection\Request
+{
     public function getName();
 
     public function getHeader();

@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Support\CKEditor;
+<?php
 
-class Controller extends \Telenok\Core\Support\CKEditor\Controller {
+namespace App\Vendor\Telenok\Core\Support\CKEditor;
 
+class Controller extends \Telenok\Core\Support\CKEditor\Controller
+{
 }

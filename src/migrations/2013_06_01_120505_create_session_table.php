@@ -1,13 +1,12 @@
 <?php
 
-class CreateSessionTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
-
+class CreateSessionTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
+{
     public function up()
     {
         parent::up();
 
-        Schema::create('session', function($t)
-        {
+        Schema::create('session', function ($t) {
             $t->string('id')->unique();
             $t->mediumText('payload')->nullable();
             $t->integer('last_activity')->unsigned()->nullable()->default(0);

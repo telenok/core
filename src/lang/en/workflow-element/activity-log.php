@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Logging',
+    'title'        => 'Logging',
     'title.groups' => 'Activity',
-    'description' => 'Logging data',
+    'description'  => 'Logging data',
 ];

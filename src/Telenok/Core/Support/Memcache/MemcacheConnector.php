@@ -6,15 +6,18 @@ namespace Telenok\Core\Support\Memcache;
  * @class Telenok.Core.Support.Memcache.MemcacheConnector
  * Create a new Memcache connection.
  */
-class MemcacheConnector {
-
+class MemcacheConnector
+{
     /**
      * @method connect
      * Create a new Memcache connection.
+     *
      * @param {Array} $servers
+     *
+     * @throws \RuntimeException
+     *
      * @return {Memcache}
      * @member Telenok.Core.Support.Memcache.MemcacheConnector
-     * @throws \RuntimeException
      */
     public function connect($servers = [])
     {
@@ -23,14 +26,12 @@ class MemcacheConnector {
         // For each server in the array, we'll just extract the configuration and add
         // the server to the Memcached connection. Once we have added all of these
         // servers we'll verify the connection is successful and return it back.
-        foreach ($servers as $server)
-        {
+        foreach ($servers as $server) {
             $memcached->addServer($server['host'], $server['port'], $server['weight']);
         }
 
-        if ($memcached->getVersion() === false)
-        {
-            throw new \RuntimeException("Could not establish Memcache connection.");
+        if ($memcached->getVersion() === false) {
+            throw new \RuntimeException('Could not establish Memcache connection.');
         }
 
         return $memcached;
@@ -39,12 +40,12 @@ class MemcacheConnector {
     /**
      * @method getMemcache
      * Return new instanse of Memcache.
+     *
      * @return {Memcache}
      * @member Telenok.Core.Support.Memcache.MemcacheConnector
      */
     protected function getMemcache()
     {
-        return new \Memcache;
+        return new \Memcache();
     }
-
 }

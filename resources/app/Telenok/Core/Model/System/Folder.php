@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Model\System;
+<?php
 
-class Folder extends \Telenok\Core\Model\System\Folder {
+namespace App\Vendor\Telenok\Core\Model\System;
 
+class Folder extends \Telenok\Core\Model\System\Folder
+{
 }

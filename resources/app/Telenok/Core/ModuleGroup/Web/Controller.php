@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\ModuleGroup\Web;
+<?php
 
-class Controller extends \Telenok\Core\ModuleGroup\Web\Controller {
-    
+namespace App\Vendor\Telenok\Core\ModuleGroup\Web;
+
+class Controller extends \Telenok\Core\ModuleGroup\Web\Controller
+{
 }

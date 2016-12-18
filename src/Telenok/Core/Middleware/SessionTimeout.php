@@ -5,8 +5,8 @@ namespace Telenok\Core\Middleware;
 /**
  * @class Telenok.Core.Middleware.SessionTimeout
  */
-class SessionTimeout {
-
+class SessionTimeout
+{
     protected $timeout = 20;
 
     public function __construct()
@@ -19,27 +19,22 @@ class SessionTimeout {
      * Handle an incoming request.
      *
      * @param {Illuminate.Http.Request} $request
-     * @param {Closure} $next
+     * @param {Closure}                 $next
+     *
      * @return {mixed}
      */
     public function handle($request, \Closure $next)
     {
-        if (!session()->has('lastActivityTime'))
-        {
+        if (!session()->has('lastActivityTime')) {
             session(['lastActivityTime' => time()]);
-        }
-        elseif (time() - session('lastActivityTime') > $this->timeout * 60)
-        {
+        } elseif (time() - session('lastActivityTime') > $this->timeout * 60) {
             session()->forget('lastActivityTime');
 
             app('auth')->logout();
-        }
-        else
-        {
+        } else {
             session(['lastActivityTime' => time()]);
         }
 
         return $next($request);
     }
-
 }

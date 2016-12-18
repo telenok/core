@@ -6,8 +6,8 @@ namespace Telenok\Core\Model\Object;
  * @class Telenok.Core.Model.Object.Version
  * @extends Telenok.Core.Abstraction.Eloquent.Object.Model
  */
-class Version extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
-
+class Version extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
+{
     protected $table = 'object_version';
     protected $hasVersioning = false;
     public $timestamps = false;
@@ -26,31 +26,22 @@ class Version extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
 
     public static function toRestore($version)
     {
-        if (is_integer($version))
-        {
+        if (is_int($version)) {
             $versionData = static::findOrFail($version);
-        }
-        else if ($version instanceof \Telenok\Core\Model\Object\Version)
-        {
+        } elseif ($version instanceof \Telenok\Core\Model\Object\Version) {
             $versionData = $version;
         }
 
-        try
-        {
+        try {
             $class = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($versionData->object_type_id)->model_class;
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             throw new \Telenok\Core\Support\Exception\ObjectTypeNotFound();
         }
 
-        try
-        {
+        try {
             $model = $class::withTrashed()->findOrFail($versionData->object_id);
             $model->restore();
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             $model = new $class();
         }
 
@@ -63,24 +54,21 @@ class Version extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
 
     public static function add(\Illuminate\Database\Eloquent\Model $model = null)
     {
-        if (!($model instanceof \Telenok\Core\Model\Object\Sequence) && $model->exists && config('app.version.enabled'))
-        {
-            $this_ = new static;
+        if (!($model instanceof \Telenok\Core\Model\Object\Sequence) && $model->exists && config('app.version.enabled')) {
+            $this_ = new static();
 
             $this_->fill([
-                'title' => ($model->title instanceof \Illuminate\Support\Collection ? $model->title->all() : $model->title),
-                'object_id' => $model->getKey(),
+                'title'          => ($model->title instanceof \Illuminate\Support\Collection ? $model->title->all() : $model->title),
+                'object_id'      => $model->getKey(),
                 'object_type_id' => $model->type()->getKey(),
-                'object_data' => $model->getAttributes(),
+                'object_data'    => $model->getAttributes(),
             ]);
 
-            if ($createdByUser = $model->createdByUser()->first())
-            {
+            if ($createdByUser = $model->createdByUser()->first()) {
                 $this_->createdByUser()->associate($createdByUser);
             }
 
-            if ($updatedByUser = $model->updatedByUser()->first())
-            {
+            if ($updatedByUser = $model->updatedByUser()->first()) {
                 $this_->updatedByUser()->associate($updatedByUser);
             }
 
@@ -95,5 +83,4 @@ class Version extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
             $this_->save();
         }
     }
-
 }

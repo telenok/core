@@ -1,5 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Field\DateTimeRange;
+<?php
 
-class Controller extends \Telenok\Core\Field\DateTimeRange\Controller {
-    
+namespace App\Vendor\Telenok\Core\Field\DateTimeRange;
+
+class Controller extends \Telenok\Core\Field\DateTimeRange\Controller
+{
 }

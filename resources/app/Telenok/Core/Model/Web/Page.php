@@ -1,4 +1,7 @@
-<?php namespace App\Vendor\Telenok\Core\Model\Web;
+<?php
 
-class Page extends \Telenok\Core\Model\Web\Page { 
+namespace App\Vendor\Telenok\Core\Model\Web;
+
+class Page extends \Telenok\Core\Model\Web\Page
+{
 }

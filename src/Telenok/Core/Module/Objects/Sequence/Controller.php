@@ -6,8 +6,8 @@ namespace Telenok\Core\Module\Objects\Sequence;
  * @class Telenok.Core.Module.Objects.Sequence.Controller
  * @extends Telenok.Core.Abstraction.Presentation.TreeTabObject.Controller
  */
-class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller {
-
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller
+{
     protected $key = 'objects-sequence';
     protected $parent = 'objects';
     protected $modelListClass = '\App\Vendor\Telenok\Core\Model\Object\Sequence';
@@ -20,5 +20,4 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
         return $this->additionalViewParam;
     }
-
 }

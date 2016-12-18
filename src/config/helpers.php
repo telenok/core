@@ -1,15 +1,15 @@
 <?php
 
-if (!function_exists('range_minutes'))
-{
+if (!function_exists('range_minutes')) {
 
     /**
-     * Return nearest minutes depend on 
+     * Return nearest minutes depend on.
      *
      * @param  int  length in minutes
-     * @return string
      *
      * @throws \RuntimeException
+     *
+     * @return string
      */
     function range_minutes($minutes = 'config')
     {
@@ -17,48 +17,38 @@ if (!function_exists('range_minutes'))
 
         $minutes = $minutes == 'config' ? config('cache.db_query.minutes', 0) : $minutes;
 
-        if ($minutes)
-        {
+        if ($minutes) {
             return [
                 $dt->minute(floor($dt->minute / $minutes) * $minutes),
-                $dt->copy()->minute((floor($dt->minute / $minutes) + 1) * $minutes)
+                $dt->copy()->minute((floor($dt->minute / $minutes) + 1) * $minutes),
             ];
-        }
-        else
-        {
+        } else {
             return [$dt, $dt->copy()];
         }
     }
-
 }
 
-if (!function_exists('file_mime_type'))
-{
+if (!function_exists('file_mime_type')) {
     function file_mime_type($file)
     {
-        if (function_exists('finfo_file'))
-        {
+        if (function_exists('finfo_file')) {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $type = finfo_file($finfo, $file);
             finfo_close($finfo);
         }
-        
-        if (!$type || in_array($type, array('application/octet-stream', 'text/plain')))
-        {
-            $secondOpinion = exec('file -b --mime-type -m /usr/share/misc/magic ' . escapeshellarg($file), $foo, $returnCode);
 
-            if ($returnCode === 0 && $secondOpinion)
-            {
+        if (!$type || in_array($type, ['application/octet-stream', 'text/plain'])) {
+            $secondOpinion = exec('file -b --mime-type -m /usr/share/misc/magic '.escapeshellarg($file), $foo, $returnCode);
+
+            if ($returnCode === 0 && $secondOpinion) {
                 $type = $secondOpinion;
             }
         }
 
-        if (!$type || in_array($type, array('application/octet-stream', 'text/plain')))
-        {
+        if (!$type || in_array($type, ['application/octet-stream', 'text/plain'])) {
             $exifImageType = exif_imagetype($file);
-            
-            if ($exifImageType !== false)
-            {
+
+            if ($exifImageType !== false) {
                 $type = image_type_to_mime_type($exifImageType);
             }
         }

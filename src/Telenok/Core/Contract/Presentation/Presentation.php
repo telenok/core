@@ -6,8 +6,8 @@ namespace Telenok\Core\Contract\Presentation;
  * @class Telenok.Core.Contract.Presentation.Presentation
  * @extends Telenok.Core.Contract.Module.Module
  */
-interface Presentation extends \Telenok\Core\Contract\Module\Module {
-
+interface Presentation extends \Telenok\Core\Contract\Module\Module
+{
     public function getActionParam();
 
     public function getPresentation();

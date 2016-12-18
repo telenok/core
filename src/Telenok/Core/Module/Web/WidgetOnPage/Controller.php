@@ -6,8 +6,8 @@ namespace Telenok\Core\Module\Web\WidgetOnPage;
  * @class Telenok.Core.Module.Web.WidgetOnPage.Controller
  * @extends Telenok.Core.Abstraction.Presentation.TreeTabObject.Controller
  */
-class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller {
-
+class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller
+{
     protected $key = 'web-page-wop';
     protected $presentation = 'tree-tab-object';
     protected $modelListClass = '\App\Vendor\Telenok\Core\Model\Web\WidgetOnPage';
@@ -21,8 +21,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     public function preProcess($model, $type, $input)
     {
-        if ($input->get('key'))
-        {
+        if ($input->get('key')) {
             app('telenok.repository')->getWidget()->get($input->get('key'))->preProcess($model, $type, $input);
         }
 
@@ -31,12 +30,10 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     public function postProcess($model, $type, $input)
     {
-        if ($input->get('key'))
-        {
+        if ($input->get('key')) {
             app('telenok.repository')->getWidget()->get($input->get('key'))->postProcess($model, $type, $input);
         }
 
         return parent::postProcess($model, $type, $input);
     }
-
 }

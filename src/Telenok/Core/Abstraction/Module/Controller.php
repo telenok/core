@@ -1,28 +1,30 @@
-<?php namespace Telenok\Core\Abstraction\Module;
+<?php
+
+namespace Telenok\Core\Abstraction\Module;
 
 /**
  * @class Telenok.Core.Abstraction.Module.Controller
  * @extends Telenok.Core.Abstraction.Controller.Controller
  */
-abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controller implements \Telenok\Core\Contract\Module\Module {
-
+abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controller implements \Telenok\Core\Contract\Module\Module
+{
     protected $permissionKey = '';
     protected $parent = '';
     protected $group = '';
-    protected $icon = 'fa fa-desktop';  
-    protected $modelModule; 
-    protected $modelRepository; 
+    protected $icon = 'fa fa-desktop';
+    protected $modelModule;
+    protected $modelRepository;
     protected $languageDirectory = 'module';
 
     public function __construct()
     {
-        $this->middleware('auth.backend.module:' . $this->getPermissionKey()); 
+        $this->middleware('auth.backend.module:'.$this->getPermissionKey());
     }
 
     public function getHeader()
     {
         return $this->LL('header.title');
-    }    
+    }
 
     public function getHeaderDescription()
     {
@@ -34,17 +36,17 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         $this->permissionKey = $param;
 
         return $this;
-    }	
+    }
 
     public function getPermissionKey()
     {
-        return $this->permissionKey ?: 'module.' . $this->getKey();
-    }	
+        return $this->permissionKey ?: 'module.'.$this->getKey();
+    }
 
     public function getParent()
     {
         return $this->parent;
-    }  
+    }
 
     public function getIcon()
     {
@@ -54,15 +56,15 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     public function getGroup()
     {
         return $this->group;
-    }  
-    
+    }
+
     public function setModelModule($model)
     {
         $this->modelModule = $model;
-        
+
         return $this;
     }
-    
+
     public function getModelModule()
     {
         return $this->modelModule;
@@ -70,54 +72,57 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     public function children()
     {
-        return app('telenok.repository')->getModule()->filter(function($item)
-        {
+        return app('telenok.repository')->getModule()->filter(function ($item) {
             return $this->getKey() == $item->getParent();
         });
     }
 
     public function parent_()
     {
-        if (!$this->getParent()) return false;
-        
+        if (!$this->getParent()) {
+            return false;
+        }
+
         return app('telenok.repository')->getModule()->get($this->getParent());
     }
 
     public function isParentAndSingle()
     {
-        $collection = app('telenok.repository')->getModule()->filter(function($item) {
+        $collection = app('telenok.repository')->getModule()->filter(function ($item) {
             return $item->getParent() == $this->getKey();
         });
-        
+
         return !$this->getParent() && $collection->isEmpty();
-    }  
+    }
 
     public function getRouterActionParam($param = [])
     {
-		return route($this->getVendorName() . ".module.{$this->getKey()}.action.param", $param);
-    }  
-	
+        return route($this->getVendorName().".module.{$this->getKey()}.action.param", $param);
+    }
+
     public function getActionParam()
     {
-        return json_encode(array(
-            'presentationBlockKey' => $this->getPresentation(),
-			'presentationModuleKey' => $this->getPresentationModuleKey(),
+        return json_encode([
+            'presentationBlockKey'     => $this->getPresentation(),
+            'presentationModuleKey'    => $this->getPresentationModuleKey(),
             'presentationBlockContent' => $this->getPresentationContent(),
-            'key' => $this->getKey(),
-            'url' => route($this->getVendorName() . ".module.{$this->getKey()}"),
-            'breadcrumbs' => $this->getBreadcrumbs(),
-            'pageHeader' => $this->getPageHeader(), 
-        ));
+            'key'                      => $this->getKey(),
+            'url'                      => route($this->getVendorName().".module.{$this->getKey()}"),
+            'breadcrumbs'              => $this->getBreadcrumbs(),
+            'pageHeader'               => $this->getPageHeader(),
+        ]);
     }
 
     public function getBreadcrumbs()
     {
         $breadcrumbs = [];
-        
-        if ($this->getParent()) $breadcrumbs[] = $this->parent_()->getName();
-        
+
+        if ($this->getParent()) {
+            $breadcrumbs[] = $this->parent_()->getName();
+        }
+
         $breadcrumbs[] = $this->getName();
-        
+
         return $breadcrumbs;
     }
 
@@ -125,7 +130,4 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         return [$this->getHeader(), $this->getHeaderDescription()];
     }
-
-
 }
-

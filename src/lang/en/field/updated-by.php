@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'name' => 'Date and renovator',
+return [
+    'name'  => 'Date and renovator',
     'title' => 'Updated',
-    'by' => 'by',
-);
+    'by'    => 'by',
+];

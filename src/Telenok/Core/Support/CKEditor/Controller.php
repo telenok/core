@@ -6,12 +6,12 @@ namespace Telenok\Core\Support\CKEditor;
  * @class Telenok.Core.Support.Config.CKEditor
  * Support rich text editor caller CKEditor.
  */
-class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller {
-
+class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller
+{
     protected $key = 'ckeditor';
-    protected $configView = "core::special.ckeditor.config";
+    protected $configView = 'core::special.ckeditor.config';
     protected $languageDirectory = 'support';
-    protected $configPluginWidgetInlineView = "core::special.ckeditor.plugin-widget-inline";
+    protected $configPluginWidgetInlineView = 'core::special.ckeditor.plugin-widget-inline';
 
     public function getCKEditorConfig()
     {
@@ -29,7 +29,7 @@ class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller 
 
         return view('core::special.ckeditor.browse-file', [
             'controller' => $this,
-            'jsUnique' => str_random(),
+            'jsUnique'   => str_random(),
         ]);
     }
 
@@ -39,30 +39,27 @@ class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller 
 
         return view('core::special.ckeditor.browse-image', [
             'controller' => $this,
-            'jsUnique' => str_random(),
+            'jsUnique'   => str_random(),
         ]);
     }
 
     public function createCache($path, $width = 0, $height = 0, $action = '')
     {
         $job = new \App\Vendor\Telenok\Core\Jobs\Cache\Store([
-            'path' => $path,
-            'path_cache' => $this->pathCache($path, $width, $height, $action),
-            'storage_key' => app('filesystem')->getDefaultDriver(),
+            'path'              => $path,
+            'path_cache'        => $this->pathCache($path, $width, $height, $action),
+            'storage_key'       => app('filesystem')->getDefaultDriver(),
             'storage_cache_key' => app('filesystem')->getDefaultDriver(),
-            'width' => $width,
-            'height' => $height,
-            'action' => $action,
+            'width'             => $width,
+            'height'            => $height,
+            'action'            => $action,
         ]);
 
-        if (config('image.cache.queue'))
-        {
+        if (config('image.cache.queue')) {
             $job->onQueue(\App\Vendor\Telenok\Core\Jobs\Cache\Store::QUEUES_CACHE);
 
             $this->dispatch($job);
-        }
-        else
-        {
+        } else {
             $job->handle();
         }
     }
@@ -91,15 +88,12 @@ class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller 
 
     public function urlCache($path, $width = 0, $height = 0, $action = '')
     {
-        $urlPattern = config("filesystems.disks." . app('filesystem')->getDefaultDriver() . ".retrieve_url");
+        $urlPattern = config('filesystems.disks.'.app('filesystem')->getDefaultDriver().'.retrieve_url');
 
-        if ($urlPattern instanceof \Closure)
-        {
+        if ($urlPattern instanceof \Closure) {
             return $urlPattern($path, $width, $height, $action);
-        }
-        else
-        {
-            return trim($urlPattern, '\\/') . '/' .
+        } else {
+            return trim($urlPattern, '\\/').'/'.
                     \App\Vendor\Telenok\Core\Support\File\StoreCache::pathCache($path, $width, $height, $action);
         }
     }
@@ -113,27 +107,24 @@ class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller 
     {
         $path = $this->getRequest()->input('directory', '');
 
-        if ($path && strpos('..', $path) !== FALSE)
-        {
+        if ($path && strpos('..', $path) !== false) {
             throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException('"wrong directory"');
         }
 
-        $files = collect(app('filesystem')->files($this->getRootDirectory() . '/' . $path));
+        $files = collect(app('filesystem')->files($this->getRootDirectory().'/'.$path));
 
-        if ($this->getRequest()->input('file_type') == 'image')
-        {
-            $files = $files->filter(function($item)
-            {
+        if ($this->getRequest()->input('file_type') == 'image') {
+            $files = $files->filter(function ($item) {
                 return in_array(pathinfo($item, PATHINFO_EXTENSION), \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION, true);
             });
         }
 
         return view('core::special.ckeditor.file-storage', [
             'controller' => $this,
-            'files' => $files,
-            'allowNew' => $this->getRequest()->input('allow_new'),
-            'allowBlob' => $this->getRequest()->input('allow_blob'),
-            'jsUnique' => $this->getRequest()->input('jsUnique'),
+            'files'      => $files,
+            'allowNew'   => $this->getRequest()->input('allow_new'),
+            'allowBlob'  => $this->getRequest()->input('allow_blob'),
+            'jsUnique'   => $this->getRequest()->input('jsUnique'),
         ]);
     }
 
@@ -143,27 +134,24 @@ class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller 
 
         $files = \App\Vendor\Telenok\Core\Model\File\File::active()
                     ->withPermission()
-                    ->where(function($query)
-                    {
+                    ->where(function ($query) {
                         $query->where(app('db')->raw(1), 0);
 
-                        if ($this->getRequest()->input('file_type'))
-                        {
-                            foreach (\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION as $ext)
-                            {
-                                $query->orWhere('upload_file_name', 'LIKE', '%.' . $ext . '%');
+                        if ($this->getRequest()->input('file_type')) {
+                            foreach (\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION as $ext) {
+                                $query->orWhere('upload_file_name', 'LIKE', '%.'.$ext.'%');
                             }
                         }
                     })
-                    ->where('title', 'LIKE', '%' . $name . '%')
+                    ->where('title', 'LIKE', '%'.$name.'%')
                     ->take(51)->get();
 
         return view('core::special.ckeditor.file-model', [
             'controller' => $this,
-            'files' => $files,
-            'allowNew' => $this->getRequest()->input('allow_new'),
-            'allowBlob' => $this->getRequest()->input('allow_blob'),
-            'jsUnique' => $this->getRequest()->input('jsUnique'),
+            'files'      => $files,
+            'allowNew'   => $this->getRequest()->input('allow_new'),
+            'allowBlob'  => $this->getRequest()->input('allow_blob'),
+            'jsUnique'   => $this->getRequest()->input('jsUnique'),
         ]);
     }
 
@@ -183,15 +171,13 @@ class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller 
     {
         $base64 = $this->getRequest()->input('blob');
         $mime = $this->getRequest()->input('mime');
-        $directory = $this->getRootDirectory() . '/' . $this->getRequest()->input('directory', date('Y/m/') . ceil(date('d') / 7));
+        $directory = $this->getRootDirectory().'/'.$this->getRequest()->input('directory', date('Y/m/').ceil(date('d') / 7));
 
-        if (strpos('..', $directory) !== FALSE)
-        {
+        if (strpos('..', $directory) !== false) {
             throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException('"wrong directory"');
         }
 
-        switch ($mime)
-        {
+        switch ($mime) {
             case 'image/jpeg':
                 $extension = 'jpg';
                 break;
@@ -206,55 +192,51 @@ class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller 
                 throw new \Exception('Wrong mime type');
         }
 
-        $filepath = $directory . '/' . ($name = (str_random(6) . '.' . $extension));
+        $filepath = $directory.'/'.($name = (str_random(6).'.'.$extension));
 
         app('filesystem')->makeDirectory($directory);
         app('filesystem')->put($filepath, base64_decode(explode(',', $base64)[1]), \Illuminate\Contracts\Filesystem\Filesystem::VISIBILITY_PUBLIC);
 
         return [
-            'src' => $filepath,
-            'filename' => $name
+            'src'      => $filepath,
+            'filename' => $name,
         ];
     }
 
     public function directoryCreate()
     {
-        $directory = $this->getRootDirectory() . '/' . $this->getRequest()->input('directory');
+        $directory = $this->getRootDirectory().'/'.$this->getRequest()->input('directory');
         $name = $this->getRequest()->input('name');
 
-        if (strpos('..', $directory) !== FALSE || preg_match("/\W/", $name))
-        {
+        if (strpos('..', $directory) !== false || preg_match("/\W/", $name)) {
             throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException('"wrong directory"');
         }
 
-        app('filesystem')->makeDirectory($directory . '/' . $name);
+        app('filesystem')->makeDirectory($directory.'/'.$name);
 
         return [
-            'directory' => ( ($d = $this->getRequest()->input('directory')) ? $d . '/' : '') . $name,
+            'directory' => (($d = $this->getRequest()->input('directory')) ? $d.'/' : '').$name,
         ];
     }
 
     public function uploadFile()
     {
         $file = $this->getRequest()->file('file');
-        $directory = $this->getRootDirectory() . '/' . $this->getRequest()->input('directory');
+        $directory = $this->getRootDirectory().'/'.$this->getRequest()->input('directory');
 
-        $extension = $file->getClientOriginalExtension() ? : $file->guessExtension();
+        $extension = $file->getClientOriginalExtension() ?: $file->guessExtension();
 
-        if (!in_array($extension, \App\Vendor\Telenok\Core\Support\File\Processing::SAFE_EXTENSION, true))
-        {
+        if (!in_array($extension, \App\Vendor\Telenok\Core\Support\File\Processing::SAFE_EXTENSION, true)) {
             throw new \Exception($this->LL('error.extension', ['attribute' => $extension]));
         }
 
-        if (strpos('..', $directory) !== FALSE)
-        {
+        if (strpos('..', $directory) !== false) {
             throw new \Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException('"wrong directory"');
         }
 
-        if ($file->isValid())
-        {
+        if ($file->isValid()) {
             $file->move(public_path($directory), pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)
-                    . '_' . str_random(3) . '.' . $file->getClientOriginalExtension());
+                    .'_'.str_random(3).'.'.$file->getClientOriginalExtension());
         }
 
         return ['success' => 1];
@@ -264,5 +246,4 @@ class Controller extends \App\Vendor\Telenok\Core\Controller\Backend\Controller 
     {
         return config('filesystems.upload.public');
     }
-
 }
