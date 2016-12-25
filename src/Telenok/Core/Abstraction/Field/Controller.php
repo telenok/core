@@ -916,12 +916,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         }
         catch (\Exception $ex)
         {
-            try
-            {
+            try {
                 $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
-            }
-            catch (\Exception $ex)
-            {
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
                 throw new \Exception($this->LL('error.tab.field.key'));
             }
         }
@@ -941,26 +938,19 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         }
         catch (\Exception $ex)
         {
-            try
-            {
+            try {
                 $tabHas = \App\Vendor\Telenok\Core\Model\Object\Tab::firstOrFail('id', $tabHasId);
-
-                $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->whereCode($tabHas->code);
-            }
-            catch (\Exception $ex)
-            {
-                try
-                {
-                    $tabTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
-                }
-                catch (\Exception $ex)
-                {
+                $tabBelongTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->whereCode($tabHas->code);
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
+                try {
+                    $tabBelongTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();
+                } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
                     throw new \Exception($this->LL('error.tab.field.key'));
                 }
             }
         }
 
-        return $tabTo;
+        return $tabBelongTo;
     }
 
     /**

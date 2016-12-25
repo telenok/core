@@ -1,6 +1,7 @@
 <?php
 
 namespace Telenok\Core\Security\Filter\Acl\Resource\ObjectType;
+use App\Vendor\Telenok\Core\Support\DateTime\Processing;
 
 /**
  * @class Telenok.Core.Security.Filter.Acl.Resource.ObjectType.Controller
@@ -15,7 +16,7 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
     {
         $resourceType = new \App\Vendor\Telenok\Core\Model\Security\Resource();
         $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
 
         //$queryWhere->where(app('db')->raw(1), 0);
 
@@ -103,7 +104,7 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
     {
         $resourceType = new \App\Vendor\Telenok\Core\Model\Security\Resource();
         $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
 
         $queryCommon->leftJoin($resourceType->getTable() . ' as resource_type_permission_user_filter_object_type', function($join) use ($r, $resourceType)
         {

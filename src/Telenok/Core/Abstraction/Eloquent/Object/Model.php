@@ -1,5 +1,6 @@
 <?php namespace Telenok\Core\Abstraction\Eloquent\Object;
 
+use App\Vendor\Telenok\Core\Support\DateTime\Processing;
 use \Telenok\Core\Contract\Eloquent\EloquentProcessController;
 use \Illuminate\Database\Eloquent\SoftDeletes;
 use \App\Vendor\Telenok\Core\Abstraction\Eloquent\Cache\QueryCache;
@@ -984,7 +985,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         if (!isset(static::$listField[$class]))
         {
-            $r = range_minutes($this->getCacheMinutes());
+            $r = Processing::range_minutes($this->getCacheMinutes());
 
             $type = app('db')->table('object_type')->whereNull('deleted_at')->where('code', $this->getTable())->first();
 
@@ -1251,7 +1252,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     public function scopeActive($query, $table = null)
     {
         $table = $table ? : $this->getTable();
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
 
         return $query->where(function($query) use ($table, $r)
                 {
@@ -1278,7 +1279,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     public function scopeNotActive($query, $table = null)
     {
         $table = $table ? : $this->getTable();
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
 
         return $query->where(function($query) use ($table, $r)
                 {
@@ -1393,7 +1394,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             return $query->where($this->getTable() . '.id', 'Error: permission code');
         }
 
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
         $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
         $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
         $type = new \App\Vendor\Telenok\Core\Model\Object\Type();

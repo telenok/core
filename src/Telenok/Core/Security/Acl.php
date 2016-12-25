@@ -1,6 +1,7 @@
 <?php
 
 namespace Telenok\Core\Security;
+use App\Vendor\Telenok\Core\Support\DateTime\Processing;
 
 /**
  * @class Telenok.Core.Security.Acl
@@ -518,15 +519,12 @@ class Acl {
 
         app('db')->transaction(function() use ($permission, $resource)
         {
-            try
-            {
+            try {
                 \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource::where('acl_permission_object_sequence', $permission->getKey())
                         ->where('acl_subject_object_sequence', $this->subject->getKey())
                         ->where('acl_resource_object_sequence', $resource->getKey())
                         ->firstOrFail();
-            }
-            catch (\Exception $e)
-            {
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
                 if ($this->subject instanceof \Telenok\Core\Model\Object\Sequence)
                 {
                     $typeSubject = $this->subject->sequencesObjectType()->first();
@@ -932,7 +930,7 @@ class Acl {
 
         $type = new \App\Vendor\Telenok\Core\Model\Object\Type();
         $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
 
         $query = $sequence::select($sequence->getTable() . '.id')->where($sequence->getTable() . '.id', $resource->getKey());
 
@@ -1024,7 +1022,7 @@ class Acl {
             return false;
         }
 
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
 
         $spr = $this->subject->with(
                     [

@@ -1,6 +1,7 @@
 <?php
 
 namespace Telenok\Core\Security\Filter\Acl\Resource\ObjectTypeOwn;
+use App\Vendor\Telenok\Core\Support\DateTime\Processing;
 
 /**
  * @class Telenok.Core.Security.Filter.Acl.Resource.ObjectTypeOwn.Controller
@@ -16,7 +17,7 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
         $resourceType = new \App\Vendor\Telenok\Core\Model\Security\Resource();
         $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
         $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
 
         //$queryWhere->where(app('db')->raw(1), 0);
 
@@ -106,9 +107,8 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
     public function filter($queryCommon, $queryWhere, $resource, $permission, $subjectCollection)
     {
         $resourceType = new \App\Vendor\Telenok\Core\Model\Security\Resource();
-        $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
         $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
 
         //$queryWhere->where(app('db')->raw(1), 0);
 

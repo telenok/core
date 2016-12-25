@@ -30,13 +30,15 @@ class Buffer extends \Illuminate\Database\Eloquent\Model {
         }
         catch (\Illuminate\Database\QueryException $exc)
         {
-            $instance = (new static)->where(function($query) use ($user_id, $sequence_id, $place)
-                    {
-                        $query->where('user_id', $user_id);
-                        $query->where('sequence_id', $sequence_id);
-                        $query->where('place', $place);
-                    })
-                    ->firstOrFail();
+            try {
+                $instance = (new static)->where(function ($query) use ($user_id, $sequence_id, $place) {
+                    $query->where('user_id', $user_id);
+                    $query->where('sequence_id', $sequence_id);
+                    $query->where('place', $place);
+                })->firstOrFail();
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                throw new \Exception('Cant add to buffer');
+            }
 
             $instance->update(
                     [

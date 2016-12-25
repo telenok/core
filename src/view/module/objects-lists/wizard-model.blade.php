@@ -274,30 +274,34 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 	@parent
 @stop
 
-@section('form') 
+@section('form')
 
 {!! Form::model($model, array('url' => $routerParam, 'files' => true, 'id'=>"model-ajax-$uniqueId", 'class'=>'form-horizontal')) !!}
-	
+
+        @section('errorContainer')
+            <div class="error-container"></div>
+        @show
+
 		{!! Form::hidden($model->getKeyName(), $model->getKey()) !!}
 
 		<div class="modal-body" style="padding: 15px; position: relative;">
 			<div class="widget-main">
 
-				{!! $controller->getFormContent($model, $type, $fields, $uniqueId) !!}
-					
+                {!! $controller->getFormContent($model, $type, $fields, $uniqueId) !!}
+
 			</div>
 		</div>
 		<div class="modal-footer">
 
 			<div class="center no-margin">
 				@if (app('request')->get('chooseBtn') && $model->exists)
-				
+
 				<script type="text/javascript">
 					<?php
-					
+
 						$config = app('telenok.repository')->getObjectFieldController();
 
-						$put = collect(); 
+						$put = collect();
 
 						if (app('request')->get('chooseSequence') && $model->exists())
 						{
@@ -307,19 +311,19 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 						{
 							$listModelField = $model;
 						}
-						
+
 						foreach ($listModelField->getFieldList() as $field)
-						{ 
+						{
 							$put->put($field->code, $config->get($field->key)->getListFieldContent($field, $listModelField, $type));
 						}
 					?>
-					
+
 					var chooseWizard = {!! $put->toJson() !!};
-				</script> 
- 
+				</script>
+
 				<button class="btn btn-success" onclick="
 					var $modal = jQuery(this).closest('.modal');
-						$modal.data('model-data')(chooseWizard); 
+						$modal.data('model-data')(chooseWizard);
 						$modal.modal('hide');
 						return false;">
 					<i class="fa fa-bullseye"></i>

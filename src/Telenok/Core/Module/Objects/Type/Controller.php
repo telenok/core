@@ -74,21 +74,15 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
         $input->put('model_class', trim($input->get('model_class'), '\\ '));
 
         $classNameCollection = collect(explode('\\', $input->get('model_class')))
-                ->filter(function($i)
-                {
+                ->filter(function($i) {
                     return trim($i);
-                })
-                ->each(function($item)
-                {
-                    if (!preg_match('/^[\\a-z][\w]*$/i', $item))
-                    {
+                })->each(function($item){
+                    if (!preg_match('/^[\\a-z][\w]*$/i', $item)) {
                         throw new \Exception($this->LL('error.model_class.name'));
                     }
-                })
-                ->transform(function($item)
-        {
-            return ucfirst($item);
-        });
+                })->transform(function($item) {
+                    return ucfirst($item);
+                });
 
         if ($classNameCollection->isEmpty())
         {

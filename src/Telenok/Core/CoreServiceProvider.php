@@ -7,9 +7,9 @@ use Telenok\Core\Event\CompileRoute;
 use Telenok\Core\Event\CompileConfig;
 
 /**
- * @class Telenok.Core.CoreServiceProvider
+ * @class \Telenok\Core\CoreServiceProvider
  * Core service provider.
- * @extends Illuminate.Support.ServiceProvider
+ * @extends \Illuminate\Support\ServiceProvider
  */
 class CoreServiceProvider extends ServiceProvider {
 
@@ -19,7 +19,7 @@ class CoreServiceProvider extends ServiceProvider {
      * @method boot
      * Load config, routers, create singletons and others.
      * @return {void}
-     * @member Telenok.Core.CoreServiceProvider
+     * @member \Telenok\Core\CoreServiceProvider
      */
     public function boot()
     {
@@ -260,7 +260,6 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function loadConfigFile()
     {
-        include_once __DIR__ . '/../../config/helpers.php';
         include_once __DIR__ . '/../../config/routes.php';
     }
 

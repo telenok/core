@@ -71,18 +71,17 @@ ob_start();
 
 				@section('ajaxFail')
 
-				var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
+                var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
 
-				try
-				{
-					var jsonError = jQuery.parseJSON(jsonResponse.error.message);
-				}
-				catch(e)
-				{
-					var jsonError = jsonResponse.error.message;
-				}
+                if (jsonResponse.error && jsonResponse.error.message) {
+                    var jsonError = jQuery.parseJSON(jsonResponse.error.message);
+                } else if (jsonResponse.error) {
+                    var jsonError = jQuery.parseJSON(jsonResponse.error);
+                } else if (jsonResponse) {
+                    var jsonError = jsonResponse;
+                }
 
-				var errorGritterText = [];
+                var errorGritterText = [];
 
 				jQuery('div.alert-danger, div.alert-success, div.alert-warning', $container).remove();
 

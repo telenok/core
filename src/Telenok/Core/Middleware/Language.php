@@ -22,7 +22,7 @@ class Language {
     {
         $localeHeader = substr($request->server('HTTP_ACCEPT_LANGUAGE'), 0, 2);
 
-        $localeCollection = collect($this->app->config->get('app.locales'));
+        $localeCollection = collect(config('app.locales'));
 
         if (in_array($localeHeader, $localeCollection->all(), true))
         {

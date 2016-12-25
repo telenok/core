@@ -25,7 +25,7 @@
 	var string_default_multilanguage{{$uniqueId}} = '';
 	var string_default{{$uniqueId}} = '';
 
-	@foreach(config('app.locales')->all() as $locale)
+	@foreach(config('app.locales') as $locale)
 		string_default_multilanguage{{$uniqueId}} += '<div class="form-group">';
 		string_default_multilanguage{{$uniqueId}} += {!! json_encode((string)Form::label("string_default[{$locale}]", $controller->LL("property.string_default") . " [{$locale}]", array("class" => "col-sm-3 control-label no-padding-right")), JSON_UNESCAPED_UNICODE) !!};
 		string_default_multilanguage{{$uniqueId}} += '<div class="col-sm-9">';

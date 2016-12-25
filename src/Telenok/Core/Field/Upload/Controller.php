@@ -268,7 +268,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
                 $basename = pathinfo($file, PATHINFO_BASENAME);
                 $size = filesize($file);
 
-                $mime = file_mime_type($file);
+                $mime = \App\Vendor\Telenok\Core\Support\File\Mime::type($file);
 
                 $file = app('\Symfony\Component\HttpFoundation\File\UploadedFile', [$file, $basename, $mime, $size, null, true]);
             }

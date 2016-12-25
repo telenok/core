@@ -44,7 +44,7 @@ class UploadedFile {
                 return \App\Vendor\Telenok\Core\Model\File\FileMimeType::where('mime_type', $mimeType)->firstOrFail();
             }
         }
-        catch (\Exception $e)
+        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
         {
             return (new \App\Vendor\Telenok\Core\Model\File\FileMimeType())->storeOrUpdate([
                         'title' => $mimeType,
@@ -72,7 +72,7 @@ class UploadedFile {
                 return \App\Vendor\Telenok\Core\Model\File\FileExtension::where('extension', $extension)->firstOrFail();
             }
         }
-        catch (\Exception $e)
+        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
         {
             return (new \App\Vendor\Telenok\Core\Model\File\FileExtension())->storeOrUpdate([
                         'title' => $extension,

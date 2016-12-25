@@ -1,6 +1,7 @@
 <?php
 
 namespace Telenok\Core\Security\Filter\Acl\Resource\DirectRight;
+use App\Vendor\Telenok\Core\Support\DateTime\Processing;
 
 /**
  * @class Telenok.Core.Security.Filter.Acl.Resource.DirectRight.Controller
@@ -23,7 +24,7 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
      */
     public function filterCan($queryCommon, $queryWhere, $resource, $permission, $subject)
     {
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
         $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
         $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
 
@@ -103,7 +104,7 @@ class Controller extends \Telenok\Core\Abstraction\Security\Filter\Acl\Resource\
 
     public function filter($queryCommon, $queryWhere, $resource, $permission, $subjectCollection)
     {
-        $r = range_minutes($this->getCacheMinutes());
+        $r = Processing::range_minutes($this->getCacheMinutes());
         $spr = new \App\Vendor\Telenok\Core\Model\Security\SubjectPermissionResource();
 
         //$queryWhere->where(app('db')->raw(1), 0);
