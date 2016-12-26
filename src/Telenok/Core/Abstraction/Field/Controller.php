@@ -934,7 +934,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         try
         {
-            $tabTo = $this->getFieldTab($typeId, $tabBelongCode);
+            $tabBelongTo = $this->getFieldTab($typeId, $tabBelongCode);
         }
         catch (\Exception $ex)
         {
