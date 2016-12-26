@@ -171,11 +171,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             }
             else if ($key == 'decimal_min')
             {
-                return \App\Vendor\Telenok\Core\Field\Decimal\BigDecimal::create('-9999999999999999999999999999', 2);
+                return \App\Vendor\Telenok\Core\Field\Decimal\BigDecimal::create('-9999999999', 2);
             }
             else if ($key == 'decimal_max')
             {
-                return \App\Vendor\Telenok\Core\Field\Decimal\BigDecimal::create('9999999999999999999999999999', 2);
+                return \App\Vendor\Telenok\Core\Field\Decimal\BigDecimal::create('9999999999', 2);
             }
             else if ($key == 'decimal_precision')
             {
@@ -217,11 +217,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             }
             else if ($key == 'decimal_min')
             {
-                $value = '-9999999999999999999999999999.00';
+                $value = '-9999999999.00';
             }
             else if ($key == 'decimal_max')
             {
-                $value = '9999999999999999999999999999.00';
+                $value = '9999999999.00';
             }
         }
 
