@@ -121,7 +121,7 @@
                                                             ->transform(function($item) { 
                                                                 return ['title' => $item->translate('title'), 'id' => $item->id]; 
                                                             })->sortBy('title')->pluck('title', 'id'), 
-                                                        [], 
+                                                        $field->file_many_to_many_allow_categories->all(),
                                                         [
                                                             'id' => 'select-file-category-' . $jsUnique, 
                                                             'multiple' => 'multiple'
@@ -149,7 +149,22 @@
                                                     <select class="chosen" multiple 
                                                         data-placeholder="{{$controller->LL('notice.choose')}}" 
                                                         id="select-file-permission-{{$jsUnique}}" 
-                                                        name="permission[read][]"></select>
+                                                        name="permission[read][]">
+                                                        <?php
+
+                                                            $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
+
+                                                            $selectedIds = $field->file_many_to_many_allow_permission->all();
+
+                                                            $subjects = \App\Vendor\Telenok\Core\Model\Object\Sequence::active()
+                                                                    ->whereIn('id', (array)$selectedIds)
+                                                                    ->get();
+
+                                                            foreach ($subjects as $subject) {
+                                                                echo "<option value='{$subject->getKey()}' selected='selected'>[{$subject->translate('title_type')}#{$subject->id}] {$subject->translate('title')}</option>";
+                                                            }
+                                                        ?>
+                                                    </select>
                                                 </div>
                                                 <script type="text/javascript">
                                                     jQuery("#select-file-permission-{{$jsUnique}}").ajaxChosen({ 
@@ -177,10 +192,36 @@
                                                 </script>
                                             </div>
 
+                                            <div class="form-group">
+
+                                                {!! Form::label("", $controller->LL('property.file_many_to_many_allow_ext'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+
+                                                <div class="col-sm-5">
+                                                    <div class="help-block">{{$field->file_many_to_many_allow_ext->implode(",")}}</div>
+                                                </div>
+                                            </div>
 
                                             <div class="form-group">
 
-                                                <div id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone" class="form-group dropzone"></div>
+                                                {!! Form::label("", $controller->LL('property.file_many_to_many_allow_mime'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+
+                                                <div class="col-sm-5">
+                                                    <div class="help-block">{{$field->file_many_to_many_allow_mime->implode(",")}}</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+
+                                                {!! Form::label("", $controller->LL('property.file_many_to_many_allow_size'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+
+                                                <div class="col-sm-5">
+                                                    <div class="help-block">{{intval($field->file_many_to_many_allow_size)}} bytes</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+
+                                                <div id="telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone" class="dropzone well"></div>
 
                                             </div>
 
@@ -552,7 +593,7 @@
                         jQuery("div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone").dropzone({
                                 url: "{!! route($controller->getRouteUpload()) !!}",
                                 paramName: "upload", // The name that will be used to transfer the file
-                                maxFilesize: 2.5, // MB
+                                maxFilesize: {{floatval($field->file_many_to_many_allow_size / 1000000)}}, // MB
                                 addRemoveLinks : true,
                                 dictDefaultMessage :
                                     '<span class="bigger-150 bolder"><i class="fa fa-caret-right red"></i> Drop files</span> to upload \
@@ -562,6 +603,8 @@
                                 autoProcessQueue: false,
                                 parallelUploads: 4,
                                 uploadMultiple: true,
+                                acceptedFiles: '{{$field->file_many_to_many_allow_mime->merge(
+                                        $field->file_many_to_many_allow_ext->transform(function($item){ return '.' . $item; }))->implode(",")}}',
                                 headers: {
                                     'X-CSRF-Token': jQuery('meta[name="csrf-token"]').attr('content')
                                 },

@@ -19,8 +19,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
-                'title' => ['ru' => "Заголовок в теге <meta>", 'en' => "Title in <meta> tag"],
-                'title_list' => ['ru' => "Заголовок в теге <meta>", 'en' => "Title in <meta> tag"],
+                'title' => ['ru' => "Заголовок в теге <title>", 'en' => "Title in <title> tag"],
+                'title_list' => ['ru' => "Заголовок в теге <title>", 'en' => "Title in <title> tag"],
                 'key' => 'string',
                 'code' => 'title_ceo',
                 'active' => 1,

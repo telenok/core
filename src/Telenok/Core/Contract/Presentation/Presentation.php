@@ -30,7 +30,7 @@ interface Presentation extends \Telenok\Core\Contract\Module\Module {
 
     public function getModelFieldView($field);
 
-    public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null);
+    public function getFormModelViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null);
 
     public function setDisplayType($type);
 

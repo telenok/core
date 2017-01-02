@@ -637,7 +637,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             $input = collect($input);
         }
 
-
         try
         {
             if (!$this->exists)
@@ -667,8 +666,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             {
                 $input->put($k, $model->{$k});
             }
+            else
+            {
+                $model->{$k} = $input->get($k);
+            }
         }
-
 
         if ($withPermission)
         {
@@ -695,6 +697,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
                 $model->preProcess($type, $input);
 
+
+                $model = $model->fill($input->all());
+
                 $validator = app('\App\Vendor\Telenok\Core\Support\Validator\Model')
                         ->setModel($model)
                         ->setInput($input)
@@ -711,7 +716,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                     $controllerProcessing->validate($model, $input);
                 }
 
-                $model->fill($input->all())->push();
+                $model->push();
 
                 if (!$exists && $type->treeable)
                 {

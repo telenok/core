@@ -58,7 +58,7 @@ class Listener {
     {
         $list = $event->getList();
 
-        $list->push('App\Vendor\Telenok\Core\Field\Integer\Controller');
+        $list->push('App\Vendor\Telenok\Core\Field\IntegerSigned\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\IntegerUnsigned\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\Decimal\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\Text\Controller');
@@ -82,6 +82,7 @@ class Listener {
         $list->push('App\Vendor\Telenok\Core\Field\SelectOne\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\SelectMany\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\Time\Controller');
+        $list->push('App\Vendor\Telenok\Core\Field\Date\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\DateTime\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\TimeRange\Controller');
         $list->push('App\Vendor\Telenok\Core\Field\DateTimeRange\Controller');

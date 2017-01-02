@@ -2080,10 +2080,10 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
     }
 
     /**
-     * @method getModelFieldViewVariable
+     * @method getFormModelViewVariable
      * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
      */
-    public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null)
+    public function getFormModelViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null)
     {
 
     }

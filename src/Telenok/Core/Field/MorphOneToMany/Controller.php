@@ -19,7 +19,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         return $field->morph_one_to_many_has ? $field->morph_one_to_many_has : $field->morph_one_to_many_belong_to_type_list->all();
     }
 
-    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         $linkedField = $this->getLinkedField($field);
         

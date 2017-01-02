@@ -28,7 +28,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
     protected $routeListTitle = "telenok.field.relation-one-to-many.list.title";
 
     /**
-     * @method getModelFieldViewVariable
+     * @method getFormModelViewVariable
      * Return array with URL for variables in $viewModel view.
      * 
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
@@ -39,7 +39,7 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
      * @return {Array}
      * @member Telenok.Core.Field.System.UpdatedBy.Controller
      */
-    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
     }
 

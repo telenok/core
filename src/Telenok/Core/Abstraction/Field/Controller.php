@@ -484,7 +484,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             'permissionDelete' => app('auth')->can('delete', 'object_field.' . $model->getTable() . '.' . $field->code),
             'pageLength'       => $this->pageLength,
             'uniqueId'         => $uniqueId,
-        ], (array)$this->getModelFieldViewVariable($controller, $model, $field, $uniqueId), (array)$controller->getModelFieldViewVariable($this, $model, $field, $uniqueId)
+        ], (array)$this->getFormModelViewVariable($controller, $model, $field, $uniqueId), (array)$controller->getFormModelViewVariable($this, $model, $field, $uniqueId)
         ))->render();
     }
 
@@ -503,10 +503,10 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     }
 
     /**
-     * @method getModelFieldViewVariable
+     * @method getFormModelViewVariable
      * @member Telenok.Core.Abstraction.Field.Controller
      */
-    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
 
     }
@@ -638,11 +638,21 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getFormFieldContent($model = null, $uniqueId = null)
     {
-        return view($this->getViewField(), array(
+        return view($this->getViewField(), array_merge([
             'controller' => $this,
             'model'      => $model,
             'uniqueId'   => $uniqueId,
+        ], (array)$this->getFormFieldViewVariable($model, $uniqueId)
         ))->render();
+    }
+
+    /**
+     * @method getFormFieldViewVariable
+     * @member Telenok.Core.Abstraction.Field.Controller
+     */
+    public function getFormFieldViewVariable($model = null, $uniqueId = null)
+    {
+        return [];
     }
 
     /**

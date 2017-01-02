@@ -34,7 +34,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     protected $specialField = ['permission_default'];
 
     /**
-     * @method getModelFieldViewVariable
+     * @method getFormModelViewVariable
      * Return array with URL for variables in $viewModel view.
      * 
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
@@ -45,7 +45,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
      * @return {Array}
      * @member Telenok.Core.Field.System.Permission.Controller
      */
-    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         return [
             'urlListTitle' => route("telenok.field.permission.list.title"),
@@ -139,8 +139,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
                     'permissionCreate' => app('auth')->can('create', 'object_field.' . $model->getTable() . '.' . $field->code),
                     'permissionUpdate' => app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code),
                 ], 
-                (array) $this->getModelFieldViewVariable($controller, $model, $field, $uniqueId), 
-                (array) $controller->getModelFieldViewVariable($this, $model, $field, $uniqueId)
+                (array) $this->getFormModelViewVariable($controller, $model, $field, $uniqueId),
+                (array) $controller->getFormModelViewVariable($this, $model, $field, $uniqueId)
             ))->render();
     }
 

@@ -94,4 +94,33 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
         return parent::postProcess($model, $type, $input);
     }
 
+    /**
+     * @method deleteProcess
+     * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
+     */
+    public function deleteProcess($id = null, $force = false)
+    {
+        $model = $this->getModelTrashed($id);
+
+        $field = app('telenok.repository')->getObjectFieldController($model->key);
+
+        $field->preDeleteProcess($model, $force);
+
+        if (!app('auth')->can('delete', $id))
+        {
+            throw new \LogicException($this->LL('error.access'));
+        }
+
+        app('db')->transaction(function() use ($model, $force)
+        {
+            if ($force || $model->trashed())
+            {
+                $model->forceDelete();
+            }
+            else
+            {
+                $model->delete();
+            }
+        });
+    }
 }

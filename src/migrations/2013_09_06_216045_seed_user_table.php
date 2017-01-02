@@ -37,6 +37,7 @@ class SeedUserTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'allow_create'      => 1,
                 'allow_update'      => 1,
                 'string_unique'     => 1,
+                'required'          => 1,
                 'field_order'       => 3,
             ]
         );

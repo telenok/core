@@ -179,7 +179,7 @@
 								   data-widget-key="{{$li->sequence->model->key}}"
 								   data-widget-buffer-id="{{$li->getKey()}}"
 								   data-widget-buffer-key="{{$li->key}}"
-								   data-widget-id="{{$li->sequence->model->getKey()}}"><i class="fa fa-times"></i> {{$li->sequence->model->translate('title')}}</a>
+								   data-widget-id="{{$li->sequence->model->getKey()}}"><i class="fa fa-times"></i> [{{$li->sequence->model->key}}] {{$li->sequence->model->translate('title')}}</a>
 							</li>
 						@endforeach
 
@@ -276,14 +276,15 @@
 					{
 						jQuery.ajax(
 							{
-								'url' : '{!! route("telenok.module.web-page-constructor.view.page.insert.widget", ['languageId' => ':languageId:', 'key' => ':key:', 'bufferId' => ':bufferId:', 'container' => ':container:', 'id' => '--id--', 'pageId' => ':pageId:', 'order' => ':order:']) !!}'
+								url : '{!! route("telenok.module.web-page-constructor.view.page.insert.widget", ['languageId' => ':languageId:', 'key' => ':key:', 'bufferId' => ':bufferId:', 'container' => ':container:', 'id' => '--id--', 'pageId' => ':pageId:', 'order' => ':order:']) !!}'
 									.replace(/:container:/gi, jQuery(ui.item).closest(".frontend-container").data('container-id'))
 									.replace(/:key:/gi, jQuery(ui.item).data('widget-key'))
 									.replace(/:languageId:/gi, parseInt(telenok_module_web_language_id, 10))
 									.replace(/:bufferId:/gi, jQuery(ui.item).data('widget-buffer-id'))
 									.replace(/--id--/gi, parseInt(jQuery(ui.item).data('widget-id'), 10))
 									.replace(/:pageId:/gi, parseInt(telenok_module_web_page_pid, 10))
-									.replace(/:order:/gi, ui.item.index())
+									.replace(/:order:/gi, ui.item.index()),
+								method: 'POST'
 							})
 							.done(function(data)
 							{
@@ -350,7 +351,8 @@
 					jQuery.ajax({
 						url: '{!! route("telenok.module.web-page-constructor.view.page.remove.widget", ['id' => '--id--']) !!}'
 							.replace(/--id--/gi, jQuery(this).closest(".telenok-widget-box").data('widget-id')),
-						context: document.body
+						context: document.body,
+						method: 'POST'
 					})
 					.done(function(data)
 					{
@@ -427,7 +429,8 @@
 						url: '{!! route("telenok.module.web-page-constructor.view.buffer.add.widget", ['id' => '--id--', 'key' => ':key:']) !!}'
 							.replace(/--id--/gi, jQuery(this).closest(".telenok-widget-box").data('widget-id'))
 							.replace(/:key:/gi, jQuery(this).data('action')),
-						context: document.body
+						context: document.body,
+                        method: 'POST'
 					})
 					.done(function(data)
 					{
@@ -487,7 +490,8 @@
 					jQuery.ajax({
 						url: '{!! route("telenok.module.web-page-constructor.view.buffer.delete.widget", ['id' => '--id--']) !!}'
 							.replace(/--id--/gi, jQuery(this).closest("a").data('widget-buffer-id')),
-						context: document.body
+						context: document.body,
+                        method: 'POST'
 					})
 					.done(function(data)
 					{

@@ -13,7 +13,7 @@ class Buffer extends \Illuminate\Database\Eloquent\Model {
 
     public function sequence()
     {
-        return $this->hasOne('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'id');
+        return $this->hasOne('\App\Vendor\Telenok\Core\Model\Object\Sequence', 'id', 'sequence_id');
     }
 
     public static function addBuffer($user_id = 0, $sequence_id = 0, $place = 'object', $key = 'cut')

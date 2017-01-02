@@ -50,8 +50,6 @@ interface Field extends \Telenok\Core\Contract\Injection\Request {
 
     public function setModelSpecialAttribute($model, $key, $value);
 
-    public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null);
-
     /**
      * @method getLinkedModelType
      * Return Object Type linked to the field
@@ -66,6 +64,12 @@ interface Field extends \Telenok\Core\Contract\Injection\Request {
     public function getFormModelTableColumn($field, $model, $jsUnique);
 
     public function getFormFieldContent($model = null, $uniqueId = null);
+
+    public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null);
+
+    public function getFormFieldViewVariable($model = null, $uniqueId = null);
+
+    public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null);
 
     public function getFilterQuery($field = null, $model = null, $query = null, $name = null, $value = null);
 

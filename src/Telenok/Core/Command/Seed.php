@@ -1,6 +1,7 @@
 <?php namespace Telenok\Core\Command;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 /**
  * @class Telenok.Core.Command.Seed
@@ -65,6 +66,8 @@ class Seed extends Command {
      */
     public function fire()
     {
+        $this->output->getFormatter()->setStyle('password', new OutputFormatterStyle('yellow', 'black'));
+
         $this->setProcessingController(app('\App\Vendor\Telenok\Core\Support\Install\Controller'));
 
         $this->info('Create and seed tables');
@@ -73,7 +76,7 @@ class Seed extends Command {
         {
             $this->inputSuperuserLogin();
             $this->inputSuperuserEmail();
-            $this->inputSuperuserPassword();
+            $password = $this->inputSuperuserPassword();
 
             $this->info('Start creating tables and seed database. Please, wait. It can take some minutes.');
 
@@ -90,6 +93,10 @@ class Seed extends Command {
                 'email' => $this->processingController->getSuperuserEmail(),
                 'password' => $this->processingController->getSuperuserPassword(),
             ]);
+
+            if ($password) {
+                $this->line('Your password: <password>' . $password . '</password>');
+            }
         }
     }
 
@@ -136,9 +143,9 @@ class Seed extends Command {
             }
             else
             {
-                $this->info('Your password: ' . $this->processingController->getSuperuserPassword());
+                $this->line('Your password: <password>' . ($password = $this->processingController->getSuperuserPassword()) . '</password>');
 
-                break;
+                return $password;
             }
         }
     }

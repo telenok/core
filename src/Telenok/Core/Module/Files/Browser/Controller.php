@@ -221,7 +221,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 </li>']);
 
         $collection->put('delete', ['order' => 2000, 'content' =>
-            '<li><a href="#" onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure.delete') . '\')) telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').deleteByURL(this, \''
+            '<li><a href="#" onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme_/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure.delete') . '\')) telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').deleteByURL(this, \''
             . $this->getRouterDelete(['id' => $item->getRealPath()]) . '\'); return false;">'
             . ' <i class="fa fa-trash-o"></i> ' . $this->LL('list.btn.delete') . '</a>
                 </li>']);
@@ -489,7 +489,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             $name = $model->getFilename();
 
-            if (preg_match('/^_delme/', $name) || $force)
+            if (preg_match('/^_delme_/', $name) || $force)
             {
                 if ($model->isDir())
                 {
@@ -502,7 +502,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             }
             else
             {
-                \File::move($model->getRealPath(), $model->getPath() . DIRECTORY_SEPARATOR . '_delme' . date('YmdHis') . '_' . $name);
+                \File::move($model->getRealPath(), $model->getPath() . DIRECTORY_SEPARATOR . '_delme_' . date('YmdHis') . '_' . $name);
             }
 
             return ['success' => 1];

@@ -148,7 +148,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
         
     }
 
-    public function getModelFieldViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null)
+    public function getFormModelViewVariable($fieldController = null, $model = null, $field = null, $uniqueId = null)
     {
         
     }

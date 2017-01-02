@@ -50,7 +50,7 @@
                             $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
 
                             $selectedIds = $model->permission_default->get($permission->code);
-                            
+
                             $subjects = \App\Vendor\Telenok\Core\Model\Object\Sequence::active()
                                     ->whereIn('id', (array)$selectedIds)
                                     ->get();

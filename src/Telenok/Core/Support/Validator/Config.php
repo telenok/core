@@ -155,9 +155,9 @@ class Config {
      */
     protected function processRule($rule)
     {
-        array_walk_recursive($rule, function(&$el, $key, $this_) {
-            $el = str_replace('{{id}}', $this_->getInput()->get('id'), $el);
-        }, $this);
+        array_walk_recursive($rule, function(&$el, $key) {
+            $el = str_replace('{{id}}', $this->getInput()->get('id'), $el);
+        });
         
         return $rule;
     }

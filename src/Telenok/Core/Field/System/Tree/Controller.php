@@ -33,7 +33,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     protected $viewField = "core::field.tree.field";
 
     /**
-     * @method getModelFieldViewVariable
+     * @method getFormModelViewVariable
      * Return array with URL for variables in $viewModel view.
      *
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
@@ -43,9 +43,9 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * @return {Array}
      * @member Telenok.Core.Field.System.Tree.Controller
      */
-    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
-        $typeIds = parent::getModelFieldViewVariable($controller, $model, $field, $uniqueId);
+        $typeIds = parent::getFormModelViewVariable($controller, $model, $field, $uniqueId);
         $typeIds['urlWizardCreate'] = route($this->getRouteWizardCreate(), ['id' => $this->getChooseTypeId($field), 'saveBtn' => 1, 'chooseBtn' => 1]);
 
         return $typeIds;

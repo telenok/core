@@ -10,6 +10,6 @@ return array(
     'language.select' => 'Выберите язык',
     'setting.title' => 'Заголовок',
     'tab.widget.list' => 'Список',
-    'tab.widget.buffer' => 'Буффер',
+    'tab.widget.buffer' => 'Буфер',
     'tab.widget.command' => 'Команды',
 );

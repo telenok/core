@@ -134,8 +134,12 @@ class Controller extends \App\Vendor\Telenok\Core\Module\Objects\Lists\Controlle
 
         $buffer = \App\Vendor\Telenok\Core\Model\System\Buffer::addBuffer(app('auth')->user()->getKey(), $widget->getKey(), 'web-page', $key);
 
-        return ['widget' => $widget, 'buffer' => $buffer];
-    }
+        return ['widget' => [
+            'id' => $widget->id,
+            'title' => $widget->translate('title'),
+            'key' => $widget->key,
+        ], 'buffer' => $buffer];
+}
 
     public function deleteBufferWidget($id = 0)
     {

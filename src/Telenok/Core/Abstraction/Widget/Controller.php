@@ -193,11 +193,6 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             'frontend_view'     => array_get($config, 'frontend_view', $this->getFrontendView()),
         ], $config);
 
-        if ($c = $this->getCachedConfig())
-        {
-            $this->config = $c;
-        }
-
         /*
          * We can restore widget config from cache by cache_key, so set object member value manually
          *
@@ -227,78 +222,6 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         {
             return array_get($this->config, $key, $default);
         }
-    }
-
-    /**
-     * @method getCachedConfig
-     * Set widget's config in cache.
-     * @return {Telenok.Core.Abstraction.Widget.Controller}
-     * @member Telenok.Core.Abstraction.Widget.Controller
-     */
-    public function getCachedConfig()
-    {
-        if (!($cacheKey = $this->getConfig('cache_key')))
-        {
-            throw new \Exception('Please, set in config of widget "' . $this->getKey() . '" parameter "cache_key"');
-        }
-
-        return collect(config('telenok.widget.config'))->get($this->getKey() . '.' . $cacheKey, []);
-    }
-
-    public function saveCachedConfig()
-    {
-
-
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        return;
-
-
-
-
-
-        if ($this->getWidgetModel())
-        {
-            return;
-        }
-
-        $cacheKey = $this->getConfig('cache_key');
-
-        $config = collect(config('telenok.widget.config'))->get($this->getKey() . '.' . $cacheKey, []);
-
-        $md5Key = md5(serialize($this->getConfig()));
-
-        if ($md5Key == array_get($config, '__md5_key'))
-        {
-            return;
-        }
-
-        $configData = app(\App\Vendor\Telenok\Core\Model\System\Config::class)->where('code', 'telenok.widget.config')->first();
-
-        $widgetConfigs = $configData->value;
-
-        $wc = $this->getConfig();
-        $wc['__md5_key'] = $md5Key;
-        $wc['__created_at'] = time();
-
-        $widgetConfigs->put($this->getKey() . '.' . $cacheKey, $wc);
-
-        // clear old widgets config
-        if (rand(0, 500000) == 1)
-        {
-            $t = time();
-
-            foreach($widgetConfigs->all() as $k => $c)
-            {
-                if ($t - $c['__created_at'] > 8640000/* 3 months */)
-                {
-                    $widgetConfigs->forget($k);
-                }
-            }
-        }
-
-        $configData->storeOrUpdate(['value' => $widgetConfigs]);
-
-        app('events')->fire(new CompileConfig());
     }
 
     /**
@@ -426,8 +349,6 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function getContent()
     {
-        $this->saveCachedConfig();
-
         $this->setCacheTime($this->getCacheTime());
 
         if (($content = $this->getCachedContent()) !== false)

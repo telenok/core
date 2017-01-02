@@ -1,11 +1,11 @@
 <div class="form-group" data-field-key='{{ $field->code }}'>
     <?php 
-        $domAttr = ['id' => $field->code . '-' . $uniqueId, 'placeholder' => $field->integer_default, 'class' => 'col-xs-10 col-sm-5'];
+        $domAttr = ['id' => $field->code . '-' . $uniqueId, 'placeholder' => $field->integer_signed_default, 'class' => 'col-xs-10 col-sm-5'];
         $disabled = false;
 
         if (!$model->exists) 
         {
-            $value = $field->integer_default;
+            $value = $field->integer_signed_default;
         }
         else
         {

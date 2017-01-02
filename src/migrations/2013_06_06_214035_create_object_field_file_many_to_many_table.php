@@ -19,8 +19,22 @@ class CreateObjectFieldFileManyToManyTable extends \App\Vendor\Telenok\Core\Supp
                 {
                     $table->text('file_many_to_many_allow_mime')->nullable();
                 }
+
+                if (!\Schema::hasColumn('object_field', 'file_many_to_many_allow_categories'))
+                {
+                    $table->text('file_many_to_many_allow_categories')->nullable();
+                }
+
+                if (!\Schema::hasColumn('object_field', 'file_many_to_many_allow_permission'))
+                {
+                    $table->text('file_many_to_many_allow_permission')->nullable();
+                }
+
+                if (!\Schema::hasColumn('object_field', 'file_many_to_many_allow_size'))
+                {
+                    $table->integer('file_many_to_many_allow_size')->nullable();
+                }
             });
         }
     }
-
 }

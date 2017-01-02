@@ -12,14 +12,6 @@ use Illuminate\Support\Arr;
 class Validator extends \Illuminate\Validation\Validator {
 
     /**
-     * @protected
-     * @property {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
-     * Model to validate.
-     * @member Telenok.Core.Support.Validator.Validator
-     */
-    protected $model = null;
-
-    /**
      * Replace all error message place-holders with actual values.
      *
      * @param  string  $message
@@ -36,22 +28,11 @@ class Validator extends \Illuminate\Validation\Validator {
 
         preg_match_all('/:(\w+)[^\w]?/', $message, $matches);
 
-        foreach ($matches[1] as $match) {
+        foreach ($matches[1] as $match)
+        {
             $message = str_replace(":{$match}", $this->getAttribute($match), $message);
         }
 
         return $message;
-    }
-
-    public function setModel($model)
-    {
-        $this->model = $model;
-
-        return $this;
-    }
-
-    public function getModel()
-    {
-        return $this->model;
     }
 }

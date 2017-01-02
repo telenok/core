@@ -569,7 +569,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             $name = $model->getFilename();
 
-            if (preg_match('/^_delme/', $name) || $force)
+            if (preg_match('/^_delme_/', $name) || $force)
             {
                 if ($model->isDir())
                 {
@@ -582,7 +582,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             }
             else
             {
-                \File::move($model->getRealPath(), $model->getPath() . DIRECTORY_SEPARATOR . '_delme' . date('YmdHis') . '_' . $name);
+                \File::move($model->getRealPath(), $model->getPath() . DIRECTORY_SEPARATOR . '_delme_' . date('YmdHis') . '_' . $name);
             }
 
             return ['success' => 1];

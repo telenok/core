@@ -195,13 +195,13 @@ class Model {
      */
     protected function processRule($rule)
     {
-        array_walk_recursive($rule, function(&$el, $key, $this_)
+        array_walk_recursive($rule, function(&$el, $key)
         {
-            $el = preg_replace_callback('/\:\w+\:/', function($matches) use ($this_)
+            $el = preg_replace_callback('/\:\w+\:/', function($matches)
             {
-                return $this_->getInput()->get(trim($matches[0], ':'), 'NULL');
+                return $this->getInput()->get(trim($matches[0], ':'), 'NULL');
             }, $el);
-        }, $this);
+        });
 
         return $rule;
     }
@@ -228,15 +228,9 @@ class Model {
                     $this->getInput()->toArray(),
                     $this->getRuleList(),
                     $this->getMessage(),
-                    $this->getInput()->merge($this->getCustomAttribute())->toArray())
-                ->setModel($this->getModel());
+                    $this->getInput()->merge($this->getCustomAttribute())->toArray());
 
-        if ($this->validator()->passes())
-        {
-            return true;
-        }
-
-        return false;
+        return $this->validator()->passes();
     }
 
     /**

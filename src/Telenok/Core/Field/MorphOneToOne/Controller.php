@@ -64,7 +64,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
     }
 
     /**
-     * @method getModelFieldViewVariable
+     * @method getFormModelViewVariable
      * Return array with URL for variables in $viewModel view.
      *
      * @param {Telenok.Core.Field.RelationOneToMany.Controller} $controller
@@ -75,7 +75,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
      * @return {Array}
      * @member Telenok.Core.Field.MorphOneToOne.Controller
      */
-    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         $linkedField = $this->getLinkedField($field);
         

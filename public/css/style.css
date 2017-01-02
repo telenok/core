@@ -327,3 +327,8 @@ div.CodeMirror span.CodeMirror-matchingbracket {
     color: red;
     font-weight: bold;
 }
+
+.dropzone .dz-preview .dz-details {
+    position: relative !important;
+    opacity: 1 !important;
+}

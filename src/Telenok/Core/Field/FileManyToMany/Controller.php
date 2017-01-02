@@ -22,7 +22,9 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * Define list of field's names to process saving and filling {@link Telenok.Core.Model.Object.Field Telenok.Core.Model.Object.Field}.
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
-    protected $specialField = ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'];
+    protected $specialField = ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime',
+                                'file_many_to_many_allow_permission', 'file_many_to_many_allow_categories',
+                                'file_many_to_many_allow_size'];
 
     /**
      * @protected
@@ -69,7 +71,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     }
 
     /**
-     * @method getModelFieldViewVariable
+     * @method getFormModelViewVariable
      * Return array with URL for variables in $viewModel view.
      *
      * @param {Telenok.Core.Field.FileManyToMany.Controller} $controller
@@ -80,7 +82,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      * @return {Array}
      * @member Telenok.Core.Field.FileManyToMany.Controller
      */
-    public function getModelFieldViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
+    public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
         $linkedField = $this->getLinkedField($field);
 
@@ -91,6 +93,13 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $field->{$linkedField}]),
             'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
             'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
+        ];
+    }
+
+    public function getFormFieldViewVariable($model = null, $uniqueId = null)
+    {
+        return [
+            'urlListTitle' => route($this->getRouteListTitle()),
         ];
     }
 
@@ -260,13 +269,17 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
     {
         try
         {
-            if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
+            if (in_array($key, [
+                'file_many_to_many_allow_ext',
+                'file_many_to_many_allow_mime',
+                'file_many_to_many_allow_permission',
+                'file_many_to_many_allow_categories'], true))
             {
-                if ($key == 'file_many_to_many_allow_ext')
+                if (!$model->exists && $key == 'file_many_to_many_allow_ext')
                 {
                     $value = $value ? : json_encode(\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION);
                 }
-                else if ($key == 'file_many_to_many_allow_mime')
+                else if (!$model->exists && $key == 'file_many_to_many_allow_mime')
                 {
                     $value = $value ? : json_encode(\App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE);
                 }
@@ -299,20 +312,13 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function setModelSpecialAttribute($model, $key, $value)
     {
-        if (in_array($key, ['file_many_to_many_allow_ext', 'file_many_to_many_allow_mime'], true))
+        if (in_array($key, [
+            'file_many_to_many_allow_ext',
+            'file_many_to_many_allow_mime',
+            'file_many_to_many_allow_permission',
+            'file_many_to_many_allow_categories'], true))
         {
-            if ($value instanceof \Illuminate\Support\Collection)
-            {
-                $value = $value->toArray();
-            }
-            else if ($key == 'file_many_to_many_allow_ext')
-            {
-                $value = $value ? : \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_EXTENSION;
-            }
-            else if ($key == 'file_many_to_many_allow_mime')
-            {
-                $value = $value ? : \App\Vendor\Telenok\Core\Support\Image\Processing::IMAGE_MIME_TYPE;
-            }
+            $value = collect($value)->filter('trim')->toArray();
 
             $model->setAttribute($key, json_encode((array)$value, JSON_UNESCAPED_UNICODE));
         }

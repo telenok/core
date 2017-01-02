@@ -25,15 +25,17 @@ ob_end_clean();
         {!! Html::style('packages/telenok/core/css/jquery.gritter.css') !!}
         {!! Html::style('packages/telenok/core/js/bootstrap/css/bootstrap.min.css') !!}
         {!! Html::style('packages/telenok/core/js/bootstrap/css/font-awesome.css') !!}
+
+        {!! Html::style('packages/telenok/core/js/dropzone/dropzone.css') !!}
+
         {!! Html::style('packages/telenok/core/js/bootstrap/css/ace-fonts.css') !!}
         {!! Html::style('packages/telenok/core/js/bootstrap/css/ace.css') !!}
         {!! Html::style('packages/telenok/core/js/bootstrap/css/ace-skins.min.css') !!}
         {!! Html::style('packages/telenok/core/js/bootstrap/lib/datetimepicker/datetimepicker.css') !!}
         {!! Html::style('packages/telenok/core/js/codemirror/codemirror.css') !!}
 
-        {!! Html::style('packages/telenok/core/js/dropzone/dropzone.css') !!}
 
-        {!! Html::style('packages/telenok/core/css/style.css') !!} 
+        {!! Html::style('packages/telenok/core/css/style.css') !!}
 
         {!! Html::script('packages/telenok/core/js/jquery.js') !!}
         {!! Html::script('packages/telenok/core/js/jquery-ui.js') !!}
