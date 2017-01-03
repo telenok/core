@@ -603,13 +603,31 @@
                                 autoProcessQueue: false,
                                 parallelUploads: 4,
                                 uploadMultiple: true,
+                                addRemoveLinks: false,
                                 acceptedFiles: '{{$field->file_many_to_many_allow_mime->merge(
                                         $field->file_many_to_many_allow_ext->transform(function($item){ return '.' . $item; }))->implode(",")}}',
                                 headers: {
                                     'X-CSRF-Token': jQuery('meta[name="csrf-token"]').attr('content')
                                 },
                                 //change the previewTemplate to use Bootstrap progress bars
-                                previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  <div class=\"dz-details\">\n    <div class=\"dz-filename\"><span data-dz-name></span></div>\n    <div class=\"dz-size\" data-dz-size></div>\n    <img data-dz-thumbnail />\n  </div>\n  <div class=\"progress progress-small progress-success progress-striped active\"><span class=\"bar\" data-dz-uploadprogress></span></div>\n  <div class=\"dz-success-mark\"><span></span></div>\n  <div class=\"dz-error-mark\"><span></span></div>\n  <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n</div>"
+                                previewTemplate:
+                                          "<div class=\"dz-preview dz-file-preview\">"
+                                        + " <div class=\"dz-success-mark\"><span></span></div>"
+                                        + " <div class=\"dz-error-mark\"><span></span></div>"
+                                        + " <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>"
+                                        + ""
+                                        + " <div class=\"dz-details\">"
+                                        + "     <a class=\"dz-remove\" href=\"javascript:undefined;\" data-dz-remove>Remove file</a><div class=\"dz-filename\">"
+                                        + "         <span data-dz-name></span>"
+                                        + "     </div>"
+                                        + "     <div class=\"dz-size\" data-dz-size></div>"
+                                        + "     <img data-dz-thumbnail />"
+                                        + " </div>"
+                                        + " <div class=\"progress progress-small progress-success progress-striped active\">"
+                                        + "     <span class=\"bar\" data-dz-uploadprogress></span>"
+                                        + " </div>"
+                                        + "</div>"
+
                             });
 
                         Dropzone.forElement('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone')

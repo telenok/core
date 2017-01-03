@@ -24,7 +24,7 @@
 			<span class="input-group-addon datepickerbutton">
 				<i class="fa fa-clock-o bigger-110"></i>
 			</span>
-			{!! Form::text("date_default", $model->date_default) !!}
+			{!! Form::text("date_default", $model->date_default ? $model->date_default->format('Y-m-d') : '') !!}
 		</div>
 	</div>
 </div>
@@ -37,6 +37,7 @@
 		pick12HourFormat: false,
 		autoclose: true,
 		minuteStep: 1,
+        pickTime: false,
         useCurrent: true
 	});
 </script>

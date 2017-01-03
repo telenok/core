@@ -234,7 +234,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         /*
          * if file uploaded
          */
-        $file = $this->getRequest()->file($field->code);
+        $file = collect($this->getRequest()->file($field->code))->first();
 
         /*
          * if file uploaded as BLOB via hidden field
@@ -286,6 +286,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         {
             return $model;
         }
+
 
         $protectedFileUpload = app('\App\Vendor\Telenok\Core\Field\Upload\UploadedFile', [$file]);
 

@@ -3,14 +3,14 @@
     $disabled = false;
     
     $domAttr = ['id' => $field->code . '-' . $uniqueId, 'class' => $field->css_class?: 'col-sm-4'];
-    
+
     if ($model->exists && $model->{$field->code})
     {
         $value = $model->{$field->code}->setTimezone(config('app.timezone'));
     }
     else
     {
-        $value = $field->datetime_default->setTimezone(config('app.timezone'));
+        $value = $field->date_default->setTimezone(config('app.timezone'));
     }
 
 	if ((!$model->exists && (!$field->allow_create || !$permissionCreate)) || ($model->exists && (!$field->allow_update || !$permissionUpdate)))
@@ -26,7 +26,7 @@
 <div class="form-group" data-field-key='{{ $field->code }}'>
 	{!! Form::label("{$field->code}", $field->translate('title'), array('class' => 'col-sm-3 control-label no-padding-right')) !!}
 	<div class="col-sm-8">
-        <div class="input-group" id="datetime-picker-time-{{$random}}">
+        <div class="input-group" id="datetime-picker-date-{{$random}}">
             @if ($field->icon_class)
             <span class="input-group-addon datepickerbutton">
                 <i class="{{ $field->icon_class }}"></i>
@@ -36,7 +36,7 @@
 				<i class="fa fa-clock-o bigger-110"></i>
 			</span>
             @endif
-			{!! Form::text($field->code, $value ? : '', $domAttr) !!}
+			{!! Form::text($field->code, $value ? $value->format('Y-m-d') : '', $domAttr) !!}
             @if ($field->translate('description'))
             <span title="" data-content="{{ $field->translate('description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 
                   class="help-button" data-original-title="{{trans('core::default.tooltip.description')}}">?</span>
@@ -46,14 +46,11 @@
 </div>
 
 <script type="text/javascript">
-	jQuery("#datetime-picker-time-{{$random}}").not('.datetime-picker-added').addClass('datetime-picker-added').datetimepicker(
+	jQuery("#datetime-picker-date-{{$random}}").not('.datetime-picker-added').addClass('datetime-picker-added').datetimepicker(
 	{
-        format: "YYYY-MM-DD HH:mm:ss",
-        useSeconds: true,
-		pick12HourFormat: false,
+        format: "YYYY-MM-DD",
 		autoclose: true,
-		minuteStep: 1,
-        useCurrent: true
+        pickTime: false
 	});
 </script>
  

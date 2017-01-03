@@ -71,6 +71,33 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     }
 
     /**
+     * @method getModelAttribute
+     * Return value of field's attributes.
+     *
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Code of field in $model.
+     * @param {mixed} $value
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     *
+     * @return {mixed}
+     * @member Telenok.Core.Field.Time.Controller
+     */
+    public function getModelAttribute($model, $key, $value, $field)
+    {
+        try
+        {
+            return \Carbon\Carbon::createFromFormat('H:i:s', $value === null ? $field->time_default : $value);
+        }
+        catch (\Exception $e)
+        {
+            return null;
+        }
+    }
+
+    /**
      * @method setModelAttribute
      * Return processed value of field.
      * 
@@ -90,10 +117,6 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         if ($value === null)
         {
             $value = $field->time_default ? : null;
-        }
-        else if (is_scalar($value) && $value)
-        {
-            $value = \Carbon\Carbon::createFromFormat('H:i:s', $value);
         }
 
         return parent::setModelAttribute($model, $key, $value, $field);

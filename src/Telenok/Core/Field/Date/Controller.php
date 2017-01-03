@@ -94,6 +94,33 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     }
 
     /**
+     * @method getModelAttribute
+     * Return value of field's attributes.
+     *
+     * @param {Telenok.Core.Abstraction.Eloquent.Object.Model} $model
+     * Eloquent object.
+     * @param {String} $key
+     * Code of field in $model.
+     * @param {mixed} $value
+     * @param {Telenok.Core.Model.Object.Field} $field
+     * Object with data of field's configuration.
+     *
+     * @return {mixed}
+     * @member Telenok.Core.Field.Date.Controller
+     */
+    public function getModelAttribute($model, $key, $value, $field)
+    {
+        try
+        {
+            return \Carbon\Carbon::createFromFormat('Y-m-d', $value === null ? $field->date_default : $value);
+        }
+        catch (\Exception $e)
+        {
+            return null;
+        }
+    }
+
+    /**
      * @method getModelSpecialAttribute
      * Return processed value of special fields.
      * 
@@ -110,9 +137,9 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     {
         try
         {
-            if ($key == 'date_default' && $value === null)
+            if ($key == 'date_default')
             { 
-                return \Carbon\Carbon::now();
+                return $value === null ? \Carbon\Carbon::now() : $value;
             }
             else
             {
@@ -140,12 +167,9 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
      */
     public function setModelSpecialAttribute($model, $key, $value)
     {  
-        if ($key == 'date_default')
+        if ($key == 'date_default' && $value === null)
         {
-            if ($value === null)
-            {
-                $value = \Carbon\Carbon::now();
-            }
+            $value = \Carbon\Carbon::now();
         }
 
         return parent::setModelSpecialAttribute($model, $key, $value);

@@ -37,7 +37,7 @@
 				<i class="fa fa-clock-o bigger-110"></i>
 			</span>
             @endif
-			{!! Form::text($field->code, $value ? $value->toTimeString() : '', $domAttr) !!}
+			{!! Form::text($field->code, $value ? $value->format('H:i:s') : '', $domAttr) !!}
             @if ($field->translate('description'))
             <span title="" data-content="{{ $field->translate('description') }}" data-placement="right" data-trigger="hover" data-rel="popover" 
                   class="help-button" data-original-title="{{trans('core::default.tooltip.description')}}">?</span>

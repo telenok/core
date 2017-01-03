@@ -24,7 +24,7 @@
 			<span class="input-group-addon datepickerbutton">
 				<i class="fa fa-clock-o bigger-110"></i>
 			</span>
-			{!! Form::text("time_default", $model->time_default ? $model->time_default->toTimeString() : '') !!}
+			{!! Form::text("time_default", $model->time_default ? $model->time_default->format('H:i:s') : '') !!}
 		</div>
 	</div>
 </div>
@@ -34,9 +34,9 @@
 	{
         format: 'HH:mm:ss',
         useSeconds: true,
-		pick12HourFormat: false,
-		autoclose: true,
-		minuteStep: 1,
+        pick12HourFormat: false,
+        autoclose: true,
+        minuteStep: 1,
         pickDate: false,
         useCurrent: true
 	});

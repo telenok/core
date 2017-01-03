@@ -332,3 +332,7 @@ div.CodeMirror span.CodeMirror-matchingbracket {
     position: relative !important;
     opacity: 1 !important;
 }
+
+.dropzone .dz-preview .dz-error-message {
+    width: 240px !important;
+}
