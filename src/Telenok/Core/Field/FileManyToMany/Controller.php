@@ -90,7 +90,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         [
             'urlListTitle' => route($this->getRouteListTitle()),
             'urlListTable' => route($this->getRouteListTable(), ['id' => (int)$model->getKey(), 'fieldId' => $field->getKey(), 'uniqueId' => $uniqueId]),
-            'urlWizardChoose' => route($this->getRouteWizardChoose(), ['id' => $field->{$linkedField}]),
+            'urlWizardChoose' => route($this->getRouteWizardChoose(), ['typeId' => $field->{$linkedField}]),
             'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->{$linkedField}, 'saveBtn' => 1, 'chooseBtn' => 1]),
             'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
         ];

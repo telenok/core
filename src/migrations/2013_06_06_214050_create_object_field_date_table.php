@@ -1,6 +1,6 @@
 <?php
 
-class CreateObjectFieldDatetimeTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
+class CreateObjectFieldDateTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
     public function up()
     {
