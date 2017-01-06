@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
     protected $key = 'morph-one-to-many'; 
-    protected $specialField = ['morph_one_to_many_has', 'morph_one_to_many_belong_to', 'morph_one_to_many_belong_to_type_list'];
+    protected $specialField = ['morph_one_to_many_has', 'morph_one_to_many_belong_to'];
     protected $allowMultilanguage = false;
 
     public function getLinkedField($field)
@@ -16,7 +16,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
     
     public function getChooseTypeId($field)
     {
-        return $field->morph_one_to_many_has ? $field->morph_one_to_many_has : $field->morph_one_to_many_belong_to_type_list->all();
+        return $field->morph_one_to_many_has ? $field->morph_one_to_many_has : $field->morph_one_to_many_belong_to->all();
     }
 
     public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
@@ -28,7 +28,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             'urlListTable' => route($this->getRouteListTable(), ['id' => (int)$model->getKey(), 'fieldId' => $field->getKey(), "uniqueId" => $uniqueId]),
             'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->morph_one_to_many_has, 'saveBtn' => 1, 'chooseBtn' => 1]),
             'urlWizardChoose' => route($this->getRouteWizardChoose(), ['typeId' => $this->getChooseTypeId($field)]),
-            'urlListTitle' => route($this->getRouteListTitle(), ['id' => (int)$field->{$linkedField}]),
+            'urlListTitle' => route($this->getRouteListTitle(), ['id' => $field->{$linkedField}]),
             'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
         ];
     }
@@ -42,12 +42,12 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
      */
     public function getLinkedModelType($field)
     {
-        return \App\Vendor\Telenok\Core\Model\Object\Type::findMany([$field->morph_one_to_many_has, $field->morph_one_to_many_belong_to])->first();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::findMany([$field->morph_one_to_many_has] + $field->morph_one_to_many_belong_to->all())->first();
     }
     
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
     {         
-        if ($field->morph_one_to_many_has || $field->morph_one_to_many_belong_to)
+        if ($field->morph_one_to_many_has || $field->morph_one_to_many_belong_to->count())
         {
             return parent::getFormModelContent($controller, $model, $field, $uniqueId);
         }
@@ -55,27 +55,18 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
     public function getModelFillableField($model, $field)
     {
-        return $field->morph_one_to_many_belong_to ? [$field->code . '_type', $field->code . '_id'] : [];
+        dd( get_class($field) );
+        
+        return $field->morph_one_to_many_belong_to->count() ? [$field->code . '_type', $field->code . '_id'] : [];
     }
     
     public function getModelSpecialAttribute($model, $key, $value)
     {
         try
         {
-            if (in_array($key, ['morph_one_to_many_belong_to_type_list'], true))
+            if (in_array($key, ['morph_one_to_many_belong_to'], true))
             {
-                $value = $value ? : '[]';
-
-                $v = json_decode($value, true);
-
-                if (is_array($v))
-                {
-                    return collect($v);
-                }
-                else
-                {
-                    return $v;
-                }
+                return collect((array)json_decode($value ? : '[]', true));
             }
             else
             {
@@ -90,7 +81,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
     public function setModelSpecialAttribute($model, $key, $value)
     {
-        if (in_array($key, ['morph_one_to_many_belong_to_type_list'], true))
+        if (in_array($key, ['morph_one_to_many_belong_to'], true))
         {
             $default = [];
 
@@ -146,7 +137,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
                 $query->whereIn($alias.'.id', (array)$value);
             }
-            else if ($field->morph_one_to_many_belong_to)
+            else if ($field->morph_one_to_many_belong_to->count())
             {
                 $modelTable = $model->getTable();
 
@@ -160,7 +151,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 });
 
                 $query->whereIn($alias.'.id', (array)$value);
-                $query->whereIn($alias.'.sequences_object_type', $field->morph_one_to_many_belong_to_type_list->all());
+                $query->whereIn($alias.'.sequences_object_type', $field->morph_one_to_many_belong_to->all());
             }
         }
     }
@@ -170,19 +161,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         $uniqueId = str_random();
         $option = [];
         
-        $id = $field->morph_one_to_many_has ?: $field->morph_one_to_many_belong_to;
-        
-        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
-        
-        $model = app($class);
-        
-        $query = $model::withPermission()->take(20)->groupBy($model->getTable() . '.id');
-        
-        if ($field->morph_one_to_many_belong_to)
-        {
-            $query->whereIn($model->getTable() . '.sequences_object_type', $field->morph_one_to_many_belong_to_type_list->all());
-        }
-        
+        $ids = [$field->morph_one_to_many_has] ?: $field->morph_one_to_many_belong_to->all();
+
+        $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::whereIn('sequences_object_type', $ids)
+                    ->withPermission()->take(20);
+
         $query->get()->each(function($item) use (&$option)
         {
             $option[] = "<option value='{$item->id}'>[{$item->id}] {$item->translate('title')}</option>";
@@ -236,13 +219,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         
         $canUpdate = app('auth')->can('update', 'object_field.' . $model->getTable() . '.' . $field->code);
         
-        if ($field->morph_one_to_many_belong_to)
+        if ($field->morph_one_to_many_belong_to->count())
         { 
             if ($id && $canUpdate)
             {
                 $objectModel = \App\Vendor\Telenok\Core\Model\Object\Sequence::find($id)->model()->first();
 
-                if (in_array($objectModel->type()->getKey(), $field->morph_one_to_many_belong_to_type_list->all(), true))
+                if (in_array($objectModel->type()->getKey(), $field->morph_one_to_many_belong_to->all(), true))
                 {
                     $model->fill([$field->code . '_type' => get_class($objectModel), $field->code . '_id' => $objectModel->getKey()])->save();
                 }
@@ -313,7 +296,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         // can be zero if process field belong_to
 		if ($input->get('morph_one_to_many_has'))
 		{
-			$input->put('morph_one_to_many_belong_to', 0);
+			//$input->put('morph_one_to_many_belong_to', 0);
             $input->put('morph_one_to_many_has', intval(\App\Vendor\Telenok\Core\Model\Object\Type::where('code', (string)$input->get('morph_one_to_many_has'))->orWhere('id', $input->get('morph_one_to_many_has'))->value('id')));
         }
         else
@@ -340,14 +323,14 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
             if ($f)
             {
-                $tList = $f->morph_one_to_many_belong_to_type_list;
+                $tList = $f->morph_one_to_many_belong_to;
 
                 $tNewList = $tList->reject(function($item) use ($model) 
                 {
                     return $item == $model->fieldObjectType->getKey();
                 });
 
-                $f->morph_one_to_many_belong_to_type_list = $tNewList;
+                $f->morph_one_to_many_belong_to = $tNewList;
 
                 $f->update();
             }
@@ -396,62 +379,60 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         if ($input->get('create_belong') !== false) 
         {
-            $title = $input->get('title_belong', []);
-            $title_list = $input->get('title_list_belong', []);
-
-            foreach($relatedTypeOfModelField->title->all() as $language => $val)
-            {
-                $title[$language] = array_get($title, $language, $model->translate('title', $language) . ' [morphTo]');
-            }
-
-            foreach($relatedTypeOfModelField->title_list->all() as $language => $val)
-            {
-                $title_list[$language] = array_get($title_list, $language, $model->translate('title_list', $language) . ' [morphTo]');
-            } 
-
-            $tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
-
-            $toSave = [
-                'title' => $title,
-                'title_list' => $title_list,
-                'key' => $this->getKey(),
-                'code' => $relatedSQLField,
-                'field_object_type' => $typeBelongTo->getKey(),
-                'field_object_tab' => $tabTo->getKey(),
-                'morph_one_to_many_belong_to' => \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'object_sequence')->value('id'),
-                'morph_one_to_many_belong_to_type_list' => [$relatedTypeOfModelField->getKey()],
-                'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
-                'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
-                'allow_search' => $input->get('allow_search_belong', $model->allow_search),
-                'multilanguage' => 0,
-                'active' => $input->get('active_belong', $model->active),
-                'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
-                'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
-                'allow_create' => $input->get('allow_create_belong', $model->allow_create),
-                'allow_update' => $input->get('allow_update_belong', $model->allow_update),
-                'field_order' => $input->get('field_order_belong', $model->field_order),
-            ];
-
-
             $f = \App\Vendor\Telenok\Core\Model\Object\Field::where(function($query) use ($relatedSQLField, $model)
                     {
                         $query->where('code', (string)$relatedSQLField);
-                        $query->where('field_object_type', $model->morph_one_to_many_has);
+                        $query->where('morph_one_to_many_has', $model->morph_one_to_many_has);
                     })
                     ->first();
 
             if ($f)
             {
-                $tList = $f->morph_one_to_many_belong_to_type_list;
+                $tList = $f->morph_one_to_many_belong_to;
 
                 $tList->push($relatedTypeOfModelField->getKey());
 
-                $f->morph_one_to_many_belong_to_type_list = $tList;
+                $f->morph_one_to_many_belong_to = $tList;
 
                 $f->update();
             }
             else
             {
+                $title = $input->get('title_belong', []);
+                $title_list = $input->get('title_list_belong', []);
+
+                foreach($relatedTypeOfModelField->title->all() as $language => $val)
+                {
+                    $title[$language] = array_get($title, $language, $model->translate('title', $language) . ' [morphTo]');
+                }
+
+                foreach($relatedTypeOfModelField->title_list->all() as $language => $val)
+                {
+                    $title_list[$language] = array_get($title_list, $language, $model->translate('title_list', $language) . ' [morphTo]');
+                }
+
+                $tabTo = $this->getFieldTabBelongTo($typeBelongTo->getKey(), $input->get('field_object_tab_belong'), $input->get('field_object_tab'));
+
+                $toSave = [
+                    'title' => $title,
+                    'title_list' => $title_list,
+                    'key' => $this->getKey(),
+                    'code' => $relatedSQLField,
+                    'field_object_type' => $typeBelongTo->getKey(),
+                    'field_object_tab' => $tabTo->getKey(),
+                    'morph_one_to_many_belong_to' => '[' . $relatedTypeOfModelField->getKey() . ']',
+                    'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
+                    'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
+                    'allow_search' => $input->get('allow_search_belong', $model->allow_search),
+                    'multilanguage' => 0,
+                    'active' => $input->get('active_belong', $model->active),
+                    'active_at_start' => $input->get('start_at_belong', $model->active_at_start),
+                    'active_at_end' => $input->get('end_at_belong', $model->active_at_end),
+                    'allow_create' => $input->get('allow_create_belong', $model->allow_create),
+                    'allow_update' => $input->get('allow_update_belong', $model->allow_update),
+                    'field_order' => $input->get('field_order_belong', $model->field_order),
+                ];
+
                 $validator = $this->validator(app('\App\Vendor\Telenok\Core\Model\Object\Field'), $toSave, []);
 
                 if ($validator->passes()) 

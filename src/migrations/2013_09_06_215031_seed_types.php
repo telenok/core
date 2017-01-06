@@ -114,7 +114,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'controller_class' => '\App\Vendor\Telenok\Core\Module\System\Config\Controller',
                 ]
             );
-
+/*
             DB::table('object_type')->insertGetId(
                 [
                     'id'               => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Type']),
@@ -126,7 +126,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'controller_class' => '\App\Vendor\Telenok\Core\Module\System\ConfigGroup\Controller',
                 ]
             );
-
+*/
             DB::table('object_type')->insertGetId(
                 [
                     'id'          => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Type']),
@@ -192,7 +192,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'model_class' => '\App\Vendor\Telenok\Core\Model\System\Language',
                 ]
             );
-
+/*
             DB::table('object_type')->insertGetId(
                 [
                     'id'          => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Type']),
@@ -329,6 +329,7 @@ class SeedTypes extends \App\Vendor\Telenok\Core\Support\Migrations\Migration
                     'controller_class' => '\App\Vendor\Telenok\Core\Module\Web\Domain\Controller',
                 ]
             );
+*/
         }
     }
 

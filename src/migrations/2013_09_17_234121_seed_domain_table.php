@@ -5,7 +5,7 @@ class SeedDomainTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migrat
     public function up()
     {
         parent::up();
-
+/*
         $modelTypeId = DB::table('object_type')->where('code', 'domain')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
@@ -16,6 +16,15 @@ class SeedDomainTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migrat
         \SeedCommonFields::alterTitle($modelTypeId, $tabMainId);
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
+*/
+        (new \App\Vendor\Telenok\Core\Model\Object\Type())->storeOrUpdate([
+            'title'            => ['ru' => 'Домен', 'en' => 'Domain'],
+            'title_list'       => ['ru' => 'Домены', 'en' => 'Domains'],
+            'code'             => 'domain',
+            'active'           => 1,
+            'model_class'      => '\App\Vendor\Telenok\Core\Model\Web\Domain',
+            'controller_class' => '\App\Vendor\Telenok\Core\Module\Web\Domain\Controller',
+        ]);
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
             'title' => ['ru' => "Домен", 'en' => "Domain"],
@@ -23,8 +32,8 @@ class SeedDomainTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migrat
             'key' => 'string',
             'code' => 'domain',
             'active' => 1,
-            'field_object_type' => $modelTypeId,
-            'field_object_tab' => $tabMainId,
+            'field_object_type' => 'domain',
+            'field_object_tab' => 'main',
             'multilanguage' => 0,
             'show_in_form' => 1,
             'show_in_list' => 1,

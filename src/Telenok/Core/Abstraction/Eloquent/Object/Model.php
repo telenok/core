@@ -1,9 +1,11 @@
 <?php namespace Telenok\Core\Abstraction\Eloquent\Object;
 
 use App\Vendor\Telenok\Core\Support\DateTime\Processing;
+use Illuminate\Support\Arr;
 use \Telenok\Core\Contract\Eloquent\EloquentProcessController;
 use \Illuminate\Database\Eloquent\SoftDeletes;
 use \App\Vendor\Telenok\Core\Abstraction\Eloquent\Cache\QueryCache;
+use Telenok\Core\Support\Exception\ModelProcessAccessDenied;
 
 /**
  * @class Telenok.Core.Abstraction.Eloquent.Object.Model
@@ -34,7 +36,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
     public $timestamps = true;
-    
+
     /**
      * @protected
      * @property {Boolean} $hasVersioning
@@ -50,7 +52,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
     protected $ruleList = [];
-    
+
     /**
      * @protected
      * @property {Array} $multilanguageList
@@ -74,7 +76,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
     protected $dates = [];
-    
+
     /**
      * @protected
      * @static
@@ -83,7 +85,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
     protected static $listField = [];
-    
+
     /**
      * @protected
      * @static
@@ -92,7 +94,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
     protected static $listRule = [];
-    
+
     /**
      * @protected
      * @static
@@ -101,7 +103,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
     protected static $listAllFieldController = [];
-    
+
     /**
      * @protected
      * @static
@@ -110,7 +112,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
     protected static $listFillableFieldController = [];
-    
+
     /**
      * @protected
      * @static
@@ -128,7 +130,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
     protected static $listFieldDate = [];
-    
+
     /**
      * @protected
      * @static
@@ -471,7 +473,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      *
      * @return {Telenok.Core.Model.Object.Sequence}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
-     * 
+     *
      *     @example
      *     \App\Model\Article::find(104)->sequence()->translate('title');
      */
@@ -486,13 +488,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      *
      * @return {Telenok.Core.Model.Object.Type}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
-     * 
+     *
      *     @example
      *     \App\Model\Article::find(104)->type()->code;
      */
     public function type()
     {
-        return \App\Vendor\Telenok\Core\Model\Object\Type::whereCode($this->getTable())->first();
+        return \App\Vendor\Telenok\Core\Model\Object\Type::where('code', $this->getTable())->first();
     }
 
     /**
@@ -520,15 +522,15 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     }
 
     /**
-     * @method eraseStatic
-     * Erase all static cached variables.
+     * @method eraseCachedFields
+     * Erase all cached variables.
      *
      * @return {void}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
-    public static function eraseStatic($model)
+    public function eraseCachedFields()
     {
-        $class = get_class($model);
+        $class = get_class($this);
 
         static::$listRule[$class] = null;
         static::$listField[$class] = null;
@@ -536,11 +538,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         static::$listFillableFieldController[$class] = null;
         static::$listTranslated[$class] = null;
 
-        $model->getObjectField();
-        $model->getFillable();
-        $model->getTranslatedField();
-        $model->getDates();
-        $model->getRule();
+        //$model->getObjectField();
+        $this->getFillable();
+        $this->getTranslatedField();
+        $this->getDates();
+        $this->getRule();
     }
 
     /**
@@ -593,7 +595,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     protected function fillableFromArray(array $attributes)
     {
-        $this->fillable = array_unique(array_merge($this->fillable, $this->getFillable()));
+        $this->fillable = array_unique(array_merge($this->fillable, $this->getFillable($attributes)));
 
         return parent::fillableFromArray($attributes);
     }
@@ -677,73 +679,74 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             $model->validateStoreOrUpdatePermission($type, $input);
         }
 
-        try
+        app('db')->transaction(function() use ($type, $input, $model, $withEvent)
         {
-            app('db')->transaction(function() use ($type, $input, $model, $withEvent)
+            $controllerProcessing = null;
+
+            $exists = $model->exists;
+
+            if ($withEvent)
             {
-                $controllerProcessing = null;
+                //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Vendor\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
+            }
 
-                $exists = $model->exists;
+            if (($c = $type->classController()) && ($controllerProcessing = app($c)) && $controllerProcessing instanceof EloquentProcessController)
+            {
+                $controllerProcessing->preProcess($model, $type, $input);
+            }
 
-                if ($withEvent)
-                {
-                    //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Vendor\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
-                }
-
-                if (($c = $type->classController()) && ($controllerProcessing = app($c)) && $controllerProcessing instanceof EloquentProcessController)
-                {
-                    $controllerProcessing->preProcess($model, $type, $input);
-                }
-
-                $model->preProcess($type, $input);
+            $model->preProcess($type, $input);
 
 
-                $model = $model->fill($input->all());
+            $model = $model->fill($input->all());
 
-                $validator = app('\App\Vendor\Telenok\Core\Support\Validator\Model')
-                        ->setModel($model)
-                        ->setInput($input)
-                        ->setMessage($this->LL('error'))
-                        ->setCustomAttribute($this->validatorCustomAttributes());
+            $validator = app('\App\Vendor\Telenok\Core\Support\Validator\Model')
+                ->setModel($model)
+                ->setInput($input)
+                ->setMessage($this->LL('error'))
+                ->setCustomAttribute($this->validatorCustomAttributes());
 
-                if ($validator->fails())
-                {
-                    throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError($validator->messages());
-                }
+            if ($validator->fails())
+            {
 
-                if ($controllerProcessing instanceof EloquentProcessController)
-                {
-                    $controllerProcessing->validate($model, $input);
-                }
 
-                $model->push();
 
-                if (!$exists && $type->treeable)
-                {
-                    $model->makeRoot();
-                }
 
-                $model->postProcess($type, $input);
 
-                if ($controllerProcessing instanceof EloquentProcessController)
-                {
-                    $controllerProcessing->postProcess($model, $type, $input);
-                }
+                throw new \Exception(json_encode($validator->messages(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-                if ($withEvent)
-                {
-                    //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.after', (new \App\Vendor\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
-                }
-            });
-        }
-        catch (\Telenok\Core\Support\Exception\Validator $e)
-        {
-            throw $e;
-        }
-        catch (\Exception $e)
-        {
-            throw $e;
-        }
+
+
+
+
+
+                throw new \Telenok\Core\Support\Exception\Validator($validator->messages());
+            }
+
+            if ($controllerProcessing instanceof EloquentProcessController)
+            {
+                $controllerProcessing->validate($model, $input);
+            }
+
+            $model->push();
+
+            if (!$exists && $type->treeable)
+            {
+                $model->makeRoot();
+            }
+
+            $model->postProcess($type, $input);
+
+            if ($controllerProcessing instanceof EloquentProcessController)
+            {
+                $controllerProcessing->postProcess($model, $type, $input);
+            }
+
+            if ($withEvent)
+            {
+                //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.after', (new \App\Vendor\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
+            }
+        });
 
         return $model;
     }
@@ -795,25 +798,24 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         if (!$this->exists && !app('auth')->can('create', "object_type.{$type->code}"))
         {
-            throw new \LogicException('Cant create model with type "' . $type->code . '". Access denied.');
+            throw new ModelProcessAccessDenied('Cant create model with type "' . $type->code . '". Access denied.');
         }
         else if ($this->exists && !app('auth')->can('update', $this->getKey()))
         {
-            throw new \LogicException('Cant update model with type "' . $type->code . '". Access denied.');
+            throw new ModelProcessAccessDenied('Cant update model with type "' . $type->code . '". Access denied.');
         }
 
-        $objectField = $this->getObjectField();
+        $objectField = static::$listField[get_class($this)];
 
         foreach ($input->all() as $key => $value)
         {
-            $f = $objectField->get($key);
-            $f_ = app('telenok.repository')->getObjectFieldController();
+            $fc = app('telenok.repository')->getObjectFieldController();
 
-            if ($f)
+            if (Arr::get($objectField, $key))
             {
                 if (
-                        (!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key)) ||
-                        ($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key))
+                    (!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key)) ||
+                    ($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key))
                 )
                 {
                     $input->forget($key);
@@ -821,26 +823,26 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             }
             else
             {
-                if ($this instanceof \Telenok\Core\Model\Object\Field && ($fieldController = $f_->get($this->key)) && (in_array($key, $fieldController->getSpecialField($this), true) || in_array($key, $fieldController->getSpecialDateField($this), true)) &&
-                        (
+                if ($this instanceof \Telenok\Core\Model\Object\Field && ($fieldController = $fc->get($this->key)) && (in_array($key, $fieldController->getSpecialField($this), true) || in_array($key, $fieldController->getSpecialDateField($this), true)) &&
+                    (
                         (!$this->exists && !app('auth')->can('create', 'object_type.object_field')) ||
                         ($this->exists && !app('auth')->can('update', $this->getKey()))
-                        )
+                    )
                 )
                 {
                     $input->forget($key);
                 }
                 else
                 {
-                    foreach ($objectField->all() as $key_ => $field_)
+                    foreach ($this->getObjectField()->all() as $key_ => $field_)
                     {
-                        $fieldController = $f_->get($field_->key);
+                        $fieldController = $fc->get($field_->key);
 
                         if ($fieldController && (in_array($key, $fieldController->getModelFillableField($this, $field_), true) || in_array($key, $fieldController->getDateField($this, $field_), true)) &&
-                                (
+                            (
                                 (!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key_)) ||
                                 ($this->exists && !app('auth')->can('update', 'object_field.' . $type->code . '.' . $key_))
-                                )
+                            )
                         )
                         {
                             $input->forget($key);
@@ -863,7 +865,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         $config = app('telenok.repository')->getObjectFieldController();
 
-        foreach ($type->field()->get() as $field)
+        foreach ($type->field()->active()->get() as $field)
         {
             $config->get($field->key)->fill($field, $this, $input);
         }
@@ -883,11 +885,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         $config = app('telenok.repository')->getObjectFieldController();
 
-        foreach ($type->field()->get() as $field)
+        foreach ($type->field()->active()->get() as $field)
         {
             $config->get($field->key)->saveModelField($field, $this, $input);
         }
-        
+
         if ($this->hasVersioning())
         {
             \App\Vendor\Telenok\Core\Model\Object\Version::add($this);
@@ -953,7 +955,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         if (isset(static::$listAllFieldController[$class][$key]))
         {
-            return static::$listAllFieldController[$class][$key]->getModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
+            return static::$listAllFieldController[$class][$key]->getModelAttribute($this, $key, $value, static::$listField[$class][$key]);
         }
         else
         {
@@ -975,7 +977,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         $f = static::$listAllFieldController[$class][$key];
 
-        $f->setModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
+        $f->setModelAttribute($this, $key, $value, static::$listField[$class][$key]);
     }
 
     /**
@@ -990,19 +992,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         if (!isset(static::$listField[$class]))
         {
-            $r = Processing::range_minutes($this->getCacheMinutes());
-
-            $type = app('db')->table('object_type')->whereNull('deleted_at')->where('code', $this->getTable())->first();
-
-            $f = app('db')->table('object_field')
-                    ->where('field_object_type', $type->id)
-                    ->whereNull('deleted_at')
-                    ->where('active', '=', 1)
-                    ->where('active_at_start', '<=', $r[1])
-                    ->where('active_at_end', '>=', $r[0])
-                    ->get();
-
-            static::$listField[$class] = collect(array_combine(array_pluck($f, 'code'), $f->toArray()));
+            static::$listField[$class] = collect($this->type()->field()->active()->get()->keyBy('code'));
         }
 
         return static::$listField[$class];
@@ -1035,9 +1025,9 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         $type = $this->type();
 
         return $type->field()->active()->get()->filter(function($item) use ($type)
-                {
-                    return $item->show_in_form == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
-                });
+        {
+            return $item->show_in_form == 1 && app('auth')->can('read', 'object_field.' . $type->code . '.' . $item->code);
+        });
     }
 
     /**
@@ -1108,7 +1098,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @return {Array}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
-    public function getFillable()
+    public function  getFillable()
     {
         $class = get_class($this);
 
@@ -1127,20 +1117,19 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                     $dateField = (array) $controller->getDateField($this, $field);
                     static::$listFieldDate[$class] = array_merge(static::$listFieldDate[$class], $dateField);
 
-                    foreach (array_merge((array) $controller->getModelFillableField($this, $field), $dateField) as $f_)
+                    foreach (array_merge((array) $controller->getModelFillableField($this, $field), $dateField) as $f)
                     {
-                        static::$listFillableFieldController[$class][$f_] = $controller;
-                        static::$listField[$class][$f_] = $field;
+                        static::$listFillableFieldController[$class][$f] = $controller;
+                        static::$listField[$class][$f] = $field;
                     }
 
-                    foreach ((array) $controller->getModelField($this, $field) as $f_)
+                    foreach ((array) $controller->getModelField($this, $field) as $f)
                     {
-                        static::$listAllFieldController[$class][$f_] = $controller;
+                        static::$listAllFieldController[$class][$f] = $controller;
                     }
                 }
             }
         }
-
 
         $this->dates = array_merge($this->getDates(), (array) static::$listFieldDate[$class]);
 
@@ -1177,7 +1166,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                 }
             }
 
-            foreach (static::$listField[$class]->all() as $key => $field)
+            foreach (static::$listField[$class] as $key => $field)
             {
                 if ($field->rule instanceof \Illuminate\Support\Collection)
                 {
@@ -1250,7 +1239,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * Name of field.
      * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
-     * 
+     *
      *     @example
      *     \App\Model\Article::active()->take(10)->get();
      */
@@ -1260,12 +1249,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         $r = Processing::range_minutes($this->getCacheMinutes());
 
         return $query->where(function($query) use ($table, $r)
-                {
-                    $query->whereNull($table . '.deleted_at')
-                            ->where($table . '.active', 1)
-                            ->where($table . '.active_at_start', '<=', $r[1])
-                            ->where($table . '.active_at_end', '>=', $r[0]);
-                });
+        {
+            $query->whereNull($table . '.deleted_at')
+                ->where($table . '.active', 1)
+                ->where($table . '.active_at_start', '<=', $r[1])
+                ->where($table . '.active_at_end', '>=', $r[0]);
+        });
     }
 
     /**
@@ -1277,7 +1266,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * Name of field.
      * @return {Illuminate.Database.Query.Builder}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
-     * 
+     *
      *     @example
      *     \App\Model\Article::notActive()->take(10)->get();
      */
@@ -1287,17 +1276,17 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         $r = Processing::range_minutes($this->getCacheMinutes());
 
         return $query->where(function($query) use ($table, $r)
-                {
-                    $query->where($table . '.active', 0)
-                            ->orWhere($table . '.active_at_start', '>=', $r[1])
-                            ->orWhere($table . '.active_at_end', '<=', $r[0]);
-                });
+        {
+            $query->where($table . '.active', 0)
+                ->orWhere($table . '.active_at_start', '>=', $r[1])
+                ->orWhere($table . '.active_at_end', '<=', $r[0]);
+        });
     }
 
     /**
      * @method scopeTranslateField
      * Add translated field to query.
-     * 
+     *
      * @param {Illuminate.Database.Query.Builder} $query
      * @param {String} $linkedTableAlias
      * @param {String} $translateTableAlias
@@ -1305,7 +1294,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * @param {String} $locale
      * @return {void}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
-     * 
+     *
      *      @example
      *      $query = \App\Model\Article::notActive()->take(10);
      *      $query->translateField($query, $productModel->getTable(), 'translate_table', 'title', config('app.locale'));
@@ -1318,29 +1307,29 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         $translateTableAlias = $translateTableAlias ? : $translateModel->getTable();
 
         $query->leftJoin($translateModel->getTable() . ' as ' . $translateTableAlias, function($join)
-                use ($linkedTableAlias, $translateTableAlias, $translateField, $locale)
+        use ($linkedTableAlias, $translateTableAlias, $translateField, $locale)
         {
             $join->on($linkedTableAlias . '.id', '=', $translateTableAlias . '.translation_object_model_id')
-                    ->on($translateTableAlias . '.translation_object_field_code', '=', app('db')->raw("'" . $translateField . "'"))
-                    ->on($translateTableAlias . '.translation_object_language', '=', app('db')->raw("'" . ($locale ? : config('app.locale')) . "'"));
+                ->on($translateTableAlias . '.translation_object_field_code', '=', app('db')->raw("'" . $translateField . "'"))
+                ->on($translateTableAlias . '.translation_object_language', '=', app('db')->raw("'" . ($locale ? : config('app.locale')) . "'"));
         });
     }
 
-    /** 
+    /**
      * @method scopeWithPermission
      * Validate right on query.
      *
      * @return {Array}
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
-     * 
+     *
      *      @example
      *      // can current user read (read - by default)
      *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission()->take(10)->get();
      *      // can current user write
      *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission('write', null)->take(10)->get();
-     *      // can $someObject read 
+     *      // can $someObject read
      *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission(null, $someObject)->take(10)->get();
-     *      // can authorized user read 
+     *      // can authorized user read
      *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission(null, 'user_authorized')->take(10)->get();
      *      // can anybody read
      *      \App\Vendor\Telenok\Core\Model\Object\Sequence::withPermission('read', 'user_any')->take(10)->get();
@@ -1481,7 +1470,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         return $this->withTreeAttr()->where($this->getTable() . '.id', $this->getKey())->firstOrFail();
     }
 
-    /** 
+    /**
      * @method scopeWithTreeAttr
      * Add additional filter to query.
      *
@@ -1492,7 +1481,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     public function scopeWithTreeAttr($query)
     {
         $query->join('pivot_relation_m2m_tree as pivot_tree_attr', $this->getTable() . '.id', '=', 'pivot_tree_attr.tree_id')
-                ->addSelect(['*', $this->getTable() . '.id as id']);
+            ->addSelect(['*', $this->getTable() . '.id as id']);
     }
 
     /**
@@ -1693,10 +1682,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             foreach ($children->all() as $child)
             {
                 app('db')->table('pivot_relation_m2m_tree')->where('tree_id', $child->getKey())->update(
-                        [
-                            'tree_path' => str_replace($sequence->tree_path, $sequenceParent->tree_path . $sequenceParent->getKey() . '.', $child->tree_path),
-                            'tree_depth' => ( $sequenceParent->tree_depth + 1 + ($child->tree_depth - $sequence->tree_depth) ),
-                ]);
+                    [
+                        'tree_path' => str_replace($sequence->tree_path, $sequenceParent->tree_path . $sequenceParent->getKey() . '.', $child->tree_path),
+                        'tree_depth' => ( $sequenceParent->tree_depth + 1 + ($child->tree_depth - $sequence->tree_depth) ),
+                    ]);
             }
 
             app('db')->table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update([
@@ -1792,12 +1781,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             }
 
             app('db')->table('pivot_relation_m2m_tree')->where('tree_id', $sequence->getKey())->update(
-                    [
-                        'tree_path' => $sequenceSibling->tree_path,
-                        'tree_pid' => $sequenceSibling->tree_pid,
-                        'tree_order' => $sequenceSibling->tree_order + ($op == '>' ? 1 : 0),
-                        'tree_depth' => $sequenceSibling->tree_depth,
-            ]);
+                [
+                    'tree_path' => $sequenceSibling->tree_path,
+                    'tree_pid' => $sequenceSibling->tree_pid,
+                    'tree_order' => $sequenceSibling->tree_order + ($op == '>' ? 1 : 0),
+                    'tree_depth' => $sequenceSibling->tree_depth,
+                ]);
         });
 
         return $this;
@@ -1930,10 +1919,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         $model = new static;
 
         $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::withTreeAttr()->leftJoin('pivot_relation_m2m_tree as tree_leaf', function($join) use ($model)
-                {
-                    $join->on($model->getTable() . '.id', '=', 'tree_leaf.tree_pid');
-                })
-                ->whereNull('tree_leaf.tree_id');
+        {
+            $join->on($model->getTable() . '.id', '=', 'tree_leaf.tree_pid');
+        })
+            ->whereNull('tree_leaf.tree_id');
 
         return $query;
     }
@@ -2074,7 +2063,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             }
         }
     }
-    
+
     /**
      * @method LL
      * Translate by key.

@@ -1092,9 +1092,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      * @return {Telenok.Core.Abstraction.Presentation.TreeTab.Controller}
      * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
      */
-    public function validateException()
+    public function validateException($messages = [])
     {
-        return new \Telenok\Core\Support\Exception\Validator;
+        return new \Telenok\Core\Support\Exception\Validator($messages = []);
     }
 
     /**
@@ -1381,43 +1381,36 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
         $id = $id === null ? $input->input('treeId', 0) : $id;
         $searchStr = $input->input('search_string');
 
-        try
+        $list = $this->getTreeListModel($id, $searchStr);
+
+        if ($searchStr)
         {
-            $list = $this->getTreeListModel($id, $searchStr);
-
-            if ($searchStr)
+            foreach ($list->all() as $l)
             {
-                foreach ($list->all() as $l)
+                foreach ($l->parents()->get()->all() as $l_)
                 {
-                    foreach ($l->parents()->get()->all() as $l_)
-                    {
-                        $tree->push("#{$l_->getKey()}");
-                    }
-
-                    $tree->push("#{$l->getKey()}");
+                    $tree->push("#{$l_->getKey()}");
                 }
-            }
-            else
-            {
-                $parents = $list->pluck('id', 'tree_pid');
 
-                foreach ($list as $key => $item)
-                {
-                    if ($item->tree_pid == $id)
-                    {
-                        $tree->push([
-                            "data" => $item->translate('title'),
-                            'attr' => ['id' => $item->getKey(), 'rel' => '', 'title' => 'ID: ' . $item->getKey()],
-                            "state" => (isset($parents[$item->getKey()]) ? 'closed' : ''),
-                            "metadata" => array_merge(['id' => $item->getKey(), 'gridId' => $this->getGridId()], $this->getTreeListItemProcessed($item)),
-                        ]);
-                    }
-                }
+                $tree->push("#{$l->getKey()}");
             }
         }
-        catch (\Exception $e)
+        else
         {
-            return $e->getMessage();
+            $parents = $list->pluck('id', 'tree_pid');
+
+            foreach ($list as $key => $item)
+            {
+                if ($item->tree_pid == $id)
+                {
+                    $tree->push([
+                        "data" => $item->translate('title'),
+                        'attr' => ['id' => $item->getKey(), 'rel' => '', 'title' => 'ID: ' . $item->getKey()],
+                        "state" => (isset($parents[$item->getKey()]) ? 'closed' : ''),
+                        "metadata" => array_merge(['id' => $item->getKey(), 'gridId' => $this->getGridId()], $this->getTreeListItemProcessed($item)),
+                    ]);
+                }
+            }
         }
 
         return $tree->all();
@@ -2010,7 +2003,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
         if ($validator->fails())
         {
-            throw $this->validateException()->setMessageError($validator->messages());
+            throw $this->validateException($validator->messages());
         }
 
         $this->preProcess($model, $type, $input);

@@ -38,7 +38,14 @@ class WidgetOnPage extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\
 
     public function preProcess($type, $input)
     {
-        app('telenok.repository')->getWidget()->get($input->get('key'))->validate($this, $input);
+        if ($widget = app('telenok.repository')->getWidget()->get($input->get('key')))
+        {
+            $widget->validate($this, $input);
+        }
+        else
+        {
+            throw new \Telenok\Core\Support\Exception\Validator(['Please, set linked widget']);
+        }
 
         return parent::preProcess($type, $input);
     }

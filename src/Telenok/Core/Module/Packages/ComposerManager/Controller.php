@@ -287,34 +287,23 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     {
         $id = $this->getRequest()->input('id');
 
-        try
-        {
-            ob_start();
+        ob_start();
 
-            $input = new \Symfony\Component\Console\Input\ArrayInput([
-                'command' => 'remove',
-                'packages' => [$id],
-                '--working-dir' => base_path(),
-            ]);
+        $input = new \Symfony\Component\Console\Input\ArrayInput([
+            'command' => 'remove',
+            'packages' => [$id],
+            '--working-dir' => base_path(),
+        ]);
 
-            $out = new \Symfony\Component\Console\Output\BufferedOutput();
-            $application = new \Composer\Console\Application();
-            $application->setAutoExit(false);
+        $out = new \Symfony\Component\Console\Output\BufferedOutput();
+        $application = new \Composer\Console\Application();
+        $application->setAutoExit(false);
 
-            $application->run($input, $out);
+        $application->run($input, $out);
 
-            ob_end_clean();
+        ob_end_clean();
 
-            return ['success' => 1];
-        }
-        catch (\Telenok\Core\Support\Exception\Validator $e)
-        {
-            throw $e;
-        }
-        catch (\Exception $e)
-        {
-            throw $e;
-        }
+        return ['success' => 1];
     }
 
     public function editList($id = null)

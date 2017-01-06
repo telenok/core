@@ -710,7 +710,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         if ($validator->fails())
         {
-            throw $this->validateException()->setMessageError($validator->messages());
+            throw $this->validateException($validator->messages());
         }
 
         return $this;
@@ -821,9 +821,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      * @method validateException
      * @member Telenok.Core.Abstraction.Field.Controller
      */
-    public function validateException()
+    public function validateException($messages = [])
     {
-        return new \Telenok\Core\Support\Exception\Validator;
+        return new \Telenok\Core\Support\Exception\Validator($messages);
     }
 
     /**

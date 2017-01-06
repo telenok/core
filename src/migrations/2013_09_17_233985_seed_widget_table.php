@@ -5,7 +5,7 @@ class SeedWidgetTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migrat
     public function up()
     {
         parent::up();
-
+/*
         $modelTypeId = DB::table('object_type')->where('code', 'widget')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
@@ -16,6 +16,15 @@ class SeedWidgetTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migrat
         \SeedCommonFields::alterTitle($modelTypeId, $tabMainId);
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
+*/
+        (new \App\Vendor\Telenok\Core\Model\Object\Type())->storeOrUpdate([
+            'title'       => ['ru' => 'Виджет', 'en' => 'Widget'],
+            'title_list'  => ['ru' => 'Виджет', 'en' => 'Widget'],
+            'code'        => 'widget',
+            'active'      => 1,
+            'model_class' => '\App\Vendor\Telenok\Core\Model\Web\Widget',
+            'multilanguage' => 1,
+        ]);
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
@@ -24,8 +33,8 @@ class SeedWidgetTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migrat
                 'key' => 'string',
                 'code' => 'controller_class',
                 'active' => 1,
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'widget',
+                'field_object_tab' => 'main',
                 'multilanguage' => 0,
                 'show_in_form' => 0,
                 'show_in_list' => 1,

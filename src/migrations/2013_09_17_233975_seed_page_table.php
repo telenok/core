@@ -5,7 +5,7 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
     public function up()
     {
         parent::up();
-
+/*
         $modelTypeId = DB::table('object_type')->where('code', 'page')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
@@ -16,26 +16,35 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
         \SeedCommonFields::alterTitle($modelTypeId, $tabMainId);
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
+*/
 
-		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-            [
-                'title' => ['ru' => "Заголовок в теге <title>", 'en' => "Title in <title> tag"],
-                'title_list' => ['ru' => "Заголовок в теге <title>", 'en' => "Title in <title> tag"],
-                'key' => 'string',
-                'code' => 'title_ceo',
-                'active' => 1,
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
-                'multilanguage' => 1,
-                'show_in_form' => 1,
-                'show_in_list' => 0,
-                'allow_search' => 1,
-                'allow_create' => 1,
-                'allow_update' => 1,
-                'required' => 0,
-                'field_order' => 3,
-            ]
-        );
+        (new \App\Vendor\Telenok\Core\Model\Object\Type())->storeOrUpdate([
+            'title'            => ['ru' => 'Страница', 'en' => 'Page'],
+            'title_list'       => ['ru' => 'Страница', 'en' => 'Page'],
+            'code'             => 'page',
+            'active'           => 1,
+            'model_class'      => '\App\Vendor\Telenok\Core\Model\Web\Page',
+            'controller_class' => '\App\Vendor\Telenok\Core\Module\Web\Page\Controller',
+            'treeable'         => 1,
+        ]);
+
+		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+            'title' => ['ru' => "Заголовок в теге <title>", 'en' => "Title in <title> tag"],
+            'title_list' => ['ru' => "Заголовок в теге <title>", 'en' => "Title in <title> tag"],
+            'key' => 'string',
+            'code' => 'title_ceo',
+            'active' => 1,
+            'field_object_type' => 'page',
+            'field_object_tab' => 'main',
+            'multilanguage' => 1,
+            'show_in_form' => 1,
+            'show_in_list' => 0,
+            'allow_search' => 1,
+            'allow_create' => 1,
+            'allow_update' => 1,
+            'required' => 0,
+            'field_order' => 3,
+        ]);
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
@@ -44,8 +53,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'key' => 'string',
                 'code' => 'keywords_ceo',
                 'active' => 1,
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'page',
+                'field_object_tab' => 'main',
                 'multilanguage' => 1,
                 'show_in_form' => 1,
                 'show_in_list' => 0,
@@ -64,8 +73,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'key' => 'string',
                 'code' => 'description_ceo',
                 'active' => 1,
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'page',
+                'field_object_tab' => 'main',
                 'multilanguage' => 1,
                 'show_in_form' => 1,
                 'show_in_list' => 0,
@@ -84,8 +93,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
             'code' => 'template_view',
             'active' => 1,
             'string_default' => 'core::controller.frontend',
-            'field_object_type' => $modelTypeId,
-            'field_object_tab' => $tabMainId,
+            'field_object_type' => 'page',
+            'field_object_tab' => 'main',
             'multilanguage' => 0,
             'show_in_form' => 1,
             'show_in_list' => 1,
@@ -103,8 +112,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'code' => 'controller_template_container',
                 'active' => 1,
                 'string_default' => 'core::controller.frontend-container',
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'page',
+                'field_object_tab' => 'main',
                 'multilanguage' => 0,
                 'show_in_form' => 1,
                 'show_in_list' => 0,
@@ -124,8 +133,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'code' => 'cache_time',
                 'active' => 1,
                 'integer_unsigned_default' => 3600,
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'page',
+                'field_object_tab' => 'main',
                 'multilanguage' => 0,
                 'show_in_form' => 1,
                 'show_in_list' => 1,
@@ -143,8 +152,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
             'code' => 'controller_class',
             'active' => 1,
             'string_default' => '\App\Vendor\Telenok\Core\Controller\Frontend\Controller',
-            'field_object_type' => $modelTypeId,
-            'field_object_tab' => $tabMainId,
+            'field_object_type' => 'page',
+            'field_object_tab' => 'main',
             'multilanguage' => 0,
             'show_in_form' => 1,
             'show_in_list' => 1,
@@ -162,8 +171,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'code' => 'controller_method',
                 'active' => 1,
                 'string_default' => 'getContent',
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'page',
+                'field_object_tab' => 'main',
                 'multilanguage' => 0,
                 'show_in_form' => 1,
                 'show_in_list' => 1,
@@ -188,8 +197,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 ],
                 'active' => 1,
                 'field_view' => 'core::field.select-one.model-toggle-button',
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'page',
+                'field_object_tab' => 'main',
                 'multilanguage' => 0,
                 'show_in_form' => 1,
                 'show_in_list' => 0,
@@ -208,8 +217,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'code' => 'url_pattern',
                 'active' => 1,
                 'string_default' => '/',
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'page',
+                'field_object_tab' => 'main',
                 'multilanguage' => 0,
                 'show_in_form' => 1,
                 'show_in_list' => 1,
@@ -227,8 +236,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'key' => 'string',
                 'code' => 'url_redirect',
                 'active' => 1,
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'page',
+                'field_object_tab' => 'main',
                 'multilanguage' => 0,
                 'show_in_form' => 1,
                 'show_in_list' => 1,
@@ -246,8 +255,8 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'key' => 'string',
                 'code' => 'router_name',
                 'active' => 1,
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => $tabMainId,
+                'field_object_type' => 'page',
+                'field_object_tab' => 'main',
                 'multilanguage' => 0,
                 'show_in_form' => 1,
                 'show_in_list' => 1,
@@ -255,17 +264,6 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 'allow_create' => 1,
                 'allow_update' => 1,
                 'field_order' => 11,
-            ]
-        );
-
-        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-            [
-                'key' => 'tree',
-                'field_object_type' => $modelTypeId,
-                'field_object_tab' => 'main',
-                'allow_create' => 1,
-                'allow_update' => 1,
-                'field_order' => 20,
             ]
         );
     }

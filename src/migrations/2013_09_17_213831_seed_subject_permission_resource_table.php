@@ -17,19 +17,54 @@ class SeedSubjectPermissionResourceTable extends \App\Vendor\Telenok\Core\Suppor
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
 
-        $now = \Carbon\Carbon::now()->toDateTimeString();
-        $plus15Year = \Carbon\Carbon::now()->addYears(15)->toDateTimeString();
+        $userId = DB::table('user')->where('username', 'admin')->value('id');
 
-        foreach(['object_type', 'object_field', 'object_tab', 'config', 'object_sequence'] as $table)
+        foreach(DB::table('object_type')->get() as $type)
         {
-            app('db')->table($table)->update([
-                'active_at_start' => $now, 
-                'active_at_end' => $plus15Year,
-                'created_at' => $now,
-                'updated_at' => $now, 
+            if ($type->code != 'object_sequence')
+            {
+                foreach(DB::table($type->code)->get() as $item)
+                {
+                    $ins = [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'sequences_object_type' => $type->id,
+                        'treeable' => $type->treeable,
+                        'model_class' => $type->model_class,
+                    ];
+                    
+                    if ($itemSequence = DB::table('object_sequence')->where('id', $item->id)->first()) {
+                        DB::table('object_sequence')->where('id', $item->id)->update($ins);
+                    }
+                    else
+                    {
+                        DB::table('object_sequence')->insert($ins);
+                    }
+                }
+            }
+
+            app('db')->table($type->code)->update([
+                'active'            => 1,
+                'active_at_start'   => '2017-01-01 00:01:01',
+                'active_at_end'     => '2032-01-01 00:01:01',
+                'created_at'        => '2017-01-01 00:01:01',
+                'updated_at'        => '2017-01-01 00:01:01',
+                'created_by_user'   => $userId,
+                'updated_by_user'   => $userId,
             ]);
         }
-        
+
+        (new \Symfony\Component\Console\Output\ConsoleOutput(
+            \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
+        ))->writeln('Super Administrator created');
+
+        //Login User
+        Auth::loginUsingId($userId);
+
+        (new \Symfony\Component\Console\Output\ConsoleOutput(
+            \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
+        ))->writeln('Super Administrator logined');
+
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
                 'title' => SeedObjectPermissionResourceTableTranslation::get('field.code'),

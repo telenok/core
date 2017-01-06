@@ -8,8 +8,13 @@ namespace Telenok\Core\Model\Object;
  */
 class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
-    protected $ruleList = ['title' => ['required', 'min:1'], 'title_list' => ['required', 'min:1'], 'code' => ['required', 'unique:object_field,code,:id:,id,field_object_type,:field_object_type:', 'regex:/^[A-Za-z][A-Za-z0-9_]*$/']];
+    protected $ruleList = ['title' => ['required', 'min:1'],
+                           'title_list' => ['required', 'min:1'],
+                           'code' => ['required', 'unique:object_field,code,:id:,id,field_object_type,:field_object_type:', 'regex:/^[A-Za-z][A-Za-z0-9_]*$/']
+                        ];
+
     protected $table = 'object_field';
+
     protected static $listSpecialFieldController = [];
 
     public static function boot()
@@ -20,9 +25,9 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
         {
             $type = $model->fieldObjectType()->first();
 
-            if ($type && $type->model_class)
+            if ($type && ($class = $type->model_class))
             {
-                static::eraseStatic(app($type->model_class));
+                $model->eraseCachedFields();
 
                 $model->createFieldResource($type);
             }
@@ -84,16 +89,11 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
                 static::$listFieldDate[$class] = array_merge(static::$listFieldDate[$class], $dateField);
 
-                foreach (array_merge((array) $controller->getSpecialField($this), $dateField) as $f_)
+                foreach (array_merge((array) $controller->getSpecialField($this), $dateField) as $f)
                 {
-                    static::$listAllFieldController[$class][$f_] = $controller;
-                    static::$listFillableFieldController[$class][$f_] = $controller;
-                    static::$listSpecialFieldController[$class][$f_] = $controller;
-
-                    if ($this->exists)
-                    {
-                        static::$listField[$class][$f_] = static::$listField[$class][$this->code];
-                    }
+                    static::$listAllFieldController[$class][$f] = $controller;
+                    static::$listFillableFieldController[$class][$f] = $controller;
+                    static::$listSpecialFieldController[$class][$f] = $controller;
                 }
             }
         }
@@ -103,13 +103,10 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
         return array_keys((array) static::$listFillableFieldController[$class]);
     }
 
-    public static function eraseStatic($model)
+    public function eraseCachedFields()
     {
-        $class = get_class($model);
-
-        static::$listSpecialFieldController[$class] = null;
-
-        parent::eraseStatic($model);
+        static::$listSpecialFieldController[get_class($this)] = null;
+        parent::eraseCachedFields();
     }
 
     public function getModelAttributeController($key, $value)
@@ -136,9 +133,7 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
         }
         else
         {
-            $f = static::$listFillableFieldController[$class][$key];
-
-            $f->setModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
+            static::$listFillableFieldController[$class][$key]->setModelAttribute($this, $key, $value, static::$listField[$class][$key]);
         }
     }
 

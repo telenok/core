@@ -85,7 +85,7 @@
                             columns.push({!! json_encode($row) !!});
 							@endforeach
 
-							columns.push({
+							buttons.push({
                                 text : "<i class='fa fa-refresh smaller-90'></i> {{ $controllerParent->LL('list.btn.refresh') }}",
                                 className : 'btn-sm',
                                 action : function (e, dt, button, config)
@@ -150,7 +150,7 @@
 									domId : "telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition",
 									dom : "<'row'<'col-md-6'B>r>t<'row'<'col-md-6'B>>",
 									retrieve : true,
-									columns : aoColumns,
+									columns : columns,
 									order : [],
 									data : [], 
 									buttons : buttons
@@ -332,7 +332,7 @@
 
     </script>
 
-@elseif ($field->morph_one_to_many_belong_to) 
+@elseif ($field->morph_one_to_many_belong_to->count())
 
     <?php 
     

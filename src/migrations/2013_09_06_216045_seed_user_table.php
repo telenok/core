@@ -277,8 +277,33 @@ class SeedUserTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
                 $table->foreign('group_user')->references('id')->on('user')->onDelete('cascade');
             });
         }
-    }
 
+        DB::table('object_field')->insert([
+            'id'                       => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+            'title'                    => json_encode(['en' => 'Deleted by'], JSON_UNESCAPED_UNICODE),
+            'title_list'               => json_encode(['en' => 'Deleted by'], JSON_UNESCAPED_UNICODE),
+            'key'                      => 'relation-one-to-many',
+            'code'                     => 'deleted_by',
+            'field_object_type'        => DB::table('object_type')->where('code', 'user')->value('id'),
+            'relation_one_to_many_has' => DB::table('object_type')->where('code', 'object_sequence')->value('id'),
+            'field_object_tab'         => $tabAdditionallyId,
+            'active'                   => 1,
+            'multilanguage'            => 0,
+            'show_in_list'             => 0,
+            'show_in_form'             => 1,
+            'allow_search'             => 1,
+        ]);
+
+
+        DB::table('user')->insert([
+            'id'                       => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\User\User']),
+            'title'                    => 'Super Administrator',
+            'username'                 => 'admin',
+            'usernick'                 => 'Super administrator',
+            'email'                    => 'support@telenok.com',
+            'password'                 => str_random(),
+        ]);
+    }
 }
 
 class SeedUserTableTranslation extends \Telenok\Core\Abstraction\Translation\Controller

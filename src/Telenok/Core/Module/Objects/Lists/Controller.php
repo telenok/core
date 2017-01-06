@@ -727,23 +727,17 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function update($id = null)
     {
-        try
+        $input = $this->getRequestCollected();
+
+        $type = $this->getType($id);
+
+        if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof \Telenok\Core\Contract\Presentation\Presentation)
         {
-            $input = $this->getRequestCollected();
-
-            $type = $this->getType($id);
-
-            if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof \Telenok\Core\Contract\Presentation\Presentation)
-            {
-                return $controllerProcessing->setDisplayType($this->displayType)->update();
-            }
-
-            $model = $this->save($input, $type);
+            return $controllerProcessing->setDisplayType($this->displayType)->update();
         }
-        catch (\Exception $e)
-        {
-            throw $e;
-        }
+
+        $model = $this->save($input, $type);
+
 
         $fields = $model->getFieldForm();
 

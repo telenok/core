@@ -409,192 +409,159 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function store($id = null)
     {
-        try
+        $input = $this->getRequest();
+
+        $modelType = $input->input('modelType');
+        $name = trim($input->input('name'));
+
+        $currentDirectory = new \SplFileInfo($this->getRequest()->input('directory'));
+
+        if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE)
         {
-            $input = $this->getRequest();
-
-            $modelType = $input->input('modelType');
-            $name = trim($input->input('name'));
-
-            $currentDirectory = new \SplFileInfo($this->getRequest()->input('directory'));
-
-            if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE)
-            {
-                throw new \Exception($this->LL('error.access-denied-over-base-directory'));
-            }
-
-            $validator = app('validator')->make(
-                ['name' => $name], 
-                ['name' => ['required', 'regex:/^[\w .-]+$/u']]
-            );
-
-            if ($validator->fails())
-            {
-                throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError($validator->messages());
-            }
-
-            $modelPath = $currentDirectory->getRealPath() . DIRECTORY_SEPARATOR . $name;
-
-            if (file_exists($modelPath))
-            {
-                throw new \Exception($this->LL('error.file.exists'));
-            }
-
-            if ($modelType == 'directory')
-            {
-                \File::makeDirectory($modelPath, 0775, true, true);
-            }
-            else if ($modelType == 'file')
-            {
-                file_put_contents($modelPath, $this->getRequest()->input('content', ''), LOCK_EX);
-            }
-            else
-            {
-                throw new \Exception($this->LL('error.create.unknown-file-type'));
-            }
-
-            return [
-                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
-                    'controller' => $this,
-                    'currentDirectory' => addslashes($currentDirectory->getRealPath()),
-                    'success' => true,
-                    'modelType' => $modelType,
-                    'model' => new \SplFileInfo($modelPath),
-                    'modelCurrentDirectory' => $currentDirectory,
-                    'routerParam' => $this->getRouterParam('update'),
-                    'uniqueId' => str_random(),
-                                ), $this->getAdditionalViewParam()))->render()
-            ];
+            throw new \Exception($this->LL('error.access-denied-over-base-directory'));
         }
-        catch (\Telenok\Core\Support\Exception\Validator $e)
+
+        $validator = app('validator')->make(
+            ['name' => $name],
+            ['name' => ['required', 'regex:/^[\w .-]+$/u']]
+        );
+
+        if ($validator->fails())
         {
-            throw $e;
+            throw new \Telenok\Core\Support\Exception\Validator($validator->messages());
         }
-        catch (\Exception $e)
+
+        $modelPath = $currentDirectory->getRealPath() . DIRECTORY_SEPARATOR . $name;
+
+        if (file_exists($modelPath))
         {
-            throw $e;
+            throw new \Exception($this->LL('error.file.exists'));
         }
+
+        if ($modelType == 'directory')
+        {
+            \File::makeDirectory($modelPath, 0775, true, true);
+        }
+        else if ($modelType == 'file')
+        {
+            file_put_contents($modelPath, $this->getRequest()->input('content', ''), LOCK_EX);
+        }
+        else
+        {
+            throw new \Exception($this->LL('error.create.unknown-file-type'));
+        }
+
+        return [
+            'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
+                'controller' => $this,
+                'currentDirectory' => addslashes($currentDirectory->getRealPath()),
+                'success' => true,
+                'modelType' => $modelType,
+                'model' => new \SplFileInfo($modelPath),
+                'modelCurrentDirectory' => $currentDirectory,
+                'routerParam' => $this->getRouterParam('update'),
+                'uniqueId' => str_random(),
+                            ), $this->getAdditionalViewParam()))->render()
+        ];
     }
 
     public function update($id = null)
     {
-        try
+        $input = $this->getRequest();
+
+        $modelType = $input->input('modelType');
+        $modelPath = $input->input('modelPath');
+        $directory = trim($input->ginputet('directory'));
+        $name = trim($input->input('name'));
+
+        $currentDirectory = new \SplFileInfo($directory);
+        $model = new \SplFileInfo($modelPath);
+
+        if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE || strstr($model->getPath(), base_path()) === FALSE)
         {
-            $input = $this->getRequest();
+            throw new \Exception($this->LL('error.access-denied-over-base-directory'));
+        }
 
-            $modelType = $input->input('modelType');
-            $modelPath = $input->input('modelPath');
-            $directory = trim($input->ginputet('directory'));
-            $name = trim($input->input('name'));
+        $validator = app('validator')->make(
+                [
+            'name' => $name,
+                ], [
+            'name' => ['required', 'regex:/^[\w .-]+$/u'],
+                ]
+        );
 
-            $currentDirectory = new \SplFileInfo($directory);
-            $model = new \SplFileInfo($modelPath);
+        if ($validator->fails())
+        {
+            throw new \Telenok\Core\Support\Exception\Validator($validator->messages());
+        }
 
-            if (strstr($currentDirectory->getRealPath(), base_path()) === FALSE || strstr($model->getPath(), base_path()) === FALSE)
+        if ($modelType == 'directory')
+        {
+            $pathNew = $currentDirectory->getPathname() . DIRECTORY_SEPARATOR . $name;
+
+            \File::move($model->getRealPath(), $pathNew);
+        }
+        else if ($modelType == 'file')
+        {
+            $pathNew = $currentDirectory->getPathname() . DIRECTORY_SEPARATOR . $name;
+
+            if (strlen($this->getRequest()->input('content', '')) && \File::size($modelPath) < $this->getMaxSizeToView())
             {
-                throw new \Exception($this->LL('error.access-denied-over-base-directory'));
+                file_put_contents($model->getRealPath(), $this->getRequest()->input('content'), LOCK_EX);
             }
 
-            $validator = app('validator')->make(
-                    [
-                'name' => $name,
-                    ], [
-                'name' => ['required', 'regex:/^[\w .-]+$/u'],
-                    ]
-            );
-
-            if ($validator->fails())
+            if ($model->getRealPath() != $pathNew)
             {
-                throw (new \Telenok\Core\Support\Exception\Validator())->setMessageError($validator->messages());
-            }
-
-            if ($modelType == 'directory')
-            {
-                $pathNew = $currentDirectory->getPathname() . DIRECTORY_SEPARATOR . $name;
-
                 \File::move($model->getRealPath(), $pathNew);
             }
-            else if ($modelType == 'file')
-            {
-                $pathNew = $currentDirectory->getPathname() . DIRECTORY_SEPARATOR . $name;
-
-                if (strlen($this->getRequest()->input('content', '')) && \File::size($modelPath) < $this->getMaxSizeToView())
-                {
-                    file_put_contents($model->getRealPath(), $this->getRequest()->input('content'), LOCK_EX);
-                }
-
-                if ($model->getRealPath() != $pathNew)
-                {
-                    \File::move($model->getRealPath(), $pathNew);
-                }
-            }
-            else
-            {
-                throw new \Exception($this->LL('error.create.unknown-file-type'));
-            }
-
-            return [
-                'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
-                    'controller' => $this,
-                    'currentDirectory' => addslashes($currentDirectory->getRealPath()),
-                    'success' => true,
-                    'modelType' => $modelType,
-                    'model' => new \SplFileInfo($pathNew),
-                    'modelCurrentDirectory' => $currentDirectory,
-                    'routerParam' => $this->getRouterParam('update'),
-                    'uniqueId' => str_random(),
-                                ), $this->getAdditionalViewParam()))->render()
-            ];
         }
-        catch (\Telenok\Core\Support\Exception\Validator $e)
+        else
         {
-            throw $e;
+            throw new \Exception($this->LL('error.create.unknown-file-type'));
         }
-        catch (\Exception $e)
-        {
-            throw $e;
-        }
+
+        return [
+            'tabContent' => view("{$this->getPackage()}::module.{$this->getKey()}.model", array_merge(array(
+                'controller' => $this,
+                'currentDirectory' => addslashes($currentDirectory->getRealPath()),
+                'success' => true,
+                'modelType' => $modelType,
+                'model' => new \SplFileInfo($pathNew),
+                'modelCurrentDirectory' => $currentDirectory,
+                'routerParam' => $this->getRouterParam('update'),
+                'uniqueId' => str_random(),
+                            ), $this->getAdditionalViewParam()))->render()
+        ];
     }
 
     public function delete($id = null, $force = false)
     {
-        try
+        $model = new \SplFileInfo(strlen($id) ? $id : $this->getRequest()->input('id'));
+
+        if (strstr($model->getPath(), base_path()) === FALSE)
         {
-            $model = new \SplFileInfo(strlen($id) ? $id : $this->getRequest()->input('id'));
+            throw new \Exception($this->LL('error.access-denied-over-base-directory'));
+        }
 
-            if (strstr($model->getPath(), base_path()) === FALSE)
+        $name = $model->getFilename();
+
+        if (preg_match('/^_delme_/', $name) || $force)
+        {
+            if ($model->isDir())
             {
-                throw new \Exception($this->LL('error.access-denied-over-base-directory'));
-            }
-
-            $name = $model->getFilename();
-
-            if (preg_match('/^_delme_/', $name) || $force)
-            {
-                if ($model->isDir())
-                {
-                    \File::deleteDirectory($model->getRealPath());
-                }
-                else
-                {
-                    \File::delete($model->getRealPath());
-                }
+                \File::deleteDirectory($model->getRealPath());
             }
             else
             {
-                \File::move($model->getRealPath(), $model->getPath() . DIRECTORY_SEPARATOR . '_delme_' . date('YmdHis') . '_' . $name);
+                \File::delete($model->getRealPath());
             }
+        }
+        else
+        {
+            \File::move($model->getRealPath(), $model->getPath() . DIRECTORY_SEPARATOR . '_delme_' . date('YmdHis') . '_' . $name);
+        }
 
-            return ['success' => 1];
-        }
-        catch (\Telenok\Core\Support\Exception\Validator $e)
-        {
-            throw $e;
-        }
-        catch (\Exception $e)
-        {
-            throw $e;
-        }
+        return ['success' => 1];
     }
 
     public function editList($id = null)

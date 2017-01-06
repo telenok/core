@@ -104,7 +104,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
      * @member Telenok.Core.Field.DateTimeRange.Controller
      */
     public function setModelAttribute($model, $key, $value, $field)
-    {   
+    {
         if (in_array($key, [$field->code . '_start', $field->code . '_end'], true))
         {
             if ($value === null)

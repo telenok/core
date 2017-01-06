@@ -5,7 +5,7 @@ class SeedFileTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
     public function up()
     {
         parent::up();
-
+/*
         $modelTypeId = DB::table('object_type')->where('code', 'file')->value('id');
 
         $tabMainId = \SeedCommonFields::createTabMain($modelTypeId);
@@ -16,6 +16,14 @@ class SeedFileTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
         \SeedCommonFields::alterTitle($modelTypeId, $tabMainId);
         \SeedCommonFields::alterActive($modelTypeId, $tabVisibleId);
         \SeedCommonFields::alterCreateUpdateBy($modelTypeId, $tabAdditionallyId);
+*/
+        (new \App\Vendor\Telenok\Core\Model\Object\Type())->storeOrUpdate([
+            'title'       => ['ru' => 'Файл', 'en' => 'File'],
+            'title_list'  => ['ru' => 'Файл', 'en' => 'File'],
+            'code'        => 'file',
+            'active'      => 1,
+            'model_class' => '\App\Vendor\Telenok\Core\Model\File\File',
+        ]);
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
             'title' => ['en' => 'Description', 'ru' => 'Описание'],

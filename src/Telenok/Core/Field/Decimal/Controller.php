@@ -246,7 +246,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
     {
         if ($input->get('decimal_precision') < $input->get('decimal_scale'))
         {
-            throw $this->validateException()->setMessageError($this->LL('error.precision_scale'));
+            throw $this->validateException($this->LL('error.precision_scale'));
         }
 
         return parent::validate($model, $input, $messages);

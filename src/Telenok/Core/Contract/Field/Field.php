@@ -89,7 +89,7 @@ interface Field extends \Telenok\Core\Contract\Injection\Request {
 
     public function validator($model = null, $input = [], $message = [], $customAttribute = []);
 
-    public function validateException();
+    public function validateException($messages = []);
 
     public function preProcess($model, $type, $input);
 

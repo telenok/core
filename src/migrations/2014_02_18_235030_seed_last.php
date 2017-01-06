@@ -125,7 +125,7 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
         (new \Symfony\Component\Console\Output\ConsoleOutput(
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Added references');
-
+/*
         \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function($type)
         {
             $table = $type->code;
@@ -133,6 +133,7 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             $plus15Year = \Carbon\Carbon::now()->addYears(15)->toDateTimeString();
 
             app('db')->table($table)->update([
+                'active' => 1,
                 'created_at' => $now,
                 'updated_at' => $now,
                 'active_at_start' => $now,
@@ -143,21 +144,18 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
         (new \Symfony\Component\Console\Output\ConsoleOutput(
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Datetime updated');
+*/
 
-        //User superadmin
-        $user = (new \App\Vendor\Telenok\Core\Model\User\User())->storeOrUpdate([
-            'title' => 'Super Administrator',
-            'username' => 'admin',
-            'usernick' => 'Super administrator',
-            'email' => 'support@telenok.com',
-            'password' => str_random(),
-            'active' => 1,
-        ]);
+        $user = \App\Vendor\Telenok\Core\Model\User\User::where('username', 'admin')->first();
+
+        (new \Symfony\Component\Console\Output\ConsoleOutput(
+            \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
+        ))->writeln('Start updating ACL resources...');
 
         \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function($type) use ($user)
         {
             (new \App\Vendor\Telenok\Core\Module\Objects\Type\Controller())->createResource($type);
-
+            /*
             $class = $type->model_class;
 
             $model = new $class;
@@ -168,7 +166,7 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
                     'created_by_user' => $user->getKey(),
                     'updated_by_user' => $user->getKey(),
                 ]);
-            });
+            });*/
 
             $type->field()->get()->each(function($field) use ($type)
             {
@@ -555,14 +553,6 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
         ))->writeln('Resources added');
 
 
-        //Login User
-        Auth::login($user);
-
-        (new \Symfony\Component\Console\Output\ConsoleOutput(
-            \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
-        ))->writeln('User logined');
-
-
         //User tab
         (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate(
                 [
@@ -816,13 +806,14 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Custom fields added');
 
-        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function($item)
+
+        \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function($type)
         {
-            if ($item->treeable && !$item->field()->where('code', 'tree_parent')->exists())
+            if ($type->treeable && !$type->field()->where('code', 'tree_parent')->exists())
             {
                 (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                     'key' => 'tree',
-                    'field_object_type' => $item->getKey(),
+                    'field_object_type' => $type->getKey(),
                     'field_object_tab' => 'main',
                     'field_order' => 20,
                     'allow_create' => 1,
@@ -834,7 +825,7 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             {
                 (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                     'key' => 'locked-by',
-                    'field_object_type' => $item->getKey(),
+                    'field_object_type' => $type->getKey(),
                     'allow_search' => 1,
                     'show_in_list' => 0,
                     'field_order' => 3,
@@ -849,7 +840,7 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             {
                 (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                     'key' => 'deleted-by',
-                    'field_object_type' => $item->getKey(),
+                    'field_object_type' => $type->getKey(),
                     'allow_search' => 1,
                     'show_in_list' => 0,
                     'field_order' => 4,
@@ -864,7 +855,7 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             {
                 (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                     'key' => 'permission',
-                    'field_object_type' => $item->getKey(),
+                    'field_object_type' => $type->getKey(),
                     'field_order' => 10,
                 ]);
             }
@@ -930,7 +921,6 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
         ]);
 
         //ACL
-        $user = \App\Vendor\Telenok\Core\Model\User\User::where('username', 'admin')->first();
         $groupSuperAdmin = \App\Vendor\Telenok\Core\Model\User\Group::where('code', 'super_administrator')->first();
         $roleSuperAdmin = \App\Vendor\Telenok\Core\Model\Security\Role::where('code', 'super_administrator')->first();
 
