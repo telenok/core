@@ -21,14 +21,11 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
     public function getFormModelViewVariable($controller = null, $model = null, $field = null, $uniqueId = null)
     {
-        $linkedField = $this->getLinkedField($field);
-        
         return
         [
             'urlListTable' => route($this->getRouteListTable(), ['id' => (int)$model->getKey(), 'fieldId' => $field->getKey(), "uniqueId" => $uniqueId]),
             'urlWizardCreate' => route($this->getRouteWizardCreate(), ['id' => $field->morph_one_to_many_has, 'saveBtn' => 1, 'chooseBtn' => 1]),
             'urlWizardChoose' => route($this->getRouteWizardChoose(), ['typeId' => $this->getChooseTypeId($field)]),
-            'urlListTitle' => route($this->getRouteListTitle(), ['id' => $field->{$linkedField}]),
             'urlWizardEdit' => route($this->getRouteWizardEdit(), ['id' => '--id--', 'saveBtn' => 1]),
         ];
     }
@@ -42,7 +39,14 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
      */
     public function getLinkedModelType($field)
     {
-        return \App\Vendor\Telenok\Core\Model\Object\Type::findMany([$field->morph_one_to_many_has] + $field->morph_one_to_many_belong_to->all())->first();
+        if ($field->morph_one_to_many_has)
+        {
+            return \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_many_has);
+        }
+        elseif ($field->morph_one_to_many_belong_to->count())
+        {
+            return \App\Vendor\Telenok\Core\Model\Object\Type::findMany($field->morph_one_to_many_belong_to->all());
+        }
     }
     
     public function getFormModelContent($controller = null, $model = null, $field = null, $uniqueId = null)
@@ -55,8 +59,6 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
     public function getModelFillableField($model, $field)
     {
-        dd( get_class($field) );
-        
         return $field->morph_one_to_many_belong_to->count() ? [$field->code . '_type', $field->code . '_id'] : [];
     }
     
@@ -163,8 +165,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         
         $ids = [$field->morph_one_to_many_has] ?: $field->morph_one_to_many_belong_to->all();
 
-        $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::whereIn('sequences_object_type', $ids)
-                    ->withPermission()->take(20);
+        $query = \App\Vendor\Telenok\Core\Model\Object\Sequence::whereIn('sequences_object_type', $ids)->withPermission()->take(20);
 
         $query->get()->each(function($item) use (&$option)
         {
@@ -323,14 +324,10 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
             if ($f)
             {
-                $tList = $f->morph_one_to_many_belong_to;
-
-                $tNewList = $tList->reject(function($item) use ($model) 
+                $f->morph_one_to_many_belong_to = $f->morph_one_to_many_belong_to->reject(function($item) use ($model)
                 {
                     return $item == $model->fieldObjectType->getKey();
                 });
-
-                $f->morph_one_to_many_belong_to = $tNewList;
 
                 $f->update();
             }
@@ -382,15 +379,13 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             $f = \App\Vendor\Telenok\Core\Model\Object\Field::where(function($query) use ($relatedSQLField, $model)
                     {
                         $query->where('code', (string)$relatedSQLField);
-                        $query->where('morph_one_to_many_has', $model->morph_one_to_many_has);
+                        $query->where('field_object_type', $model->morph_one_to_many_has);
                     })
                     ->first();
 
             if ($f)
             {
-                $tList = $f->morph_one_to_many_belong_to;
-
-                $tList->push($relatedTypeOfModelField->getKey());
+                $tList = $f->morph_one_to_many_belong_to->push($relatedTypeOfModelField->getKey())->unique();
 
                 $f->morph_one_to_many_belong_to = $tList;
 
@@ -420,7 +415,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                     'code' => $relatedSQLField,
                     'field_object_type' => $typeBelongTo->getKey(),
                     'field_object_tab' => $tabTo->getKey(),
-                    'morph_one_to_many_belong_to' => '[' . $relatedTypeOfModelField->getKey() . ']',
+                    'morph_one_to_many_belong_to' => [$relatedTypeOfModelField->getKey()],
                     'show_in_form' => $input->get('show_in_form_belong', $model->show_in_form),
                     'show_in_list' => $input->get('show_in_list_belong', $model->show_in_list),
                     'allow_search' => $input->get('allow_search_belong', $model->allow_search),

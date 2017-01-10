@@ -453,22 +453,39 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
      */
     public function upload()
     {
-        $input = $this->getRequestCollected();
+        $input = collect(collect($this->getRequest()->all())->get($this->getKey()))->except('upload');
+
+        if (!$input->get('file_name'))
+        {
+            throw new \Telenok\Core\Support\Exception\Validator(['Wrong File name']);
+        }
 
         if (!$input->get('title'))
         {
-            $input->merge(['title' => ['en' => 'Some file']]);
+            throw new \Telenok\Core\Support\Exception\Validator(['Wrong File title']);
         }
 
-        $input->merge([
-            'active' => 1,
-        ]);
+        if (!$this->getRequest()->file($this->getKey() . '.upload'))
+        {
+            throw new \Telenok\Core\Support\Exception\Validator(['Please, upload file']);
+        }
+
+        $title = [];
+
+        \App\Vendor\Telenok\Core\Model\System\Language::whereIn('locale', config('app.locales'))->get()->each(function($item) use (&$title, $input)
+        {
+            $title[$item->locale] = trim(array_get($input, 'title.' . $item->locale, data_get($input, 'title.' . config('app.localeDefault'), 'File'))) . ' ' . $input->get('file_name');
+        });
+
+        $input->put('title', $title);
+        $input->put('active', 1);
+        $input->put('upload', $this->getRequest()->file($this->getKey() . '.upload'));
 
         $file = app('\App\Vendor\Telenok\Core\Model\File\File');
+        $model = $file->storeOrUpdate($input);
 
-        $model = $file->storeOrUpdate($input->all(), true);
+        return $model->getKey();
 
-        return $model->id;
     }
 
     /**

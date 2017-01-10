@@ -203,7 +203,7 @@
             jQuery('div.field-select-one-{{$uniqueId}} div.select-one-container').append($templateClone);
         }
 
-        var randId = Math.floor(Math.random()*1000000000);
+        var randId = Math.floor(Math.random()*10000000);
 
         jQuery('ul.nav.nav-tabs li a, div.tab-content div.tab-pane.in', $templateClone).each(function(k, v)
         {
@@ -219,6 +219,9 @@
 
         jQuery("input.key-default", $templateClone).on('click', function()
         {
+            jQuery("div.field-select-one-{{$uniqueId}} input.key-default").not(this).removeAttr('checked').val(0);
+            jQuery("div.field-select-one-{{$uniqueId}} div.widget-header .widget-title").removeClass('green');
+
             var $i = jQuery("input.key-value", $templateClone);
             var $c = jQuery("input.key-default", $templateClone);
 
@@ -226,15 +229,13 @@
             {
                 jQuery("#key-default-{{$uniqueId}}").val($i.val());
                 $c.prop('checked', 'checked');
+                jQuery("div.widget-header .widget-title", $templateClone).addClass('green');
             }
             else
             {
                 jQuery("#key-default-{{$uniqueId}}").val("");
                 $c.removeProp('checked');
             }
-
-            jQuery("div.field-select-one-{{$uniqueId}} input.key-default").not($('input.key-default', $templateClone)).removeAttr('checked').val(0);
-            jQuery("div.widget-header .widget-title", $templateClone).toggleClass('green'); 
         });
 
         jQuery("input.key-value", $templateClone).on('keyup', function()
@@ -242,13 +243,7 @@
             jQuery("h4.widget-title", $templateClone).text("{{$controller->LL('row.title')}}" + this.value);
 
             jQuery("input.key-value", $templateClone).val(this.value);
-/*
-            if (jQuery("input.key-default", $templateClone).prop('checked'))
-            {
-                jQuery("#key-default-{{$uniqueId}}").val(this.value);
-            }
-*/
-        }); 
+        });
 
         jQuery('div.widget-header a[data-action="close"]', $templateClone).on('click', function()
         {
@@ -265,6 +260,8 @@
 
     if (data{{$uniqueId}}['title-key'].length)
     {
+        jQuery("#key-default-{{$uniqueId}}").val(data{{$uniqueId}}.default);
+
         data{{$uniqueId}}['title-key'].forEach(function(o) 
         {
             $templateClone = addSelectOneRow{{$uniqueId}}();
@@ -285,7 +282,7 @@
             if (data{{$uniqueId}}.default == o.key)
             {
                 jQuery("input.key-default", $templateClone).attr('checked', 'checked');
-                jQuery("div.widget-header .widget-title", $templateClone).addClass('green'); 
+                jQuery("div.widget-header .widget-title", $templateClone).addClass('green');
             }
         });
     }

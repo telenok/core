@@ -321,11 +321,6 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
             if (!$model->{$method}()->exists() && empty($idsAdd))
             {
-                if (!$field->relation_many_to_many_default)
-                {
-                    dd($field);
-                }
-
                 $idsAdd = $field->relation_many_to_many_default->all();
             }
 

@@ -3,7 +3,7 @@
 
 <?php
 
-    if (!$model->exists || $model->morph_one_to_one_has || !$model->morph_one_to_one_belong_to)
+    if (!$model->exists || $model->morph_one_to_one_has || !$model->morph_one_to_one_belong_to->count())
     {
         $linkedField = 'morph_one_to_one_has';
     }

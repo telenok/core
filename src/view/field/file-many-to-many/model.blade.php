@@ -113,10 +113,54 @@
 
                                             <div class="form-group">
 
+                                                {!! Form::label("", 'File title', array('class'=>'col-sm-3 control-label no-padding-right')) !!}
+
+                                                <div class="col-sm-5">
+
+                                                    <ul class="nav nav-tabs" >
+                                                        <?php
+
+                                                        $localeDefault = config('app.localeDefault');
+
+                                                        $languages = \App\Vendor\Telenok\Core\Model\System\Language::whereIn('locale', config('app.locales'))
+                                                                ->get()->sortBy(function($item) use ($localeDefault)
+                                                                {
+                                                                    return $item->locale == $localeDefault ? 0 : 1;
+                                                                });
+                                                        ?>
+
+                                                        @foreach($languages as $language)
+                                                            <li class="<?php if ($language->locale == $localeDefault) echo "active"; ?>">
+                                                                <a data-toggle="tab" href="#{{$jsUnique}}-language-{{$language->locale}}-{{$field->code}}">
+                                                                    {{$language->translate('title')}}
+                                                                </a>
+                                                            </li>
+                                                        @endforeach
+
+                                                    </ul>
+
+                                                    <div class="tab-content">
+                                                        @foreach($languages as $language)
+                                                            <div id="{{$jsUnique}}-language-{{$language->locale}}-{{$field->code}}" class="tab-pane in @if ($language->locale == $localeDefault) active @endif">
+
+                                                                {!! Form::text("", '', [
+                                                                        'class' => 'col-xs-11 col-sm-11 ' . ($field->code . '-' . $uniqueId . '-title'),
+                                                                        'placeholder' => 'File title',
+                                                                        'language' => $language->locale,
+                                                                    ]) !!}
+
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+
                                                 {!! Form::label("", $controller->LL('choose.categories'), array('class'=>'col-sm-3 control-label no-padding-right')) !!}
 
                                                 <div class="col-sm-5">
-                                                    {!! Form::select('category_add[]', 
+                                                    {!! Form::select("",
                                                         \App\Vendor\Telenok\Core\Model\File\FileCategory::active()->get(['title', 'id'])
                                                             ->transform(function($item) { 
                                                                 return ['title' => $item->translate('title'), 'id' => $item->id]; 
@@ -149,7 +193,7 @@
                                                     <select class="chosen" multiple 
                                                         data-placeholder="{{$controller->LL('notice.choose')}}" 
                                                         id="select-file-permission-{{$jsUnique}}" 
-                                                        name="permission[read][]">
+                                                        name="">
                                                         <?php
 
                                                             $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
@@ -592,7 +636,7 @@
                     {
                         jQuery("div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone").dropzone({
                                 url: "{!! route($controller->getRouteUpload()) !!}",
-                                paramName: "upload", // The name that will be used to transfer the file
+                                paramName: "{{$controller->getKey()}}[upload]", // The name that will be used to transfer the file
                                 maxFilesize: {{floatval($field->file_many_to_many_allow_size / 1000000)}}, // MB
                                 addRemoveLinks : true,
                                 dictDefaultMessage :
@@ -601,8 +645,8 @@
                                     <i class="upload-icon fa fa-cloud-upload blue fa fa-3x"></i>',
                                 dictResponseError: 'Error while uploading file!',
                                 autoProcessQueue: false,
-                                parallelUploads: 4,
-                                uploadMultiple: true,
+                                parallelUploads: 1,
+                                uploadMultiple: false,
                                 addRemoveLinks: false,
                                 acceptedFiles: '{{$field->file_many_to_many_allow_mime->merge(
                                         $field->file_many_to_many_allow_ext->transform(function($item){ return '.' . $item; }))->implode(",")}}',
@@ -635,31 +679,39 @@
                                 jQuery('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload').append(
                                     '<input type="hidden" class="{{$field->code}}_add_{{$jsUnique}}" name="{{$field->code}}_add[]" value="' + id + '" />'
                                 );
+
+                                Dropzone.forElement('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone').options.autoProcessQueue = true;
                             });
 
-                        Dropzone.forElement('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone').on("sending", function(file, xhr, formData) {
-                                formData.append("title", file.name);
+                        Dropzone.forElement('div#telenok-{{$controller->getKey()}}-{{$jsUnique}}-tab-upload-dropzone').on("sending", function(file, xhr, formData)
+                        {
+                            formData.append("{{$controller->getKey()}}[file_name]", file.name);
 
-                                var arr = jQuery('#select-file-category-{{$jsUnique}}').val();
-
-                                if (arr instanceof Array)
-                                {
-                                    arr.forEach(function(item, i, arr) 
-                                    {
-                                        formData.append("category_add[]", item);
-                                    });
-                                }
-
-                                var arr = jQuery('#select-file-permission-{{$jsUnique}}').val();
-
-                                if (arr instanceof Array)
-                                {
-                                    arr.forEach(function(item, i, arr) 
-                                    {
-                                        formData.append("permission[read][]", item);
-                                    });
-                                }
+                            jQuery('input.{{$field->code}}-{{$uniqueId}}-title').each(function(i, item)
+                            {
+                                formData.append("{{$controller->getKey()}}[title][" + jQuery(item).attr('language') + "]", item.value);
                             });
+
+                            var arr = jQuery('#select-file-category-{{$jsUnique}}').val();
+
+                            if (arr instanceof Array)
+                            {
+                                arr.forEach(function(item, i, arr)
+                                {
+                                    formData.append("{{$controller->getKey()}}[category_add][]", item);
+                                });
+                            }
+
+                            var arr = jQuery('#select-file-permission-{{$jsUnique}}').val();
+
+                            if (arr instanceof Array)
+                            {
+                                arr.forEach(function(item, i, arr)
+                                {
+                                    formData.append("{{$controller->getKey()}}[permission][read][]", item);
+                                });
+                            }
+                        });
                     }
                     catch(e) {}
 

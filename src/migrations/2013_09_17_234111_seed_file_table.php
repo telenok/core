@@ -23,6 +23,7 @@ class SeedFileTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
             'code'        => 'file',
             'active'      => 1,
             'model_class' => '\App\Vendor\Telenok\Core\Model\File\File',
+            'multilanguage' => 1,
         ]);
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([

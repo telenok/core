@@ -949,8 +949,8 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
         catch (\Exception $ex)
         {
             try {
-                $tabHas = \App\Vendor\Telenok\Core\Model\Object\Tab::firstOrFail('id', $tabHasId);
-                $tabBelongTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->whereCode($tabHas->code);
+                $tabHas = \App\Vendor\Telenok\Core\Model\Object\Tab::where('id', $tabHasId)->firstOrFail();
+                $tabBelongTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->whereCode($tabHas->code)->firstOrFail();
             } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $ex) {
                 try {
                     $tabBelongTo = \App\Vendor\Telenok\Core\Model\Object\Tab::where('tab_object_type', $typeId)->where('code', 'main')->firstOrFail();

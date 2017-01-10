@@ -1,7 +1,7 @@
 
 @include('core::field.common-view.field-view')
 
-<?php 
+<?php
 
     $textUnique = str_random();
 
@@ -51,23 +51,23 @@
 <script>
 
 	var $form{{$uniqueId}} = jQuery('#model-ajax-{{$uniqueId}}');
-	var $multilanguage{{$uniqueId}} = jQuery('input[name=multilanguage]', $form{{$uniqueId}}); 
+	var $multilanguage{{$uniqueId}} = jQuery('input[name=multilanguage]', $form{{$uniqueId}});
 
 	var string_default_multilanguage{{$uniqueId}} = '';
 	var string_default{{$uniqueId}} = '';
-			 
+
 	@foreach(config('app.locales') as $locale)
 		string_default_multilanguage{{$uniqueId}} += '<div class="form-group">';
-		string_default_multilanguage{{$uniqueId}} += {!! json_encode(Form::label("text_default[{$locale}]", $controller->LL("property.default") . " [{$locale}]", array('class'=>'col-sm-3 control-label no-padding-right'))) !!};
+		string_default_multilanguage{{$uniqueId}} += {!! json_encode(Form::label("text_default[{$locale}]", $controller->LL("property.default") . " [{$locale}]", array('class'=>'col-sm-3 control-label no-padding-right'))->toHtml()) !!};
 		string_default_multilanguage{{$uniqueId}} += '<div class="col-sm-9">';
-		string_default_multilanguage{{$uniqueId}} += {!! json_encode(Form::text("text_default[{$locale}]", $model->translate("text_default", $locale) )) !!};
+		string_default_multilanguage{{$uniqueId}} += {!! json_encode(Form::text("text_default[{$locale}]", $model->translate("text_default", $locale) )->toHtml()) !!};
 		string_default_multilanguage{{$uniqueId}} += '</div></div>';
 	@endforeach
-	
+
 	string_default{{$uniqueId}} += '<div class="form-group">';
-	string_default{{$uniqueId}} += {!! json_encode(Form::label("text_default", $controller->LL("property.default"), array('class'=>'col-sm-3 control-label no-padding-right'))) !!};
+	string_default{{$uniqueId}} += {!! json_encode(Form::label("text_default", $controller->LL("property.default"), array('class'=>'col-sm-3 control-label no-padding-right'))->toHtml()) !!};
 	string_default{{$uniqueId}} += '<div class="col-sm-9">';
-	string_default{{$uniqueId}} += {!! json_encode(Form::text("text_default", $model->text_default)) !!};
+	string_default{{$uniqueId}} += {!! json_encode(Form::text("text_default", $model->text_default)->toHtml()) !!};
 	string_default{{$uniqueId}} += '</div></div>';
 
 	var closure{{$uniqueId}} = function()

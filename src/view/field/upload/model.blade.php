@@ -17,7 +17,7 @@
 
         <div class="row">
             <div class="col-sm-6">
-                
+
             @if ($model->{$field->code}->exists())
 
                 @if ($model->{$field->code}->isImage())
@@ -84,7 +84,7 @@
 
 
 <script type="text/javascript">
-    
+
 $('#id-file-upload-{{$field->code}}-{{$uniqueId}}').ace_file_input({
     no_file: 'No File ...',
     btn_choose: 'Choose',

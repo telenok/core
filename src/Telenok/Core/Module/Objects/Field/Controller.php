@@ -8,7 +8,6 @@ namespace Telenok\Core\Module\Objects\Field;
  */
 class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Controller
 {
-
     protected $key                           = 'objects-field';
     protected $parent                        = 'objects';
     protected $modelListClass                = '\App\Vendor\Telenok\Core\Model\Object\Field';
@@ -19,9 +18,12 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
     public function getFormFieldContent($fieldKey, $modelId, $uniqueId)
     {
-        try {
+        try
+        {
             $model = \App\Vendor\Telenok\Core\Model\Object\Field::withPermission()->findOrFail($modelId);
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex)
+        {
             $model = app('\App\Vendor\Telenok\Core\Model\Object\Field');
         }
 

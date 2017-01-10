@@ -2,7 +2,7 @@
 
 
 <script type="text/javascript">
-  
+
 if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 {
     var presentationTreeTab{{$uniqueId}} = Clazzzz.extend(
@@ -34,7 +34,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                 {
                     buttons.push(param.tableListBtnCreate);
                 }
-                else 
+                else
                 {
                     buttons.push({
                         text: "<i class='fa fa-plus smaller-90'></i> {{ $controller->LL('list.btn.create') }}",
@@ -53,7 +53,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                 {
                     buttons.push(param.tableListBtnRefresh);
                 }
-                else 
+                else
                 {
                     buttons.push({
                             text : "<i class='fa fa-refresh smaller-90'></i> {{ $controller->LL('list.btn.refresh') }}",
@@ -64,20 +64,20 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                             }
                         });
                 }
-            @show 
+            @show
 
             @section('tableListBtnSelected')
                 if (param.tableListBtnSelected)
                 {
                     buttons.push(param.tableListBtnSelected);
                 }
-                else 
+                else
                 {
                     buttons.push({
                         extend: 'collection',
                         className : 'btn btn-sm btn-light',
                         text : "<i class='fa fa-check-square-o smaller-90'></i> {{ $controller->LL('list.btn.select') }}",
-                        buttons : [ 
+                        buttons : [
                             {
                                 text : "<i class='fa fa-pencil-square-o'></i> {{ $controller->LL('btn.edit') }}",
                                 action : function (e, dt, button, config)
@@ -85,8 +85,8 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                                     if (param.btnListEditUrl)
                                     {
                                         this_.addTabByURL({
-                                            url: param.btnListEditUrl, 
-                                            data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize() 
+                                            url: param.btnListEditUrl,
+                                            data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize()
                                         });
                                     }
                                 }
@@ -98,11 +98,11 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                                     if (param.btnListLockUrl && jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).size())
                                     {
                                         jQuery.ajax({
-                                            url: param.btnListLockUrl, 
+                                            url: param.btnListLockUrl,
                                             data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize(),
                                             method: 'post',
                                             dataType: 'json'
-                                        }).done(function(data) 
+                                        }).done(function(data)
                                         {
                                             if (data.success == 1)
                                             {
@@ -113,7 +113,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                                                     time: 3000,
                                                 });
                                             }
-                                        }); 
+                                        });
                                     }
                                 }
                             },
@@ -124,11 +124,11 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                                     if (param.btnListUnlockUrl && jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).size())
                                     {
                                         jQuery.ajax({
-                                            url: param.btnListUnlockUrl, 
+                                            url: param.btnListUnlockUrl,
                                             data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize(),
                                             method: 'post',
                                             dataType: 'json'
-                                        }).done(function(data) 
+                                        }).done(function(data)
                                         {
                                             if (data.success == 1)
                                             {
@@ -139,7 +139,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                                                     time: 3000,
                                                 });
                                             }
-                                        }); 
+                                        });
                                     }
                                 }
                             },
@@ -149,13 +149,13 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                                 action : function (e, dt, button, config)
                                 {
                                     if (param.btnListDeleteDisabled || !param.btnListDeleteUrl) return false;
-                                    else 
+                                    else
                                     {
                                         jQuery.ajax({
                                             url: param.btnListDeleteUrl,
                                             method: 'post',
                                             dataType: 'json',
-                                            data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize() 
+                                            data: jQuery('input[name=tableCheckAll\\[\\]]:checked', dt.table().body()).serialize()
                                         }).done(function(data)
                                         {
                                             if (data.success)
@@ -176,7 +176,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                 {
                     buttons.push(param.tableListBtnFilter);
                 }
-                else 
+                else
                 {
                     buttons.push({
                         text : "<i class='fa fa-search'></i> {{ $controller->LL('btn.filter') }}",
@@ -187,7 +187,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                         }
                     });
                 }
-            @show 				
+            @show
 
             param = jQuery.extend({}, {
                 columns : [],
@@ -204,7 +204,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                 language : {
                     paginate : {
                         next : "{{ trans('core::default.btn.next') }}",
-                        previous : "{{ trans('core::default.btn.prev') }}", 
+                        previous : "{{ trans('core::default.btn.prev') }}",
                     },
                     emptyTable : "{{ trans('core::default.table.empty') }}",
                     search : "{{ trans('core::default.btn.search') }} ",
@@ -256,7 +256,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
 			time: 3000,
 		});
 
-		$el.closest('div.modal').html(data.tabContent); 
+		$el.closest('div.modal').html(data.tabContent);
 
 	@stop
 

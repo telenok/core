@@ -233,13 +233,15 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         /*
          * if file uploaded
+         *
+         * @var $file \Symfony\Component\HttpFoundation\File\UploadedFiles
          */
-        $file = collect($this->getRequest()->file($field->code))->first();
+        $file = $input->get($field->code);
 
         /*
          * if file uploaded as BLOB via hidden field
          */
-        $fileBlob = $this->getRequest()->input($field->code . '_blob');
+        $fileBlob = $input->get($field->code . '_blob');
 
         /*
          * if not post file - think it can be sent by string - full path from local disk
@@ -247,9 +249,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         if ($file === null)
         {
             if ($file = $input->get($field->code))
-            {
-                
-            }
+            {}
             else if ($fileBlob)
             {
                 if (strpos($fileBlob, 'data:') === 0)
@@ -294,9 +294,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
         if ($file !== null)
         {
-            while (($filename = $protectedFileUpload->generateFileName()) && $model::where($field->code . '_file_name', $filename)->exists())
-            {
-            }
+            while (($filename = $protectedFileUpload->generateFileName()) && $model::where($field->code . '_file_name', $filename)->exists()) {}
 
             $this->validateUpload($protectedFileUpload, $field);
 

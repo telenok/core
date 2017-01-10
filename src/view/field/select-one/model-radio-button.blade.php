@@ -44,7 +44,7 @@
 
                 <?php
 
-                    $checked = ($model->exists && strcmp($k, $model->{$field->code}) === 0) || (!$model->exists && strcmp($k, $default) === 0) ? 1 : 0;
+                    $checked = ($model->exists && strcmp($k, $model->{$field->code}) === 0) || (!$model->exists && $k == $default) ? 1 : 0;
  
 					$domAttr['id'] .= '-' . $k;
 

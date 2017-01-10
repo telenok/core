@@ -23,12 +23,12 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
 
         static::saved(function($model)
         {
+            $model->eraseCachedFields();
+
             $type = $model->fieldObjectType()->first();
 
             if ($type && ($class = $type->model_class))
             {
-                $model->eraseCachedFields();
-
                 $model->createFieldResource($type);
             }
         });
@@ -43,6 +43,11 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
             }
 
             $model->deleteFieldResourcePermission($type);
+        });
+
+        static::deleted(function($model)
+        {
+            $model->eraseCachedFields();
         });
     }
 

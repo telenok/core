@@ -165,7 +165,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             $idsParentDelete = array_unique((array) $input->get("tree_parent_delete", []));
 
             $idsChildAdd = array_unique((array) $input->get("tree_child_add", []));
-            $idsChilDelete = array_unique((array) $input->get("tree_child_delete", []));
+            $idsChildDelete = array_unique((array) $input->get("tree_child_delete", []));
 
             if (!empty($idsParentDelete))
             {
@@ -190,15 +190,15 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
 
         if (app('auth')->can('update', 'object_field.' . $model->getTable() . '.tree_child'))
         {
-            if (!empty($idsChilDelete))
+            if (!empty($idsChildDelete))
             {
-                if (in_array('*', $idsChilDelete, true))
+                if (in_array('*', $idsChildDelete, true))
                 {
                     $model->treeChild()->detach();
                 }
-                else if (!empty($idsChilDelete))
+                else if (!empty($idsChildDelete))
                 {
-                    $model->treeChild()->detach($idsChilDelete);
+                    $model->treeChild()->detach($idsChildDelete);
                 }
             }
 

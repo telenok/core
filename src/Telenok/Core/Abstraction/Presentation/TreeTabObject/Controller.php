@@ -110,7 +110,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab
                     'type' => $type,
                     'fields' => $fields,
                     'uniqueId' => $uniqueId,
-                                ), $this->getAdditionalViewParam()))->render();
+                ), $this->getAdditionalViewParam()))->render();
     }
 
     public function getModelFieldFilter($model = null)
@@ -330,7 +330,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab
                 'routerParam' => $this->getRouterParam('edit', $eventResource->get('type'), $eventResource->get('model')),
                 'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
                 'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
-                            ), $this->getAdditionalViewParam()))->render()
+            ), $this->getAdditionalViewParam()))->render()
         ];
     }
 

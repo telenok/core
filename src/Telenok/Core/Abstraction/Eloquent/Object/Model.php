@@ -111,7 +111,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      * List of cached links to field's controllers.
      * @member Telenok.Core.Abstraction.Eloquent.Object.Model
      */
-    protected static $listFillableFieldController = [];
+    public static $listFillableFieldController = [];
 
     /**
      * @protected
@@ -629,8 +629,11 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             throw new \Telenok\Core\Support\Exception\ModelProcessAccessDenied('Telenok\Core\Abstraction\Eloquent\Object\Model::storeOrUpdate() - Error: "type of object not found, please, define it"');
         }
 
-
-        if ($input instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model)
+        if ($input instanceof \Illuminate\Http\Request)
+        {
+            $input = collect($input->all());
+        }
+        else if ($input instanceof \Telenok\Core\Abstraction\Eloquent\Object\Model)
         {
             $input = collect($input->getAttributes());
         }
@@ -708,11 +711,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
             if ($validator->fails())
             {
-
-
-
-
-
                 throw new \Exception(json_encode($validator->messages(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
 

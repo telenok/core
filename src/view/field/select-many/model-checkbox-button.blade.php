@@ -45,7 +45,7 @@
 
                 <?php
 
-                    $checked = ($model->exists && $model->{$field->code}->search($k) !== false) || (!$model->exists && in_array($k, $default, true)) ? 1 : 0;
+                    $checked = ($model->exists && $model->{$field->code}->search($k) !== false) || (!$model->exists && in_array($k, $default)) ? 1 : 0;
 
                 ?>
 
