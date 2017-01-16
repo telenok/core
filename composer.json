@@ -33,7 +33,7 @@
             "src/migrations"
         ],
         "psr-4": {
-            "Telenok\\Core": "src/"
+            "Telenok\\Core\\": "src/"
         }
     },
     "extra": {
