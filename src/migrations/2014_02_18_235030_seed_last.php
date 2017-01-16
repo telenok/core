@@ -554,73 +554,65 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
 
 
         //User tab
-        (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate(
-                [
-                    'title' => ['en' => 'Contact', 'ru' => 'Контакт'],
-                    'code' => 'contact',
-                    'active' => 1,
-                    'tab_object_type' => 'user',
-                    'tab_order' => 2
-                ]
-        );
+        (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate([
+            'title' => ['en' => 'Contact', 'ru' => 'Контакт'],
+            'code' => 'contact',
+            'active' => 1,
+            'tab_object_type' => 'user',
+            'tab_order' => 2
+        ]);
 
         //User fields
-        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-                [
-                    'title' => ['en' => 'Firstname', 'ru' => "Имя"],
-                    'title_list' => ['en' => 'Firstname', 'ru' => "Имя"],
-                    'key' => 'string',
-                    'code' => 'firstname',
-                    'active' => 1,
-                    'field_object_type' => 'user',
-                    'field_object_tab' => 'main',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 5,
-                ]
-        );
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+            'title' => ['en' => 'Firstname', 'ru' => "Имя"],
+            'title_list' => ['en' => 'Firstname', 'ru' => "Имя"],
+            'key' => 'string',
+            'code' => 'firstname',
+            'active' => 1,
+            'field_object_type' => 'user',
+            'field_object_tab' => 'main',
+            'show_in_form' => 1,
+            'show_in_list' => 0,
+            'allow_search' => 1,
+            'multilanguage' => 0,
+            'allow_create' => 1,
+            'allow_update' => 1,
+            'field_order' => 5,
+        ]);
 
-        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-                [
-                    'title' => ['en' => 'Middlename', 'ru' => "Отчество"],
-                    'title_list' => ['en' => 'Middlename', 'ru' => "Отчество"],
-                    'key' => 'string',
-                    'code' => 'middlename',
-                    'active' => 1,
-                    'field_object_type' => 'user',
-                    'field_object_tab' => 'main',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 6,
-                ]
-        );
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+            'title' => ['en' => 'Middlename', 'ru' => "Отчество"],
+            'title_list' => ['en' => 'Middlename', 'ru' => "Отчество"],
+            'key' => 'string',
+            'code' => 'middlename',
+            'active' => 1,
+            'field_object_type' => 'user',
+            'field_object_tab' => 'main',
+            'show_in_form' => 1,
+            'show_in_list' => 0,
+            'allow_search' => 1,
+            'multilanguage' => 0,
+            'allow_create' => 1,
+            'allow_update' => 1,
+            'field_order' => 6,
+        ]);
 
-        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-                [
-                    'title' => ['en' => 'Lastname', 'ru' => "Фамилия"],
-                    'title_list' => ['en' => 'Lastname', 'ru' => "Фамилия"],
-                    'key' => 'string',
-                    'code' => 'lastname',
-                    'active' => 1,
-                    'field_object_type' => 'user',
-                    'field_object_tab' => 'main',
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'multilanguage' => 0,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 7,
-                ]
-        );
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+            'title' => ['en' => 'Lastname', 'ru' => "Фамилия"],
+            'title_list' => ['en' => 'Lastname', 'ru' => "Фамилия"],
+            'key' => 'string',
+            'code' => 'lastname',
+            'active' => 1,
+            'field_object_type' => 'user',
+            'field_object_tab' => 'main',
+            'show_in_form' => 1,
+            'show_in_list' => 0,
+            'allow_search' => 1,
+            'multilanguage' => 0,
+            'allow_create' => 1,
+            'allow_update' => 1,
+            'field_order' => 7,
+        ]);
 
         (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
                 [

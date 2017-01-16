@@ -24,6 +24,7 @@ class SeedDomainTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migrat
             'active'           => 1,
             'model_class'      => '\App\Vendor\Telenok\Core\Model\Web\Domain',
             'controller_class' => '\App\Vendor\Telenok\Core\Module\Web\Domain\Controller',
+            'multilanguage'    => 1,
         ]);
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([

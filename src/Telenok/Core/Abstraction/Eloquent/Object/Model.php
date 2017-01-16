@@ -711,13 +711,6 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
             if ($validator->fails())
             {
-                throw new \Exception(json_encode($validator->messages(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-
-
-
-
-
                 throw new \Telenok\Core\Support\Exception\Validator($validator->messages());
             }
 

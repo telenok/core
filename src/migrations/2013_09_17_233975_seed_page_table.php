@@ -26,6 +26,7 @@ class SeedPageTable extends \App\Vendor\Telenok\Core\Support\Migrations\Migratio
             'model_class'      => '\App\Vendor\Telenok\Core\Model\Web\Page',
             'controller_class' => '\App\Vendor\Telenok\Core\Module\Web\Page\Controller',
             'treeable'         => 1,
+            'multilanguage' => 1,
         ]);
 
 		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
