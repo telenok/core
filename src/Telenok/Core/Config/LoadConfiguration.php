@@ -25,7 +25,7 @@ class LoadConfiguration extends \Illuminate\Foundation\Bootstrap\LoadConfigurati
             $loadedFromCache = true;
         }
 
-        $app->instance('config', $config = new \App\Vendor\Telenok\Core\Config\Repository($items));
+        $app->instance('config', $config = $this->getRepository($items));
 
         // Next we will spin through all of the configuration files in the configuration
         // directory and load each one into the repository. This will make all of the
@@ -41,5 +41,10 @@ class LoadConfiguration extends \Illuminate\Foundation\Bootstrap\LoadConfigurati
         date_default_timezone_set($config['app.timezone']);
 
         mb_internal_encoding('UTF-8');
+    }
+
+    protected function getRepository($items)
+    {
+        return new \Telenok\Core\Config\Repository($items);
     }
 }
