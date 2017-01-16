@@ -45,6 +45,6 @@ class LoadConfiguration extends \Illuminate\Foundation\Bootstrap\LoadConfigurati
 
     protected function getRepository($items)
     {
-        return new \Telenok\Core\Config\Repository($items);
+        return new \App\Vendor\Telenok\Core\Config\Repository($items);
     }
 }
