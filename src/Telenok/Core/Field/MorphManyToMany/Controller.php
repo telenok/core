@@ -79,7 +79,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $model = app($class);
 
-        $model::withPermission()->take(20)->groupBy($model->getTable() . '.id')->get()->each(function($item) use (&$option)
+        $model::withPermission()->take(20)->distinct()->get()->each(function($item) use (&$option)
         {
             $option[] = "<option value='{$item->id}'>[{$item->id}] {$item->translate('title')}</option>";
         });
@@ -317,6 +317,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         {
             \Session::flash('warning.morphManyHas', $this->LL('error.method.defined', ['method' => $has['method'], 'class' => $hasObject]));
         }
+
+        $belongToObject->eraseCachedFields();
 
         return parent::postProcess($model, $type, $input);
     }

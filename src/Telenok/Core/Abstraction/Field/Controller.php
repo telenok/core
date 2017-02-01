@@ -981,7 +981,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             $model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
         }
 
-        $query = $model::withPermission()->with('sequencesObjectType');
+        $query = $model::withPermission()->distinct()->with('sequencesObjectType');
 
         if (in_array('title', $model->getTranslatedField(), true))
         {
@@ -1025,7 +1025,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
             $closure($query);
         }
 
-        $query->take(20)->groupBy($model->getTable() . '.id')->get()->each(function ($item) use (&$return)
+        $query->take(20)->get()->each(function ($item) use (&$return)
         {
             $return[] = ['value' => $item->id, 'text' => "[{$item->sequencesObjectType->translate('title')} #{$item->id}] " . $item->translate('title')];
         });

@@ -198,15 +198,15 @@ abstract class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab
     {
         $model = $model? : $this->getModelList();
 
-        $query = $model::withTrashed()->select($model->getTable() . '.*')->withPermission();
+        $query = $model::withTrashed()->distinct()->select($model->getTable() . '.*')->withPermission();
 
         $this->getFilterQuery($model, $query);
 
-        return $query->groupBy($model->getTable() . '.id')
-                        ->orderBy($model->getTable() . '.updated_at', 'desc')
-                        ->skip($this->getRequest()->input('start', 0))
-                        ->take($this->getRequest()->input('length', $this->pageLength) + 1)
-                        ->get();
+        return $query
+                    ->orderBy($model->getTable() . '.updated_at', 'desc')
+                    ->skip($this->getRequest()->input('start', 0))
+                    ->take($this->getRequest()->input('length', $this->pageLength) + 1)
+                    ->get();
     }
 
     public function getTreeListTypes()

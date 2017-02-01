@@ -19,7 +19,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
     {
         $model = $model ? : $this->getModelList();
 
-        $query = $model::withTrashed()->withTreeAttr()->withPermission()->where(function($query) use ($model)
+        $query = $model::withTrashed()->distinct()->withTreeAttr()->withPermission()->where(function($query) use ($model)
                 {
                     if (!$this->getRequest()->input('multifield_search', false) && ($treeId = $this->getRequest()->input('treeId', 0)))
                     {
@@ -33,7 +33,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
         $this->getFilterQuery($model, $query);
 
-        return $query->groupBy($model->getTable() . '.id')
+        return $query
                         ->orderBy($model->getTable() . '.updated_at', 'desc')
                         ->skip($this->getRequest()->input('start', 0))
                         ->take($this->getRequest()->input('length', $this->pageLength) + 1)

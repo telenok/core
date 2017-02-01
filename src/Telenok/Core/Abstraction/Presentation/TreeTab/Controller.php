@@ -1282,7 +1282,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
     {
         $id = $this->getRequest()->input('treeId', 0);
 
-        $query = $model->withTrashed();
+        $query = $model->withTrashed()->distinct();
 
         if ($model->treeForming())
         {
@@ -1306,7 +1306,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
         $this->getFilterQuery($model, $query);
 
-        return $query->groupBy($model->getTable() . '.id')
+        return $query
                         ->orderBy($model->getTable() . '.updated_at', 'desc')
                         ->skip($this->getRequest()->input('start', 0))
                         ->take($this->getRequest()->input('length', $this->pageLength) + 1)
@@ -1451,7 +1451,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
 
         if ($str)
         {
-            $query = $sequence->withTreeAttr();
+            $query = $sequence->withTreeAttr()->distinct();
 
             $this->getFilterQueryLike($str, $query, $sequence, 'title');
         }
@@ -1471,11 +1471,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
             $query->whereIn('object_sequence.sequences_object_type', $types);
         }
 
-        $query->where('object_sequence.treeable', 1);
-        $query->groupBy('object_sequence.id');
-        $query->withPermission('read', null, ['direct-right']);
-
-        return $query->get();
+        return $query->withPermission('read', null, ['direct-right'])
+                    ->where('object_sequence.treeable', 1)
+                    ->get();
     }
 
     /**

@@ -261,7 +261,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
         $this->getFilterQuery($model, $query);
 
-        return $query->groupBy($model->getTable() . '.id')
+        return $query->distinct()
                         ->orderBy($model->getTable() . '.updated_at', 'desc')
                         ->skip($this->getRequest()->input('start', 0))
                         ->take($this->getRequest()->input('length', $this->pageLength) + 1)

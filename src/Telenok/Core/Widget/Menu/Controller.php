@@ -259,7 +259,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 				}
 			});
 
-		$query->groupBy($model->getTable() . '.id')
+		$query->distinct()
                 ->orderBy('tree_depth')
                 ->orderBy('tree_order')->get()->each(function($item) use (&$return)
 		{

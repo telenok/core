@@ -28,7 +28,7 @@
 							$query->whereIn($model->getTable() . '.id', $typeId);
 						}
 						
-						$query->active()->groupBy($model->getTable() . '.id')->get()->each(function($item) use (&$option)
+						$query->active()->distinct()->get()->each(function($item) use (&$option)
 						{
 							$option[] = "<option value='{$item->id}'>[{$item->id}] {$item->translate('title')}</option>";
 						});

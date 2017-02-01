@@ -186,7 +186,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $model = app($class);
 
-        $model::withPermission()->groupBy($model->getTable() . '.id')->take(20)->get()->each(function($item) use (&$option)
+        $model::withPermission()->distinct()->take(20)->get()->each(function($item) use (&$option)
         {
             $option[] = "<option value='{$item->id}'>[{$item->id}] {$item->translate('title')}</option>";
         });
@@ -469,6 +469,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         {
             \Session::flash('warning.hasOne', $this->LL('error.method.defined', ['method' => $hasOne['method'], 'class' => $classModelHasOne]));
         }
+
+        $belongToObject->eraseCachedFields();
 
         return parent::postProcess($model, $type, $input);
     }

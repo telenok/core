@@ -614,25 +614,22 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
             'field_order' => 7,
         ]);
 
-        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-                [
-                    'title' => ['en' => 'Telephone', 'ru' => 'Телефон'],
-                    'title_list' => ['en' => 'Telephone', 'ru' => 'Телефон'],
-                    'key' => 'string',
-                    'code' => 'telephone',
-                    'active' => 1,
-                    'field_object_type' => 'user',
-                    'show_in_form' => 1,
-                    'allow_create' => 1,
-                    'allow_update' => 1,
-                    'field_order' => 8,
-                    'allow_search' => 1,
-                    'field_object_tab' => 'main',
-                ]
-        );
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
+            'title' => ['en' => 'Telephone', 'ru' => 'Телефон'],
+            'title_list' => ['en' => 'Telephone', 'ru' => 'Телефон'],
+            'key' => 'string',
+            'code' => 'telephone',
+            'active' => 1,
+            'field_object_type' => 'user',
+            'show_in_form' => 1,
+            'allow_create' => 1,
+            'allow_update' => 1,
+            'field_order' => 8,
+            'allow_search' => 1,
+            'field_object_tab' => 'main',
+        ]);
 
-        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
-                [
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate([
                     'title' => ['en' => 'Avatar', 'ru' => 'Аватар'],
                     'title_list' => ['en' => 'Avatar', 'ru' => 'Аватар'],
                     'key' => 'upload',

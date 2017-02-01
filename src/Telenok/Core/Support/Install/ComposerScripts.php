@@ -79,24 +79,6 @@ class ComposerScripts {
 
     /*
      *
-     * Add $listener to \App\Providers\EventServiceProvider
-     *
-     */
-    public static function addListener($listener)
-    {
-        $fn = (new \ReflectionClass('App\Providers\EventServiceProvider'))->getFileName();
-        $content = file_get_contents($fn);
-
-        if (strpos($content, $listener) === FALSE)
-        {
-            $content = file_get_contents($fn);
-            $content = str_replace('###listener###', "'{$listener}',\n###listener###", $content);
-            file_put_contents($fn, $content, LOCK_EX);
-        }
-    }
-
-    /*
-     *
      * Add $provider to \App\Providers\EventServiceProvider
      *
      */

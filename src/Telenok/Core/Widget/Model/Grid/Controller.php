@@ -204,7 +204,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
             $query->orderBy($this->getModel()->getTable() . '.' . $orderByField, $input->get('sSortDir_0'));
         }
 
-        $items = $query->groupBy($this->getModel()->getTable() . '.id')
+        $items = $query->distinct()
 				->orderBy($this->getModel()->getTable() . '.updated_at', 'desc')
 				->skip($this->getRequest()->input('pageStart', 0))
 				->take($this->getpageLength() + 1)->get();
@@ -263,7 +263,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
 				$query->orWhere($this->getModelType()->getTable() . '.id', (int) $term);
 			})
-			->take(20)->groupBy($this->getModelType()->getTable() . '.id')->get()->each(function($item) use (&$return)
+			->take(20)->distinct()->get()->each(function($item) use (&$return)
 		{
 			$return[] = ['value' => $item->id, 'text' => "[{$item->id}] " . $item->translate('title')];
 		});

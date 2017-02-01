@@ -205,22 +205,60 @@ class SeedCommonFields extends \App\Vendor\Telenok\Core\Support\Migrations\Migra
         );
 
         DB::table('object_field')->insert(
-                [
-                    'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
-                    'title' => json_encode(['en' => 'Updated by', 'ru' => 'Кем обновлено'], JSON_UNESCAPED_UNICODE),
-                    'title_list' => json_encode(['en' => 'Updated by', 'ru' => 'Кем обновлено'], JSON_UNESCAPED_UNICODE),
-                    'key' => 'updated-by',
-                    'code' => 'updated_by_user',
-                    'active' => 1,
-                    'field_object_type' => $typeId,
-                    'field_object_tab' => $tabId,
-                    'relation_one_to_many_belong_to' => DB::table('object_type')->where('code', 'user')->value('id'),
-                    'multilanguage' => 0,
-                    'show_in_form' => 1,
-                    'show_in_list' => 0,
-                    'allow_search' => 1,
-                    'field_order' => 2,
-                ]
+            [
+                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'title' => json_encode(['en' => 'Updated by', 'ru' => 'Кем обновлено'], JSON_UNESCAPED_UNICODE),
+                'title_list' => json_encode(['en' => 'Updated by', 'ru' => 'Кем обновлено'], JSON_UNESCAPED_UNICODE),
+                'key' => 'updated-by',
+                'code' => 'updated_by_user',
+                'active' => 1,
+                'field_object_type' => $typeId,
+                'field_object_tab' => $tabId,
+                'relation_one_to_many_belong_to' => DB::table('object_type')->where('code', 'user')->value('id'),
+                'multilanguage' => 0,
+                'show_in_form' => 1,
+                'show_in_list' => 0,
+                'allow_search' => 1,
+                'field_order' => 2,
+            ]
+        );
+
+        DB::table('object_field')->insert(
+            [
+                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'title' => json_encode(['en' => 'Deleted by', 'ru' => 'Кем удалено'], JSON_UNESCAPED_UNICODE),
+                'title_list' => json_encode(['en' => 'Deleted by', 'ru' => 'Кем удалено'], JSON_UNESCAPED_UNICODE),
+                'key' => 'deleted-by',
+                'code' => 'deleted_by_user',
+                'active' => 1,
+                'field_object_type' => $typeId,
+                'field_object_tab' => $tabId,
+                'relation_one_to_many_belong_to' => DB::table('object_type')->where('code', 'user')->value('id'),
+                'multilanguage' => 0,
+                'show_in_form' => 1,
+                'show_in_list' => 0,
+                'allow_search' => 1,
+                'field_order' => 2,
+            ]
+        );
+
+        DB::table('object_field')->insert(
+            [
+                'id' => DB::table('object_sequence')->insertGetId(['id' => null, 'model_class' => '\App\Vendor\Telenok\Core\Model\Object\Field']),
+                'title' => json_encode(['en' => 'Locked by', 'ru' => 'Кем заблокировано'], JSON_UNESCAPED_UNICODE),
+                'title_list' => json_encode(['en' => 'Locked by', 'ru' => 'Кем заблокировано'], JSON_UNESCAPED_UNICODE),
+                'key' => 'locked-by',
+                'code' => 'locked_by_user',
+                'active' => 1,
+                'field_object_type' => $typeId,
+                'field_object_tab' => $tabId,
+                'relation_one_to_many_belong_to' => DB::table('object_type')->where('code', 'user')->value('id'),
+                'multilanguage' => 0,
+                'show_in_form' => 1,
+                'show_in_list' => 0,
+                'allow_search' => 1,
+                'field_order' => 2,
+            ]
         );
     }
 }

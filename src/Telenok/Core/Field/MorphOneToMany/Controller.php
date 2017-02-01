@@ -470,6 +470,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             \Session::flash('warning.morphManyHas', $this->LL('error.method.defined', ['method'=>$hasMany['method'], 'class'=>$classModelHasMany]));
         }
 
+        $belongToObject->eraseCachedFields();
+
         return parent::postProcess($model, $type, $input);
     } 
 

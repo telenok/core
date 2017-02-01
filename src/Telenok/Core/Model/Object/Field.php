@@ -138,7 +138,7 @@ class Field extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
         }
         else
         {
-            static::$listFillableFieldController[$class][$key]->setModelAttribute($this, $key, $value, static::$listField[$class][$key]);
+            static::$listAllFieldController[$class][$key]->setModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
         }
     }
 

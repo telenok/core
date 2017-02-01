@@ -178,6 +178,10 @@ class Controller extends \Telenok\Core\Field\RelationOneToMany\Controller {
      */
     public function postProcess($model, $type, $input)
     {
+        $classBelongTo = app('db')->table('object_type')->where('code', 'user')->value('model_class');
+
+        (new $classBelongTo)->eraseCachedFields();
+
         return $this;
     }
 

@@ -17,11 +17,11 @@ class User extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model {
     {
         if ($value = trim($value))
         {
-            $this->attributes['password'] = password_hash($value, PASSWORD_BCRYPT);
+            $this->attributes['password'] = app('hash')->make($value);
         }
         else if (!$this->exists && !$value)
         {
-            $this->attributes['password'] = password_hash(str_random(), PASSWORD_BCRYPT);
+            $this->attributes['password'] = app('hash')->make(str_random());
         }
     }
 

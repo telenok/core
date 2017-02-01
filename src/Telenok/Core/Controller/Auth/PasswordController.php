@@ -24,15 +24,7 @@ class PasswordController extends \Telenok\Core\Abstraction\Controller\Controller
      */
     public function __construct(Guard $auth)
     {
-        $tokens = app('auth.password.tokens');
-
-        $users = app('auth')->driver()->getProvider();
-
-        $view = app('config')->get('passwords.users.email');
-
-        $this->passwords = new PasswordBroker(
-                $tokens, $users, app('mailer'), $view
-        );
+        $this->passwords = app('auth.password.broker');
 
         $this->auth = $auth;
     }

@@ -181,7 +181,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $model = app($class);
 
-        $model::withPermission()->take(20)->groupBy($model->getTable() . '.id')->get()->each(function($item) use (&$option)
+        $model::withPermission()->take(20)->distinct()->get()->each(function($item) use (&$option)
         {
             $option[] = "<option value='{$item->id}'>[{$item->id}] {$item->translate('title')}</option>";
         });
@@ -520,6 +520,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         {
             $this->updateModelFile($hasManyObject, $hasMany, 'hasMany');
         }
+
+        $belongToObject->eraseCachedFields();
 
         return parent::postProcess($model, $type, $input);
     }

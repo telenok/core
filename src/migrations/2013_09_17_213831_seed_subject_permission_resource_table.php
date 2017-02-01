@@ -65,7 +65,16 @@ class SeedSubjectPermissionResourceTable extends \App\Vendor\Telenok\Core\Suppor
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
         ))->writeln('Super Administrator logined');
 
-		(new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
+
+        app('config')->set('app.localeDefault', 'en');
+        app('config')->set('app.locales', ['en', 'ru']);
+        app('config')->set('app.timezone', 'UTC');
+
+        (new \Symfony\Component\Console\Output\ConsoleOutput(
+            \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
+        ))->writeln('Set initial config data (locale, timezone)');
+
+        (new \App\Vendor\Telenok\Core\Model\Object\Field())->storeOrUpdate(
             [
                 'title' => SeedObjectPermissionResourceTableTranslation::get('field.code'),
                 'title_list' => SeedObjectPermissionResourceTableTranslation::get('field.code'),

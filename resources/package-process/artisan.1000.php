@@ -1,7 +1,7 @@
 <?php
 
     app()->register('App\Vendor\Telenok\Core\CoreServiceProvider');
-    app('events')->subscribe('App\Vendor\Telenok\Core\Event\Listener');
+    app('events')->subscribe('App\Vendor\Telenok\Core\Event\Subscribe');
 
     $this->line('Package assets publishing');
     

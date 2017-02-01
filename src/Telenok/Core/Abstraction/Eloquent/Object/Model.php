@@ -532,13 +532,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     {
         $class = get_class($this);
 
-        static::$listRule[$class] = null;
-        static::$listField[$class] = null;
-        static::$listAllFieldController[$class] = null;
-        static::$listFillableFieldController[$class] = null;
-        static::$listTranslated[$class] = null;
+        unset(static::$listRule[$class]);
+        unset(static::$listField[$class]);
+        unset(static::$listAllFieldController[$class]);
+        unset(static::$listFillableFieldController[$class]);
+        unset(static::$listTranslated[$class]);
 
-        //$model->getObjectField();
         $this->getFillable();
         $this->getTranslatedField();
         $this->getDates();
@@ -644,20 +643,19 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         try
         {
-            if (!$this->exists)
+            if ($this->exists)
             {
-                $model = $this->findOrFail($input->get($this->getKeyName()));
+                $model = $this;
             }
             else
             {
-                $model = $this;
+                $model = $this->findOrFail($input->get($this->getKeyName()));
             }
         }
         catch (\Exception $ex)
         {
             $model = new static();
         }
-
 
         foreach ($model->fillable as $k)
         {
@@ -667,13 +665,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                 $model->{$k} = null;
             }
 
-            if (!$input->has($k))
+            if ($input->has($k))
             {
-                $input->put($k, $model->{$k});
+                $model->{$k} = $input->get($k);
             }
             else
             {
-                $model->{$k} = $input->get($k);
+                $input->put($k, $model->{$k});
             }
         }
 
@@ -796,13 +794,12 @@ class Model extends \Illuminate\Database\Eloquent\Model {
             throw new ModelProcessAccessDenied('Cant update model with type "' . $type->code . '". Access denied.');
         }
 
-        $objectField = static::$listField[get_class($this)];
 
         foreach ($input->all() as $key => $value)
         {
             $fc = app('telenok.repository')->getObjectFieldController();
 
-            if (Arr::get($objectField, $key))
+            if ($this->getObjectField()->get($key))
             {
                 if (
                     (!$this->exists && !app('auth')->can('create', 'object_field.' . $type->code . '.' . $key)) ||
@@ -946,7 +943,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         if (isset(static::$listAllFieldController[$class][$key]))
         {
-            return static::$listAllFieldController[$class][$key]->getModelAttribute($this, $key, $value, static::$listField[$class][$key]);
+            return static::$listAllFieldController[$class][$key]->getModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
         }
         else
         {
@@ -968,7 +965,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         $f = static::$listAllFieldController[$class][$key];
 
-        $f->setModelAttribute($this, $key, $value, static::$listField[$class][$key]);
+        $f->setModelAttribute($this, $key, $value, $this->getObjectField()->get($key));
     }
 
     /**
@@ -983,7 +980,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
         if (!isset(static::$listField[$class]))
         {
-            static::$listField[$class] = collect($this->type()->field()->active()->get()->keyBy('code'));
+            static::$listField[$class] = $this->type()->field()->active()->get()->keyBy('code');
         }
 
         return static::$listField[$class];
@@ -1111,10 +1108,10 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                     foreach (array_merge((array) $controller->getModelFillableField($this, $field), $dateField) as $f)
                     {
                         static::$listFillableFieldController[$class][$f] = $controller;
-                        static::$listField[$class][$f] = $field;
+                        static::$listField[$class] = static::$listField[$class]->put($f, $field);
                     }
 
-                    foreach ((array) $controller->getModelField($this, $field) as $f)
+                    foreach((array)$controller->getModelField($this, $field) as $f)
                     {
                         static::$listAllFieldController[$class][$f] = $controller;
                     }
@@ -1157,7 +1154,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                 }
             }
 
-            foreach (static::$listField[$class] as $key => $field)
+            foreach ($this->getObjectField()->all() as $key => $field)
             {
                 if ($field->rule instanceof \Illuminate\Support\Collection)
                 {

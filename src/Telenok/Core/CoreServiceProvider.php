@@ -13,8 +13,6 @@ use Telenok\Core\Event\CompileConfig;
  */
 class CoreServiceProvider extends ServiceProvider {
 
-    protected $defer = false;
-
     /**
      * @method boot
      * Load config, routers, create singletons and others.
@@ -25,7 +23,7 @@ class CoreServiceProvider extends ServiceProvider {
     {
         $this->addResolver();
         $this->extendValidator();
-        $this->loadConfigFile();
+        $this->loadRouterFile();
         $this->packageResourceRegister();
         $this->packageCommandRegister();
 
@@ -61,15 +59,20 @@ class CoreServiceProvider extends ServiceProvider {
     public function register()
     {
         $this->registerTelenokRepository();
-
         $this->registerValidationFactory();
-        
+        $this->registerEventSubscribe();
+
         $this->registerCommandInstall();
         $this->registerCommandSeed();
         $this->registerCommandPackage();
 
         $this->registerDBConnection();
         $this->registerMemcache();
+    }
+
+    public function registerEventSubscribe()
+    {
+        $this->app['events']->subscribe(\App\Vendor\Telenok\Core\Event\Subscribe::class);
     }
 
     /**
@@ -258,9 +261,9 @@ class CoreServiceProvider extends ServiceProvider {
         });
     }
 
-    public function loadConfigFile()
+    public function loadRouterFile()
     {
-        include_once __DIR__ . '/../../config/routes.php';
+        $this->loadRoutesFrom(__DIR__ . '/../../config/routes.php');
     }
 
     public function packageResourceRegister()

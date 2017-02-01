@@ -294,6 +294,10 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         if ($input->get('create_belong') !== false && $validator->passes())
         {
             \App\Vendor\Telenok\Core\Model\Object\Field::create($toSave);
+
+            $classBelongTo = app('db')->table('object_type')->where('code', 'object_sequence')->value('model_class');
+
+            (new $classBelongTo)->eraseCachedFields();
         }
 
         return $this;

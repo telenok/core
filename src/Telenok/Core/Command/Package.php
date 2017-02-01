@@ -39,8 +39,8 @@ class Package extends Command {
             ['provider', 'p', InputOption::VALUE_OPTIONAL,
                 'What service provider should be added to app.php. Example: "\App\Vendor\Telenok\News\NewsServiceProvider"',
                 null],
-            ['listener', 'l', InputOption::VALUE_OPTIONAL,
-                'What listener should be added to \App\Providers\EventServiceProvider. Example: "\App\Vendor\Telenok\News\Event\Listener"',
+            ['subscribe', 's', InputOption::VALUE_OPTIONAL,
+                'What subscribe should be added to \App\Providers\EventServiceProvider. Example: "\App\Vendor\Telenok\News\Event\Subscribe"',
                 null],
         ];
     }
@@ -83,6 +83,7 @@ class Package extends Command {
         {
             $allPackages = $composer->getRepositoryManager()->getLocalRepository()->getPackages();
         }
+
 
         $packageArtisan = [];
 
@@ -134,7 +135,7 @@ class Package extends Command {
             }
             else
             {
-                $c = str_replace('###providers###', "'$provider',\n###providers###", $c);
+                $c = str_replace('###providers###', "{$provider}::class,\n###providers###", $c);
             }
         }
 

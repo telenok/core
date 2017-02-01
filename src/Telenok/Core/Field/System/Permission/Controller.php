@@ -344,7 +344,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             $closure($query);
         }
 
-        $query->take(20)->groupBy($model->getTable() . '.id')->get()->each(function ($item) use (&$return) {
+        $query->take(20)->distinct()->get()->each(function ($item) use (&$return) {
             $return[] = [
                 'class' => 'searched',
                 'value' => $item->id,

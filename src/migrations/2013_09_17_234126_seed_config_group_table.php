@@ -55,7 +55,7 @@ class SeedConfigGroupTable extends \App\Vendor\Telenok\Core\Support\Migrations\M
             'code' => 'config',
             'active' => 1,
             'field_object_type' => 'config_group',
-            'field_object_tab' => 'additionally',
+            'field_object_tab' => 'main',
             'relation_one_to_many_has' => 'config',
             'show_in_form' => 1,
             'show_in_list' => 0,
