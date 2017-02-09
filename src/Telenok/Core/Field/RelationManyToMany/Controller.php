@@ -478,7 +478,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 'field_order' => $input->get('field_order_belong', $model->field_order),
             ];
 
-            $validator = $this->validator(new App\Vendor\Telenok\Core\Model\Object\Field(), $toSave, []);
+            $validator = $this->validator(new \App\Vendor\Telenok\Core\Model\Object\Field(), $toSave, []);
 
             if ($validator->passes())
             {
