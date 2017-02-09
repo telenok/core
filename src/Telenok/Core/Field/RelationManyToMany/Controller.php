@@ -179,9 +179,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
 
-        $model = app($class);
-
-        $model::withPermission()->take(20)->distinct()->get()->each(function($item) use (&$option)
+        (new $class)->withPermission()->take(20)->distinct()->get()->each(function($item) use (&$option)
         {
             $option[] = "<option value='{$item->id}'>[{$item->id}] {$item->translate('title')}</option>";
         });
@@ -440,8 +438,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             'field_2' => $pivotField,
         ];
 
-        $hasManyObject = app($classModelHasMany);
-        $belongToObject = app($classBelongTo);
+        $hasManyObject = new $classModelHasMany;
+        $belongToObject = new $classBelongTo;
 
         if ($input->get('create_belong') !== false)
         {
@@ -480,7 +478,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 'field_order' => $input->get('field_order_belong', $model->field_order),
             ];
 
-            $validator = $this->validator(app('App\Vendor\Telenok\Core\Model\Object\Field'), $toSave, []);
+            $validator = $this->validator(new App\Vendor\Telenok\Core\Model\Object\Field(), $toSave, []);
 
             if ($validator->passes())
             {

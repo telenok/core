@@ -285,7 +285,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
             'field_order' => $input->get('field_order'),
         ];
 
-        $validator = $this->validator(app('\App\Vendor\Telenok\Core\Model\Object\Field'), $toSave, []);
+        $validator = $this->validator(new \App\Vendor\Telenok\Core\Model\Object\Field(), $toSave, []);
 
         $fieldObjectType = \App\Vendor\Telenok\Core\Model\Object\Type::find($input->get('field_object_type'));
         $fieldObjectType->treeable = 1;

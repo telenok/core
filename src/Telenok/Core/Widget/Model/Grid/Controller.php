@@ -372,7 +372,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 		}
 		else if (is_string($model) && class_exists($model))
 		{
-			$this->modelType = app($model);
+			$this->modelType = new $model;
 		}
 		else
 		{
@@ -549,7 +549,9 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
     public function getModelByType()
     {
-        return app($this->getModelType()->model_class);
+        $class = $this->getModelType()->model_class;
+
+        return new $class;
     }
 	
 	public function getpageLength()

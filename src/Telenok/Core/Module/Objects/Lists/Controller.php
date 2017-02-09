@@ -89,9 +89,9 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function typeForm($type)
     {
-        return app($type->classController())
-                        ->setTabKey($this->key)
-                        ->setAdditionalViewParam($this->getAdditionalViewParam());
+        return (new $type->classController())
+                    ->setTabKey($this->key)
+                    ->setAdditionalViewParam($this->getAdditionalViewParam());
     }
 
     public function getTreeListTypes()
@@ -134,7 +134,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             if ($item->model->controller_class)
             {
-                $module = app($item->model->controller_class);
+                $module = new $item->model->controller_class;
             }
         }
 

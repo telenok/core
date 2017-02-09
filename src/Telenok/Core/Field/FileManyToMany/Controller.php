@@ -481,8 +481,7 @@ class Controller extends \Telenok\Core\Field\RelationManyToMany\Controller {
         $input->put('active', 1);
         $input->put('upload', $this->getRequest()->file($this->getKey() . '.upload'));
 
-        $file = app('\App\Vendor\Telenok\Core\Model\File\File');
-        $model = $file->storeOrUpdate($input);
+        $model = (new \App\Vendor\Telenok\Core\Model\File\File())->storeOrUpdate($input);
 
         return $model->getKey();
 

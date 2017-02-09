@@ -172,7 +172,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
          */
         $storages = File::storageList($model->upload_storage)->all();
 
-        app($type->model_class)->chunk(200, function ($rows) use ($storages, $model)
+        (new $type->model_class)->chunk(200, function ($rows) use ($storages, $model)
         {
             foreach ($rows as $row)
             {
@@ -270,7 +270,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
                 $mime = \App\Vendor\Telenok\Core\Support\File\Mime::type($file);
 
-                $file = app('\Symfony\Component\HttpFoundation\File\UploadedFile', [$file, $basename, $mime, $size, null, true]);
+                $file = new \Symfony\Component\HttpFoundation\File\UploadedFile($file, $basename, $mime, $size, null, true);
             }
         }
 
@@ -288,7 +288,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
         }
 
 
-        $protectedFileUpload = app('\App\Vendor\Telenok\Core\Field\Upload\UploadedFile', [$file]);
+        $protectedFileUpload = new \App\Vendor\Telenok\Core\Field\Upload\UploadedFile($file);
 
         $model->{$field->code}->removeCachedFile();
 
@@ -395,7 +395,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
      */
     public function getModelAttribute($model, $key, $value, $field)
     {
-        return app('\App\Vendor\Telenok\Core\Field\Upload\File', [$model, $field]);
+        return new \App\Vendor\Telenok\Core\Field\Upload\File($model, $field);
     }
 
     /**

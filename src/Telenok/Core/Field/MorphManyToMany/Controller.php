@@ -77,9 +77,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
 
         $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
 
-        $model = app($class);
-
-        $model::withPermission()->take(20)->distinct()->get()->each(function($item) use (&$option)
+        ($model = new $class)->withPermission()->take(20)->distinct()->get()->each(function($item) use (&$option)
         {
             $option[] = "<option value='{$item->id}'>[{$item->id}] {$item->translate('title')}</option>";
         });
@@ -216,8 +214,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
         $classModelHas = $typeHas->model_class;
         $classModelBelongTo = $typeBelongTo->model_class;
 
-        $hasObject = app($classModelHas);
-        $belongToObject = app($classModelBelongTo);
+        $hasObject = new $classModelHas;
+        $belongToObject = new $classModelBelongTo;
 
 
 
@@ -292,7 +290,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
             ];
 
 
-            $validator = $this->validator(app('\App\Vendor\Telenok\Core\Model\Object\Field'), $toSave, []);
+            $validator = $this->validator(new \App\Vendor\Telenok\Core\Model\Object\Field(), $toSave, []);
 
             if ($validator->passes())
             {

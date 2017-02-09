@@ -344,7 +344,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         $routerName = app('router')->currentRouteName();
 
-        $pageModel = app(\App\Vendor\Telenok\Core\Model\Web\Page::class);
+        $pageModel = new \App\Vendor\Telenok\Core\Model\Web\Page;
 
         $query = $pageModel->active()
             ->where(function($query) use ($pageModel, $routerName)

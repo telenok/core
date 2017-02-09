@@ -107,12 +107,12 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
 
             foreach ($value->all() as $k => $v)
             {
-                $value->put($k, app('\App\Vendor\Telenok\Core\Field\Text\Processing')->setRawValue($v));
+                $value->put($k, (new \App\Vendor\Telenok\Core\Field\Text\Processing())->setRawValue($v));
             }
         }
         else
         {
-            $value = app('\App\Vendor\Telenok\Core\Field\Text\Processing')->setRawValue($value);
+            $value = (new \App\Vendor\Telenok\Core\Field\Text\Processing())->setRawValue($value);
         }
 
         return $value;

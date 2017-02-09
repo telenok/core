@@ -27,7 +27,9 @@ class Download extends \Telenok\Core\Abstraction\Controller\Controller {
 
         $responses = \Event::fire('download.file', ['model' => $model, 'field' => $field]);
 
-        if (!in_array(false, $responses, true) && (($model instanceof \App\Vendor\Telenok\Core\Model\File\File && app('auth')->can('read', $model)) || (!($model instanceof \App\Vendor\Telenok\Core\Model\File\File) &&
+        if (!in_array(false, $responses, true)
+            && (($model instanceof \App\Vendor\Telenok\Core\Model\File\File
+                && app('auth')->can('read', $model)) || (!($model instanceof \App\Vendor\Telenok\Core\Model\File\File) &&
                 app('auth')->can('read', 'object_field.' . $model->getTable() . '.' . $field->code))))
         {
             $fileObject = $model->{$field->code};

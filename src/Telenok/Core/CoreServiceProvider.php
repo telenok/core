@@ -90,11 +90,10 @@ class CoreServiceProvider extends ServiceProvider {
                 'sqlite' => 'SQLite',
                 'sqlsrv' => 'SqlServer',
             ] as $key => $driver)
-        {           
-            $this->app->singleton('db.connection.' . $key, function ($app, $parameters) use ($driver)
-            {
-                list($connection, $database, $prefix, $config) = $parameters;
+        {
 
+            \Illuminate\Database\Connection::resolverFor($key, function ($connection, $database, $prefix, $config) use ($driver)
+            {
                 $class = '\App\Vendor\Telenok\Core\Abstraction\Database\Connection\\' . $driver . 'Connection';
 
                 return new $class($connection, $database, $prefix, $config);
@@ -186,16 +185,13 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function setAuthGuard()
     {
-        // using custom guard
         app('auth')->extend('telenok', function($app, $name, array $config)
         {
-            $guard = app(
-                \App\Vendor\Telenok\Core\Security\Guard::class,
-                [
+            $guard = new \App\Vendor\Telenok\Core\Security\Guard(
                     $name,
-                    $app['auth']->createUserProvider($config['provider'])
-                ]
-            );
+                    $app['auth']->createUserProvider($config['provider']),
+                    $app['session.store']
+                );
 
             $guard->setCookieJar($app->make('cookie'));
 
@@ -231,7 +227,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function registerCommandInstall()
     {
-        $this->app['command.telenok.install'] = $this->app->share(function($app)
+        $this->app['command.telenok.install'] = $this->app->singleton(function($app)
         {
             return new \App\Vendor\Telenok\Core\Command\Install();
         });
@@ -239,7 +235,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function registerCommandSeed()
     {
-        $this->app['command.telenok.seed'] = $this->app->share(function($app)
+        $this->app['command.telenok.seed'] = $this->app->singleton(function($app)
         {
             return new \App\Vendor\Telenok\Core\Command\Seed();
         });
@@ -247,7 +243,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function registerCommandPackage()
     {
-        $this->app['command.telenok.package'] = $this->app->share(function($app)
+        $this->app['command.telenok.package'] = $this->app->singleton(function($app)
         {
             return new \App\Vendor\Telenok\Core\Command\Package($app['composer']);
         });

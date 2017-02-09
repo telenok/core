@@ -92,7 +92,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function validator($rule = [], $input = [], $message = [], $customAttribute = [])
     {
-        return app('\App\Vendor\Telenok\Core\Support\Validator\Config')
+        return (new \App\Vendor\Telenok\Core\Support\Validator\Config())
             ->setRuleList($rule)
             ->setInput($input)
             ->setMessage($message)

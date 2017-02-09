@@ -168,7 +168,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
         ->first()
         ->model_class;
 
-        $model = app($class);
+        $model = new $class;
 
         $idsArray = array_flatten($ids); 
 
@@ -228,7 +228,7 @@ class Controller extends \App\Vendor\Telenok\Core\Abstraction\Widget\Controller 
 
 		$return = [];
 
-		$model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
+		$model = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
 
         $objectFolderId = \App\Vendor\Telenok\Core\Model\Object\Type::where('code', 'folder')->active()->value('id');
 

@@ -960,7 +960,14 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getModelList()
     {
-        return app($this->getModelListClass());
+        if ($class = $this->getModelListClass())
+        {
+            return new $class;
+        }
+        else
+        {
+            throw new \LogicException('Model list doesnt exist');
+        }
     }
 
     /**
@@ -971,7 +978,14 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getModelTree()
     {
-        return app($this->getModelTreeClass());
+        if ($class = $this->getModelTreeClass())
+        {
+            return new $class;
+        }
+        else
+        {
+            throw new \LogicException('Model tree doesnt exist');
+        }
     }
 
     /**
@@ -1050,7 +1064,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getModelByTypeId($id)
     {
-        return app($this->getType($id)->model_class);
+        $class = $this->getType($id)->model_class;
+
+        return new $class;
     }
 
     /**
@@ -1079,7 +1095,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function validator($model = null, $input = [], $message = [], $customAttribute = [])
     {
-        return app('\App\Vendor\Telenok\Core\Support\Validator\Model')
+        return (new \App\Vendor\Telenok\Core\Support\Validator\Model())
                         ->setModel($model ? : $this->getModelList())
                         ->setInput($input)
                         ->setMessage($message)
@@ -1447,7 +1463,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getTreeListModel($treeId = 0, $str = '')
     {
-        $sequence = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
+        $sequence = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
 
         if ($str)
         {

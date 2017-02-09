@@ -691,7 +691,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                 //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Vendor\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
             }
 
-            if (($c = $type->classController()) && ($controllerProcessing = app($c)) && $controllerProcessing instanceof EloquentProcessController)
+            if (($c = $type->classController()) && ($controllerProcessing = new $c()) && $controllerProcessing instanceof EloquentProcessController)
             {
                 $controllerProcessing->preProcess($model, $type, $input);
             }
@@ -701,7 +701,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
 
             $model = $model->fill($input->all());
 
-            $validator = app('\App\Vendor\Telenok\Core\Support\Validator\Model')
+            $validator = (new \App\Vendor\Telenok\Core\Support\Validator\Model)
                 ->setModel($model)
                 ->setInput($input)
                 ->setMessage($this->LL('error'))
@@ -1290,7 +1290,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
      */
     public function scopeTranslateField($query, $linkedTableAlias = '', $translateTableAlias = '', $translateField = '', $locale = '')
     {
-        $translateModel = app('\App\Vendor\Telenok\Core\Model\Object\Translation');
+        $translateModel = new \App\Vendor\Telenok\Core\Model\Object\Translation();
 
         $translateTableAlias = $translateTableAlias ? : $translateModel->getTable();
 

@@ -68,7 +68,7 @@ class Seed extends Command {
     {
         $this->output->getFormatter()->setStyle('password', new OutputFormatterStyle('yellow', 'black'));
 
-        $this->setProcessingController(app('\App\Vendor\Telenok\Core\Support\Install\Controller'));
+        $this->setProcessingController(new \App\Vendor\Telenok\Core\Support\Install\Controller());
 
         $this->info('Create and seed tables');
 

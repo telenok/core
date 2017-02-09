@@ -79,15 +79,15 @@ class Processing {
             switch ($this->library)
             {
                 case 'imagick':
-                    $this->imagine = app('\Imagine\Imagick\Imagine');
+                    $this->imagine = new \Imagine\Imagick\Imagine();
                     break;
 
                 case 'gmagick':
-                    $this->imagine = app('\Imagine\Gmagick\Imagine');
+                    $this->imagine = new \Imagine\Gmagick\Imagine();
                     break;
 
                 default:
-                    $this->imagine = app('\Imagine\Gd\Imagine');
+                    $this->imagine = new \Imagine\Gd\Imagine();
             }
         }
     }

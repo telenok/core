@@ -29,9 +29,7 @@ class Repository {
 
             foreach ($collection->all() as $class)
             {
-                $object = app($class);
-
-                $list->put($object->getKey(), $object);
+                $list->put(($object = new $class)->getKey(), $object);
             }
         }
         catch (\Exception $e)
@@ -47,7 +45,7 @@ class Repository {
             {
                 $class = get_class($el);
 
-                return app($class);
+                return new $class;
             }
             else
             {
@@ -133,8 +131,7 @@ class Repository {
 
             \App\Vendor\Telenok\Core\Model\Web\ModuleGroup::active()->get()->each(function($item) use (&$list)
             {
-                $object = app($item->controller_class);
-                $object->setModelModuleGroup($item);
+                ($object = new $item->controller_class)->setModelModuleGroup($item);
                 $list->put($object->getKey(), $object);
             });
         }
@@ -154,8 +151,7 @@ class Repository {
 
             \App\Vendor\Telenok\Core\Model\Web\Module::active()->get()->each(function($item) use (&$list)
             {
-                $object = app($item->controller_class);
-                $object->setModelModule($item);
+                ($object = new $item->controller_class)->setModelModule($item);
                 $list->put($object->getKey(), $object);
             });
         }
@@ -175,8 +171,7 @@ class Repository {
 
             \App\Vendor\Telenok\Core\Model\Web\WidgetGroup::active()->get()->each(function($item) use (&$list)
             {
-                $object = app($item->controller_class);
-                $object->setWidgetGroupModel($item);
+                ($object = new $item->controller_class)->setWidgetGroupModel($item);
                 $list->put($object->getKey(), $object);
             });
         }
@@ -196,8 +191,7 @@ class Repository {
 
             \App\Vendor\Telenok\Core\Model\Web\Widget::active()->get()->each(function($item) use (&$list)
             {
-                $object = app($item->controller_class);
-                $list->put($object->getKey(), $object);
+                $list->put(($object = new $item->controller_class)->getKey(), $object);
             });
         }
         catch (\Exception $e)

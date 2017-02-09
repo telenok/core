@@ -810,7 +810,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      */
     public function validator($model = null, $input = [], $message = [], $customAttribute = [])
     {
-        return app('\App\Vendor\Telenok\Core\Support\Validator\Model')
+        return (new \App\Vendor\Telenok\Core\Support\Validator\Model)
             ->setModel($model)
             ->setInput($input)
             ->setMessage($message)
@@ -974,11 +974,13 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
         if ($id)
         {
-            $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class);
+            $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
+
+            $model = new $class;
         }
         else
         {
-            $model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
+            $model = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
         }
 
         $query = $model::withPermission()->distinct()->with('sequencesObjectType');

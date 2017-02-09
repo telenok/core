@@ -20,12 +20,16 @@ class Sequence extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Mode
 
     public static function getModelTrashed($id)
     {
-        return app(\App\Vendor\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType->model_class)->withTrashed()->findOrFail($id);
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::withTrashed()->findOrFail($id)->sequencesObjectType->model_class;
+
+        return (new $class)->withTrashed()->findOrFail($id);
     }
 
     public static function getModel($id)
     {
-        return app(\App\Vendor\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType->model_class)->findOrFail($id);
+        $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::findOrFail($id)->sequencesObjectType->model_class;
+
+        return (new $class)->findOrFail($id);
     }
 
     public static function getTypeById($id)
@@ -35,7 +39,9 @@ class Sequence extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Mode
 
     public static function getModelByTypeId($id)
     {
-        return app(static::getTypeById($id)->model_class);
+        $class = static::getTypeById($id)->model_class;
+
+        return new $class;
     }
 
     public function delete()

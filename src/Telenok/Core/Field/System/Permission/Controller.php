@@ -289,10 +289,15 @@ class Controller extends \Telenok\Core\Abstraction\Field\Controller {
             return $return;
         }
 
-        if ($id) {
-            $model = app(\App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class);
-        } else {
-            $model = app('\App\Vendor\Telenok\Core\Model\Object\Sequence');
+        if ($id)
+        {
+            $class = \App\Vendor\Telenok\Core\Model\Object\Sequence::getModel($id)->model_class;
+
+            $model = new $class;
+        }
+        else
+        {
+            $model = new \App\Vendor\Telenok\Core\Model\Object\Sequence();
         }
 
         $query = $model::select([$model->getTable() . '.*', 'resource.code as resource_code'])

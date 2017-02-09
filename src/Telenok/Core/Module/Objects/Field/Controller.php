@@ -24,7 +24,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
         }
         catch (\Exception $ex)
         {
-            $model = app('\App\Vendor\Telenok\Core\Model\Object\Field');
+            $model = new \App\Vendor\Telenok\Core\Model\Object\Field();
         }
 
         return app('telenok.repository')->getObjectFieldController($fieldKey)->getFormFieldContent($model, $uniqueId);

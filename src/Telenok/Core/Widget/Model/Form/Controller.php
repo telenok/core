@@ -350,7 +350,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 
     public function getModelByTypeId($id)
     {
-        return app($this->getTypeById($id)->model_class);
+        return (new $this->getTypeById($id))->model_class();
     }
 
 	public function setModelType($model = null)
@@ -363,7 +363,7 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Controller {
 		}
 		else if (is_string($model) && class_exists($model))
 		{
-			$this->modelType = app($model);
+			$this->modelType = new $model;
 		}
 		else
 		{

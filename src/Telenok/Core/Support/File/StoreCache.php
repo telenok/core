@@ -21,7 +21,7 @@ class StoreCache {
             {
                 $extension = pathinfo($pathLocal, PATHINFO_EXTENSION);
 
-                $imageProcess = app('\App\Vendor\Telenok\Core\Support\Image\Processing');
+                $imageProcess = new \App\Vendor\Telenok\Core\Support\Image\Processing();
                 $imageProcess->setImage($imageProcess->imagine()->load($content));
 
                 $content = $imageProcess->process($width, $height, $action)->get($extension, config('image.options'));

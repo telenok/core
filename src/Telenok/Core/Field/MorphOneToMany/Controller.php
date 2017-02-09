@@ -261,8 +261,10 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                         $item->fill([$relatedField . '_id' => 0, $relatedField . '_type' => null])->save();
                     });
                 }
-                
-                $relatedModel = app(\App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_many_has)->model_class);
+
+                $relatedClass = \App\Vendor\Telenok\Core\Model\Object\Type::findOrFail($field->morph_one_to_many_has)->model_class;
+
+                $relatedModel = new $relatedClass;
 
                 collect($idsAdd)->each(function($id) use ($model, $method, $relatedModel) 
                 {
@@ -371,8 +373,8 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                 'id' => $relatedSQLField . '_id',
             ];
 
-        $hasManyObject = app($classModelHasMany);
-        $belongToObject = app($classBelongTo);
+        $hasManyObject = new $classModelHasMany;
+        $belongToObject = new $classBelongTo;
 
         if ($input->get('create_belong') !== false) 
         {
@@ -428,7 +430,7 @@ class Controller extends \Telenok\Core\Abstraction\Field\Relation\Controller {
                     'field_order' => $input->get('field_order_belong', $model->field_order),
                 ];
 
-                $validator = $this->validator(app('\App\Vendor\Telenok\Core\Model\Object\Field'), $toSave, []);
+                $validator = $this->validator(new \App\Vendor\Telenok\Core\Model\Object\Field(), $toSave, []);
 
                 if ($validator->passes()) 
                 {
