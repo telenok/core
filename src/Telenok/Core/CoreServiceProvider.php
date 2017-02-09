@@ -156,7 +156,7 @@ class CoreServiceProvider extends ServiceProvider {
      */
     protected function registerValidationFactory()
     {
-        $this->app->bind('validator_telenok', function ($app)
+        $this->app->singleton('validator_telenok', function ($app)
         {
             $validator = new Factory($app['translator'], $app);
 
@@ -222,12 +222,12 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function registerTelenokRepository()
     {
-        $this->app->singleton('telenok.repository', '\App\Vendor\Telenok\Core\Support\Repository');
+        $this->app->singleton('telenok.repository', \App\Vendor\Telenok\Core\Support\Repository::class);
     }
 
     public function registerCommandInstall()
     {
-        $this->app['command.telenok.install'] = $this->app->singleton(function($app)
+        $this->app->singleton('command.telenok.install', function($app)
         {
             return new \App\Vendor\Telenok\Core\Command\Install();
         });
@@ -235,7 +235,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function registerCommandSeed()
     {
-        $this->app['command.telenok.seed'] = $this->app->singleton(function($app)
+        $this->app->singleton('command.telenok.seed', function($app)
         {
             return new \App\Vendor\Telenok\Core\Command\Seed();
         });
@@ -243,7 +243,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function registerCommandPackage()
     {
-        $this->app['command.telenok.package'] = $this->app->singleton(function($app)
+        $this->app->singleton('command.telenok.package', function($app)
         {
             return new \App\Vendor\Telenok\Core\Command\Package($app['composer']);
         });
