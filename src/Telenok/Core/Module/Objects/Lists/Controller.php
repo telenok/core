@@ -89,7 +89,9 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function typeForm($type)
     {
-        return (new $type->classController())
+        $class = $type->classController();
+
+        return app($class)
                     ->setTabKey($this->key)
                     ->setAdditionalViewParam($this->getAdditionalViewParam());
     }
@@ -134,7 +136,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             if ($item->model->controller_class)
             {
-                $module = new $item->model->controller_class;
+                $module = app($item->model->controller_class);
             }
         }
 
@@ -273,6 +275,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         $model = null;
         $content = [];
         $input = $this->getRequest();
+
         $draw = $input->input('draw');
         $start = $input->input('start', 0);
         $length = $input->input('length', $this->pageLength);
@@ -614,7 +617,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             if ($type->classController() && ($controllerProcessing = $this->typeForm($type)) instanceof \Telenok\Core\Contract\Presentation\Presentation)
             {
-                $content[] = with(new \Illuminate\Support\Collection($controllerProcessing->edit($id_)))->get('tabContent');
+                $content[] = collect(\Illuminate\Support\Collection($controllerProcessing->edit($id_)))->get('tabContent');
             }
             else
             {

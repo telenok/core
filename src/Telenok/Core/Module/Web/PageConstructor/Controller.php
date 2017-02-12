@@ -49,7 +49,7 @@ class Controller extends \App\Vendor\Telenok\Core\Module\Objects\Lists\Controlle
                 throw new \Exception('Please, set "Page Controller" for current page');
             }
 
-            $controllerClass = new $page->controller_class;
+            $controllerClass = app($page->controller_class);
 
             return [
                 'pageId' => $id,

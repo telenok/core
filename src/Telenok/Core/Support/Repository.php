@@ -29,7 +29,7 @@ class Repository {
 
             foreach ($collection->all() as $class)
             {
-                $list->put(($object = new $class)->getKey(), $object);
+                $list->put(($object = app($class))->getKey(), $object);
             }
         }
         catch (\Exception $e)
@@ -45,7 +45,7 @@ class Repository {
             {
                 $class = get_class($el);
 
-                return new $class;
+                return app($class);
             }
             else
             {

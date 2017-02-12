@@ -51,7 +51,7 @@ class Version extends \App\Vendor\Telenok\Core\Abstraction\Eloquent\Object\Model
         }
         catch (\Exception $ex)
         {
-            $model = new $class();
+            $model = new $class;
         }
 
         $model->setRawAttributes($versionData->object_data->all());

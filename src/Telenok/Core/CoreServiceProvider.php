@@ -222,7 +222,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function registerTelenokRepository()
     {
-        $this->app->singleton('telenok.repository', \App\Vendor\Telenok\Core\Support\Repository::class);
+        $this->app->singleton('telenok.repository', '\App\Vendor\Telenok\Core\Support\Repository');
     }
 
     public function registerCommandInstall()
@@ -251,7 +251,7 @@ class CoreServiceProvider extends ServiceProvider {
 
     public function addResolver()
     {
-        $this->app->resolving(\Telenok\Core\Contract\Injection\Request::class, function($object, $app)
+        $this->app->resolving('\Telenok\Core\Contract\Injection\Request', function($object, $app)
         {
             $object->setRequest($app['request']);
         });

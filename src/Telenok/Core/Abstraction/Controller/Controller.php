@@ -148,6 +148,6 @@ abstract class Controller extends \Illuminate\Routing\Controller implements \Tel
      */
     public static function make()
     {
-        return new static;
+        return app(static::class);
     }
 }

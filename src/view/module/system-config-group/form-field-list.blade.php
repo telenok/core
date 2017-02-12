@@ -32,7 +32,7 @@
             {
                 if ($item->controller_class && class_exists($item->controller_class))
                 {
-                    echo with(new $item->controller_class)->getValueContent($controller, $item, $field_, $uniqueId);
+                    echo app($item->controller_class)->getValueContent($controller, $item, $field_, $uniqueId);
                 }
                 else
                 {

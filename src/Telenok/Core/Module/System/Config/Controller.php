@@ -28,7 +28,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
         if ($model->controller_class)
         {
-            if (class_exists($model->controller_class) && ($controller = new $model->controller_class)
+            if (class_exists($model->controller_class) && ($controller = app($model->controller_class))
                     && ($controller instanceof \Telenok\Core\Abstraction\Config\Controller))
             {
                 $controller->validate($input);

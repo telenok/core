@@ -10,7 +10,7 @@
             {
                 if ($model->controller_class && class_exists($model->controller_class))
                 {
-                    echo with(new $model->controller_class)->getValueContent($controller, $model, $field, $uniqueId);
+                    echo app($model->controller_class)->getValueContent($controller, $model, $field, $uniqueId);
                 }
                 else
                 {

@@ -74,12 +74,12 @@ class Language {
 
         if (($locale !== $sessionLocale && in_array($locale, $localeCollection->all(), true)))
         {
-            $this->app->session->set('app.locale', $locale);
+            $this->app->session->put('app.locale', $locale);
             $this->app->setLocale($locale);
         }
         else if ($localeHost !== $sessionLocale && in_array($localeHost, $localeCollection->all(), true))
         {
-            $this->app->session->set('app.locale', $localeHost);
+            $this->app->session->put('app.locale', $localeHost);
             $this->app->setLocale($localeHost);
         }
         else if ($sessionLocale)
@@ -88,7 +88,7 @@ class Language {
         }
         else if (!$sessionLocale)
         {
-            $this->app->session->set('app.locale', $localeCurrent);
+            $this->app->session->put('app.locale', $localeCurrent);
             $this->app->setLocale($localeCurrent);
         }
 

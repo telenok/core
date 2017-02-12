@@ -654,7 +654,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
         }
         catch (\Exception $ex)
         {
-            $model = new static();
+            $model = new static;
         }
 
         foreach ($model->fillable as $k)
@@ -691,7 +691,7 @@ class Model extends \Illuminate\Database\Eloquent\Model {
                 //\Event::fire('workflow.' . ($exists ? 'update' : 'store') . '.before', (new \App\Vendor\Telenok\Core\Workflow\Event())->setResource($model)->setInput($input));
             }
 
-            if (($c = $type->classController()) && ($controllerProcessing = new $c) && $controllerProcessing instanceof EloquentProcessController)
+            if (($c = $type->classController()) && ($controllerProcessing = app($c)) && $controllerProcessing instanceof EloquentProcessController)
             {
                 $controllerProcessing->preProcess($model, $type, $input);
             }

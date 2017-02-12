@@ -11,7 +11,7 @@
         '--force' => true
     ]);
 
-    if ((new \App\Vendor\Telenok\Core\Support\Install\Controller())->telenokInstalled())
+    if (app(\App\Vendor\Telenok\Core\Support\Install\Controller::class)->telenokInstalled())
     {
         $this->line('Package migrating', true);
 
