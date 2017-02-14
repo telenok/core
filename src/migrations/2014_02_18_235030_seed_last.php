@@ -747,7 +747,6 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
                     'allow_update' => 1,
                     'field_order' => 4,
                     'icon_class' => 'ace-icon fa fa-skype light-blue',
-                    'string_unique' => 1,
                 ]
         );
 
