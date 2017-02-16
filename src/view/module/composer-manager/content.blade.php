@@ -4,7 +4,6 @@
 
 ?>
 
-
 <div class="container-table">
 
     <div class="table-header">{{ $controller->LL("list.name") }}</div>
@@ -92,6 +91,7 @@
                 buttons: [
                     {
                         text : "<i class='fa fa-list'></i> {{ $controller->LL('list.btn.action') }}",
+                        extend: 'collection',
                         className : 'btn btn-sm btn-success',
                         buttons : [ 
                             {

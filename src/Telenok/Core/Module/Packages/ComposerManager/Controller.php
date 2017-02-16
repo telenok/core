@@ -15,7 +15,9 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     protected $presentationContentView = 'core::module.composer-manager.content';
     protected $presentationComposerJsonView = 'core::module.composer-manager.composer-json';
     protected $tableColumn = ['name', 'version', 'description', 'license', 'type'];
-    protected $timeProcessLimit = 600;
+    protected $timeProcessLimit = 60;
+
+    protected $fileStatusComposerUpdate = 'telenok/composer/composer.update.status.txt';
 
     public function getContent()
     {
@@ -58,10 +60,8 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
         if (file_exists($validateFile) && (time() - filemtime($validateFile) < $this->timeProcessLimit))
         {
-            return \Response::json(['error' => $this->LL('error.json.locked')], 417 /* Expectation Failed */);
+            return \Response::json(['error' => $this->LL('error.json.locked')], 417);
         }
-
-        touch($validateFile);
 
         try
         {
@@ -88,6 +88,8 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
             if (strpos($out->fetch(), 'is invalid') !== false)
             {
+                dd($out->fetch(), strpos($out->fetch(), 'is invalid'));
+
                 throw new \Exception();
             }
 
@@ -101,9 +103,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         }
         catch (\Exception $e)
         {
+            dd($e->getMessage(), 'EXCEPTION');
+
             \File::delete($validateFile);
 
-            return \Response::json(['error' => $this->LL('error.json')], 417 /* Expectation Failed */);
+            return \Response::json(['error' => $this->LL('error.json.format')], 417 /* Expectation Failed */);
         }
 
         \File::delete($validateFile);
@@ -120,21 +124,21 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     {
         $input = $this->getRequest();
         $composer = (new \Telenok\Core\Composer\Application())->getEmbeddedComposer();
-        $collection = collect();
+
+        $collectionList = collect();
 
         $start = $input->input('start', 0);
         $length = $input->input('length', $this->pageLength);
 
         foreach ($composer->getRepositoryManager()->getLocalRepository()->getPackages() as $package)
         {
-            if (!$collection->has($package->getName()) || !is_object($collection->get($package->getName())) || version_compare($collection->get($package->getName())->getVersion(), $package->getVersion(), '<')
-            )
+            if (!$collectionList->has($package->getName())
+                || !is_object($collectionList->get($package->getName()))
+                /*|| version_compare($collectionList->get($package->getName())->getVersion(), $package->getVersion(), '<')*/)
             {
-                $collection->put($package->getName(), $package);
+                $collectionList->put($package->getName(), $package);
             }
         }
-
-        $content = [];
 
         $input = $this->getRequest();
 
@@ -142,17 +146,13 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
         if (($title = trim($input->input('search.value'))) || ($title = trim(array_get($filter, 'name'))))
         {
-            $collection = $collection->filter(function($item) use ($title)
+            $collectionList = $collectionList->filter(function($item) use ($title)
             {
                 return strpos($item->getName(), $title) !== FALSE;
             });
         }
 
-        return $collection->sortBy(function($item)
-                        {
-                            return $item->getName();
-                        })
-                        ->slice($start, $length + 1);
+        return $collectionList->sortBy(function($item) { return $item->getName(); })->slice($start, $length + 1);
     }
 
     public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null)
@@ -227,21 +227,24 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function updatePackages($id = [])
     {
-        ob_start();
-
         $input = new \Symfony\Component\Console\Input\ArrayInput([
             'command' => 'update',
+            'discard-changes' => true,
             //'packages' => ($id ? (array)$id : []),
             '--working-dir' => base_path(),
         ]);
 
-        $out = new \Symfony\Component\Console\Output\BufferedOutput();
+        @mkdir(dir(storage_path($this->fileStatusComposerUpdate)));
+
+        $hFile = fopen(storage_path($this->fileStatusComposerUpdate), 'w');
+
+        $out = new \Symfony\Component\Console\Output\StreamOutput($hFile);
         $application = new \Composer\Console\Application();
-        $application->setAutoExit(false);
+        $application->setAutoExit(true);
 
         $application->run($input, $out);
 
-        ob_end_clean();
+        return ['success' => 1];
     }
 
     public function edit($id = 0)
@@ -258,7 +261,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 'id' => $id,
                 'uniqueId' => str_random(),
                 'model' => []
-                            ), $this->getAdditionalViewParam()))->render()
+            ), $this->getAdditionalViewParam()))->render()
         ];
     }
 
@@ -435,5 +438,4 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     {
         return;
     }
-
 }

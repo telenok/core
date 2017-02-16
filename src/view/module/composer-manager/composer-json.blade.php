@@ -21,7 +21,27 @@
 			return;
 		}
 		else if (button_type=='save' || button_type=='save.close' || button_type=='save.update')
-		{	
+		{
+			if (button_type=='save.update')
+			{
+				jQuery("#alert-update-composer-{{$jsContentUnique}}").show();
+
+				jQuery.gritter.add({
+					title: '{{ $controller->LL('composer.update.start') }}',
+					text: '{{ $controller->LL('notice.composer.update.start') }}!',
+					class_name: 'gritter-success gritter-light',
+					time: 3000,
+				});
+/*
+				if (!jQuery('#modal-cropper-{{$jsContentUnique}}').size())
+				{
+					jQuery('body').append('<div id="modal-cropper-{{$jsContentUnique}}" class="modal" role="dialog" aria-labelledby="label"></div>');
+				}
+
+				jQuery('#modal-cropper-{{$jsContentUnique}}').html(data).modal('show')
+*/
+			}
+
 			var $content = jQuery('pre#{{$jsContentUnique}} code').text();
 			jQuery("input#content-{{$jsContentUnique}}").val($content);
             
@@ -45,21 +65,33 @@
 			}
 			else if (button_type=='save')
 			{
-				jQuery.gritter.add({
-					title: '{{$controller->LL('notice.saved.description')}}',
-					text: '{{$controller->LL('notice.saved.thank.you')}}!',
-					class_name: 'gritter-success gritter-light',
-					time: 3000,
-				});
-				
-				$el.closest('div.container-model-{{$uniqueId}}').html(data.tabContent); 
+				$el.closest('div.container-model-{{$uniqueId}}').html(data.tabContent);
 			}
-		@stop 
+		@stop
+
+
+		@section('ajaxFail')
+			@parent
+			jQuery("#alert-update-composer-{{$jsContentUnique}}").hide();
+		@stop
 
 @stop
 
 
 @section('form')
+
+	<div id="alert-update-composer-{{$jsContentUnique}}" class="alert alert-block alert-success" style="display: none;">
+		<button data-dismiss="alert" class="close" type="button">
+			<i class="fa fa-times"></i>
+		</button>
+		<p>
+			<strong>
+				<i class="fa fa-check"></i>
+				{{ $controller->LL('composer.update.start') }}!
+			</strong>
+			{{ $controller->LL('notice.composer.update.start') }}
+		</p>
+	</div>
 
 	@parent 
 

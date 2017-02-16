@@ -7447,7 +7447,7 @@
 		// is a Javascript property of functions which defines how many arguments
 		// the function expects.
 		if ( len === undefined ) {
-			return this.context.length !== 0 ?
+			return this.context.length !== 0 ?rr
 				this.context[0]._iDisplayLength :
 				undefined;
 		}
