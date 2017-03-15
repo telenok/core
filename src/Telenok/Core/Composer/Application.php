@@ -1,5 +1,6 @@
 <?php
 namespace Telenok\Core\Composer;
+use Composer\Json\JsonValidationException;
 
 /**
  * Class extends Composer as embedded
@@ -28,18 +29,19 @@ class Application extends \Composer\Console\Application {
      * @member Telenok.Core.Composer.Application
      * @return {Composer.Composer}
      */
-    public function getEmbeddedComposer()
+    public function getEmbeddedComposer($input = null, $output = null)
     {
-        $input = new \Symfony\Component\Console\Input\ArrayInput([]);
-        $output = new \Symfony\Component\Console\Output\BufferedOutput();
+        chdir(base_path());
+
+        $input = $input ? $input : new \Symfony\Component\Console\Input\ArrayInput([]);
+        $output = $output ? $output : new \Symfony\Component\Console\Output\BufferedOutput();
 
         $this->setAutoExit(false);
+
         $this->setIO(new \Composer\IO\ConsoleIO($input, $output, $this->getHelperSet()));
-        
+
         \Composer\Util\ErrorHandler::register($this->getIO());
-        
-        chdir(base_path());
-        
+
         return $this->getComposer(false, true);
     }
 }

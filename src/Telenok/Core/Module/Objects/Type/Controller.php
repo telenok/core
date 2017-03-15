@@ -319,41 +319,35 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTabObject\Co
 
         if (!$tabMain)
         {
-            $tabMain = (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate(
-                    [
-                        'title' => array_get($translationSeed, 'tab.main'),
-                        'code' => 'main',
-                        'active' => 1,
-                        'tab_object_type' => $model->getKey(),
-                        'tab_order' => 1
-                    ]
-            );
+            $tabMain = (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate([
+                'title' => array_get($translationSeed, 'tab.main'),
+                'code' => 'main',
+                'active' => 1,
+                'tab_object_type' => $model->getKey(),
+                'tab_order' => 1
+            ]);
         }
 
         if (!$tabVisible)
         {
-            $tabVisible = (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate(
-                    [
-                        'title' => array_get($translationSeed, 'tab.visibility'),
-                        'code' => 'visibility',
-                        'active' => 1,
-                        'tab_object_type' => $model->getKey(),
-                        'tab_order' => 2
-                    ]
-            );
+            $tabVisible = (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate([
+                'title' => array_get($translationSeed, 'tab.visibility'),
+                'code' => 'visibility',
+                'active' => 1,
+                'tab_object_type' => $model->getKey(),
+                'tab_order' => 2
+            ]);
         }
 
         if (!$tabAdditionally)
         {
-            $tabAdditionally = (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate(
-                    [
-                        'title' => array_get($translationSeed, 'tab.additionally'),
-                        'code' => 'additionally',
-                        'active' => 1,
-                        'tab_object_type' => $model->getKey(),
-                        'tab_order' => 3
-                    ]
-            );
+            $tabAdditionally = (new \App\Vendor\Telenok\Core\Model\Object\Tab())->storeOrUpdate([
+                'title' => array_get($translationSeed, 'tab.additionally'),
+                'code' => 'additionally',
+                'active' => 1,
+                'tab_object_type' => $model->getKey(),
+                'tab_order' => 3
+            ]);
         }
 
         if (!\App\Vendor\Telenok\Core\Model\Object\Field::where('field_object_type', $model->getKey())->where('code', 'id')->exists())

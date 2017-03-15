@@ -93,6 +93,7 @@
                         text : "<i class='fa fa-list'></i> {{ $controller->LL('list.btn.action') }}",
                         extend: 'collection',
                         className : 'btn btn-sm btn-success',
+
                         buttons : [ 
                             {
                                 text : "<i class='fa fa-pencil'></i> {{ $controller->LL('list.btn.edit.composer.json') }}",
@@ -100,7 +101,7 @@
                                 { 
                                     telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
                                         url: '{!! route("telenok.module.composer-manager.composer-json.edit") !!}'
-                                    }); 
+                                    });
                                 }
                             }
                         ]
@@ -114,7 +115,7 @@
         function presentationTableFilter{{$jsContentUnique}}(dom_obj, erase)
         {
 			var $form = jQuery(dom_obj).closest('form');
-			
+
             if (erase)
             {
 				jQuery('select option:selected', $form).removeAttr('selected');
@@ -126,9 +127,8 @@
                 jQuery('input[name="multifield_search"]', $form).val(1);
 			}
 
-            
             jQuery('#telenok-{{$controller->getPresentation()}}-presentation-grid-{{$gridId}}')
-                .DataTable().ajax.url('{!! $controller->getRouterList() !!}?' + (erase ? '' : jQuery.param($form.serializeArray()))).load();
+                .dataTable().ajax.url('{!! $controller->getRouterList() !!}?' + (erase ? '' : jQuery.param($form.serializeArray()))).load();
         }
     </script>
 </div>

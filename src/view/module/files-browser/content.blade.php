@@ -165,7 +165,8 @@
                     extend: 'collection',
                     className : 'btn btn-sm btn-success',
                     text : "<i class='fa fa-plus smaller-90'></i> {{ $controller->LL('list.btn.create') }}",
-                    buttons : [ 
+                    autoClose: true,
+                    buttons : [
                         {
                             text : "<i class='fa fa-folder'></i> {{ $controller->LL('btn.create.directory') }}",
                             action : function (e, dt, button, config)
@@ -239,6 +240,7 @@
                     extend: 'collection',
                     className : 'btn btn-sm btn-light',
                     text : "<i class='fa fa-check-square-o smaller-90'></i> {{ $controller->LL('list.btn.select') }}",
+                    autoClose: true,
                     buttons : [
                         {
                             text : "<i class='fa fa-pencil-square-o'></i> {{ $controller->LL('btn.edit') }}",
@@ -293,7 +295,7 @@
 
             
             jQuery('#telenok-{{$controller->getPresentation()}}-presentation-grid-{{$gridId}}')
-                .DataTable().ajax.url('{!! $controller->getRouterList() !!}?' + (erase ? '' : jQuery.param($form.serializeArray()))).load();
+                .dataTable().ajax.url('{!! $controller->getRouterList() !!}?' + (erase ? '' : jQuery.param($form.serializeArray()))).load();
         }
                 
     </script>

@@ -488,7 +488,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                     'uniqueId' => str_random(),
                     'routerParam' => $this->getRouterParam('create', $eventResource->get('type'), $eventResource->get('model')),
                     'canCreate' => app('auth')->can('create', "object_type.{$eventResource->get('type')->code}"),
-                                ), $this->getAdditionalViewParam()))->render()
+                ), $this->getAdditionalViewParam()))->render()
             ];
         }
         catch (\Exception $ex)
@@ -539,7 +539,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                     'routerParam' => $this->getRouterParam('edit', $eventResource->get('type'), $eventResource->get('model')),
                     'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
                     'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
-                                ), $this->getAdditionalViewParam()))->render()
+                ), $this->getAdditionalViewParam()))->render()
             ];
         }
         catch (\Exception $ex)
@@ -634,7 +634,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                     'uniqueId' => str_random(),
                     'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
                     'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
-                                ), $this->getAdditionalViewParam()))->render();
+                ), $this->getAdditionalViewParam()))->render();
             }
         }
 
@@ -723,7 +723,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             'routerParam' => $this->getRouterParam('store', $eventResource->get('type'), $eventResource->get('model')),
             'canUpdate' => app('auth')->can('update', $eventResource->get('model')),
             'canDelete' => app('auth')->can('delete', $eventResource->get('model')),
-                        ), $this->getAdditionalViewParam()))->render();
+        ), $this->getAdditionalViewParam()))->render();
 
         return $return;
     }
@@ -740,7 +740,6 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         }
 
         $model = $this->save($input, $type);
-
 
         $fields = $model->getFieldForm();
 
@@ -810,7 +809,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 }
                 catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
                 {
-                    throw new \Exception("\App\Vendor\Telenok\Core\Module\Objects\Lists\Controller::save() - Error: 'type of object not found, please, define it'");
+                    throw new \Exception('\App\Vendor\Telenok\Core\Module\Objects\Lists\Controller::save() - Error: \'type of object not found, please, define it\'');
                 }
             }
         }

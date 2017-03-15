@@ -88,7 +88,7 @@ class ComposerScripts {
 
         if (strpos($content, $provider) === FALSE)
         {
-            $content = str_replace('###providers###', "'{$provider}',\n###providers###", $content);
+            $content = str_replace('###providers###', "{$provider},\n###providers###", $content);
             file_put_contents(config_path('app.php'), $content, LOCK_EX);
         }
     }

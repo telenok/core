@@ -87,63 +87,65 @@
     <script type="text/javascript">
         (function()
         {
-        var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
-        var columns = [];
-        columns.push({
-        data : "tableCheckAll",
-                title :
-                '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#'
-                + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();'
-                + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());'
-                + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
-                + '<span class="lbl">'
-                + '</span></label>',
-                className : "center",
-                width : "20px",
-                defaultContent : '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>',
-                orderable : false
-        });
-        columns.push({ "data": "tableManageItem", "title": "", "orderable": false });
-        @foreach($fields as $key => $field)
-                columns.push({
-                data : "{{ $field->code }}",
+            var presentation = telenok.getPresentation('{{$controller->getPresentationModuleKey()}}');
+            var columns = [];
+            columns.push({
+            data : "tableCheckAll",
+                    title :
+                    '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#'
+                    + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();'
+                    + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());'
+                    + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
+                    + '<span class="lbl">'
+                    + '</span></label>',
+                    className : "center",
+                    width : "20px",
+                    defaultContent : '<input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" value=><span class="lbl"></span>',
+                    orderable : false
+            });
+
+            columns.push({ "data": "tableManageItem", "title": "", "orderable": false });
+            @foreach($fields as $key => $field)
+                    columns.push({
+                        data : "{{ $field->code }}",
                         title : "{{ $field->translate('title_list') }}",
                         orderable : @if ($field->allow_sort) true @else false @endif
-                });
-        @endforeach
+                    });
+            @endforeach
 
-                presentation.addDataTable({
-                columns : columns,
-                        order : [],
-                        @if (isset($search))
-                        search: {search : "{{$search}}"},
-                        @endif
-                        ajax : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
-                        domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
-                        btnCreateUrl : '{!! $controller->getRouterCreate(['id' => $type->getKey()]) !!}',
-                        btnListEditUrl : '{!! $controller->getRouterListEdit(['id' => $type->getKey()]) !!}',
-                        btnListDeleteUrl : '{!! $controller->getRouterListDelete(['id' => $type->getKey()]) !!}',
-                        btnListLockUrl : '{!! $controller->getRouterListLock(['id' => $type->getKey()]) !!}',
-                        btnListUnlockUrl : '{!! $controller->getRouterListUnlock(['id' => $type->getKey()]) !!}',
-                        btnCreateDisabled : '{{ !app('auth')->can('create', "object_type.{$type->code}") }}',
-                        btnListDeleteDisabled : '{!!  !app('auth')->can('delete', "object_type.{$type->code}") !!}'
-                });
+            presentation.addDataTable({
+            columns : columns,
+                    order : [],
+                    @if (isset($search))
+                    search: {search : "{{$search}}"},
+                    @endif
+                    ajax : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
+                    domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
+                    btnCreateUrl : '{!! $controller->getRouterCreate(['id' => $type->getKey()]) !!}',
+                    btnListEditUrl : '{!! $controller->getRouterListEdit(['id' => $type->getKey()]) !!}',
+                    btnListDeleteUrl : '{!! $controller->getRouterListDelete(['id' => $type->getKey()]) !!}',
+                    btnListLockUrl : '{!! $controller->getRouterListLock(['id' => $type->getKey()]) !!}',
+                    btnListUnlockUrl : '{!! $controller->getRouterListUnlock(['id' => $type->getKey()]) !!}',
+                    btnCreateDisabled : '{{ !app('auth')->can('create', "object_type.{$type->code}") }}',
+                    btnListDeleteDisabled : '{!!  !app('auth')->can('delete', "object_type.{$type->code}") !!}'
+            });
         })();
         function presentationTableFilter{{$uniqueId}}(dom_obj, erase)
         {
-        var $form = jQuery(dom_obj).closest('form');
-        if (erase)
-        {
-        jQuery('select option:selected', $form).removeAttr('selected');
-        jQuery('.chosen, .chosen-select', $form).trigger('chosen:updated');
-        jQuery('input[name="multifield_search"]', $form).val(0);
-        }
-        else
-        {
-        jQuery('input[name="multifield_search"]', $form).val(1);
-        }
+            var $form = jQuery(dom_obj).closest('form');
 
-        jQuery('#telenok-{{$controller->getPresentation()}}-presentation-grid-{{$gridId}}')
-                .DataTable().ajax.url('{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}&' + (erase ? '' : jQuery.param($form.serializeArray()))).load();
+            if (erase)
+            {
+                jQuery('select option:selected', $form).removeAttr('selected');
+                jQuery('.chosen, .chosen-select', $form).trigger('chosen:updated');
+                jQuery('input[name="multifield_search"]', $form).val(0);
+            }
+            else
+            {
+                jQuery('input[name="multifield_search"]', $form).val(1);
+            }
+
+            jQuery('#telenok-{{$controller->getPresentation()}}-presentation-grid-{{$gridId}}')
+                .dataTable().ajax.url('{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}&' + (erase ? '' : jQuery.param($form.serializeArray()))).load();
         }
     </script>

@@ -77,6 +77,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                         extend: 'collection',
                         className : 'btn btn-sm btn-light',
                         text : "<i class='fa fa-check-square-o smaller-90'></i> {{ $controller->LL('list.btn.select') }}",
+                        autoClose: true,
                         buttons : [
                             {
                                 text : "<i class='fa fa-pencil-square-o'></i> {{ $controller->LL('btn.edit') }}",
@@ -215,7 +216,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                 }
             }, param);
 
-            jQuery('#' + param.domId).DataTable(param);
+            jQuery('#' + param.domId).dataTable(param);
 
             return this;
         },
@@ -224,7 +225,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
             if (jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId).size())
             {
                 jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId)
-                    .DataTable().ajax.url(param.url + (param.data ? '?' + jQuery.param(param.data) : '')).load();
+                    .dataTable().ajax.url(param.url + (param.data ? '?' + jQuery.param(param.data) : '')).load();
             }
             return this;
         },

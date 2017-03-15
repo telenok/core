@@ -73,7 +73,7 @@
                 order: [],
                 ajax : '{!! $controller->getRouterList() !!}',
                 domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
-                btnCreateUrl : '{!! $controller->getRouterCreate() }}',
+                btnCreateUrl : '{!! $controller->getRouterCreate() !!}',
                 btnListEditUrl : '{!! $controller->getRouterListEdit() !!}',
                 btnListDeleteUrl : '{!! $controller->getRouterListDelete() !!}',
                 btnListLockUrl : '{!! $controller->getRouterListLock() !!}',

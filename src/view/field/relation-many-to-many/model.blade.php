@@ -247,7 +247,7 @@
                 data.tableManageItem = '<button class="btn btn-minier btn-danger trash-it" title="{{$controller->LL('list.btn.delete')}}" onclick="deleteM2MAddition{{$jsUnique}}(this); return false;">'
                     + '<i class="fa fa-trash-o"></i></button>';
 
-                jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").DataTable().row.add(data).draw();
+                jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").dataTable().row.add(data).draw();
 
                 addM2MAdditional{{$jsUnique}}(data.id);
             });
@@ -336,7 +336,7 @@
                 data.tableManageItem = '<button class="btn btn-minier btn-danger trash-it" title="{{$controller->LL('list.btn.delete')}}" onclick="deleteM2MAddition{{$jsUnique}}(this); return false;">'
                     + '<i class="fa fa-trash-o"></i></button>';
 
-                jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").DataTable().row.add(data).draw();
+                jQuery("table#telenok-{{$controller->getKey()}}-{{$jsUnique}}-addition").dataTable().row.add(data).draw();
 
                 addM2MAdditional{{$jsUnique}}(data.id);
             });

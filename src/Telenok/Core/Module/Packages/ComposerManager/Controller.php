@@ -1,6 +1,10 @@
 <?php
 
 namespace Telenok\Core\Module\Packages\ComposerManager;
+use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Telenok\Core\Composer\Application;
+use Telenok\Core\Support\Stream\FileStreamOutput;
 
 /**
  * @class Telenok.Core.Module.Packages.ComposerManager.Controller
@@ -14,10 +18,157 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     protected $presentation = 'tree-tab-object';
     protected $presentationContentView = 'core::module.composer-manager.content';
     protected $presentationComposerJsonView = 'core::module.composer-manager.composer-json';
-    protected $tableColumn = ['name', 'version', 'description', 'license', 'type'];
+    protected $tableColumn = ['name',/* 'installed', */'version', 'description', 'license', 'type'];
     protected $timeProcessLimit = 60;
 
     protected $fileStatusComposerUpdate = 'telenok/composer/composer.update.status.txt';
+    protected $fileValidateComposerJson = 'telenok/composer/composer.validate.json';
+    protected $fileLastComposerJson = 'telenok/composer/composer.last.json';
+
+
+    public function getPackageData($id)
+    {
+        $input = new \Symfony\Component\Console\Input\ArrayInput([
+            'command' => 'show',
+            'package' => $id,
+            '--working-dir' => base_path(),
+        ]);
+
+        $out = new \Symfony\Component\Console\Output\BufferedOutput();
+        $application = new \Composer\Console\Application();
+        $application->setAutoExit(false);
+
+        $application->run($input, $out);
+
+        return $out->fetch();
+    }
+
+    public function updatePackages($dry = true)
+    {
+        $inputArray = [
+            'command' => 'update',
+            '--working-dir' => base_path(),
+            '--no-interaction' => true,
+        ];
+
+        if ($dry)
+        {
+            $inputArray['--dry-run'] = true;
+        }
+
+        try
+        {
+            $filePath = storage_path($this->fileStatusComposerUpdate);
+            $fs = fopen($filePath, 'w');
+
+            if (!flock($fs, LOCK_EX | LOCK_NB))
+            {
+                throw new \Exception($this->LL('error.json.locked'));
+            }
+
+            ftruncate($fs, 0);
+
+            $output = new StreamOutput($fs);
+            $input = new \Symfony\Component\Console\Input\ArrayInput($inputArray);
+
+            @mkdir(dir($filePath));
+
+            $application = new \Composer\Console\Application();
+            $application->setAutoExit(false);
+
+            $application->run($input, $output);
+        }
+        finally
+        {
+            @flock($fs, LOCK_UN);
+            @fclose($fs);
+        }
+    }
+
+    public function composerJsonOutput()
+    {
+        return file_get_contents(storage_path($this->fileStatusComposerUpdate));
+    }
+
+    public function composerJsonUpdate()
+    {
+        // validate json
+        if ($this->getRequest()->input('action') == "composer.validate")
+        {
+            $this->composerJsonValidate();
+
+            return ['success' => 1];
+        }
+
+        if ($this->getRequest()->input('action') == "composer.update.dry")
+        {
+            $this->updatePackages();
+
+            return ['success' => 1];
+        }
+
+        if ($this->getRequest()->input('action') == "composer.update.finish")
+        {
+            $this->updatePackages(false);
+
+            return ['success' => 1];
+        }
+
+        return $this->getComposerJsonContent(true);
+    }
+
+    public function composerJsonValidate()
+    {
+        \File::makeDirectory(storage_path('telenok/composer'), 0775, true, true);
+
+        $lastFile = storage_path($this->fileLastComposerJson);
+        $validateFile = storage_path($this->fileValidateComposerJson);
+
+        if (file_exists($validateFile) && (time() - filemtime($validateFile) < $this->timeProcessLimit))
+        {
+            throw new \Exception($this->LL('error.json.locked'));
+        }
+
+        $json = $this->getRequest()->input('content');
+
+        $content = json_decode($json);
+
+        if ($content === null)
+        {
+            throw new \Exception($this->LL('error.json.empty'));
+        }
+
+        try
+        {
+            file_put_contents($validateFile, $json, LOCK_EX);
+
+            $input = new \Symfony\Component\Console\Input\ArrayInput([
+                'command' => 'validate',
+                'file' => storage_path('telenok/composer/composer.validate.json'),
+            ]);
+
+            $out = new \Symfony\Component\Console\Output\BufferedOutput();
+            $application = new \Composer\Console\Application();
+            $application->setAutoExit(false);
+            $application->run($input, $out);
+
+            if (strpos($out->fetch(), 'is invalid') !== false || strpos($out->fetch(), 'Problem 1') !== false)
+            {
+                throw new \Exception($this->LL('error.json.invalid'));
+            }
+
+            file_put_contents($lastFile, file_get_contents(base_path('composer.json')), LOCK_EX);
+            file_put_contents(base_path('composer.json'), $json, LOCK_EX);
+        }
+        catch (\Exception $e)
+        {
+            throw $e;
+        }
+        finally
+        {
+            \File::delete($validateFile);
+        }
+    }
 
     public function getContent()
     {
@@ -38,7 +189,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     public function getComposerJsonContent($success = false)
     {
         return [
-            'tabKey' => "{$this->getTabKey()}-{$this->getParent()}-" . str_random(),
+            'tabKey' => "{$this->getTabKey()}-{$this->getParent()}-validate-update",
             'tabLabel' => 'Composer.json',
             'tabContent' => view($this->presentationComposerJsonView, array(
                 'routerParam' => $this->getRouterParam('composer-json-update'),
@@ -51,92 +202,32 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         ];
     }
 
-    public function composerJsonUpdate()
-    {
-        \File::makeDirectory(storage_path('telenok/composer'), 0775, true, true);
-
-        $lastFile = storage_path('telenok/composer/composer.last.json');
-        $validateFile = storage_path('telenok/composer/composer.validate.json');
-
-        if (file_exists($validateFile) && (time() - filemtime($validateFile) < $this->timeProcessLimit))
-        {
-            return \Response::json(['error' => $this->LL('error.json.locked')], 417);
-        }
-
-        try
-        {
-            $json = $this->getRequest()->input('content');
-
-            $content = json_decode($json);
-
-            if ($content === null)
-            {
-                throw new \Exception();
-            }
-
-            file_put_contents($validateFile, $json, LOCK_EX);
-
-            $input = new \Symfony\Component\Console\Input\ArrayInput([
-                'command' => 'validate',
-                'file' => storage_path('telenok/composer/composer.validate.json'),
-            ]);
-
-            $out = new \Symfony\Component\Console\Output\BufferedOutput();
-            $application = new \Composer\Console\Application();
-            $application->setAutoExit(false);
-            $application->run($input, $out);
-
-            if (strpos($out->fetch(), 'is invalid') !== false)
-            {
-                dd($out->fetch(), strpos($out->fetch(), 'is invalid'));
-
-                throw new \Exception();
-            }
-
-            file_put_contents($lastFile, file_get_contents(base_path('composer.json')), LOCK_EX);
-            file_put_contents(base_path('composer.json'), $json, LOCK_EX);
-
-            if ($this->getRequest()->input('action') == "save.update")
-            {
-                $this->updatePackages();
-            }
-        }
-        catch (\Exception $e)
-        {
-            dd($e->getMessage(), 'EXCEPTION');
-
-            \File::delete($validateFile);
-
-            return \Response::json(['error' => $this->LL('error.json.format')], 417 /* Expectation Failed */);
-        }
-
-        \File::delete($validateFile);
-
-        return $this->getComposerJsonContent(true);
-    }
-
-    public function getModelList()
-    {
-        
-    }
+    public function getModelList() {}
 
     public function getListItem($model = null)
     {
-        $input = $this->getRequest();
-        $composer = (new \Telenok\Core\Composer\Application())->getEmbeddedComposer();
+        $outputComposer = new \Symfony\Component\Console\Output\BufferedOutput();
+        $inputComposer = new \Symfony\Component\Console\Input\ArrayInput([
+            '--working-dir' => base_path(),
+            '--no-interaction' => true,
+        ]);
 
-        $collectionList = collect();
+        $composer = (new Application())->getEmbeddedComposer($inputComposer, $outputComposer);
+
+        $collection = collect();
+
+        $input = $this->getRequest();
 
         $start = $input->input('start', 0);
         $length = $input->input('length', $this->pageLength);
 
         foreach ($composer->getRepositoryManager()->getLocalRepository()->getPackages() as $package)
         {
-            if (!$collectionList->has($package->getName())
-                || !is_object($collectionList->get($package->getName()))
-                /*|| version_compare($collectionList->get($package->getName())->getVersion(), $package->getVersion(), '<')*/)
+            if (!$collection->has($package->getName())
+                || !is_object($collection->get($package->getName()))
+                /*|| version_compare($collection->get($package->getName())->getVersion(), $package->getVersion(), '<')*/)
             {
-                $collectionList->put($package->getName(), $package);
+                $collection->put($package->getName(), $package);
             }
         }
 
@@ -146,13 +237,13 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
         if (($title = trim($input->input('search.value'))) || ($title = trim(array_get($filter, 'name'))))
         {
-            $collectionList = $collectionList->filter(function($item) use ($title)
+            $collection = $collection->filter(function($item) use ($title)
             {
                 return strpos($item->getName(), $title) !== FALSE;
             });
         }
 
-        return $collectionList->sortBy(function($item) { return $item->getName(); })->slice($start, $length + 1);
+        return $collection->sortBy(function($item) { return $item->getName(); })->slice($start, $length + 1);
     }
 
     public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null)
@@ -166,7 +257,13 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         $put->put('version', $item->getPrettyVersion());
         $put->put('description', $item->getDescription());
         $put->put('tableManageItem', $this->getListButton($item));
+/*
+        $isInstalled = (new Application())->getEmbeddedComposer(new \Symfony\Component\Console\Input\ArrayInput([]))
+            ->getRepositoryManager()
+            ->getLocalRepository()->hasPackage($item);
 
+        $put->put('installed', $isInstalled);
+*/
         return $this;
     }
 
@@ -208,45 +305,6 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 })->implode('content');
     }
 
-    public function getPackageData($id)
-    {
-        $input = new \Symfony\Component\Console\Input\ArrayInput([
-            'command' => 'show',
-            'package' => $id,
-            '--working-dir' => base_path(),
-        ]);
-
-        $out = new \Symfony\Component\Console\Output\BufferedOutput();
-        $application = new \Composer\Console\Application();
-        $application->setAutoExit(false);
-
-        $application->run($input, $out);
-
-        return $out->fetch();
-    }
-
-    public function updatePackages($id = [])
-    {
-        $input = new \Symfony\Component\Console\Input\ArrayInput([
-            'command' => 'update',
-            'discard-changes' => true,
-            //'packages' => ($id ? (array)$id : []),
-            '--working-dir' => base_path(),
-        ]);
-
-        @mkdir(dir(storage_path($this->fileStatusComposerUpdate)));
-
-        $hFile = fopen(storage_path($this->fileStatusComposerUpdate), 'w');
-
-        $out = new \Symfony\Component\Console\Output\StreamOutput($hFile);
-        $application = new \Composer\Console\Application();
-        $application->setAutoExit(true);
-
-        $application->run($input, $out);
-
-        return ['success' => 1];
-    }
-
     public function edit($id = 0)
     {
         $id = $this->getRequest()->input('id');
@@ -269,7 +327,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     {
         $id = $this->getRequest()->input('id');
 
-        $this->updatePackage($id);
+        $this->updatePackages($id);
 
         return [
             'tabKey' => "{$this->getTabKey()}-" . md5($id),
@@ -282,15 +340,13 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 'model' => [],
                 'routerParam' => $this->getRouterParam('update'),
                 'uniqueId' => str_random(),
-                            ), $this->getAdditionalViewParam()))->render()
+            ), $this->getAdditionalViewParam()))->render()
         ];
     }
 
     public function delete($id = null, $force = false)
     {
         $id = $this->getRequest()->input('id');
-
-        ob_start();
 
         $input = new \Symfony\Component\Console\Input\ArrayInput([
             'command' => 'remove',
@@ -303,8 +359,6 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         $application->setAutoExit(false);
 
         $application->run($input, $out);
-
-        ob_end_clean();
 
         return ['success' => 1];
     }

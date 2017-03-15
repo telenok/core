@@ -7447,7 +7447,7 @@
 		// is a Javascript property of functions which defines how many arguments
 		// the function expects.
 		if ( len === undefined ) {
-			return this.context.length !== 0 ?rr
+			return this.context.length !== 0 ?
 				this.context[0]._iDisplayLength :
 				undefined;
 		}
@@ -15631,7 +15631,7 @@ $.extend( Buttons.prototype, {
 		var buttons = this.s.buttons;
 		var subButtons = this.s.subButtons;
 		var i, ien, j, jen;
-		
+
 		for ( i=0, ien=buttons.length ; i<ien ; i++ ) {
 			this.removePrep( i );
 

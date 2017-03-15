@@ -69,13 +69,16 @@
             @section('ajaxFail')
 
             var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
+            var jsonError;
+
+            console.log()
 
             if (jsonResponse.error && jsonResponse.error.message) {
-                var jsonError = jQuery.parseJSON(jsonResponse.error.message);
+                jsonError = jQuery.parseJSON(jsonResponse.error.message);
             } else if (jsonResponse.error) {
-                var jsonError = jQuery.parseJSON(jsonResponse.error);
+                jsonError = jQuery.parseJSON(jsonResponse.error);
             } else if (jsonResponse) {
-                var jsonError = jsonResponse;
+                jsonError = jsonResponse;
             }
 
             var $errorContainer = jQuery('div.error-container', $el);
@@ -84,26 +87,24 @@
 
             jQuery('div.alert-danger, div.alert-success, div.alert-warning', $container).remove();
 
-            console.log( jsonError instanceof Array && jsonError.length );
-
             if (jsonError instanceof Array && jsonError.length) 
             {
-                    jQuery.each(jsonError.reverse(), function(i,v) {
-                            $errorContainer.prepend('<div class="alert alert-danger">' + v + '<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
-                            errorGritterText.unshift("- " + v);
-                    });
+                jQuery.each(jsonError.reverse(), function(i,v) {
+                        $errorContainer.prepend('<div class="alert alert-danger">' + v + '<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
+                        errorGritterText.unshift("- " + v);
+                });
             }
             else if (typeof jsonError === "string")
             {
-                    errorGritterText.push(jsonError);
-                    $errorContainer.prepend('<div class="alert alert-danger">' + jsonError + '<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
+                errorGritterText.push(jsonError);
+                $errorContainer.prepend('<div class="alert alert-danger">' + jsonError + '<button data-dismiss="alert" class="close" type="button"><i class="fa fa-times"></i></button></div>');
             }
 
             jQuery.gritter.add({
-                    title: '{{$controller->LL('notice.error')}}! {{$controller->LL('notice.error.undefined')}}',
-                    text: errorGritterText.join("<br>"),
-                    class_name: 'gritter-error gritter-light',
-                    time: 5000
+                title: '{{$controller->LL('notice.error')}}! {{$controller->LL('notice.error.undefined')}}',
+                text: errorGritterText.join("<br>"),
+                class_name: 'gritter-error gritter-light',
+                time: 5000
             });
 
             @show
@@ -111,7 +112,9 @@
         })
         .always(function(jqXHR, textStatus, errorThrown)
         {
-            jQuery('div.form-actions button').removeAttr('disabled');
+            @section('ajaxAlways')
+                jQuery('div.form-actions button', '#model-ajax-{{$uniqueId}}').removeAttr('disabled');
+            @show
         });
     });
 

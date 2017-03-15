@@ -180,7 +180,8 @@
     app('router')->post('telenok/module/packages/composer-manager/delete', array('as' => 'telenok.module.composer-manager.delete', 'uses' => 'App\Vendor\Telenok\Core\Module\Packages\ComposerManager\Controller@delete'));
 
     app('router')->get('telenok/module/packages/composer-manager/composer-json/edit', array('as' => 'telenok.module.composer-manager.composer-json.edit', 'uses' => 'App\Vendor\Telenok\Core\Module\Packages\ComposerManager\Controller@getComposerJsonContent'));
-    app('router')->post('telenok/module/packages/composer-manager/composer-json/update', array('as' => 'telenok.module.composer-manager.composer-json.update', 'uses' => 'App\Vendor\Telenok\Core\Module\Packages\ComposerManager\Controller@composerJsonUpdate'));
+    app('router')->post('telenok/module/packages/composer-manager/composer-json/validate-update', array('as' => 'telenok.module.composer-manager.composer-json.update', 'uses' => 'App\Vendor\Telenok\Core\Module\Packages\ComposerManager\Controller@composerJsonUpdate'));
+    app('router')->get('telenok/module/packages/composer-manager/composer-json/update-output', array('as' => 'telenok.module.composer-manager.composer-json.output', 'uses' => 'App\Vendor\Telenok\Core\Module\Packages\ComposerManager\Controller@composerJsonOutput'));
 
     // Module Packages\InstallerManager
     app('router')->get('telenok/module/packages/installer-manager/action-param', array('as' => 'telenok.module.installer-manager.action.param', 'uses' => 'App\Vendor\Telenok\Core\Module\Packages\InstallerManager\Controller@getActionParam'));

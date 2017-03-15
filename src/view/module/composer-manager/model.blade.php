@@ -130,10 +130,10 @@
 
                     @if ($key==0)
                         columns.push({
-                    data : "choose",
-                    title : "{{ $controller->LL('btn.choose') }}",
-                    orderable : false
-                });
+                            data : "choose",
+                            title : "{{ $controller->LL('btn.choose') }}",
+                            orderable : false
+                        });
                 @endif
 
                 columns.push({
