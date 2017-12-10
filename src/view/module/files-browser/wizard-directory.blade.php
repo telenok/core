@@ -10,7 +10,7 @@
 				jQuery("#tree-{{$uniqueId}}").jstree({
 					"themes": {
 						"theme": "proton",
-						"url": "packages/telenok/core/js/jquery.jstree/themes/proton/style.css"
+						"url": "/packages/telenok/core/js/jquery.jstree/themes/proton/style.css"
 					},
 					"contextmenu" : {
 						'items' : {
@@ -51,7 +51,8 @@
 							}
 						}
 					},
-					"plugins": ["themes", "json_data", "ui", "crrm", "contextmenu"]
+					"state": { "key": "tree-{{$controller->getKey()}}" },
+					"plugins": ["themes", "json_data", "ui", "crrm", "contextmenu", "state", "cookies"]
 				})
 				.bind("create.jstree", function(e, data) {
 					if (data.rslt.parent == -1) 

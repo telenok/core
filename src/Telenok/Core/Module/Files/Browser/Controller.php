@@ -1,6 +1,7 @@
 <?php
 
 namespace Telenok\Core\Module\Files\Browser;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @class Telenok.Core.Module.Files.Controller
@@ -17,6 +18,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
     protected $maxFileSizeToView = 100000;
     protected $routerUpload = 'telenok.module.files-browser.upload';
 
+
     public function getMaxSizeToView()
     {
         return $this->maxFileSizeToView;
@@ -31,7 +33,15 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function getTreeContent()
     {
-        
+    }
+
+    public function getAdditionalActionParam()
+    {
+        return [
+            'url' => $this->getRouterContent([
+                'currentDirectory' => addslashes($this->getRequest()->input('currentDirectory')),
+            ]),
+        ];
     }
 
     public function getContent()
@@ -41,7 +51,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             'tabLabel' => $this->LL('header.title'),
             'tabContent' => view($this->getPresentationContentView(), array(
                 'controller' => $this,
-                'currentDirectory' => addslashes(base_path()),
+                'currentDirectory' => addslashes($this->getRequest()->input('currentDirectory')),
                 'fields' => $this->tableColumn,
                 'gridId' => $this->getGridId(),
                 'uniqueId' => str_random(),
@@ -54,9 +64,10 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         $input = $this->getRequest();
         $start = $input->input('start', 0);
         $length = $input->input('length', $this->pageLength);
-        $currentDirectory = $input->input('currentDirectory');
 
-        if (strstr($currentDirectory, base_path()) === FALSE)
+        $currentDirectory = $this->processURLCurrentDirectory($this->getRequest()->input('currentDirectory'));
+
+        if ($currentDirectory === FALSE || strstr($currentDirectory, base_path()) === FALSE)
         {
             $currentDirectory = base_path();
         }
@@ -128,14 +139,17 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         return $c->slice($start, $length + 1);
     }
 
+    protected function processURLCurrentDirectory($currentDirectory) {
+        return realpath(base_path(trim($currentDirectory, '/\\ ')));
+    }
+
     public function getList()
     {
         $parent = parent::getList();
 
-        $currentDirectory = $this->getRequest()->input('currentDirectory');
-        $uniqueId = $this->getRequest()->input('uniqueId');
+        $currentDirectory = $this->processURLCurrentDirectory($this->getRequest()->input('currentDirectory'));
 
-        if (strstr($currentDirectory, base_path()) === FALSE)
+        if ($currentDirectory === FALSE || strstr($currentDirectory, base_path()) === FALSE)
         {
             $currentDirectory = base_path();
         }
@@ -144,14 +158,13 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
         if ($directory->getPathname() != base_path())
         {
+            $currentDirectory = trim(str_replace_first(base_path(), '', $directory->getPathname()), '/\\ ');
+
             $link = '<i class="fa fa-folder"></i> '
-                    . '<a href="#" onclick="currentDirectory' . $uniqueId . ' = \'' . addslashes($directory->getPath()) . '\'; telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\')'
-                    . '.reloadDataTableOnClick({url: \'' . $this->getRouterList() . '\', gridId: \'' . $this->getGridId()
-                    . '\', data : {uniqueId: \'' . $uniqueId . '\', currentDirectory: \''
-                    . addslashes($directory->getPath()) . '\'}}); return false;">' . $directory->getPathname() . '</a> <i class="fa fa-level-up"></i>';
+                    . '<a data-navigo href="#/module/' . $this->getKey() . '/list/' . urlencode($currentDirectory) . '/">' . e($currentDirectory) . '</a> <i class="fa fa-level-up"></i>';
 
             array_unshift(
-                    $parent['data'], [
+                $parent['data'], [
                 'tableCheckAll' => '',
                 'name' => $link,
                 'size' => '',
@@ -166,6 +179,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         return $parent;
     }
 
+    /**
+     * @param SplFileInfo                         $item
+     * @param \Illuminate\Support\Collection|null $put
+     * @param null                                $model
+     */
     public function fillListItem($item = null, \Illuminate\Support\Collection $put = null, $model = null)
     {
         $uniqueId = $this->getRequest()->input('uniqueId');
@@ -175,12 +193,20 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
         if ($item->isDir())
         {
-            $put->put('name', '<i class="fa fa-folder"></i> '
-                    . '<a href="#" onclick="currentDirectory' . $uniqueId . ' = \'' . addslashes($item->getPathname()) . '\'; telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\')'
-                    . '.reloadDataTableOnClick({url: \'' . $this->getRouterList() . '\', '
-                    . 'gridId: \'' . $this->getGridId() . '\', data : {uniqueId: \'' . $uniqueId . '\', '
-                    . 'currentDirectory: \'' . addslashes($item->getPathname()) . '\'}}); return false;">'
-                    . $item->getFilename() . '</a>');
+            $currentDirectory = trim(str_replace_first(base_path(), '', $item->getPathname()), '/\\ ');
+
+            $put->put('name', '<i class="fa fa-folder"></i>
+                    <a data-navigo href="#/module/' . $this->getKey() . '/list/' . urlencode($currentDirectory) . '/" onclick1111="
+                            currentDirectory' . $uniqueId . ' = \'' . addslashes($currentDirectory) . '\'; 
+                            telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\')
+                                .reloadDataTableOnClick({
+                                    url: \'' . $this->getRouterList() . '\', 
+                                    gridId: \'' . $this->getGridId() . '\', 
+                                    data : {
+                                        uniqueId: \'' . $uniqueId . '\', 
+                                        currentDirectory: \'' . addslashes($currentDirectory) . '\'
+                                    }
+                                }); return false;">' . e($item->getFilename()) . '</a>');
         }
         else if ($item->isFile())
         {
@@ -214,14 +240,17 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             '</ul>
             </div>']);
 
+        /** @var \SplFileInfo $item */
+        $href = '#/module/' . $this->getKey() . '/edit/' . urlencode($item->getRealPath()) . '/';
+
         $collection->put('edit', ['order' => 1000, 'content' =>
-            '<li><a href="#" onclick="telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').addTabByURL({url : \''
-            . $this->getRouterEdit(['id' => $item->getRealPath()]) . '\'}); return false;">'
+            '<li><a data-navigo href="' . $href . '">'
             . ' <i class="fa fa-pencil"></i> ' . $this->LL('list.btn.edit') . '</a>
                 </li>']);
 
         $collection->put('delete', ['order' => 2000, 'content' =>
-            '<li><a href="#" onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme_/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure.delete') . '\')) telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').deleteByURL(this, \''
+            '<li><a href="#" onclick="if (confirm(\'' . $this->LL(preg_match('/^_delme_/', $item->getFilename()) ? 'notice.delete.force' : 'notice.sure.delete')
+            . '\')) telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').deleteByURL(this, \''
             . $this->getRouterDelete(['id' => $item->getRealPath()]) . '\'); return false;">'
             . ' <i class="fa fa-trash-o"></i> ' . $this->LL('list.btn.delete') . '</a>
                 </li>']);
@@ -234,10 +263,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
                 })->implode('content');
     }
 
-    public function getModelList()
-    {
-        
-    }
+    public function getModelList() {}
 
     public function create()
     {
@@ -637,44 +663,6 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         );
     }
 
-    public function getTreeList111()
-    {
-        $basePath = base_path();
-        $basePathLength = \Str::length($basePath);
-
-        $input = $this->getRequest();
-
-        $id = $basePath . $input->input('id');
-
-        $listTree = [];
-
-        foreach (\Symfony\Component\Finder\Finder::create()->ignoreDotFiles(true)->ignoreVCS(true)->directories()->in($id)->depth(0) as $dir)
-        {
-            $path = $dir->getPathname();
-
-            $listTree[] = array(
-                "data" => $dir->getFilename(),
-                "metadata" => array('path' => substr($dir->getPathname(), $basePathLength, \Str::length($path) - $basePathLength)),
-                "state" => "closed",
-                "children" => [],
-            );
-        }
-
-        if (!$input->input('id'))
-        {
-            $listTree = array(
-                'data' => array(
-                    "title" => "Root node",
-                    "attr" => array('id' => 'root-not-delete'),
-                ),
-                "state" => "open",
-                'children' => $listTree
-            );
-        }
-
-        return $listTree;
-    }
-
     public function getRouterUpload($param = [])
     {
         return route($this->routerUpload, $param);
@@ -705,4 +693,49 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         return ['success' => 1];
     }
 
+
+    /**
+     * @method getNavigoRouterCode
+     * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
+     */
+    public function getNavigoRouterCode()
+    {
+        $uniqueId = uniqid();
+
+        $str = parent::getNavigoRouterCode();
+        $str .= '
+                var deferred;
+            (function() {
+
+                var handler = function (params, query)
+                {
+                    deferred = ' . $this->getContentNavigoHandler() . '(params, query);
+
+                    deferred.then(function() {
+
+                        var url = decodeURIComponent(params.id);
+                        currentDirectory' . $uniqueId . ' = url;
+                        telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\')
+                            .reloadDataTableOnClick({
+                                url: "' . $this->getRouterList() . '", 
+                                gridId: "' . $this->getGridId() . '", 
+                                data : {
+                                    uniqueId: "' . $uniqueId . '", 
+                                    currentDirectory: url
+                                }
+                            });
+                    });
+                }
+            
+                telenok
+                    .getRouter()
+                    .on({
+                        "/module/' . $this->getKey() . '/list/:id/" : handler
+                    }).resolve();
+
+            }) ();
+        ';
+
+        return $str;
+    }
 }

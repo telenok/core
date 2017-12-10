@@ -125,7 +125,9 @@
                 order: [],
                 ajax : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
                 domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
-                btnCreateUrl : '{!! $controller->getRouterCreate(['id' => $type->getKey()]) !!}',
+                btnCreateUrl : '#/module/{{ $controller->getParent() }}/{{ $controller->getKey() }}/action-param/{!!
+                    urlencode($controller->getRouterActionParam()) !!}/tab/create/{!!
+                    urlencode( $controller->getRouterCreate(['id' => $type->getKey()]) ) !!}/',
                 btnCreateTitle : '{{ $controller->LL('list.btn.create') }}',
                 btnListEditUrl : '{!! $controller->getRouterListEdit(['id' => $type->getKey()]) !!}',
                 btnListDeleteUrl : '{!! $controller->getRouterListDelete(['id' => $type->getKey()]) !!}',
@@ -154,6 +156,9 @@
             
             jQuery('#telenok-{{$controller->getPresentation()}}-presentation-grid-{{$gridId}}')
                 .dataTable().ajax.url('{!! URL::route("telenok.module.{$controller->getKey()}.list") !!}?typeId={{$type->getKey()}}&' + (erase ? '' : jQuery.param($form.serializeArray()))).load();
+
+
+            telenok.updatePageLinks()
         }
     </script>
 </div>

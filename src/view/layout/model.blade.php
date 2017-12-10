@@ -71,8 +71,6 @@
             var jsonResponse = jQuery.parseJSON(jqXHR.responseText);
             var jsonError;
 
-            console.log()
-
             if (jsonResponse.error && jsonResponse.error.message) {
                 jsonError = jQuery.parseJSON(jsonResponse.error.message);
             } else if (jsonResponse.error) {

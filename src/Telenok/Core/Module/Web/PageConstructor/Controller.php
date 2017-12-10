@@ -151,4 +151,15 @@ class Controller extends \App\Vendor\Telenok\Core\Module\Objects\Lists\Controlle
         }
     }
 
+    /**
+     * @method getRouterEdit
+     * Return router edit.
+     * @param {String} $param
+     * @return string
+     * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
+     */
+    public function getRouterEdit($param = [])
+    {
+        return '';
+    }
 }

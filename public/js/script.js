@@ -128,6 +128,7 @@ var telenokJS = Clazzzz.extend(
     {
         this.presentation = {};
         this.module = {};
+        this.router = null;
     },
     setBreadcrumbs: function(param) 
     {
@@ -150,22 +151,24 @@ var telenokJS = Clazzzz.extend(
     getPresentationDomId: function(presentation) { return 'telenok-' + presentation + '-presentation'; },
     addModule: function(moduleKey, url, callback) 
     {
-        if (!this.module[moduleKey])
+        if (this.module[moduleKey])
+        {
+            return callback(moduleKey);
+        }
+        else
         {
             var _this = this;
 
-            jQuery.ajax({
+            return jQuery.when(jQuery.ajax({
                 url: url,
                 method: 'get',
                 dataType: 'json'
             }).done(function(data) {
                 _this.module[moduleKey] = data;
-                callback(moduleKey);
+
+            })).then(function() {
+                return callback(moduleKey);
             });
-        }
-        else
-        {
-            callback(moduleKey);
         }
     },
     preCallingPresentation: function(moduleKey) 
@@ -236,7 +239,29 @@ var telenokJS = Clazzzz.extend(
         });    
 
         $what_change.css('zIndex', maxZ + 1);
+    },
+    getRouter: function()
+    {
+        if (this.router === null) {
+            var root = null;
+            var useHash = true; // Defaults to: false
+            //var hash = '#'; // Defaults to: '#'
+            this.router = new Navigo(root, useHash/*, hash*/);
+        }
+
+        return this.router;
+    },
+    updatePageLinks: function()
+    {
+        this.getRouter().updatePageLinks()
+    },
+    getUrlParameterByName: function (name, url)
+    {
+        var res = parseUrl().parse(url) || {};
+
+        return res[name];
     }
 });
 
 var telenok = new telenokJS();
+telenok.init();

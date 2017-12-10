@@ -42,7 +42,8 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
                         action : function (e, dt, button, config)
                         {
                             if (param.btnCreateDisabled || !param.btnCreateUrl) return false;
-                            else this_.addTabByURL({url : param.btnCreateUrl});
+                            else telenok.getRouter().navigate(param.btnCreateUrl, true);
+                                //this_.addTabByURL({url : param.btnCreateUrl});
                         }
                     });
                 }
@@ -225,7 +226,7 @@ if (!telenok.hasPresentation('{{$presentationModuleKey}}'))
             if (jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId).size())
             {
                 jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId)
-                    .dataTable().ajax.url(param.url + (param.data ? '?' + jQuery.param(param.data) : '')).load();
+                    .DataTable().ajax.url(param.url + (param.data ? '?' + jQuery.param(param.data) : '')).load();
             }
             return this;
         },

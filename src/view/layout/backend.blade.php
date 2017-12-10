@@ -16,7 +16,7 @@ ob_end_clean();
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <meta name="csrf-token" content="{{csrf_token()}}" /> 
 
-        <base href="/" />
+        <base href="{{config("app.url")}}/telenok/" />
 
         <!--[if lt IE 9]> 
         <script src="packages/telenok/core/js/html5shiv/html5shiv.js">
@@ -39,6 +39,7 @@ ob_end_clean();
 
         {!! Html::script('packages/telenok/core/js/jquery.js') !!}
         {!! Html::script('packages/telenok/core/js/jquery-ui.js') !!}
+        {!! Html::script('packages/telenok/core/js/jquery.cookie.js') !!}
         {!! Html::script('packages/telenok/core/js/jquery.gritter.js') !!}
         {!! Html::script('packages/telenok/core/js/jquery.punch.js') !!}
         {!! Html::script('packages/telenok/core/js/jquery.datatables/jquery.datatables.js') !!}
@@ -49,6 +50,9 @@ ob_end_clean();
 
         {!! Html::style('packages/telenok/core/js/highlight/styles/vs.css') !!}
         {!! Html::script('packages/telenok/core/js/highlight/highlight.js') !!}
+
+        {!! Html::script('packages/telenok/core/js/navigo.router.js') !!}
+
 
         <script type="text/javascript">
             if ("ontouchend" in document)
@@ -65,6 +69,7 @@ ob_end_clean();
 
         {!! Html::script('packages/telenok/core/js/dropzone/dropzone.js') !!}
         {!! Html::script('packages/telenok/core/js/codemirror/codemirror.js') !!}
+        {!! Html::script('packages/telenok/core/js/url-parse.js') !!}
         {!! Html::script('packages/telenok/core/js/script.js') !!}
         @show
 

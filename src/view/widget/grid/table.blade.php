@@ -59,7 +59,7 @@ ob_start();
 				}
 			};
 
-			jQuery('#table-{{$controller->getUniqueId()}}').dataTable(param);
+			jQuery('#table-{{$controller->getUniqueId()}}').DataTable(param);
 
 
 			@if ($deleteRouter = $controller->getRouterDelete())

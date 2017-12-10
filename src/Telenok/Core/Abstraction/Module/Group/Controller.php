@@ -8,8 +8,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
      
     protected $icon = 'fa fa-desktop'; 
     protected $btn = 'btn-info'; 
-    protected $modelGroupModule;  
+    protected $modelGroupModule;
     protected $languageDirectory = 'module-group';
+    protected $order = 1;
 
     public function getButton()
     {
@@ -19,8 +20,13 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     public function getIcon()
     {
         return $this->icon;
-    } 
-    
+    }
+
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
     public function setModelModuleGroup($model)
     {
         $this->modelGroupModule = $model;

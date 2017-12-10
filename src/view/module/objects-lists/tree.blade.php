@@ -37,7 +37,7 @@
                     url: '{!! $controller->getRouterContent(['typeId' => '__typeId__']) !!}'.replace('__typeId__', data.rslt.obj.data('id')),
                     after: function() 
                     {
-                        telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').reloadDataTableOnClick({
+                        return telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').reloadDataTableOnClick({
                             "url": '{!! $controller->getRouterList() !!}', 
                             "data": { "typeId": data.rslt.obj.data("id") },
                             "gridId": data.rslt.obj.data("gridId")

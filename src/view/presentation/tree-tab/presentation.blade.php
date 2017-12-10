@@ -45,7 +45,9 @@
 			},
 			addTab: function(param)
 			{
-				if (!param.tabKey) return this;
+			    var deferred = jQuery.Deferred();
+
+				if (!param.tabKey) return deferred.resolve();
 
 				var id = this.presentationDomId + '-tab-' + param.tabKey;
 				var tabs = jQuery('div.telenok-presentation-tabs', '#' + this.presentationDomId);
@@ -54,7 +56,7 @@
 				if (jQuery('div#' + id, tabs).length)
 				{
 					jQuery('ul.nav-tabs#nav-tabs-{{$presentation}} a[href="#' + id + '"]', tabs).tab('show');
-					return this;
+					return deferred.resolve();
 				}
 
 				var tabTemplate = "<li><a href='#" + id + "' data-toggle='tab'><i class='green fa fa-home bigger-110'></i>&nbsp;" + param.tabLabel + "&nbsp;<i class='fa fa-times red' style='cursor:pointer;'></i></a></li>";
@@ -90,16 +92,25 @@
 					jQuery('ul.nav-tabs#nav-tabs-{{$presentation}} a:last', tabs).tab('show');
 				});
 
-				return this;
+				return deferred.resolve();
 			},
 			addTabByURL: function(param)
 			{ 
 				var _this = this;
 
-				jQuery.ajax(jQuery.extend({}, {
+				return jQuery.ajax(jQuery.extend({}, {
 						method: 'get',
 						dataType: 'json',
 					}, param))
+				.fail(function(jqXHR, textStatus, errorThrown)
+				{
+					jQuery.gritter.add({
+						title: 'Error',
+						text: jqXHR.responseText,
+						class_name: 'gritter-error gritter-light',
+						time: 3000,
+					});
+				})
 				.done(function(data)
 				{
 					if (data.exception)
@@ -110,28 +121,23 @@
 							class_name: 'gritter-error gritter-light',
 							time: 3000,
 						});
+
+						return jQuery.Deferred();
 					}
 					else
 					{
-						_this.addTab({tabKey: data.tabKey, tabLabel: data.tabLabel, tabContent: data.tabContent});
+                        var deferred = jQuery.Deferred();
 
-						if(jQuery.isFunction(param.after))
+                        _this.addTab({tabKey: data.tabKey, tabLabel: data.tabLabel, tabContent: data.tabContent});
+
+						if (jQuery.isFunction(param.after))
 						{
-							param.after();
+                            deferred.then(function() { return param.after(); });
 						}
-					} 
-				})
-				.fail(function(jqXHR, textStatus, errorThrown)
-				{
-					jQuery.gritter.add({
-						title: 'Error',
-						text: jqXHR.responseText,
-						class_name: 'gritter-error gritter-light',
-						time: 3000,
-					});
-				});
 
-				return this;
+                        return deferred;
+                    }
+				});
 			},
 			showTree: function() 
 			{
@@ -139,7 +145,7 @@
 				{
 					return this;
 				}
-				
+
 				var key = 'telenok-presentation-' + this.presentationParam.key + '-tree'; 
 				jQuery('div.telenok-presentation-tabs', '#' + this.getPresentationDomId()).removeClass('col-xs-12').addClass('col-xs-9');
 				jQuery('div.telenok-presentation-tree', '#' + this.getPresentationDomId()).show();
@@ -150,7 +156,7 @@
 				{
 					return this;
 				}
-				
+
 				var key = 'telenok-presentation-' + this.presentationParam.key + '-tree'; 
 				jQuery('div.telenok-presentation-tabs', '#' + this.getPresentationDomId()).removeClass('col-xs-9').addClass('col-xs-12');
 				jQuery('div.telenok-presentation-tree', '#' + this.getPresentationDomId()).hide();
@@ -161,7 +167,7 @@
 				{
 					return this;
 				}
-                
+
 				this.showTree();
 
 				var key = 'telenok-presentation-' + this.presentationParam.key + '-tree'; 
@@ -202,7 +208,8 @@
                             action : function (e, dt, button, config)
                             {
 								if (param.btnCreateDisabled || !param.btnCreateUrl) return false;
-								else this_.addTabByURL({url : param.btnCreateUrl});
+								else telenok.getRouter().navigate(param.btnCreateUrl, true);
+									//this_.addTabByURL({url : param.btnCreateUrl});
 							}
 						});
 					}
@@ -365,7 +372,7 @@
                     dom : "<'row'<'col-md-9'B><'col-md-3'f>r>t<'row'<'col-md-9'B><'col-md-3'p>>",
                     @section('tableListBtn')
                     buttons : buttons,
-                    @show 				
+                    @show
 					language : {
 						paginate : {
 							next : "{{ trans('core::default.btn.next') }}",
@@ -392,9 +399,10 @@
 				if (jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId).size())
 				{
 					jQuery('#' + this.getPresentationDomId() + '-grid-' + param.gridId)
-                        .dataTable().ajax.url(param.url + (param.data ? '?' + jQuery.param(param.data) : '')).load();
+                        .DataTable().ajax.url(param.url + (param.data ? '?' + jQuery.param(param.data) : '')).load();
 				}
-				return this;
+
+				return jQuery.Deferred();
 			},
 			deleteByURL: function(dom_obj, url)
 			{
@@ -438,8 +446,8 @@
 				return this;
 			},
 			callMe: function(param)
-			{ 
-				this.setParam(param);  
+			{
+				this.setParam(param);
 
 				param.addSkeleton===false ? '' : this.showSkeleton();
 				param.addTree===false  ? '' : this.addTree(); 

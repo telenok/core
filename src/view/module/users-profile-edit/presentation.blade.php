@@ -83,13 +83,15 @@
 					jQuery('ul.nav-tabs#nav-tabs-{{$presentation}} a:last', tabs).tab('show');
 				});
 
-				return this;
+                telenok.updatePageLinks();
+
+                return this;
 			},
 			addTabByURL: function(param)
 			{ 
 				var _this = this;
 
-				jQuery.ajax(jQuery.extend({}, {
+				return jQuery.ajax(jQuery.extend({}, {
 						method: 'get',
 						dataType: 'json',
 					}, param))
@@ -112,7 +114,7 @@
 						{
 							param.after();
 						}
-					} 
+					}
 				})
 				.fail(function(jqXHR, textStatus, errorThrown)
 				{
@@ -123,8 +125,6 @@
 						time: 3000,
 					});
 				});
-
-				return this;
 			},
 			removePageAttribute: function()
 			{

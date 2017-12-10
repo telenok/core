@@ -396,10 +396,11 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             '</ul>
             </div>']);
 
+        $href = '#/module/' . $this->getKey() . '/edit/' . intval($item->getKey()) . '/';
+
         $collection->put('edit', ['order' => 1000, 'content' =>
-            '<li><a href="#" onclick="telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').addTabByURL({url : \''
-            . $this->getRouterEdit(['id' => $item->getKey()]) . '\'}); return false;">'
-            . ' <i class="fa fa-pencil"></i> ' . $this->LL('list.btn.edit') . '</a>
+            '<li><a data-navigo href="' . $href . '">'
+                . ' <i class="fa fa-pencil"></i> ' . $this->LL('list.btn.edit') . '</a>
                 </li>']);
 
         $collection->put('delete', ['order' => 2000, 'content' =>
@@ -410,8 +411,7 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
         app('events')->fire($this->getListButtonEventKey(), $collection);
 
-        return $this->getAdditionalListButton($item, $collection)->sort(function($a, $b)
-                {
+        return $this->getAdditionalListButton($item, $collection)->sort(function($a, $b) {
                     return array_get($a, 'order', 0) > array_get($b, 'order', 0) ? 1 : -1;
                 })->implode('content');
     }

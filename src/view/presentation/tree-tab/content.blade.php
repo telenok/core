@@ -73,7 +73,9 @@
                 order: [],
                 ajax : '{!! $controller->getRouterList() !!}',
                 domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
-                btnCreateUrl : '{!! $controller->getRouterCreate() !!}',
+                btnCreateUrl : '#/module/{{ $controller->getParent() }}/{{ $controller->getKey() }}/action-param/{!!
+                    urlencode($controller->getRouterActionParam()) !!}/tab/create/{!!
+                    urlencode( $controller->getRouterCreate(['id' => $type->getKey()]) ) !!}/',
                 btnListEditUrl : '{!! $controller->getRouterListEdit() !!}',
                 btnListDeleteUrl : '{!! $controller->getRouterListDelete() !!}',
                 btnListLockUrl : '{!! $controller->getRouterListLock() !!}',

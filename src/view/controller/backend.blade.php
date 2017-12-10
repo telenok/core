@@ -80,7 +80,7 @@
                         <li class="light-blue user-profile">
 
                             <a data-toggle="dropdown" href="#" class="user-menu dropdown-toggle">
-                                <img class="nav-user-photo" src="packages/telenok/core/image/anonym.png" title="Anonym">
+                                <img class="nav-user-photo" src="/packages/telenok/core/image/anonym.png" title="Anonym">
                                 <span id="user_info">
                                     Welcome,John!
                                 </span>
@@ -124,35 +124,31 @@
                     @foreach($listModule as $listModuleItem)
                     
                         @if ($listModuleGroupItem->getKey() == $listModuleItem->getGroup())
-                        
-                            @if ($listModuleItem->isParentAndSingle()) 
+
+                            @if ($listModuleItem->isParentAndSingle())
                             <li class="parent-single">
-                                <a href="#" onclick='
-                                    telenok.addModule( "{{ $listModuleItem->getKey() }}", "{!! $listModuleItem->getRouterActionParam() !!}", function(moduleKey) {
-                                                telenok.processModuleContent(moduleKey);
-                                            }); 
-                                            return false;'>
+                                <a  data-navigo href="#/module/{{ $listModuleItem->getKey() }}">
                                     <i class="menu-icon {{ $listModuleItem->getIcon() }}"></i>
                                     <span class="menu-text">{{ $listModuleItem->getName() }}</span>
                                 </a>
                             </li>
                             @elseif (!$listModuleItem->getParent())
                             <li>
-                                <a class="dropdown-toggle" href="#">
+                                <a  class="dropdown-toggle" href="#"
+                                    data-menu="module-{{$listModuleItem->getKey()}}">
                                     <i class="menu-icon {{ $listModuleItem->getIcon() }}"></i>
                                     <span class="menu-text">{{ $listModuleItem->getName() }}</span>
                                     <b class="arrow fa fa-angle-down"></b>
                                 </a>
-                                <ul class="submenu"> 
-									
+                                <ul class="submenu">
+
                                     @foreach($listModule as $item)
                                     @if ($item->getParent() == $listModuleItem->getKey())
-									
+
 									<li class="">
-										<a href="#" onclick='telenok.addModule("{{ $item->getKey() }}", "{!! $item->getRouterActionParam() !!}", function(moduleKey) {
-                                                telenok.processModuleContent(moduleKey);
-                                            });
-                                            return false;'>
+										<a  data-navigo href="#/module/{{ $item->getKey() }}"
+                                            data-menu-parent="module-{{$listModuleItem->getKey()}}"
+                                            data-menu="module-{{$listModuleItem->getKey()}}-{{$item->getKey()}}">
 											<i class="menu-icon fa fa-caret-right"></i>
 											{{ $item->getName() }}
 										</a>
@@ -161,7 +157,7 @@
                                     @endif
                                     @endforeach
                                 </ul>
-                            </li> 
+                            </li>
                             @endif
                             
                         @endif
@@ -256,5 +252,18 @@
 			{!! $code !!} 
 
 		@endforeach
+
+
+        <script>
+
+            <?php
+                app('telenok.repository')->getModule()->each(function($item)
+                {
+                    echo $item->getNavigoRouterCode();
+                });
+            ?>
+
+        </script>
+
 	</body>
 @stop

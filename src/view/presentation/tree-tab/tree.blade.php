@@ -2,7 +2,7 @@
     jQuery("#tree-{{$id}}").jstree({
         "themes": {
 			"theme": "proton",
-			"url": "packages/telenok/core/js/jquery.jstree/themes/proton/style.css"
+			"url": "/packages/telenok/core/js/jquery.jstree/themes/proton/style.css"
         },
         "core": {"initially_open": ["root-not-delete"]},
         "crrm": {
@@ -69,21 +69,21 @@
             }
         },
         @show
-        
-        "plugins": ["themes", "json_data", "ui", "crrm", "search", "types", "state"]
+        "state": { "key": "tree-{{$controller->getKey()}}" },
+        "plugins": ["themes", "json_data", "ui", "crrm", "search", "types", "state", "cookies"]
     })
     .bind("select_node.jstree", function(event, data) 
     {
-		@section("select_node")
+		@section('select_node')
 		
         //data.inst.toggle_node(data.rslt.obj);
 
         telenok.getPresentation('{{$controller->getPresentationModuleKey()}}')
                 .addTabByURL({
                     url: '{!! $controller->getRouterContent() !!}',
-                    after: function() 
+                    after: function()
                     {
-                        telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').reloadDataTableOnClick({
+                        return telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').reloadDataTableOnClick({
                             "url": '{!! $controller->getRouterList() !!}', 
                             "data": { "treeId": data.rslt.obj.data("id") },
                             "gridId": data.rslt.obj.data("gridId")

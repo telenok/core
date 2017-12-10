@@ -1121,7 +1121,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
      */
     public function getActionParam()
     {
-        return json_encode([
+        return json_encode(array_merge([
             'presentation' => $this->getPresentation(),
             'presentationModuleKey' => $this->getPresentationModuleKey(),
             'presentationContent' => $this->getPresentationContent(),
@@ -1131,7 +1131,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
             'breadcrumbs' => $this->getBreadcrumbs(),
             'pageHeader' => $this->getPageHeader(),
             'uniqueId' => str_random(),
-        ]);
+        ], $this->getAdditionalActionParam()));
     }
 
     /**
@@ -1530,9 +1530,10 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
             '</ul>
                 </div>']);
 
+        $href = '#/module/' . $this->getKey() . '/edit/' . intval($item->getKey()) . '/';
+
         $collection->put('edit', ['order' => 1000, 'content' =>
-            '<li><a href="#" onclick="telenok.getPresentation(\''
-            . $this->getPresentationModuleKey() . '\').addTabByURL({url : \'' . $this->getRouterEdit(['id' => $item->getKey()]) . '\'}); return false;">'
+            '<li><a data-navigo href="' . $href . '">'
             . ' <i class="fa fa-pencil"></i> ' . $this->LL('list.btn.edit') . '</a>
                     </li>']);
 
@@ -1595,6 +1596,17 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
         $this->additionalViewParam = $param;
 
         return $this;
+    }
+
+    /**
+     * @method getAdditionalActionParam
+     * Return additional parameters for method action.
+     * @return {Array}
+     * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
+     */
+    public function getAdditionalActionParam()
+    {
+        return [];
     }
 
     /**
@@ -1741,7 +1753,7 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
                 'model' => $this->getModelList()->find($id),
                 'routerParam' => $this->getRouterParam('edit'),
                 'uniqueId' => str_random(),
-                            ), $this->getAdditionalViewParam()))->render()
+            ), $this->getAdditionalViewParam()))->render()
         ];
     }
 
@@ -2124,4 +2136,57 @@ abstract class Controller extends \Telenok\Core\Abstraction\Module\Controller im
         return $this->displayType == static::$DISPLAY_TYPE_WIZARD;
     }
 
+    /**
+     * @method getNavigoRouterCode
+     * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
+     */
+    public function getNavigoRouterCode()
+    {
+        $url = $this->getRouterEdit(['id' => '_id_']);
+
+        if (!$url) return;
+
+        $str = '
+        
+            (function() {
+
+                telenok
+                    .getRouter()
+                    .on({
+                        "/module/' . $this->getKey() . '/" : ' . $this->getContentNavigoHandler() . '
+                    }).resolve();
+
+            })();
+        
+            (function() {
+
+                var handler = function (params, query)
+                {
+                    var deferred = ' . $this->getContentNavigoHandler() . '(params, query);
+
+                    deferred.then(function(){
+
+                        var url = "' . $url . '".replace("_id_", params.id);
+    
+                        var presentationParams = telenok.getModule("' . $this->getKey() . '") || {};
+    
+                        telenok.getPresentation(presentationParams.presentationModuleKey).addTabByURL(jQuery.extend({}, {
+                                url: url
+                            }, "{}"
+                        ));
+                    });
+                }
+            
+
+                telenok
+                    .getRouter()
+                    .on({
+                        "/module/' . $this->getKey() . '/edit/:id/" : handler
+                    }).resolve();
+
+            }) ();
+        ';
+
+        return $str;
+    }
 }

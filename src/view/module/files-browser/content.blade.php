@@ -94,7 +94,7 @@
                                 </script> 
                             </div>
                         </div>
-                         
+
                         <div class="form-group center">
 							<div class="hr hr-8 dotted"></div>
 							<button onclick="presentationTableFilter{{$jsContentUnique}}(this);" class="btn btn-sm btn-info">
@@ -106,17 +106,14 @@
                                 {{ $controller->LL('btn.clear') }}
 							</button>
 						</div>
-                        
+
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-
     <table class="table table-striped table-bordered table-hover" id="telenok-{{$controller->getPresentation()}}-presentation-grid-{{$gridId}}" role="grid"></table>
-
-
 
     <script type="text/javascript">
 
@@ -159,8 +156,13 @@
             presentation.addDataTable({
                 columns : columns,
                 order : [],
-                ajax : '{!! $controller->getRouterList(['uniqueId' => $jsContentUnique]) !!}',
-                domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}", 
+                ajax : {
+                    url: '{!! $controller->getRouterList(['uniqueId' => $jsContentUnique, 'currentDirectory' => $currentDirectory]) !!}',
+                    complete: function() {
+                        jQuery(document).trigger('{{$controller->getKey()}}.list.load.complete');
+                    }
+                },
+                domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
                 tableListBtnCreate: {
                     extend: 'collection',
                     className : 'btn btn-sm btn-success',
@@ -170,27 +172,37 @@
                         {
                             text : "<i class='fa fa-folder'></i> {{ $controller->LL('btn.create.directory') }}",
                             action : function (e, dt, button, config)
-                            { 
-                                telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-                                    url: '{!! $controller->getRouterCreate() !!}',
-                                    data: {
-                                        currentDirectory: currentDirectory{{$jsContentUnique}},
-                                        modelType : 'directory'
-                                    }
-                                }); 
+                            {
+                                telenok.getRouter().navigate('#/module/{{ $controller->getKey() }}/create/?' + jQuery.param(
+                                        {
+                                            params: {
+                                                data: {
+                                                    currentDirectory: currentDirectory{{$jsContentUnique}},
+                                                    modelType: 'directory'
+                                                }
+                                            }
+                                        }
+                                    )
+                                );
                             }
                         },
                         {
                             text : "<i class='fa fa-file'></i> {{ $controller->LL('btn.create.file') }}",
                             action : function (e, dt, button, config)
                             {
-                                telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').addTabByURL({
-                                    url: '{!! $controller->getRouterCreate() !!}', 
-                                    data: {
-                                        currentDirectory: currentDirectory{{$jsContentUnique}},
-                                        modelType : 'file'
-                                    }
-                                }); 
+                                telenok.getRouter().navigate('#/module/{{ $controller->getParent() }}/{{ $controller->getKey() }}/action-param/{!!
+                                    urlencode($controller->getRouterActionParam()) !!}/tab/create/{!!
+                                    urlencode( $controller->getRouterCreate() ) !!}/?' + jQuery.param(
+                                                {
+                                                    params: {
+                                                        data: {
+                                                            currentDirectory: currentDirectory{{$jsContentUnique}},
+                                                            modelType: 'file'
+                                                        }
+                                                    }
+                                                }
+                                        )
+                                );
                             }
                         },
                         {
@@ -281,7 +293,7 @@
         function presentationTableFilter{{$jsContentUnique}}(dom_obj, erase)
         {
 			var $form = jQuery(dom_obj).closest('form');
-			
+
             if (erase)
             {
 				jQuery('select option:selected', $form).removeAttr('selected');

@@ -11,5 +11,5 @@ class Controller extends \Telenok\Core\Abstraction\Module\Group\Controller {
     protected $key = 'content';
     protected $icon = 'fa fa-pencil';
     protected $btn = 'btn-success';
-
+    protected $order = 1;
 }

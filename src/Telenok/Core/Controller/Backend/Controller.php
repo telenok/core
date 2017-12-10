@@ -106,23 +106,18 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Backend\Controller
         $setArray = [];
         
         $listModule = $config->getModule()
-                ->filter(function($item) use ($listModuleMenuLeft)
+            ->filter(function($item) use ($listModuleMenuLeft)
+            {
+                if (!$item->getParent() && $listModuleMenuLeft->has($item->getKey()))
                 {
-                    if (!$item->getParent() && $listModuleMenuLeft->has($item->getKey()))
-                    {
-                        return true;
-                    }
+                    return true;
+                }
 
-                    if ($item->getParent() && app('auth')->can('read', 'module.' . $item->getKey()) && $listModuleMenuLeft->has($item->getKey()))
-                    {
-                        return true;
-                    }
-                })
-                ->sortBy(function($item) use ($listModuleMenuLeft)
-        {
-            return $item->getModelModule()->module_order;
-        });
-
+                if ($item->getParent() && app('auth')->can('read', 'module.' . $item->getKey()) && $listModuleMenuLeft->has($item->getKey()))
+                {
+                    return true;
+                }
+            });
 
         $listModule = $listModule->filter(function($item) use ($listModule)
         {
@@ -163,12 +158,9 @@ class Controller extends \Telenok\Core\Abstraction\Controller\Backend\Controller
         {
             list($code, $method) = explode('@', $item, 2);
 
-            $listModuleMenuTop->push($config->getModule()->get($code)->{$method}());
-        });
+            $module = $config->getModule()->get($code);
 
-        $listModuleMenuTop->sortBy(function($item)
-        {
-            return $item->get('order');
+            $listModuleMenuTop->push($module->{$method}());
         });
 
         $setArray['listModuleMenuTop'] = $listModuleMenuTop;

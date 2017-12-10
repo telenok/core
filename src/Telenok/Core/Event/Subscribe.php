@@ -14,6 +14,59 @@ class Subscribe {
         $event->getList()->push('App\Vendor\Telenok\Core\Security\Filter\Acl\Resource\DirectRight\Controller');
     }
 
+    public function onWidgetGroup(WidgetGroup $event)
+    {
+        $event->getList()->push('App\Vendor\Telenok\Core\WidgetGroup\Standart\Controller');
+        $event->getList()->push('App\Vendor\Telenok\News\WidgetGroup\News\Controller');
+    }
+
+    public function onWidget(Widget $event)
+    {
+        $list = $event->getList();
+
+        $list->push('App\Vendor\Telenok\Core\Widget\Html\Controller');
+        $list->push('App\Vendor\Telenok\Core\Widget\Table\Controller');
+        $list->push('App\Vendor\Telenok\Core\Widget\Menu\Controller');
+        $list->push('App\Vendor\Telenok\Core\Widget\Rte\Controller');
+        $list->push('App\Vendor\Telenok\Core\Widget\Php\Controller');
+        $list->push('App\Vendor\Telenok\Core\Widget\Table\Controller');
+    }
+
+    public function onModuleGroup(ModuleGroup $event)
+    {
+        $list = $event->getList();
+
+        $list->push('App\Vendor\Telenok\Core\ModuleGroup\Content\Controller');
+        $list->push('App\Vendor\Telenok\Core\ModuleGroup\User\Controller');
+        $list->push('App\Vendor\Telenok\Core\ModuleGroup\Web\Controller');
+        $list->push('App\Vendor\Telenok\Core\ModuleGroup\Setting\Controller');
+    }
+
+    public function onModule(Module $event)
+    {
+        $list = $event->getList();
+
+        $list->push('App\Vendor\Telenok\Core\Module\Users\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Users\ProfileEdit\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Objects\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Objects\Type\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Objects\Field\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Objects\Lists\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Objects\Version\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Web\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Files\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Files\Browser\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Web\Page\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Web\PageConstructor\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Web\Domain\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Tools\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Tools\PhpConsole\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Tools\DatabaseConsole\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Packages\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Packages\ComposerManager\Controller');
+        $list->push('App\Vendor\Telenok\Core\Module\Packages\InstallerManager\Controller');
+    }
+
     public function onModuleMenuLeft(ModuleMenuLeft $event)
     {
         $list = $event->getList();
@@ -111,16 +164,28 @@ class Subscribe {
         app('telenok.repository')->compileConfig();
     }
 
+    public function onNavigoRouter(NavigoRouter $event)
+    {
+        $list = $event->getList();
+
+        $list->push('Telenok\Core\Event\Subscribers\NavigoRouter@onEventFire');
+    }
+
     public function subscribe($events)
     {
         $this->addListenerRepositoryPackage($events);
         $this->addListenerAclFilterResource($events);
+        $this->addListenerModule($events);
         $this->addListenerModuleMenuLeft($events);
         $this->addListenerModuleMenuTop($events);
+        $this->addListenerModuleGroup($events);
+        $this->addListenerWidget($events);
+        $this->addListenerWidgetGroup($events);
         $this->addListenerRepositoryObjectField($events);
         $this->addListenerRepositoryObjectFieldViewModel($events);
         $this->addListenerCompileRoute($events);
         $this->addListenerCompileConfig($events);
+        $this->addListenerNavigoRouter($events);
     }
 
     public function addListenerRepositoryPackage($events)
@@ -139,6 +204,22 @@ class Subscribe {
         );
     }
 
+    public function addListenerModule($events)
+    {
+        $events->listen(
+            'Telenok\Core\Event\Module',
+            'App\Vendor\Telenok\Core\Event\Subscribe@onModule'
+        );
+    }
+
+    public function addListenerModuleGroup($events)
+    {
+        $events->listen(
+            'Telenok\Core\Event\ModuleGroup',
+            'App\Vendor\Telenok\Core\Event\Subscribe@onModuleGroup'
+        );
+    }
+
     public function addListenerModuleMenuLeft($events)
     {
         $events->listen(
@@ -152,6 +233,22 @@ class Subscribe {
         $events->listen(
             'Telenok\Core\Event\ModuleMenuTop',
             'App\Vendor\Telenok\Core\Event\Subscribe@onModuleMenuTop'
+        );
+    }
+
+    public function addListenerWidget($events)
+    {
+        $events->listen(
+            'Telenok\Core\Event\Widget',
+            'App\Vendor\Telenok\Core\Event\Subscribe@onWidget'
+        );
+    }
+
+    public function addListenerWidgetGroup($events)
+    {
+        $events->listen(
+            'Telenok\Core\Event\WidgetGroup',
+            'App\Vendor\Telenok\Core\Event\Subscribe@onWidgetGroup'
         );
     }
 
@@ -184,6 +281,14 @@ class Subscribe {
         $events->listen(
             'Telenok\Core\Event\CompileConfig',
             'App\Vendor\Telenok\Core\Event\Subscribe@onCompileConfig'
+        );
+    }
+
+    public function addListenerNavigoRouter($events)
+    {
+        $events->listen(
+            'Telenok\Core\Event\NavigoRouter',
+            'App\Vendor\Telenok\Core\Event\Subscribe@onNavigoRouter'
         );
     }
 }

@@ -3,7 +3,7 @@
 namespace Telenok\Core\Module\Files;
 
 /**
- * @class Telenok.Core.Module.Files.Controller
+ * @class Telenok.Site.Module.Files.Controller
  * @extends Telenok.Core.Abstraction.Module.Controller
  */
 class Controller extends \Telenok\Core\Abstraction\Module\Controller {

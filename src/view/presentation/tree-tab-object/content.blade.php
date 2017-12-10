@@ -121,7 +121,9 @@
                     @endif
                     ajax : '{!! $controller->getRouterList(['typeId' => $type->getKey()]) !!}',
                     domId: presentation.getPresentationDomId() + "-grid-{{$gridId}}",
-                    btnCreateUrl : '{!! $controller->getRouterCreate(['id' => $type->getKey()]) !!}',
+                    btnCreateUrl : '#/module/{{ $controller->getParent() }}/{{ $controller->getKey() }}/action-param/{!!
+                        urlencode($controller->getRouterActionParam()) !!}/tab/create/{!!
+                        urlencode( $controller->getRouterCreate(['id' => $type->getKey()]) ) !!}/',
                     btnListEditUrl : '{!! $controller->getRouterListEdit(['id' => $type->getKey()]) !!}',
                     btnListDeleteUrl : '{!! $controller->getRouterListDelete(['id' => $type->getKey()]) !!}',
                     btnListLockUrl : '{!! $controller->getRouterListLock(['id' => $type->getKey()]) !!}',

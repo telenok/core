@@ -128,7 +128,7 @@
 
                 aoColumns.push({ "mData": "tableCheckAll", "sTitle": 
                         '<label><input type="checkbox" class="ace ace-checkbox-2" name="checkHeader" onclick="var tb=jQuery(\'#' 
-                        + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').dataTable();' 
+                        + presentation.getPresentationDomId() + '-grid-{{$gridId}}\').DataTable();'
                         + 'var chbx = jQuery(\'input[name=tableCheckAll\\\\[\\\\]]\', tb.fnGetNodes());' 
                         + 'chbx.prop(\'checked\', jQuery(\'input[name=checkHeader]\', tb).prop(\'checked\'));">'
                         + '<span class="lbl">' 

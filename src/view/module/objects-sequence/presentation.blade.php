@@ -38,14 +38,13 @@
                                         param.addTab = false;
 
                                         telenok.setModuleParam(data.key, param);
-
                                         telenok.processModuleContent(data.key);
 
                                         var url = "{!! route("telenok.module.objects-lists.create", ['id' => '__id__']) !!}".replace("__id__", id);
 
-                                        this_.addTabByURL({url : url});
-
                                         jQuery('#modal-choose-type-{{$jsPresentationUnique}}').modal('hide');
+
+                                        return this_.addTabByURL({url : url});
                                     }
                                 );
                             });

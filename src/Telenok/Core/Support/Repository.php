@@ -4,10 +4,14 @@ namespace Telenok\Core\Support;
 
 use App\Events\Event;
 use Telenok\Core\Event\AclFilterResource;
+use Telenok\Core\Event\Module;
+use Telenok\Core\Event\ModuleGroup;
+use Telenok\Core\Event\WidgetGroup;
 use Telenok\Core\Event\RepositoryObjectField;
 use Telenok\Core\Event\RepositoryObjectFieldViewModel;
 use Telenok\Core\Event\RepositoryPackage;
 use Telenok\Core\Event\RepositoryConfig;
+use Telenok\Core\Event\Widget;
 
 /**
  * @class Telenok.Core.Support.Config.Repository
@@ -31,30 +35,28 @@ class Repository {
             {
                 $list->put(($object = app($class))->getKey(), $object);
             }
+
+            if ($key)
+            {
+                $el = $list->get($key);
+
+                if (is_object($el))
+                {
+                    return $el;
+                }
+                else
+                {
+                    throw new \RuntimeException('Failed to fire event "' . get_class($event) . '" with key "' . $key . '". Error: Class "' . e(get_class($el)) . '" not exists.');
+                }
+            }
+            else
+            {
+                return $list;
+            }
         }
         catch (\Exception $e)
         {
             throw new \RuntimeException('Failed to fire event "' . get_class($event) . '". Error: ' . $e->getMessage());
-        }
-
-        if ($key)
-        {
-            $el = $list->get($key);
-
-            if ($el)
-            {
-                $class = get_class($el);
-
-                return app($class);
-            }
-            else
-            {
-                throw new \RuntimeException('Failed to fire event "' . get_class($event) . '" with key "' . $key . '". Error: Class "' . e($el) . '" not exists.');
-            }
-        }
-        else
-        {
-            return $list;
         }
     }
 
@@ -125,81 +127,22 @@ class Repository {
 
     public function getModuleGroup()
     {
-        try
-        {
-            $list = collect();
-
-            \App\Vendor\Telenok\Core\Model\Web\ModuleGroup::active()->get()->each(function($item) use (&$list)
-            {
-                ($object = new $item->controller_class)->setModelModuleGroup($item);
-                $list->put($object->getKey(), $object);
-            });
-        }
-        catch (\Exception $e)
-        {
-            throw new \RuntimeException('Failed to get module-group. Error: ' . $e->getMessage());
-        }
-
-        return $list;
+        return $this->getValue(new ModuleGroup());
     }
 
     public function getModule()
     {
-        try
-        {
-            $list = collect();
-
-            \App\Vendor\Telenok\Core\Model\Web\Module::active()->get()->each(function($item) use (&$list)
-            {
-                ($object = new $item->controller_class)->setModelModule($item);
-                $list->put($object->getKey(), $object);
-            });
-        }
-        catch (\Exception $e)
-        {
-            throw new \RuntimeException('Failed to get module. Error: ' . $e->getMessage());
-        }
-
-        return $list;
+        return $this->getValue(new Module());
     }
 
     public function getWidgetGroup()
     {
-        try
-        {
-            $list = collect();
-
-            \App\Vendor\Telenok\Core\Model\Web\WidgetGroup::active()->get()->each(function($item) use (&$list)
-            {
-                ($object = new $item->controller_class)->setWidgetGroupModel($item);
-                $list->put($object->getKey(), $object);
-            });
-        }
-        catch (\Exception $e)
-        {
-            throw new \RuntimeException('Failed to get widget group. Error: ' . $e->getMessage());
-        }
-
-        return $list;
+        return $this->getValue(new WidgetGroup());
     }
 
     public function getWidget()
     {
-        try
-        {
-            $list = collect();
-
-            \App\Vendor\Telenok\Core\Model\Web\Widget::active()->get()->each(function($item) use (&$list)
-            {
-                $list->put(($object = new $item->controller_class)->getKey(), $object);
-            });
-        }
-        catch (\Exception $e)
-        {
-            throw new \RuntimeException('Failed to get widget. Error: ' . $e->getMessage());
-        }
-
-        return $list;
+        return $this->getValue(new Widget());
     }
 
     public function compileRoute()

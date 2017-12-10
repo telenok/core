@@ -8,10 +8,10 @@
 			.addTabByURL({
 				url: '{!! $controller->getRouterContent(['typeId' => $typeId]) !!}',
 				after: function() {
-					telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').reloadDataTableOnClick({
-						url: '{!! $controller->getRouterList() !!}', 
-						data: { multifield_search: 1, filter: {field_object_type: data.rslt.obj.data("id")}, 'typeId': {{$typeId}} },
-						gridId: data.rslt.obj.data("gridId")
+                    return telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').reloadDataTableOnClick({
+						"url": '{!! $controller->getRouterList() !!}',
+                        "data": { multifield_search: 1, filter: {field_object_type: data.rslt.obj.data("id")}, 'typeId': {{$typeId}} },
+                        "gridId": data.rslt.obj.data("gridId")
 					});
 				}});
 	@stop

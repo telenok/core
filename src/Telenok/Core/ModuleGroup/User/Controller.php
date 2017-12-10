@@ -11,5 +11,5 @@ class Controller extends \Telenok\Core\Abstraction\Module\Group\Controller {
     protected $key = 'user';
     protected $icon = 'fa fa-users';
     protected $btn = 'btn-info';
-
+    protected $order = 3;
 }

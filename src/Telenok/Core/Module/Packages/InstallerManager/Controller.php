@@ -74,16 +74,16 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 
     public function getListButton($item)
     {
+        $href = '#/module/' . $this->getKey() . '/edit/' . intval($item->getKey()) . '/';
+
         return '
-                <div class="hidden-phone visible-lg btn-group">
-				
-                    <button class="btn btn-xs btn-info" 
-                        onclick="telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').addTabByURL({url : \''
-                . $this->getRouterView(['id' => $item['key']]) . '\'});">
+                <div class="hidden-phone visible-lg btn-group">				
+                    <a data-navigo class="btn btn-xs btn-info" 
+                        href="' . $href . '">
                         <i class="ace-icon glyphicon glyphicon-eye-open bigger-110"></i>
 						View
 						<i class="ace-icon fa fa-arrow-circle-o-right icon-on-right"></i>
-                    </button>
+                    </a>
                 </div>';
     }
 
@@ -745,11 +745,12 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
 						"' . route('telenok.module.installer-manager.action.param') . '", 
 						function(moduleKey) 
 						{
-							telenok.processModuleContent(moduleKey);
-							
-							telenok.getPresentation("tree-tab-object-installer-manager").addTabByURL({
-								url : "' . route('telenok.module.installer-manager.view', ['id' => $package]) . '"
-							});
+							return jQuery.Deferred()
+							    .when(function() { return telenok.processModuleContent(moduleKey); })
+							    .then(function() { return telenok.getPresentation("tree-tab-object-installer-manager").addTabByURL({
+								        url : "' . route('telenok.module.installer-manager.view', ['id' => $package]) . '"
+							        });
+							    }).promise();
 						}
 					);
 				</script>
@@ -757,4 +758,15 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
         }
     }
 
+    /**
+     * @method getRouterEdit
+     * Return router edit.
+     * @param {String} $param
+     * @return string
+     * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
+     */
+    public function getRouterEdit($param = [])
+    {
+        return '';
+    }
 }

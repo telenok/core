@@ -8,7 +8,7 @@
 			.addTabByURL({
 				url: '{!! $controller->getRouterContent(['treeId' => '__treeId__', 'typeId' => $typeId]) !!}'.replace('__treeId__', data.rslt.obj.data('id')),
 				after: function() {
-					telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').reloadDataTableOnClick({
+                    return telenok.getPresentation('{{$controller->getPresentationModuleKey()}}').reloadDataTableOnClick({
 						url: '{!! $controller->getRouterList() !!}', 
 						data: { treeId: data.rslt.obj.data("id"), 'typeId': {{$typeId}} },
 						gridId: data.rslt.obj.data("gridId")

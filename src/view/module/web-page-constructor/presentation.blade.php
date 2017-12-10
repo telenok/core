@@ -134,6 +134,7 @@
 								<ul id="module-web-page-widget-list-item" class="dropdown-menu dropdown-success">
 
 							<?php
+
 								foreach ($g->children() as $w)
 								{
 									?>
@@ -179,7 +180,9 @@
 								   data-widget-key="{{$li->sequence->model->key}}"
 								   data-widget-buffer-id="{{$li->getKey()}}"
 								   data-widget-buffer-key="{{$li->key}}"
-								   data-widget-id="{{$li->sequence->model->getKey()}}"><i class="fa fa-times"></i> [{{$li->sequence->model->key}}] {{$li->sequence->model->translate('title')}}</a>
+								   data-widget-id="{{$li->sequence->model->getKey()}}"><i class="fa fa-times"></i>
+									[{{$li->sequence->model->key}}]
+									{{$li->sequence->model->translate('title')}}</a>
 							</li>
 						@endforeach
 
@@ -625,13 +628,15 @@
 					}
 				});
 
+			telenok.updatePageLinks();
+
 			return this;
 		},
 		addTabByURL: function(param, reload)
 		{
 			var _this = this;
 
-			jQuery.ajax({
+			return jQuery.ajax({
 					url: param.url,
 					method: 'get',
 					dataType: 'json',
@@ -663,8 +668,6 @@
 						time: 3000,
 					});
 				});
-
-				return this;
 		},
 		callMe: function(param)
 		{

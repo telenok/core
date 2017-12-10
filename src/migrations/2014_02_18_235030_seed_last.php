@@ -1166,47 +1166,40 @@ class SeedLast extends \App\Vendor\Telenok\Core\Support\Migrations\Migration {
         ))->writeln('Modules added');
 
 
-        // Widget group
-        (new \App\Vendor\Telenok\Core\Model\Web\WidgetGroup())->storeOrUpdate([
-            'title' => ['en' => 'Standart', 'ru' => 'Стандартные'],
-            'active' => 1,
-            'controller_class' => '\App\Vendor\Telenok\Core\WidgetGroup\Standart\Controller',
+        // Widget resource
+        (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+            'title' => ['en' => 'Widget Html', 'ru' => 'Виджет Html'],
+            'code' => 'widget.core.html',
+            'active' => 1
         ]);
 
-        // Widget
-        (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Html', 'ru' => 'Html'],
-            'active' => 1,
-            'controller_class' => '\App\Vendor\Telenok\Core\Widget\Html\Controller',
+        (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+            'title' => ['en' => 'Widget Table', 'ru' => 'Виджет Table'],
+            'code' => 'widget.core.table',
+            'active' => 1
         ]);
 
-        (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Table', 'ru' => 'Таблица'],
-            'active' => 1,
-            'controller_class' => '\App\Vendor\Telenok\Core\Widget\Table\Controller',
+        (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+            'title' => ['en' => 'Widget Menu', 'ru' => 'Виджет Menu'],
+            'code' => 'widget.core.menu',
+            'active' => 1
         ]);
 
-        (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Menu', 'ru' => 'Menu'],
-            'active' => 1,
-            'controller_class' => '\App\Vendor\Telenok\Core\Widget\Menu\Controller',
+        (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+            'title' => ['en' => 'Widget RTE', 'ru' => 'Виджет RTE'],
+            'code' => 'widget.core.rte',
+            'active' => 1
         ]);
 
-        (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Rich text editor', 'ru' => 'Редактор'],
-            'active' => 1,
-            'controller_class' => '\App\Vendor\Telenok\Core\Widget\Rte\Controller',
-        ]);
-
-        (new \App\Vendor\Telenok\Core\Model\Web\Widget())->storeOrUpdate([
-            'title' => ['en' => 'Php code', 'ru' => 'Php код'],
-            'active' => 1,
-            'controller_class' => '\App\Vendor\Telenok\Core\Widget\Php\Controller',
+        (new \App\Vendor\Telenok\Core\Model\Security\Resource())->storeOrUpdate([
+            'title' => ['en' => 'Widget PHP', 'ru' => 'Виджет PHP'],
+            'code' => 'widget.core.php',
+            'active' => 1
         ]);
 
         (new \Symfony\Component\Console\Output\ConsoleOutput(
             \Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL
-        ))->writeln('Widgets added');
+        ))->writeln('Widgets resources added');
 
         //Change classes
         \App\Vendor\Telenok\Core\Model\Object\Type::all()->each(function($item)

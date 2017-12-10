@@ -11,8 +11,9 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     protected $group = '';
     protected $icon = 'fa fa-desktop';  
     protected $modelModule; 
-    protected $modelRepository; 
+    protected $modelRepository;
     protected $languageDirectory = 'module';
+    protected $order = 1;
 
     public function __construct()
     {
@@ -22,7 +23,12 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     public function getHeader()
     {
         return $this->LL('header.title');
-    }    
+    }
+
+    public function getOrder()
+    {
+        return $this->order;
+    }
 
     public function getHeaderDescription()
     {
@@ -94,20 +100,102 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
 
     public function getRouterActionParam($param = [])
     {
-		return route($this->getVendorName() . ".module.{$this->getKey()}.action.param", $param);
+		return app('router')->has($name = $this->getVendorName() . ".module.{$this->getKey()}.action.param") ? route($name, $param) : '';
     }  
 	
     public function getActionParam()
     {
         return json_encode(array(
-            'presentationBlockKey' => $this->getPresentation(),
-			'presentationModuleKey' => $this->getPresentationModuleKey(),
-            'presentationBlockContent' => $this->getPresentationContent(),
             'key' => $this->getKey(),
-            'url' => route($this->getVendorName() . ".module.{$this->getKey()}"),
+            'url' => app('router')->has($route = $this->getVendorName() . ".module.{$this->getKey()}") ? route($route): '/module-route-not-exists',
             'breadcrumbs' => $this->getBreadcrumbs(),
             'pageHeader' => $this->getPageHeader(), 
         ));
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentNavigoHandler()
+    {
+        $actionParams = is_array($actionParam = $this->getActionParam()) ? $actionParam : json_decode($actionParam);
+        $url = is_array($actionParams)?array_get($actionParams, 'url') : object_get($actionParams, 'url');
+
+        $str = '
+                (function (params, query)
+                {
+        ';
+
+        if ($this->getRouterActionParam()) {
+            $str .= '
+                        jQuery("ul.telenok-sidebar li").removeClass("active");
+                        jQuery("a[data-menu=\'module-' . $this->getParent() . '\']").closest("li").addClass("open active");
+                        jQuery("a[data-menu=\'module-' . $this->getParent() . '-' . $this->getKey() . '\']").closest("li").addClass("active");
+                ';
+        } else {
+            $str .= '
+                        jQuery("ul.telenok-sidebar li").removeClass("active");
+                        jQuery("a[data-menu=\'module-' . $this->getKey() . '\']").closest("li").addClass("open active");
+                ';
+        }
+
+        $str .= '        
+                        return telenok.addModule(
+                            "' . $this->getKey() . '",
+                            "' . $this->getRouterActionParam() . '",
+                            function(moduleKey)
+                            {
+                                var deferred = jQuery.Deferred();
+
+                                var presentationParams = telenok.getModule(moduleKey) || {};
+                                telenok.processModuleContent(moduleKey);
+                ';
+
+        if ($url) {
+            $str .= '
+                                jQuery(document).on("'. $this->getKey() . '.list.load.complete", function() {
+                                    deferred.resolve();
+                                });
+                                
+                                telenok.getPresentation(presentationParams.presentationModuleKey).addTabByURL(jQuery.extend({}, {
+                                        url: "' . $url . '"
+                                    }, ' . ($actionParams ? json_encode($actionParams) : "{}") . '));
+                            ';
+        } else {
+            $str .= '
+                                deferred.resolve();
+            ';
+        }
+        $str .= '
+                                return deferred;
+                            }
+                        );
+                    }
+                )
+        ';
+
+        return $str;
+    }
+
+    /**
+     * @method getNavigoRouterCode
+     * @member Telenok.Core.Abstraction.Presentation.TreeTab.Controller
+     */
+    public function getNavigoRouterCode()
+    {
+        $str = '
+            (function() {
+/*
+                telenok
+                    .getRouter()
+                    .on({
+                        "/module/' . $this->getKey() . '" : ' . $this->getContentNavigoHandler() . '
+                    }).resolve();
+*/
+            })();
+        ';
+
+        return $str;
     }
 
     public function getBreadcrumbs()
@@ -125,7 +213,4 @@ abstract class Controller extends \Telenok\Core\Abstraction\Controller\Controlle
     {
         return [$this->getHeader(), $this->getHeaderDescription()];
     }
-
-
 }
-

@@ -285,9 +285,10 @@ class Controller extends \Telenok\Core\Abstraction\Presentation\TreeTab\Controll
             '</ul>
             </div>']);
 
+        $href = '#/module/' . $this->getKey() . '/edit/' . intval($item->getName()) . '/';
+
         $collection->put('edit', ['order' => 1000, 'content' =>
-            '<li><a href="#" onclick="telenok.getPresentation(\'' . $this->getPresentationModuleKey() . '\').addTabByURL({url : \''
-            . $this->getRouterEdit(['id' => $item->getName()]) . '\'}); return false;">'
+            '<li><a data-navigo href="' . $href . '">'
             . ' <i class="fa fa-pencil"></i> ' . $this->LL('list.btn.edit') . '</a>
                 </li>']);
 
